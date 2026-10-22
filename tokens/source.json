@@ -1,0 +1,55 @@
+{
+  "color": {
+    "ink": { "$value": "#0A1033", "$type": "color", "$description": "Outline, shadow and text." },
+    "white": { "$value": "#FFFFFF", "$type": "color" },
+    "panel": { "$value": "#EEF2FF", "$type": "color", "$description": "Background panel of scenes and diagrams." },
+    "ring": { "$value": "#E0E7FB", "$type": "color", "$description": "Concentric rings on the panel." },
+    "healthy": { "$value": "#3DDC84", "$type": "color", "$description": "Healthy or normal (CLOSED)." },
+    "blocked": { "$value": "#FF8A3D", "$type": "color", "$description": "Blocked or fail-fast (OPEN)." },
+    "transitional": { "$value": "#FFD25A", "$type": "color", "$description": "Transitional (HALF_OPEN)." },
+    "caller": { "$value": "#8FB2FF", "$type": "color", "$description": "The caller." },
+    "backend": { "$value": "#FF6B6B", "$type": "color", "$description": "The backend." },
+    "failure": { "$value": "#E04848", "$type": "color", "$description": "The failure path." },
+    "failFast": { "$value": "#E0661F", "$type": "color", "$description": "Text and lines of a fail-fast path." }
+  },
+  "outline": {
+    "block": { "$value": 4, "$type": "dimension" },
+    "arrow": { "$value": 4, "$type": "dimension" },
+    "small": { "$value": 3, "$type": "dimension" }
+  },
+  "shadow": {
+    "block": { "$value": 10, "$type": "dimension", "$description": "Hard offset shadow, never blurred." },
+    "pill": { "$value": 6, "$type": "dimension" },
+    "small": { "$value": 4, "$type": "dimension" }
+  },
+  "radius": {
+    "block": { "$value": 18, "$type": "dimension" },
+    "pill": { "$value": 22, "$type": "dimension" },
+    "small": { "$value": 6, "$type": "dimension" }
+  },
+  "font": {
+    "sans": { "$value": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif", "$type": "fontFamily" },
+    "mono": { "$value": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", "$type": "fontFamily" },
+    "weightBold": { "$value": 700, "$type": "fontWeight" },
+    "weightHeavy": { "$value": 900, "$type": "fontWeight", "$description": "Headings; Google's Lato has no 800." }
+  },
+  "motion": {
+    "fps": { "$value": 30, "$type": "frames", "$description": "Frames per second of every composition." },
+    "drawArrow": { "$value": 20, "$type": "frames", "$description": "Frames to draw a transition arrow." },
+    "travel": { "$value": 22, "$type": "frames", "$description": "Frames for a token to travel along an arrow." },
+    "fade": { "$value": 10, "$type": "frames", "$description": "Frames for text fades." },
+    "readingHold": { "$value": 90, "$type": "frames", "$description": "Minimum frames the final frame stays still." },
+    "dimOpacity": { "$value": 0.42, "$type": "opacity", "$description": "Opacity of states that are not in focus." },
+    "focusScale": { "$value": 1.06, "$type": "number", "$description": "Scale of the state in focus." },
+    "pop": {
+      "damping": { "$value": 13, "$type": "number", "$description": "Pop-in: a short overshoot, then rest." },
+      "stiffness": { "$value": 140, "$type": "number" },
+      "mass": { "$value": 0.7, "$type": "number" }
+    },
+    "focus": {
+      "damping": { "$value": 200, "$type": "number", "$description": "Focus change: no overshoot." },
+      "stiffness": { "$value": 120, "$type": "number" },
+      "mass": { "$value": 1, "$type": "number" }
+    }
+  }
+}

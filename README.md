@@ -1,5 +1,6 @@
 # brunosouzas-design-system
 
+[![CI](https://github.com/brunosouzas/brunosouzas-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/brunosouzas/brunosouzas-design-system/actions/workflows/ci.yml)
 [![OpenSpec](https://github.com/brunosouzas/brunosouzas-design-system/actions/workflows/openspec.yml/badge.svg)](https://github.com/brunosouzas/brunosouzas-design-system/actions/workflows/openspec.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
@@ -12,6 +13,8 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 - [Status](#status)
 - [What it is](#what-it-is)
 - [How it works](#how-it-works)
+- [Commands](#commands)
+- [How a scene is built](#how-a-scene-is-built)
 - [Decisions](#decisions)
 - [How this project is built](#how-this-project-is-built)
 - [Security](#security)
@@ -20,7 +23,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The repository holds its plan, the decisions and the evidence of the pilot. **Nothing in it is implemented yet**: the first change ports the pilot into `src/` (see the [roadmap](docs/roadmap.md)). The commands below are planned, not available.
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The site and the static diagram generators do not consume the tokens yet (roadmap items 3 and 4).
 
 ## What it is
 
@@ -34,15 +37,44 @@ The style follows the illustration covers of the [Spotify Engineering blog](http
 
 ## How it works
 
-Planned for the first change:
-
 ```text
-tokens (one source) ──► CSS variables  ──► brunosouzas.com (site repository)
-                    ├─► TypeScript     ──► motion components ──► scenes ──► MP4 per format and language
-                    └─► JSON           ──► static diagram generators
+tokens/source.json ──► tokens/generated/tokens.css  ──► brunosouzas.com (site repository, planned)
+                   ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format and language
+                   └─► tokens/generated/tokens.json ──► static diagram generators (planned)
 ```
 
-A scene is four small files: the strings per language (taken from the article), the timeline in frames, one layout per format, and the composition. Everything else comes from the components and tokens, so a new scene reuses what earlier scenes proved.
+The generated files are committed, so a consumer can read them without running Node. CSS custom properties carry the prefix `--ds-` (for example `--ds-color-ink`, `--ds-motion-pop-damping`) so they do not clash with the site's own theme names.
+
+## Commands
+
+Requirements: Node.js 22.12 or later. Rendering also needs the network: Remotion downloads its headless browser on first use, and every render fetches Lato from Google Fonts.
+
+```bash
+npm ci                                            # install the pinned dependencies
+npm run tokens                                    # validate tokens/source.json and write tokens/generated/
+npm run tokens:check                              # fail if tokens/generated/ is stale (CI runs this)
+npm run typecheck                                 # tsc over src/, scripts/ and test/
+npm test                                          # unit and integration tests (no rendering, no network)
+npm run stills -- circuit-breaker-states          # key-frame PNGs to out/stills/<composition>/<frame>.png
+npm run render -- circuit-breaker-states          # out/master/<id>.mp4 and the web copy out/web/<id>.mp4
+npm run studio                                    # Remotion Studio, for frame-by-frame review
+```
+
+- Change a token value in `tokens/source.json` and run `npm run tokens`; never edit `tokens/generated/` by hand. An invalid source prints every problem and writes nothing.
+- `stills` and `render` take one scene name and an optional `--dry-run`, which prints the commands without running them. A render writes a hardware-encoded master (about 28 MB for 33 s) and an x264 web copy (under 1 MB) made with the ffmpeg bundled with Remotion, and prints one line per composition with its time and sizes. The four circuit-breaker clips take about four to five minutes on an Apple M3.
+- Everything rendered goes to `out/`, which Git ignores.
+
+## How a scene is built
+
+A scene lives in `src/scenes/<scene>/` as three files:
+
+- `scene.ts`: the scene data, with no React: id, formats, languages, the timeline in frames (phases, call results, transition fires), the text table per language (every string taken from the article) and the source article URL per language.
+- `layout.ts`: one layout per format, in composition pixels; the 4:5 layout has its own arrow routes.
+- `Scene.tsx`: the composition, which arranges the components from `src/brand/`.
+
+`src/scenes/index.ts` lists the scenes and `src/Root.tsx` registers each one as a Studio folder with one composition per format and language (`<scene>-16x9-pt`, `-16x9-en`, `-4x5-pt`, `-4x5-en`). The tests check every registered scene: the same text keys in both languages, phases inside the composition and in order, transitions firing in their window, and a reading hold of at least three seconds at the end.
+
+The components take every colour and size from the tokens, and what is visible at a frame (arrow progress, travelling tokens, focus and dimming, captions, countdown, call results) comes from pure functions in `src/brand/motion.ts`, which the tests check without rendering.
 
 ## Decisions
 

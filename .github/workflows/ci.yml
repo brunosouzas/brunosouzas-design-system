@@ -1,0 +1,39 @@
+name: CI
+
+# Type-checks the code, checks that tokens/generated/ matches tokens/source.json,
+# and runs the unit and integration tests. No step renders video or loads fonts:
+# rendering needs a headless browser and the network and is run locally.
+#
+# Actions are pinned by commit SHA, with the tag in a comment.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: npm ci
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Generated tokens are fresh
+        run: npm run tokens:check
+
+      - name: Tests
+        run: npm test
