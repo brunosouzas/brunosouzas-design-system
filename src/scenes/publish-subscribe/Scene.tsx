@@ -25,7 +25,7 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
     {timeline.routes.map(route=><Arrow key={route.id} d={l.arrows[route.id]} drawAt={route.drawAt} stroke={route.id==="invoice-return"?color.failure:color.ink} width={l.width} height={l.height}/>)}
     <Exchange {...l.boxes.exchange} appearAt={22}>
       <div style={{position:"absolute",top:18,width:"100%",textAlign:"center",fontSize:l.size.name,fontWeight:font.weightHeavy,lineHeight:1.05}}>{t.exchange}</div>
-      <div style={{position:"absolute",top:83,width:"100%",textAlign:"center",fontSize:l.size.label,fontFamily:font.mono,fontWeight:font.weightBold}}>{t.exchangeId}</div>
+      <div style={{position:"absolute",top:format==="4x5"?75:83,width:"100%",textAlign:"center",fontSize:l.size.label,fontFamily:font.mono,fontWeight:font.weightBold}}>{t.exchangeId}</div>
     </Exchange>
     {consumers.map((id,i)=><Queue key={id} {...l.boxes[`${id}-queue`]} appearAt={26}>
       <div style={{position:"absolute",left:28,right:28,top:10,textAlign:"center",fontSize:l.size.label,fontFamily:font.mono,fontWeight:font.weightBold,whiteSpace:"nowrap"}}>{t.queueIds[i]}</div>

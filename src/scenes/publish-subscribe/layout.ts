@@ -27,7 +27,7 @@ for (const [i,id] of consumers.entries()) {
   landscape.arrows[`${id}-binding`]=`M655,385 L655,475 L${x+60},475 L${x+60},528`;
   landscape.arrows[`${id}-subscriber`]=`M${x+60},650 L${x+60},745 L${x+24},745 L${x+24},778`;
   landscape.labels[`${id}-binding`]={x:x+300,y:490};
-  landscape.labels[`${id}-subscriber`]={x:x+260,y:742};
+  landscape.labels[`${id}-subscriber`]={x:x+260,y:730};
 }
 landscape.routes.publish="M660,125 L550,125 L550,385 L655,385";
 landscape.arrows.publish="M660,125 L550,125 L550,385 L578,385";
@@ -38,7 +38,7 @@ landscape.routes["invoice-return"]="M1304,925 L1250,925 L1250,774 L1840,774 L184
 const portrait: Layout = {
   width:1080,height:1350,mq:{x:25,y:220,w:600,h:840},
   boxes:{api:{x:235,y:20,w:610,h:145},exchange:{x:80,y:250,w:520,h:145}},
-  docks:{api:{x:270,y:125},exchange:{x:140,y:345}},routes:{},arrows:{},labels:{},
+  docks:{api:{x:810,y:125},exchange:{x:535,y:380}},routes:{},arrows:{},labels:{},
   caption:{x:40,y:1125,w:1000,h:210},size:{name:54,label:30,caption:38,square:32},
 };
 for (const [i,id] of consumers.entries()) {
@@ -48,15 +48,15 @@ for (const [i,id] of consumers.entries()) {
   portrait.docks[`${id}-queue`]={x:140,y:y+110};
   portrait.docks[id]={x:737,y:y+138};
   const lane=45+i*14;
-  portrait.routes[`${id}-binding`]=`M140,345 L${lane},345 L${lane},${y+110} L140,${y+110}`;
+  portrait.routes[`${id}-binding`]=`M535,380 L${lane},380 L${lane},${y+110} L140,${y+110}`;
   portrait.routes[`${id}-subscriber`]=`M140,${y+110} L650,${y+110} L650,${y+138} L737,${y+138}`;
-  portrait.arrows[`${id}-binding`]=`M140,345 L${lane},345 L${lane},${y+110} L83,${y+110}`;
+  portrait.arrows[`${id}-binding`]=`M535,380 L${lane},380 L${lane},${y+110} L83,${y+110}`;
   portrait.arrows[`${id}-subscriber`]=`M140,${y+110} L650,${y+110} L650,${y+138} L698,${y+138}`;
   portrait.labels[`${id}-binding`]={x:220,y:y-24};
   portrait.labels[`${id}-subscriber`]={x:500,y:y-24};
 }
-portrait.routes.publish="M270,125 L180,125 L180,240 L140,240 L140,345";
-portrait.arrows.publish="M270,125 L180,125 L180,240 L140,240";
+portrait.routes.publish="M810,125 L810,195 L650,195 L650,380 L535,380";
+portrait.arrows.publish="M810,125 L810,195 L650,195 L650,380 L590,380";
 portrait.arrows["invoice-return"]="M737,1053 L680,1053 L680,1098 L80,1098 L80,1025 L83,1025";
 portrait.labels.publish={x:420,y:195};
 portrait.routes["invoice-return"]="M737,1053 L680,1053 L680,1098 L80,1098 L80,1025 L140,1025";
