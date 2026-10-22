@@ -71,7 +71,7 @@ The build SHALL accept these types and reject a value that does not fit its type
 - **THEN** the build accepts them
 
 ### Requirement: Required tokens
-The source SHALL define every token the components read, with this type: `color` ink, white, panel, ring, healthy, blocked, transitional, caller, backend, failure, failFast (`color`); `outline` block, arrow, small, `shadow` block, pill, small, `radius` block, pill, small (`dimension`); `font` sans, mono (`fontFamily`), weightBold, weightHeavy (`fontWeight`); `motion` fps, drawArrow, travel, fade, readingHold (`frames`), dimOpacity (`opacity`), focusScale and pop and focus damping, stiffness, mass (`number`).
+The source SHALL define these tokens with these types; a missing one, or one with another type, is an error. `color`: ink, white, panel, ring, healthy, blocked, transitional, caller, backend, failure, failFast (`color`). `outline`: block, arrow, small; `shadow` and `radius`: block, pill, small (`dimension`). `font`: sans, mono (`fontFamily`); weightBold, weightHeavy (`fontWeight`). The motion tokens are the next requirement.
 
 #### Scenario: Missing required token
 - **WHEN** the source lacks `color.failure`
@@ -80,6 +80,17 @@ The source SHALL define every token the components read, with this type: `color`
 #### Scenario: Required token with the wrong type
 - **WHEN** `outline.block` is declared with type `number`
 - **THEN** the build fails, naming `outline.block` and the expected type `dimension`, and writes no file
+
+### Requirement: Required motion tokens
+The source SHALL define these motion tokens with these types; a missing one, or one with another type, is an error: `motion` fps, drawArrow, travel, fade, readingHold (`frames`); dimOpacity (`opacity`); focusScale (`number`); `motion.pop` and `motion.focus` damping, stiffness, mass (`number`).
+
+#### Scenario: Missing motion token
+- **WHEN** the source lacks `motion.focus.mass`
+- **THEN** the build fails, names `motion.focus.mass` as missing, and writes no file
+
+#### Scenario: Frame rate with the wrong type
+- **WHEN** `motion.fps` is declared with type `number`
+- **THEN** the build fails, naming `motion.fps` and the expected type `frames`, and writes no file
 
 #### Scenario: Extra token in a known group
 - **WHEN** the source adds `color.accent` with type `color` and a valid value

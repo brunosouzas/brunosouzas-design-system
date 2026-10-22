@@ -14,7 +14,7 @@ Turns a catalogue scene into the files the owner reviews and publishes: key-fram
 - **THEN** each of the four compositions gets seven PNGs (frames 200, 365, 500, 620, 775, 990 and 999) under its own folder, and 28 paths are printed
 
 ### Requirement: Master and web videos
-`npm run render -- <scene>` SHALL render every composition of the scene to `out/master/<composition-id>.mp4` (H.264, hardware acceleration used when the machine offers it) and then re-encode it to `out/web/<composition-id>.mp4` (H.264 with x264, CRF 30, `yuv420p`, fast start, no audio) using the ffmpeg bundled with Remotion. Compositions go in format then language order (16x9-pt, 16x9-en, 4x5-pt, 4x5-en), each rendered then encoded before the next starts. It prints one line per composition with its id, the elapsed seconds and both file sizes.
+`npm run render -- <scene>` SHALL render each composition to `out/master/<composition-id>.mp4` (H.264, hardware acceleration when available), then re-encode it with Remotion's bundled ffmpeg to `out/web/<composition-id>.mp4` (x264, CRF 30, `yuv420p`, fast start, no audio). Order: 16x9-pt, 16x9-en, 4x5-pt, 4x5-en, each rendered and encoded before the next. One line per composition gives its id, elapsed seconds and both sizes.
 
 #### Scenario: Render of the circuit-breaker scene
 - **WHEN** the owner runs `npm run render -- circuit-breaker-states`
