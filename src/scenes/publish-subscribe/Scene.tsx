@@ -13,7 +13,7 @@ import { consumers, consumerLines, layouts } from "./layout";
 import { frameAt } from "./flow";
 import { text } from "./text";
 import { timeline } from "./timeline";
-const {color,font,outline}=tokens;
+const {color,font}=tokens;
 const settledPop = (frame:number, at:number) => frame >= at+90 ? {opacity:1,scale:1} : blockPopIn(frame,at);
 export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,format}) => {
   const frame=useCurrentFrame();
@@ -37,7 +37,7 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
       const footer=l.docks[id].y-b.y;
       return <InkBlock key={id} {...b} fill={state.fills[id]} appearance={settledPop(frame,timeline.popIn[id])}>
         <div style={{position:"absolute",top:format==="16x9"&&id!=="api"?4:8,left:10,right:10,textAlign:"center",fontSize:l.size.name,lineHeight:1,fontWeight:font.weightHeavy}}>{lines.map(line=><div key={line}>{line}</div>)}</div>
-        <div style={{position:"absolute",top:footer-14-outline.block,left:id==="api"?80:format==="4x5"?48:70,right:id==="api"?50:format==="4x5"?48:70,textAlign:"center",fontSize:l.size.label,whiteSpace:"nowrap",fontWeight:font.weightBold}}>{t.subtitle}</div>
+        <div style={{position:"absolute",top:footer-18,left:id==="api"?80:format==="4x5"?48:70,right:id==="api"?50:format==="4x5"?48:70,textAlign:"center",fontSize:l.size.label,whiteSpace:"nowrap",fontWeight:font.weightBold}}>{t.subtitle}</div>
       </InkBlock>;
     })}
     {state.tokens.map(item=>{

@@ -8,9 +8,8 @@ The catalogue has one approved state-machine scene. The published Publish-Subscr
 
 - Generalise catalogue consumption to common scene metadata and phase ranges, retaining the existing state-machine timeline and checks as one supported form.
 - Add `publish-subscribe` as four compositions (16:9 and 4:5, PT and EN), 1000 frames at 30 fps: intro, publish acceptance, fan-out, independent consumption, invoice NACK return, final reading hold.
-- Add only the reusable shapes and token-placement logic needed by this scene; reuse the existing tokens and add none.
-- **Owner request after gate-1 stills:** make scene outlines and hard shadows as bold, at displayed size, as the site's static body diagrams. Only the values of `outline.*`, `shadow.*` and `radius.*` in `tokens/source.json` change (old → new and the measured reason in design §7), plus the arrowhead constant and the layout spacing that the thicker shadows need in both scenes. The circuit-breaker scene is re-rendered with the same timeline; its approved look changes only in line weight, shadow offset and the spacing that keeps them apart. Site covers and banners are unaffected: they live outside this repository and do not read these tokens.
-- Keep circuit-breaker data, timing, behaviour and regression assertions unchanged; both scene kinds work through the existing Studio, stills and render commands. Its line weight follows the token change above.
+- Add only the reusable shapes and token-placement logic needed by this scene; reuse existing tokens without changing their values.
+- Keep circuit-breaker data, timing, behaviour and regression assertions unchanged; both scene kinds work through the existing Studio, stills and render commands.
 - Review all key-frame stills with the owner before rendering videos; update the README scene list and roadmap after implementation.
 
 ## Capabilities
@@ -25,13 +24,12 @@ None: scene behaviour belongs in the existing catalogue capability.
 - `motion-components`: generic exchange, queue and tagged container shapes, and persistent/path-based message token placement.
 - `scene-rendering`: pub-sub stills and videos through existing commands, preserving circuit-breaker outputs.
 
-`design-tokens` requirements remain unchanged: no token is added, renamed or retyped. Token *values* for outline, shadow and radius change at the owner's request (design §7); the requirement lists names and types, not values.
+`design-tokens` remains unchanged: no new token or token value is needed.
 
 ## Out of scope
 
 - A fourth subscriber, successful invoice redelivery, repeated publishes, routing rules, TTL, DLQ, duplicate handling, real broker access or XML execution.
-- New narration, sound, invented captions, changes to the published articles, the circuit-breaker pilot's story or its pinned timeline (only its line weight and the spacing that keeps it clear change, §7).
-- Covers, banners and the static diagram SVGs: they are outside this repository and do not read these tokens.
+- New narration, sound, invented captions, changes to the published articles, the circuit-breaker pilot or its pinned timeline.
 - A general-purpose graph editor, arbitrary scene plug-ins, an event simulator or package publication.
 - Rendering in CI, site integration and deployment. Videos stay ignored under `out/`.
 - Code changes in this spec-only commit; implementation waits for gate 1. Independent spec review is performed afterwards by Codex, not by the spec executor.
@@ -49,7 +47,7 @@ Happy-path-only visual requirements need no artificial runtime error: their boun
 
 ## Impact
 
-Implementation affects `src/scenes/catalogue.ts`, `src/scenes/index.ts`, `src/Root.tsx`, `src/brand/`, a new `src/scenes/publish-subscribe/`, and corresponding `test/` suites; scripts may consume a narrowed common type but CLI syntax and output policy do not change. No new dependency. Existing circuit-breaker `scene.ts` and pinned regression test remain unmodified. The owner-requested line-weight change (design §7) touches `tokens/source.json` and `tokens/generated/`, the arrowhead constant in `src/brand/components.tsx`, the call-square gap in the circuit-breaker `Scene.tsx`, and in its `layout.ts` the 4:5 square size and six arrow end points (collision fixes, not timing changes). No ADR is superseded: values stay in one token source (ADR 0002) and shadows stay hard (ADR 0001).
+Implementation affects `src/scenes/catalogue.ts`, `src/scenes/index.ts`, `src/Root.tsx`, `src/brand/`, a new `src/scenes/publish-subscribe/`, and corresponding `test/` suites; scripts may consume a narrowed common type but CLI syntax and output policy do not change. No new dependency. Existing circuit-breaker `scene.ts`, layout, composition and pinned regression test remain unmodified. No ADR is superseded.
 
 ## Open questions
 

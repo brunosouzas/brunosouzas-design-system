@@ -28,13 +28,13 @@
   --ds-motion-pop-stiffness: 140;
   --ds-motion-reading-hold: 90;
   --ds-motion-travel: 22;
-  --ds-outline-arrow: 7px;
-  --ds-outline-block: 9px;
-  --ds-outline-small: 6px;
-  --ds-radius-block: 28px;
-  --ds-radius-pill: 30px;
-  --ds-radius-small: 10px;
-  --ds-shadow-block: 19px;
-  --ds-shadow-pill: 12px;
-  --ds-shadow-small: 6px;
+  --ds-outline-arrow: 4px;
+  --ds-outline-block: 4px;
+  --ds-outline-small: 3px;
+  --ds-radius-block: 18px;
+  --ds-radius-pill: 22px;
+  --ds-radius-small: 6px;
+  --ds-shadow-block: 10px;
+  --ds-shadow-pill: 6px;
+  --ds-shadow-small: 4px;
 }

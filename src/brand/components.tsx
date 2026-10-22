@@ -39,8 +39,7 @@ const COUNTDOWN_INNER_STROKE = 10;
 /** Gap between the countdown's outer circle and the frame edge, and between its two circles. */
 const COUNTDOWN_EDGE = 5;
 const COUNTDOWN_INSET = 7;
-/** 31 (pilot 22): keeps the static body diagrams' head-to-stroke ratio at the bolder `outline.arrow`. */
-const ARROW_HEAD_SIZE = 31;
+const ARROW_HEAD_SIZE = 22;
 
 // Full-bleed light panel with concentric rings (body-diagram background).
 export const Rings: React.FC<{

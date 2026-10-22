@@ -6,7 +6,7 @@ Reusable exchange, queue and tagged-container shapes SHALL use generated tokens 
 #### Scenario: Generic shapes match the diagram language
 - **GIVEN** shapes with scene-supplied text and bounds
 - **WHEN** their settled appearance is inspected
-- **THEN** they have ink outlines and hard offset shadows, the exchange's six vertices, queue's two end rails and container's tab; they contain no hard-coded Anypoint or order labels and read only existing tokens (no new token)
+- **THEN** they have ink outlines and hard offset shadows, the exchange's six vertices, queue's two end rails and container's tab; they contain no hard-coded Anypoint or order labels and use existing token values only
 
 #### Scenario: Shapes before appearance
 - **GIVEN** each shape's pop-in frame

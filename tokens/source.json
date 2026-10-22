@@ -13,19 +13,19 @@
     "failFast": { "$value": "#E0661F", "$type": "color", "$description": "Text and lines of a fail-fast path." }
   },
   "outline": {
-    "block": { "$value": 9, "$type": "dimension" },
-    "arrow": { "$value": 7, "$type": "dimension" },
-    "small": { "$value": 6, "$type": "dimension" }
+    "block": { "$value": 4, "$type": "dimension" },
+    "arrow": { "$value": 4, "$type": "dimension" },
+    "small": { "$value": 3, "$type": "dimension" }
   },
   "shadow": {
-    "block": { "$value": 19, "$type": "dimension", "$description": "Hard offset shadow, never blurred." },
-    "pill": { "$value": 12, "$type": "dimension" },
-    "small": { "$value": 6, "$type": "dimension" }
+    "block": { "$value": 10, "$type": "dimension", "$description": "Hard offset shadow, never blurred." },
+    "pill": { "$value": 6, "$type": "dimension" },
+    "small": { "$value": 4, "$type": "dimension" }
   },
   "radius": {
-    "block": { "$value": 28, "$type": "dimension" },
-    "pill": { "$value": 30, "$type": "dimension" },
-    "small": { "$value": 10, "$type": "dimension" }
+    "block": { "$value": 18, "$type": "dimension" },
+    "pill": { "$value": 22, "$type": "dimension" },
+    "small": { "$value": 6, "$type": "dimension" }
   },
   "font": {
     "sans": { "$value": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif", "$type": "fontFamily" },
