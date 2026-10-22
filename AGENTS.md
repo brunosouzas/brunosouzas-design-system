@@ -6,11 +6,11 @@ The public visual identity of the blog brunosouzas.com: one source of design tok
 
 Stack: TypeScript, Node.js, React, Remotion, vitest, GitHub Actions, OpenSpec
 
-Nothing is implemented yet: the repository holds the plan, the ADRs and the pilot's evidence (`docs/spikes/2026-10-22-motion-pilot/`). Say so instead of describing files that do not exist. The first change (`docs/roadmap.md`) adds the code, and with it these commands:
+Layout: `tokens/source.json` (the only place token values are written) generates `tokens/generated/` (committed; never edit by hand); `src/brand/` holds the motion components and their frame logic (`motion.ts`); `src/scenes/<scene>/` holds each scene (`scene.ts` data without React, `layout.ts`, `Scene.tsx`); `scripts/` holds the token build and the stills and render commands; `test/` the vitest suites. Node.js 22.12 or later.
 
-- Build: not available yet
-- Test: not available yet
-- Run locally: not available yet
+- Build: `npm ci`, then `npm run tokens` after any change to `tokens/source.json` (`npm run tokens:check` fails on stale output)
+- Test: `npm run typecheck && npm run tokens:check && npm test` (what CI runs; no rendering, no network)
+- Run locally: `npm run studio` (Remotion Studio), `npm run stills -- <scene>` (key-frame PNGs in `out/stills/`), `npm run render -- <scene>` (masters in `out/master/`, web copies in `out/web/`); both accept `--dry-run`. Rendering needs the network (headless browser on first use, Lato from Google Fonts).
 
 ## Rules for this repository
 
