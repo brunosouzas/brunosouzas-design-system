@@ -41,4 +41,4 @@ Test levels: **unit** (vitest, no files), **integration** (vitest with a tempora
 ## 6. Documentation and delivery
 
 - [x] 6.1 Update `README.md` (status, commands, how a scene is built), `AGENTS.md` (Build, Test, Run; remove "nothing is implemented") and `docs/roadmap.md` (row 1 delivered). Check: every command in the README runs.
-- [ ] 6.2 Run `openspec validate tokens-and-motion-foundation --strict`, then archive the change in the branch and replace any `TBD` purpose. Check: `openspec validate --all --strict` and `openspec validate --archived` exit 0.
+- [x] 6.2 Run `openspec validate tokens-and-motion-foundation --strict`, then archive the change in the branch and replace any `TBD` purpose. Check: `openspec validate --all --strict` and `openspec validate --archived` exit 0.
