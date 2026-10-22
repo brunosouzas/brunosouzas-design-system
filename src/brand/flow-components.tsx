@@ -4,7 +4,7 @@ import React from "react";
 import { useCurrentFrame } from "remotion";
 import { tokens } from "../../tokens/generated/tokens";
 import { sans } from "./fonts";
-import { flowShape, positionedTokenStyle, type Bounds } from "./flow-shapes";
+import { flowShape, positionedTokenDrawing, type Bounds } from "./flow-shapes";
 import type { Point } from "./motion";
 
 type ShapeProps = Bounds & { appearAt: number; children?: React.ReactNode };
@@ -35,10 +35,10 @@ export const ContainerTab: React.FC<{label:string}> = ({label}) => {
   return <div style={{position:"absolute", left:20, top:-28, background:color.transitional, border:`${outline.small}px solid ${color.ink}`, boxShadow:`${shadow.pill}px ${shadow.pill}px 0 ${color.ink}`, borderRadius:radius.pill, padding:"6px 24px", fontFamily:sans, fontSize:30, fontWeight:font.weightHeavy, whiteSpace:"nowrap"}}>{label}</div>;
 };
 export const PositionedToken: React.FC<{point:Point | null; stroke?:string; fill?:string; width:number; height:number}> = ({point, stroke, fill, width,height}) => {
-  if (!point) return null;
-  const s = positionedTokenStyle(point, stroke, fill);
+  const s = positionedTokenDrawing(point, stroke, fill);
+  if (s === null) return null;
   return <svg width={width} height={height} style={{position:"absolute", inset:0, overflow:"visible"}}>
-    <circle cx={point.x+s.shadow} cy={point.y+s.shadow} r={s.radius} fill={tokens.color.ink}/>
-    <circle cx={point.x} cy={point.y} r={s.radius} fill={s.fill} stroke={s.stroke} strokeWidth={s.strokeWidth}/>
+    <circle cx={s.point.x+s.shadow} cy={s.point.y+s.shadow} r={s.radius} fill={tokens.color.ink}/>
+    <circle cx={s.point.x} cy={s.point.y} r={s.radius} fill={s.fill} stroke={s.stroke} strokeWidth={s.strokeWidth}/>
   </svg>;
 };

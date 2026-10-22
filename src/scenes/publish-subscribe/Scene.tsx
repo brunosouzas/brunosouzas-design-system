@@ -6,10 +6,10 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { Arrow, CallSquare, InkBlock, Rings } from "../../brand/components";
 import { Exchange, Queue, TaggedContainer, ContainerTab, PositionedToken } from "../../brand/flow-components";
 import { sans } from "../../brand/fonts";
-import { blockPopIn, pillPopIn, pointAlong } from "../../brand/motion";
+import { blockPopIn, pillPopIn } from "../../brand/motion";
 import { tokens } from "../../../tokens/generated/tokens";
 import type { Format, Lang } from "../catalogue";
-import { consumers, consumerLines, layouts } from "./layout";
+import { consumers, consumerLines, layouts, tokenPoint } from "./layout";
 import { frameAt } from "./flow";
 import { text } from "./text";
 import { timeline } from "./timeline";
@@ -41,7 +41,7 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
       </InkBlock>;
     })}
     {state.tokens.map(item=>{
-      const point=item.route ? pointAlong(l.routes[item.route],item.progress ?? 0) : item.node ? l.docks[item.node] : null;
+      const point=tokenPoint(item,l);
       return <PositionedToken key={item.copy} point={point} stroke={item.stroke} fill={item.fill} width={l.width} height={l.height}/>;
     })}
     {timeline.routes.filter(route=>route.labelAt!==undefined).map(route=>{

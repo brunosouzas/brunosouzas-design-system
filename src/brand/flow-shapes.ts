@@ -17,6 +17,10 @@ export const flowShape = (kind: "exchange" | "queue" | "container", bounds: Boun
     tab: kind === "container" ? { fill: color.transitional, radius: radius.pill, strokeWidth: outline.small, shadow: shadow.pill } : null,
   };
 };
+/** What PositionedToken draws: nothing when the path gave no point, else the token style. */
+export const positionedTokenDrawing = (point: Point | null, stroke?: string, fill?: string) =>
+  point === null ? null : positionedTokenStyle(point, stroke, fill);
+
 export const positionedTokenStyle = (point: Point, stroke: string = tokens.color.ink, fill: string = tokens.color.white) => ({
   point, radius: 17, fill, stroke, strokeWidth: tokens.outline.small + 1, shadow: tokens.shadow.small,
 });

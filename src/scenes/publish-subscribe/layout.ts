@@ -3,7 +3,7 @@
 // and labels have separate allocations; the stills gate checks actual font fit.
 import type { Format, Lang } from "../catalogue";
 import type { Bounds } from "../../brand/flow-shapes";
-import type { Point } from "../../brand/motion";
+import { pointAlong, type Point } from "../../brand/motion";
 export const consumers = ["payment", "inventory", "invoice"] as const;
 export type Layout = {
   width:number; height:number; mq:Bounds; boxes:Record<string,Bounds>;
@@ -65,6 +65,14 @@ portrait.arrows["invoice-return"]="M727,1113 L727,1180 L330,1180 L330,1119";
 portrait.labels.publish={x:420,y:195};
 portrait.routes["invoice-return"]="M727,1113 L727,1180 L330,1180 L330,1085 L140,1085";
 export const layouts:Record<Format,Layout>={"16x9":landscape,"4x5":portrait};
+
+/** Where a copy is drawn: along its route, at its node's dock, or nowhere (null) when the path yields no point. */
+export const tokenPoint = (
+  item: { route?: string; progress?: number | null; node?: string },
+  l: Layout,
+  evaluate: (path: string, t: number) => Point | null = pointAlong,
+): Point | null =>
+  item.route ? evaluate((l.routes as Record<string, string>)[item.route], item.progress ?? 0) : item.node ? (l.docks as Record<string, Point>)[item.node] ?? null : null;
 /** Word wrapping is view data, preserving spaces and complete identifiers. */
 export const consumerLines = (lang:Lang, format:Format, index:number): string[] => {
   if (lang === "en") return [["Payment","consumer"],["Inventory","consumer"],["Invoice","consumer"]][index];

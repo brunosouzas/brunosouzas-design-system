@@ -2,6 +2,8 @@
 import {expect,test} from "vitest";
 import {getLength,getPointAtLength} from "@remotion/paths";
 import {positionedTokenAt} from "../../src/brand/motion";
+import {positionedTokenDrawing} from "../../src/brand/flow-shapes";
+import {layouts,tokenPoint} from "../../src/scenes/publish-subscribe/layout";
 test("Stationary path and return placement",()=>{
   for(const path of ["M0,0 L40,0 L40,100","M40,100 L40,0 L0,0"]){
     const placement={path,departAt:100};
@@ -14,4 +16,13 @@ test("Stationary path and return placement",()=>{
     }
   }
 });
-test("Token path cannot yield a point",()=>{expect(positionedTokenAt(111,{path:"M0,0 L10,0",departAt:100},()=>null)).toBeNull();});
+test("Token path cannot yield a point",()=>{
+  expect(positionedTokenAt(111,{path:"M0,0 L10,0",departAt:100},()=>null)).toBeNull();
+  // The production path the scene uses: tokenPoint (placement) then positionedTokenDrawing (what PositionedToken draws).
+  const l=layouts["16x9"];
+  const route=Object.keys(l.routes)[0];
+  expect(()=>tokenPoint({route,progress:.5},l,()=>null)).not.toThrow();
+  expect(tokenPoint({route,progress:.5},l,()=>null)).toBeNull();
+  expect(positionedTokenDrawing(null)).toBeNull();
+  expect(positionedTokenDrawing(tokenPoint({route,progress:.5},l))).not.toBeNull();
+});
