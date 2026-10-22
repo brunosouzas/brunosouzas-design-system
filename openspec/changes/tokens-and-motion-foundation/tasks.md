@@ -1,0 +1,43 @@
+# Tasks
+
+Test levels: **unit** (vitest, no files), **integration** (vitest with a temporary folder or an injected command runner), **local** (a command the owner runs on a Mac, with its expected output; not in CI because it renders).
+
+## 1. Project setup
+
+- [ ] 1.1 Add `package.json` (scripts `tokens`, `tokens:check`, `stills`, `render`, `studio`, `test`, `typecheck`; Node 22 or later), `tsconfig.json`, the dependencies listed in the proposal, and `vitest.config.ts`. Check: `npm ci && npm run typecheck` exits 0.
+- [ ] 1.2 Add `.github/workflows/ci.yml` (actions pinned by commit SHA): `npm ci`, `npm run typecheck`, `npm run tokens:check`, `npm test` on Node 22. Check: the workflow passes on the pull request.
+
+## 2. Design tokens (`design-tokens`)
+
+- [ ] 2.1 Write `tokens/source.json` with the pilot's values (same hex, sizes and timings as the pilot's `tokens.ts`) and every required token. Check: `npm run tokens` exits 0 and prints three paths.
+- [ ] 2.2 Implement validation in `scripts/tokens.ts`. Tests in `test/tokens/validate.test.ts` (unit):
+  - "Source with an unknown group", "Token without a type"
+  - "Malformed colour", "Zero or negative frame count", "Opacity above one", "Boundary values accepted"
+  - "Missing required token", "Extra token in a known group" (accepted part)
+- [ ] 2.3 Implement the three emitters. Tests in `test/tokens/emit.test.ts` (unit): "CSS custom property names and units", "TypeScript and JSON keep the nesting", "Generated files say they are generated", "Extra token in a known group" (appears in all three outputs), "Key order does not matter".
+- [ ] 2.4 Implement write and check modes. Tests in `test/tokens/files.test.ts` (integration, temporary folder): "Same source, same bytes", "Stale output", "Missing output", "Invalid source during the check", and "writes no file" for each invalid-source scenario of 2.2 (the folder is unchanged after a failed build).
+- [ ] 2.5 Commit `tokens/generated/`. Check: `npm run tokens:check` exits 0.
+
+## 3. Motion components (`motion-components`)
+
+- [ ] 3.1 Port the frame logic into `src/brand/motion.ts`. Tests in `test/brand/motion.test.ts` (unit): "Before the draw frame", "Half way", "Fully drawn", "Token position over a trip", "Transition fires twice", "Focus changes to the next state", "Reading hold", "Blocked call inside the OPEN block", "Countdown at the phase boundaries".
+- [ ] 3.2 Port the components into `src/brand/components.tsx` and `src/brand/fonts.ts`, reading only `tokens/generated/tokens.ts`. Test in `test/brand/no-colour-literals.test.ts` (unit, scans `src/brand/` and `src/scenes/`): "Colour literal in a component" (a fixture file with `#FF8A3D` is reported with its line; the real sources report nothing).
+- [ ] 3.3 "Token change reaches the components" (local): change `color.ink` to `#FF0000` in a scratch copy of the source, run `npm run tokens` and `npx remotion still src/index.ts circuit-breaker-states-16x9-en out/ink-check.png --frame=999`; expected: outlines and shadows are red in the PNG. Restore the source and rebuild; `npm run tokens:check` exits 0.
+
+## 4. Scene catalogue (`scene-catalogue`)
+
+- [ ] 4.1 Add `src/scenes/index.ts`, `src/Root.tsx` and `src/index.ts`; register compositions from scene data. Tests in `test/scenes/catalogue.test.ts` (unit): "Circuit-breaker compositions", "Duplicate composition id" (two fixture scenes with one id).
+- [ ] 4.2 Add the catalogue checks for text tables and timelines, run over every registered scene and over broken fixture scenes, in `test/scenes/catalogue.test.ts` (unit): "Key missing in one language", "Empty string or missing source", "Overlapping phases", "Event outside its phase", "Movement inside the reading hold".
+- [ ] 4.3 Port the circuit-breaker scene into `src/scenes/circuit-breaker-states/` (`scene.ts`, `layout.ts`, `Scene.tsx`) with the pilot's strings, timeline and layouts. Tests in `test/scenes/circuit-breaker.test.ts` (unit): "Phase and transition order", "Failure crosses the threshold before OPEN", "The failed test reopens, the successful test closes".
+- [ ] 4.4 "Caption follows the active state" (local): `npm run stills -- circuit-breaker-states`; expected: in each of the 28 PNGs the caption names the phase's state and shows its sentence in the composition's language. Compare the 16:9 and 4:5 stills with the pilot's contact sheets in `docs/spikes/2026-10-22-motion-pilot/`: same layout and colours.
+
+## 5. Scene rendering (`scene-rendering`)
+
+- [ ] 5.1 Implement `scripts/cli.ts` (argument parsing, scene lookup, command list, injectable runner), `scripts/stills.ts` and `scripts/render.ts`. Tests in `test/scripts/cli.test.ts` (integration, injected runner, temporary `out/`): "Dry run of a render", "Unknown scene", "Missing argument", "Unknown option", "Encode failure", "Rendering again" (every render command carries `--overwrite` and every encode `-y`), "Paths of every written file" (every output path in the command list is under `out/`), and the stills command list for "Stills of the circuit-breaker scene" (28 commands with the expected frames and paths).
+- [ ] 5.2 "Stills of the circuit-breaker scene" (local): `npm run stills -- circuit-breaker-states`; expected: 4 folders under `out/stills/`, 7 PNGs each.
+- [ ] 5.3 "Render of the circuit-breaker scene" (local): `npm run render -- circuit-breaker-states`; expected: 4 files in `out/master/` and 4 in `out/web/`; `npx remotion ffmpeg -hide_banner -i out/web/<id>.mp4` shows 1920x1080 or 1080x1350, 30 fps, 33.33 s; each web file is smaller than its master.
+
+## 6. Documentation and delivery
+
+- [ ] 6.1 Update `README.md` (status, commands, how a scene is built), `AGENTS.md` (Build, Test, Run; remove "nothing is implemented") and `docs/roadmap.md` (row 1 delivered). Check: every command in the README runs.
+- [ ] 6.2 Run `openspec validate tokens-and-motion-foundation --strict`, then archive the change in the branch and replace any `TBD` purpose. Check: `openspec validate --all --strict` and `openspec validate --archived` exit 0.
