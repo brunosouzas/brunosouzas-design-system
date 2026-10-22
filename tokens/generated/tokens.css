@@ -1,0 +1,40 @@
+/* Generated from tokens/source.json by scripts/tokens.ts (npm run tokens). Do not edit by hand. */
+:root {
+  --ds-color-backend: #FF6B6B;
+  --ds-color-blocked: #FF8A3D;
+  --ds-color-caller: #8FB2FF;
+  --ds-color-fail-fast: #E0661F;
+  --ds-color-failure: #E04848;
+  --ds-color-healthy: #3DDC84;
+  --ds-color-ink: #0A1033;
+  --ds-color-panel: #EEF2FF;
+  --ds-color-ring: #E0E7FB;
+  --ds-color-transitional: #FFD25A;
+  --ds-color-white: #FFFFFF;
+  --ds-font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --ds-font-sans: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-heavy: 900;
+  --ds-motion-dim-opacity: 0.42;
+  --ds-motion-draw-arrow: 20;
+  --ds-motion-fade: 10;
+  --ds-motion-focus-damping: 200;
+  --ds-motion-focus-mass: 1;
+  --ds-motion-focus-stiffness: 120;
+  --ds-motion-focus-scale: 1.06;
+  --ds-motion-fps: 30;
+  --ds-motion-pop-damping: 13;
+  --ds-motion-pop-mass: 0.7;
+  --ds-motion-pop-stiffness: 140;
+  --ds-motion-reading-hold: 90;
+  --ds-motion-travel: 22;
+  --ds-outline-arrow: 4px;
+  --ds-outline-block: 4px;
+  --ds-outline-small: 3px;
+  --ds-radius-block: 18px;
+  --ds-radius-pill: 22px;
+  --ds-radius-small: 6px;
+  --ds-shadow-block: 10px;
+  --ds-shadow-pill: 6px;
+  --ds-shadow-small: 4px;
+}
