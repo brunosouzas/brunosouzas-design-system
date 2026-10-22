@@ -26,7 +26,7 @@ for (const [i,id] of consumers.entries()) {
   landscape.routes[`${id}-subscriber`]=`M${x+60},650 L${x+60},745 L${x+24},745 L${x+24},925`;
   landscape.arrows[`${id}-binding`]=`M655,385 L655,475 L${x+60},475 L${x+60},528`;
   landscape.arrows[`${id}-subscriber`]=`M${x+60},650 L${x+60},745 L${x+24},745 L${x+24},778`;
-  landscape.labels[`${id}-binding`]={x:x+300,y:490};
+  landscape.labels[`${id}-binding`]={x:x+300,y:515};
   landscape.labels[`${id}-subscriber`]={x:x+260,y:730};
 }
 landscape.routes.publish="M660,125 L550,125 L550,385 L655,385";

@@ -42,6 +42,15 @@ test("Landscape preserves diagram topology",()=>{
     }
     expect(app.y+app.h+tokens.shadow.block).toBeLessThanOrEqual(l.caption.y);
   }
+  // Regression from the supplemental midpoint still: a binding token passed
+  // over its label. Reserve the label rectangle plus token/shadow clearance.
+  for(const id of consumers){
+    const label=l.labels[`${id}-binding`];
+    for(let step=0;step<=100;step++){
+      const p=pointAlong(l.routes[`${id}-binding`],step/100)!;
+      expect(Math.abs(p.x-label.x)>86 || Math.abs(p.y-label.y)>39,`${id} binding at ${step}% obscures label`).toBe(true);
+    }
+  }
   expect(pointAlong(l.routes["invoice-return"],1)).toEqual(l.docks["invoice-queue"]);
   expect(l.routes["invoice-return"]).not.toBe(layouts["4x5"].routes["invoice-return"]);
 });
