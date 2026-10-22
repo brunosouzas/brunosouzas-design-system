@@ -45,7 +45,7 @@ Rejected: no prefix (clashes with `--color-primary` and friends); `--brunosouzas
 
 ### 5. Frame logic as pure functions
 
-`src/brand/motion.ts` holds the decisions that the components draw: arrow progress and head visibility, token position along a path, focus and opacity of a state at a frame, countdown fraction, the fill and glyph of each call kind. Components stay thin wrappers. Unit tests prove the motion scenarios on these functions with vitest, without a browser.
+`src/brand/motion.ts` holds the decisions that the components draw: arrow progress and head visibility, token position along a path, focus and opacity of a state at a frame (intro, between phases and outro included), the caption shown at a frame, countdown fraction, the fill and glyph of each call kind. Components stay thin wrappers. Unit tests prove the motion scenarios on these functions with vitest, without a browser.
 
 Rejected: testing rendered components (needs a Remotion player context and screenshots; slow and brittle for numeric checks).
 
@@ -55,15 +55,39 @@ Each scene folder has `scene.ts` (id, formats, duration, timeline, text table, s
 
 ### 7. Render and stills through the Remotion CLI
 
-`scripts/render.ts` and `scripts/stills.ts` build the command list from the scene data, print it in `--dry-run`, or run it in order with a child process, stopping at the first failure. Render: `npx remotion render src/index.ts <id> out/master/<id>.mp4 --codec=h264 --hardware-acceleration=if-possible --overwrite`; encode: `npx remotion ffmpeg -y -i <master> -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an out/web/<id>.mp4`; stills: `npx remotion still ... --frame=<n>`. The command runner is injectable, so tests prove ordering and stop-on-failure without rendering.
+`scripts/cli.ts` parses the arguments (first problem only: unknown option, extra name, missing name, unknown scene) and runs a command list; `scripts/render.ts` and `scripts/stills.ts` build the command list from the scene data, print it in `--dry-run`, or run it in order with a child process, stopping at the first failure. Render: `npx remotion render src/index.ts <id> out/master/<id>.mp4 --codec=h264 --hardware-acceleration=if-possible --overwrite`; encode: `npx remotion ffmpeg -y -i <master> -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an out/web/<id>.mp4`; stills: `npx remotion still ... --frame=<n>`. The command runner is injectable, so tests prove ordering and stop-on-failure without rendering.
 
 Rejected: the `@remotion/renderer` Node API (more code to keep, and the CLI is what the owner runs by hand when reviewing).
 
-### 8. Layout
+### 8. The pilot's timeline, frame by frame
+
+The approved pilot (`~/.hermes/spikes/motion/pilot/src/scenes/circuit-breaker/timeline.ts` and `StateMachine.tsx`) uses these values; the ported `scene.ts` must hold exactly them, and `test/scenes/circuit-breaker.test.ts` compares the two. Phase ranges are inclusive.
+
+| Item | Frames |
+|---|---|
+| Duration | 1000 (30 fps, 33.33 s) |
+| Intro end (first phase starts, dimming starts) | 40 |
+| Outro (everything back to full opacity) | 910 |
+| Start marker fade | 4 to 14 |
+| Block pop-in (CLOSED, OPEN, HALF_OPEN) | 6, 14, 22 |
+| Phase 1 CLOSED `[40, 200]` | events at 56, 73, 90, 107, 124, 141, 158, 175: ok, ok, fail, ok, fail, fail, fail, fail |
+| Phase 2 OPEN `[245, 365]` | blocked at 262, 288, 314, 340 |
+| Phase 3 HALF_OPEN `[410, 500]` | ok at 424, fail at 458 |
+| Phase 4 OPEN `[545, 620]` | blocked at 560, 586 |
+| Phase 5 HALF_OPEN `[665, 775]` | ok at 680, 710, 740 |
+| Phase 6 CLOSED `[820, 990]` | ok at 834, 843, 852, 861, 870, 879, 888, 897 |
+| Fires | CLOSED to OPEN 215; OPEN to HALF_OPEN 380 and 630; HALF_OPEN to OPEN 515; HALF_OPEN to CLOSED 790 |
+| Arrow draw frame (first fire minus 18) | 197, 362, 497, 772 |
+| Pill pop-in (draw frame plus 8) | 205, 370, 505, 780 |
+| Slots | CLOSED 8, OPEN 4, HALF_OPEN 3 |
+
+`font.sans` is `Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif` (the designer skill's stack). In the animations, the Lato loaded through `@remotion/google-fonts` (weights 700 and 900) comes first, followed by this stack.
+
+### 9. Layout
 
 ```text
 tokens/source.json            tokens/generated/{tokens.css,tokens.ts,tokens.json}
-scripts/{tokens,render,stills}.ts
+scripts/{tokens,cli,render,stills}.ts
 src/index.ts  src/Root.tsx
 src/brand/{fonts.ts,motion.ts,components.tsx}
 src/scenes/index.ts  src/scenes/circuit-breaker-states/{scene.ts,layout.ts,Scene.tsx}

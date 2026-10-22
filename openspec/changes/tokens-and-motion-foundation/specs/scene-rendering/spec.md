@@ -7,18 +7,22 @@ Turns a catalogue scene into the files the owner reviews and publishes: key-fram
 ## ADDED Requirements
 
 ### Requirement: Stills for review
-`npm run stills -- <scene>` SHALL render, for every composition of the scene, one PNG per phase (at the phase's last frame) plus the composition's last frame, to `out/stills/<composition-id>/<frame>.png`, and print each path.
+`npm run stills -- <scene>` SHALL render, for every composition of the scene, one PNG per phase (at the phase's `to` frame) plus the composition's last frame, to `out/stills/<composition-id>/<frame>.png`, and print each path after it is written.
 
 #### Scenario: Stills of the circuit-breaker scene
 - **WHEN** the owner runs `npm run stills -- circuit-breaker-states`
-- **THEN** each of the four compositions gets seven PNGs (six phases and the last frame) under its own folder
+- **THEN** each of the four compositions gets seven PNGs (frames 200, 365, 500, 620, 775, 990 and 999) under its own folder, and 28 paths are printed
 
 ### Requirement: Master and web videos
-`npm run render -- <scene>` SHALL render every composition of the scene to `out/master/<composition-id>.mp4` (H.264, hardware acceleration used when the machine offers it) and then re-encode it to `out/web/<composition-id>.mp4` (H.264 with x264, CRF 30, `yuv420p`, fast start, no audio) using the ffmpeg bundled with Remotion. It prints one line per composition with the elapsed seconds and both file sizes.
+`npm run render -- <scene>` SHALL render every composition of the scene to `out/master/<composition-id>.mp4` (H.264, hardware acceleration used when the machine offers it) and then re-encode it to `out/web/<composition-id>.mp4` (H.264 with x264, CRF 30, `yuv420p`, fast start, no audio) using the ffmpeg bundled with Remotion. Compositions go in format then language order (16x9-pt, 16x9-en, 4x5-pt, 4x5-en), each rendered then encoded before the next starts. It prints one line per composition with its id, the elapsed seconds and both file sizes.
 
 #### Scenario: Render of the circuit-breaker scene
 - **WHEN** the owner runs `npm run render -- circuit-breaker-states`
-- **THEN** four masters and four web copies exist, each web copy plays for 1000 frames at 30 frames per second and is smaller than its master
+- **THEN** four masters and four web copies exist, each web copy plays for 1000 frames at 30 frames per second and is smaller than its master, and four progress lines are printed
+
+#### Scenario: Progress line
+- **WHEN** a composition finishes rendering and encoding
+- **THEN** one line with its id, the elapsed seconds and the master and web sizes is printed before the next composition starts
 
 #### Scenario: Rendering again
 - **WHEN** the same scene is rendered twice
@@ -32,7 +36,7 @@ Both commands SHALL accept `--dry-run`, which prints every render and encode com
 - **THEN** it prints eight commands (four renders, four encodes), exits 0, and `out/` is unchanged
 
 ### Requirement: Invalid invocation and failures
-Both commands SHALL take exactly one scene name and the optional `--dry-run`, in any order, and SHALL exit 1 without writing anything when the scene is missing or unknown, an option is unknown, or more than one name is given; the message names the problem and lists the available scenes. When a render or encode fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
+Both commands SHALL take one scene name and the optional `--dry-run`, in any order, and SHALL exit 1 without writing anything on a bad invocation, reporting only the first problem in this order: unknown option, more than one name, missing name, unknown scene; the message lists the available scenes. When a render or encode fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
 
 #### Scenario: Unknown scene
 - **WHEN** `npm run render -- circuit-break` runs
@@ -50,12 +54,20 @@ Both commands SHALL take exactly one scene name and the optional `--dry-run`, in
 - **WHEN** `npm run render -- circuit-breaker-states other` runs
 - **THEN** it exits 1, says only one scene is accepted, and writes nothing
 
+#### Scenario: Unknown option and unknown scene together
+- **WHEN** `npm run render -- circuit-break --fast` runs
+- **THEN** it exits 1 naming only `--fast` as unknown
+
+#### Scenario: Render failure
+- **WHEN** the render of `circuit-breaker-states-16x9-en` fails
+- **THEN** the command exits 1, names that composition, runs no encode for it, and does not start `circuit-breaker-states-4x5-pt`
+
 #### Scenario: Encode failure
 - **WHEN** the encode of `circuit-breaker-states-4x5-pt` fails
-- **THEN** the command exits 1, names that composition, and does not start the next one
+- **THEN** the command exits 1, names that composition, does not start `circuit-breaker-states-4x5-en`, and the files of the two 16x9 compositions are still in `out/`
 
 ### Requirement: Output location
-The commands SHALL write only inside `out/` in the repository, which Git ignores.
+Every file the commands name as an output SHALL be inside `out/` in the repository, which Git ignores. Remotion's own temporary bundle and browser cache, which the library manages outside the repository, are not outputs of these commands.
 
 #### Scenario: Paths of every written file
 - **WHEN** a render or stills run finishes

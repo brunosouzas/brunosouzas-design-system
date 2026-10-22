@@ -18,7 +18,7 @@ The repository SHALL keep every token in one source file, `tokens/source.json`. 
 - **THEN** the build fails, names the token's full path and the reason, and writes no file
 
 ### Requirement: Token shape, names and nesting
-A token SHALL be an object with `$value` and `$type`, and MAY have `$description`, which no output uses; any other key starting with `$` is an error. Group and token names SHALL be camelCase ASCII (`^[a-z][a-zA-Z0-9]*$`). A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting, or a group holding no token, is an error. A file that is not valid JSON is an error.
+A token SHALL be an object with `$value` and `$type`, and MAY have `$description`, which no output uses; any other key in a token is an error. A group SHALL be an object whose keys are tokens or (at the second level) groups. Names SHALL be camelCase ASCII (`^[a-z][a-zA-Z0-9]*$`). A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting or an empty group is an error. A file that is not valid JSON is an error.
 
 #### Scenario: Invalid JSON
 - **WHEN** `tokens/source.json` has a trailing comma
@@ -29,11 +29,26 @@ A token SHALL be an object with `$value` and `$type`, and MAY have `$description
 - **THEN** the build fails, naming the token path and "expected camelCase", and writes no file
 
 #### Scenario: Too deep or unknown token key
-- **WHEN** the source has `motion.pop.spring.damping`, or a token with a `$unit` key
+- **WHEN** the source has `motion.pop.spring.damping`, or a token with a `$unit` key, or a token `color.ink` that also holds a child `dark`
 - **THEN** the build fails, naming the path, and writes no file
 
+#### Scenario: Group that is not an object
+- **WHEN** the source has `"outline": 4` or `"color": []`
+- **THEN** the build fails, naming the group, and writes no file
+
+#### Scenario: Two paths with one CSS name
+- **WHEN** the source has both `motion.pop.damping` and `motion.popDamping`
+- **THEN** the build fails, naming both paths and the shared name `--ds-motion-pop-damping`, and writes no file
+
+### Requirement: Every problem reported at once
+When the source breaks several rules, the build and the check SHALL report every problem found, one line each, sorted by token path in Unicode code-point order (a problem with no path, such as invalid JSON, first), and exit 1. Invalid JSON stops validation, since nothing else can be read.
+
+#### Scenario: Unknown group and missing token together
+- **WHEN** the source has a group `colour` and lacks `color.failure`
+- **THEN** the build prints both problems, `color.failure` before `colour`, and exits 1
+
 ### Requirement: Supported token types and their values
-The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a positive integer of pixels), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string), `fontWeight` (an integer from 100 to 900 in steps of 100).
+The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a positive integer of pixels), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string without `;`, `{`, `}`, `<`, `>` or a line break), `fontWeight` (an integer from 100 to 900 in steps of 100).
 
 #### Scenario: Malformed colour
 - **WHEN** a `color` token has the value `#12345` or `red`
@@ -47,16 +62,24 @@ The build SHALL accept these types and reject a value that does not fit its type
 - **WHEN** an `opacity` token has the value `1.2`
 - **THEN** the build fails, naming the token path, and writes no file
 
+#### Scenario: Font family that would break the CSS
+- **WHEN** `font.sans` is `Lato; } body { color: red`
+- **THEN** the build fails, naming `font.sans`, and writes no file
+
 #### Scenario: Boundary values accepted
 - **WHEN** an `opacity` token is `1`, a `fontWeight` token is `900` and a `dimension` token is `1`
 - **THEN** the build accepts them
 
 ### Requirement: Required tokens
-The source SHALL define every token the components read: `color` ink, white, panel, ring, healthy, blocked, transitional, caller, backend, failure, failFast; `outline` block, arrow, small; `shadow` block, pill, small; `radius` block, pill, small; `font` sans, mono, weightBold, weightHeavy; `motion` fps, pop and focus (each damping, stiffness, mass), drawArrow, travel, fade, dimOpacity, focusScale, readingHold.
+The source SHALL define every token the components read, with this type: `color` ink, white, panel, ring, healthy, blocked, transitional, caller, backend, failure, failFast (`color`); `outline` block, arrow, small, `shadow` block, pill, small, `radius` block, pill, small (`dimension`); `font` sans, mono (`fontFamily`), weightBold, weightHeavy (`fontWeight`); `motion` fps, drawArrow, travel, fade, readingHold (`frames`), dimOpacity (`opacity`), focusScale and pop and focus damping, stiffness, mass (`number`).
 
 #### Scenario: Missing required token
 - **WHEN** the source lacks `color.failure`
 - **THEN** the build fails, names `color.failure` as missing, and writes no file
+
+#### Scenario: Required token with the wrong type
+- **WHEN** `outline.block` is declared with type `number`
+- **THEN** the build fails, naming `outline.block` and the expected type `dimension`, and writes no file
 
 #### Scenario: Extra token in a known group
 - **WHEN** the source adds `color.accent` with type `color` and a valid value

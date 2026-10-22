@@ -11,28 +11,36 @@ Each scene SHALL be registered as one composition per format and language, with 
 
 #### Scenario: Circuit-breaker compositions
 - **WHEN** the catalogue is loaded
-- **THEN** it holds `circuit-breaker-states-16x9-pt`, `circuit-breaker-states-16x9-en`, `circuit-breaker-states-4x5-pt` and `circuit-breaker-states-4x5-en`, with the sizes above and 30 frames per second
+- **THEN** it holds `circuit-breaker-states-16x9-pt`, `circuit-breaker-states-16x9-en`, `circuit-breaker-states-4x5-pt` and `circuit-breaker-states-4x5-en`, with the sizes above and 30 frames per second, grouped under the folder `circuit-breaker-states`
 
 #### Scenario: Duplicate composition id
 - **WHEN** two scenes would register the same composition id
 - **THEN** the catalogue test fails and names the id
 
 ### Requirement: Text table per language
-Each scene SHALL keep every on-screen string in one text table with a `pt` and an `en` entry holding the same keys, and SHALL record the URL of its source article for each language.
+Each scene SHALL keep every on-screen string in one text table with a `pt` and an `en` entry holding the same keys at every level, and SHALL record the URL of its source article for each language. A list of strings counts as one key: it must be non-empty in both languages, and its length may differ between them (a label can wrap into more lines in Portuguese).
 
 #### Scenario: Key missing in one language
-- **WHEN** the `en` entry lacks a key the `pt` entry has
-- **THEN** the catalogue test fails and names the scene, the language and the key
+- **WHEN** the `en` entry lacks a key the `pt` entry has, at any level
+- **THEN** the catalogue test fails and names the scene, the language and the key path
+
+#### Scenario: Lists of different lengths
+- **WHEN** a label is a list of three lines in `pt` and two in `en`
+- **THEN** the catalogue test passes
+
+#### Scenario: Empty list
+- **WHEN** a label is an empty list in one language
+- **THEN** the catalogue test fails and names the scene, the language and the key path
 
 #### Scenario: Empty string or missing source
 - **WHEN** a string is empty, or a language has no source article URL starting with `https://`
 - **THEN** the catalogue test fails and names the scene and the entry
 
 ### Requirement: Valid timeline
-Each scene's timeline SHALL list phases in increasing, non-overlapping frame ranges inside the composition; each event SHALL fall inside its phase; each transition fire SHALL fall after the start of its source phase and before the start of the phase it leads to. No phase start, event or fire SHALL happen in the last `motion.readingHold` frames.
+Each scene's timeline SHALL list phases as inclusive frame ranges `[from, to]` inside the composition, each starting after the previous one's `to`; each event SHALL fall inside its phase; each transition fire SHALL fall after its source phase's `from` and before the next phase's `from`. No phase start, event or fire SHALL happen in the last `motion.readingHold` frames.
 
 #### Scenario: Overlapping phases
-- **WHEN** a phase starts before the previous phase ends
+- **WHEN** a phase's `from` is equal to or before the previous phase's `to`
 - **THEN** the catalogue test fails and names the scene and both phases
 
 #### Scenario: Event outside its phase
@@ -44,7 +52,11 @@ Each scene's timeline SHALL list phases in increasing, non-overlapping frame ran
 - **THEN** the catalogue test fails and names the scene and the frame
 
 ### Requirement: Circuit-breaker state machine scene
-The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" through one loop: CLOSED, OPEN, HALF_OPEN, OPEN, HALF_OPEN, CLOSED. Its strings are the article's diagram labels and its three state sentences, in Portuguese and English. It lasts 1000 frames.
+The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels and its three state sentences. Its timing is the approved pilot's, listed frame by frame in the design.
+
+#### Scenario: Timing equals the approved pilot
+- **WHEN** the scene's timeline is compared with the pilot timeline table in the design
+- **THEN** duration, intro end, outro frame, every phase range, every event, every transition fire, every draw and pill frame, and the slot counts are equal
 
 #### Scenario: Phase and transition order
 - **WHEN** the scene's timeline is read
@@ -61,3 +73,7 @@ The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HAL
 #### Scenario: Caption follows the active state
 - **WHEN** a still is taken during each phase
 - **THEN** the caption shows the active state's name and its sentence from the article, in the composition's language
+
+#### Scenario: Caption outside phases
+- **WHEN** the frame is before the first phase, or between two phases, or in the outro
+- **THEN** there is no caption before the first phase; between phases and in the outro the caption of the latest phase that started stays
