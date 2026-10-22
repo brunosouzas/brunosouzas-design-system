@@ -2,9 +2,11 @@
 // scene means adding its data here and its component in src/Root.tsx; the
 // catalogue tests then check its text table, timeline and composition ids.
 // No React here: the CLI scripts import this file under tsx.
-import type { SceneData } from "./catalogue";
+import type { CatalogueScene } from "./catalogue";
 import { circuitBreakerStates } from "./circuit-breaker-states/scene";
 
-export const scenes: readonly SceneData[] = [circuitBreakerStates];
+import { publishSubscribe } from "./publish-subscribe/scene.ts";
 
-export const findScene = (id: string): SceneData | undefined => scenes.find((scene) => scene.id === id);
+export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe];
+
+export const findScene = (id: string): CatalogueScene | undefined => scenes.find((scene) => scene.id === id);

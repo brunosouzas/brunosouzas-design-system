@@ -138,7 +138,7 @@ describe("Invalid invocation and failures", () => {
     expect(h.err).toEqual([
       "error: missing scene name",
       "usage: npm run stills -- <scene> [--dry-run]",
-      `available scenes: ${SCENE}`,
+      `available scenes: ${SCENE}, publish-subscribe`,
     ]);
     expectNothingWritten(h);
   });

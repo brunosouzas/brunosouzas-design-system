@@ -21,6 +21,7 @@ import {
   squarePopScale,
   tokenPositions,
   type Appearance,
+  type CallAppearance,
   type SlotKind,
 } from "./motion";
 
@@ -219,10 +220,10 @@ export const Arrow: React.FC<{
 };
 
 // A call result: a square with a glyph (ok, fail, blocked) or a dashed empty slot.
-export const CallSquare: React.FC<{ kind: SlotKind; size: number; appearAt: number }> = ({ kind, size, appearAt }) => {
+export const CallSquare: React.FC<{ kind: SlotKind; size: number; appearAt: number; look?: CallAppearance }> = ({ kind, size, appearAt, look: override }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const look = callAppearance(kind);
+  const look = override ?? callAppearance(kind);
   const pop = kind === "empty" ? 1 : popSpring(frame, appearAt, fps);
   const visible = kind === "empty" || frame >= appearAt;
   return (
