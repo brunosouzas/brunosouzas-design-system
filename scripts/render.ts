@@ -14,7 +14,7 @@
 // needs the network on first use (headless browser) and on every render (Lato).
 import { existsSync, mkdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { compositionsOf, type SceneData } from "../src/scenes/catalogue";
+import { compositionsOf, type CatalogueScene } from "../src/scenes/catalogue";
 import { scenes } from "../src/scenes";
 import {
   defaultIo,
@@ -31,7 +31,7 @@ export const masterPath = (compositionId: string): string => `out/master/${compo
 export const webPath = (compositionId: string): string => `out/web/${compositionId}.mp4`;
 
 /** Render then encode, per composition, in catalogue order. */
-export const renderCommands = (scene: SceneData): Command[] =>
+export const renderCommands = (scene: CatalogueScene): Command[] =>
   compositionsOf(scene).flatMap(({ id }) => [
     {
       kind: "render" as const,

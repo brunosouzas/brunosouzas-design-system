@@ -12,7 +12,7 @@
 import { spawn } from "node:child_process";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import type { SceneData } from "../src/scenes/catalogue";
+import type { CatalogueScene } from "../src/scenes/catalogue";
 
 export const DRY_RUN = "--dry-run";
 
@@ -61,7 +61,7 @@ export const defaultIo = (): Io => ({
   now: () => Date.now(),
 });
 
-export type Invocation = { ok: true; scene: SceneData; dryRun: boolean } | { ok: false; problem: string };
+export type Invocation = { ok: true; scene: CatalogueScene; dryRun: boolean } | { ok: false; problem: string };
 
 /**
  * Scene and composition ids become folder and file names under out/, and one
@@ -84,7 +84,7 @@ export const outputOutsideOut = (root: string, commands: readonly Command[]): st
   commands.find((command) => !isInsideOut(root, command.output))?.output ?? null;
 
 /** Parses `<scene> [--dry-run]` in any order; reports only the first problem, in the spec's order. */
-export const parseInvocation = (argv: readonly string[], scenes: readonly SceneData[]): Invocation => {
+export const parseInvocation = (argv: readonly string[], scenes: readonly CatalogueScene[]): Invocation => {
   const options = argv.filter((arg) => arg.startsWith("-"));
   const names = argv.filter((arg) => !arg.startsWith("-"));
   const unknown = options.find((option) => option !== DRY_RUN);
@@ -99,7 +99,7 @@ export const parseInvocation = (argv: readonly string[], scenes: readonly SceneD
 };
 
 /** Prints a bad invocation's problem, the usage and the available scenes. */
-export const reportInvocationProblem = (problem: string, tool: "stills" | "render", scenes: readonly SceneData[], io: Io): number => {
+export const reportInvocationProblem = (problem: string, tool: "stills" | "render", scenes: readonly CatalogueScene[], io: Io): number => {
   io.error(`error: ${problem}`);
   io.error(`usage: npm run ${tool} -- <scene> [${DRY_RUN}]`);
   io.error(`available scenes: ${scenes.map((scene) => scene.id).join(", ")}`);

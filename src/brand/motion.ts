@@ -187,6 +187,18 @@ export const tokenPositions = (
     .map((t) => pointAlong(path, t))
     .filter((point): point is Point => point !== null);
 
+/** Persistent stationary placement or one half-open path trip. The evaluator is
+ * injectable for the null-path boundary; choreography belongs to the scene. */
+export const positionedTokenAt = (
+  frame: number,
+  placement: { point: Point } | { path: string; departAt: number },
+  evaluate: (path: string, progress: number) => Point | null = pointAlong,
+): Point | null => {
+  if ("point" in placement) return placement.point;
+  const [progress] = tripsAt(frame, [placement.departAt]);
+  return progress === undefined ? null : evaluate(placement.path, progress);
+};
+
 // ---------------------------------------------------------------- fades, caption, countdown
 
 export const fadeIn = (frame: number, range: readonly [number, number]): number =>

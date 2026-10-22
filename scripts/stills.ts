@@ -12,7 +12,7 @@
 // network on first use (headless browser) and on every render (Lato).
 import { mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { compositionsOf, type SceneData } from "../src/scenes/catalogue";
+import { compositionsOf, type CatalogueScene } from "../src/scenes/catalogue";
 import { scenes } from "../src/scenes";
 import {
   defaultIo,
@@ -29,10 +29,10 @@ import {
 export const stillsFolder = (compositionId: string): string => `out/stills/${compositionId}`;
 
 /** Frames reviewed per composition: every phase's end and the last frame. */
-export const stillFrames = (scene: SceneData): number[] =>
+export const stillFrames = (scene: CatalogueScene): number[] =>
   [...new Set([...scene.timeline.phases.map((phase) => phase.to), scene.timeline.duration - 1])].sort((a, b) => a - b);
 
-export const stillCommands = (scene: SceneData): Command[] =>
+export const stillCommands = (scene: CatalogueScene): Command[] =>
   compositionsOf(scene).flatMap((composition) =>
     stillFrames(scene).map((frame) => {
       const output = `${stillsFolder(composition.id)}/${frame}.png`;

@@ -1,0 +1,90 @@
+{
+  "pt": {
+    "source": "https://brunosouzas.com/pt/wiki/publish-subscribe-in-mulesoft/",
+    "provenance": {
+      "labels": "images/publish-subscribe-in-mulesoft-anypoint-mq-pt.svg text/tspan nodes",
+      "publish": "MQ diagram following paragraph",
+      "fanOut": "first MQ section paragraph",
+      "consume": "comparison final paragraph, before semicolon",
+      "failure": "comparison final paragraph, after semicolon",
+      "final": "comparison final paragraph, last sentence"
+    },
+    "labels": [
+      "Anypoint MQ",
+      "API de pedidos",
+      "(aplicação Mule)",
+      "Message exchange",
+      "order-created",
+      "fila",
+      "order-created-payment",
+      "fila",
+      "order-created-inventory",
+      "fila",
+      "order-created-invoice",
+      "Consumidor de pagamento",
+      "(aplicação Mule)",
+      "Consumidor de estoque",
+      "(aplicação Mule)",
+      "Consumidor de nota fiscal",
+      "(aplicação Mule)",
+      "Publish",
+      "binding",
+      "binding",
+      "binding",
+      "Subscriber",
+      "Subscriber",
+      "Subscriber"
+    ],
+    "captions": {
+      "publish": "A API de pedidos publica o evento no message exchange order-created.",
+      "fanOut": "por padrão, ele envia cada mensagem a todas as filas ligadas",
+      "consume": "Se o consumidor de nota fiscal falhar, a cópia dele volta para a fila order-created-invoice para nova entrega;",
+      "failure": "as cópias do pagamento e do estoque estão em outras filas e seguem normalmente",
+      "final": "A API de pedidos já recebeu a confirmação do Publish e não fica sabendo da falha."
+    }
+  },
+  "en": {
+    "source": "https://brunosouzas.com/wiki/publish-subscribe-in-mulesoft/",
+    "provenance": {
+      "labels": "images/publish-subscribe-in-mulesoft-anypoint-mq-en.svg text/tspan nodes",
+      "publish": "MQ diagram following paragraph",
+      "fanOut": "first MQ section paragraph",
+      "consume": "comparison final paragraph, before semicolon",
+      "failure": "comparison final paragraph, after semicolon",
+      "final": "comparison final paragraph, last sentence"
+    },
+    "labels": [
+      "Anypoint MQ",
+      "Orders API",
+      "(Mule application)",
+      "Message exchange",
+      "order-created",
+      "order-created-payment",
+      "queue",
+      "order-created-inventory",
+      "queue",
+      "order-created-invoice",
+      "queue",
+      "Payment consumer",
+      "(Mule application)",
+      "Inventory consumer",
+      "(Mule application)",
+      "Invoice consumer",
+      "(Mule application)",
+      "Publish",
+      "binding",
+      "binding",
+      "binding",
+      "Subscriber",
+      "Subscriber",
+      "Subscriber"
+    ],
+    "captions": {
+      "publish": "The orders API publishes the event to the order-created message exchange.",
+      "fanOut": "by default, it sends each message to every bound queue",
+      "consume": "If the invoice consumer fails, its copy goes back to the order-created-invoice queue for redelivery;",
+      "failure": "the payment and inventory copies are on other queues and carry on normally",
+      "final": "The orders API has already received the Publish confirmation and never learns about the failure."
+    }
+  }
+}
