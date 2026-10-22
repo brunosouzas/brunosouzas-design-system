@@ -32,7 +32,7 @@ Both commands SHALL accept `--dry-run`, which prints every render and encode com
 - **THEN** it prints eight commands (four renders, four encodes), exits 0, and `out/` is unchanged
 
 ### Requirement: Invalid invocation and failures
-Both commands SHALL exit 1 without writing anything when the scene argument is missing or names no scene, printing the available scene names. When a render or encode fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
+Both commands SHALL take exactly one scene name and the optional `--dry-run`, in any order, and SHALL exit 1 without writing anything when the scene is missing or unknown, an option is unknown, or more than one name is given; the message names the problem and lists the available scenes. When a render or encode fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
 
 #### Scenario: Unknown scene
 - **WHEN** `npm run render -- circuit-break` runs
@@ -45,6 +45,10 @@ Both commands SHALL exit 1 without writing anything when the scene argument is m
 #### Scenario: Unknown option
 - **WHEN** `npm run render -- circuit-breaker-states --fast` runs
 - **THEN** it exits 1, names `--fast` as unknown, and writes nothing
+
+#### Scenario: Two scene names
+- **WHEN** `npm run render -- circuit-breaker-states other` runs
+- **THEN** it exits 1, says only one scene is accepted, and writes nothing
 
 #### Scenario: Encode failure
 - **WHEN** the encode of `circuit-breaker-states-4x5-pt` fails

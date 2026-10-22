@@ -12,6 +12,7 @@ Test levels: **unit** (vitest, no files), **integration** (vitest with a tempora
 - [ ] 2.1 Write `tokens/source.json` with the pilot's values (same hex, sizes and timings as the pilot's `tokens.ts`) and every required token. Check: `npm run tokens` exits 0 and prints three paths.
 - [ ] 2.2 Implement validation in `scripts/tokens.ts`. Tests in `test/tokens/validate.test.ts` (unit):
   - "Source with an unknown group", "Token without a type"
+  - "Invalid JSON", "Name that is not camelCase", "Too deep or unknown token key"
   - "Malformed colour", "Zero or negative frame count", "Opacity above one", "Boundary values accepted"
   - "Missing required token", "Extra token in a known group" (accepted part)
 - [ ] 2.3 Implement the three emitters. Tests in `test/tokens/emit.test.ts` (unit): "CSS custom property names and units", "TypeScript and JSON keep the nesting", "Generated files say they are generated", "Extra token in a known group" (appears in all three outputs), "Key order does not matter".
@@ -33,7 +34,7 @@ Test levels: **unit** (vitest, no files), **integration** (vitest with a tempora
 
 ## 5. Scene rendering (`scene-rendering`)
 
-- [ ] 5.1 Implement `scripts/cli.ts` (argument parsing, scene lookup, command list, injectable runner), `scripts/stills.ts` and `scripts/render.ts`. Tests in `test/scripts/cli.test.ts` (integration, injected runner, temporary `out/`): "Dry run of a render", "Unknown scene", "Missing argument", "Unknown option", "Encode failure", "Rendering again" (every render command carries `--overwrite` and every encode `-y`), "Paths of every written file" (every output path in the command list is under `out/`), and the stills command list for "Stills of the circuit-breaker scene" (28 commands with the expected frames and paths).
+- [ ] 5.1 Implement `scripts/cli.ts` (argument parsing, scene lookup, command list, injectable runner), `scripts/stills.ts` and `scripts/render.ts`. Tests in `test/scripts/cli.test.ts` (integration, injected runner, temporary `out/`): "Dry run of a render", "Unknown scene", "Missing argument", "Unknown option", "Two scene names", "Encode failure", "Rendering again" (every render command carries `--overwrite` and every encode `-y`), "Paths of every written file" (every output path in the command list is under `out/`), and the stills command list for "Stills of the circuit-breaker scene" (28 commands with the expected frames and paths).
 - [ ] 5.2 "Stills of the circuit-breaker scene" (local): `npm run stills -- circuit-breaker-states`; expected: 4 folders under `out/stills/`, 7 PNGs each.
 - [ ] 5.3 "Render of the circuit-breaker scene" (local): `npm run render -- circuit-breaker-states`; expected: 4 files in `out/master/` and 4 in `out/web/`; `npx remotion ffmpeg -hide_banner -i out/web/<id>.mp4` shows 1920x1080 or 1080x1350, 30 fps, 33.33 s; each web file is smaller than its master.
 

@@ -17,8 +17,23 @@ The repository SHALL keep every token in one source file, `tokens/source.json`. 
 - **WHEN** a token has a value but no type, or a type outside the supported types
 - **THEN** the build fails, names the token's full path and the reason, and writes no file
 
+### Requirement: Token shape, names and nesting
+A token SHALL be an object with `$value` and `$type`, and MAY have `$description`, which no output uses; any other key starting with `$` is an error. Group and token names SHALL be camelCase ASCII (`^[a-z][a-zA-Z0-9]*$`). A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting, or a group holding no token, is an error. A file that is not valid JSON is an error.
+
+#### Scenario: Invalid JSON
+- **WHEN** `tokens/source.json` has a trailing comma
+- **THEN** the build fails with the parser's line and column, and writes no file
+
+#### Scenario: Name that is not camelCase
+- **WHEN** the source has a token `color.fail-fast` or `color.Ink`
+- **THEN** the build fails, naming the token path and "expected camelCase", and writes no file
+
+#### Scenario: Too deep or unknown token key
+- **WHEN** the source has `motion.pop.spring.damping`, or a token with a `$unit` key
+- **THEN** the build fails, naming the path, and writes no file
+
 ### Requirement: Supported token types and their values
-The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string), `dimension` (a positive integer of pixels), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string), `fontWeight` (an integer from 100 to 900 in steps of 100).
+The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a positive integer of pixels), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string), `fontWeight` (an integer from 100 to 900 in steps of 100).
 
 #### Scenario: Malformed colour
 - **WHEN** a `color` token has the value `#12345` or `red`
@@ -48,7 +63,7 @@ The source SHALL define every token the components read: `color` ink, white, pan
 - **THEN** the build accepts it and it appears in all three outputs
 
 ### Requirement: Generated outputs
-`npm run tokens` SHALL write three files in `tokens/generated/`: `tokens.css` (one CSS custom property per token on `:root`, named `--ds-<group>-<name>` in kebab case, `dimension` values with `px`), `tokens.ts` (a typed, read-only object with the source's nesting) and `tokens.json` (the same nesting with plain values). It prints one line per file written.
+`npm run tokens` SHALL write three files in `tokens/generated/`: `tokens.css` (one CSS custom property per token on `:root`, named `--ds-` plus the path in kebab case, `failFast` becoming `fail-fast`; `dimension` values with `px`; `fontFamily` values as written), `tokens.ts` (a typed, read-only object with the source's nesting) and `tokens.json` (the same nesting with plain values). It prints one line per file written.
 
 #### Scenario: CSS custom property names and units
 - **WHEN** the source has `outline.block` = 4 (`dimension`) and `motion.pop.damping` = 13 (`number`)
@@ -63,7 +78,7 @@ The source SHALL define every token the components read: `color` ink, white, pan
 - **THEN** each starts with a comment saying it is generated from `tokens/source.json` and must not be edited by hand
 
 ### Requirement: Deterministic build
-The build SHALL produce byte-identical outputs from the same source, whatever the order of keys in the source file, and running it twice SHALL leave the files unchanged.
+The build SHALL produce byte-identical outputs from the same source, whatever the order of keys in the source file (outputs list keys sorted by Unicode code point, with LF line endings), and running it twice SHALL leave the files unchanged.
 
 #### Scenario: Same source, same bytes
 - **WHEN** the build runs twice on an unchanged source
