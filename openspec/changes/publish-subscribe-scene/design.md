@@ -37,7 +37,7 @@ Choose the third. Implement a structural `SceneContract<TTimeline>` whose minimu
 
 Caption selection is by flow phase id (`publish`, `fanOut`, `consume`, `failure`, `final`), not by active node. Add a flow-specific pure caption resolver; leave legacy `captionAt` and focus rules unchanged. No state-chip captions are invented for this scene. CLI still frames continue to use common phase ends plus final frame. No callback, React component or font module enters scene data.
 
-Verification: new catalogue/flow suites plus **all existing tests unchanged**, particularly the pinned timeline. Composition ids, output directories, frame sets and circuit-breaker playback do not change. No security/operational change: safe ids and `out/` containment remain; no new network use beyond existing browser/font loading.
+Verification: new catalogue/flow suites plus **all existing tests unchanged**, particularly the pinned timeline, except catalogue-dependent assertions that list every registered scene (the CLI usage line `available scenes: …` in `test/scripts/cli.test.ts`), which gain `publish-subscribe`. Composition ids, output directories, frame sets and circuit-breaker playback do not change. No security/operational change: safe ids and `out/` containment remain; no new network use beyond existing browser/font loading.
 
 ### 2. Scene-owned choreography, reusable drawing primitives
 

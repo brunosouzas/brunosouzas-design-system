@@ -41,7 +41,7 @@ Each scene SHALL have ordered, non-overlapping inclusive phases within its durat
 ## ADDED Requirements
 
 ### Requirement: State-machine and flow catalogue compatibility
-The catalogue SHALL register both state-machine and message-flow scenes through the same composition, text, source and phase-range contract, without requiring flow nodes to be active states or hold call slots. The circuit-breaker scene's data, four compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged.
+The catalogue SHALL register both state-machine and message-flow scenes through the same composition, text, source and phase-range contract, without requiring flow nodes to be active states or hold call slots. The circuit-breaker scene's data, four compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list both scenes in registration order.
 
 #### Scenario: Both kinds in the catalogue
 - **GIVEN** the circuit-breaker and pub-sub scenes

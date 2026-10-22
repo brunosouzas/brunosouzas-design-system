@@ -2,7 +2,7 @@
 
 Implementation begins only after owner gate 1 on the reviewed spec commit. Claude implements; Codex independently reviews afterwards. This commit is planning only; leave these boxes unchecked.
 
-Test levels: **unit** (vitest, pure data/frame logic), **integration** (vitest, injected runner and temporary outputs), **local** (exact render commands and expected output, owner visual review; not CI). New regression tests go in new files; do not change existing circuit-breaker data or existing tests to make compatibility pass.
+Test levels: **unit** (vitest, pure data/frame logic), **integration** (vitest, injected runner and temporary outputs), **local** (exact render commands and expected output, owner visual review; not CI). New regression tests go in new files; do not change existing circuit-breaker data or existing tests to make compatibility pass. One exception: assertions that list every registered scene (today `test/scripts/cli.test.ts` "Missing argument" expects `available scenes: circuit-breaker-states`) are catalogue-dependent and change to `available scenes: circuit-breaker-states, publish-subscribe` when task 3.3 registers the scene; nothing else in those tests changes.
 
 ## 1. Catalogue boundary and validation (`scene-catalogue`)
 
