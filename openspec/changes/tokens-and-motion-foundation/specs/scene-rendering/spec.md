@@ -7,11 +7,15 @@ Turns a catalogue scene into the files the owner reviews and publishes: key-fram
 ## ADDED Requirements
 
 ### Requirement: Stills for review
-`npm run stills -- <scene>` SHALL render, for every composition of the scene, one PNG per phase (at the phase's `to` frame) plus the composition's last frame, to `out/stills/<composition-id>/<frame>.png`, and print each path after it is written.
+`npm run stills -- <scene>` SHALL render, for every composition of the scene, one PNG per phase (at the phase's `to` frame) plus the composition's last frame, to `out/stills/<composition-id>/<frame>.png`, and print each path after it is written. Before rendering a composition's stills it empties that composition's folder, so stills from an earlier timeline do not linger.
 
 #### Scenario: Stills of the circuit-breaker scene
 - **WHEN** the owner runs `npm run stills -- circuit-breaker-states`
 - **THEN** each of the four compositions gets seven PNGs (frames 200, 365, 500, 620, 775, 990 and 999) under its own folder, and 28 paths are printed
+
+#### Scenario: Stale stills removed
+- **WHEN** `out/stills/circuit-breaker-states-16x9-pt/` holds `123.png` from an earlier run
+- **THEN** after the stills run that folder holds only the seven current PNGs
 
 ### Requirement: Master and web videos
 `npm run render -- <scene>` SHALL render each composition to `out/master/<composition-id>.mp4` (H.264, hardware acceleration when available), then re-encode it with Remotion's bundled ffmpeg to `out/web/<composition-id>.mp4` (x264, CRF 30, `yuv420p`, fast start, no audio). Order: 16x9-pt, 16x9-en, 4x5-pt, 4x5-en, each rendered and encoded before the next. One line per composition gives its id, elapsed seconds and both sizes.
@@ -29,14 +33,18 @@ Turns a catalogue scene into the files the owner reviews and publishes: key-fram
 - **THEN** the second run overwrites the files of the first
 
 ### Requirement: Dry run
-Both commands SHALL accept `--dry-run`, which prints every render and encode command they would run, in order, and writes nothing.
+Both commands SHALL accept `--dry-run` (exactly that spelling, at most once), which prints every command they would run, in order, and writes or deletes nothing.
 
 #### Scenario: Dry run of a render
 - **WHEN** `npm run render -- circuit-breaker-states --dry-run` runs
 - **THEN** it prints eight commands (four renders, four encodes), exits 0, and `out/` is unchanged
 
+#### Scenario: Dry run of stills
+- **WHEN** `npm run stills -- circuit-breaker-states --dry-run` runs
+- **THEN** it prints 28 still commands, exits 0, and `out/` is unchanged (no folder emptied)
+
 ### Requirement: Invalid invocation and failures
-Both commands SHALL take one scene name and the optional `--dry-run`, in any order, and SHALL exit 1 without writing anything on a bad invocation, reporting only the first problem in this order: unknown option, more than one name, missing name, unknown scene; the message lists the available scenes. When a render or encode fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
+Both commands SHALL take one scene name and the optional `--dry-run`, in any order, and SHALL exit 1 without writing anything on a bad invocation, reporting only the first problem in this order: unknown option (including `--dry-run=…`), repeated `--dry-run`, more than one name, missing name, unknown scene; the message lists the available scenes. When a render, encode or still fails, the command SHALL stop, exit 1 and name the composition; files already finished stay.
 
 #### Scenario: Unknown scene
 - **WHEN** `npm run render -- circuit-break` runs
@@ -53,6 +61,14 @@ Both commands SHALL take one scene name and the optional `--dry-run`, in any ord
 #### Scenario: Two scene names
 - **WHEN** `npm run render -- circuit-breaker-states other` runs
 - **THEN** it exits 1, says only one scene is accepted, and writes nothing
+
+#### Scenario: Repeated or valued dry run
+- **WHEN** `npm run render -- circuit-breaker-states --dry-run --dry-run` runs, or `--dry-run=1` is given
+- **THEN** it exits 1, naming the repeated option or `--dry-run=1` as unknown, and writes nothing
+
+#### Scenario: Still failure
+- **WHEN** the still at frame 500 of `circuit-breaker-states-16x9-en` fails
+- **THEN** the command exits 1, names that composition and frame, and starts no further still
 
 #### Scenario: Unknown option and unknown scene together
 - **WHEN** `npm run render -- circuit-break --fast` runs

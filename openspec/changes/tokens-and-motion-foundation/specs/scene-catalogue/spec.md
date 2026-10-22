@@ -37,7 +37,19 @@ Each scene SHALL keep every on-screen string in one text table with a `pt` and a
 - **THEN** the catalogue test fails and names the scene and the entry
 
 ### Requirement: Valid timeline
-Each scene's timeline SHALL list phases as inclusive frame ranges `[from, to]` inside the composition, each starting after the previous one's `to`; each event SHALL fall inside its phase; each transition fire SHALL fall after its source phase's `from` and before the next phase's `from`. No phase start, event or fire SHALL happen in the last `motion.readingHold` frames.
+Each scene's timeline SHALL list phases as inclusive ranges `[from, to]` within `[0, duration − 1]`, each starting after the previous `to`; each event SHALL fall inside its phase. A transition fire SHALL fall after the `from` of a phase of its source state and before the `from` of the next phase, which SHALL be of its target state. The outro frame SHALL be at most `duration − motion.readingHold`, and every phase start, event, fire, arrow draw and pill pop-in SHALL come before it.
+
+#### Scenario: Phase beyond the composition
+- **WHEN** a phase's `to` is equal to or greater than the duration
+- **THEN** the catalogue test fails and names the scene and the phase
+
+#### Scenario: Fire outside its window
+- **WHEN** a CLOSED to OPEN fire falls before its CLOSED phase starts, or after the next phase starts, or the next phase is not OPEN
+- **THEN** the catalogue test fails and names the scene, the transition and the frame
+
+#### Scenario: Outro inside the reading hold
+- **WHEN** a 1000-frame scene with `motion.readingHold` 90 sets its outro at 950
+- **THEN** the catalogue test fails and names the scene and the outro frame
 
 #### Scenario: Overlapping phases
 - **WHEN** a phase's `from` is equal to or before the previous phase's `to`
@@ -48,15 +60,15 @@ Each scene's timeline SHALL list phases as inclusive frame ranges `[from, to]` i
 - **THEN** the catalogue test fails and names the scene, the phase and the frame
 
 #### Scenario: Movement inside the reading hold
-- **WHEN** an event happens within the last `motion.readingHold` frames
+- **WHEN** an event, a fire, an arrow draw or a pill pop-in happens at or after the outro frame
 - **THEN** the catalogue test fails and names the scene and the frame
 
 ### Requirement: Circuit-breaker state machine scene
-The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels and its three state sentences. Its timing is the approved pilot's, listed frame by frame in the design.
+The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels and its three state sentences. The OPEN block carries the countdown. Its timing is the approved pilot's, listed frame by frame in the design.
 
 #### Scenario: Timing equals the approved pilot
 - **WHEN** the scene's timeline is compared with the pilot timeline table in the design
-- **THEN** duration, intro end, outro frame, every phase range, every event, every transition fire, every draw and pill frame, and the slot counts are equal
+- **THEN** duration, intro end, outro frame, start-marker fade, block pop-in frames, rings fade, every phase range, every event, every transition fire, every draw and pill frame, and the slot counts are equal
 
 #### Scenario: Phase and transition order
 - **WHEN** the scene's timeline is read

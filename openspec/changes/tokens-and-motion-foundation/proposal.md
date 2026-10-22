@@ -38,10 +38,10 @@ None (the repository has no specs yet).
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. The token build rejects an invalid source (missing required token, malformed colour, non-positive frame count, unknown group) without writing any file. The render and stills commands reject an unknown scene and report a failed composition by name.
-- **Limits:** requirement for what the scene must hold: the final frame stays still for at least the reading-hold token (90 frames, 3 s). No limit on the number of tokens or scenes is specified: n/a, the counts are small and owner-authored.
+- **Limits:** requirement for what the scene must hold: the outro (every block at full opacity) starts at least the reading-hold token (90 frames, 3 s) before the end, and nothing new starts after it; springs started just before it settle in its first frames. No limit on the number of tokens or scenes is specified: n/a, the counts are small and owner-authored.
 - **Repetition and idempotency:** requirement. The token build is deterministic: the same source gives byte-identical outputs, and running it twice changes nothing. Rendering again overwrites the previous outputs of the same composition.
 - **Concurrency:** n/a. The commands are run by one person on one machine; two renders of the same scene at once are not supported and not guarded.
-- **Security:** requirement. The commands write only inside the repository's output folders (`tokens/generated/` for the build, `out/` for renders) and make no network call of their own; Remotion's first run may download its headless browser, which is the library's behaviour. No secrets are involved.
+- **Security:** requirement. The commands write only inside the repository's output folders (`tokens/generated/` for the build, `out/` for renders) and make no network call of their own. Two network uses come from libraries: Remotion's first run downloads its headless browser, and every render fetches Lato from Google Fonts (`fonts.googleapis.com`, `fonts.gstatic.com`) through `@remotion/google-fonts`. No secrets are involved.
 - **Logs and observability:** requirement. Each command prints one line per output written (or per composition rendered, with its elapsed seconds and file size) and a final error line naming the cause when it fails.
 
 ## Open questions
@@ -50,8 +50,8 @@ None. The decisions taken in the design (generated files committed, the CSS pref
 
 ## Impact
 
-- New: `tokens/`, `src/brand/`, `src/scenes/circuit-breaker/`, `scripts/`, `test/`, `package.json`, `tsconfig.json`, `.github/workflows/ci.yml`.
-- Dependencies: `remotion`, `@remotion/cli`, `@remotion/paths`, `@remotion/google-fonts`, `react`, `react-dom` (runtime); `typescript`, `@types/react`, `vitest`, `tsx` (development).
+- New: `tokens/`, `src/brand/`, `src/scenes/circuit-breaker-states/`, `scripts/`, `test/`, `package.json`, `tsconfig.json`, `.github/workflows/ci.yml`.
+- Dependencies: `remotion`, `@remotion/cli`, `@remotion/paths`, `@remotion/google-fonts`, `react`, `react-dom` (runtime); `typescript`, `@types/react`, `@types/node`, `vitest`, `tsx` (development).
 - Licence: rendering with Remotion follows Remotion's licence (README already says so).
 
 ## Documentation

@@ -53,9 +53,11 @@ Rejected: testing rendered components (needs a Remotion player context and scree
 
 Each scene folder has `scene.ts` (id, formats, duration, timeline, text table, sources; no React), `layout.ts` and `Scene.tsx`. `src/scenes/index.ts` lists scene data; `src/Root.tsx` registers compositions from it. The CLI scripts import only scene data, so they run under `tsx` without React or the bundler.
 
+Rejected: scene data inside `Scene.tsx`, as in the pilot (the scripts and the catalogue tests would have to load React and the font loader, which fetches from the network, just to read frame numbers).
+
 ### 7. Render and stills through the Remotion CLI
 
-`scripts/cli.ts` parses the arguments (first problem only: unknown option, extra name, missing name, unknown scene) and runs a command list; `scripts/render.ts` and `scripts/stills.ts` build the command list from the scene data, print it in `--dry-run`, or run it in order with a child process, stopping at the first failure. Render: `npx remotion render src/index.ts <id> out/master/<id>.mp4 --codec=h264 --hardware-acceleration=if-possible --overwrite`; encode: `npx remotion ffmpeg -y -i <master> -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an out/web/<id>.mp4`; stills: `npx remotion still ... --frame=<n>`. The command runner is injectable, so tests prove ordering and stop-on-failure without rendering.
+`scripts/cli.ts` parses the arguments (first problem only: unknown option, repeated `--dry-run`, extra name, missing name, unknown scene) and runs a command list; `scripts/render.ts` and `scripts/stills.ts` build the command list from the scene data, print it in `--dry-run`, or run it in order with a child process, stopping at the first failure. Render: `npx remotion render src/index.ts <id> out/master/<id>.mp4 --codec=h264 --hardware-acceleration=if-possible --overwrite`; encode: `npx remotion ffmpeg -y -i <master> -c:v libx264 -crf 30 -preset slow -pix_fmt yuv420p -movflags +faststart -an out/web/<id>.mp4`; stills: `npx remotion still ... --frame=<n>`. The command runner is injectable, so tests prove ordering and stop-on-failure without rendering.
 
 Rejected: the `@remotion/renderer` Node API (more code to keep, and the CLI is what the owner runs by hand when reviewing).
 
@@ -70,6 +72,7 @@ The approved pilot (`~/.hermes/spikes/motion/pilot/src/scenes/circuit-breaker/ti
 | Outro (everything back to full opacity) | 910 |
 | Start marker fade | 4 to 14 |
 | Block pop-in (CLOSED, OPEN, HALF_OPEN) | 6, 14, 22 |
+| Rings fade | 0 to 20 |
 | Phase 1 CLOSED `[40, 200]` | events at 56, 73, 90, 107, 124, 141, 158, 175: ok, ok, fail, ok, fail, fail, fail, fail |
 | Phase 2 OPEN `[245, 365]` | blocked at 262, 288, 314, 340 |
 | Phase 3 HALF_OPEN `[410, 500]` | ok at 424, fail at 458 |
@@ -80,6 +83,8 @@ The approved pilot (`~/.hermes/spikes/motion/pilot/src/scenes/circuit-breaker/ti
 | Arrow draw frame (first fire minus 18) | 197, 362, 497, 772 |
 | Pill pop-in (draw frame plus 8) | 205, 370, 505, 780 |
 | Slots | CLOSED 8, OPEN 4, HALF_OPEN 3 |
+
+Component constants that stay in code, with the pilot's values (`components.tsx`): rings start at radius 100, step 34, stroke 2.5; the countdown's inner stroke 10; empty slot opacity 0.35; travelling token radius 17 with its shadow offset equal to `shadow.small`; block gap 18; the CSS keywords `transparent` and `none`. A change to any of them is a visual change and needs the owner's approval.
 
 `font.sans` is `Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif` (the designer skill's stack). In the animations, the Lato loaded through `@remotion/google-fonts` (weights 700 and 900) comes first, followed by this stack.
 
@@ -98,6 +103,6 @@ test/{tokens,brand,scenes,scripts}/*.test.ts
 ## Risks / Trade-offs
 
 - **Remotion licence:** free for the owner; a company of four or more people that renders with this code needs a licence. Stated in the README.
-- **First render downloads a headless browser** (Remotion's behaviour); offline machines cannot render until it is cached.
+- **Rendering needs the network:** the first render downloads a headless browser (Remotion's behaviour), and every render fetches Lato from Google Fonts through `@remotion/google-fonts`. Offline, renders fail or fall back to the stack's next font. Self-hosting the font is a later option.
 - **Bundled ffmpeg varies with the Remotion version:** pinning Remotion in `package-lock.json` pins it; the dry-run test checks the command, not the encoder's presence.
 - **Spring settle time** (the 30-frame bound in the focus scenario) depends on the `motion.focus` values; a token change that slows the spring will fail that test on purpose.

@@ -7,7 +7,11 @@ Keeps the visual identity's values (colour, type, outline, shadow, radius, motio
 ## ADDED Requirements
 
 ### Requirement: Token source
-The repository SHALL keep every token in one source file, `tokens/source.json`. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`; a group may nest one more level (for example `motion.pop.damping`).
+The repository SHALL keep every token in one source file, `tokens/source.json`, whose root is a JSON object. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`; a group may nest one more level (for example `motion.pop.damping`).
+
+#### Scenario: Source file missing or not an object
+- **WHEN** `tokens/source.json` does not exist, or its root is `[]` or `null`
+- **THEN** the build fails, saying which, and writes no file
 
 #### Scenario: Source with an unknown group
 - **WHEN** the source has a top-level group outside the six named groups
@@ -18,7 +22,7 @@ The repository SHALL keep every token in one source file, `tokens/source.json`. 
 - **THEN** the build fails, names the token's full path and the reason, and writes no file
 
 ### Requirement: Token shape, names and nesting
-A token SHALL be an object with `$value` and `$type`, and MAY have `$description`, which no output uses; any other key in a token is an error. A group SHALL be an object whose keys are tokens or (at the second level) groups. Names SHALL be camelCase ASCII (`^[a-z][a-zA-Z0-9]*$`). A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting or an empty group is an error. A file that is not valid JSON is an error.
+A token SHALL be an object with `$value` and `$type`, and MAY have a string `$description`, which no output uses; any other key in a token is an error. A group SHALL be an object of tokens or (at the second level) groups. Names SHALL match `^[a-z][a-zA-Z0-9]*$`. A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting or an empty group is an error. Invalid JSON is an error.
 
 #### Scenario: Invalid JSON
 - **WHEN** `tokens/source.json` has a trailing comma
@@ -36,16 +40,31 @@ A token SHALL be an object with `$value` and `$type`, and MAY have `$description
 - **WHEN** the source has `"outline": 4` or `"color": []`
 - **THEN** the build fails, naming the group, and writes no file
 
+### Requirement: CSS names
+Each token's CSS name SHALL be `--ds-` followed by its path joined with `-`, where each name is put in kebab case: a `-` before each capital letter, which is lowercased; digits stay as they are. Two tokens whose CSS names are equal are an error.
+
+#### Scenario: Kebab case with capitals and digits
+- **WHEN** the source has `color.failFast`, `color.okHTTP` and `color.ink2Dark`
+- **THEN** their CSS names are `--ds-color-fail-fast`, `--ds-color-ok-h-t-t-p` and `--ds-color-ink2-dark`
+
 #### Scenario: Two paths with one CSS name
 - **WHEN** the source has both `motion.pop.damping` and `motion.popDamping`
 - **THEN** the build fails, naming both paths and the shared name `--ds-motion-pop-damping`, and writes no file
 
 ### Requirement: Every problem reported at once
-When the source breaks several rules, the build and the check SHALL report every problem found, one line each, sorted by token path in Unicode code-point order (a problem with no path, such as invalid JSON, first), and exit 1. Invalid JSON stops validation, since nothing else can be read.
+When the source breaks several rules, the build and the check SHALL report every problem, one line each, sorted by path in Unicode code-point order and then by message text (a problem with no path first), and exit 1. A missing file, invalid JSON or a non-object root stops validation. Validation does not look inside an unknown group. A token whose `$type` is wrong or unsupported gets one problem, and its value is not checked.
 
 #### Scenario: Unknown group and missing token together
 - **WHEN** the source has a group `colour` and lacks `color.failure`
 - **THEN** the build prints both problems, `color.failure` before `colour`, and exits 1
+
+#### Scenario: Problems inside an unknown group are not reported
+- **WHEN** the unknown group `colour` holds a token with an invalid value
+- **THEN** only the unknown group is reported for that path
+
+#### Scenario: Wrong required type hides the value check
+- **WHEN** `outline.block` is declared `number` with the value `1.5`
+- **THEN** exactly one problem is printed for `outline.block`: the expected type `dimension`
 
 ### Requirement: Supported token types and their values
 The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a positive integer of pixels), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string without `;`, `{`, `}`, `<`, `>` or a line break), `fontWeight` (an integer from 100 to 900 in steps of 100).
@@ -57,6 +76,10 @@ The build SHALL accept these types and reject a value that does not fit its type
 #### Scenario: Zero or negative frame count
 - **WHEN** a `frames` token has the value `0` or `-5`
 - **THEN** the build fails, naming the token path, and writes no file
+
+#### Scenario: Non-integer or off-step values
+- **WHEN** a `frames` token is `0.5`, a `dimension` token is `1.5`, or a `fontWeight` token is `450` or `950`
+- **THEN** the build fails, naming each token path, and writes no file
 
 #### Scenario: Opacity above one
 - **WHEN** an `opacity` token has the value `1.2`
