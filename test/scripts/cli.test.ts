@@ -4,9 +4,9 @@
 // stop-on-failure and the printed lines are proven without rendering.
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
-import { formatCommand, type Command, type Io } from "../../scripts/cli";
+import { SAFE_ID, formatCommand, isInsideOut, outputOutsideOut, parseInvocation, type Command, type Io } from "../../scripts/cli";
 import { renderCommands, runRender } from "../../scripts/render";
 import { stillCommands, runStills } from "../../scripts/stills";
 import { circuitBreakerStates } from "../../src/scenes/circuit-breaker-states/scene";
@@ -232,6 +232,70 @@ describe("Master and web videos", () => {
       expect(line).toBeGreaterThan(h.events.indexOf(`run encode ${IDS[i]}`));
       if (i + 1 < IDS.length) expect(line).toBeLessThan(h.events.indexOf(`run render ${IDS[i + 1]}`));
     }
+  });
+});
+
+describe("Encoder settings", () => {
+  // Written out by hand from design §7, not derived from renderCommands, so a
+  // change to CRF, codec, audio or overwrite flags fails here.
+  test("render and encode arguments match the design", () => {
+    const id = `${SCENE}-16x9-pt`;
+    const [render, encode] = renderCommands(circuitBreakerStates).filter((c) => c.composition === id);
+    expect(render.args).toEqual([
+      "remotion", "render", "src/index.ts", id, `out/master/${id}.mp4`,
+      "--codec=h264", "--hardware-acceleration=if-possible", "--overwrite", "--log=error",
+    ]);
+    expect(encode.args).toEqual([
+      "remotion", "ffmpeg", "-v", "error", "-y", "-i", `out/master/${id}.mp4`,
+      "-c:v", "libx264", "-crf", "30", "-preset", "slow", "-pix_fmt", "yuv420p",
+      "-movflags", "+faststart", "-an", `out/web/${id}.mp4`,
+    ]);
+  });
+
+  test("still arguments match the design", () => {
+    const [first] = stillCommands(circuitBreakerStates);
+    expect(first.args).toEqual([
+      "remotion", "still", "src/index.ts", `${SCENE}-16x9-pt`, `out/stills/${SCENE}-16x9-pt/200.png`,
+      "--frame=200", "--overwrite", "--log=error",
+    ]);
+  });
+});
+
+describe("Path containment", () => {
+  // Regression (Codex code review): a scene id with `..` once made stills
+  // empty a folder outside the repository.
+  const hostile = (id: string) => ({ ...circuitBreakerStates, id });
+
+  test("a scene id that could leave out/ is refused before any effect", async () => {
+    expect(SAFE_ID.test("-a")).toBe(false);
+    for (const id of ["../../../victim", "a/b", "..", "UPPER", "a--b"]) {
+      expect(SAFE_ID.test(id)).toBe(false);
+      const parsed = parseInvocation([id], [hostile(id)]);
+      expect(parsed.ok).toBe(false);
+      if (!parsed.ok) expect(parsed.problem).toMatch(/^invalid scene id/);
+    }
+    expect(SAFE_ID.test(SCENE)).toBe(true);
+  });
+
+  test("hostile composition paths are detected as outside out/", async () => {
+    const h = harness();
+    const victim = join(h.root, "..", `${basename(h.root)}-victim-16x9-pt`);
+    mkdirSync(victim, { recursive: true });
+    writeFileSync(join(victim, "keep.txt"), "keep");
+    roots.push(victim);
+    const outputs = stillCommands(hostile(`../../../${basename(h.root)}-victim`));
+    expect(outputOutsideOut(h.root, outputs)).not.toBeNull();
+    expect(existsSync(join(victim, "keep.txt"))).toBe(true);
+  });
+
+  test("containment check", () => {
+    const root = "/repo";
+    expect(isInsideOut(root, "out/stills/x/1.png")).toBe(true);
+    expect(isInsideOut(root, "out")).toBe(false);
+    expect(isInsideOut(root, "out/../src/x")).toBe(false);
+    expect(isInsideOut(root, "out/stills/../../../etc")).toBe(false);
+    expect(isInsideOut(root, "/etc/passwd")).toBe(false);
+    expect(isInsideOut(root, "outside/x")).toBe(false);
   });
 });
 

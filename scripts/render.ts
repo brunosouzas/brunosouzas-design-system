@@ -16,7 +16,16 @@ import { existsSync, mkdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { compositionsOf, type SceneData } from "../src/scenes/catalogue";
 import { scenes } from "../src/scenes";
-import { defaultIo, formatCommand, isMainModule, parseInvocation, reportInvocationProblem, type Command, type Io } from "./cli";
+import {
+  defaultIo,
+  formatCommand,
+  isMainModule,
+  outputOutsideOut,
+  parseInvocation,
+  reportInvocationProblem,
+  type Command,
+  type Io,
+} from "./cli";
 
 export const masterPath = (compositionId: string): string => `out/master/${compositionId}.mp4`;
 export const webPath = (compositionId: string): string => `out/web/${compositionId}.mp4`;
@@ -80,6 +89,11 @@ export const runRender = async (argv: readonly string[], io: Io): Promise<number
   const invocation = parseInvocation(argv, scenes);
   if (!invocation.ok) return reportInvocationProblem(invocation.problem, "render", scenes, io);
   const commands = renderCommands(invocation.scene);
+  const outside = outputOutsideOut(io.root, commands);
+  if (outside !== null) {
+    io.error(`error: refusing to run: ${outside} is not inside out/`);
+    return 1;
+  }
   if (invocation.dryRun) {
     for (const command of commands) io.log(formatCommand(command));
     return 0;

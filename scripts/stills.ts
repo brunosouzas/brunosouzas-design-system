@@ -14,7 +14,17 @@ import { mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { compositionsOf, type SceneData } from "../src/scenes/catalogue";
 import { scenes } from "../src/scenes";
-import { defaultIo, formatCommand, isMainModule, parseInvocation, reportInvocationProblem, type Command, type Io } from "./cli";
+import {
+  defaultIo,
+  formatCommand,
+  isInsideOut,
+  isMainModule,
+  outputOutsideOut,
+  parseInvocation,
+  reportInvocationProblem,
+  type Command,
+  type Io,
+} from "./cli";
 
 export const stillsFolder = (compositionId: string): string => `out/stills/${compositionId}`;
 
@@ -41,11 +51,21 @@ export const runStills = async (argv: readonly string[], io: Io): Promise<number
   const invocation = parseInvocation(argv, scenes);
   if (!invocation.ok) return reportInvocationProblem(invocation.problem, "stills", scenes, io);
   const commands = stillCommands(invocation.scene);
+  const outside = outputOutsideOut(io.root, commands);
+  if (outside !== null) {
+    io.error(`error: refusing to run: ${outside} is not inside out/`);
+    return 1;
+  }
   if (invocation.dryRun) {
     for (const command of commands) io.log(formatCommand(command));
     return 0;
   }
   for (const composition of compositionsOf(invocation.scene)) {
+    // The folder that is emptied must itself sit inside out/ (checked again, right before the deletion).
+    if (!isInsideOut(io.root, stillsFolder(composition.id))) {
+      io.error(`error: refusing to empty ${stillsFolder(composition.id)}: not inside out/`);
+      return 1;
+    }
     const folder = join(io.root, stillsFolder(composition.id));
     rmSync(folder, { recursive: true, force: true });
     mkdirSync(folder, { recursive: true });

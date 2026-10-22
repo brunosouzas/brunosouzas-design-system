@@ -202,6 +202,12 @@ export const checkCatalogue = (scenes: readonly SceneData[]): string[] => {
   for (const [compositionIdValue, sceneIds] of owners) {
     if (sceneIds.length > 1) problems.push(`duplicate composition id ${compositionIdValue} (scenes ${sceneIds.join(", ")})`);
   }
+  // Ids become folder names under out/ (and one folder is emptied before stills).
+  for (const scene of scenes) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(scene.id)) {
+      problems.push(`invalid scene id ${JSON.stringify(scene.id)}: lowercase letters, digits and single hyphens only`);
+    }
+  }
   for (const scene of scenes) problems.push(...checkScene(scene));
   return problems;
 };

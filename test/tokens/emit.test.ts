@@ -24,6 +24,29 @@ describe("CSS names", () => {
   });
 });
 
+describe("Names shared with Object.prototype", () => {
+  // Regression (Codex code review): the value tree once followed inherited
+  // properties, so `motion.toString.gain` vanished and `.name` threw.
+  test("tokens under a group named like an inherited property are exported", () => {
+    const outputs = outputsOf(
+      sourceWith(
+        set("motion.toString.gain", token(2, "number")),
+        set("motion.toString.name", token(3, "number")),
+        set("motion.constructor.mass", token(1, "number")),
+      ),
+    );
+    const ts = exportedTokens(outputs["tokens.ts"]) as { motion: Record<string, Record<string, unknown>> };
+    const json = JSON.parse(outputs["tokens.json"]) as typeof ts;
+    for (const tree of [ts, json]) {
+      expect(Object.hasOwn(tree.motion, "toString")).toBe(true);
+      expect(tree.motion.toString).toEqual({ gain: 2, name: 3 });
+      expect(tree.motion.constructor).toEqual({ mass: 1 });
+    }
+    expect(outputs["tokens.css"]).toContain("  --ds-motion-to-string-gain: 2;\n");
+    expect(outputs["tokens.css"]).toContain("  --ds-motion-constructor-mass: 1;\n");
+  });
+});
+
 describe("Generated outputs", () => {
   test("CSS custom property names and units", () => {
     const css = outputsOf(sourceWith(set("outline.block", token(4, "dimension")), set("motion.pop.damping", token(13, "number"))))[

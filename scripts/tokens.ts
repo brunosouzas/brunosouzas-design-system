@@ -192,7 +192,7 @@ export const validateSource = (root: unknown, sourceLabel = "tokens/source.json"
       report(path, `unsupported type ${describe(type)} (supported: ${TYPES.join(", ")})`);
       return;
     }
-    const required = REQUIRED[path];
+    const required = Object.hasOwn(REQUIRED, path) ? REQUIRED[path] : undefined;
     if (required !== undefined && required !== type) {
       // One problem per token: a wrong declared type hides the value check.
       report(path, `expected type ${required}, found ${type}`);
@@ -282,11 +282,16 @@ export const parseSource = (text: string, sourceLabel = "tokens/source.json"): {
 
 /** Nested plain values, keys sorted by code point at every level. */
 export const valueTree = (tokens: FlatToken[]): ValueTree => {
-  const tree: ValueTree = {};
+  // Objects without a prototype: a token named `toString` or `constructor` must
+  // not find (or collide with) a property inherited from Object.prototype.
+  const tree: ValueTree = Object.create(null);
   for (const token of [...tokens].sort((a, b) => compareCodePoints(a.path, b.path))) {
     const names = token.path.split(".");
     let node = tree;
-    for (const name of names.slice(0, -1)) node = (node[name] ??= {}) as ValueTree;
+    for (const name of names.slice(0, -1)) {
+      if (!Object.hasOwn(node, name)) node[name] = Object.create(null) as ValueTree;
+      node = node[name] as ValueTree;
+    }
     node[names[names.length - 1]] = token.value;
   }
   const sortTree = (node: ValueTree): ValueTree =>

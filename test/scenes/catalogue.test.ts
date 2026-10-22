@@ -41,6 +41,12 @@ describe("One composition per format and language", () => {
     const problems = checkCatalogue([first, second]);
     expect(problems).toContainEqual(expect.stringContaining("duplicate composition id fixture-scene-16x9-pt"));
   });
+
+  test("scene id that could leave out/ fails the catalogue check", () => {
+    for (const id of ["../victim", "a/b", "Upper"]) {
+      expect(checkCatalogue([{ ...base, id }])).toContainEqual(expect.stringContaining(`invalid scene id ${JSON.stringify(id)}`));
+    }
+  });
 });
 
 describe("Text table per language", () => {

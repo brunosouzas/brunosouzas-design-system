@@ -10,7 +10,7 @@
 // reporting only the first problem (unknown option, repeated --dry-run, more
 // than one name, missing name, unknown scene) with the usage and the scenes.
 import { spawn } from "node:child_process";
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type { SceneData } from "../src/scenes/catalogue";
 
@@ -63,6 +63,26 @@ export const defaultIo = (): Io => ({
 
 export type Invocation = { ok: true; scene: SceneData; dryRun: boolean } | { ok: false; problem: string };
 
+/**
+ * Scene and composition ids become folder and file names under out/, and one
+ * folder is emptied before stills. Only lowercase letters, digits and single
+ * hyphens are allowed, so an id can never hold `/`, `\` or `..`.
+ */
+export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** True when `relativePath`, resolved against `root`, lies strictly inside `root/out`. */
+export const isInsideOut = (root: string, relativePath: string): boolean => {
+  const fromOut = relative(resolve(root, "out"), resolve(root, relativePath));
+  return fromOut !== "" && !fromOut.startsWith("..") && !isAbsolute(fromOut);
+};
+
+/**
+ * Checks, before any effect, that every command writes inside out/.
+ * Returns the first offending output, or null when all are inside.
+ */
+export const outputOutsideOut = (root: string, commands: readonly Command[]): string | null =>
+  commands.find((command) => !isInsideOut(root, command.output))?.output ?? null;
+
 /** Parses `<scene> [--dry-run]` in any order; reports only the first problem, in the spec's order. */
 export const parseInvocation = (argv: readonly string[], scenes: readonly SceneData[]): Invocation => {
   const options = argv.filter((arg) => arg.startsWith("-"));
@@ -74,6 +94,7 @@ export const parseInvocation = (argv: readonly string[], scenes: readonly SceneD
   if (names.length === 0) return { ok: false, problem: "missing scene name" };
   const scene = scenes.find((candidate) => candidate.id === names[0]);
   if (!scene) return { ok: false, problem: `unknown scene: ${names[0]}` };
+  if (!SAFE_ID.test(scene.id)) return { ok: false, problem: `invalid scene id: ${JSON.stringify(scene.id)} (allowed: ${SAFE_ID.source})` };
   return { ok: true, scene, dryRun: options.length === 1 };
 };
 
