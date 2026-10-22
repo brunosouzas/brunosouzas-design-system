@@ -48,7 +48,7 @@ Each time a transition fires, a token SHALL travel along its arrow from the path
 - **THEN** one token travels in each trip and none is shown between them
 
 ### Requirement: Focus on the active state
-From the first phase's start, the state of the latest phase that has started SHALL be in focus: fully opaque and scaled by `motion.focusScale`; until the outro frame, every other state block SHALL use `motion.dimOpacity`. Focus moves with a spring using the `motion.focus` values. Before the first phase every block is fully opaque at scale 1; from the outro frame on every block is fully opaque, and the state in focus keeps its scale.
+Focus SHALL give each state block an opacity factor and a scale factor, multiplied with its pop-in animation. From the first phase's start, the latest started phase's state is in focus (opacity 1, scale `motion.focusScale`); until the outro frame the others get `motion.dimOpacity`. Focus moves with a `motion.focus` spring. Before the first phase both factors are 1 for every block; from the outro on every opacity factor is 1 and the state in focus keeps its scale.
 
 #### Scenario: Focus changes to the next state
 - **WHEN** a new phase starts on another state
@@ -60,7 +60,11 @@ From the first phase's start, the state of the latest phase that has started SHA
 
 #### Scenario: Intro and outro
 - **WHEN** the frame is before the first phase's start, or at or after the outro frame
-- **THEN** every state block is fully opaque; in the outro the last state in focus is still scaled by `motion.focusScale` and the others are at scale 1
+- **THEN** every block's opacity factor is 1; in the intro every scale factor is 1, and in the outro the last state in focus keeps `motion.focusScale` and the others are at 1
+
+#### Scenario: Pop-in during the intro
+- **WHEN** the circuit-breaker scene is at frame 10
+- **THEN** the CLOSED block is mid pop-in (opacity and scale come from its pop-in, since both focus factors are 1) and the HALF_OPEN block, whose pop-in starts at 22, is not visible
 
 ### Requirement: State block contents at a frame
 A state block SHALL show one slot per call its scene allows. While a phase of its state runs, and after it until the state's next phase starts, the slots hold that phase's results that have happened, in order, and the rest are `empty`. When the state's next phase starts, the slots restart empty. Before the state's first phase, every slot is `empty` and a countdown is empty.

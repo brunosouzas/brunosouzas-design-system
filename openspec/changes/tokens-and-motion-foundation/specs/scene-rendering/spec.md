@@ -83,8 +83,8 @@ Both commands SHALL take one scene name and the optional `--dry-run`, in any ord
 - **THEN** the command exits 1, names that composition, does not start `circuit-breaker-states-4x5-en`, and the files of the two 16x9 compositions are still in `out/`
 
 ### Requirement: Output location
-Every file the commands name as an output SHALL be inside `out/` in the repository, which Git ignores. Remotion's own temporary bundle and browser cache, which the library manages outside the repository, are not outputs of these commands.
+Every media file the commands produce (masters, web copies, stills) SHALL be inside `out/` in the repository, which Git ignores. Remotion also keeps its own caches (the bundler cache in `node_modules/.cache/` and its browser in `node_modules/.remotion/`, both ignored with `node_modules/`, plus temporary files in the system temp folder); those are the library's, not outputs of these commands.
 
-#### Scenario: Paths of every written file
-- **WHEN** a render or stills run finishes
-- **THEN** every file it wrote is under `out/`
+#### Scenario: Paths of every media output
+- **WHEN** the command list of a render or stills run is built
+- **THEN** every output path in it (master, web copy, still) is under `out/`

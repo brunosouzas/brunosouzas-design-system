@@ -103,6 +103,6 @@ test/{tokens,brand,scenes,scripts}/*.test.ts
 ## Risks / Trade-offs
 
 - **Remotion licence:** free for the owner; a company of four or more people that renders with this code needs a licence. Stated in the README.
-- **Rendering needs the network:** the first render downloads a headless browser (Remotion's behaviour), and every render fetches Lato from Google Fonts through `@remotion/google-fonts`. Offline, renders fail or fall back to the stack's next font. Self-hosting the font is a later option.
+- **Rendering needs the network:** the first render downloads a headless browser (Remotion's behaviour), and every render fetches Lato from Google Fonts through `@remotion/google-fonts`. Offline, a render waits on the font (the loader holds the frame with `delayRender` and retries) and then fails with a timeout; there is no fallback to the stack's next font. Self-hosting the font is a later option.
 - **Bundled ffmpeg varies with the Remotion version:** pinning Remotion in `package-lock.json` pins it; the dry-run test checks the command, not the encoder's presence.
 - **Spring settle time** (the 30-frame bound in the focus scenario) depends on the `motion.focus` values; a token change that slows the spring will fail that test on purpose.
