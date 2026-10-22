@@ -1,4 +1,8 @@
-// One layout per format, in composition pixels (the pilot's, unchanged). The 4:5
+// One layout per format, in composition pixels: the pilot's, except two
+// collision fixes for the bolder outline/shadow tokens (publish-subscribe design
+// §7): arrows that end on a block's shadowed side (right or bottom) stop about
+// 11 px earlier along their last direction, so the larger arrowhead meets the
+// 19 px shadow instead of entering it, and the 4:5 squares are 34 px. The 4:5
 // layout is drawn on its own, with its own arrow routes: scaling the 16:9 one
 // does not work. Keep pills off the straight part of an arrow, or the
 // travelling token hides under the pill for most of its trip.
@@ -30,9 +34,9 @@ const landscape: Layout = {
   start: { dot: [110, 255], d: "M128,255 L172,255" },
   arrows: {
     toOpen: "M684,255 L1232,255",
-    toHalf: "M1560,376 C1560,600 1440,715 1246,715",
-    halfToOpen: "M1080,598 C1150,500 1300,450 1400,378",
-    halfToClosed: "M676,715 C470,715 380,560 420,378",
+    toHalf: "M1560,376 C1560,600 1440,715 1257,715",
+    halfToOpen: "M1080,598 C1150,500 1300,450 1391,384",
+    halfToClosed: "M676,715 C470,715 380,560 418,389",
   },
   pills: {
     toOpen: [958, 160],
@@ -56,9 +60,9 @@ const portrait: Layout = {
   start: { dot: [40, 350], d: "M56,350 L86,350" },
   arrows: {
     toOpen: "M305,236 C305,110 785,110 785,236",
-    toHalf: "M900,464 C900,650 880,860 804,890",
-    halfToOpen: "M640,778 C660,690 700,580 760,466",
-    halfToClosed: "M276,890 C140,885 110,650 220,466",
+    toHalf: "M900,464 C900,650 880,860 814,886",
+    halfToOpen: "M640,778 C660,690 700,580 755,476",
+    halfToClosed: "M276,890 C140,885 110,650 214,475",
   },
   pills: {
     toOpen: [545, 140],
@@ -67,7 +71,9 @@ const portrait: Layout = {
     halfToClosed: [170, 680],
   },
   caption: { y: 1170, width: 960 },
-  size: { state: 54, pill: 30, caption: 40, square: 36 },
+  // Squares 34 (pilot 36): eight squares with the wider gap that keeps ink
+  // squares clear of the thicker shadows still fit the 410 px CLOSED block.
+  size: { state: 54, pill: 30, caption: 40, square: 34 },
 };
 
 export const layouts: Record<Format, Layout> = { "16x9": landscape, "4x5": portrait };

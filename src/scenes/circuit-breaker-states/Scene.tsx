@@ -31,6 +31,9 @@ const COUNTDOWN_STATE: StateId = "open";
 const START_DOT_RADIUS = 14;
 const STATE_LETTER_SPACING = 1;
 const CAPTION_GAP = 20;
+/** Gap between call squares, as a share of their size: wide enough that an
+ * ink (blocked) square stays apart from its neighbour's hard shadow. */
+const SQUARE_GAP = 0.35;
 
 const StateBlock: React.FC<{ id: StateId; layout: Layout; lang: Lang }> = ({ id, layout, lang }) => {
   const frame = useCurrentFrame();
@@ -43,7 +46,7 @@ const StateBlock: React.FC<{ id: StateId; layout: Layout; lang: Lang }> = ({ id,
       <div style={{ fontSize: layout.size.state, fontWeight: font.weightHeavy, letterSpacing: STATE_LETTER_SPACING }}>
         {text[lang].states[id]}
       </div>
-      <div style={{ display: "flex", gap: sq * 0.28, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: sq * SQUARE_GAP, alignItems: "center" }}>
         {id === COUNTDOWN_STATE ? (
           <div style={{ marginRight: sq * 0.3 }}>
             <Countdown left={contents.countdown} size={sq * 1.35} />

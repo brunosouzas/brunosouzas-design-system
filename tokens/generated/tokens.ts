@@ -40,19 +40,19 @@ export const tokens = {
     "travel": 22
   },
   "outline": {
-    "arrow": 4,
-    "block": 4,
-    "small": 3
-  },
-  "radius": {
-    "block": 18,
-    "pill": 22,
+    "arrow": 7,
+    "block": 9,
     "small": 6
   },
+  "radius": {
+    "block": 28,
+    "pill": 30,
+    "small": 10
+  },
   "shadow": {
-    "block": 10,
-    "pill": 6,
-    "small": 4
+    "block": 19,
+    "pill": 12,
+    "small": 6
   }
 } as const;
 
