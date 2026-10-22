@@ -12,15 +12,29 @@ export const flowCaptionAt = (frame: number, data: FlowTimeline = timeline) => {
   return { key: phase.id, opacity, lift: 14 * (1 - opacity) };
 };
 
-export const frameAt = (frame: number, data: FlowTimeline = timeline) => ({
-  tokens: data.ownership.filter(item => frame >= item.from && frame < item.to).map(item => ({
-    copy: item.copy, node: item.node, route: item.route,
-    progress: item.route ? (frame - item.from) / (item.to - item.from) : null,
-    stroke: item.copy === "invoice" && frame >= 610 ? tokens.color.failure : tokens.color.ink,
-  })),
-  marks: data.marks.filter(mark => frame >= mark.at).map(mark => ({ ...mark, appearance: callAppearance(mark.kind) })),
-  caption: flowCaptionAt(frame, data),
-});
+const failureAt = (data: FlowTimeline) => data.marks.find(mark => mark.kind === "fail")?.at ?? data.duration;
+/** The failed application turns `color.failure`, so its mark must not use that
+ * hue (ADR 0003): a white square with an ink cross, like the ink-on-white checks. */
+const markAppearance = (kind: "ok" | "fail") => kind === "fail"
+  ? { ...callAppearance("fail"), fill: tokens.color.white, glyphColor: tokens.color.ink }
+  : callAppearance(kind);
+
+export const frameAt = (frame: number, data: FlowTimeline = timeline) => {
+  const failed = frame >= failureAt(data);
+  return {
+    // Copies are filled with `color.caller` so they read inside white queues and
+    // on the panel; the returning invoice copy keeps its failure outline.
+    tokens: data.ownership.filter(item => frame >= item.from && frame < item.to).map(item => ({
+      copy: item.copy, node: item.node, route: item.route,
+      progress: item.route ? (frame - item.from) / (item.to - item.from) : null,
+      fill: tokens.color.caller,
+      stroke: item.copy === "invoice" && failed ? tokens.color.failure : tokens.color.ink,
+    })),
+    fills: { api: tokens.color.healthy, payment: tokens.color.healthy, inventory: tokens.color.healthy, invoice: failed ? tokens.color.failure : tokens.color.healthy } as Record<string, string>,
+    marks: data.marks.filter(mark => frame >= mark.at).map(mark => ({ ...mark, appearance: markAppearance(mark.kind) })),
+    caption: flowCaptionAt(frame, data),
+  };
+};
 
 /** Flow-only checks; common catalogue checks run first. Half-open intervals
  * allow atomic handoff while still rejecting any simultaneous copy owners. */

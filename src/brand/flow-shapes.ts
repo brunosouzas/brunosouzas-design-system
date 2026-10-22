@@ -17,6 +17,6 @@ export const flowShape = (kind: "exchange" | "queue" | "container", bounds: Boun
     tab: kind === "container" ? { fill: color.transitional, radius: radius.pill, strokeWidth: outline.small, shadow: shadow.pill } : null,
   };
 };
-export const positionedTokenStyle = (point: Point, stroke: string = tokens.color.ink) => ({
-  point, radius: 17, fill: tokens.color.white, stroke, strokeWidth: tokens.outline.small + 1, shadow: tokens.shadow.small,
+export const positionedTokenStyle = (point: Point, stroke: string = tokens.color.ink, fill: string = tokens.color.white) => ({
+  point, radius: 17, fill, stroke, strokeWidth: tokens.outline.small + 1, shadow: tokens.shadow.small,
 });

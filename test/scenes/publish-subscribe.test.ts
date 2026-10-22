@@ -97,10 +97,22 @@ test("Caption windows and final caption",()=>{
 test("Failure stays local and marks remain visible",()=>{
   for(const f of [610,640,651,662,999]){
     const state=frameAt(f);expect(state.tokens[0].stroke).toBe(tokens.color.failure);
+    // From the failure event the invoice block itself turns failure-red; the
+    // others stay healthy. Every mark is white with an ink glyph, so none
+    // shares its block's hue (ADR 0003): a check on green, a cross on red.
+    expect(state.fills).toEqual({api:tokens.color.healthy,payment:tokens.color.healthy,inventory:tokens.color.healthy,invoice:tokens.color.failure});
     for(const mark of state.marks){
-      expect(mark.appearance.fill).toBe(mark.node==="invoice"?tokens.color.failure:tokens.color.white);
-      expect(mark.appearance.glyphColor).toBe(mark.node==="invoice"?tokens.color.white:tokens.color.ink);
+      expect(mark.appearance.fill).toBe(tokens.color.white);expect(mark.appearance.glyphColor).toBe(tokens.color.ink);
+      expect(mark.appearance.fill).not.toBe(state.fills[mark.node]);expect(mark.appearance.glyph).toBe(mark.node==="invoice"?"✕":"✓");
     }
   }
-  expect(frameAt(609).tokens[0].stroke).toBe(tokens.color.ink);
+  for(const f of [0,302,492,609]){
+    const state=frameAt(f);expect(Object.values(state.fills)).toEqual(Array(4).fill(tokens.color.healthy));
+    for(const t of state.tokens)expect(t.stroke).toBe(tokens.color.ink);
+  }
+  // Copies are filled with the caller colour at every frame, so they read
+  // inside the white queues and on the panel, not as white on white.
+  for(const f of [111,291,302,481,651,662,999])for(const t of frameAt(f).tokens){
+    expect(t.fill).toBe(tokens.color.caller);expect(t.fill).not.toBe(tokens.color.white);
+  }
 });

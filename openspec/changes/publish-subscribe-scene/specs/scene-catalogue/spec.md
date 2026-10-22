@@ -87,7 +87,7 @@ The pub-sub scene SHALL animate one event from the API to the exchange, confirm 
 #### Scenario: Final scene holds without redelivery
 - **GIVEN** the invoice copy returned and the final caption settled
 - **WHEN** every frame from 910 through 999 is compared
-- **THEN** visible scene state is identical: one invoice queue copy, no other tokens, two consumer checks, invoice failure mark, unchanged API confirmation, no fourth subscriber and no successful redelivery
+- **THEN** visible scene state is identical: one invoice queue copy, no other tokens, two consumer checks, the red invoice block with its cross, unchanged API confirmation, no fourth subscriber and no successful redelivery
 
 ### Requirement: Deterministic flow validation
 Flow choreography SHALL be seekable without accumulating state. Validation SHALL reject unknown route endpoints, invalid event ranges and impossible copy ownership (a copy on two routes or in a queue while travelling), naming the scene and offending item. Event boundaries SHALL transfer ownership atomically without double drawing or losing a copy.
@@ -108,7 +108,7 @@ The scene SHALL use an independent layout and routes for each format, preserving
 #### Scenario: Portrait identifiers and long Portuguese names fit
 - **GIVEN** the portrait layout in each language, including `order-created-inventory` and `Consumidor de nota fiscal`
 - **WHEN** all phase stills and the final frame are reviewed at 1080x1350
-- **THEN** queue/consumer rows and wrapped names remain legible at the minimum sizes, every queue is inside MQ, every consumer outside, and all text, shadows and travelling token routes stay clear of other labels and the caption area
+- **THEN** queue/consumer rows and wrapped names remain legible at the minimum sizes, every queue is inside MQ, every consumer outside, the bindings leave the exchange as one trunk with a short branch per queue, the rows extend to just above the caption, and all text, shadows and travelling token routes stay clear of other labels and the caption area
 
 #### Scenario: Landscape preserves diagram topology
 - **GIVEN** the landscape layout in each language

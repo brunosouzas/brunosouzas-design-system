@@ -31,6 +31,20 @@ test("Portrait identifiers and long Portuguese names fit",()=>{
   expect(pointAlong(l.routes.publish,1)).toEqual(l.docks.exchange);
   for(const id of consumers)expect(pointAlong(l.routes[`${id}-binding`],0)).toEqual(l.docks.exchange);
   expect(l.caption.y+l.caption.h).toBeLessThanOrEqual(l.height);
+  // Designer review: one binding trunk from the exchange with a short branch
+  // per queue (not three parallel rails), and rows spread into the band above
+  // the caption so the composition is balanced.
+  const parse=(d:string)=>[...d.matchAll(/(-?\d+),(-?\d+)/g)].map(m=>[+m[1],+m[2]]);
+  const trunks=consumers.map(id=>parse(l.arrows[`${id}-binding`]));
+  for(const path of trunks){expect(path[1][0]).toBe(trunks[0][1][0]);expect(path[2][0]).toBe(trunks[0][1][0]);expect(path.slice(0,2)).toEqual(trunks[0].slice(0,2));}
+  for(const [i,id] of consumers.entries()){
+    const q=l.boxes[`${id}-queue`],branch=trunks[i];
+    expect(branch[2][1]).toBe(branch[3][1]);expect(q.x-branch[2][0]).toBeLessThanOrEqual(60);
+  }
+  const last=l.boxes.invoice;expect(last.y+last.h).toBeGreaterThanOrEqual(1140);
+  const returnLane=Math.max(...parse(l.routes["invoice-return"]).map(p=>p[1]));
+  expect(l.caption.y-(returnLane+21)).toBeLessThanOrEqual(40);
+  expect(pointAlong(l.routes["invoice-return"],1)).toEqual(l.docks["invoice-queue"]);
 });
 test("Landscape preserves diagram topology",()=>{
   const l=layouts["16x9"];

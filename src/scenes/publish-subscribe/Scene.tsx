@@ -35,14 +35,14 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
       const b=l.boxes[id], index=consumers.indexOf(id as typeof consumers[number]);
       const lines=id==="api"?[t.api]:consumerLines(lang,format,index);
       const footer=l.docks[id].y-b.y;
-      return <InkBlock key={id} {...b} fill={color.healthy} appearance={settledPop(frame,timeline.popIn[id])}>
+      return <InkBlock key={id} {...b} fill={state.fills[id]} appearance={settledPop(frame,timeline.popIn[id])}>
         <div style={{position:"absolute",top:format==="16x9"&&id!=="api"?4:8,left:10,right:10,textAlign:"center",fontSize:l.size.name,lineHeight:1,fontWeight:font.weightHeavy}}>{lines.map(line=><div key={line}>{line}</div>)}</div>
-        <div style={{position:"absolute",top:footer-18,left:format==="4x5"&&id!=="api"?48:80,right:format==="4x5"&&id!=="api"?38:50,textAlign:"center",fontSize:l.size.label,whiteSpace:"nowrap",fontWeight:font.weightBold}}>{t.subtitle}</div>
+        <div style={{position:"absolute",top:footer-18,left:id==="api"?80:format==="4x5"?48:70,right:id==="api"?50:format==="4x5"?48:70,textAlign:"center",fontSize:l.size.label,whiteSpace:"nowrap",fontWeight:font.weightBold}}>{t.subtitle}</div>
       </InkBlock>;
     })}
     {state.tokens.map(item=>{
       const point=item.route ? pointAlong(l.routes[item.route],item.progress ?? 0) : item.node ? l.docks[item.node] : null;
-      return <PositionedToken key={item.copy} point={point} stroke={item.stroke} width={l.width} height={l.height}/>;
+      return <PositionedToken key={item.copy} point={point} stroke={item.stroke} fill={item.fill} width={l.width} height={l.height}/>;
     })}
     {timeline.routes.filter(route=>route.labelAt!==undefined).map(route=>{
       const at=route.labelAt!, p=l.labels[route.id], pop=frame>=at+90?{opacity:1,scale:1}:pillPopIn(frame,at);
@@ -51,8 +51,10 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
     })}
     {state.marks.map(mark=>{
       const b=l.boxes[mark.node], dock=l.docks[mark.node];
-      const p=mark.kind==="fail"?{x:b.x+b.w-20,y:dock.y}:dock;
-      return <div key={mark.node} style={{position:"absolute",left:p.x-l.size.square/2,top:p.y-l.size.square/2}}><CallSquare kind={mark.kind} appearAt={mark.at} size={l.size.square}/></div>;
+      // The failure cross mirrors the ACK check: same size, same inset from the
+      // block's right edge as the check's from its left, beside the subtitle.
+      const p=mark.kind==="fail"?{x:b.x+b.w-(dock.x-b.x),y:dock.y}:dock;
+      return <div key={mark.node} style={{position:"absolute",left:p.x-l.size.square/2,top:p.y-l.size.square/2,width:l.size.square,height:l.size.square}}><CallSquare kind={mark.kind} appearAt={mark.at} size={l.size.square} look={mark.appearance}/></div>;
     })}
     <div style={{position:"absolute",left:l.mq.x,top:l.mq.y,opacity:settledPop(frame,14).opacity}}><ContainerTab label={t.mq}/></div>
     {state.caption?<div style={{position:"absolute",left:l.caption.x,top:l.caption.y+state.caption.lift,width:l.caption.w,height:l.caption.h,opacity:state.caption.opacity,fontSize:l.size.caption,fontWeight:font.weightBold,lineHeight:1.15,textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center"}}>{t.captions[state.caption.key]}</div>:null}

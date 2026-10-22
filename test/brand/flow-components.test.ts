@@ -14,6 +14,7 @@ test("Generic shapes match the diagram language",()=>{
     expect(JSON.stringify(s)).not.toMatch(/Anypoint|order-created/);
   }
   expect(positionedTokenStyle({x:1,y:2})).toEqual({point:{x:1,y:2},radius:17,fill:tokens.color.white,stroke:tokens.color.ink,strokeWidth:tokens.outline.small+1,shadow:tokens.shadow.small});
+  expect(positionedTokenStyle({x:1,y:2},tokens.color.failure,tokens.color.caller)).toMatchObject({fill:tokens.color.caller,stroke:tokens.color.failure});
 });
 test("Shapes before appearance",()=>{
   for(const kind of ["exchange","queue","container"] as const){

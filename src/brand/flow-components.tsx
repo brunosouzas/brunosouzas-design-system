@@ -34,9 +34,9 @@ export const ContainerTab: React.FC<{label:string}> = ({label}) => {
   const {color, outline, shadow, radius, font} = tokens;
   return <div style={{position:"absolute", left:20, top:-28, background:color.transitional, border:`${outline.small}px solid ${color.ink}`, boxShadow:`${shadow.pill}px ${shadow.pill}px 0 ${color.ink}`, borderRadius:radius.pill, padding:"6px 24px", fontFamily:sans, fontSize:30, fontWeight:font.weightHeavy, whiteSpace:"nowrap"}}>{label}</div>;
 };
-export const PositionedToken: React.FC<{point:Point | null; stroke?:string; width:number; height:number}> = ({point, stroke, width,height}) => {
+export const PositionedToken: React.FC<{point:Point | null; stroke?:string; fill?:string; width:number; height:number}> = ({point, stroke, fill, width,height}) => {
   if (!point) return null;
-  const s = positionedTokenStyle(point, stroke);
+  const s = positionedTokenStyle(point, stroke, fill);
   return <svg width={width} height={height} style={{position:"absolute", inset:0, overflow:"visible"}}>
     <circle cx={point.x+s.shadow} cy={point.y+s.shadow} r={s.radius} fill={tokens.color.ink}/>
     <circle cx={point.x} cy={point.y} r={s.radius} fill={s.fill} stroke={s.stroke} strokeWidth={s.strokeWidth}/>
