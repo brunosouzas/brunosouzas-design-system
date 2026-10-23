@@ -27,6 +27,23 @@ describe("UI icons as data", () => {
     expect(text).toEqual([]);
   });
 
+  test("Every glyph as designed", () => {
+    // design §5 of stackledger-map-and-link-pieces, written out independently of the data.
+    const path = (d: string) => ({ tag: "path", attrs: { d, fill: "none", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round" }, children: [] });
+    const fill = (d: string) => ({ tag: "path", attrs: { d, stroke: "none" }, children: [] });
+    const expected: Record<string, unknown[]> = {
+      sun: [{ tag: "circle", attrs: { cx: 12, cy: 12, r: 4.5, stroke: "none" }, children: [] }, path("M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8")],
+      moon: [fill("M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z")],
+      zoomIn: [path("M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6")],
+      zoomOut: [path("M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6")],
+      reset: [path("M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5")],
+      calendar: [path("M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4"), { tag: "rect", attrs: { x: 7, y: 13, width: 3, height: 3, rx: 0.5, stroke: "none" }, children: [] }],
+      download: [path("M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3")],
+    };
+    for (const name of UI_ICON_NAMES) expect(uiIcon({ name, x: 0, y: 0 }).body[0].children, name).toEqual(expected[name]);
+    expect(UI_ICONS.map((icon) => icon.title)).toEqual(["Sun", "Moon", "Zoom in", "Zoom out", "Reset", "Calendar", "Download"]);
+  });
+
   test("The seven names", () => {
     expect(UI_ICON_NAMES).toEqual(["sun", "moon", "zoomIn", "zoomOut", "reset", "calendar", "download"]);
     for (const icon of UI_ICONS) {
@@ -60,6 +77,35 @@ describe("Link icons as data", () => {
     const path = /<path d="([^"]+)"/.exec(site)![1];
     expect((mark.children[0] as SvgNode).attrs.d).toBe(path);
     expect(LINK_ICONS.find((icon) => icon.name === "github")!.description).toMatch(/Font Awesome.*CC BY 4\.0/);
+  });
+
+  test("Faces and glyphs as designed", () => {
+    // design §6: faces as token paths; glyphs of brunosouzas.com e29b3dd, and the website globe.
+    expect(LINK_ICONS.map((icon) => [icon.name, icon.title, icon.face])).toEqual([
+      ["github", "GitHub", "color.white"],
+      ["linkedin", "LinkedIn", "color.caller"],
+      ["email", "Email", "color.transitional"],
+      ["website", "Website", "color.healthy"],
+    ]);
+    const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(2);
+    const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[1]).attrs.fill;
+    expect(["github", "linkedin", "email", "website"].map(faceFill)).toEqual(["#FFFFFF", "#8FB2FF", "#FFD25A", "#3DDC84"]);
+    const ink = "#0A1033";
+    expect(glyph("linkedin")).toEqual([
+      { tag: "rect", attrs: { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: ink, stroke: "none" }, children: [] },
+      { tag: "circle", attrs: { cx: 14, cy: 13.8, r: 2.4, fill: ink, stroke: "none" }, children: [] },
+      { tag: "path", attrs: { d: "M19.5,30 V18.5 H23.5 V20.3 C24.5,19 26.2,18.1 28,18.1 C31.2,18.1 32.5,20.2 32.5,23.6 V30 H28.5 V24.3 C28.5,22.7 27.8,21.9 26.6,21.9 C25.2,21.9 23.5,22.8 23.5,24.7 V30 Z", fill: ink, stroke: "none" }, children: [] },
+    ]);
+    expect(glyph("email")).toEqual([
+      { tag: "rect", attrs: { x: 9, y: 13, width: 24, height: 17, rx: 3, fill: "#FFFFFF", stroke: ink, "stroke-width": 2.5 }, children: [] },
+      { tag: "path", attrs: { d: "M10,15 L21,23 L32,15", fill: "none", stroke: ink, "stroke-width": 2.5, "stroke-linejoin": "round" }, children: [] },
+    ]);
+    expect(glyph("website")).toEqual([
+      { tag: "circle", attrs: { cx: 21, cy: 21, r: 10.5, fill: "#FFFFFF", stroke: ink, "stroke-width": 2.5 }, children: [] },
+      { tag: "ellipse", attrs: { cx: 21, cy: 21, rx: 4.6, ry: 10.5, fill: "none", stroke: ink, "stroke-width": 2 }, children: [] },
+      { tag: "path", attrs: { d: "M10.5 21H31.5M12.5 15.5H29.5M12.5 26.5H29.5", fill: "none", stroke: ink, "stroke-width": 2, "stroke-linecap": "round" }, children: [] },
+    ]);
+    expect(glyph("github")).toHaveLength(1);
   });
 
   test("Dark frame", () => {
