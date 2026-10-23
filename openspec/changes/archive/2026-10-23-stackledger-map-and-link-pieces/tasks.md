@@ -42,4 +42,4 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the com
 
 - [x] 6.1 README (the six pieces, the subtitle, the optional letter, the mark's surface, the new tokens), `docs/roadmap.md` (the stackledger requests delivered under AB#167), and the ADR 0003 amendment of design §2. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
 - [x] 6.2 Local check: render the catalogue sheet (`npm run pieces:sheet`) and each new piece on light and dark with `rsvg-convert`, and compare with the spike sheet. Check: PNGs attached to the pull request.
-- [ ] 6.3 After the pull request is ready, update the vault's `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`.
+- [x] 6.3 (brain `138b7c2`) After the pull request is ready, update the vault's `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`.

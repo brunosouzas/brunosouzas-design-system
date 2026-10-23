@@ -177,7 +177,7 @@ Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no
 - **THEN** the cover command reports `pieces[0].fill` as a colour literal and writes nothing
 
 ### Requirement: Piece catalogue
-The library SHALL export these pieces, with the parameters and defaults of the designs (`illustration-pieces` §4, `metro-and-diagram-pieces` §3, `stackledger-map-and-link-pieces` §3): pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon, lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon.
+The library SHALL export 41 pieces with the parameters and defaults of their designs: the 26 cover pieces of `illustration-pieces` §4 (pill to eipIcon), the nine of `metro-and-diagram-pieces` §3 (lineBadge to ledgerMark), and renewalRing, suggestedHalo, licenceMark, zone, uiIcon and linkIcon of `stackledger-map-and-link-pieces` §3, in that order.
 
 #### Scenario: Every piece draws with its defaults
 - **WHEN** the catalogue test calls each of the 41 pieces with only its required parameters

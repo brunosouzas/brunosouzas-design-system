@@ -51,7 +51,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 35 piece names
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 41 piece names
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`
