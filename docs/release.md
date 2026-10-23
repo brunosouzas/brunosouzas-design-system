@@ -133,3 +133,5 @@ Before the first version that should release on merge (card 171), the owner chan
 2. Settings → Rules → Rulesets → `release tags`: untick "Restrict creations" (or add the GitHub Actions app to the bypass list, if it is offered). Without it the release is published on npm but the tag and the GitHub release fail; "Re-run failed jobs" after the fix finishes them.
 
 The trusted publisher on npm does not change: it names the workflow file `release.yml` and the environment `npm`, not the trigger.
+
+**Why not an app in the bypass list.** The workflow's own token is not an installed app, so the ruleset cannot list it. A GitHub App of the owner's (installed here, its token made in `publish` with `actions/create-github-app-token`) could be listed and keep "Restrict creations", but it adds a long-lived private key to the environment `npm` (today the release holds no secret at all), and a tag pushed with an app token starts the workflow again (a second run asking for approval). With the owner as the only person with write access, the tag check and the approval already stop a stray `v*` tag. Revisit this when the repository has other writers.
