@@ -19,7 +19,7 @@ Option 2.
 - Shapes are flat, with an ink outline (`#0A1033`) and a hard offset shadow drawn in the same ink. No blur, no gradients.
 - Colours keep one meaning everywhere: green healthy or normal, orange blocked or fail-fast, yellow transitional, light blue caller, coral backend, red the failure path. White and ink are neutral.
 - Small elements inside a coloured block use ink or white, never the block's own hue.
-- Type is Lato (bold and black weights); code identifiers use the monospace stack. Text is never rotated.
+- Type is Lato (bold and black weights); code identifiers use the monospace stack.
 - In animation, a bottom caption with the article's sentence for the current state is the default, and the last frame holds still for at least three seconds.
 
 ## Consequences
@@ -27,3 +27,7 @@ Option 2.
 - New scenes start from the existing components and tokens, which makes them faster to build and review.
 - A topic that needs a colour outside the code (a platform's brand colour) uses it only for that external system, as the static diagrams already do.
 - The caption is a deliberate difference from the static diagrams, which carry no caption: a video often plays muted, and the caption explains what is moving.
+
+## Amendment, 2026-10-23 (AB#139)
+
+The rule "text is never rotated" is removed. The published covers already turn a stamp's word with the stamp, and a fixed rule like this one limits the drawing more than it helps the reader. Whether a rotated word reads well is judged by the owner when he reviews each image, like any other layout choice. The colour meanings and the outline and shadow rules are unchanged.

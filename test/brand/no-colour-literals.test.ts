@@ -40,4 +40,17 @@ describe("Components take values only from the tokens", () => {
     expect(colourLiterals("src/brand")).toEqual([]);
     expect(colourLiterals("src/scenes")).toEqual([]);
   });
+
+  // Spec illustration-pieces, "Colours only from tokens" (change illustration-pieces, tasks 2.4).
+  test("Source without literals", () => {
+    expect(colourLiterals("src/pieces")).toEqual([]);
+  });
+
+  // Spec illustration-pieces, "Pure pieces": piece modules read nothing (no node: imports).
+  test("No file access in piece modules", () => {
+    const offenders = readdirSync(join(repoRoot, "src/pieces"))
+      .filter((name) => /\.(ts|tsx)$/.test(name))
+      .filter((name) => /from\s+["']node:/.test(readFileSync(join(repoRoot, "src/pieces", name), "utf8")));
+    expect(offenders).toEqual([]);
+  });
 });

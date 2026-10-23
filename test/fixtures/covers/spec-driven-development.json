@@ -1,0 +1,124 @@
+{
+  "id": "sdd",
+  "title": "A one-line request becomes a reviewed spec before any code",
+  "description": "Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.",
+  "background": "blush",
+  "rings": {
+    "cx": 400,
+    "cy": 220,
+    "radius": 96
+  },
+  "pieces": [
+    {
+      "piece": "speechBubble",
+      "x": 52,
+      "y": 174,
+      "width": 160,
+      "height": 74
+    },
+    {
+      "piece": "blockArrow",
+      "x": 230,
+      "y": 215,
+      "length": 50
+    },
+    {
+      "piece": "blockArrow",
+      "x": 532,
+      "y": 215,
+      "length": 52
+    },
+    {
+      "piece": "sheet",
+      "x": 300,
+      "y": 112,
+      "width": 200,
+      "height": 222,
+      "rows": [
+        {
+          "lead": "question",
+          "bar": 94,
+          "tail": "check"
+        },
+        {
+          "lead": "question",
+          "bar": 76,
+          "tail": "check"
+        },
+        {
+          "lead": "question",
+          "bar": 88,
+          "tail": "check"
+        },
+        {
+          "lead": "question",
+          "bar": 60
+        }
+      ],
+      "top": 37,
+      "step": 40
+    },
+    {
+      "piece": "stamp",
+      "cx": 488,
+      "cy": 300,
+      "word": "GO"
+    },
+    {
+      "piece": "codePanel",
+      "x": 602,
+      "y": 140,
+      "width": 150,
+      "height": 152,
+      "lines": [
+        {
+          "indent": 0,
+          "w": 58,
+          "color": "healthy"
+        },
+        {
+          "indent": 16,
+          "w": 88,
+          "color": "caller"
+        },
+        {
+          "indent": 16,
+          "w": 64,
+          "color": "white"
+        },
+        {
+          "indent": 16,
+          "w": 80,
+          "color": "caller"
+        },
+        {
+          "indent": 0,
+          "w": 44,
+          "color": "healthy"
+        }
+      ]
+    },
+    {
+      "piece": "pill",
+      "x": 132,
+      "y": 174,
+      "text": "request",
+      "width": 104
+    },
+    {
+      "piece": "pill",
+      "x": 400,
+      "y": 112,
+      "text": "spec",
+      "fill": "color.transitional",
+      "width": 80
+    },
+    {
+      "piece": "pill",
+      "x": 677,
+      "y": 140,
+      "text": "code",
+      "width": 80
+    }
+  ]
+}

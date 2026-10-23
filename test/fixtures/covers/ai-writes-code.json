@@ -1,0 +1,125 @@
+{
+  "id": "awc",
+  "title": "The AI writes the code; the developer owns both ends",
+  "description": "Illustration. On the left, a developer's spec sheet with a checklist, labelled You. In the middle, a green robot that writes code, labelled AI. On the right, the code it produced under a magnifying glass that finds a problem line, labelled You. Arrows run from the spec to the robot and from the robot to the review.",
+  "background": "peach",
+  "rings": {
+    "cx": 400,
+    "cy": 215,
+    "radius": 100
+  },
+  "pieces": [
+    {
+      "piece": "sheet",
+      "x": 56,
+      "y": 122,
+      "width": 164,
+      "height": 190,
+      "rows": [
+        {
+          "lead": "checked",
+          "bar": 86
+        },
+        {
+          "lead": "checked",
+          "bar": 70
+        },
+        {
+          "lead": "checked",
+          "bar": 80
+        },
+        {
+          "lead": "checkbox",
+          "bar": 56
+        }
+      ],
+      "top": 46,
+      "step": 36
+    },
+    {
+      "piece": "blockArrow",
+      "x": 238,
+      "y": 215,
+      "length": 66
+    },
+    {
+      "piece": "blockArrow",
+      "x": 502,
+      "y": 215,
+      "length": 66
+    },
+    {
+      "piece": "robot",
+      "cx": 400,
+      "top": 140
+    },
+    {
+      "piece": "codePanel",
+      "x": 580,
+      "y": 124,
+      "width": 168,
+      "height": 186,
+      "top": 40,
+      "lines": [
+        {
+          "indent": 0,
+          "w": 70,
+          "color": "healthy"
+        },
+        {
+          "indent": 16,
+          "w": 96,
+          "color": "caller"
+        },
+        {
+          "indent": 16,
+          "w": 60,
+          "color": "white"
+        },
+        {
+          "indent": 30,
+          "w": 92,
+          "color": "backend",
+          "tall": true
+        },
+        {
+          "indent": 16,
+          "w": 74,
+          "color": "caller"
+        },
+        {
+          "indent": 0,
+          "w": 50,
+          "color": "healthy"
+        }
+      ]
+    },
+    {
+      "piece": "magnifier",
+      "cx": 676,
+      "cy": 235
+    },
+    {
+      "piece": "pill",
+      "x": 138,
+      "y": 122,
+      "text": "You",
+      "width": 92
+    },
+    {
+      "piece": "pill",
+      "x": 400,
+      "y": 294,
+      "text": "AI",
+      "fill": "color.transitional",
+      "width": 68
+    },
+    {
+      "piece": "pill",
+      "x": 664,
+      "y": 124,
+      "text": "You",
+      "width": 92
+    }
+  ]
+}

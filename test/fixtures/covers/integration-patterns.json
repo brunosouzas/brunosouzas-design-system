@@ -1,0 +1,120 @@
+{
+  "id": "ipc",
+  "title": "Integration patterns in Mule: you already use them, you just don't know their names",
+  "description": "Illustration. On the left, a white book marked EIP with six pattern icons on its cover. On the right, a blue Mule flow with three components: Scatter-Gather, Choice and For Each. Each component has a yellow name tag hanging from it on a string, and each tag shows the book's icon for the pattern the component implements: Scatter-Gather, Content-Based Router and Splitter. The components already carry the book's patterns; the tags give them their names.",
+  "background": "lavender",
+  "rings": {
+    "cx": 480,
+    "cy": 210
+  },
+  "pieces": [
+    {
+      "piece": "book",
+      "x": 104,
+      "y": 102
+    },
+    {
+      "piece": "eipIcon",
+      "name": "publish-subscribe-channel",
+      "x": 132,
+      "y": 140,
+      "scale": 0.66
+    },
+    {
+      "piece": "eipIcon",
+      "name": "content-based-router",
+      "x": 178,
+      "y": 140,
+      "scale": 0.66
+    },
+    {
+      "piece": "eipIcon",
+      "name": "splitter",
+      "x": 132,
+      "y": 190,
+      "scale": 0.66
+    },
+    {
+      "piece": "eipIcon",
+      "name": "dead-letter-channel",
+      "x": 178,
+      "y": 190,
+      "scale": 0.66
+    },
+    {
+      "piece": "eipIcon",
+      "name": "message-translator",
+      "x": 132,
+      "y": 240,
+      "scale": 0.66
+    },
+    {
+      "piece": "eipIcon",
+      "name": "idempotent-receiver",
+      "x": 178,
+      "y": 240,
+      "scale": 0.66
+    },
+    {
+      "piece": "muleFlow",
+      "x": 272,
+      "y": 112,
+      "width": 420,
+      "tiles": [
+        {
+          "x": 312,
+          "kind": "scatter-gather"
+        },
+        {
+          "x": 442,
+          "kind": "choice"
+        },
+        {
+          "x": 572,
+          "kind": "for-each"
+        }
+      ]
+    },
+    {
+      "piece": "nameTag",
+      "hangX": 355,
+      "hangY": 196,
+      "cx": 355,
+      "top": 232,
+      "rotate": -7,
+      "icon": "scatter-gather"
+    },
+    {
+      "piece": "nameTag",
+      "hangX": 485,
+      "hangY": 196,
+      "cx": 485,
+      "top": 232,
+      "rotate": 4,
+      "icon": "content-based-router"
+    },
+    {
+      "piece": "nameTag",
+      "hangX": 615,
+      "hangY": 196,
+      "cx": 615,
+      "top": 232,
+      "rotate": -4,
+      "icon": "splitter"
+    },
+    {
+      "piece": "pill",
+      "x": 164,
+      "y": 102,
+      "text": "EIP",
+      "width": 74
+    },
+    {
+      "piece": "pill",
+      "x": 330,
+      "y": 112,
+      "text": "Mule",
+      "width": 88
+    }
+  ]
+}

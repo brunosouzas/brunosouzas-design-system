@@ -15,6 +15,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 - [How it works](#how-it-works)
 - [Commands](#commands)
 - [How a scene is built](#how-a-scene-is-built)
+- [Illustration pieces and covers](#illustration-pieces-and-covers)
 - [Decisions](#decisions)
 - [How this project is built](#how-this-project-is-built)
 - [Security](#security)
@@ -23,7 +24,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The site and the static diagram generators do not consume the tokens yet (roadmap items 3 and 4).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
 
 ## What it is
 
@@ -31,6 +32,7 @@ The blog's articles explain how systems behave: a circuit breaker opening, a pip
 
 - **Design tokens, one source.** Colours with fixed meanings (green healthy, orange blocked, yellow transitional, red the failure path), the Lato type scale, the thick ink outline, the hard offset shadow, radii, and motion timings. Exported as CSS variables for the site, TypeScript for the animations and JSON for anything else (the SVG generators of the static diagrams).
 - **Motion components.** React components for [Remotion](https://www.remotion.dev): an ink block with a hard shadow, a pill label, an arrow that draws itself, a token travelling along a transition, call-result squares, a countdown ring. Flow primitives in `src/brand/flow-components.tsx` add a white hexagonal `Exchange`, rail-ended `Queue`, yellow-tab `TaggedContainer` and persistent `PositionedToken` (stationary or path-positioned). Copy identities, splits and ACK/NACK rules belong to scenes, not to a generic message engine.
+- **Illustration pieces.** The objects the blog's covers and diagrams draw again and again (pill label, sheet, code panel, robot, server stack, gear, road, the 26 EIP icons and more), each a pure TypeScript function that returns an SVG node tree from the tokens. The same tree becomes an SVG file for a cover and React elements for a scene, and a scene animates a piece by recomputing its parameters every frame. See [Illustration pieces and covers](#illustration-pieces-and-covers).
 - **A catalogue of scenes.** Each scene animates something a published article already says, in 16:9 (article) and 4:5 (LinkedIn), in Portuguese and English from one text table. The first is the [circuit-breaker state machine](docs/spikes/2026-10-22-motion-pilot/README.md).
 
 The style follows the illustration covers of the [Spotify Engineering blog](https://engineering.atspotify.com/): flat shapes, a dark ink outline, a hard shadow with no blur, saturated colours on a calm page.
@@ -40,7 +42,10 @@ The style follows the illustration covers of the [Spotify Engineering blog](http
 ```text
 tokens/source.json ──► tokens/generated/tokens.css  ──► brunosouzas.com (site repository, planned)
                    ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format and language
-                   └─► tokens/generated/tokens.json ──► static diagram generators (planned)
+                   └─► tokens/generated/tokens.json ──► other scripts
+
+src/pieces (pure functions → SVG node tree) ──► toSvg   ──► covers (npm run cover), diagrams
+                                            └─► toReact ──► Remotion scenes
 ```
 
 The generated files are committed, so a consumer can read them without running Node. CSS custom properties carry the prefix `--ds-` (for example `--ds-color-ink`, `--ds-motion-pop-damping`) so they do not clash with the site's own theme names.
@@ -60,6 +65,8 @@ npm run render -- circuit-breaker-states          # out/master/<id>.mp4 and the 
 npm run stills -- publish-subscribe               # 24 phase/final PNGs (six per composition)
 npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effects
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
+npm run cover -- cover.json --out card.svg        # build a blog cover from its spec
+npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
 npm run studio                                    # Remotion Studio, for frame-by-frame review
 ```
 
@@ -92,13 +99,53 @@ Pub-sub separates `text.ts`, `timeline.ts` and pure `flow.ts` from its data entr
 
 The components take every colour and size from the tokens, and what is visible at a frame (arrow progress, travelling tokens, focus and dimming, captions, countdown, call results) comes from pure functions in `src/brand/motion.ts`, which the tests check without rendering.
 
+## Illustration pieces and covers
+
+`src/pieces/` holds the drawing library. A piece is a function from plain parameters to `{ body, text }`: `body` holds the shapes, drawn inside the outlined group, and `text` the words and glyphs, drawn after every shape so the outline never strokes a letter. Pieces read only the generated tokens and never a file, so a Remotion scene can import them.
+
+- `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
+- `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
+- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value. Each piece checks its parameters before drawing and names the first wrong one.
+- The 26 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) of the change that added them; the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+
+### A cover
+
+A cover is a JSON spec kept with its article, outside this repository: drafts are private, and only the pieces are public. `npm run cover -- <spec.json> --out <file.svg>` validates it, reports every problem with its JSON path, and writes an 800x420 SVG; the same spec always gives the same bytes.
+
+```json
+{
+  "id": "sdd",
+  "title": "A one-line request becomes a reviewed spec before any code",
+  "description": "Illustration. On the left, a small slip …",
+  "background": "blush",
+  "rings": { "cx": 400, "cy": 220, "radius": 96 },
+  "pieces": [
+    { "piece": "speechBubble", "x": 52, "y": 174, "width": 160, "height": 74 },
+    { "piece": "pill", "x": 132, "y": 174, "text": "request", "width": 104 }
+  ]
+}
+```
+
+- `background` names one of the 21 pairs in `coverBackground` (a background and its ring colour, measured from the published covers). Each pair is used by one cover only.
+- `pieces` are drawn in order; their words go on top.
+- `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead.
+- The three published covers that proved the pieces are the test fixtures in `test/fixtures/covers/`.
+
+### A new piece
+
+Add it to `src/pieces/library.ts` with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
+
+### EIP icons
+
+`src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+
 ## Decisions
 
 Project-wide decisions are recorded as ADRs in [`docs/adr/`](docs/adr/README.md).
 
 - **Animations are code, made with Remotion.** A scene is React components and data, so a correction is a re-render and every format and language comes from one composition. AI video generators were rejected because their outputs are not consistent between clips. [ADR 0001](docs/adr/0001-remotion-for-motion.md)
 - **One token source.** Colours, type, outline, shadow and motion timings live in one file; the site, the animations and the SVG scripts read generated exports instead of keeping their own copies. [ADR 0002](docs/adr/0002-one-token-source.md)
-- **One visual language, fixed colour meanings.** Green is always healthy, orange always blocked, red always the failure path, so a reader learns the code once. [ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md)
+- **One visual language, fixed colour meanings.** Green is always healthy, orange always blocked, red always the failure path, so a reader learns the code once. Rotated text is allowed since the 2026-10-23 amendment. [ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md)
 - **Scenes illustrate published articles.** Every string on screen comes from the article, so an animation never says more than the reviewed text. [ADR 0004](docs/adr/0004-scenes-illustrate-published-articles.md)
 
 ## How this project is built

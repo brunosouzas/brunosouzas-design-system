@@ -13,6 +13,8 @@
     "tokens:check": "tsx scripts/tokens.ts --check",
     "stills": "tsx scripts/stills.ts",
     "render": "tsx scripts/render.ts",
+    "cover": "tsx scripts/cover.ts",
+    "pieces:sheet": "tsx scripts/pieces-sheet.ts",
     "studio": "remotion studio src/index.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
