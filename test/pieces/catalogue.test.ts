@@ -49,11 +49,24 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   zone: { points: [[0, 0], [100, 0], [50, 80]], fill: "color.caller" },
   uiIcon: { name: "sun", x: 0, y: 0 },
   linkIcon: { icon: "github", x: 0, y: 0 },
+  diagramBox: { x: 0, y: 0, width: 120, text: ["a"] },
+  decisionNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
+  storeNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
+  queueNode: { x: 0, y: 0, width: 120, text: ["a"] },
+  exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
+  taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
+  lifeline: { x: 0, y1: 0, y2: 100 },
+  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.healthy" },
+  altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
+  edgeLabel: { x: 0, y: 0, lines: ["a"] },
 };
 
 /** The metro and diagram pieces have limits that depend on each other (width against height, room for
  * the ink), so their boundary calls are listed with valid companions instead of one value at a time. */
-const METRO = new Set(["lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark", "renewalRing", "suggestedHalo", "licenceMark", "zone"]);
+const METRO = new Set([
+  "lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark", "renewalRing", "suggestedHalo", "licenceMark", "zone",
+  "diagramBox", "decisionNode", "storeNode", "queueNode", "exchangeNode", "taggedContainer", "lifeline", "phaseBand", "altFrame", "edgeLabel",
+]);
 const ink = (extra: Record<string, unknown>) => [{ ...extra, inkScale: 0.25 }, { ...extra, inkScale: 8 }];
 export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   lineBadge: [
@@ -101,6 +114,45 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
     { points: [[0, 0]], fill: "#7B3FE4", title: "a", titleAt: [0, 0], surface: "dark" },
     { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.caller" },
   ],
+  // Body diagram pieces (change body-diagram-pieces, task 3.2).
+  diagramBox: [
+    { x: 0, y: 0, width: 3, height: 3, text: ["a"], radius: 0, textSize: 6, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: ["a", "b", "c"], subtitle: "d", radius: 5000, textSize: 48, inkScale: 8, surface: "dark" },
+    { x: 0, y: 0, width: 96, height: 96, text: ["a"], shape: "pill", fill: "color.healthy", inkScale: 8 },
+  ],
+  decisionNode: [
+    { x: 0, y: 0, width: 3, height: 3, text: ["a"], inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: ["a"], inkScale: 8, surface: "dark" },
+  ],
+  storeNode: [
+    { x: 0, y: 0, width: 3, height: 3, text: ["a"], ry: 0.75, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: ["a"], ry: 2500, inkScale: 8, surface: "dark" },
+  ],
+  queueNode: [
+    { x: 0, y: 0, width: 23, height: 3, text: ["a"], inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: ["a"], inkScale: 8, surface: "dark" },
+  ],
+  exchangeNode: [
+    { x: 0, y: 0, width: 3, height: 3, text: ["a"], inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: ["a"], inkScale: 8, surface: "dark" },
+  ],
+  taggedContainer: [
+    { x: 0, y: 0, width: 52, height: 3, tag: "a", tagWidth: 24, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, tag: "a", tagWidth: 9972, inkScale: 2, surface: "dark" },
+  ],
+  lifeline: [{ x: 0, y1: 0, y2: 0.01, width: 0.01 }, { x: 0, y1: -10000, y2: 10000, width: 12, state: "inactive", surface: "dark" }],
+  phaseBand: [
+    { x: 0, y: 0, width: 3, height: 3, text: "a", fill: "color.healthy", textSize: 6, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: "a", fill: "color.blocked", textSize: 48, inkScale: 8, surface: "dark" },
+  ],
+  altFrame: [
+    { x: 0, y: 0, width: 0.01, height: 0.02, tag: "a", tagWidth: 0.01, sections: [{ y: 0.01, tag: "b", conditionWidth: 0.01, condition: "c" }] },
+    { x: 0, y: 0, width: 10000, height: 10000, tag: "a", condition: "b", tagWidth: 10000, conditionWidth: 10000, sections: Array.from({ length: 10 }, (_, i) => ({ y: 1 + i, tag: "c" })), surface: "dark" },
+  ],
+  edgeLabel: [
+    { x: 0, y: 0, lines: ["a"], backdrop: true, width: 0.01, textSize: 6 },
+    { x: 0, y: 0, lines: ["a", "b", "c", "d"], backdrop: true, width: 10000, textSize: 48, anchor: "end", surface: "dark" },
+  ],
 };
 
 const call = (name: P.PieceName, params: Record<string, unknown>) => (P.PIECES[name] as unknown as (p: Record<string, unknown>) => ReturnType<typeof P.pill>)(params);
@@ -118,10 +170,14 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(41);
+    expect(P.PIECE_NAMES).toHaveLength(51);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
-      expect(drawn.body.length, name).toBeGreaterThan(0);
+      // edgeLabel without a backdrop draws words only (change body-diagram-pieces).
+      if (name === "edgeLabel") {
+        expect(drawn.body, name).toHaveLength(0);
+        expect(drawn.text.length, name).toBeGreaterThan(0);
+      } else expect(drawn.body.length, name).toBeGreaterThan(0);
       walk([...drawn.body, ...drawn.text], (node) => {
         expect(SVG_TAGS, `${name}: ${node.tag}`).toContain(node.tag);
         for (const attr of ["fill", "stroke"]) {
@@ -205,6 +261,9 @@ describe("Piece parameters checked", () => {
     expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
     expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
+    // Change body-diagram-pieces, task 3.2.
+    expect(() => call("altFrame", { x: 0, y: 0, width: 200, height: 100, tag: "a", sections: Array.from({ length: 11 }, (_, i) => ({ y: 1 + i, tag: "b" })) })).toThrow(/^altFrame: sections: expected at most 10 item\(s\)/);
+    expect(() => call("diagramBox", { x: 0, y: 0, width: 120, text: ["a", "b", "c", "d"] })).toThrow(/^diagramBox: text: expected at most 3 item\(s\)/);
   });
 
   test("Road path with something else", () => {
@@ -227,7 +286,14 @@ describe("Words come from the caller", () => {
     for (const name of P.PIECE_NAMES) {
       const words: string[] = [];
       walk(call(name, REQUIRED_ONLY[name]).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
-      const given = Object.values(REQUIRED_ONLY[name]).filter((v): v is string => typeof v === "string");
+      // The caller's words, in strings, string arrays and objects (change body-diagram-pieces); backticks are not drawn.
+      const given: string[] = [];
+      const collect = (value: unknown): void => {
+        if (typeof value === "string") given.push(value, ...value.split("`").filter(Boolean));
+        else if (Array.isArray(value)) value.forEach(collect);
+        else if (typeof value === "object" && value !== null) Object.values(value).forEach(collect);
+      };
+      collect(REQUIRED_ONLY[name]);
       for (const word of words) expect(word === "?" || given.includes(word), `${name}: ${word}`).toBe(true);
     }
   });

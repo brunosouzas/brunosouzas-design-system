@@ -9,14 +9,12 @@
 // cross-parameter limits (room for the outline, width against height, arrow
 // length) are checked here and thrown as a RangeError naming the parameter.
 import { tokens } from "../../tokens/generated/tokens.ts";
-import { drawn, el, g, r2, type Attrs, type SvgNode } from "./node.ts";
+import { atLeast, inkOf, inkSchema, limits, roomFor, sticker, surfaceParam, words, type Ink, type Point, type Shape, type SurfaceName } from "./ink.ts";
+import { drawn, el, g, r2, type SvgNode } from "./node.ts";
 import { col, colour, label, MAX_SIZE, PATH_DATA, paint, pos, size, type ParamSpec, type Problem, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
-type Point = [number, number];
-export const SURFACES = ["light", "dark"] as const;
-export type SurfaceName = (typeof SURFACES)[number];
-export type Ink = { surface?: SurfaceName; inkScale?: number };
+export { SURFACES, type Ink, type SurfaceName } from "./ink.ts";
 
 const ink = tokens.color.ink;
 const white = tokens.color.white;
@@ -24,45 +22,9 @@ const font = tokens.font.sans;
 const bold = tokens.font.weightBold;
 const M = tokens.map;
 
-const surfaceParam: ParamSpec = { kind: "enum", values: SURFACES };
-const inkScaleParam: ParamSpec = { kind: "number", min: 0.25, max: 8 };
 const dataColour = (required = true): ParamSpec => ({ kind: "dataColor", required });
 const point = (required = true): ParamSpec => ({ kind: "point", required });
-const inkSchema: Schema = { surface: surfaceParam, inkScale: inkScaleParam };
 
-/** Collects the limits between parameters (piece.ts, `relations`). */
-const limits = (...checks: (Problem | false)[]): Problem[] => checks.filter((check): check is Problem => check !== false);
-
-/** The surface's colours and the ink measures at a scale. */
-const inkOf = ({ surface = "light", inkScale = 1 }: Ink) => {
-  const s = tokens.surface[surface];
-  return { s, outline: M.outline * inkScale, rim: s.rimWidth * inkScale, offset: M.shadow * inkScale };
-};
-
-/** Outlined shapes need room for their ink: smallest dimension ≥ 4 × outline. */
-const roomFor = (name: string, smallest: number, inkParams: Ink): Problem | false => {
-  const need = 4 * inkOf(inkParams).outline;
-  return smallest < need && { path: name, message: `leaves no room for the outline: needs at least ${r2(need)} at this ink scale` };
-};
-const atLeast = (name: string, value: number, least: number, what: string): Problem | false =>
-  value < least && { path: name, message: `must be at least ${what} (${r2(least)}), found ${r2(value)}` };
-
-type Shape = (dx: number, dy: number, attrs: Attrs) => SvgNode;
-
-/** The ink sticker (design §3): shadow copy, rim on dark, then the face. */
-const sticker = (shape: Shape, face: string, inkParams: Ink): SvgNode[] => {
-  const { s, outline, rim, offset } = inkOf(inkParams);
-  const wide = r2(outline + 2 * rim);
-  return [
-    // Joins are set here, so a sticker draws the same inside any group.
-    shape(offset, offset, { fill: s.shadow, stroke: s.shadow, "stroke-width": wide, "stroke-linejoin": "round" }),
-    ...(s.rimWidth > 0 ? [shape(0, 0, { fill: s.rim, stroke: s.rim, "stroke-width": wide, "stroke-linejoin": "round" })] : []),
-    shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" }),
-  ];
-};
-
-// Every text sets its own anchor, size and weight, so a surrounding group (a cover's label style) does not leak in.
-const words = (x: number, y: number, value: string, attrs: Attrs): SvgNode => el("text", { x: r2(x), y: r2(y), "font-family": font, ...attrs }, value);
 const pill = (x: number, y: number, w: number, h: number): Shape => (dx, dy, attrs) =>
   el("rect", { x: r2(x + dx), y: r2(y + dy), width: r2(w), height: r2(h), rx: r2(h / 2), ...attrs });
 
@@ -233,36 +195,62 @@ export const hexNode = definePiece<NodeParams>("hexNode", nodeSchema, (p) => dra
 
 // ---------- arrow ----------
 
-export type MessageArrowParams = { from: Point; to: Point; curve?: "bezier" | "straight"; head?: boolean; label?: string; width?: number; surface?: SurfaceName };
-/** An edge with a head at `to`: curved (leaves and enters horizontally) or straight, with an optional label. */
+export type ArrowKind = "message" | "reply" | "failure" | "failFast";
+export type MessageArrowParams = {
+  from: Point;
+  to: Point;
+  curve?: "bezier" | "straight";
+  controls?: [Point, Point];
+  head?: boolean;
+  label?: string;
+  width?: number;
+  kind?: ArrowKind;
+  surface?: SurfaceName;
+};
+/** An edge with a head at `to`: curved (leaves and enters horizontally), straight, or through the caller's two
+ * control points, with an optional label. `kind` paints a reply, a failure or a fail-fast path (card 141). */
 export const messageArrow = definePiece<MessageArrowParams>(
   "messageArrow",
   {
     from: point(),
     to: point(),
     curve: { kind: "enum", values: ["bezier", "straight"] },
+    controls: { kind: "array", minItems: 2, maxItems: 2, of: point() },
     head: { kind: "boolean" },
     label: label(false),
     width: { kind: "number", min: 1, max: 12 },
+    kind: { kind: "enum", values: ["message", "reply", "failure", "failFast"] },
     surface: surfaceParam,
   },
-  ({ from, to, curve = "bezier", head = true, label: text, width = M.edgeWidth, surface = "light" }) => {
+  ({ from, to, curve = "bezier", controls, head = true, label: text, width = M.edgeWidth, kind = "message", surface = "light" }) => {
     const s = tokens.surface[surface];
+    const paint_ = kind === "failure" ? tokens.color.failure : kind === "failFast" ? tokens.color.failFast : s.text;
     const length = 5 * width;
     const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
     const dx = to[0] - from[0];
     // A curve whose ends are almost above each other has no horizontal entry: draw it straight.
-    const bent = curve === "bezier" && Math.abs(dx) > 2 * length;
-    const direction: Point = bent ? [Math.sign(dx), 0] : [dx / distance, (to[1] - from[1]) / distance];
+    const bent = controls === undefined && curve === "bezier" && Math.abs(dx) > 2 * length;
+    // With controls, the head points from the last of c2, c1, from that differs from `to` (design §5).
+    const towards = (q: Point): Point => {
+      const l = Math.hypot(to[0] - q[0], to[1] - q[1]);
+      return [(to[0] - q[0]) / l, (to[1] - q[1]) / l];
+    };
+    const tail = controls && [controls[1], controls[0], from].find((q) => q[0] !== to[0] || q[1] !== to[1]);
+    const direction: Point = tail !== undefined ? towards(tail) : bent ? [Math.sign(dx), 0] : [dx / distance, (to[1] - from[1]) / distance];
     const end: Point = head ? [to[0] - direction[0] * length, to[1] - direction[1] * length] : to;
     const mx = (from[0] + to[0]) / 2;
     const at = (p: Point) => `${r2(p[0])},${r2(p[1])}`;
-    const d = bent ? `M${at(from)} C${r2(mx)},${r2(from[1])} ${r2(mx)},${r2(to[1])} ${at(end)}` : `M${at(from)} L${at(end)}`;
-    const body: SvgNode[] = [el("path", { d, fill: "none", stroke: s.text, "stroke-width": r2(width), "stroke-linecap": "round" })];
+    const d = controls
+      ? `M${at(from)} C${at(controls[0])} ${at(controls[1])} ${at(end)}`
+      : bent
+        ? `M${at(from)} C${r2(mx)},${r2(from[1])} ${r2(mx)},${r2(to[1])} ${at(end)}`
+        : `M${at(from)} L${at(end)}`;
+    const dash: Record<string, string> = kind === "message" ? {} : { "stroke-dasharray": `${r2(2.4 * width)} ${r2(3.2 * width)}` };
+    const body: SvgNode[] = [el("path", { d, fill: "none", stroke: paint_, "stroke-width": r2(width), "stroke-linecap": "round", ...dash })];
     if (head) {
       const normal: Point = [-direction[1] * 2 * width, direction[0] * 2 * width];
       const points: Point[] = [to, [end[0] + normal[0], end[1] + normal[1]], [end[0] - normal[0], end[1] - normal[1]]];
-      body.push(el("polygon", { points: points.map(at).join(" "), fill: s.text, stroke: s.text, "stroke-width": 1, "stroke-linejoin": "round" }));
+      body.push(el("polygon", { points: points.map(at).join(" "), fill: paint_, stroke: paint_, "stroke-width": 1, "stroke-linejoin": "round" }));
     }
     const words_: SvgNode[] = [];
     if (text !== undefined) {
@@ -273,11 +261,12 @@ export const messageArrow = definePiece<MessageArrowParams>(
     }
     return drawn(body, words_);
   },
-  ({ from, to, head = true, width = M.edgeWidth }) => {
+  ({ from, to, head = true, width = M.edgeWidth, controls, curve }) => {
     const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
     return limits(
       distance === 0 && { path: "to", message: "must differ from from" },
       distance > 0 && head && distance < 10 * width && { path: "to", message: `is too close to from for the head: needs at least ${r2(10 * width)}, found ${r2(distance)}` },
+      controls !== undefined && curve !== undefined && { path: "controls", message: "cannot be combined with curve" },
     );
   },
 );

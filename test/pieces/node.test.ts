@@ -3,7 +3,7 @@
 import { describe, expect, test } from "vitest";
 import { tokens } from "../../tokens/generated/tokens";
 import { lineBadge, pill, sheet } from "../../src/pieces/library";
-import { el, shadowed } from "../../src/pieces/node";
+import { SVG_TAGS, el, shadowed } from "../../src/pieces/node";
 
 describe("SVG node tree", () => {
   test("Shapes and words apart", () => {
@@ -11,6 +11,13 @@ describe("SVG node tree", () => {
     expect(drawn.body).toHaveLength(1);
     expect(drawn.body[0]).toMatchObject({ tag: "rect", attrs: { height: 36 } });
     expect(drawn.text).toEqual([{ tag: "text", attrs: { x: 132, y: 181 }, children: ["request"] }]);
+  });
+
+  // Change body-diagram-pieces, task 2.1: a tspan is a tag of the tree.
+  test("Tspan inside a text node", () => {
+    expect(SVG_TAGS).toContain("tspan");
+    const node = el("text", {}, "a ", el("tspan", { "font-family": "x" }, "b"));
+    expect(node.children[1]).toMatchObject({ tag: "tspan", children: ["b"] });
   });
 
   test("Non-finite number", () => {

@@ -98,7 +98,8 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       return;
     case "point":
       // Any finite number: a map position has no maximum (spec illustration-pieces, "Positions of any size").
-      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n))) {
+      // Both indices read directly: every() skips the holes of a sparse array.
+      if (!Array.isArray(value) || value.length !== 2 || ![value[0], value[1]].every((n) => typeof n === "number" && Number.isFinite(n))) {
         return report(`expected a point [x, y] of finite numbers, found ${describe(value)}`);
       }
       return;
@@ -106,7 +107,8 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       if (!Array.isArray(value)) return report(`expected an array, found ${describe(value)}`);
       if (spec.minItems !== undefined && value.length < spec.minItems) return report(`expected at least ${spec.minItems} item(s)`);
       if (value.length > (spec.maxItems ?? MAX_ITEMS)) return report(`expected at most ${spec.maxItems ?? MAX_ITEMS} item(s)`);
-      value.forEach((item, index) => checkValue(spec.of, item, `${path}[${index}]`, out));
+      // An index loop, not forEach: a hole in a sparse array is checked as a missing item, not skipped.
+      for (let index = 0; index < value.length; index++) checkValue(spec.of, value[index], `${path}[${index}]`, out);
       return;
     case "object":
       if (!isPlainObject(value)) return report(`expected an object, found ${describe(value)}`);

@@ -37,3 +37,20 @@ describe("UI icon calls of 0.3.0 unchanged", () => {
     }
   });
 });
+
+// Calls valid in 0.3.1 draw the same tree and SVG bytes (spec illustration-pieces,
+// "Message arrow calls of 0.3.1 unchanged"; change body-diagram-pieces, task 1.1).
+// The fixture was written once by scripts/freeze-message-arrow.ts on the 0.3.1 tree.
+const frozenArrows = JSON.parse(readFileSync(new URL("../fixtures/message-arrow-0.3.1.json", import.meta.url), "utf8")) as FrozenIcon[];
+type Written = { body: Parameters<typeof toSvg>[0][]; text: Parameters<typeof toSvg>[0][] };
+
+describe("Message arrow calls of 0.3.1 unchanged", () => {
+  test("Frozen 0.3.1 arrow calls", () => {
+    expect(frozenArrows).toHaveLength(8);
+    for (const { piece, params, tree, svg } of frozenArrows) {
+      const drawn = call(piece, params) as Written;
+      expect(JSON.parse(JSON.stringify(drawn)), JSON.stringify(params)).toEqual(tree);
+      expect([...drawn.body, ...drawn.text].map((node) => toSvg(node)).join(""), JSON.stringify(params)).toBe(svg);
+    }
+  });
+});

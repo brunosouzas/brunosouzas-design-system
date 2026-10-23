@@ -2,6 +2,7 @@
 // illustration-pieces, change metro-and-diagram-pieces; tasks 3.2 to 3.4).
 // Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
+import { readFileSync } from "node:fs";
 import { hexNode, ledgerMark, messageArrow, nodeBlock, pillNode } from "../../src/pieces/metro";
 
 describe("Diagram nodes", () => {
@@ -122,5 +123,51 @@ describe("Ledger mark on a surface", () => {
 
   test("Unknown surface on the mark", () => {
     expect(() => ledgerMark({ x: 0, y: 0, surface: "navy" as "dark" })).toThrow(/^ledgerMark: surface: expected one of light, dark/);
+  });
+});
+
+// Change body-diagram-pieces, task 4.1: kinds and control points.
+const paints = (drawn: ReturnType<typeof messageArrow>) => drawn.body.map((n) => [n.tag, n.attrs.stroke, n.attrs["stroke-dasharray"]]);
+const straight = { from: [0, 0] as [number, number], to: [100, 0] as [number, number], curve: "straight" as const };
+
+describe("Message arrow kinds", () => {
+  test("Reply", () => {
+    const { body } = messageArrow({ ...straight, kind: "reply" });
+    expect(body[0].attrs).toEqual({ d: "M0,0 L87.5,0", fill: "none", stroke: "#0A1033", "stroke-width": 2.5, "stroke-linecap": "round", "stroke-dasharray": "6 8" });
+    expect(body[1].attrs).toMatchObject({ points: "100,0 87.5,5 87.5,-5", fill: "#0A1033", stroke: "#0A1033" });
+  });
+
+  test("Failure and fail-fast", () => {
+    expect(paints(messageArrow({ ...straight, kind: "failure" }))).toEqual([["path", "#E04848", "6 8"], ["polygon", "#E04848", undefined]]);
+    expect(messageArrow({ ...straight, kind: "failure" }).body[1].attrs.fill).toBe("#E04848");
+    expect(paints(messageArrow({ ...straight, kind: "failFast", surface: "dark" }))).toEqual([["path", "#E0661F", "6 8"], ["polygon", "#E0661F", undefined]]);
+  });
+
+  test("Message kind is the 0.3.1 drawing", () => {
+    const frozen = JSON.parse(readFileSync(new URL("../fixtures/message-arrow-0.3.1.json", import.meta.url), "utf8")) as { params: Parameters<typeof messageArrow>[0]; tree: unknown }[];
+    for (const { params, tree } of frozen) expect(JSON.parse(JSON.stringify(messageArrow({ ...params, kind: "message" })))).toEqual(tree);
+  });
+
+  test("Message arrow label stays plain", () => {
+    expect(messageArrow({ from: [0, 0], to: [100, 0], label: "`x`" }).text[0].children).toEqual(["`x`"]);
+  });
+});
+
+describe("Message arrow through control points", () => {
+  test("Vertical curve", () => {
+    const { body } = messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 50]] });
+    expect(body[0].attrs.d).toBe("M0,0 C0,50 100,50 100,87.5");
+    expect(body[1].attrs.points).toBe("100,100 95,87.5 105,87.5");
+  });
+
+  test("Last control point on the end", () => {
+    const { body } = messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 100]] });
+    expect(body[0].attrs.d).toBe("M0,0 C0,50 100,100 88.82,94.41");
+    expect(body[1].attrs.points).toBe("100,100 86.58,98.88 91.06,89.94");
+  });
+
+  test("Controls with a curve, or three points", () => {
+    expect(() => messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 50]], curve: "bezier" })).toThrow(/^messageArrow: controls:/);
+    expect(() => messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 50], [1, 1]] as never })).toThrow(/^messageArrow: controls:/);
   });
 });

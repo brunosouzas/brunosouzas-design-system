@@ -5,7 +5,22 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { LINK_ICONS, LINK_ICON_NAMES, linkIcon } from "../../src/pieces/link-icons";
+import { DIAGRAM_PIECES, altFrame, edgeLabel } from "../../src/pieces/diagram";
 import { ledgerMark, licenceMark, renewalRing, suggestedHalo, zone } from "../../src/pieces/metro";
+
+// Required parameters of the ten body diagram pieces (as catalogue.test.ts REQUIRED_ONLY).
+const BODY_DIAGRAM: Record<keyof typeof DIAGRAM_PIECES, object> = {
+  diagramBox: { x: 0, y: 0, width: 120, text: ["a"] },
+  decisionNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
+  storeNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
+  queueNode: { x: 0, y: 0, width: 120, text: ["a"] },
+  exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
+  taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
+  lifeline: { x: 0, y1: 0, y2: 100 },
+  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.healthy" },
+  altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
+  edgeLabel: { x: 0, y: 0, lines: ["a"] },
+};
 import { SVG_TAGS, el, type Drawn, type SvgNode } from "../../src/pieces/node";
 import { toReact } from "../../src/pieces/react";
 import { toSvg } from "../../src/pieces/render";
@@ -201,6 +216,14 @@ describe("New pieces carry their own stroke", () => {
       );
     }
     drawings.push(["ledgerMark dark", ledgerMark({ x: 0, y: 0, surface: "dark" })]);
+    // The ten body diagram pieces (change body-diagram-pieces, task 3.3).
+    for (const surface of surfaces) {
+      for (const [name, params] of Object.entries(BODY_DIAGRAM)) drawings.push([`${name} ${surface}`, (DIAGRAM_PIECES[name as keyof typeof DIAGRAM_PIECES] as unknown as (p: object) => Drawn)({ ...params, surface })]);
+      drawings.push(
+        ["altFrame sections", altFrame({ x: 0, y: 0, width: 200, height: 100, tag: "alt", condition: "[x]", sections: [{ y: 50, tag: "else", condition: "[y]" }], surface })],
+        ["edgeLabel backdrop", edgeLabel({ x: 0, y: 0, lines: ["a"], backdrop: true, surface })],
+      );
+    }
     const shapes = new Set(["circle", "ellipse", "rect", "line", "polyline", "polygon", "path"]);
     for (const [label, drawn] of drawings) {
       walk(drawn.body, (node, ancestors) => {
