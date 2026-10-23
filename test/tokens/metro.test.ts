@@ -1,6 +1,7 @@
 // Unit tests of the surface, map and site tokens (spec design-tokens, change
 // metro-and-diagram-pieces, tasks 1.1 and 1.2; change
-// stackledger-map-and-link-pieces, task 1.1). Each test title is the spec
+// stackledger-map-and-link-pieces, task 1.1; change bend-radius-and-current-colour,
+// task 1.1). Each test title is the spec
 // scenario it proves.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
@@ -39,19 +40,32 @@ describe("Surface tokens", () => {
 describe("Map tokens", () => {
   test("Map token with the wrong type", () => {
     expect(problemsOf(sourceWith(set("map.lineWidth", token(12, "number"))))).toEqual([expect.stringMatching(/^map\.lineWidth: expected type dimension, found number/)]);
+    expect(problemsOf(sourceWith(set("map.bendRadius", token(32, "number"))))).toEqual([expect.stringMatching(/^map\.bendRadius: expected type dimension, found number/)]);
     expect(problemsOf(sourceWith(set("map.zoneTitleTint", token(0.6, "dimension"))))).toEqual([expect.stringMatching(/^map\.zoneTitleTint: expected type number, found dimension/)]);
+  });
+
+  test("Missing bend radius", () => {
+    expect(problemsOf(sourceWith(remove("map.bendRadius")))).toEqual(["map.bendRadius: missing required token (type dimension)"]);
+  });
+
+  test("Described bend radius", () => {
+    const source = JSON.parse(readFileSync(new URL("../../tokens/source.json", import.meta.url), "utf8")) as Record<string, Record<string, Record<string, unknown>>>;
+    expect(source.map.bendRadius).toEqual({ $value: 32, $type: "dimension", $description: "Radius of a bundle's centre line at a 45° or 90° bend, in map units (stackledger round-bends, AB#166)." });
+    expect(json.map.bendRadius).toBe(32);
   });
 
   test("Measured map values", () => {
     expect(tokens.map).toEqual({
       outline: 3, shadow: 3.5, lineWidth: 12, casing: 6, badgeHeight: 20, badgeTextSize: 12, countHeight: 16, countTextSize: 11,
       stopRadius: 12, interchangeExtra: 2, nodeHeight: 46, nodeRadius: 10, edgeWidth: 2.5, labelSize: 13,
-      ringWidth: 3, haloWidth: 1.5, licenceSize: 10, zonePadding: 32, zoneTitleTint: 0.6,
+      ringWidth: 3, haloWidth: 1.5, licenceSize: 10, zonePadding: 32, bendRadius: 32, zoneTitleTint: 0.6,
     });
     const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
     expect(css).toContain("--ds-map-line-width: 12px;");
     expect(css).toContain("--ds-map-halo-width: 1.5px;");
+    expect(css).toContain("--ds-map-bend-radius: 32px;");
     expect(css).toContain("--ds-map-zone-title-tint: 0.6;");
+    expect(Object.keys(tokens.map)).toHaveLength(20);
   });
 });
 

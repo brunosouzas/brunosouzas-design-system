@@ -1,0 +1,815 @@
+[
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "sun",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "circle",
+              "attrs": {
+                "cx": 12,
+                "cy": 12,
+                "r": 4.5,
+                "stroke": "none"
+              },
+              "children": []
+            },
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <circle cx=\"12\" cy=\"12\" r=\"4.5\" stroke=\"none\"/>\n  <path d=\"M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "sun",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "circle",
+              "attrs": {
+                "cx": 12,
+                "cy": 12,
+                "r": 4.5,
+                "stroke": "none"
+              },
+              "children": []
+            },
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <circle cx=\"12\" cy=\"12\" r=\"4.5\" stroke=\"none\"/>\n  <path d=\"M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "sun",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "circle",
+              "attrs": {
+                "cx": 12,
+                "cy": 12,
+                "r": 4.5,
+                "stroke": "none"
+              },
+              "children": []
+            },
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <circle cx=\"12\" cy=\"12\" r=\"4.5\" stroke=\"none\"/>\n  <path d=\"M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "moon",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z",
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "moon",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z",
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "moon",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z",
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomIn",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomIn",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomIn",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6M10.5 7.5v6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomOut",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomOut",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "zoomOut",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13ZM15.3 15.3l5.2 5.2M7.5 10.5h6\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "reset",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "reset",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "reset",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M4.5 12A7.5 7.5 0 1 0 6.7 6.7M4 3.5v4.5h4.5\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "calendar",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            },
+            {
+              "tag": "rect",
+              "attrs": {
+                "x": 7,
+                "y": 13,
+                "width": 3,
+                "height": 3,
+                "rx": 0.5,
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <rect x=\"7\" y=\"13\" width=\"3\" height=\"3\" rx=\"0.5\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "calendar",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            },
+            {
+              "tag": "rect",
+              "attrs": {
+                "x": 7,
+                "y": 13,
+                "width": 3,
+                "height": 3,
+                "rx": 0.5,
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <rect x=\"7\" y=\"13\" width=\"3\" height=\"3\" rx=\"0.5\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "calendar",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            },
+            {
+              "tag": "rect",
+              "attrs": {
+                "x": 7,
+                "y": 13,
+                "width": 3,
+                "height": 3,
+                "rx": 0.5,
+                "stroke": "none"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M5.5 5h13a2 2 0 0 1 2 2v11.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3.5 10h17M8 3v4M16 3v4\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n  <rect x=\"7\" y=\"13\" width=\"3\" height=\"3\" rx=\"0.5\" stroke=\"none\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "download",
+      "x": 0,
+      "y": 0
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#0A1033",
+            "stroke": "#0A1033"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#0A1033\" stroke=\"#0A1033\">\n  <path d=\"M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "download",
+      "x": 0,
+      "y": 0,
+      "colour": "surface.dark.text"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(0 0) scale(1)",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(0 0) scale(1)\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\">\n  <path d=\"M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  },
+  {
+    "piece": "uiIcon",
+    "params": {
+      "name": "download",
+      "x": 3.5,
+      "y": -2,
+      "size": 18,
+      "colour": "color.white"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "g",
+          "attrs": {
+            "transform": "translate(3.5 -2) scale(0.75)",
+            "fill": "#FFFFFF",
+            "stroke": "#FFFFFF"
+          },
+          "children": [
+            {
+              "tag": "path",
+              "attrs": {
+                "d": "M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3",
+                "fill": "none",
+                "stroke-width": 2,
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round"
+              },
+              "children": []
+            }
+          ]
+        }
+      ],
+      "text": []
+    },
+    "svg": "<g transform=\"translate(3.5 -2) scale(0.75)\" fill=\"#FFFFFF\" stroke=\"#FFFFFF\">\n  <path d=\"M12 3.5v11M7.5 10l4.5 4.5 4.5-4.5M4.5 16.5v3h15v-3\" fill=\"none\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</g>"
+  }
+]

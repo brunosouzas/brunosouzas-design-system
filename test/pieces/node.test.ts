@@ -2,7 +2,7 @@
 // tasks 2.1). Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
 import { tokens } from "../../tokens/generated/tokens";
-import { pill, sheet } from "../../src/pieces/library";
+import { lineBadge, pill, sheet } from "../../src/pieces/library";
 import { el, shadowed } from "../../src/pieces/node";
 
 describe("SVG node tree", () => {
@@ -23,6 +23,12 @@ describe("Colours only from tokens", () => {
   test("Hex passed as a colour", () => {
     expect(() => pill({ x: 1, y: 1, text: "a", fill: "#FFFFFF" })).toThrow(new RangeError("pill: fill: colour literals are not allowed; use a token path"));
     expect(() => pill({ x: 1, y: 1, text: "a", fill: "outline.block" })).toThrow(/^pill: fill: expected a colour token path such as color\.healthy/);
+  });
+
+  // change bend-radius-and-current-colour, task 2.1: only uiIcon.colour takes currentColor.
+  test("Current colour elsewhere", () => {
+    expect(() => pill({ x: 1, y: 1, text: "a", fill: "currentColor" })).toThrow(/^pill: fill: /);
+    expect(() => lineBadge({ x: 1, y: 1, text: "SH", fill: "currentColor" })).toThrow(/^lineBadge: fill: /);
   });
 });
 

@@ -428,3 +428,29 @@ describe("Banner format", () => {
     expect([radii[0], radii[544]]).toEqual([90, 15322]);
   });
 });
+
+// Change bend-radius-and-current-colour (AB#170), task 3.1: cover-cli "No current colour in a spec".
+describe("No current colour in a spec", () => {
+  test("Current colour in a cover", () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), pieces: [{ piece: "uiIcon", name: "sun", x: 10, y: 10, colour: "currentColor" }] });
+    writeFileSync(join(ws.root, "cover.svg"), "old");
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err).toEqual(["pieces[0].colour: currentColor is for icons inline in a page; a cover uses a token path", "cover: 1 problem(s) in spec.json; no file written"]);
+    expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toBe("old");
+  });
+
+  test("Current colour on another piece", () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), pieces: [{ piece: "pill", x: 100, y: 100, text: "ok", fill: "currentColor" }] });
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err).toEqual(['pieces[0].fill: expected a colour token path such as color.healthy, found "currentColor"', "cover: 1 problem(s) in spec.json; no file written"]);
+  });
+
+  test("Token colour in a cover", () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), pieces: [{ piece: "uiIcon", name: "sun", x: 10, y: 10, colour: "color.white" }] });
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(0);
+    expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toContain('<g transform="translate(10 10) scale(1)" fill="#FFFFFF" stroke="#FFFFFF">');
+  });
+});

@@ -8,7 +8,7 @@
 // rejected by the schema before drawing.
 import type { SvgNode } from "./node.ts";
 import { el, g, drawn, r2 } from "./node.ts";
-import { col, pos, size } from "./params.ts";
+import { CURRENT_COLOUR, colOrCurrent, pos, size } from "./params.ts";
 import { definePiece } from "./piece.ts";
 import { colour } from "./params.ts";
 
@@ -43,13 +43,14 @@ export const UI_ICONS: readonly UiIcon[] = [
 export const UI_ICON_NAMES = UI_ICONS.map((icon) => icon.name);
 
 export type UiIconParams = { name: string; x: number; y: number; size?: number; colour?: string };
-/** One UI icon at (x, y), `size` wide (24 by default), in one token colour (`color.ink` by default). */
+/** One UI icon at (x, y), `size` wide (24 by default), in one token colour (`color.ink` by default)
+ * or `currentColor`, so an icon inline in a page follows its element's text colour. */
 export const uiIcon = definePiece<UiIconParams>(
   "uiIcon",
-  { name: { kind: "enum", required: true, values: UI_ICON_NAMES }, x: pos(), y: pos(), size: size(), colour: col() },
+  { name: { kind: "enum", required: true, values: UI_ICON_NAMES }, x: pos(), y: pos(), size: size(), colour: colOrCurrent() },
   ({ name, x, y, size: side = UI_ICON_SIZE, colour: path = "color.ink" }) => {
     const icon = UI_ICONS.find((candidate) => candidate.name === name)!;
-    const paint = colour(path, "colour");
+    const paint = path === CURRENT_COLOUR ? CURRENT_COLOUR : colour(path, "colour");
     return drawn([g({ transform: `translate(${r2(x)} ${r2(y)}) scale(${side / UI_ICON_SIZE})`, fill: paint, stroke: paint }, ...icon.nodes)]);
   },
 );

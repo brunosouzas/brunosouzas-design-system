@@ -127,6 +127,7 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "map.haloWidth": "dimension",
   "map.licenceSize": "dimension",
   "map.zonePadding": "dimension",
+  "map.bendRadius": "dimension",
   "map.zoneTitleTint": "number",
   // Banner frame (AB#156), measured from the published brunosouzas.com home banner.
   "banner.width": "dimension",

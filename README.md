@@ -143,7 +143,8 @@ Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https:
 - `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe`; `ledgerMark` takes only `surface`. On dark the hard shadow takes `surface.dark.shadow` and the outline gets a light rim ([ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md), amendment of AB#157).
 - `inkScale` (0.25 to 8) thickens the outline, rim and shadow without changing the geometry, on `lineBadge`, `stationMarker`, `countBadge` and the three nodes; the map uses 1, the page diagrams 1.6. A shape's height (a marker's diameter) must be at least four outlines; a placeholder node, which draws no ink, is exempt.
 - A line's colour comes from the map's data, so `pipe.fill`, `lineBadge.fill` and `zone.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
-- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+- `map.bendRadius` (32) is the radius of a bundle's centre line at a 45° or 90° bend; no piece reads it, the map engine draws the arcs (`pipe.d` takes `A`).
+- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
 
 ```ts
 import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
@@ -191,7 +192,7 @@ Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram
 
 ### UI and link icons
 
-- `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`).
+- `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`). `colour: "currentColor"` makes the icon follow its element's text colour (a button that inverts on hover, say); it only works when the SVG is inline in the page, since an `<img>` does not inherit the page's colour, and a cover spec refuses it.
 - `linkIcon({ icon, x, y, size, surface })` draws a link sticker as brunosouzas.com draws its social icons (46-unit box, light or dark frame): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - Neither holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
 
