@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish one checked brunosouzas-design-system tarball to npm and create its GitHub release.
+# Publish one checked @brunosouzas/design-system tarball to npm and create its GitHub release.
 #
 # Why: the publish job of .github/workflows/release.yml must publish exactly the bytes the check job
 # tested, and a re-run after a failure must finish the release without publishing twice. So it asks
@@ -20,7 +20,7 @@
 # 2: usage. The tarball is data only: npm publishes it with --ignore-scripts and nothing in it runs.
 set -euo pipefail
 
-PACKAGE=brunosouzas-design-system
+PACKAGE=@brunosouzas/design-system
 
 if [ "$#" -ne 2 ]; then
   echo "usage: scripts/release-publish.sh <tarball> <integrity-file>" >&2

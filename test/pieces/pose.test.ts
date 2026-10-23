@@ -37,6 +37,12 @@ describe("Pose parameters checked", () => {
     // The first offending parameter in order wins, whatever kind of problem it has.
     expect(() => pose(body(), { x: 0, y: 0, squash: 0, hop: Number.POSITIVE_INFINITY })).toThrow(/^pose: squash must be greater than 0/);
   });
+
+  test("Finite values that overflow together", () => {
+    // Each value is finite, but scale × squash is not.
+    expect(() => pose(body(), { x: 0, y: 0, scale: 1e308, squash: 4 })).toThrow(/^pose: vertical scale overflows/);
+    expect(() => pose(body(), { x: 1.7e308, y: 0, shake: 1.7e308 })).toThrow(/^pose: x \+ shake overflows/);
+  });
 });
 
 describe("Frame by frame", () => {

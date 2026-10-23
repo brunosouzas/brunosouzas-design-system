@@ -15,7 +15,7 @@ Layout: `tokens/source.json` (the only place token values are written) generates
 ## Rules for this repository
 
 - Integration branch: `main`.
-- Releases to npm (`brunosouzas-design-system`) only via a version tag and the owner-approved environment `npm`; see `docs/release.md`. Never publish from a local agent session. The package ships only `dist/` and `tokens/generated/` and has no runtime dependency.
+- Releases to npm (`@brunosouzas/design-system`, org `brunosouzas`) only via a version tag and the owner-approved environment `npm`; see `docs/release.md`. Never publish from a local agent session. The package ships only `dist/` and `tokens/generated/` and has no runtime dependency.
 - Board area: `site` (Azure Boards, project `brunosouzas`).
 - OpenSpec: yes, see `openspec/`. The order of the planned changes is in `docs/roadmap.md`.
 - Project-wide decisions are ADRs in `docs/adr/` (index in `docs/adr/README.md`). Read them before a design; a change that contradicts one needs a new ADR that supersedes it.

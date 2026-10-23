@@ -30,7 +30,7 @@ beforeAll(() => {
   mkdirSync(join(withReact, "node_modules"), { recursive: true });
   writeFileSync(join(withReact, "package.json"), JSON.stringify({ name: "with-react", private: true, type: "module" }));
   // A copy, not a link: Node resolves a linked package from its real folder, which has no React.
-  cpSync(join(consumer, "node_modules/brunosouzas-design-system"), join(withReact, "node_modules/brunosouzas-design-system"), { recursive: true });
+  cpSync(join(consumer, "node_modules/@brunosouzas/design-system"), join(withReact, "node_modules/@brunosouzas/design-system"), { recursive: true });
   for (const name of ["react", "react-dom", "@types"]) symlinkSync(join(ROOT, "node_modules", name), join(withReact, "node_modules", name));
 }, 120_000);
 
@@ -63,8 +63,8 @@ describe("Installed package", () => {
 
   test("Pieces and tokens import without React", () => {
     const out = node(`
-      import { pill, toSvg, tokens, PIECE_NAMES } from "brunosouzas-design-system";
-      import { tokens as fromTokens } from "brunosouzas-design-system/tokens";
+      import { pill, toSvg, tokens, PIECE_NAMES } from "@brunosouzas/design-system";
+      import { tokens as fromTokens } from "@brunosouzas/design-system/tokens";
       const svg = toSvg(pill({ x: 10, y: 10, text: "hi" }).body[0]);
       console.log(JSON.stringify({ svg, ink: tokens.color.ink, same: fromTokens === tokens || fromTokens.color.ink === tokens.color.ink, pieces: PIECE_NAMES.length }));
     `);
@@ -80,7 +80,7 @@ describe("Installed package", () => {
     const out = node(`
       import { createRequire } from "node:module";
       const require = createRequire(import.meta.url);
-      console.log(require.resolve("brunosouzas-design-system/tokens.css") + "\\n" + require.resolve("brunosouzas-design-system/tokens.json"));
+      console.log(require.resolve("@brunosouzas/design-system/tokens.css") + "\\n" + require.resolve("@brunosouzas/design-system/tokens.json"));
     `);
     const [css, json] = out.trim().split("\n");
     expect(readFileSync(css, "utf8")).toContain("--ds-color-ink: #0A1033;");
@@ -89,8 +89,8 @@ describe("Installed package", () => {
 
   test("The React entry renders the same drawing as the SVG renderer", () => {
     const out = run("node", ["--input-type=module", "-e", `
-      import { pill, g, toSvg } from "brunosouzas-design-system";
-      import { toReact } from "brunosouzas-design-system/react";
+      import { pill, g, toSvg } from "@brunosouzas/design-system";
+      import { toReact } from "@brunosouzas/design-system/react";
       import { renderToStaticMarkup } from "react-dom/server";
       const tree = g({ "stroke-width": 4 }, ...pill({ x: 10, y: 10, text: "hi" }).body);
       console.log(JSON.stringify({ react: renderToStaticMarkup(toReact(tree)), svg: toSvg(tree) }));
@@ -103,9 +103,9 @@ describe("Installed package", () => {
   test("The type declarations compile in a TypeScript consumer", () => {
     const consumerDir = join(work, "with-react");
     writeFileSync(join(consumerDir, "use.ts"), [
-      'import { pill, toSvg, tokens, type CoverSpec } from "brunosouzas-design-system";',
-      'import { toReact } from "brunosouzas-design-system/react";',
-      'import { tokens as t } from "brunosouzas-design-system/tokens";',
+      'import { pill, toSvg, tokens, type CoverSpec } from "@brunosouzas/design-system";',
+      'import { toReact } from "@brunosouzas/design-system/react";',
+      'import { tokens as t } from "@brunosouzas/design-system/tokens";',
       'const ink: "#0A1033" = tokens.color.ink;',
       'const spec: Pick<CoverSpec, "background"> = { background: "blush" };',
       'export const out = [toSvg(pill({ x: 1, y: 1, text: "a" }).body[0]), toReact, t.cover.width, ink, spec];',

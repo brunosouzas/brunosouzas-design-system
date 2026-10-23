@@ -32,6 +32,11 @@ export const pose = (node: SvgNode, params: Pose): SvgNode => {
     if (name === "opacity" && (value < 0 || value > 1)) throw new RangeError(`pose: opacity must be within 0 and 1, found ${value}`);
   }
   if (tilt === 0 && squash === 1 && hop === 0 && scale === 1 && shake === 0 && opacity === 1) return node;
-  const transform = `translate(${x + shake} ${y - hop}) rotate(${tilt}) scale(${scale / Math.sqrt(squash)} ${scale * squash}) translate(${-x} ${-y})`;
+  // Finite inputs can still overflow once combined (scale 1e308 with squash 4).
+  const parts = { "x + shake": x + shake, "y - hop": y - hop, "horizontal scale": scale / Math.sqrt(squash), "vertical scale": scale * squash };
+  for (const [name, value] of Object.entries(parts)) {
+    if (!Number.isFinite(value)) throw new RangeError(`pose: ${name} overflows, found ${value}`);
+  }
+  const transform = `translate(${parts["x + shake"]} ${parts["y - hop"]}) rotate(${tilt}) scale(${parts["horizontal scale"]} ${parts["vertical scale"]}) translate(${-x} ${-y})`;
   return g(opacity < 1 ? { transform, opacity } : { transform }, node);
 };

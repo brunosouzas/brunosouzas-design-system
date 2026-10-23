@@ -1,4 +1,4 @@
-# Releasing brunosouzas-design-system
+# Releasing @brunosouzas/design-system
 
 A version reaches npm only one way: the owner pushes a tag `v<major>.<minor>.<patch>` on a commit already on `main`, and approves the publishing job. The workflow is [`.github/workflows/release.yml`](../.github/workflows/release.yml). This page says how to release, how the very first version is set up, and how to check what was published.
 
@@ -54,9 +54,9 @@ npm lets a package trust a GitHub workflow only once the package exists. So vers
 2. Create a granular access token ([npm docs](https://docs.npmjs.com/creating-and-viewing-access-tokens)): Access Tokens → Generate New Token → Granular Access Token.
    - Name: `brunosouzas-design-system first release`.
    - Expiration: 7 days.
-   - Packages and scopes: permission **Read and write**, for **All packages** (the package does not exist yet, so it cannot be selected).
+   - Packages and scopes: permission **Read and write**, for the scope **`@brunosouzas`** (the package does not exist yet, so it cannot be selected; the scope limits the token to the org's packages).
    - Tick **Bypass two-factor authentication**: the job cannot answer a two-factor prompt.
-   - Organisations: no access.
+   - Organisations: no access (publishing to the scope needs only the package permission above; the account must be a member of the org `brunosouzas` with publish rights, which its owner is).
 
    Copy the token once; it is shown only once. Never paste it anywhere but the secret below.
 
@@ -93,7 +93,7 @@ Approve the `publish` job when it waits. npm publishes with the token and with p
 
 Right after 0.1.0 is on npm:
 
-1. On npmjs.com, open the package `brunosouzas-design-system` → Settings → Trusted Publisher → GitHub Actions ([npm docs](https://docs.npmjs.com/trusted-publishers)): user `brunosouzas`, repository `brunosouzas-design-system`, workflow filename `release.yml`, environment `npm`. Save.
+1. On npmjs.com, open the package `@brunosouzas/design-system` → Settings → Trusted Publisher → GitHub Actions ([npm docs](https://docs.npmjs.com/trusted-publishers)): user `brunosouzas`, repository `brunosouzas-design-system`, workflow filename `release.yml`, environment `npm`. Save.
 2. In the same settings, Publishing access: choose "Require two-factor authentication and disallow tokens". From now on only the trusted workflow can publish.
 3. Revoke the token: Access Tokens → the `brunosouzas-design-system first release` token → Delete.
 4. Delete the environment secret `NPM_TOKEN` in Settings → Environments → `npm`.
@@ -105,7 +105,7 @@ The workflow still passes `NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}`. With the 
 **On npm.** The package page on npmjs.com shows a provenance badge naming the repository, the workflow and the commit. From the command line:
 
 ```sh
-npm view brunosouzas-design-system@0.1.0 dist --json   # integrity and attestations.provenance
+npm view @brunosouzas/design-system@0.1.0 dist --json   # integrity and attestations.provenance
 ```
 
 **Signatures and provenance of an install.** In a scratch folder, not in a project:
@@ -113,10 +113,10 @@ npm view brunosouzas-design-system@0.1.0 dist --json   # integrity and attestati
 ```sh
 mkdir ds-check && cd ds-check
 npm init -y
-npm install brunosouzas-design-system@0.1.0
+npm install @brunosouzas/design-system@0.1.0
 npm audit signatures
 ```
 
-`npm audit signatures` checks the registry signature of every installed package and the provenance attestation of those that have one; brunosouzas-design-system must be counted under "verified attestation". Then delete the folder.
+`npm audit signatures` checks the registry signature of every installed package and the provenance attestation of those that have one; @brunosouzas/design-system must be counted under "verified attestation". Then delete the folder.
 
 **What this proves.** Provenance says the tarball on npm was built by `release.yml` in `brunosouzas/brunosouzas-design-system` from the tagged commit; it does not say the code is safe. The tarball on npm is the one the `check` job tested and audited: `publish` uploads those bytes and builds nothing.

@@ -53,22 +53,22 @@ The generated files are committed, so a consumer can read them without running N
 
 ## Install
 
-The tokens and the illustration pieces are published on npm as [`brunosouzas-design-system`](https://www.npmjs.com/package/brunosouzas-design-system), with provenance; releases follow [docs/release.md](docs/release.md). The package has no runtime dependency: Remotion, the motion components and the scenes stay in this repository.
+The tokens and the illustration pieces are published on npm as [`@brunosouzas/design-system`](https://www.npmjs.com/package/@brunosouzas/design-system), with provenance; releases follow [docs/release.md](docs/release.md). The package has no runtime dependency: Remotion, the motion components and the scenes stay in this repository.
 
 ```bash
-npm install brunosouzas-design-system
+npm install @brunosouzas/design-system
 ```
 
 | Import | What it gives |
 |---|---|
-| `brunosouzas-design-system` | the pieces, `toSvg`, `pose`, the cover spec helpers and `tokens` |
-| `brunosouzas-design-system/react` | `toReact`, for React and Remotion (needs `react` 19) |
-| `brunosouzas-design-system/tokens` | the typed `tokens` object |
-| `brunosouzas-design-system/tokens.css` | the `--ds-*` custom properties |
-| `brunosouzas-design-system/tokens.json` | the plain values |
+| `@brunosouzas/design-system` | the pieces, `toSvg`, `pose`, the cover spec helpers and `tokens` |
+| `@brunosouzas/design-system/react` | `toReact`, for React and Remotion (needs `react` 19) |
+| `@brunosouzas/design-system/tokens` | the typed `tokens` object |
+| `@brunosouzas/design-system/tokens.css` | the `--ds-*` custom properties |
+| `@brunosouzas/design-system/tokens.json` | the plain values |
 
 ```ts
-import { pill, toSvg, tokens } from "brunosouzas-design-system";
+import { pill, toSvg, tokens } from "@brunosouzas/design-system";
 const label = pill({ x: 60, y: 30, text: "main" });
 ```
 

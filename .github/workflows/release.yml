@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes one version of brunosouzas-design-system to npm, with provenance, and creates its GitHub
+# Publishes one version of @brunosouzas/design-system to npm, with provenance, and creates its GitHub
 # release. How to release, the first-version bootstrap and the checks: docs/release.md. Same
 # procedure as stackledger's release workflow.
 #
@@ -94,5 +94,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           version="${GITHUB_REF_NAME#v}"
-          scripts/release-publish.sh "$RUNNER_TEMP/release/brunosouzas-design-system-$version.tgz" \
+          scripts/release-publish.sh "$RUNNER_TEMP/release/brunosouzas-design-system-$version.tgz"  # npm pack name of @brunosouzas/design-system \
             "$RUNNER_TEMP/release/integrity"

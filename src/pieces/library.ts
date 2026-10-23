@@ -9,7 +9,7 @@
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { EIP_ICONS, EIP_ICON_NAMES } from "./eip-icons.ts";
 import { drawn, el, g, r2, shadowed, type SvgNode } from "./node.ts";
-import { col, colour, count, label, PATH_DATA, pos, size, type Schema } from "./params.ts";
+import { col, colour, count, label, MAX_SIZE, PATH_DATA, pos, size, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
 const ink = tokens.color.ink;
@@ -138,7 +138,7 @@ export const codePanel = definePiece<CodePanelParams>(
       required: true,
       of: {
         kind: "object",
-        fields: { indent: { kind: "number", required: true, min: 0 }, w: size(true), color: { kind: "enum", required: true, values: Object.keys(CODE_COLOURS) }, tall: { kind: "boolean" } },
+        fields: { indent: { kind: "number", required: true, min: 0, max: MAX_SIZE }, w: size(true), color: { kind: "enum", required: true, values: Object.keys(CODE_COLOURS) }, tall: { kind: "boolean" } },
       },
     },
     top: size(),
