@@ -130,7 +130,7 @@ The components take every colour and size from the tokens, and what is visible a
 
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
-- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the two line fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one.
+- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the two line fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
 - The 35 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces) and in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
 
 ### Maps and diagrams
@@ -169,6 +169,7 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 
 - `background` names one of the 21 pairs in `coverBackground` (a background and its ring colour, measured from the published covers). Each pair is used by one cover only.
 - `pieces` are drawn in order; their words go on top.
+- The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
 - `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead.
 - The three published covers that proved the pieces are the test fixtures in `test/fixtures/covers/`.
 

@@ -45,3 +45,4 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
 - Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
+- Requested by stackledger, not blocking (2026-10-23): an optional subtitle on a `placeholder` node; pieces for the renewal ring, the suggested-position halo, the licence marker at 10 units (below today's minimum of four outlines) and the map zones; UI icons (sun, moon, zoom, calendar, download).
