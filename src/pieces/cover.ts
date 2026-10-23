@@ -10,7 +10,7 @@
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { PIECE_NAMES, PIECES, rings, type PieceName } from "./library.ts";
 import { el, g, type SvgNode, type SvgTag } from "./node.ts";
-import { COLOUR_TOKENS, checkParams, isColourLiteral, PATH_DATA, type Problem } from "./params.ts";
+import { COLOUR_TOKENS, checkParams, isColourLiteral, MAX_SIZE, PATH_DATA, type Problem } from "./params.ts";
 
 export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TOP_LEVEL = ["id", "title", "description", "background", "rings", "pieces", "custom"] as const;
@@ -151,7 +151,17 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
     out.push({ path: "background", message: `expected one of ${backgroundNames().join(", ")}, found ${describe(spec.background)}` });
   }
   if (!isPlainObject(spec.rings)) out.push({ path: "rings", message: "missing or not an object (expected cx, cy and an optional radius)" });
-  else out.push(...checkParams(rings.schema, spec.rings, "rings").filter((problem) => problem.path !== "rings.color"));
+  else {
+    const ringProblems = checkParams(rings.schema, spec.rings, "rings").filter((problem) => problem.path !== "rings.color");
+    out.push(...ringProblems);
+    // The piece takes any finite centre; a cover spec keeps 0.1.0's ±10000, which bounds a banner's ring count.
+    for (const axis of ["cx", "cy"] as const) {
+      const value = spec.rings[axis];
+      if (ringProblems.some((p) => p.path === `rings.${axis}`) || typeof value !== "number") continue;
+      if (value < -MAX_SIZE) out.push({ path: `rings.${axis}`, message: `expected a number at least -${MAX_SIZE}, found ${value}` });
+      else if (value > MAX_SIZE) out.push({ path: `rings.${axis}`, message: `expected a number at most ${MAX_SIZE}, found ${value}` });
+    }
+  }
   if (isPlainObject(spec.rings) && Object.hasOwn(spec.rings, "color")) out.push({ path: "rings.color", message: "unknown parameter: the ring colour comes from the background" });
   if (!Array.isArray(spec.pieces)) out.push({ path: "pieces", message: "missing or not an array" });
   else
@@ -177,6 +187,14 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
         }
         const reported = new Set(own.map((problem) => problem.path));
         out.push(...related.map((problem) => ({ path: `${at}.${problem.path}`, message: problem.message })).filter((problem) => !reported.has(problem.path)));
+      }
+      // A valid entry is drawn once: an overflow is a spec problem at the entry, not a crash.
+      if (own.length === 0 && !(definition.relations?.(params) ?? []).length) {
+        try {
+          (PIECES[piece as PieceName] as (p: object) => unknown)(params);
+        } catch (error) {
+          if (error instanceof RangeError && error.message.endsWith(": the drawing overflows")) out.push({ path: at, message: "the drawing overflows" });
+        }
       }
     });
   if (spec.custom !== undefined) {

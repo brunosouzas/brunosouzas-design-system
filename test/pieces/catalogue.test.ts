@@ -146,9 +146,8 @@ describe("Piece parameters checked", () => {
     // Sizes leave room for each piece's fixed insets, so no generated dimension is negative.
     expect(() => P.stamp({ cx: 0, cy: 0, word: "x", r: 1 })).toThrow(/^stamp: r: expected a number at least 12/);
     expect(() => P.browserWindow({ x: 0, y: 0, width: 20 })).toThrow(/^browserWindow: width: expected a number at least 60/);
-    // Sizes and coordinates have an upper bound, so geometry never overflows to Infinity.
+    // Sizes have an upper bound (positions do not: see positions.test.ts).
     expect(() => P.folder({ x: 0, y: 0, scale: 1e307 })).toThrow(/^folder: scale: expected a number at most 10000/);
-    expect(() => P.pill({ x: 1e307, y: 0, text: "a" })).toThrow(/^pill: x: expected a number at most 10000/);
   });
 
   test("Smallest and largest accepted sizes draw valid geometry", () => {
@@ -183,7 +182,6 @@ describe("Piece parameters checked", () => {
     expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
     expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
-    expect(() => P.arcArrow({ from: [10001, 0], c1: [0, 0], c2: [0, 0], to: [0, 0] })).toThrow(/^arcArrow: from: expected a point \[x, y\] of finite numbers within ±10000/);
   });
 
   test("Road path with something else", () => {

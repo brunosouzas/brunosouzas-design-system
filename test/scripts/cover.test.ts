@@ -313,3 +313,36 @@ describe("Parity with the published proof covers", () => {
     if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${name}.svg`), "utf8"));
   });
 });
+
+// Change unbounded-positions (cover-cli "Spec positions stay in the frame's range", "Overflow reported as a spec problem").
+describe("Positions in a cover spec", () => {
+  test("Rings centre out of range in a spec", () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), rings: { cx: 400, cy: -10001 } });
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err[0]).toBe("rings.cy: expected a number at least -10000, found -10001");
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+
+  test("Far piece in a spec", () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), pieces: [{ piece: "pill", x: 20000, y: 100, text: "far" }] });
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(0);
+    expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toMatch(/<text x="20000" y="107">far<\/text>/);
+  });
+
+  test("Overflowing arrow in a spec", () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "pill", x: 100, y: 100, text: "ok" },
+        { piece: "messageArrow", from: [-1.7e308, 0], to: [1.7e308, 0], curve: "straight" },
+      ],
+    });
+    writeFileSync(join(ws.root, "cover.svg"), "old");
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err[0]).toBe("pieces[1]: the drawing overflows");
+    expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toBe("old");
+  });
+});

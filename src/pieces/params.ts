@@ -95,8 +95,9 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       if (typeof value !== "boolean") return report(`expected true or false, found ${describe(value)}`);
       return;
     case "point":
-      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n) && Math.abs(n) <= MAX_SIZE)) {
-        return report(`expected a point [x, y] of finite numbers within ±${MAX_SIZE}, found ${describe(value)}`);
+      // Any finite number: a map position has no maximum (spec illustration-pieces, "Positions of any size").
+      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n))) {
+        return report(`expected a point [x, y] of finite numbers, found ${describe(value)}`);
       }
       return;
     case "array":
@@ -137,7 +138,7 @@ export const assertParams = (piece: string, schema: Schema, params: Record<strin
 
 // Shorthands for schemas.
 export const num = (extra: Omit<Extract<ParamSpec, { kind: "number" }>, "kind"> = {}): ParamSpec => ({ kind: "number", ...extra });
-/** Largest size or coordinate magnitude a piece accepts, far above any banner. */
+/** Largest size a piece accepts, far above any banner. Positions and points have no bound. */
 export const MAX_SIZE = 10000;
 /** Most items in any list parameter (rows, lines, nodes, tiles). */
 export const MAX_ITEMS = 50;
@@ -147,7 +148,8 @@ export const count = (min: number, max: number): ParamSpec => ({ kind: "number",
 /** A size: greater than 0 (or at least `min`, where fixed insets need room), at most MAX_SIZE. */
 export const size = (required = false, min?: number): ParamSpec =>
   min === undefined ? { kind: "number", min: 0, exclusiveMin: true, max: MAX_SIZE, required } : { kind: "number", min, max: MAX_SIZE, required };
-export const pos = (): ParamSpec => ({ kind: "number", required: true, min: -MAX_SIZE, max: MAX_SIZE });
+/** A position: any finite number, because a map position has no maximum. */
+export const pos = (): ParamSpec => ({ kind: "number", required: true });
 export const col = (): ParamSpec => ({ kind: "color" });
 /** SVG path data: commands, digits, signs, dots, commas and spaces only. */
 export const PATH_DATA = /^[MmLlHhVvCcSsQqTtAaZz0-9eE.,+\-\s]+$/;
