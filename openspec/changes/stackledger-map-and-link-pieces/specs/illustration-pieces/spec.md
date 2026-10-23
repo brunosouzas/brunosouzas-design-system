@@ -109,11 +109,18 @@ The library SHALL hold `LINK_ICONS`, the four stickers of `stackledger-map-and-l
 - **THEN** each call throws a `RangeError` naming `icon`
 
 ### Requirement: Icons hold no link, style or script
-The serialized output of every `uiIcon` and `linkIcon`, on both surfaces, SHALL hold no `href`, `style`, `script`, `url(`, `on…=` attribute or `http`, so a consumer can ship it as a static file under a strict content policy.
+Every `uiIcon` and `linkIcon` tree, on both surfaces, SHALL use only the node contract's tags, hold no attribute named `href`, `xlink:href`, `style` or starting with `on`, and no attribute value or text containing `url(` or `://`. So a consumer can wrap it in a standalone SVG and ship it under a strict content policy.
 
-#### Scenario: Every icon scanned
-- **WHEN** the test renders each of the 7 UI icons and each of the 4 link icons on light and dark with `toSvg`
-- **THEN** none of the 22 strings matches `href|style|script|url\(|\son[a-z]+=|http`
+#### Scenario: Every icon as a standalone file
+- **WHEN** the test wraps each of the 7 UI icons and each of the 4 link icons, on light and dark (22 trees), in `el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 46 46" }, …body)`, writes it with `toSvg` and parses it as XML
+- **THEN** each parses, and below the root no element is outside the contract's tags, no attribute is `href`, `xlink:href`, `style` or `on…`, and no value or text holds `url(` or `://`
+
+### Requirement: New pieces carry their own stroke
+Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `zone`, `uiIcon`, `linkIcon`, and the dark `ledgerMark` rim) SHALL carry its own `stroke`, or sit in a group of the piece that sets one, so it draws the same inside the cover command's outlined group (`stroke` ink, width 4) as on its own.
+
+#### Scenario: Inside the outlined group
+- **WHEN** the test walks each new piece's body, drawn with its required parameters on light and dark, plus `zone` with one, two and three points
+- **THEN** every `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon` and `path` has a `stroke` attribute or an ancestor `g` inside the piece's body that has one
 
 ### Requirement: Badge without a letter
 `lineBadge.text` SHALL be optional. Without it, the body is drawn as with a text, the `text` array is empty, and the default width is the one-character width, 30. `text: ""` is still rejected naming `text`. A call with a text draws as in 0.2.0.
@@ -131,11 +138,15 @@ The serialized output of every `uiIcon` and `linkIcon`, on both surfaces, SHALL 
 - **THEN** the first throws a `RangeError` naming `text`; the second names `width`
 
 ### Requirement: Existing calls unchanged
-Every call that is valid in 0.2.0 SHALL draw the same tree in this version: the proof cover and banner goldens stay byte-identical, a `placeholder` without a subtitle, a `lineBadge` with a text and a `ledgerMark` without `surface` (or with `surface: "light"`) draw as before.
+Every call that is valid in 0.2.0 SHALL draw the same tree in this version: the proof cover and banner goldens stay byte-identical, and the calls frozen from 0.2.0 in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b: `lineBadge` with a text, nodes without a placeholder subtitle, `ledgerMark` without `surface`) draw deep-equal trees.
 
-#### Scenario: Goldens and light mark
-- **WHEN** the four golden fixtures are built, and `ledgerMark({ x: 0, y: 0 })` is compared with `ledgerMark({ x: 0, y: 0, surface: "light" })`
-- **THEN** each output equals its golden byte for byte, and the two marks are deep-equal to the 0.2.0 scenario "Favicon size"
+#### Scenario: Goldens unchanged
+- **WHEN** the four golden fixtures are built
+- **THEN** each output equals its golden byte for byte
+
+#### Scenario: Frozen 0.2.0 calls
+- **WHEN** each call of `test/fixtures/pieces-0.2.0.json` is made again
+- **THEN** its tree is deep-equal to the frozen one, and each `ledgerMark` call with `surface: "light"` added is deep-equal to the same frozen tree
 
 ## MODIFIED Requirements
 

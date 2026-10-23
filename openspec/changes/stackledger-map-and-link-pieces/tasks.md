@@ -4,6 +4,10 @@ At gate 1 the owner sees this spec and the spike sheet (`~/.hermes/spikes/design
 
 Test levels: **unit** (vitest, pure functions), **integration** (vitest, the command with temporary folders), **local** (render and look; needs `rsvg-convert`, not in CI). Existing tests stay unchanged, except: the catalogue count (35 to 41) in `test/pieces/catalogue.test.ts`, the placeholder-subtitle refusal in `test/pieces/diagram.test.ts` (it moves to the scenario "Node too narrow, without a title, or a placeholder with a subtitle"), the `lineBadge` required-parameter case in the catalogue's missing-parameter test, `ledgerMark`'s unknown-`surface` case in the sticker test, and the token tests that list the `map` and `surface` tokens.
 
+## 0. Freeze 0.2.0 first
+
+- [ ] 0.1 Before any other code change, write `scripts/freeze-pieces.ts` (design §6b) and run it on the tree of `897f2ff` to write `test/fixtures/pieces-0.2.0.json`; commit both alone. Check: the fixture holds the calls of design §6b and the commit's parent is `897f2ff` or the spec commits after it.
+
 ## 1. Tokens (`design-tokens`)
 
 - [ ] 1.1 Add `map.ringWidth` 3, `map.haloWidth` 1.5, `map.licenceSize` 10, `map.zonePadding` 32 (`dimension`), `map.zoneTitleTint` 0.6 (`number`), and `surface.light.zoneOpacity` 0.12 and `surface.dark.zoneOpacity` 0.22 (`opacity`) to `tokens/source.json` (edited as text, one token per line) and to the required lists in `scripts/tokens.ts`; run `npm run tokens`. Unit tests in `test/tokens/metro.test.ts`: "Surface entry without its shadow", "Surface entry without its zone opacity", "Extra surface", "Measured surfaces", "Map token with the wrong type", "Measured map values". Check: `npm test -- test/tokens` and `npm run tokens:check` exit 0.
@@ -18,7 +22,8 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the com
 ## 3. Icons (`illustration-pieces`)
 
 - [ ] 3.1 `UI_ICONS` and `uiIcon` in a new `src/pieces/ui-icons.ts`, exported from `src/pieces/index.ts` (design §5). Unit tests in a new `test/pieces/icons.test.ts`: "Default sun", "The seven names", "Unknown icon or a hex colour".
-- [ ] 3.2 `LINK_ICONS` and `linkIcon` in a new `src/pieces/link-icons.ts` (design §6). Copy the glyphs from brunosouzas.com `e29b3dd` `public/images/home/social-{github,linkedin,email}.svg` with colours replaced by tokens, and the GitHub path unchanged. Unit tests in `test/pieces/icons.test.ts`: "GitHub on light" (its path compared with the one in the site's file, read in the test from a copy in `test/fixtures/link-icons/social-github.svg`, whose source, brunosouzas.com `e29b3dd`, and licence, Font Awesome CC BY 4.0, are written in `test/fixtures/link-icons/README.md`), "Dark frame", "Unknown icon", "Every icon scanned".
+- [ ] 3.2 `LINK_ICONS` and `linkIcon` in a new `src/pieces/link-icons.ts` (design §6). Copy the glyphs from brunosouzas.com `e29b3dd` `public/images/home/social-{github,linkedin,email}.svg` with colours replaced by tokens, and the GitHub path unchanged. Unit tests in `test/pieces/icons.test.ts`: "GitHub on light" (its path compared with the one in the site's file, read in the test from a copy in `test/fixtures/link-icons/social-github.svg`, whose source, brunosouzas.com `e29b3dd`, and licence, Font Awesome CC BY 4.0, are written in `test/fixtures/link-icons/README.md`), "Dark frame", "Unknown icon", "Every icon as a standalone file" (parsed with `normalForm` of `test/pieces/normal-form.ts`, the parser the render tests already use; no new dependency).
+- [ ] 3.3 Unit test in `test/pieces/icons.test.ts`: "Inside the outlined group", over the six new pieces and the dark `ledgerMark`.
 - [ ] Check for section 3: `npm test -- test/pieces/icons.test.ts`.
 
 ## 4. Changes to existing pieces (`illustration-pieces`)
@@ -26,7 +31,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the com
 - [ ] 4.1 Placeholder subtitle in `nodeLimits` and `drawNode` (design §4). Unit tests in `test/pieces/diagram.test.ts`: "Placeholder with a subtitle", "Node too narrow, without a title, or a placeholder with a subtitle". "Default state", "Node radius out of range", "Focus node on dark" and "Placeholder" keep passing.
 - [ ] 4.2 `lineBadge.text` optional (design §4). Unit tests in `test/pieces/metro.test.ts`: "Default badge without a letter", "Banner badge without a letter", "Empty letter and narrow badge". "Flat badge" and "Badge narrower than tall" keep passing.
 - [ ] 4.3 `ledgerMark` takes `surface` (design §4). Unit tests in `test/pieces/metro.test.ts`: "Mark on a dark surface", "Unknown surface on the mark". "Favicon size" and "Scaled and too small" keep passing.
-- [ ] 4.4 Integration: "Existing calls unchanged", the four goldens in `test/scripts/cover.test.ts` byte for byte and the light-mark comparison in `test/pieces/metro.test.ts`.
+- [ ] 4.4 Integration test "Goldens unchanged" in `test/scripts/cover.test.ts` (the four goldens byte for byte; the existing golden tests already do it, so this names them), and unit test "Frozen 0.2.0 calls" in a new `test/pieces/frozen.test.ts`, reading `test/fixtures/pieces-0.2.0.json`.
 
 ## 5. Catalogue and cover command
 
