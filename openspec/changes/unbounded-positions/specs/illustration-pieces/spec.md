@@ -38,25 +38,25 @@ Every position parameter and every point (`[x, y]`) parameter SHALL accept any f
 
 #### Scenario: Far map position
 - **WHEN** `stationMarker`, `lineBadge`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` and `ledgerMark` are drawn at 6400000 on both axes, and again at -6400000
-- **THEN** each draws without error, and every number in its tree (attributes and path data) equals, within 0.01, the same number drawn at 0 moved by the same amount
+- **THEN** each draws without error, and, taking the numbers of its tree in order (attributes, then those in path data and transforms), each one either equals its counterpart in the drawing at 0 or differs from it by exactly the shift (6400000 or -6400000), within 0.01
 
 #### Scenario: Far interchange and arrow
 - **WHEN** `stationMarker` gets `cx` 6400000, `cy` 6400000, `to` [6400000, 6400640], and `messageArrow` gets `from` [6399900, 6400000] and `to` [6400100, 6400000]
-- **THEN** both draw, and every number equals, within 0.01, the drawing at `cx` 0, `cy` 0, `to` [0, 640] (and `from` [-100, 0], `to` [100, 0]) moved by 6400000 on both axes
+- **THEN** both draw, and against the drawing at `cx` 0, `cy` 0, `to` [0, 640] (and `from` [-100, 0], `to` [100, 0]) each number in order either is equal or differs by exactly 6400000, within 0.01
 
 #### Scenario: Not finite
-- **WHEN** `stationMarker` gets `cx: NaN`, `lineBadge` gets `y: Infinity`, or `arcArrow` gets `from: [-Infinity, 0]`
-- **THEN** each call throws a `RangeError` naming `cx`, `y` or `from`
+- **WHEN** `stationMarker` gets `cx: NaN`, `lineBadge` gets `y: Infinity`, `arcArrow` gets `from: [-Infinity, 0]`, `nodeBlock` gets `x: "6400000"`, or `messageArrow` gets `from: [null, 0]`
+- **THEN** each call throws a `RangeError` naming `cx`, `y`, `from`, `x` or `from`
 
 #### Scenario: Rings centre stays bounded
 - **WHEN** `rings` gets `cx: 10001`, or a cover spec has `rings.cy: -10001`
 - **THEN** the call throws a `RangeError` naming `cx`, and the cover command reports `rings.cy`
 
 ### Requirement: Drawing overflow
-A piece SHALL throw a `RangeError` naming the piece and "the drawing overflows" when a number it would draw (in an attribute or in path data) is not finite, for example the distance between two points near opposite ends of the number range. It draws nothing then. A drawing within the limits never triggers this check.
+A piece SHALL throw a `RangeError` naming the piece and "the drawing overflows" when a number it computes and draws (an attribute, or a number it writes into path data or a transform) is not finite, for example after dividing by the distance between two points at opposite ends of the number range. It draws nothing then. Path data passed in by the caller (`road.d`, `pipe.d`) keeps its own check. A drawing within the limits never triggers this check.
 
 #### Scenario: Distance overflows
-- **WHEN** `messageArrow` gets `from` [-1.7e308, 0] and `to` [1.7e308, 0], or `stationMarker` gets `cx` -1.7e308, `cy` 0 and `to` [1.7e308, 0]
+- **WHEN** `messageArrow` gets `from` [-1.7e308, 0], `to` [1.7e308, 0] and `curve: "straight"`, or `stationMarker` gets `cx` -1.7e308, `cy` 0 and `to` [1.7e308, 0]
 - **THEN** each call throws a `RangeError` starting with `messageArrow: the drawing overflows` or `stationMarker: the drawing overflows`
 
 #### Scenario: Large but finite
