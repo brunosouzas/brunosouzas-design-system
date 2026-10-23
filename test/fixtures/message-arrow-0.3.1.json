@@ -1,0 +1,419 @@
+[
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        200,
+        100
+      ]
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M0,0 C100,0 100,100 187.5,100",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "200,100 187.5,105 187.5,95",
+            "fill": "#0A1033",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        }
+      ],
+      "text": []
+    },
+    "svg": "<path d=\"M0,0 C100,0 100,100 187.5,100\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"2.5\" stroke-linecap=\"round\"/><polygon points=\"200,100 187.5,105 187.5,95\" fill=\"#0A1033\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linejoin=\"round\"/>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        0,
+        100
+      ]
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M0,0 L0,87.5",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "0,100 -5,87.5 5,87.5",
+            "fill": "#0A1033",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        }
+      ],
+      "text": []
+    },
+    "svg": "<path d=\"M0,0 L0,87.5\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"2.5\" stroke-linecap=\"round\"/><polygon points=\"0,100 -5,87.5 5,87.5\" fill=\"#0A1033\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linejoin=\"round\"/>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        25,
+        100
+      ]
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M0,0 L21.97,87.87",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "25,100 17.12,89.09 26.82,86.66",
+            "fill": "#0A1033",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        }
+      ],
+      "text": []
+    },
+    "svg": "<path d=\"M0,0 L21.97,87.87\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"2.5\" stroke-linecap=\"round\"/><polygon points=\"25,100 17.12,89.09 26.82,86.66\" fill=\"#0A1033\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linejoin=\"round\"/>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        100,
+        0
+      ],
+      "curve": "straight",
+      "label": "used by"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M0,0 L87.5,0",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "100,0 87.5,5 87.5,-5",
+            "fill": "#0A1033",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "rect",
+          "attrs": {
+            "x": 19.6,
+            "y": -9,
+            "width": 60.8,
+            "height": 18,
+            "rx": 9,
+            "fill": "#EEF2FF",
+            "stroke": "#0A1033",
+            "stroke-width": 1.5
+          },
+          "children": []
+        }
+      ],
+      "text": [
+        {
+          "tag": "text",
+          "attrs": {
+            "x": 50,
+            "y": 4,
+            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#0A1033",
+            "font-size": 11,
+            "font-weight": 400,
+            "text-anchor": "middle"
+          },
+          "children": [
+            "used by"
+          ]
+        }
+      ]
+    },
+    "svg": "<path d=\"M0,0 L87.5,0\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"2.5\" stroke-linecap=\"round\"/><polygon points=\"100,0 87.5,5 87.5,-5\" fill=\"#0A1033\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linejoin=\"round\"/><rect x=\"19.6\" y=\"-9\" width=\"60.8\" height=\"18\" rx=\"9\" fill=\"#EEF2FF\" stroke=\"#0A1033\" stroke-width=\"1.5\"/><text x=\"50\" y=\"4\" font-family=\"Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif\" fill=\"#0A1033\" font-size=\"11\" font-weight=\"400\" text-anchor=\"middle\">used by</text>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        10,
+        20
+      ],
+      "to": [
+        300,
+        -40
+      ],
+      "head": false
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M10,20 C155,20 155,-40 300,-40",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        }
+      ],
+      "text": []
+    },
+    "svg": "<path d=\"M10,20 C155,20 155,-40 300,-40\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        -50,
+        10
+      ],
+      "to": [
+        150,
+        90
+      ],
+      "width": 4,
+      "surface": "dark"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M-50,10 C50,10 50,90 130,90",
+            "fill": "none",
+            "stroke": "#EEF2FF",
+            "stroke-width": 4,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "150,90 130,98 130,82",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        }
+      ],
+      "text": []
+    },
+    "svg": "<path d=\"M-50,10 C50,10 50,90 130,90\" fill=\"none\" stroke=\"#EEF2FF\" stroke-width=\"4\" stroke-linecap=\"round\"/><polygon points=\"150,90 130,98 130,82\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\" stroke-width=\"1\" stroke-linejoin=\"round\"/>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        0,
+        0
+      ],
+      "to": [
+        120,
+        60
+      ],
+      "curve": "straight",
+      "width": 1,
+      "label": "x"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M0,0 L115.53,57.76",
+            "fill": "none",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "120,60 114.63,59.55 116.42,55.98",
+            "fill": "#0A1033",
+            "stroke": "#0A1033",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "rect",
+          "attrs": {
+            "x": 48.8,
+            "y": 21,
+            "width": 22.4,
+            "height": 18,
+            "rx": 9,
+            "fill": "#EEF2FF",
+            "stroke": "#0A1033",
+            "stroke-width": 1.5
+          },
+          "children": []
+        }
+      ],
+      "text": [
+        {
+          "tag": "text",
+          "attrs": {
+            "x": 60,
+            "y": 34,
+            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#0A1033",
+            "font-size": 11,
+            "font-weight": 400,
+            "text-anchor": "middle"
+          },
+          "children": [
+            "x"
+          ]
+        }
+      ]
+    },
+    "svg": "<path d=\"M0,0 L115.53,57.76\" fill=\"none\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linecap=\"round\"/><polygon points=\"120,60 114.63,59.55 116.42,55.98\" fill=\"#0A1033\" stroke=\"#0A1033\" stroke-width=\"1\" stroke-linejoin=\"round\"/><rect x=\"48.8\" y=\"21\" width=\"22.4\" height=\"18\" rx=\"9\" fill=\"#EEF2FF\" stroke=\"#0A1033\" stroke-width=\"1.5\"/><text x=\"60\" y=\"34\" font-family=\"Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif\" fill=\"#0A1033\" font-size=\"11\" font-weight=\"400\" text-anchor=\"middle\">x</text>"
+  },
+  {
+    "piece": "messageArrow",
+    "params": {
+      "from": [
+        300,
+        200
+      ],
+      "to": [
+        0,
+        0
+      ],
+      "surface": "dark",
+      "label": "reads"
+    },
+    "tree": {
+      "body": [
+        {
+          "tag": "path",
+          "attrs": {
+            "d": "M300,200 C150,200 150,0 12.5,0",
+            "fill": "none",
+            "stroke": "#EEF2FF",
+            "stroke-width": 2.5,
+            "stroke-linecap": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "polygon",
+          "attrs": {
+            "points": "0,0 12.5,-5 12.5,5",
+            "fill": "#EEF2FF",
+            "stroke": "#EEF2FF",
+            "stroke-width": 1,
+            "stroke-linejoin": "round"
+          },
+          "children": []
+        },
+        {
+          "tag": "rect",
+          "attrs": {
+            "x": 126,
+            "y": 91,
+            "width": 48,
+            "height": 18,
+            "rx": 9,
+            "fill": "#14215A",
+            "stroke": "#EEF2FF",
+            "stroke-width": 1.5
+          },
+          "children": []
+        }
+      ],
+      "text": [
+        {
+          "tag": "text",
+          "attrs": {
+            "x": 150,
+            "y": 104,
+            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#EEF2FF",
+            "font-size": 11,
+            "font-weight": 400,
+            "text-anchor": "middle"
+          },
+          "children": [
+            "reads"
+          ]
+        }
+      ]
+    },
+    "svg": "<path d=\"M300,200 C150,200 150,0 12.5,0\" fill=\"none\" stroke=\"#EEF2FF\" stroke-width=\"2.5\" stroke-linecap=\"round\"/><polygon points=\"0,0 12.5,-5 12.5,5\" fill=\"#EEF2FF\" stroke=\"#EEF2FF\" stroke-width=\"1\" stroke-linejoin=\"round\"/><rect x=\"126\" y=\"91\" width=\"48\" height=\"18\" rx=\"9\" fill=\"#14215A\" stroke=\"#EEF2FF\" stroke-width=\"1.5\"/><text x=\"150\" y=\"104\" font-family=\"Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif\" fill=\"#EEF2FF\" font-size=\"11\" font-weight=\"400\" text-anchor=\"middle\">reads</text>"
+  }
+]
