@@ -157,7 +157,7 @@ In every text parameter of the ten body diagram pieces, a string with an even nu
 - **THEN** its text node's only child is the string `` `x` ``
 
 ### Requirement: Tagged container
-`taggedContainer` SHALL draw a frame sticker with `rx` `map.nodeRadius` and a tab sticker at (x + 14, y − 12), `tagWidth` × 24 with `rx` 12, in `tagFill` (default `color.transitional`), with the `tag` word in `color.ink`, bold, size `map.badgeTextSize`, centred on the tab. `tagWidth` defaults to 7.2 × characters + 24. A width below `tagWidth` + 28 is rejected naming `width`.
+`taggedContainer` SHALL draw a frame sticker with `rx` `map.nodeRadius` and a tab sticker at (x + 14, y − 12), `tagWidth` × 24 with `rx` 12, in `tagFill` (default `color.transitional`), with the `tag` word in `color.ink`, bold, size `map.badgeTextSize`, centred on the tab. `tagWidth` defaults to 7.2 × characters + 24. The tab follows the room rule (design §3), and a width below `tagWidth` + 28 is rejected naming `width`.
 
 #### Scenario: Container with its tab
 - **WHEN** `taggedContainer({ x: 0, y: 0, width: 300, height: 120, tag: "Anypoint MQ" })` is called
@@ -166,6 +166,10 @@ In every text parameter of the ten body diagram pieces, a string with an even nu
 #### Scenario: Tag wider than the frame
 - **WHEN** `taggedContainer({ x: 0, y: 0, width: 100, height: 120, tag: "Anypoint MQ" })` is called
 - **THEN** it throws a `RangeError` naming `width`
+
+#### Scenario: Room for the tab
+- **WHEN** `taggedContainer` gets `width: 300`, `height: 120` and `tag: "MQ"`, once with `tagWidth: 23`, once with `inkScale: 2.1` and once with `inkScale: 2` (no `tagWidth` in the last two)
+- **THEN** the first throws a `RangeError` naming `tagWidth`, the second naming `inkScale`, and the third draws a tab 24 high with stroke-width 6
 
 ### Requirement: Lifeline
 `lifeline` SHALL draw one `line` from (x, y1) to (x, y2) in `surface.muted`, width `width` (default 1.75, as given): `active` (default) with dash `5 5` and cap `butt`, `inactive` with dash `1 6` and cap `round`. `y2` equal to `y1` is rejected naming `y2`.
@@ -200,6 +204,10 @@ In every text parameter of the ten body diagram pieces, a string with an even nu
 - **WHEN** `altFrame({ x: 0, y: 0, width: 300, height: 200, tag: "alt", condition: "[found]", sections: [{ y: 120, tag: "else", condition: "[not found]" }] })` is called
 - **THEN** its body is the rect 300 × 200 (`rx` 7, fill `none`, stroke `#0A1033`, width 1.75); the `line` from (0, 120) to (300, 120) with stroke-width 1.4 and dash `4 4`; the tag rect at (7, 6), 33.2 × 17, fill `#0A1033`; the condition backdrop at (42.2, 7.5), 51.4 × 14, fill `#EEF2FF`; the tag rect at (7, 126), 39.6 × 17; and the backdrop at (48.6, 127.5), 76.2 × 14. Its text is `alt` at (23.6, 18.5) in `#FFFFFF`, size 10, weight 900; `[found]` at (46.2, 18.5); `else` at (26.8, 138.5); `[not found]` at (52.6, 138.5)
 
+#### Scenario: Measured widths in a section
+- **WHEN** `altFrame` gets `x: 0`, `y: 0`, `width: 300`, `height: 200`, `tag: "alt"` and `sections: [{ y: 120, tag: "else", condition: "[not found]", tagWidth: 50, conditionWidth: 90 }]`
+- **THEN** the section's tag rect is 50 wide at (7, 126), its condition backdrop is 90 wide at (59, 127.5), and its condition starts at (63, 138.5)
+
 #### Scenario: Section outside the frame
 - **WHEN** `altFrame` gets `y: 0`, `height: 200` and `sections: [{ y: 200, tag: "else" }]`
 - **THEN** it throws a `RangeError` naming `sections[0].y`
@@ -222,6 +230,10 @@ In every text parameter of the ten body diagram pieces, a string with an even nu
 #### Scenario: Too many lines
 - **WHEN** `edgeLabel` gets five lines
 - **THEN** it throws a `RangeError` naming `lines`
+
+#### Scenario: Text size bounds
+- **WHEN** `edgeLabel` gets `textSize: 49`, `phaseBand` gets `textSize: 5`, and `edgeLabel` gets `textSize: 48`
+- **THEN** the first two throw a `RangeError` naming `textSize`; the third draws its line at size 48
 
 ### Requirement: Message arrow kinds
 `messageArrow` SHALL take `kind`: `message` (default) and `reply` paint `surface.text`, `failure` paints `color.failure`, `failFast` paints `color.failFast`; the path's stroke and the head's fill and stroke take that paint. `reply`, `failure` and `failFast` add `stroke-dasharray` `2.4 × width` `3.2 × width` as the path's last attribute. The label keeps `surface.text`.

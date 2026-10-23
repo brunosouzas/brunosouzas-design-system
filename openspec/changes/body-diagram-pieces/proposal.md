@@ -6,7 +6,7 @@ The blog's 14 body diagrams (28 files, PT and EN, in the brain vault under `50-w
 
 ## What Changes
 
-- **Ten new pieces** on the model of the metro and diagram pieces (they paint what the caller lays out; ink sticker on a `surface` with an `inkScale`): `diagramBox`, `decisionNode`, `storeNode`, `queueNode`, `exchangeNode`, `taggedContainer`, `lifeline`, `phaseBand`, `altFrame` and `edgeLabel` (design §3). The catalogue goes from 41 to 51 pieces.
+- **Ten new pieces** (nine from the card's list, plus `diagramBox`, which the owner decides at gate 1: design §9, decision 6) on the model of the metro and diagram pieces (they paint what the caller lays out; ink sticker on a `surface` with an `inkScale`): `diagramBox`, `decisionNode`, `storeNode`, `queueNode`, `exchangeNode`, `taggedContainer`, `lifeline`, `phaseBand`, `altFrame` and `edgeLabel` (design §3). The catalogue goes from 41 to 51 pieces.
 - **One text model for the new pieces:** one to three centred bold lines plus an optional subtitle, an optional `textSize`, ink text on a coloured `fill` (ADR 0003), and backticks that mark code, drawn in the monospace stack as a `tspan` (design §4). The node tree gains the `tspan` tag.
 - **`messageArrow` gains two optional parameters:** `kind` (`message`, `reply`, `failure`, `failFast`) and `controls` (two control points of a cubic curve). Without them it draws as in 0.3.1, proven by a frozen fixture written on `main` before any code (design §5).
 - Release: patch `0.3.2` (additive, for a consumer), through `docs/release.md`. The owner tags and approves.
