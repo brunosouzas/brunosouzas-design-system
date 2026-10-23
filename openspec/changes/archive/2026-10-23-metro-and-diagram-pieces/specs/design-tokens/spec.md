@@ -20,7 +20,7 @@ The repository SHALL keep every token in one source file, `tokens/source.json`, 
 - **THEN** the build accepts them and they appear in all three outputs, for example `--ds-cover-background-blush-fill` and `--ds-surface-dark-shadow` in `tokens.css`
 
 ### Requirement: Supported token types and their values
-The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a number of pixels from 0 to 10000 with at most two decimal places), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string without `;`, `{`, `}`, `<`, `>` or a line break), `fontWeight` (an integer from 100 to 900 in steps of 100).
+The build SHALL accept these types and reject a value that does not fit: `color` (`#RRGGBB`, either case, written as in the source), `dimension` (pixels from 0 to 10000, at most two decimals), `frames` (a positive integer), `number` (finite, above zero), `opacity` (above 0, at most 1), `fontFamily` (non-empty, without `;`, `{`, `}`, `<`, `>` or a line break), `fontWeight` (100 to 900 in steps of 100).
 
 #### Scenario: Malformed colour
 - **WHEN** a `color` token has the value `#12345` or `red`

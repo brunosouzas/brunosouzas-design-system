@@ -23,7 +23,7 @@ A shadowed shape of the 26 cover pieces SHALL be drawn twice: first a copy fille
 - **THEN** the shadow's transform is `translate(8 8) rotate(30)`
 
 ### Requirement: Piece parameters checked
-Each piece SHALL check its parameters before drawing and throw a `RangeError` naming the first problem: a missing required or an unknown parameter, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a token path (data colours: "Line colours from data"). Sizes, coordinates and points lie within ±10000, counts and lists have the limits of the designs, and a size leaves room for fixed insets. `road.d` and `pipe.d` accept only path characters.
+Each piece SHALL check its parameters before drawing and throw a `RangeError` naming the first problem: a missing or unknown parameter, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a token path (except "Line colours from data"). Sizes and points lie within ±10000, counts and lists within the designs' limits, sizes leave room for insets; `road.d` and `pipe.d` take only path characters.
 
 #### Scenario: Missing and unknown parameters
 - **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
@@ -54,7 +54,7 @@ Each piece SHALL check its parameters before drawing and throw a `RangeError` na
 - **THEN** each call throws a `RangeError` naming `d`
 
 ### Requirement: Piece catalogue
-The library SHALL export these pieces, with the anchors, parameters and defaults of the `illustration-pieces` design §4 and the `metro-and-diagram-pieces` design §3: pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon, lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark.
+The library SHALL export these pieces, with the parameters and defaults of the designs (`illustration-pieces` §4, `metro-and-diagram-pieces` §3): pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon, lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark.
 
 #### Scenario: Every piece draws with its defaults
 - **WHEN** the catalogue test calls each of the 35 pieces with only its required parameters
