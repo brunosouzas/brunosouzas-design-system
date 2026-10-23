@@ -112,8 +112,8 @@ The library SHALL hold `LINK_ICONS`, the four stickers of `stackledger-map-and-l
 Every `uiIcon` and `linkIcon` tree, on both surfaces, SHALL use only the node contract's tags, hold no attribute named `href`, `xlink:href`, `style` or starting with `on`, and no attribute value or text containing `url(` or `://`. So a consumer can wrap it in a standalone SVG and ship it under a strict content policy.
 
 #### Scenario: Every icon as a standalone file
-- **WHEN** the test wraps each of the 7 UI icons and each of the 4 link icons, on light and dark (22 trees), in `el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 46 46" }, …body)`, writes it with `toSvg` and parses it as XML
-- **THEN** each parses, and below the root no element is outside the contract's tags, no attribute is `href`, `xlink:href`, `style` or `on…`, and no value or text holds `url(` or `://`
+- **WHEN** the test walks the node tree of each of the 7 UI icons and each of the 4 link icons, on light and dark (22 trees), and then writes each wrapped in `el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 46 46" }, …body)` with `toSvg`
+- **THEN** in the trees no tag is outside `SVG_TAGS`, no attribute is `href`, `xlink:href`, `style` or `on…`, and no attribute value or text holds `url(` or `://`; and each written string holds `://` exactly once, in the root's `xmlns`
 
 ### Requirement: New pieces carry their own stroke
 Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `zone`, `uiIcon`, `linkIcon`, and the dark `ledgerMark` rim) SHALL carry its own `stroke`, or sit in a group of the piece that sets one, so it draws the same inside the cover command's outlined group (`stroke` ink, width 4) as on its own.
