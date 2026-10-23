@@ -132,6 +132,13 @@ describe("Safe write through a link", () => {
   });
 });
 
+describe("Line colours from data", () => {
+  test("Data colour in a cover spec", () => {
+    const lines = problems({ ...minimal(), pieces: [{ piece: "pipe", d: "M0,0 L100,0", fill: "#7B3FE4" }] });
+    expect(lines).toEqual([expect.stringMatching(/^pieces\[0\]\.fill: colour literals are not allowed/)]);
+  });
+});
+
 describe("Code panel indent bound", () => {
   test("An indent beyond the size bound is rejected in code and in a cover spec", async () => {
     const { codePanel } = await import("../../src/pieces/library");
@@ -149,7 +156,8 @@ describe("Cover spec format", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
     expect(lines[0]).toMatch(/^background: expected one of blush, cobalt, .*, wine, found "pink"$/);
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon\)$/);
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(35);
   });
 
   test("Unsafe id", () => {

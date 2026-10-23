@@ -138,7 +138,9 @@ describe("Supported token types and their values", () => {
     const problems = problemsOf(
       sourceWith(
         set("motion.fps", token(0.5, "frames")),
-        set("outline.block", token(1.5, "dimension")),
+        set("outline.block", token(-1, "dimension")),
+        set("outline.arrow", token(1.555, "dimension")),
+        set("outline.small", token(10001, "dimension")),
         set("font.weightBold", token(450, "fontWeight")),
         set("font.weightHeavy", token(950, "fontWeight")),
       ),
@@ -147,7 +149,9 @@ describe("Supported token types and their values", () => {
       "font.weightBold",
       "font.weightHeavy",
       "motion.fps",
+      "outline.arrow",
       "outline.block",
+      "outline.small",
     ]);
   });
 
@@ -167,9 +171,15 @@ describe("Supported token types and their values", () => {
     const source = sourceWith(
       set("motion.dimOpacity", token(1, "opacity")),
       set("font.weightHeavy", token(900, "fontWeight")),
-      set("outline.small", token(1, "dimension")),
+      set("outline.small", token(0, "dimension")),
+      set("outline.block", token(3.5, "dimension")),
+      set("outline.arrow", token(12.8, "dimension")),
+      set("shadow.block", token(10000, "dimension")),
     );
     expect(problemsOf(source)).toEqual([]);
+    const result = buildFromText(JSON.stringify(source));
+    expect(result.ok && result.outputs["tokens.css"]).toContain("--ds-outline-block: 3.5px;");
+    expect(result.ok && result.outputs["tokens.css"]).toContain("--ds-outline-arrow: 12.8px;");
   });
 });
 

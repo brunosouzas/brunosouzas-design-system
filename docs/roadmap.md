@@ -9,9 +9,9 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 1 | `tokens-and-motion-foundation` | The token source and its CSS, TypeScript and JSON exports; the motion components; the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, PT and EN); the render script with a web copy | AB#132 | delivered |
 | 2 | Variety scenes | Became the per-article video list below | AB#138 | `publish-subscribe` implemented; owner media approval pending |
 | 3 | `illustration-pieces` | New tokens (illustration colours, cover backgrounds with their measured rings, cover measures); pieces as TypeScript functions rendered to SVG and React; the 26 EIP icons as data; the cover command | AB#139 | delivered |
-| 4 | Package for both sites | Both of the owner's sites (same Astro template) install the design system as a versioned git dependency: tokens CSS, pieces and the cover command | AB#155 | planned |
+| 4 | Package for both sites | `@brunosouzas/design-system` on npm, with provenance: tokens CSS and JSON, pieces, the React entry and the cover command, no runtime dependency | AB#155 | delivered |
 | 5 | Static banner format | The cover spec gains a banner format with its measures in tokens; static SVG | AB#156 | planned |
-| 6 | Diagram pieces and icons | Node block, pill node, decision, store, queue, exchange, tagged container, lifelines, phase band, alt frame, message arrows; new icons as data | AB#157 | planned |
+| 6 | `metro-and-diagram-pieces` | Surface (light and dark), map and site palette tokens; line badge, station marker, pipe, count badge, node block, pill and hex nodes, message arrow and stackledger's mark, for stackledger's map and diagrams. Decision, store, queue, exchange, lifelines, phase band and alt frame stay with AB#141 | AB#157 | delivered |
 | 7 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces | AB#151 | planned |
 | 8 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it | AB#152 | planned |
 | 9 | Covers on the pieces | Port the 21 published covers to cover specs, one first and then in batches checked on the site | AB#140 | planned |

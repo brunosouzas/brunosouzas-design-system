@@ -6,7 +6,7 @@
 export { SVG_TAGS, drawn, el, g, shadowed, type AttrValue, type Attrs, type Drawn, type SvgNode, type SvgTag } from "./node.ts";
 export { toSvg } from "./render.ts";
 export { pose, type Pose } from "./pose.ts";
-export { COLOUR_TOKENS, MAX_ITEMS, MAX_SIZE, checkParams, colour, isColourLiteral, type ParamSpec, type Problem, type Schema } from "./params.ts";
+export { COLOUR_TOKENS, DATA_COLOUR, MAX_ITEMS, paint, MAX_SIZE, checkParams, colour, isColourLiteral, type ParamSpec, type Problem, type Schema } from "./params.ts";
 export { definePiece, type Piece } from "./piece.ts";
 export * from "./library.ts";
 export { EIP_ICONS, EIP_ICON_NAMES, EIP_ICON_HEIGHT, EIP_ICON_WIDTH, type EipIcon } from "./eip-icons.ts";

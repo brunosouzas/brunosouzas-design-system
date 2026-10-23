@@ -94,5 +94,87 @@
     "blush": { "fill": { "$value": "#F6CFE0", "$type": "color", "$description": "Measured from spec-driven-development." }, "ring": { "$value": "#ECBAD0", "$type": "color" } },
     "mint": { "fill": { "$value": "#CDE5D3", "$type": "color", "$description": "Measured from validate-ai-api-contract-change." }, "ring": { "$value": "#BCDAC4", "$type": "color" } },
     "teal": { "fill": { "$value": "#1F8A8A", "$type": "color", "$description": "Measured from where-the-work-moves." }, "ring": { "$value": "#2A9A99", "$type": "color" } }
+  },
+  "surface": {
+    "light": {
+      "background": { "$value": "#EEF2FF", "$type": "color", "$description": "Map or diagram background on the light surface (stackledger 0.4.1 map theme)." },
+      "text": { "$value": "#0A1033", "$type": "color" },
+      "muted": { "$value": "#5B6694", "$type": "color" },
+      "grid": { "$value": "#E0E7FB", "$type": "color" },
+      "panel": { "$value": "#FFFFFF", "$type": "color" },
+      "shadow": { "$value": "#0A1033", "$type": "color" },
+      "rim": { "$value": "#EEF2FF", "$type": "color" },
+      "rimWidth": { "$value": 0, "$type": "dimension", "$description": "No rim on the light surface." }
+    },
+    "dark": {
+      "background": { "$value": "#14215A", "$type": "color", "$description": "Map or diagram background on the dark surface." },
+      "text": { "$value": "#EEF2FF", "$type": "color" },
+      "muted": { "$value": "#8F9BD0", "$type": "color" },
+      "grid": { "$value": "#1C2D74", "$type": "color" },
+      "panel": { "$value": "#1C2D74", "$type": "color" },
+      "shadow": { "$value": "#4C5CB8", "$type": "color", "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)." },
+      "rim": { "$value": "#EEF2FF", "$type": "color" },
+      "rimWidth": { "$value": 1, "$type": "dimension", "$description": "Light band round the ink outline." }
+    }
+  },
+  "map": {
+    "outline": { "$value": 3, "$type": "dimension", "$description": "Map and page diagrams, measured from stackledger 0.4.1." },
+    "shadow": { "$value": 3.5, "$type": "dimension" },
+    "lineWidth": { "$value": 12, "$type": "dimension" },
+    "casing": { "$value": 6, "$type": "dimension" },
+    "badgeHeight": { "$value": 20, "$type": "dimension" },
+    "badgeTextSize": { "$value": 12, "$type": "dimension" },
+    "countHeight": { "$value": 16, "$type": "dimension" },
+    "countTextSize": { "$value": 11, "$type": "dimension" },
+    "stopRadius": { "$value": 12, "$type": "dimension" },
+    "interchangeExtra": { "$value": 2, "$type": "dimension" },
+    "nodeHeight": { "$value": 46, "$type": "dimension" },
+    "nodeRadius": { "$value": 10, "$type": "dimension" },
+    "edgeWidth": { "$value": 2.5, "$type": "dimension" },
+    "labelSize": { "$value": 13, "$type": "dimension" }
+  },
+  "site": {
+    "light": {
+      "primary": { "$value": "#121212", "$type": "color", "$description": "Page palette of brunosouzas.com (src/styles/generated-theme.css)." },
+      "body": { "$value": "#FFFFFF", "$type": "color" },
+      "border": { "$value": "#EAEAEA", "$type": "color" },
+      "light": { "$value": "#F6F6F6", "$type": "color" },
+      "dark": { "$value": "#040404", "$type": "color" },
+      "text": { "$value": "#444444", "$type": "color" },
+      "textDark": { "$value": "#040404", "$type": "color" },
+      "textLight": { "$value": "#717171", "$type": "color" }
+    },
+    "dark": {
+      "primary": { "$value": "#FFFFFF", "$type": "color" },
+      "body": { "$value": "#1C1C1C", "$type": "color" },
+      "border": { "$value": "#3E3E3E", "$type": "color" },
+      "light": { "$value": "#222222", "$type": "color" },
+      "dark": { "$value": "#FFFFFF", "$type": "color" },
+      "text": { "$value": "#B4AFB6", "$type": "color" },
+      "textDark": { "$value": "#FFFFFF", "$type": "color" },
+      "textLight": { "$value": "#B4AFB6", "$type": "color" }
+    },
+    "font": {
+      "primary": { "$value": "Heebo, sans-serif", "$type": "fontFamily" },
+      "secondary": { "$value": "Signika, sans-serif", "$type": "fontFamily" }
+    },
+    "fontSize": {
+      "base": { "$value": 16, "$type": "dimension" },
+      "baseSmall": { "$value": 12.8, "$type": "dimension" }
+    },
+    "heading": {
+      "h1": { "$value": 2.985984, "$type": "number", "$description": "Heading sizes in rem: calc(var(--ds-site-heading-h1) * 1rem)." },
+      "h2": { "$value": 2.48832, "$type": "number" },
+      "h3": { "$value": 2.0736, "$type": "number" },
+      "h4": { "$value": 1.728, "$type": "number" },
+      "h5": { "$value": 1.44, "$type": "number" },
+      "h6": { "$value": 1.2, "$type": "number" },
+      "h1Small": { "$value": 2.6873856, "$type": "number" },
+      "h2Small": { "$value": 2.239488, "$type": "number" },
+      "h3Small": { "$value": 1.86624, "$type": "number" },
+      "h4Small": { "$value": 1.5552, "$type": "number" },
+      "h5Small": { "$value": 1.296, "$type": "number" },
+      "h6Small": { "$value": 1.08, "$type": "number" }
+    }
   }
 }
