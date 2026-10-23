@@ -66,13 +66,17 @@ describe("Installed package", () => {
       import { pill, toSvg, tokens, PIECE_NAMES } from "@brunosouzas/design-system";
       import { tokens as fromTokens } from "@brunosouzas/design-system/tokens";
       const svg = toSvg(pill({ x: 10, y: 10, text: "hi" }).body[0]);
-      console.log(JSON.stringify({ svg, ink: tokens.color.ink, same: fromTokens === tokens || fromTokens.color.ink === tokens.color.ink, pieces: PIECE_NAMES.length }));
+      const all = await import("@brunosouzas/design-system");
+      const helpers = ["inkOf", "sticker", "words", "limits", "roomFor", "atLeast"].filter((name) => name in all);
+      console.log(JSON.stringify({ svg, ink: tokens.color.ink, same: fromTokens === tokens || fromTokens.color.ink === tokens.color.ink, pieces: PIECE_NAMES.length, helpers }));
     `);
     const result = JSON.parse(out);
+    // The ink helpers stay internal (change body-diagram-pieces, task 2.2).
+    expect(result.helpers).toEqual([]);
     expect(result.svg).toMatch(/^<rect /);
     expect(result.ink).toBe("#0A1033");
     expect(result.same).toBe(true);
-    expect(result.pieces).toBe(41);
+    expect(result.pieces).toBe(51);
     expect(existsSync(join(consumer(), "node_modules/react"))).toBe(false);
   });
 

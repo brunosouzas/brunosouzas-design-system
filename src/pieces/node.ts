@@ -24,6 +24,7 @@ export const SVG_TAGS = [
   "polygon",
   "path",
   "text",
+  "tspan",
 ] as const;
 export type SvgTag = (typeof SVG_TAGS)[number];
 

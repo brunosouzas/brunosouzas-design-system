@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
 import { coverTree, type CoverSpec } from "../../src/pieces/cover";
+import { diagramBox, edgeLabel } from "../../src/pieces/diagram";
 import { el } from "../../src/pieces/node";
 import { toReact } from "../../src/pieces/react";
 import { toSvg } from "../../src/pieces/render";
@@ -25,6 +26,20 @@ describe("SVG renderer", () => {
     const tree = el("svg", {}, el("text", {}, "a", el("title", {}, "tooltip"), "b"));
     expect(toSvg(tree)).toBe("<svg>\n  <text>a<title>tooltip</title>b</text>\n</svg>");
     expect(normalForm(renderToStaticMarkup(toReact(tree)))).toEqual(normalForm(toSvg(tree)));
+  });
+
+  // Change body-diagram-pieces, task 2.1.
+  test("Text holding only a tspan", () => {
+    expect(toSvg(edgeLabel({ x: 0, y: 0, lines: ["`200 OK`"] }).text[0])).toBe(
+      `<text x="0" y="0" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#0A1033" font-size="11" font-weight="700" text-anchor="middle"><tspan font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">200 OK</tspan></text>`,
+    );
+  });
+
+  test("Code through both renderers", () => {
+    const tree = el("svg", {}, ...diagramBox({ x: 0, y: 0, width: 200, text: ["adopts a `correlationId`"] }).text);
+    const svg = toSvg(tree);
+    expect(svg.split("\n").find((line) => line.includes("<tspan"))).toMatch(/^  <text [^\n]*>adopts a <tspan [^>]*>correlationId<\/tspan><\/text>$/);
+    expect(normalForm(renderToStaticMarkup(toReact(tree)))).toEqual(normalForm(svg));
   });
 
   test("Deterministic text", () => {
