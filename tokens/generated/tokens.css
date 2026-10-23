@@ -1,5 +1,8 @@
 /* Generated from tokens/source.json by scripts/tokens.ts (npm run tokens). Do not edit by hand. */
 :root {
+  --ds-banner-height: 420px;
+  --ds-banner-radius: 20px;
+  --ds-banner-width: 1200px;
   --ds-color-backend: #FF6B6B;
   --ds-color-blocked: #FF8A3D;
   --ds-color-caller: #8FB2FF;

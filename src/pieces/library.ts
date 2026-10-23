@@ -39,16 +39,18 @@ export const pill = definePiece<PillParams>(
 // ---------- background ----------
 
 export const RING_COUNT = 14;
-export type RingsParams = { cx: number; cy: number; radius?: number; color?: string };
-/** Concentric rings around (cx, cy): 14 rings, step and width from the cover tokens. */
+/** Most rings one call draws: enough for a banner's farthest corner from any centre a cover spec accepts (548). */
+export const MAX_RINGS = 1000;
+export type RingsParams = { cx: number; cy: number; radius?: number; color?: string; count?: number };
+/** Concentric rings around (cx, cy): `count` rings (14 by default), step and width from the cover tokens. */
 export const rings = definePiece<RingsParams>(
   "rings",
-  { cx: pos(), cy: pos(), radius: size(), color: col() },
-  ({ cx, cy, radius = tokens.cover.ringRadius, color = "color.ring" }) =>
+  { cx: pos(), cy: pos(), radius: size(), color: col(), count: count(1, MAX_RINGS) },
+  ({ cx, cy, radius = tokens.cover.ringRadius, color = "color.ring", count: rings = RING_COUNT }) =>
     drawn([
       g(
         { fill: "none", stroke: colour(color, "color"), "stroke-width": tokens.cover.ringWidth },
-        ...Array.from({ length: RING_COUNT }, (_, i) => el("circle", { cx, cy, r: radius + i * tokens.cover.ringStep })),
+        ...Array.from({ length: rings }, (_, i) => el("circle", { cx, cy, r: radius + i * tokens.cover.ringStep })),
       ),
     ]),
 );

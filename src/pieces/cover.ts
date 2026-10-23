@@ -13,7 +13,10 @@ import { el, g, type SvgNode, type SvgTag } from "./node.ts";
 import { COLOUR_TOKENS, checkParams, isColourLiteral, MAX_SIZE, PATH_DATA, type Problem } from "./params.ts";
 
 export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const TOP_LEVEL = ["id", "title", "description", "background", "rings", "pieces", "custom"] as const;
+const TOP_LEVEL = ["id", "title", "description", "format", "background", "rings", "pieces", "custom"] as const;
+/** Cover (800x420, the default) or banner (1200x420, rounded corners): spec cover-cli, "Banner output". */
+export const FORMATS = ["cover", "banner"] as const;
+export type CoverFormat = (typeof FORMATS)[number];
 const CUSTOM_TAGS: readonly SvgTag[] = ["g", "rect", "circle", "ellipse", "line", "polyline", "polygon", "path", "text"];
 // Attributes a free-form object may use (design §6): geometry, paint, text and transform.
 const CUSTOM_ATTRS = new Set([
@@ -32,6 +35,7 @@ export type CoverSpec = {
   id: string;
   title: string;
   description: string;
+  format?: CoverFormat;
   background: string;
   rings: { cx: number; cy: number; radius?: number };
   pieces: CoverPiece[];
@@ -152,7 +156,7 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
   }
   if (!isPlainObject(spec.rings)) out.push({ path: "rings", message: "missing or not an object (expected cx, cy and an optional radius)" });
   else {
-    const ringProblems = checkParams(rings.schema, spec.rings, "rings").filter((problem) => problem.path !== "rings.color");
+    const ringProblems = checkParams(rings.schema, spec.rings, "rings").filter((problem) => problem.path !== "rings.color" && problem.path !== "rings.count");
     out.push(...ringProblems);
     // The piece takes any finite centre; a cover spec keeps 0.1.0's ±10000, which bounds a banner's ring count.
     for (const axis of ["cx", "cy"] as const) {
@@ -163,6 +167,10 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
     }
   }
   if (isPlainObject(spec.rings) && Object.hasOwn(spec.rings, "color")) out.push({ path: "rings.color", message: "unknown parameter: the ring colour comes from the background" });
+  if (isPlainObject(spec.rings) && Object.hasOwn(spec.rings, "count")) out.push({ path: "rings.count", message: "unknown parameter: the ring count comes from the format" });
+  if (spec.format !== undefined && (typeof spec.format !== "string" || !(FORMATS as readonly string[]).includes(spec.format))) {
+    out.push({ path: "format", message: `expected one of ${FORMATS.join(", ")}` });
+  }
   if (!Array.isArray(spec.pieces)) out.push({ path: "pieces", message: "missing or not an array" });
   else
     spec.pieces.forEach((entry, index) => {
@@ -236,12 +244,33 @@ const resolveCustom = (node: CustomNode): SvgNode => {
   return el(node.tag as SvgTag, attrs, ...(node.children ?? []).map((child) => (typeof child === "string" ? child : resolveCustom(child))));
 };
 
-/** The cover's node tree. The spec must be valid (validateCoverSpec returned no problem). */
+/** Rings a banner draws: out to the frame's farthest corner (spec cover-cli, "Banner rings reach the corners"). */
+export const bannerRingCount = (cx: number, cy: number, radius: number = tokens.cover.ringRadius): number => {
+  const { width, height } = tokens.banner;
+  const far = Math.max(...[[0, 0], [width, 0], [0, height], [width, height]].map(([x, y]) => Math.hypot(x - cx, y - cy)));
+  return Math.max(1, Math.ceil((far - radius) / tokens.cover.ringStep) + 1);
+};
+
+/** The cover's (or banner's) node tree. The spec must be valid (validateCoverSpec returned no problem). */
 export const coverTree = (spec: CoverSpec): SvgNode => {
-  const { width, height } = tokens.cover;
+  const banner = spec.format === "banner";
+  const { width, height } = banner ? tokens.banner : tokens.cover;
+  // A banner's corners are rounded; a cover keeps today's square frame, attribute for attribute.
+  const corner: Record<string, number> = banner ? { rx: tokens.banner.radius } : {};
   const pair = tokens.coverBackground[spec.background as keyof typeof tokens.coverBackground];
   const drawnPieces = spec.pieces.map(({ piece, ...params }) => (PIECES[piece] as (p: object) => { body: readonly SvgNode[]; text: readonly SvgNode[] })(params));
   const ringPath = `coverBackground.${spec.background}.ring`;
+  const ringCount: { count?: number } = banner ? { count: bannerRingCount(spec.rings.cx, spec.rings.cy, spec.rings.radius) } : {};
+  const frame = `url(#${spec.id}-frame)`;
+  const outlined = g(
+    { stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" },
+    ...drawnPieces.flatMap((d) => d.body),
+    spec.custom ? resolveCustom(spec.custom) : null,
+  );
+  const labels = g(
+    { "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" },
+    ...drawnPieces.flatMap((d) => d.text),
+  );
   return el(
     "svg",
     {
@@ -255,17 +284,10 @@ export const coverTree = (spec: CoverSpec): SvgNode => {
     },
     el("title", { id: `${spec.id}-title` }, spec.title),
     el("desc", { id: `${spec.id}-desc` }, spec.description),
-    el("defs", {}, el("clipPath", { id: `${spec.id}-frame` }, el("rect", { width, height }))),
-    el("rect", { width, height, fill: pair.fill }),
-    g({ "clip-path": `url(#${spec.id}-frame)` }, ...rings({ ...spec.rings, color: ringPath }).body),
-    g(
-      { stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" },
-      ...drawnPieces.flatMap((d) => d.body),
-      spec.custom ? resolveCustom(spec.custom) : null,
-    ),
-    g(
-      { "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" },
-      ...drawnPieces.flatMap((d) => d.text),
-    ),
+    el("defs", {}, el("clipPath", { id: `${spec.id}-frame` }, el("rect", { width, height, ...corner }))),
+    el("rect", { width, height, ...corner, fill: pair.fill }),
+    g({ "clip-path": frame }, ...rings({ ...spec.rings, color: ringPath, ...ringCount }).body),
+    // On a banner, pieces and labels are clipped too, so nothing pokes past a rounded corner.
+    ...(banner ? [g({ "clip-path": frame }, outlined, labels)] : [outlined, labels]),
   );
 };
