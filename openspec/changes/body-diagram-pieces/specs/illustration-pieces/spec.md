@@ -16,49 +16,30 @@ The library SHALL export 51 pieces with the parameters and defaults of their des
 
 #### Scenario: Every piece draws with its defaults
 - **WHEN** the catalogue test calls each of the 51 pieces with only its required parameters
-- **THEN** each returns a non-empty `body` or `text`, valid tags only, and colours that are token values
+- **THEN** each returns valid tags only and colours that are token values; every piece except `edgeLabel` returns a non-empty `body`, and `edgeLabel` returns an empty `body` and a non-empty `text`
 
 #### Scenario: Catalogue sheet
 - **WHEN** `npm run pieces:sheet -- --out <file.svg>` runs
 - **THEN** it writes one SVG with every piece once, labelled with its name in the mono font, and prints `wrote <file>`
 
-### Requirement: Ink sticker on a surface
-`lineBadge` (unless flat), `stationMarker`, `countBadge`, `licenceMark`, the three nodes (unless placeholder), the five diagram shapes (`diagramBox`, `decisionNode`, `storeNode`, `queueNode`, `exchangeNode`), `taggedContainer` (frame and tab) and `phaseBand` SHALL draw the sticker of `metro-and-diagram-pieces` design §3: a shadow copy moved by `map.shadow` × `inkScale` in `surface.shadow`, a rim in `surface.rim` when `rimWidth` > 0, then the face outlined in `color.ink`. `surface` is `light` (default) or `dark`; `inkScale` is 0.25 to 8; `pipe` takes neither; `ledgerMark`, `lifeline`, `altFrame` and `edgeLabel` take only `surface`.
+### Requirement: SVG renderer
+`toSvg(node)` SHALL write the tree as SVG text: two-space indent per level (a `text` node, and any node holding a string child, is written inline with its whole subtree, so no whitespace is added to its text), attributes in insertion order, numbers through `String`, `&`, `<`, `>` and `"` escaped in text and attribute values, LF line ends. The same tree gives the same string.
 
-#### Scenario: Light sticker
-- **WHEN** `stationMarker({ cx: 100, cy: 50 })` is called
-- **THEN** its body is two circles of radius 12: the first at (103.5, 53.5) with fill and stroke `#0A1033` and stroke-width 3, the second at (100, 50) with fill `#FFFFFF`, stroke `#0A1033` and stroke-width 3
+#### Scenario: Escaping
+- **WHEN** a `text` node holds `a < b & "c"`
+- **THEN** the output holds `a &lt; b &amp; &quot;c&quot;`
 
-#### Scenario: Dark sticker with its rim
-- **WHEN** `stationMarker({ cx: 100, cy: 50, surface: "dark" })` is called
-- **THEN** its body is three circles: the shadow at (103.5, 53.5) in `#4C5CB8` with stroke-width 5, the rim at (100, 50) in `#EEF2FF` with stroke-width 5, then the white face with stroke-width 3
+#### Scenario: Mixed text content
+- **WHEN** a `text` node holds `a`, a `title` node and `b`, inside an `svg`
+- **THEN** `toSvg` writes `<text>a<title>tooltip</title>b</text>` on one line, and the React path matches it
 
-#### Scenario: Ink scale and its bounds
-- **WHEN** `nodeBlock` is drawn with `inkScale: 1.6`, and then with `inkScale: 0.1` and `inkScale: 9`
-- **THEN** the first has outline 4.8 and its shadow moved by 5.6; the other two throw a `RangeError` naming `inkScale`
+#### Scenario: Deterministic text
+- **WHEN** the same cover tree is rendered twice
+- **THEN** both strings are byte-identical
 
-#### Scenario: Unknown surface or a parameter a piece does not take
-- **WHEN** `countBadge` gets `surface: "sepia"`, `pipe` gets `surface: "dark"`, `ledgerMark` gets `inkScale: 2`, or `lifeline` gets `inkScale: 2`
-- **THEN** the first throws a `RangeError` naming `surface` and listing `light, dark`; the others name `surface`, `inkScale` and `inkScale` as unknown parameters
-
-#### Scenario: Dark diagram box
-- **WHEN** `diagramBox({ x: 0, y: 0, width: 120, text: ["Sender"], shape: "pill", surface: "dark" })` is called
-- **THEN** its body is three rects of 120 × 46 with `rx` 23: the shadow at (3.5, 3.5) in `#4C5CB8` with stroke-width 5, the rim at (0, 0) in `#EEF2FF` with stroke-width 5, and the face `#1C2D74` with stroke `#0A1033` and stroke-width 3; its word `Sender` is at (60, 27.5) in `#EEF2FF`
-
-### Requirement: Room for the outline
-The smallest dimension of an outlined shape (`height` of a `lineBadge`, flat or not, of a `countBadge`, of a `normal` or `focus` node, of a `queueNode`, an `exchangeNode` and a `phaseBand`; the smaller of `width` and `height` of a `diagramBox`, a `decisionNode`, a `storeNode` and a `taggedContainer`; `2 × r` of a `stationMarker`) SHALL be at least 4 × `map.outline` × `inkScale`; a smaller one throws a `RangeError` naming `height` or `r`, equality accepted. A `placeholder` node is exempt: it draws no ink.
-
-#### Scenario: Badge too low for its ink
-- **WHEN** `lineBadge` gets `flat: true` and `inkScale: 8` with the default height 20, and then `height: 96`, `width: 120` and `inkScale: 8`
-- **THEN** the first throws a `RangeError` naming `height`; the second draws a rect 96 wide and 72 high, inset by 12
-
-#### Scenario: Placeholder without ink
-- **WHEN** `nodeBlock` is drawn with `state: "placeholder"`, `height: 20`, `width: 40` and `inkScale: 8`
-- **THEN** it draws the dashed box without an error
-
-#### Scenario: Diagram box too low
-- **WHEN** `diagramBox` gets `height: 10`, and then `height: 12`, each with `width: 120` and `text: ["a"]`
-- **THEN** the first throws a `RangeError` naming `height` and saying it needs at least 12; the second draws
+#### Scenario: Text holding only a tspan
+- **WHEN** `toSvg` writes the text node of ``edgeLabel({ x: 0, y: 0, lines: ["`200 OK`"] })``
+- **THEN** the output is exactly `<text x="0" y="0" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#0A1033" font-size="11" font-weight="700" text-anchor="middle"><tspan font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">200 OK</tspan></text>`
 
 ### Requirement: Message arrow
 `messageArrow` SHALL draw as in `metro-and-diagram-pieces` design §3, "The arrow": a path to the base of a head of length 5 × `width` at `to`, in `surface.text` or the colour of its `kind` ("Message arrow kinds"); `bezier` leaves and enters horizontally, and falls back to `straight` when the horizontal distance is at most twice the head; `controls` gives its own curve ("Message arrow through control points"); `head: false` ends at `to`; a `label` sits in a pill at the middle.
@@ -112,8 +93,38 @@ Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `z
 - **THEN** its face polygon has points `11.96,0 108.04,0 120,23 108.04,46 11.96,46 0,23`
 
 #### Scenario: Shape limits
-- **WHEN** `diagramBox` gets `radius: 30` with the default height, `storeNode` gets `ry: 20` with `height: 60`, `queueNode` gets `width: 40`, `diagramBox` gets four lines of text, and `diagramBox` gets `text: ["a", ""]`
-- **THEN** each throws a `RangeError` naming `radius`, `ry`, `width`, `text` and `text[1]`
+- **WHEN** `diagramBox` gets `radius: 30` with the default height, `storeNode` gets `ry: 20` with `height: 60`, `queueNode` gets `width: 40`, `diagramBox` gets four lines of text, `diagramBox` gets `text: ["a", ""]`, and `diagramBox` gets `shape: "pill"` with `radius: 5`
+- **THEN** each throws a `RangeError` naming `radius`, `ry`, `width`, `text`, `text[1]` and `radius`
+
+#### Scenario: First limit wins
+- **WHEN** `diagramBox` gets `height: 10` and `radius: 30` with `width: 120`, and `messageArrow` gets `from: [0, 0]`, `to: [20, 0]`, `controls: [[5, 0], [15, 0]]` and `curve: "straight"`
+- **THEN** the first names `height` and the second names `to`
+
+#### Scenario: Queue as narrow as its rails allow
+- **WHEN** `queueNode` gets `height: 12` with `width: 31`, and then with `width: 32`
+- **THEN** the first throws a `RangeError` naming `width`; the second draws its rails at 10 and 22
+
+### Requirement: Sticker of the body diagram pieces
+The five diagram shapes, `taggedContainer` (frame and tab) and `phaseBand` SHALL draw the sticker of the requirement "Ink sticker on a surface" and take `surface` and `inkScale`; `lifeline`, `altFrame` and `edgeLabel` SHALL take only `surface`.
+
+#### Scenario: Dark diagram box
+- **WHEN** `diagramBox({ x: 0, y: 0, width: 120, text: ["Sender"], shape: "pill", surface: "dark" })` is called
+- **THEN** its body is three rects of 120 × 46 with `rx` 23: the shadow at (3.5, 3.5) in `#4C5CB8` with stroke-width 5, the rim at (0, 0) in `#EEF2FF` with stroke-width 5, and the face `#1C2D74` with stroke `#0A1033` and stroke-width 3; its word `Sender` is at (60, 27.5) in `#EEF2FF`
+
+#### Scenario: Ink scale on a lifeline
+- **WHEN** `lifeline` gets `inkScale: 2`
+- **THEN** it throws a `RangeError` naming `inkScale` as an unknown parameter
+
+### Requirement: Room in the body diagram pieces
+The rule of "Room for the outline" SHALL apply to the body diagram stickers: `height` of a `queueNode`, an `exchangeNode` and a `phaseBand`, and the smaller of `width` and `height` of a `diagramBox`, a `decisionNode`, a `storeNode` and a `taggedContainer`. The error names `width` when the width is the smaller, otherwise `height`.
+
+#### Scenario: Diagram box too low
+- **WHEN** `diagramBox` gets `height: 10`, and then `height: 12`, each with `width: 120` and `text: ["a"]`
+- **THEN** the first throws a `RangeError` naming `height` and saying it needs at least 12; the second draws a rect 12 high with `rx` 6
+
+#### Scenario: Diamond too narrow
+- **WHEN** `decisionNode` gets `width: 10` and `height: 100`
+- **THEN** it throws a `RangeError` naming `width`
 
 ### Requirement: Diagram words
 The words of the diagram shapes SHALL be centred lines as in `body-diagram-pieces` design §3: line step `textSize` × 1.25, an optional subtitle 15 below the last line at size 11, weight 400. Without `fill` the face is `surface.panel`, the lines `surface.text` and the subtitle `surface.muted`; with `fill` the face is that colour token and every word `color.ink`.
@@ -247,4 +258,4 @@ Every `messageArrow` call valid in 0.3.1 SHALL draw the same tree and the same `
 
 #### Scenario: Frozen 0.3.1 arrow calls
 - **WHEN** the test re-calls the fixture `test/fixtures/message-arrow-0.3.1.json`, written on `origin/main` (`b0712a9`) before any code, with the eight calls of `body-diagram-pieces` design §5
-- **THEN** each tree deep-equals its frozen tree and its `toSvg` output equals its frozen string
+- **THEN** each tree deep-equals its frozen tree, and its body nodes then its text nodes, each through `toSvg` and joined with no separator, equal its frozen string
