@@ -231,6 +231,14 @@ describe("Ring count", () => {
   });
 
   test("Count out of range", () => {
-    for (const count of [0, 1001, 2.5]) expect(() => P.rings({ cx: 0, cy: 0, count })).toThrow(/^rings: count: /);
+    const cases: [number, string][] = [
+      [0, "rings: count: expected a number at least 1, found 0"],
+      [1001, "rings: count: expected a number at most 1000, found 1001"],
+      [2.5, "rings: count: expected an integer, found 2.5"],
+    ];
+    for (const [count, message] of cases) {
+      expect(() => P.rings({ cx: 0, cy: 0, count })).toThrow(RangeError);
+      expect(() => P.rings({ cx: 0, cy: 0, count })).toThrow(message);
+    }
   });
 });
