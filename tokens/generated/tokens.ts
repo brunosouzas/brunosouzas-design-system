@@ -138,14 +138,19 @@ export const tokens = {
     "countHeight": 16,
     "countTextSize": 11,
     "edgeWidth": 2.5,
+    "haloWidth": 1.5,
     "interchangeExtra": 2,
     "labelSize": 13,
+    "licenceSize": 10,
     "lineWidth": 12,
     "nodeHeight": 46,
     "nodeRadius": 10,
     "outline": 3,
+    "ringWidth": 3,
     "shadow": 3.5,
-    "stopRadius": 12
+    "stopRadius": 12,
+    "zonePadding": 32,
+    "zoneTitleTint": 0.6
   },
   "motion": {
     "dimOpacity": 0.42,
@@ -234,7 +239,8 @@ export const tokens = {
       "rim": "#EEF2FF",
       "rimWidth": 1,
       "shadow": "#4C5CB8",
-      "text": "#EEF2FF"
+      "text": "#EEF2FF",
+      "zoneOpacity": 0.22
     },
     "light": {
       "background": "#EEF2FF",
@@ -244,7 +250,8 @@ export const tokens = {
       "rim": "#EEF2FF",
       "rimWidth": 0,
       "shadow": "#0A1033",
-      "text": "#0A1033"
+      "text": "#0A1033",
+      "zoneOpacity": 0.12
     }
   }
 } as const;
