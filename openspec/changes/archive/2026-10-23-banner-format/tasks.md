@@ -22,4 +22,4 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the com
 ## 4. Documentation
 
 - [x] 4.1 README (cover command: `format`, a banner example, the `banner` tokens), `docs/roadmap.md` (item 5, AB#156, delivered), `test/fixtures/covers/README.md` (the banner fixture, its published source `brunosouzas.com/public/images/home/home-banner.svg` at `e8ad098`, and why it may be public). Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
-- [ ] 4.2 After the pull request is ready, update the vault's `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`.
+- [x] 4.2 After the pull request is ready (brain `2a6e76b`), update the vault's `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`.
