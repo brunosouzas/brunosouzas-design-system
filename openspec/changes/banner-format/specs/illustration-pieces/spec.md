@@ -9,7 +9,7 @@
 
 #### Scenario: Given count
 - **WHEN** `rings({ cx: 600, cy: 225, radius: 60, count: 22 })` is called
-- **THEN** its body holds 22 circles, radii 60 to 648
+- **THEN** its body holds one group with 22 circles, radii 60 to 648
 
 #### Scenario: Count out of range
 - **WHEN** `rings` is called with `count` 0, 1001 or 2.5

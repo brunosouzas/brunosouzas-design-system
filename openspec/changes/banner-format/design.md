@@ -34,3 +34,119 @@ On a cover only the rings are clipped, because the square SVG viewport already t
 ## 5. Spike evidence
 
 `~/.hermes/cache/scratch/ab156/contact-sheet.png` (outside the repository): (1) the published banner; (2) spike A, the same idea from pieces only; (3) spike B, a stackledger metro banner (pipes, station markers at `inkScale` 1.6 and `r` 20, line badges at height 34, `ledgerMark` 120); (4) both at phone width, 375px, next to a cover at the same scale. Findings: no new piece is needed. Pill labels drop to about 6px at 375px. Metro badge text stays 12px whatever the `inkScale`. Both are out of scope.
+
+## 6. The `home-banner` fixture
+
+Task 3.3 writes this file as `test/fixtures/covers/home-banner.json`, byte for byte (two-space indent, LF ending). It is spike A. The pieces, positions and parameters are the ones rendered in the spike sheet, and the title and description describe that drawing. The labels are the words of the published banner (`APIs`, `Integration`, `CI/CD`).
+
+```json
+{
+  "id": "home-banner",
+  "title": "Integration, delivery and AI between systems",
+  "description": "Illustration. On the left, a browser window labelled APIs and a stack of three server units send blue pipes into a light blue Mule flow labelled Integration, with a Choice and a For Each component. From the flow a pipe runs right through two passing checks labelled CI/CD into a white cloud. A green robot stands above the pipe on the right.",
+  "format": "banner",
+  "background": "navy",
+  "rings": {
+    "cx": 600,
+    "cy": 225,
+    "radius": 60
+  },
+  "pieces": [
+    {
+      "piece": "pipe",
+      "d": "M250,118 C360,118 380,196 470,196",
+      "fill": "illustration.accent",
+      "width": 22,
+      "casing": 8
+    },
+    {
+      "piece": "pipe",
+      "d": "M244,262 C360,262 380,244 470,244",
+      "fill": "illustration.accent",
+      "width": 22,
+      "casing": 8
+    },
+    {
+      "piece": "pipe",
+      "d": "M730,255 H1010",
+      "fill": "illustration.accent",
+      "width": 22,
+      "casing": 8
+    },
+    {
+      "piece": "browserWindow",
+      "x": 50,
+      "y": 62,
+      "width": 200,
+      "height": 130
+    },
+    {
+      "piece": "serverStack",
+      "x": 64,
+      "y": 210,
+      "width": 180,
+      "units": 3
+    },
+    {
+      "piece": "muleFlow",
+      "x": 470,
+      "y": 190,
+      "width": 262,
+      "height": 130,
+      "tiles": [
+        {
+          "x": 498,
+          "kind": "choice"
+        },
+        {
+          "x": 618,
+          "kind": "for-each"
+        }
+      ],
+      "tileWidth": 86
+    },
+    {
+      "piece": "robot",
+      "cx": 980,
+      "top": 54
+    },
+    {
+      "piece": "checkBadge",
+      "cx": 790,
+      "cy": 255,
+      "r": 24
+    },
+    {
+      "piece": "checkBadge",
+      "cx": 860,
+      "cy": 255,
+      "r": 24
+    },
+    {
+      "piece": "cloud",
+      "cx": 1090,
+      "cy": 262,
+      "scale": 1.05
+    },
+    {
+      "piece": "pill",
+      "x": 150,
+      "y": 62,
+      "text": "APIs"
+    },
+    {
+      "piece": "pill",
+      "x": 601,
+      "y": 190,
+      "text": "Integration"
+    },
+    {
+      "piece": "pill",
+      "x": 825,
+      "y": 210,
+      "text": "CI/CD",
+      "fill": "color.transitional"
+    }
+  ]
+}
+```
