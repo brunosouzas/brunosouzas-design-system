@@ -92,7 +92,9 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+        # No comment may sit on a continued line: bash ends the command there (test/package/release.test.ts).
+        # brunosouzas-design-system-<version>.tgz is the npm pack name of @brunosouzas/design-system.
         run: |
           version="${GITHUB_REF_NAME#v}"
-          scripts/release-publish.sh "$RUNNER_TEMP/release/brunosouzas-design-system-$version.tgz"  # npm pack name of @brunosouzas/design-system \
+          scripts/release-publish.sh "$RUNNER_TEMP/release/brunosouzas-design-system-$version.tgz" \
             "$RUNNER_TEMP/release/integrity"
