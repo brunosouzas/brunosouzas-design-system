@@ -34,7 +34,9 @@
     "tokens/generated/",
     "!dist/**/*.test.*"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "engines": {
     "node": ">=22.12.0"
   },

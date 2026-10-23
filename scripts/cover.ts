@@ -10,7 +10,7 @@
 // What can go wrong: a bad invocation reports its first problem with the
 // usage; an invalid spec reports every problem by JSON path. In both cases the
 // command exits 1 and writes nothing. An existing output file is replaced.
-import { closeSync, existsSync, openSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -112,7 +112,8 @@ export const runCover = (args: string[], io: CoverIo): number => {
     const fd = openSync(temporary, "wx");
     created = true; // ours from here on: remove it on any later failure
     try {
-      writeSync(fd, result.svg);
+      // writeFileSync on a descriptor loops until every byte is written (writeSync may write fewer).
+      writeFileSync(fd, result.svg);
     } finally {
       closeSync(fd);
     }
