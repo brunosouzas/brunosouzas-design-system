@@ -28,7 +28,7 @@ A piece SHALL depend only on its parameters and the generated tokens: the same p
 - **THEN** no file imports a `node:` module
 
 ### Requirement: Colours only from tokens
-Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no colour literal (`#` with three or six hex digits, `rgb(`, `hsl(`). A colour parameter SHALL be a token path of type `color`, such as `color.healthy`; any other value is rejected. Only `pipe.fill`, `lineBadge.fill` and `zone.fill` are data colours: they also accept `#RRGGBB` (see "Line colours from data").
+Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no colour literal (`#` with three or six hex digits, `rgb(`, `hsl(`). A colour parameter SHALL be a token path of type `color`, such as `color.healthy`; any other value is rejected. Only `pipe.fill`, `lineBadge.fill` and `zone.fill` are data colours: they also accept `#RRGGBB` (see "Line colours from data"). Only `uiIcon.colour` also accepts `currentColor` (see "Current colour on UI icons").
 
 #### Scenario: Source without literals
 - **WHEN** the no-colour-literals test scans `src/pieces/`
@@ -37,6 +37,10 @@ Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no
 #### Scenario: Hex passed as a colour
 - **WHEN** `pill` is called with `fill: "#FFFFFF"` or `fill: "outline.block"`
 - **THEN** it throws a `RangeError` naming `fill` and saying a colour token path is expected
+
+#### Scenario: Current colour elsewhere
+- **WHEN** `pill` is called with `fill: "currentColor"`, or `lineBadge` with `fill: "currentColor"`
+- **THEN** each call throws a `RangeError` naming `fill`
 
 ### Requirement: Hard shadow with the outline
 A shadowed shape of the 26 cover pieces SHALL be drawn twice: first a copy filled with `color.ink` and translated by the shadow offset (default `shadow.block`), then the shape. Both sit in the outlined group, so the shadow copy carries the outline too. A shape with its own transform casts a shadow with `translate(offset offset)` before that transform. The metro and diagram pieces draw stickers instead ("Ink sticker on a surface").
@@ -116,7 +120,7 @@ The library SHALL export 41 pieces with the parameters and defaults of their des
 - **THEN** it writes one SVG with every piece once, labelled with its name in the mono font, and prints `wrote <file>`
 
 ### Requirement: Piece parameters checked
-Each piece SHALL check its parameters before drawing and throw a `RangeError` naming the first problem: a missing or unknown parameter, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a token path (except "Line colours from data"). Sizes lie within 10000, counts and lists within the designs' limits, sizes leave room for insets; `road.d` and `pipe.d` take only path characters.
+Each piece SHALL check its parameters before drawing and throw a `RangeError` naming the first problem: a missing or unknown parameter, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a token path (except "Line colours from data" and "Current colour on UI icons"). Sizes lie within 10000, counts and lists within the designs' limits, sizes leave room for insets; `road.d` and `pipe.d` take only path characters.
 
 #### Scenario: Missing and unknown parameters
 - **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
@@ -433,7 +437,7 @@ A `zone` with a `title` SHALL draw it at (titleAt.x, titleAt.y + 13), bold, `map
 - **THEN** the calls throw a `RangeError` naming `titleAt`, `title` and `title`
 
 ### Requirement: UI icons as data
-The library SHALL hold `UI_ICONS`, the seven icons of `stackledger-map-and-link-pieces` design §5 (`sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download`), each with a title, a description and nodes in a 24 × 24 box without colours. `uiIcon({ name, x, y, size, colour })` SHALL place one in a group `translate(x y) scale(size / 24)` whose `fill` and `stroke` are `colour` (a token path, default `color.ink`).
+The library SHALL hold `UI_ICONS`, the seven icons of `stackledger-map-and-link-pieces` design §5 (`sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download`), each with a title, a description and nodes in a 24 × 24 box without colours. `uiIcon({ name, x, y, size, colour })` SHALL place one in a group `translate(x y) scale(size / 24)` whose `fill` and `stroke` are `colour` (a token path, default `color.ink`, or `currentColor`).
 
 #### Scenario: Default sun
 - **WHEN** `uiIcon({ name: "sun", x: 0, y: 0 })` is called
@@ -444,7 +448,7 @@ The library SHALL hold `UI_ICONS`, the seven icons of `stackledger-map-and-link-
 - **THEN** the names are exactly the seven above, in that order, each with a non-empty title and description, and no node of the data carries a colour
 
 #### Scenario: Unknown icon or a hex colour
-- **WHEN** `uiIcon` gets `name: "menu"`, or `colour: "#FFFFFF"`
+- **WHEN** `uiIcon` gets `name: "menu"`, or `colour` `"#FFFFFF"`, `"currentcolor"`, `"inherit"` or `" currentColor"`
 - **THEN** each call throws a `RangeError` naming `name` or `colour`
 
 ### Requirement: Link icons as data
@@ -501,3 +505,21 @@ Every call that is valid in 0.2.0 SHALL draw the same tree in this version: the 
 #### Scenario: Frozen 0.2.0 calls
 - **WHEN** each call of `test/fixtures/pieces-0.2.0.json` is made again
 - **THEN** its tree is deep-equal to the frozen one, and each `ledgerMark` call with `surface: "light"` added is deep-equal to the same frozen tree
+
+### Requirement: Current colour on UI icons
+`uiIcon` SHALL accept the exact keyword `currentColor` as `colour` and write it as is as the group's `fill` and `stroke`, with the same children as a token colour, so an icon inline in a page follows its element's text colour. No other spelling is accepted.
+
+#### Scenario: Current colour
+- **WHEN** `uiIcon({ name: "zoomIn", x: 4, y: 8, size: 16, colour: "currentColor" })` is called
+- **THEN** its body is one group with transform `translate(4 8) scale(0.6666666666666666)`, fill and stroke `currentColor`, and the same children as `uiIcon({ name: "zoomIn", x: 4, y: 8, size: 16 })`
+
+#### Scenario: Current colour on every icon
+- **WHEN** each of the seven icons is drawn with `colour: "currentColor"`, written with `toSvg` and with `toReact`
+- **THEN** no node holds a hex colour, every `fill` and `stroke` is `currentColor` or `none`, and the "Icons hold no link, style or script" rule holds for each tree
+
+### Requirement: UI icon calls of 0.3.0 unchanged
+Every `uiIcon` call valid in 0.3.0 SHALL draw the same tree and the same `toSvg` bytes as in 0.3.0.
+
+#### Scenario: Frozen 0.3.0 icon calls
+- **WHEN** the test re-calls the frozen fixture `test/fixtures/ui-icons-0.3.0.json`, written on `origin/main` (`2bfe4a5`) before any code: each of the seven icons with no colour at (0, 0), with `colour: "surface.dark.text"` at (0, 0), and with `colour: "color.white"` at (3.5, -2) with `size` 18
+- **THEN** each of the 21 trees deep-equals its frozen tree and its `toSvg` output equals its frozen string

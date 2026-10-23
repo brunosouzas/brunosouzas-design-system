@@ -20,4 +20,4 @@ Scenarios carried unchanged into MODIFIED requirements keep their existing tests
 ## 4. Version and documentation
 
 - [x] 4.1 `npm version 0.3.1 --no-git-tag-version`. Check: `package.json` and the root of `package-lock.json` both say `0.3.1`. Tag and publication are the owner's (`docs/release.md`).
-- [ ] 4.2 README (map tokens, `uiIcon` with `currentColor` and the inline note of design §3) and `docs/roadmap.md` (AB#170 row). Vault notes on the vault's `main` after the pull request is ready. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
+- [x] 4.2 README (map tokens, `uiIcon` with `currentColor` and the inline note of design §3) and `docs/roadmap.md` (AB#170 row). Vault notes on the vault's `main` after the pull request is ready. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
