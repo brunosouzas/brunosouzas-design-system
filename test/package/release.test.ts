@@ -1,6 +1,6 @@
-// The release safeguards (AB#155, docs/release.md): the tag check against a
-// synthetic Git history, and the publish script with stub `npm` and `gh` on the
-// PATH. Nothing here talks to npm or GitHub.
+// The release safeguards (AB#155, docs/release.md): the tag check and the
+// release detection (AB#171) against a synthetic Git history, and the publish
+// script with stub `npm` and `gh` on the PATH. Nothing here talks to npm or GitHub.
 import { execFileSync, spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -39,7 +39,8 @@ describe("Release tag check", () => {
     git("switch", "-q", "main");
     return repo;
   };
-  const check = (repo: string, tag: string) => spawnSync("node", [join(ROOT, "scripts/check-release-tag.mjs"), tag], { cwd: repo, encoding: "utf8" });
+  const check = (repo: string, tag: string, commit?: string) =>
+    spawnSync("node", [join(ROOT, "scripts/check-release-tag.mjs"), tag, ...(commit === undefined ? [] : [commit])], { cwd: repo, encoding: "utf8" });
 
   test("A tag on main that matches the version passes", () => {
     expect(check(history("0.1.0"), "v0.1.0").status).toBe(0);
@@ -51,6 +52,72 @@ describe("Release tag check", () => {
     expect(check(repo, "v0.2.0").stderr).toMatch(/does not match package.json version 0\.1\.0/);
     writeFileSync(join(repo, "package.json"), JSON.stringify({ version: "9.9.9" }));
     expect(check(repo, "v9.9.9").stderr).toMatch(/must be on main/);
+  });
+
+  test("From main: a commit on main with the version passes before the tag exists", () => {
+    const repo = history("0.1.0");
+    execFileSync("git", ["tag", "-d", "v0.1.0"], { cwd: repo, stdio: "ignore" });
+    expect(check(repo, "v0.1.0", "main").status).toBe(0);
+    expect(check(repo, "v0.1.0", "side").stderr).toMatch(/must be on main/);
+    expect(check(repo, "v0.1.0", "nothing").stderr).toMatch(/does not name a commit/);
+  });
+
+  test("From main: an existing tag on another commit stops the release", () => {
+    const repo = history("0.1.0");
+    execFileSync("git", ["tag", "-f", "v0.1.0", "side"], { cwd: repo, stdio: "ignore" });
+    expect(check(repo, "v0.1.0", "main").stderr).toMatch(/already exists on/);
+  });
+});
+
+describe("Release detection", () => {
+  /** main with three commits: version 0.1.0, then 0.2.0 (the version pull request), then a README fix. */
+  const history = () => {
+    const repo = temp("detect-");
+    const git = (...args: string[]) => execFileSync("git", args, { cwd: repo, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+    git("init", "-q", "-b", "main");
+    git("config", "user.email", "test@example.com");
+    git("config", "user.name", "test");
+    const commit = (files: Record<string, string>, message: string) => {
+      for (const [name, text] of Object.entries(files)) writeFileSync(join(repo, name), text);
+      git("add", ".");
+      git("commit", "-qm", message);
+      return git("rev-parse", "HEAD");
+    };
+    const first = commit({ "package.json": JSON.stringify({ version: "0.1.0" }) }, "0.1.0");
+    git("tag", "v0.1.0");
+    const bump = commit({ "package.json": JSON.stringify({ version: "0.2.0" }) }, "0.2.0");
+    const readme = commit({ "README.md": "fix" }, "readme");
+    return { repo, git, first, bump, readme };
+  };
+  const detect = (repo: string, ...args: string[]) => {
+    const result = spawnSync("node", [join(ROOT, "scripts/release-detect.mjs"), ...args], { cwd: repo, encoding: "utf8" });
+    return { status: result.status, out: result.stdout, why: result.stderr };
+  };
+
+  test("The merge that changes the version releases it", () => {
+    const { repo, first, bump } = history();
+    expect(detect(repo, "branch", "main", first, bump)).toMatchObject({ status: 0, out: "release=true\ntag=v0.2.0\n" });
+  });
+
+  test("A later push with the same version releases nothing, even before the tag exists", () => {
+    const { repo, bump, readme } = history();
+    const result = detect(repo, "branch", "main", bump, readme);
+    expect(result).toMatchObject({ status: 0, out: "release=false\ntag=v0.2.0\n" });
+    expect(result.why).toMatch(/unchanged/);
+  });
+
+  test("A version whose tag exists releases nothing", () => {
+    const { repo, git, first, bump } = history();
+    git("tag", "v0.2.0", bump);
+    expect(detect(repo, "branch", "main", first, bump).out).toBe("release=false\ntag=v0.2.0\n");
+  });
+
+  test("A pushed tag goes to the tag check; other branches and a missing before release nothing", () => {
+    const { repo, first, bump } = history();
+    expect(detect(repo, "tag", "v0.2.0", "0000000000000000000000000000000000000000", bump).out).toBe("release=true\ntag=v0.2.0\n");
+    expect(detect(repo, "branch", "ab171-x", first, bump).out).toBe("release=false\ntag=\n");
+    expect(detect(repo, "branch", "main", "0000000000000000000000000000000000000000", bump).out).toBe("release=false\ntag=v0.2.0\n");
+    expect(detect(repo, "branch", "main").status).toBe(1);
   });
 });
 
@@ -82,7 +149,7 @@ describe("Release workflow publish step", () => {
     const result = spawnSync("bash", ["-e", join(dir, "step.sh")], {
       cwd: dir,
       encoding: "utf8",
-      env: { ...process.env, GITHUB_REF_NAME: "v0.1.0", RUNNER_TEMP: runnerTemp },
+      env: { ...process.env, RELEASE_TAG: "v0.1.0", RUNNER_TEMP: runnerTemp },
     });
     expect(result.status, result.stderr).toBe(0);
     const { name } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as { name: string };
@@ -128,6 +195,16 @@ describe("Release publish script", () => {
     expect(result.status).toBe(0);
     expect(result.calls).toContain(`npm publish ${result.calls.find((c) => c.startsWith("npm publish"))!.split(" ")[2]} --provenance --access public --ignore-scripts`);
     expect(result.calls.some((call) => call.startsWith("gh release create v0.1.0 --verify-tag"))).toBe(true);
+  });
+
+  test("From main: publishes, then the release creates the tag on the commit", () => {
+    const run = stubs();
+    const result = run({ NPM_VIEW_STATUS: "1", NPM_VIEW_OUT: '{"error":{"code":"E404"}}', GITHUB_REF_NAME: "main", RELEASE_TAG: "v0.1.0", RELEASE_COMMIT: "abc123" });
+    expect(result.status, result.stderr).toBe(0);
+    const publish = result.calls.findIndex((call) => call.startsWith("npm publish"));
+    const create = result.calls.findIndex((call) => call === "gh release create v0.1.0 --target abc123 --generate-notes");
+    expect(publish).toBeGreaterThan(-1);
+    expect(create).toBeGreaterThan(publish);
   });
 
   test("Same bytes with provenance: does not publish again", () => {

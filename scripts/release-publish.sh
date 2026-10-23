@@ -14,8 +14,10 @@
 #
 # Run (in the publish job, from the checkout of the tagged commit):
 #   scripts/release-publish.sh <tarball> <integrity-file>
-# Environment: GITHUB_REF_NAME (the tag, v<version>), GH_TOKEN and GH_REPO for gh, NODE_AUTH_TOKEN
-# only for the very first version (docs/release.md). npm, gh and node must be on PATH.
+# Environment: RELEASE_TAG (the tag, v<version>; GITHUB_REF_NAME when unset), GH_TOKEN and GH_REPO
+# for gh, NODE_AUTH_TOKEN only for the very first version (docs/release.md). RELEASE_COMMIT, when set
+# (a release from a push to main), is the commit the GitHub release creates the tag on, after npm
+# publishing; when unset (a pushed tag), the tag must already exist. npm, gh and node must be on PATH.
 # Exit 0: published or already published, and the release exists. 1: stopped, reason on stderr.
 # 2: usage. The tarball is data only: npm publishes it with --ignore-scripts and nothing in it runs.
 set -euo pipefail
@@ -28,7 +30,7 @@ if [ "$#" -ne 2 ]; then
 fi
 tarball=$1
 integrity_file=$2
-tag=${GITHUB_REF_NAME:?GITHUB_REF_NAME must hold the release tag}
+tag=${RELEASE_TAG:-${GITHUB_REF_NAME:?RELEASE_TAG or GITHUB_REF_NAME must hold the release tag}}
 version=${tag#v}
 expected=$(tr -d '[:space:]' < "$integrity_file")
 if [ -z "$expected" ]; then
@@ -76,7 +78,11 @@ view_error=$(gh release view "$tag" 2>&1 >/dev/null) || view_status=$?
 if [ "$view_status" -eq 0 ]; then
   echo "release $tag already exists"
 elif printf '%s' "$view_error" | grep -q 'release not found'; then
-  gh release create "$tag" --verify-tag --generate-notes
+  if [ -n "${RELEASE_COMMIT:-}" ]; then
+    gh release create "$tag" --target "$RELEASE_COMMIT" --generate-notes
+  else
+    gh release create "$tag" --verify-tag --generate-notes
+  fi
 else
   fail "gh release view $tag failed: $view_error"
 fi
