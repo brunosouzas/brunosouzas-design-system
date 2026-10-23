@@ -38,11 +38,15 @@ Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no
 - **THEN** it throws a `RangeError` naming `fill` and saying a colour token path is expected
 
 ### Requirement: Hard shadow with the outline
-A shadowed shape SHALL be drawn twice: first a copy filled with `color.ink` and translated by the shadow offset (default `shadow.block`), then the shape. Both sit in the outlined group, so the shadow copy carries the outline too.
+A shadowed shape SHALL be drawn twice: first a copy filled with `color.ink` and translated by the shadow offset (default `shadow.block`), then the shape. Both sit in the outlined group, so the shadow copy carries the outline too. A shape with its own transform casts a shadow with `translate(offset offset)` before that transform.
 
 #### Scenario: Default shadow
 - **WHEN** `sheet` draws its page at `x` 300, `y` 112
 - **THEN** the first body node is a `rect` at the same position with `fill` ink and `transform` `translate(10 10)`, and the next one is the white page
+
+#### Scenario: Shadow of a turned shape
+- **WHEN** a shape with `transform="rotate(30)"` is shadowed with offset 8
+- **THEN** the shadow's transform is `translate(8 8) rotate(30)`
 
 ### Requirement: SVG renderer
 `toSvg(node)` SHALL write the tree as SVG text: two-space indent per level, attributes in insertion order, numbers through `String`, `&`, `<`, `>` and `"` escaped in text and attribute values, LF line ends. The same tree gives the same string.
@@ -85,8 +89,8 @@ Every `pose` parameter SHALL be a finite number; `squash` and `scale` SHALL be g
 - **THEN** it throws a `RangeError` naming that parameter
 
 #### Scenario: Non-finite values
-- **WHEN** `pose` gets `scale: Infinity`, or `tilt: NaN` together with `hop: Infinity`
-- **THEN** it throws a `RangeError` naming `scale`, and in the second call `tilt`
+- **WHEN** `pose` gets `scale: Infinity`; `tilt: NaN` with `hop: Infinity`; or `squash: 0` with `hop: Infinity`
+- **THEN** it throws a `RangeError` naming `scale`, then `tilt`, then `squash`
 
 ### Requirement: Frame by frame
 A scene SHALL be able to recompute a piece and its pose for every frame from frame-derived numbers, and the React path SHALL match the SVG path at every frame.
@@ -107,7 +111,7 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 - **THEN** it writes one SVG with every piece once, labelled with its name in the mono font, and prints `wrote <file>`
 
 ### Requirement: Piece parameters checked
-Each piece SHALL check its parameters against its schema before drawing and throw a `RangeError` naming the first problem: a missing required parameter, an unknown one, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a colour token path. `road.d` accepts only path commands, digits, signs, dots, commas and spaces.
+Each piece SHALL check its parameters against its schema before drawing and throw a `RangeError` naming the first problem: a missing required parameter, an unknown one, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a colour token path. Sizes and coordinates lie within ±10000; a size leaves room for the piece's fixed insets (minimums in `design.md` §4). `road.d` accepts only path characters.
 
 #### Scenario: Missing and unknown parameters
 - **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
@@ -116,6 +120,10 @@ Each piece SHALL check its parameters against its schema before drawing and thro
 #### Scenario: Out of range
 - **WHEN** `gear` gets `teeth: 3`, `serverStack` gets `units: 1.5`, or `sheet` gets a row with `lead: "star"`
 - **THEN** each call throws a `RangeError` naming `teeth`, `units` or `rows[0].lead`
+
+#### Scenario: Sizes that would break the drawing
+- **WHEN** `stamp` gets `r: 1`, `browserWindow` gets `width: 20`, or `folder` gets `scale: 1e307`
+- **THEN** each call throws a `RangeError` naming `r`, `width` or `scale`, and no drawing has a negative or infinite dimension
 
 #### Scenario: Road path with something else
 - **WHEN** `road` gets `d: "M0,0 L10,10\" onload=\"x"`

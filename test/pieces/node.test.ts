@@ -3,6 +3,7 @@
 import { describe, expect, test } from "vitest";
 import { tokens } from "../../tokens/generated/tokens";
 import { pill, sheet } from "../../src/pieces/library";
+import { el, shadowed } from "../../src/pieces/node";
 
 describe("SVG node tree", () => {
   test("Shapes and words apart", () => {
@@ -34,5 +35,10 @@ describe("Hard shadow with the outline", () => {
       children: [],
     });
     expect(drawn.body[1]).toMatchObject({ tag: "rect", attrs: { x: 300, y: 112, fill: tokens.color.white } });
+  });
+
+  test("Shadow of a turned shape", () => {
+    const [shadow] = shadowed(el("rect", { width: 10, height: 10, transform: "rotate(30)" }), 8);
+    expect(shadow.attrs.transform).toBe("translate(8 8) rotate(30)");
   });
 });

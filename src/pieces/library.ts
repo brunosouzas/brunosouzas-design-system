@@ -76,7 +76,7 @@ export const sheet = definePiece<SheetParams>(
   {
     x: pos(),
     y: pos(),
-    width: size(true),
+    width: size(true, 80),
     height: size(true),
     rows: { kind: "array", required: true, of: { kind: "object", fields: rowSchema } },
     top: size(),
@@ -167,7 +167,7 @@ export type SpeechBubbleParams = { x: number; y: number; width: number; height: 
 /** Chat slip with a tail at the bottom left and one white text line. */
 export const speechBubble = definePiece<SpeechBubbleParams>(
   "speechBubble",
-  { x: pos(), y: pos(), width: size(true), height: size(true), fill: col() },
+  { x: pos(), y: pos(), width: size(true, 60), height: size(true, 50), fill: col() },
   ({ x, y, width: w, height: h, fill = "color.caller" }) => {
     const r = 12;
     const b = y + h;
@@ -183,7 +183,7 @@ export type BrowserWindowParams = { x: number; y: number; width?: number; height
 /** Browser window: title bar with three dots, a hero block and two text lines. */
 export const browserWindow = definePiece<BrowserWindowParams>(
   "browserWindow",
-  { x: pos(), y: pos(), width: size(), height: size() },
+  { x: pos(), y: pos(), width: size(false, 60), height: size(false, 130) },
   ({ x, y, width: w = 200, height: h = 140 }) =>
     drawn([
       ...shadowed(el("rect", { x, y, width: w, height: h, rx: 12, fill: tokens.color.white })),
@@ -276,7 +276,7 @@ export type RailParams = { x: number; y: number; width: number; nodes: string[];
 /** A rail (track) with square nodes spread along it. */
 export const rail = definePiece<RailParams>(
   "rail",
-  { x: pos(), y: pos(), width: size(true), nodes: { kind: "array", required: true, minItems: 1, of: { kind: "color" } }, fill: col(), thickness: size() },
+  { x: pos(), y: pos(), width: size(true, 100), nodes: { kind: "array", required: true, minItems: 1, of: { kind: "color" } }, fill: col(), thickness: size() },
   ({ x, y, width: w, nodes, fill = "illustration.codePanel", thickness: t = 44 }) =>
     drawn([
       ...shadowed(el("rect", { x, y, width: w, height: t, rx: t / 2, fill: colour(fill, "fill") }), 8),
@@ -370,7 +370,7 @@ export type StampParams = { cx: number; cy: number; word: string; fill?: string;
 /** Rubber stamp, round (dashed inner ring) or rectangular, tilted, with one word. */
 export const stamp = definePiece<StampParams>(
   "stamp",
-  { cx: pos(), cy: pos(), word: label(), fill: col(), r: size(), rotate: { kind: "number" }, shape: { kind: "enum", values: ["round", "rect"] } },
+  { cx: pos(), cy: pos(), word: label(), fill: col(), r: size(false, 12), rotate: { kind: "number" }, shape: { kind: "enum", values: ["round", "rect"] } },
   ({ cx, cy, word, fill = "color.healthy", r = 40, rotate = -12, shape = "round" }) => {
     const turn = `rotate(${rotate} ${cx} ${cy})`;
     const face =
@@ -519,10 +519,10 @@ export const muleFlow = definePiece<MuleFlowParams>(
   {
     x: pos(),
     y: pos(),
-    width: size(true),
-    height: size(),
+    width: size(true, 120),
+    height: size(false, 40),
     tiles: { kind: "array", required: true, minItems: 1, of: { kind: "object", fields: { x: pos(), kind: { kind: "enum", required: true, values: ["scatter-gather", "choice", "for-each"] } } } },
-    tileWidth: size(),
+    tileWidth: size(false, 40),
     fill: col(),
   },
   ({ x, y, width: w, height: h = 104, tiles, tileWidth = 86, fill = "color.caller" }) => {

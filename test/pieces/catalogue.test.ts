@@ -91,7 +91,16 @@ describe("Piece parameters checked", () => {
   test("Out of range", () => {
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 3 })).toThrow(/^gear: teeth: expected a number at least 4/);
     expect(() => P.serverStack({ x: 0, y: 0, units: 1.5 })).toThrow(/^serverStack: units: expected an integer/);
-    expect(() => call("sheet", { x: 0, y: 0, width: 1, height: 1, rows: [{ lead: "star", bar: 4 }] })).toThrow(/^sheet: rows\[0\]\.lead: expected one of/);
+    expect(() => call("sheet", { x: 0, y: 0, width: 100, height: 1, rows: [{ lead: "star", bar: 4 }] })).toThrow(/^sheet: rows\[0\]\.lead: expected one of/);
+  });
+
+  test("Sizes that would break the drawing", () => {
+    // Sizes leave room for each piece's fixed insets, so no generated dimension is negative.
+    expect(() => P.stamp({ cx: 0, cy: 0, word: "x", r: 1 })).toThrow(/^stamp: r: expected a number at least 12/);
+    expect(() => P.browserWindow({ x: 0, y: 0, width: 20 })).toThrow(/^browserWindow: width: expected a number at least 60/);
+    // Sizes and coordinates have an upper bound, so geometry never overflows to Infinity.
+    expect(() => P.folder({ x: 0, y: 0, scale: 1e307 })).toThrow(/^folder: scale: expected a number at most 10000/);
+    expect(() => P.pill({ x: 1e307, y: 0, text: "a" })).toThrow(/^pill: x: expected a number at most 10000/);
   });
 
   test("Road path with something else", () => {

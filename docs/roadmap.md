@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 after the inventory of the published covers and a review of all 28 articles. Each one is a card in Azure Boards (area `site`), a branch and one pull request with its OpenSpec change. Nothing below is implemented until its row says so.
+Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 after the inventory of the published covers and a review of all 28 articles, and again the same day to put first what a second site needs (package, banner, diagram pieces, designer skill). Each one is a card in Azure Boards (area `site`), a branch and one pull request with its OpenSpec change. Nothing below is implemented until its row says so.
 
 ## Foundation
 
@@ -8,15 +8,19 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 |---|---|---|---|---|
 | 1 | `tokens-and-motion-foundation` | The token source and its CSS, TypeScript and JSON exports; the motion components; the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, PT and EN); the render script with a web copy | AB#132 | delivered |
 | 2 | Variety scenes | Became the per-article video list below | AB#138 | `publish-subscribe` implemented; owner media approval pending |
-| 3 | `illustration-pieces` | New tokens (illustration colours, cover backgrounds with their measured rings, cover measures); pieces as TypeScript functions rendered to SVG and React; the 26 EIP icons as data; the cover command | AB#139 | in progress |
-| 4 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it | AB#152 | planned |
-| 5 | Covers on the pieces | Port the 21 published covers to cover specs (replaces the old "static diagrams on the tokens" item) | AB#140 | planned |
-| 6 | Body diagram kit | Port the 14 body diagrams to the pieces | AB#141 | planned |
-| 7 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
-| 8 | Designer skill | The kit's `designer` skill plans and delivers videos and uses the pieces | AB#151 | planned |
-| 9 | Site palette | Two or three palette options (shared ink, one brand accent) shown on a real page; the chosen one becomes a change in the site repository that consumes the CSS tokens | — | planned |
-| 10 | Site banner | Animated SVG/CSS banner built from the pieces | AB#143 | after the palette |
-| 11 | Published catalogue | The Remotion Studio deployed as a static site, so the catalogue can be browsed without a local install | — | later |
+| 3 | `illustration-pieces` | New tokens (illustration colours, cover backgrounds with their measured rings, cover measures); pieces as TypeScript functions rendered to SVG and React; the 26 EIP icons as data; the cover command | AB#139 | delivered |
+| 4 | Package for both sites | Both of the owner's sites (same Astro template) install the design system as a versioned git dependency: tokens CSS, pieces and the cover command | AB#155 | planned |
+| 5 | Static banner format | The cover spec gains a banner format with its measures in tokens; static SVG | AB#156 | planned |
+| 6 | Diagram pieces and icons | Node block, pill node, decision, store, queue, exchange, tagged container, lifelines, phase band, alt frame, message arrows; new icons as data | AB#157 | planned |
+| 7 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces | AB#151 | planned |
+| 8 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it | AB#152 | planned |
+| 9 | Covers on the pieces | Port the 21 published covers to cover specs, one first and then in batches checked on the site | AB#140 | planned |
+| 10 | Body diagram kit | Port the 14 body diagrams to the diagram pieces | AB#141 | planned |
+| 11 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
+| 12 | Designer skill for videos | The `designer` skill decides where a video belongs and writes its script | AB#158 | planned |
+| 13 | Site palette | Two or three palette options (shared ink, one brand accent) shown on a real page; the chosen one becomes a change in the site repository that consumes the CSS tokens | — | planned |
+| 14 | Animated site banner | Animated SVG/CSS banner built from the pieces | AB#143 | after the palette |
+| 15 | Published catalogue | The Remotion Studio deployed as a static site, so the catalogue can be browsed without a local install | — | later |
 
 ## Videos per article
 

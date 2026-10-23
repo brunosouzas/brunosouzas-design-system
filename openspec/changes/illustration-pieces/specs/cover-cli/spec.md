@@ -35,11 +35,15 @@ The command SHALL exit 1 with the problem and the usage line, writing nothing, w
 - **THEN** it prints that the output is a folder and exits 1
 
 ### Requirement: Safe write
-The command SHALL write the cover to a temporary file in the output folder and rename it over the target. When the write fails it prints `cannot write <out>: <reason>`, exits 1, removes the temporary file and leaves an existing file at the target unchanged.
+The command SHALL write the cover to a new temporary file with an unpredictable name, created exclusively in the output folder, and rename it over the target, so it never writes through an existing path or link. When the write fails it prints `cannot write <out>: <reason>`, exits 1, removes the temporary file and leaves an existing file at the target unchanged.
 
 #### Scenario: Write fails
 - **WHEN** the output folder is read-only and already holds `cover.svg`
 - **THEN** the command prints `cannot write`, exits 1, and `cover.svg` keeps its bytes
+
+#### Scenario: Output that is a symlink
+- **WHEN** `cover.svg` is a symlink to another file
+- **THEN** the other file keeps its bytes and `cover.svg` becomes a regular file holding the cover
 
 ### Requirement: Cover spec format
 A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), `background` (a `coverBackground` name), `rings` (`cx`, `cy`, optional `radius`; finite numbers), `pieces` (array of objects with `piece` and its parameters) and optional `custom`. Any other top-level key is an error.
@@ -79,8 +83,12 @@ When a readable spec breaks several rules, the command SHALL print every problem
 - **THEN** exactly one problem is printed for `pieces[0].fill`: "colour literals are not allowed; use a token path"
 
 #### Scenario: Wrong container
-- **WHEN** `pieces` is an object instead of an array
-- **THEN** one problem is printed for `pieces` and nothing inside it is reported
+- **WHEN** `pieces` is an object holding `fill: "#fff"`, or an entry has an unknown `piece` and a colour literal
+- **THEN** one problem is printed for `pieces` (or for that entry's `piece`) and nothing inside it is reported
+
+#### Scenario: Paths in code-point order
+- **WHEN** two problem paths differ only in a character above U+FFFF and one in the private-use area U+E000
+- **THEN** the U+E000 path comes first
 
 ### Requirement: One free-form object
 A spec SHALL have at most one free-form object, `custom`, a single JSON node tree (not an array) drawn after the pieces' bodies in the outlined group, with its colour token paths resolved and every `text` node written with `stroke="none"`.
@@ -94,7 +102,7 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 - **THEN** the cover draws them after the pieces' bodies, with `fill` resolved to the token's value and the text with `stroke="none"`
 
 ### Requirement: Free-form content
-`custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate`, `rotate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
+`custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill`, `stroke` and the grammar attributes (`transform`, `d`, `points`) are strings; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate`, `rotate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
 
 #### Scenario: Forbidden content
 - **WHEN** `custom` holds a `script` or `image` node, or an attribute `onload`, `href` or `style`
@@ -103,6 +111,10 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 #### Scenario: External reference
 - **WHEN** a `custom` node has `filter: "url(https://example.com/f.svg#f)"` or `fill: "url(#g)"`
 - **THEN** each is reported by its path
+
+#### Scenario: Numbers in grammar attributes
+- **WHEN** a `custom` node has `fill: 123`, `transform: 5` and `d: 5`
+- **THEN** each is reported as "expected a string"
 
 #### Scenario: Transform outside the grammar
 - **WHEN** a `custom` node has `transform: "matrix(1 0 0 1 0 0)"`, and another `transform: "rotate(-12 400 200)"`

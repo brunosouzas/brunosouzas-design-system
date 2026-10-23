@@ -9,6 +9,7 @@
 // usage; an invalid spec reports every problem by JSON path. In both cases the
 // command exits 1 and writes nothing. An existing output file is replaced.
 import { existsSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { coverTree, validateCoverSpec, type CoverSpec } from "../src/pieces/cover.ts";
@@ -102,12 +103,15 @@ export const runCover = (args: string[], io: CoverIo): number => {
   }
   // Write beside the target and rename, so a failed write never leaves half a cover.
   const target = resolve(io.cwd, invocation.out);
-  const temporary = `${target}.${process.pid}.tmp`;
+  // Unpredictable name, created exclusively ("wx"): never follows or reuses an existing path.
+  const temporary = `${target}.${randomUUID()}.tmp`;
+  let created = false;
   try {
-    writeFileSync(temporary, result.svg);
+    writeFileSync(temporary, result.svg, { flag: "wx" });
+    created = true;
     renameSync(temporary, target);
   } catch (error) {
-    rmSync(temporary, { force: true });
+    if (created) rmSync(temporary, { force: true });
     io.error(`cannot write ${invocation.out}: ${error instanceof Error ? error.message : String(error)}`);
     return 1;
   }

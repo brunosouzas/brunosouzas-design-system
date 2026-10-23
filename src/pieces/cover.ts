@@ -22,6 +22,8 @@ const CUSTOM_ATTRS = new Set([
   "font-size", "font-weight", "font-family", "text-anchor", "transform",
 ]);
 const COLOUR_ATTRS = new Set(["fill", "stroke"]);
+// Attributes whose value is a grammar, never a bare number.
+const STRING_ONLY_ATTRS = new Set(["transform", "d", "points", "font-family", "text-anchor", "stroke-linecap", "stroke-linejoin"]);
 const TRANSFORM = /^\s*(?:(?:translate|rotate|scale)\(\s*-?[\d.]+(?:[\s,]+-?[\d.]+){0,2}\s*\)\s*)+$/;
 
 export type CoverPiece = { piece: PieceName } & Record<string, unknown>;
@@ -71,7 +73,8 @@ const checkCustom = (node: unknown, path: string, out: Problem[]): void => {
           continue;
         }
         if (typeof value === "number") {
-          if (!Number.isFinite(value)) out.push({ path: at, message: "expected a finite number" });
+          if (COLOUR_ATTRS.has(name) || STRING_ONLY_ATTRS.has(name)) out.push({ path: at, message: "expected a string" });
+          else if (!Number.isFinite(value)) out.push({ path: at, message: "expected a finite number" });
           continue;
         }
         if (typeof value !== "string") {
@@ -104,6 +107,17 @@ const checkCustom = (node: unknown, path: string, out: Problem[]): void => {
   }
 };
 
+/** Orders strings by Unicode code point (JS `<` compares UTF-16 code units). */
+const compareCodePoints = (a: string, b: string): number => {
+  const left = Array.from(a);
+  const right = Array.from(b);
+  for (let i = 0; i < Math.min(left.length, right.length); i++) {
+    const diff = left[i].codePointAt(0)! - right[i].codePointAt(0)!;
+    if (diff !== 0) return diff;
+  }
+  return left.length - right.length;
+};
+
 /** Compares JSON paths: segment by segment, array indexes as numbers, names by code point. */
 export const comparePaths = (a: string, b: string): number => {
   const split = (path: string) => path.match(/[^.[\]]+|\[\d+\]/g) ?? [];
@@ -116,7 +130,7 @@ export const comparePaths = (a: string, b: string): number => {
     const xi = /^\[\d+\]$/.test(x);
     const yi = /^\[\d+\]$/.test(y);
     if (xi && yi) return Number(x.slice(1, -1)) - Number(y.slice(1, -1));
-    return x < y ? -1 : 1;
+    return compareCodePoints(x, y);
   }
   return left.length - right.length;
 };
@@ -156,6 +170,19 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
     else checkCustom(spec.custom, "custom", out);
   }
   // A colour literal is reported once, by the literal check, not again as a bad token path.
+  // A container with the wrong shape is one problem: nothing inside it is reported.
+  const blocked: string[] = [];
+  if (!Array.isArray(spec.pieces) && spec.pieces !== undefined) blocked.push("pieces");
+  if (Array.isArray(spec.pieces)) {
+    spec.pieces.forEach((entry, index) => {
+      const known = isPlainObject(entry) && typeof entry.piece === "string" && (PIECE_NAMES as string[]).includes(entry.piece) && entry.piece !== "rings";
+      if (!known) blocked.push(`pieces[${index}]`);
+    });
+  }
+  if (Array.isArray(spec.custom)) blocked.push("custom");
+  if (!isPlainObject(spec.rings) && spec.rings !== undefined) blocked.push("rings");
+  const insideBlocked = (path: string) => blocked.some((b) => (path.startsWith(`${b}.`) || path.startsWith(`${b}[`)) && path !== `${b}.piece`);
+  out.splice(0, out.length, ...out.filter((p) => !insideBlocked(p.path)));
   const literalPaths = new Set(out.filter((p) => p.message.startsWith("colour literals")).map((p) => p.path));
   const seen = new Set<string>();
   const unique = out.filter((p) => {
@@ -164,7 +191,7 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
     seen.add(key);
     return true;
   });
-  return unique.sort((a, b) => comparePaths(a.path, b.path) || (a.message < b.message ? -1 : a.message > b.message ? 1 : 0));
+  return unique.sort((a, b) => comparePaths(a.path, b.path) || compareCodePoints(a.message, b.message));
 };
 
 const resolveCustom = (node: CustomNode): SvgNode => {

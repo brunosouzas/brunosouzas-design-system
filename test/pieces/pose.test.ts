@@ -34,6 +34,8 @@ describe("Pose parameters checked", () => {
   test("Non-finite values", () => {
     expect(() => pose(body(), { x: 0, y: 0, scale: Number.POSITIVE_INFINITY })).toThrow(/^pose: scale must be a finite number/);
     expect(() => pose(body(), { x: 0, y: 0, tilt: Number.NaN, hop: Number.POSITIVE_INFINITY })).toThrow(/^pose: tilt must be a finite number/);
+    // The first offending parameter in order wins, whatever kind of problem it has.
+    expect(() => pose(body(), { x: 0, y: 0, squash: 0, hop: Number.POSITIVE_INFINITY })).toThrow(/^pose: squash must be greater than 0/);
   });
 });
 

@@ -124,8 +124,13 @@ export const assertParams = (piece: string, schema: Schema, params: Record<strin
 
 // Shorthands for schemas.
 export const num = (extra: Omit<Extract<ParamSpec, { kind: "number" }>, "kind"> = {}): ParamSpec => ({ kind: "number", ...extra });
-export const size = (required = false): ParamSpec => ({ kind: "number", min: 0, exclusiveMin: true, required });
-export const pos = (): ParamSpec => ({ kind: "number", required: true });
+/** Largest size or coordinate magnitude a piece accepts, far above any banner. */
+export const MAX_SIZE = 10000;
+
+/** A size: greater than 0 (or at least `min`, where fixed insets need room), at most MAX_SIZE. */
+export const size = (required = false, min?: number): ParamSpec =>
+  min === undefined ? { kind: "number", min: 0, exclusiveMin: true, max: MAX_SIZE, required } : { kind: "number", min, max: MAX_SIZE, required };
+export const pos = (): ParamSpec => ({ kind: "number", required: true, min: -MAX_SIZE, max: MAX_SIZE });
 export const col = (): ParamSpec => ({ kind: "color" });
 /** SVG path data: commands, digits, signs, dots, commas and spaces only. */
 export const PATH_DATA = /^[MmLlHhVvCcSsQqTtAaZz0-9eE.,+\-\s]+$/;

@@ -52,9 +52,17 @@ export const drawn = (body: readonly SvgNode[], text: readonly SvgNode[] = []): 
  * the motion components' shadow does.
  */
 export const shadowed = (shape: SvgNode, offset: number = tokens.shadow.block): SvgNode[] => [
-  { ...shape, attrs: { ...shape.attrs, fill: tokens.color.ink, transform: `translate(${offset} ${offset})` } },
+  {
+    ...shape,
+    attrs: {
+      ...shape.attrs,
+      fill: tokens.color.ink,
+      // The offset applies after the shape's own transform, so a turned shape casts a turned shadow.
+      transform: shape.attrs.transform === undefined ? `translate(${offset} ${offset})` : `translate(${offset} ${offset}) ${shape.attrs.transform}`,
+    },
+  },
   shape,
 ];
 
 /** Rounds to two decimals so computed geometry stays short and stable in the output. */
-export const r2 = (value: number): number => Math.round(value * 100) / 100;
+export const r2 = (value: number): number => (Math.abs(value) < 1e12 ? Math.round(value * 100) / 100 : value);

@@ -1,10 +1,11 @@
 // Integration tests of `npm run cover` (spec cover-cli; tasks 4.1 and 4.2),
 // run in temporary folders. Each test title is the spec scenario it proves.
-import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 import { buildCover, COVER_USAGE, runCover } from "../../scripts/cover";
+import { comparePaths } from "../../src/pieces/cover";
 import { tokens } from "../../tokens/generated/tokens";
 
 const FIXTURES = new URL("../fixtures/covers/", import.meta.url).pathname;
@@ -118,6 +119,19 @@ describe("Safe write", () => {
   });
 });
 
+describe("Safe write through a link", () => {
+  test("Output that is a symlink", () => {
+    const ws = workspace();
+    cpSync(join(FIXTURES, "ai-writes-code.json"), join(ws.root, "spec.json"));
+    writeFileSync(join(ws.root, "outside.txt"), "keep");
+    symlinkSync(join(ws.root, "outside.txt"), join(ws.root, "cover.svg"));
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(0);
+    expect(readFileSync(join(ws.root, "outside.txt"), "utf8")).toBe("keep");
+    expect(lstatSync(join(ws.root, "cover.svg")).isSymbolicLink()).toBe(false);
+    expect(readdirSync(ws.root).sort()).toEqual(["cover.svg", "outside.txt", "spec.json"]);
+  });
+});
+
 describe("Cover spec format", () => {
   test("Unknown background and piece", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
@@ -138,7 +152,7 @@ describe("Piece parameters checked", () => {
     expect(problems(spec)).toEqual([
       "pieces[2].colour: unknown parameter (expected x, y, width, height, rows, top, step, fill, leadFill, tick)",
       "pieces[2].rows: missing required parameter",
-      "pieces[2].width: expected a number greater than 0, found -5",
+      "pieces[2].width: expected a number at least 80, found -5",
     ]);
   });
 
@@ -166,6 +180,14 @@ describe("Every spec problem at once", () => {
 
   test("Wrong container", () => {
     expect(problems({ ...minimal(), pieces: { a: { piece: "pill" } } })).toEqual(["pieces: missing or not an array"]);
+    expect(problems({ ...minimal(), pieces: { fill: "#fff" } })).toEqual(["pieces: missing or not an array"]);
+    expect(problems({ ...minimal(), pieces: [{ piece: "rocket", fill: "#fff" }] })).toEqual([expect.stringMatching(/^pieces\[0\]\.piece: unknown piece "rocket"/)]);
+    expect(problems({ ...minimal(), custom: [{ tag: "g", attrs: { fill: "#fff" } }] })).toEqual(["custom: one free-form object per cover; a repeated object must be a piece"]);
+  });
+
+  test("Paths in code-point order", () => {
+    expect(comparePaths("\u{10000}", "\uE000")).toBeGreaterThan(0);
+    expect(comparePaths("pieces[2]", "pieces[10]")).toBeLessThan(0);
   });
 });
 
@@ -206,6 +228,15 @@ describe("Free-form content", () => {
       "custom.children[0].attrs.filter: attribute not allowed in a free-form object",
     ]);
     expect(problems({ ...minimal(), custom: { tag: "rect", attrs: { d: "url(https://x)" } } })).toEqual(["custom.attrs.d: references are not allowed (url( or //)"]);
+  });
+
+  test("Numbers in grammar attributes", () => {
+    const custom = { tag: "path", attrs: { fill: 123, transform: 5, d: 5 } };
+    expect(problems({ ...minimal(), custom })).toEqual([
+      "custom.attrs.d: expected a string",
+      "custom.attrs.fill: expected a string",
+      "custom.attrs.transform: expected a string",
+    ]);
   });
 
   test("Transform outside the grammar", () => {

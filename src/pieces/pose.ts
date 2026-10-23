@@ -25,10 +25,12 @@ const finite = (name: string, value: number) => {
 
 export const pose = (node: SvgNode, params: Pose): SvgNode => {
   const { x, y, tilt = 0, squash = 1, hop = 0, scale = 1, shake = 0, opacity = 1 } = params;
-  for (const [name, value] of Object.entries({ x, y, tilt, squash, hop, scale, shake, opacity })) finite(name, value);
-  if (squash <= 0) throw new RangeError(`pose: squash must be greater than 0, found ${squash}`);
-  if (scale <= 0) throw new RangeError(`pose: scale must be greater than 0, found ${scale}`);
-  if (opacity < 0 || opacity > 1) throw new RangeError(`pose: opacity must be within 0 and 1, found ${opacity}`);
+  // Each parameter is checked completely (finite, then range) before the next, in this order.
+  for (const [name, value] of Object.entries({ x, y, tilt, squash, hop, scale, shake, opacity })) {
+    finite(name, value);
+    if ((name === "squash" || name === "scale") && value <= 0) throw new RangeError(`pose: ${name} must be greater than 0, found ${value}`);
+    if (name === "opacity" && (value < 0 || value > 1)) throw new RangeError(`pose: opacity must be within 0 and 1, found ${value}`);
+  }
   if (tilt === 0 && squash === 1 && hop === 0 && scale === 1 && shake === 0 && opacity === 1) return node;
   const transform = `translate(${x + shake} ${y - hop}) rotate(${tilt}) scale(${scale / Math.sqrt(squash)} ${scale * squash}) translate(${-x} ${-y})`;
   return g(opacity < 1 ? { transform, opacity } : { transform }, node);
