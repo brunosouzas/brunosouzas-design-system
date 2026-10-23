@@ -69,6 +69,10 @@ The source SHALL define `cover` width, height, pillHeight, labelSize, ringStep, 
 - **WHEN** the source has `coverBackground.blush` as a token instead of a group
 - **THEN** the build fails, naming `coverBackground.blush` and "expected a group with fill and ring", and writes no file
 
+#### Scenario: Ring with another type
+- **WHEN** `coverBackground.blush.ring` is declared `dimension`
+- **THEN** the build fails, naming it and the expected type `color`, and writes no file
+
 #### Scenario: Missing group
 - **WHEN** the source has no `coverBackground` group
 - **THEN** the build fails, naming `coverBackground` as missing, and writes no file

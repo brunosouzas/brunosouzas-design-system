@@ -16,7 +16,7 @@ Builds a blog cover from a JSON spec kept with the article in the private vault,
 - **THEN** the file is byte-identical after both runs
 
 ### Requirement: Invocation problems
-The command SHALL exit 1 with the problem and the usage line, writing nothing, when: an option other than `--out` is given, `--out` is missing, repeated or has no value, the out path does not end in `.svg`, its folder does not exist, no spec path or more than one is given, or the spec file cannot be read. Only the first of these is reported, in that order.
+The command SHALL exit 1 with the problem and the usage line, writing nothing, when: an option other than `--out` is given, `--out` has no value, is missing or is repeated, the out path does not end in `.svg`, its folder does not exist, it names a folder, no spec path or more than one is given, or the spec file cannot be read. Only the first of these is reported, in that order.
 
 #### Scenario: Missing out
 - **WHEN** the owner runs `npm run cover -- cover.json`
@@ -29,6 +29,17 @@ The command SHALL exit 1 with the problem and the usage line, writing nothing, w
 #### Scenario: Missing folder
 - **WHEN** `--out` names `missing/cover.svg` and `missing/` does not exist
 - **THEN** it prints that the folder does not exist and exits 1
+
+#### Scenario: Out names a folder
+- **WHEN** `--out` names `covers.svg` and `covers.svg/` is a folder
+- **THEN** it prints that the output is a folder and exits 1
+
+### Requirement: Safe write
+The command SHALL write the cover to a temporary file in the output folder and rename it over the target. When the write fails it prints `cannot write <out>: <reason>`, exits 1, removes the temporary file and leaves an existing file at the target unchanged.
+
+#### Scenario: Write fails
+- **WHEN** the output folder is read-only and already holds `cover.svg`
+- **THEN** the command prints `cannot write`, exits 1, and `cover.svg` keeps its bytes
 
 ### Requirement: Cover spec format
 A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), `background` (a `coverBackground` name), `rings` (`cx`, `cy`, optional `radius`; finite numbers), `pieces` (array of objects with `piece` and its parameters) and optional `custom`. Any other top-level key is an error.
@@ -57,26 +68,45 @@ Each entry of `pieces` SHALL be checked against its piece's parameters: a requir
 - **THEN** that path is reported with "colour literals are not allowed; use a token path"
 
 ### Requirement: Every spec problem at once
-When a readable spec breaks several rules, the command SHALL print every problem, one line each as `<json path>: <message>`, sorted by path in Unicode code-point order with array indexes compared as numbers, exit 1 and write nothing.
+When a readable spec breaks several rules, the command SHALL print every problem, one line each as `<json path>: <message>`, sorted by path (array indexes as numbers, names by code point), then by message, exit 1 and write nothing. A container with the wrong shape (`pieces` not an array, an entry not an object, an unknown `piece`) is one problem and its children are not checked. A colour literal is reported once at its path and replaces any other problem there.
 
 #### Scenario: Problems sorted
 - **WHEN** a spec has a bad `title`, a bad `pieces[10]` and a bad `pieces[2]`
 - **THEN** the order is `pieces[2]`, `pieces[10]`, `title`
 
+#### Scenario: One problem per path
+- **WHEN** `pieces[0]` is a `pill` with `fill: "#fff"`
+- **THEN** exactly one problem is printed for `pieces[0].fill`: "colour literals are not allowed; use a token path"
+
+#### Scenario: Wrong container
+- **WHEN** `pieces` is an object instead of an array
+- **THEN** one problem is printed for `pieces` and nothing inside it is reported
+
 ### Requirement: One free-form object
-A spec SHALL have at most one free-form object, `custom`, a single JSON node tree (not an array). Its tags are limited to `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`; attribute names match `^[a-z][a-z-]*$` and are not `on*`, `href`, `style` or `class`; colour attributes are `none` or a token path.
+A spec SHALL have at most one free-form object, `custom`, a single JSON node tree (not an array) drawn after the pieces' bodies in the outlined group, with its colour token paths resolved and every `text` node written with `stroke="none"`.
 
 #### Scenario: Array of objects
 - **WHEN** `custom` is an array of two trees
 - **THEN** `custom` is reported as "one free-form object per cover; a repeated object must be a piece"
 
+#### Scenario: Allowed object
+- **WHEN** `custom` is a `g` with a `path` whose `fill` is `color.blocked` and a `text` node `v1`
+- **THEN** the cover draws them after the pieces' bodies, with `fill` resolved to the token's value and the text with `stroke="none"`
+
+### Requirement: Free-form content
+`custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
+
 #### Scenario: Forbidden content
-- **WHEN** `custom` holds a `script` or `image` node, or an attribute `onload` or `href`
+- **WHEN** `custom` holds a `script` or `image` node, or an attribute `onload`, `href` or `style`
 - **THEN** each is reported by its path and nothing is written
 
-#### Scenario: Allowed object
-- **WHEN** `custom` is a `g` with a `path` whose `fill` is `color.blocked`
-- **THEN** the cover draws it after the pieces' bodies, with `fill` resolved to the token's value
+#### Scenario: External reference
+- **WHEN** a `custom` node has `filter: "url(https://example.com/f.svg#f)"` or `fill: "url(#g)"`
+- **THEN** each is reported by its path
+
+#### Scenario: Rotated text
+- **WHEN** a `custom` node has `transform: "rotate(-12 400 200)"`
+- **THEN** `transform` is reported as "only translate and scale are allowed"
 
 ### Requirement: Cover output
 The cover SHALL be an 800x420 `svg` with `role="img"`, `aria-labelledby` naming `<id>-title` and `<id>-desc`, the sans font, then `title`, `desc`, a clip-path `<id>-frame`, the background fill, the clipped rings in the background's ring colour, one outlined group with every piece body in paint order and then `custom`, and one label group with every text, ending in LF.

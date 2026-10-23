@@ -67,7 +67,7 @@ A shadowed shape SHALL be drawn twice: first a copy filled with `color.ink` and 
 - **THEN** React receives `data-piece` unchanged and the normal forms still match
 
 ### Requirement: Animation by parameter
-`pose(node, params)` SHALL wrap a node in a `g` with transform `translate(x+shake y-hop) rotate(tilt) scale(scale/√squash scale·squash) translate(-x -y)` and `opacity` when below 1. Defaults: tilt 0, squash 1, hop 0, scale 1, shake 0, opacity 1; with all defaults it returns the node unchanged.
+`pose(node, params)` SHALL wrap a node in a `g` with transform `translate(x+shake y-hop) rotate(tilt) scale(scale/√squash scale·squash) translate(-x -y)` and `opacity` when below 1. `x` and `y` are required; defaults: tilt 0, squash 1, hop 0, scale 1, shake 0, opacity 1. With all defaults it returns the node unchanged.
 
 #### Scenario: Squash keeps the base
 - **WHEN** a robot is posed at `x` 400, `y` 300 with `squash` 1.21
@@ -77,9 +77,16 @@ A shadowed shape SHALL be drawn twice: first a copy filled with `color.ink` and 
 - **WHEN** `pose` is called with only `x` and `y`
 - **THEN** it returns the same node object
 
+### Requirement: Pose parameters checked
+Every `pose` parameter SHALL be a finite number; `squash` and `scale` SHALL be greater than 0 and `opacity` within 0 and 1. Otherwise `pose` throws a `RangeError` naming the first offending parameter in the order x, y, tilt, squash, hop, scale, shake, opacity.
+
 #### Scenario: Impossible values
 - **WHEN** `pose` gets `squash: 0`, `scale: -1` or `opacity: 1.5`
 - **THEN** it throws a `RangeError` naming that parameter
+
+#### Scenario: Non-finite values
+- **WHEN** `pose` gets `scale: Infinity`, or `tilt: NaN` together with `hop: Infinity`
+- **THEN** it throws a `RangeError` naming `scale`, and in the second call `tilt`
 
 ### Requirement: Frame by frame
 A scene SHALL be able to recompute a piece and its pose for every frame from frame-derived numbers, and the React path SHALL match the SVG path at every frame.
@@ -89,7 +96,7 @@ A scene SHALL be able to recompute a piece and its pose for every frame from fra
 - **THEN** the normal forms match at every frame and the hop at frame 6 is 28
 
 ### Requirement: Piece catalogue
-The library SHALL export these pieces, with the parameters and defaults of `design.md` §4: pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon.
+The library SHALL export these pieces, with the anchors, parameters and defaults of `design.md` §4: pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon.
 
 #### Scenario: Every piece draws with its defaults
 - **WHEN** the catalogue test calls each of the 26 pieces with only its required parameters
@@ -98,6 +105,21 @@ The library SHALL export these pieces, with the parameters and defaults of `desi
 #### Scenario: Catalogue sheet
 - **WHEN** `npm run pieces:sheet -- --out <file.svg>` runs
 - **THEN** it writes one SVG with every piece once, labelled with its name in the mono font, and prints `wrote <file>`
+
+### Requirement: Piece parameters checked
+Each piece SHALL check its parameters against its schema before drawing and throw a `RangeError` naming the first problem: a missing required parameter, an unknown one, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a colour token path. `road.d` accepts only path commands, digits, signs, dots, commas and spaces.
+
+#### Scenario: Missing and unknown parameters
+- **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
+- **THEN** each call throws a `RangeError` naming the missing parameter, and the `pill` call names `colour`
+
+#### Scenario: Out of range
+- **WHEN** `gear` gets `teeth: 3`, `serverStack` gets `units: 1.5`, or `sheet` gets a row with `lead: "star"`
+- **THEN** each call throws a `RangeError` naming `teeth`, `units` or `rows[0].lead`
+
+#### Scenario: Road path with something else
+- **WHEN** `road` gets `d: "M0,0 L10,10\" onload=\"x"`
+- **THEN** it throws a `RangeError` naming `d`
 
 ### Requirement: Words come from the caller
 A piece SHALL draw no word of its own: the only text nodes are the caller's `text`, `word` or label parameters and the glyphs `?` (question row) and the tick path. An empty label is rejected.

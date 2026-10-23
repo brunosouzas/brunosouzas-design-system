@@ -38,11 +38,11 @@ The blog has 21 published covers and 14 body diagrams (28 files, PT and EN), all
 
 ## Implicit requirements
 
-- **Errors and invalid input:** requirement. The CLI reports every problem of a spec at once, by JSON path, exits 1 and writes nothing (`cover-cli`). Pieces called from code reject impossible values (non-positive sizes, unknown names) with an error naming the parameter (`illustration-pieces`). Token validation keeps its current behaviour for the new groups.
+- **Errors and invalid input:** requirement. The CLI reports every problem of a spec at once, by JSON path, exits 1 and writes nothing; a failed write leaves an existing cover untouched (`cover-cli`). Pieces called from code reject impossible values (non-positive sizes, unknown names) with an error naming the parameter (`illustration-pieces`). Token validation keeps its current behaviour for the new groups.
 - **Limits:** requirement. One cover is 800x420; at most one free-form object per cover; a free-form object holds only drawing tags; ring count and step are fixed by the measured covers.
 - **Repetition and idempotency:** requirement. Same spec, same bytes; running the CLI twice leaves the file unchanged. Pieces are pure: the same parameters give a deep-equal tree, so a scene can seek to any frame.
 - **Concurrency:** n/a. One command writes one file; parallel runs on the same output are not supported, as for `stills` and `render`.
-- **Security:** requirement. A cover spec is author input but becomes public SVG: no `script`, `foreignObject`, `image`, `use`, `href` or `on*` attribute can pass, text is escaped, and the id is a safe slug. Draft cover specs never enter this public repository; only the three published proof covers are fixtures. No secrets, no network.
+- **Security:** requirement. A cover spec is author input but becomes public SVG: a free-form object takes only drawing tags and an allowlist of geometry, paint and text attributes, no value may reference anything (`url(`, `//`), transforms are translate and scale only, path data is checked, text is escaped, and the id is a safe slug. Draft cover specs never enter this public repository; only the three published proof covers are fixtures. No secrets, no network.
 - **Logs and observability:** requirement. The CLI prints one line with the written path, or the problem list on failure.
 
 Text provenance (ADR 0004): pieces draw no words of their own; every word on a cover comes from the spec (pill labels, stamp word, tag text, title and description). Whether those words come from the published article is checked by the `designer`/`editor` review the covers already have, not by code.
@@ -53,7 +53,7 @@ New `src/pieces/` (node contract, renderers, `pose`, pieces, EIP icon data), `sc
 
 ## Open questions
 
-For gate 1 (recommendation in `design.md` §9): hue names for the 21 backgrounds; the four extra illustration colours beyond the card's list; the three proof covers as public fixtures; the Mule flow as a piece.
+For gate 1 (recommendation in `design.md` §9): hue names for the 21 backgrounds; the four extra illustration colours beyond the card's list; the three proof covers as public fixtures; the Mule flow as a piece; the stamp's word turning with the stamp despite ADR 0003. The evidence for gate 1 is built with the recommended answers.
 
 ## Documentation
 
