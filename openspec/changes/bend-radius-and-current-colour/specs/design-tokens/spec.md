@@ -18,8 +18,8 @@ The source SHALL define the `map` tokens outline, shadow, lineWidth, casing, bad
 ## ADDED Requirements
 
 ### Requirement: Bend radius meaning
-`map.bendRadius` SHALL carry the `$description` "Radius of a bundle's centre line at a 45° or 90° bend, in map units". No piece reads it; a map engine draws its bends with it.
+`map.bendRadius` in `tokens/source.json` SHALL carry the `$description` "Radius of a bundle's centre line at a 45° or 90° bend, in map units (stackledger round-bends, AB#166)." The generated files hold only the value, as for every token. No piece reads it; a map engine draws its bends with it.
 
 #### Scenario: Described bend radius
-- **WHEN** the build runs on the repository's source
-- **THEN** `tokens.json` has `map.bendRadius` with that description
+- **WHEN** the test reads `tokens/source.json`
+- **THEN** `map.bendRadius` has `$value` 32, `$type` `dimension` and that `$description`, and the generated `tokens.json` holds `map.bendRadius` as the plain number 32

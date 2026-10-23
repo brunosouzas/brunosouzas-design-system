@@ -1,6 +1,8 @@
 # Tasks
 
-Requested by stackledger (`~/.hermes/spikes/design-system/stackledger-0.3.1-prompt.md`, AB#170). Gate 1 with the owner, then tests before code; Codex reviews, Claude implements. Test level: **unit** (vitest). Existing tests stay unchanged except the ones named below.
+Requested by stackledger (`~/.hermes/spikes/design-system/stackledger-0.3.1-prompt.md`, AB#170). Gate 1 with the owner, then tests before code; Codex reviews, Claude implements. Test levels: **unit** (vitest) for tokens and pieces; **integration** (vitest running the cover command) for task 3.1. Existing tests stay unchanged except the ones named below.
+
+Scenarios carried unchanged into MODIFIED requirements keep their existing tests, run again by the full check in 4.2: "Source without literals" (`test/brand/no-colour-literals.test.ts`, unit); "Hex passed as a colour" (`test/pieces/node.test.ts`, unit); "Missing and unknown parameters", "Out of range", "Sizes that would break the drawing", "Smallest and largest accepted sizes draw valid geometry", "Too many repeated parts" and "Road path with something else" (`test/pieces/catalogue.test.ts`, unit); "Pipe path with something else" (`test/pieces/metro.test.ts`, unit); "Default sun" and "The seven names" (`test/pieces/icons.test.ts`, unit).
 
 ## 1. Token (`design-tokens`)
 
@@ -9,7 +11,7 @@ Requested by stackledger (`~/.hermes/spikes/design-system/stackledger-0.3.1-prom
 ## 2. Current colour (`illustration-pieces`)
 
 - [ ] 2.0 Before any code: a one-off script on `origin/main` writes `test/fixtures/ui-icons-0.3.0.json` (design §2), committed alone. Test "Frozen 0.3.0 icon calls" in `test/pieces/frozen.test.ts`. Check: it passes on that commit.
-- [ ] 2.1 Tests first in `test/pieces/icons.test.ts`: "Unknown icon or a hex colour" gains `currentcolor`, `inherit` and ` currentColor`; new "Current colour" and "Current colour on every icon" (`toSvg` and `toReact`). In `test/pieces/catalogue.test.ts` (or where "Hex passed as a colour" lives): new "Current colour elsewhere". Then the `currentColor` option of the `color` kind in `src/pieces/params.ts` and its use in `src/pieces/ui-icons.ts` (design §2). Check: those tests pass and "Default sun", "The seven names", "Frozen 0.2.0 calls" and "Frozen 0.3.0 icon calls" pass unchanged.
+- [ ] 2.1 Tests first in `test/pieces/icons.test.ts`: "Unknown icon or a hex colour" gains `currentcolor`, `inherit` and ` currentColor`; new "Current colour" and "Current colour on every icon" (`toSvg` and `toReact`). In `test/pieces/node.test.ts`, next to "Hex passed as a colour": new "Current colour elsewhere". Then the `currentColor` option of the `color` kind in `src/pieces/params.ts` and its use in `src/pieces/ui-icons.ts` (design §2). Check: those tests pass and "Default sun", "The seven names", "Frozen 0.2.0 calls" and "Frozen 0.3.0 icon calls" pass unchanged.
 
 ## 3. Cover spec (`cover-cli`)
 
