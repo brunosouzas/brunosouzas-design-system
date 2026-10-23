@@ -98,7 +98,8 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       return;
     case "point":
       // Any finite number: a map position has no maximum (spec illustration-pieces, "Positions of any size").
-      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n))) {
+      // Both indices read directly: every() skips the holes of a sparse array.
+      if (!Array.isArray(value) || value.length !== 2 || ![value[0], value[1]].every((n) => typeof n === "number" && Number.isFinite(n))) {
         return report(`expected a point [x, y] of finite numbers, found ${describe(value)}`);
       }
       return;

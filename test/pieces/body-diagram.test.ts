@@ -113,6 +113,10 @@ describe("Diagram words", () => {
     expect(() => edgeLabel({ x: 0, y: 0, lines: new Array(2) })).toThrow(/^edgeLabel: lines\[0\]:/);
     expect(() => altFrame({ x: 0, y: 0, width: 200, height: 100, tag: "a", sections: new Array(1) })).toThrow(/^altFrame: sections\[0\]:/);
     expect(() => messageArrow({ from: [0, 0], to: [100, 0], controls: new Array(2) as never })).toThrow(/^messageArrow: controls\[0\]:/);
+    // Code review round 2: a hole inside a point.
+    expect(() => messageArrow({ from: [0, 0], to: [100, 100], controls: [new Array(2), [100, 50]] as never })).toThrow(/^messageArrow: controls\[0\]: expected a point/);
+    expect(() => messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], new Array(2)] as never })).toThrow(/^messageArrow: controls\[1\]: expected a point/);
+    expect(() => messageArrow({ from: new Array(2) as never, to: [100, 100] })).toThrow(/^messageArrow: from: expected a point/);
   });
 
   test("Smaller text", () => {
