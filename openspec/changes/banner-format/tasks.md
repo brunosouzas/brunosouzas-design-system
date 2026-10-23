@@ -1,6 +1,6 @@
 # Tasks
 
-At gate 1 the owner sees this spec and the spike sheet (`~/.hermes/cache/scratch/ab156/contact-sheet.png`, outside the repository). Implementation starts after the owner's ok. Codex reviews and Claude implements.
+At gate 1 the owner sees this spec and the spike sheet (`~/.hermes/spikes/design-system/banner-format/contact-sheet.png`, outside the repository). Implementation starts after the owner's ok. Codex reviews and Claude implements.
 
 Test levels: **unit** (vitest, pure functions), **integration** (vitest, the command with temporary folders), **local** (render and look; needs `rsvg-convert` and ffmpeg, not in CI). The existing tests stay unchanged, except those that list the token groups (twelve to thirteen) and the catalogue's boundary test, which also draws `rings` with `count` 1 and 1000.
 

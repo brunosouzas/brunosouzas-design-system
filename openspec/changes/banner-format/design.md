@@ -33,7 +33,7 @@ On a cover only the rings are clipped, because the square SVG viewport already t
 
 ## 5. Spike evidence
 
-`~/.hermes/cache/scratch/ab156/contact-sheet.png` (outside the repository): (1) the published banner; (2) spike A, the same idea from pieces only; (3) spike B, a stackledger metro banner (pipes, station markers at `inkScale` 1.6 and `r` 20, line badges at height 34, `ledgerMark` 120); (4) both at phone width, 375px, next to a cover at the same scale. Findings: no new piece is needed. Pill labels drop to about 6px at 375px. Metro badge text stays 12px whatever the `inkScale`. Both are out of scope.
+`~/.hermes/spikes/design-system/banner-format/contact-sheet.png` (outside the repository): (1) the published banner; (2) spike A, the same idea from pieces only; (3) spike B, a stackledger metro banner (pipes, station markers at `inkScale` 1.6 and `r` 20, line badges at height 34, `ledgerMark` 120); (4) both at phone width, 375px, next to a cover at the same scale. Findings: no new piece is needed. Pill labels drop to about 6px at 375px. Metro badge text stays 12px whatever the `inkScale`. Both are out of scope.
 
 ## 6. The `home-banner` fixture
 
