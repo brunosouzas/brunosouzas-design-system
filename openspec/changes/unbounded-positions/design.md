@@ -2,7 +2,7 @@
 
 ## 1. Where the limit lives
 
-`src/pieces/params.ts`: `pos()` (`min: -MAX_SIZE, max: MAX_SIZE`) and the `point` check (`Math.abs(n) <= MAX_SIZE`). `pos()` drops its bounds and `point` keeps only `Number.isFinite`. `rings` gets a local bounded position (`{ kind: "number", required: true, min: -MAX_SIZE, max: MAX_SIZE }`) for `cx` and `cy`. `size()`, `count()` and `MAX_SIZE` stay as they are.
+`src/pieces/params.ts`: `pos()` (`min: -MAX_SIZE, max: MAX_SIZE`) and the `point` check (`Math.abs(n) <= MAX_SIZE`). `pos()` drops its bounds and `point` keeps only `Number.isFinite`. `size()`, `count()` and `MAX_SIZE` stay as they are.
 
 The point's message becomes "expected a point [x, y] of finite numbers".
 
@@ -19,6 +19,6 @@ Without a bound, a finite position can still produce a non-finite drawing. The d
 
 `r2` (`src/pieces/node.ts`) rounds to two decimals below 1e12 and writes larger values as they are. `toSvg` writes numbers with `String`, which uses an exponent only from 1e21. stackledger's coordinates stop below 6e17, so they are written in full. No change.
 
-## 4. Why `rings` keeps its bound
+## 4. The rings centre in a cover spec
 
-The request covers every `pos()`. `rings` is the one exception, because its centre sets how many circles a banner draws (AB#156: one circle per 28 units out to the farthest corner). Without a bound, `cx` 1e15 would ask for about 3.6e13 circles. stackledger does not use `rings`. If the owner prefers the request's exact wording, the alternative is to bound the computed count instead (AB#156) and free the centre here.
+The `rings` piece follows the request: its centre takes any finite number. A cover spec keeps `rings.cx` and `rings.cy` within ±10000 in `validateCoverSpec`. That keeps 0.1.0's behaviour for covers and bounds the ring count of a banner (AB#156: one circle per 28 units out to the farthest corner, at most 548). An overflow while drawing a valid spec is caught in `validateCoverSpec`, which draws each valid entry once, and reported at `pieces[<i>]`.

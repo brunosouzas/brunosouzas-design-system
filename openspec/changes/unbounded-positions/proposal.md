@@ -7,7 +7,8 @@ stackledger cannot adopt 0.1.0 (AB#164, brunosouzas/stackledger#29). Pieces reje
 ## What Changes
 
 - **Positions of any size.** Every position parameter built with `pos()` and every `point` parameter accepts any finite number. `NaN`, `Infinity` and non-numbers are still rejected and named. That covers all 34 `pos()` uses in the cover and metro pieces and the `point` parameters of `arcArrow`, `priceTag`, `stationMarker` and `messageArrow`.
-- **Exception: `rings`.** The centre (`cx`, `cy`) keeps ±10000. The rings are a frame's background, not a map position, and the banner format (AB#156) computes its ring count from the centre.
+- **Cover specs keep their rings bound.** The `rings` piece is free like the others, but a cover spec still keeps `rings.cx` and `rings.cy` within ±10000, as in 0.1.0. The banner format (AB#156) computes its ring count from that centre.
+- **Overflow in a cover spec.** It is reported like any spec problem, at the entry's path, and nothing is written.
 - **Sizes unchanged.** `size()` (widths, heights, radii, scales) keeps its 10000 limit.
 - **Overflow is an error.** A piece that would draw a number that is not finite throws a `RangeError` and draws nothing. For example, the distance between two points at opposite ends of the number range becomes `Infinity`, and `Infinity` must never reach an SVG.
 - **No drawing change.** Every measure, token and drawing stays as in 0.1.0: a piece within ±10000 gives the same tree as before.
@@ -17,9 +18,8 @@ stackledger cannot adopt 0.1.0 (AB#164, brunosouzas/stackledger#29). Pieces reje
 
 ### Modified Capabilities
 
-- `illustration-pieces`: the parameter limits (positions and points unbounded, rings centre bounded, sizes bounded) and the overflow check.
-
-`cover-cli` takes the same schemas, so a cover spec accepts positions of any size too. Its requirements do not mention the limit.
+- `illustration-pieces`: the parameter limits (positions and points unbounded, sizes bounded) and the overflow check.
+- `cover-cli`: the rings centre keeps ±10000 in a spec, piece positions follow the pieces, and an overflow becomes a spec problem.
 
 ## Out of scope
 
@@ -31,7 +31,7 @@ stackledger cannot adopt 0.1.0 (AB#164, brunosouzas/stackledger#29). Pieces reje
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. Non-finite positions are still rejected and named, and a drawing that overflows is a `RangeError`.
-- **Limits:** requirement. Positions and points have no bound beyond being finite. The `rings` centre stays within ±10000 and sizes within 10000.
+- **Limits:** requirement. Positions and points have no bound beyond being finite. Sizes stay within 10000, and a cover spec's rings centre within ±10000.
 - **Repetition and idempotency:** requirement. The existing requirement "Pure pieces" holds: the same parameters give the same tree.
 - **Concurrency:** n/a. Pure functions.
 - **Security:** requirement. Only finite numbers reach the SVG, and the overflow check keeps `Infinity` and `NaN` out of attributes and path data.

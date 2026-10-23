@@ -34,26 +34,26 @@ Each piece SHALL check its parameters before drawing and throw a `RangeError` na
 ## ADDED Requirements
 
 ### Requirement: Positions of any size
-Every position parameter and every point (`[x, y]`) parameter SHALL accept any finite number, with no bound, except the `rings` centre (`cx`, `cy`), which stays within ±10000. A position or point holding `NaN`, `Infinity`, `-Infinity` or a non-number is still a `RangeError` naming the parameter. Pieces draw a far position exactly as a near one, moved by the same amount.
+Every position parameter and every point (`[x, y]`) parameter of every piece SHALL accept any finite number, with no bound. A position or point holding `NaN`, `Infinity`, `-Infinity` or a non-number is still a `RangeError` naming the parameter. Pieces draw a far position exactly as a near one, moved by the same amount.
 
 #### Scenario: Far map position
 - **WHEN** `stationMarker`, `lineBadge`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` and `ledgerMark` are drawn at 6400000 on both axes, and again at -6400000
-- **THEN** each draws without error, and, taking the numbers of its tree in order (attributes, then those in path data and transforms), each one either equals its counterpart in the drawing at 0 or differs from it by exactly the shift (6400000 or -6400000), within 0.01
+- **THEN** each draws without error, and, taking the numbers of its tree in order (attributes, then those in path data and transforms), the absolute coordinates differ from the drawing at 0 by exactly the shift (6400000 or -6400000), within 0.01, and every other number is equal. Absolute coordinates are the attributes `x`, `y`, `cx`, `cy`, `x1`, `y1`, `x2`, `y2` outside a group with a `transform`, the `translate` of such a group, and in path data the points of `M`, `L`, `C`, `Q` and the end point of `A` (not its radii or flags)
 
 #### Scenario: Far interchange and arrow
 - **WHEN** `stationMarker` gets `cx` 6400000, `cy` 6400000, `to` [6400000, 6400640], and `messageArrow` gets `from` [6399900, 6400000] and `to` [6400100, 6400000]
-- **THEN** both draw, and against the drawing at `cx` 0, `cy` 0, `to` [0, 640] (and `from` [-100, 0], `to` [100, 0]) each number in order either is equal or differs by exactly 6400000, within 0.01
+- **THEN** both draw, and against the drawing at `cx` 0, `cy` 0, `to` [0, 640] (and `from` [-100, 0], `to` [100, 0]) the absolute coordinates (as in "Far map position") differ by exactly 6400000, within 0.01, and every other number is equal
 
 #### Scenario: Not finite
 - **WHEN** `stationMarker` gets `cx: NaN`, `lineBadge` gets `y: Infinity`, `arcArrow` gets `from: [-Infinity, 0]`, `nodeBlock` gets `x: "6400000"`, or `messageArrow` gets `from: [null, 0]`
 - **THEN** each call throws a `RangeError` naming `cx`, `y`, `from`, `x` or `from`
 
-#### Scenario: Rings centre stays bounded
-- **WHEN** `rings` gets `cx: 10001`, or a cover spec has `rings.cy: -10001`
-- **THEN** the call throws a `RangeError` naming `cx`, and the cover command reports `rings.cy`
+#### Scenario: Far rings centre
+- **WHEN** `rings` gets `cx` 6400000 and `cy` -6400000
+- **THEN** it draws its 14 circles centred there
 
 ### Requirement: Drawing overflow
-A piece SHALL throw a `RangeError` naming the piece and "the drawing overflows" when a number it computes and draws (an attribute, or a number it writes into path data or a transform) is not finite, for example after dividing by the distance between two points at opposite ends of the number range. It draws nothing then. Path data passed in by the caller (`road.d`, `pipe.d`) keeps its own check. A drawing within the limits never triggers this check.
+A piece SHALL throw a `RangeError` naming the piece and "the drawing overflows" when a number it computes and draws (an attribute, or a number it writes into path data or a transform) is not finite, for example after dividing by the distance between two points at opposite ends of the number range. It draws nothing then. Path data passed in by the caller (`road.d`, `pipe.d`) keeps its own check. Parameters whose positions and points lie within ±1e15 never trigger it.
 
 #### Scenario: Distance overflows
 - **WHEN** `messageArrow` gets `from` [-1.7e308, 0], `to` [1.7e308, 0] and `curve: "straight"`, or `stationMarker` gets `cx` -1.7e308, `cy` 0 and `to` [1.7e308, 0]
