@@ -8,7 +8,7 @@
 // What can go wrong: a bad invocation reports its first problem with the
 // usage; an invalid spec reports every problem by JSON path. In both cases the
 // command exits 1 and writes nothing. An existing output file is replaced.
-import { existsSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, renameSync, rmSync, statSync, writeSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -107,8 +107,13 @@ export const runCover = (args: string[], io: CoverIo): number => {
   const temporary = `${target}.${randomUUID()}.tmp`;
   let created = false;
   try {
-    writeFileSync(temporary, result.svg, { flag: "wx" });
-    created = true;
+    const fd = openSync(temporary, "wx");
+    created = true; // ours from here on: remove it on any later failure
+    try {
+      writeSync(fd, result.svg);
+    } finally {
+      closeSync(fd);
+    }
     renameSync(temporary, target);
   } catch (error) {
     if (created) rmSync(temporary, { force: true });

@@ -35,7 +35,7 @@ The command SHALL exit 1 with the problem and the usage line, writing nothing, w
 - **THEN** it prints that the output is a folder and exits 1
 
 ### Requirement: Safe write
-The command SHALL write the cover to a new temporary file with an unpredictable name, created exclusively in the output folder, and rename it over the target, so it never writes through an existing path or link. When the write fails it prints `cannot write <out>: <reason>`, exits 1, removes the temporary file and leaves an existing file at the target unchanged.
+The command SHALL write the cover to a new temporary file with an unpredictable name, created exclusively in the output folder, and rename it over the target, so it never writes through an existing path or link. When the write fails at any point after the temporary file is created, it prints `cannot write <out>: <reason>`, exits 1, removes that temporary file and leaves an existing file at the target unchanged.
 
 #### Scenario: Write fails
 - **WHEN** the output folder is read-only and already holds `cover.svg`

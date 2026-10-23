@@ -103,6 +103,32 @@ describe("Piece parameters checked", () => {
     expect(() => P.pill({ x: 1e307, y: 0, text: "a" })).toThrow(/^pill: x: expected a number at most 10000/);
   });
 
+  test("Smallest and largest accepted sizes draw valid geometry", () => {
+    const bad: string[] = [];
+    for (const name of P.PIECE_NAMES) {
+      for (const [key, spec] of Object.entries(P.PIECES[name].schema)) {
+        if (spec.kind !== "number" || spec.min === undefined || spec.min < 0 || spec.max === undefined) continue;
+        const smallest = spec.exclusiveMin ? spec.min + 0.01 : spec.min;
+        for (const value of [smallest, spec.max]) {
+          walk([...call(name, { ...REQUIRED_ONLY[name], [key]: value }).body], (node) => {
+            for (const [attr, v] of Object.entries(node.attrs)) {
+              if (typeof v === "number" && (!Number.isFinite(v) || (["width", "height", "r", "rx", "ry"].includes(attr) && v < 0))) bad.push(`${name}.${key}=${value}: ${attr}=${v}`);
+              if (typeof v === "string" && /NaN|Infinity/.test(v)) bad.push(`${name}.${key}=${value}: ${attr}`);
+            }
+          });
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  test("Too many repeated parts", () => {
+    expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
+    expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
+    expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
+    expect(() => P.arcArrow({ from: [10001, 0], c1: [0, 0], c2: [0, 0], to: [0, 0] })).toThrow(/^arcArrow: from: expected a point \[x, y\] of finite numbers within ±10000/);
+  });
+
   test("Road path with something else", () => {
     expect(() => P.road({ d: 'M0,0 L10,10" onload="x' })).toThrow(/^road: d: expected SVG path data/);
   });

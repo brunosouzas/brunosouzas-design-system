@@ -13,7 +13,7 @@ export type ParamSpec =
   | { kind: "enum"; required?: boolean; values: readonly string[] }
   | { kind: "boolean"; required?: boolean }
   | { kind: "point"; required?: boolean }
-  | { kind: "array"; required?: boolean; minItems?: number; of: ParamSpec }
+  | { kind: "array"; required?: boolean; minItems?: number; maxItems?: number; of: ParamSpec }
   | { kind: "object"; required?: boolean; fields: Schema };
 
 export type Schema = Readonly<Record<string, ParamSpec>>;
@@ -83,13 +83,14 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       if (typeof value !== "boolean") return report(`expected true or false, found ${describe(value)}`);
       return;
     case "point":
-      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n))) {
-        return report(`expected a point [x, y] of finite numbers, found ${describe(value)}`);
+      if (!Array.isArray(value) || value.length !== 2 || !value.every((n) => typeof n === "number" && Number.isFinite(n) && Math.abs(n) <= MAX_SIZE)) {
+        return report(`expected a point [x, y] of finite numbers within ±${MAX_SIZE}, found ${describe(value)}`);
       }
       return;
     case "array":
       if (!Array.isArray(value)) return report(`expected an array, found ${describe(value)}`);
       if (spec.minItems !== undefined && value.length < spec.minItems) return report(`expected at least ${spec.minItems} item(s)`);
+      if (value.length > (spec.maxItems ?? MAX_ITEMS)) return report(`expected at most ${spec.maxItems ?? MAX_ITEMS} item(s)`);
       value.forEach((item, index) => checkValue(spec.of, item, `${path}[${index}]`, out));
       return;
     case "object":
@@ -126,6 +127,10 @@ export const assertParams = (piece: string, schema: Schema, params: Record<strin
 export const num = (extra: Omit<Extract<ParamSpec, { kind: "number" }>, "kind"> = {}): ParamSpec => ({ kind: "number", ...extra });
 /** Largest size or coordinate magnitude a piece accepts, far above any banner. */
 export const MAX_SIZE = 10000;
+/** Most items in any list parameter (rows, lines, nodes, tiles). */
+export const MAX_ITEMS = 50;
+/** A count of repeated parts (units, steps, teeth): an integer from `min` to `max`. */
+export const count = (min: number, max: number): ParamSpec => ({ kind: "number", integer: true, min, max });
 
 /** A size: greater than 0 (or at least `min`, where fixed insets need room), at most MAX_SIZE. */
 export const size = (required = false, min?: number): ParamSpec =>

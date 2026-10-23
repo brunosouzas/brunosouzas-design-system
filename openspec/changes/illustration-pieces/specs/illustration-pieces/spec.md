@@ -49,11 +49,15 @@ A shadowed shape SHALL be drawn twice: first a copy filled with `color.ink` and 
 - **THEN** the shadow's transform is `translate(8 8) rotate(30)`
 
 ### Requirement: SVG renderer
-`toSvg(node)` SHALL write the tree as SVG text: two-space indent per level, attributes in insertion order, numbers through `String`, `&`, `<`, `>` and `"` escaped in text and attribute values, LF line ends. The same tree gives the same string.
+`toSvg(node)` SHALL write the tree as SVG text: two-space indent per level (a node holding any text is written inline, so no whitespace is added to its text), attributes in insertion order, numbers through `String`, `&`, `<`, `>` and `"` escaped in text and attribute values, LF line ends. The same tree gives the same string.
 
 #### Scenario: Escaping
 - **WHEN** a `text` node holds `a < b & "c"`
 - **THEN** the output holds `a &lt; b &amp; &quot;c&quot;`
+
+#### Scenario: Mixed text content
+- **WHEN** a `text` node holds `a`, a `title` node and `b`, inside an `svg`
+- **THEN** `toSvg` writes `<text>a<title>tooltip</title>b</text>` on one line, and the React path matches it
 
 #### Scenario: Deterministic text
 - **WHEN** the same cover tree is rendered twice
@@ -97,7 +101,7 @@ A scene SHALL be able to recompute a piece and its pose for every frame from fra
 
 #### Scenario: Hop over twenty frames
 - **WHEN** a test poses a robot with `hop = 28·sin(π·f/12)` for frames 0 to 19 and renders each frame both ways
-- **THEN** the normal forms match at every frame and the hop at frame 6 is 28
+- **THEN** the normal forms match at every frame, each transform carries `translate(400 300−hop)`, and at frame 6 it is `translate(400 272)`
 
 ### Requirement: Piece catalogue
 The library SHALL export these pieces, with the anchors, parameters and defaults of `design.md` §4: pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon.
@@ -111,7 +115,7 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 - **THEN** it writes one SVG with every piece once, labelled with its name in the mono font, and prints `wrote <file>`
 
 ### Requirement: Piece parameters checked
-Each piece SHALL check its parameters against its schema before drawing and throw a `RangeError` naming the first problem: a missing required parameter, an unknown one, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a colour token path. Sizes and coordinates lie within ±10000; a size leaves room for the piece's fixed insets (minimums in `design.md` §4). `road.d` accepts only path characters.
+Each piece SHALL check its parameters against its schema before drawing and throw a `RangeError` naming the first problem: a missing required parameter, an unknown one, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a colour token path. Sizes, coordinates and points lie within ±10000, counts and lists have the limits of `design.md` §4, and a size leaves room for the piece's fixed insets. `road.d` accepts only path characters.
 
 #### Scenario: Missing and unknown parameters
 - **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
@@ -123,7 +127,15 @@ Each piece SHALL check its parameters against its schema before drawing and thro
 
 #### Scenario: Sizes that would break the drawing
 - **WHEN** `stamp` gets `r: 1`, `browserWindow` gets `width: 20`, or `folder` gets `scale: 1e307`
-- **THEN** each call throws a `RangeError` naming `r`, `width` or `scale`, and no drawing has a negative or infinite dimension
+- **THEN** each call throws a `RangeError` naming `r`, `width` or `scale`
+
+#### Scenario: Smallest and largest accepted sizes draw valid geometry
+- **WHEN** each piece is drawn with each bounded size parameter at its smallest and at its largest accepted value
+- **THEN** no drawn width, height or radius is negative and no value is infinite or NaN
+
+#### Scenario: Too many repeated parts
+- **WHEN** `steps` gets `count: 4294967296`, `gear` gets `teeth: 65`, `rail` gets 51 nodes, or `arcArrow` gets `from: [10001, 0]`
+- **THEN** each call throws a `RangeError` naming `count`, `teeth`, `nodes` or `from` before drawing
 
 #### Scenario: Road path with something else
 - **WHEN** `road` gets `d: "M0,0 L10,10\" onload=\"x"`

@@ -16,6 +16,10 @@ export const toSvg = (node: SvgNode | string, depth = 0): string => {
   const pad = "  ".repeat(depth);
   const open = `${pad}<${node.tag}${attributes(node)}`;
   if (node.children.length === 0) return `${open}/>`;
+  // Text content, alone or mixed with elements, is written inline: added whitespace would change it.
+  if (node.children.some((child) => typeof child === "string")) {
+    return `${open}>${node.children.map((child) => toSvg(child)).join("")}</${node.tag}>`;
+  }
   if (node.children.every((child) => typeof child === "string")) {
     return `${open}>${node.children.map((child) => toSvg(child)).join("")}</${node.tag}>`;
   }

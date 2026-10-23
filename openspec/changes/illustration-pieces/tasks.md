@@ -12,13 +12,13 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the CLI
 ## 2. Node contract and renderers (`illustration-pieces`)
 
 - [x] 2.1 `src/pieces/node.ts`: `SvgNode`, `Drawn`, `el`, `g`, `shadowed`, colour-path and number guards. Unit `test/pieces/node.test.ts`: "Shapes and words apart", "Non-finite number", "Hex passed as a colour", "Default shadow", "Shadow of a turned shape".
-- [x] 2.2 `src/pieces/render.ts`: `toSvg`; `src/pieces/react.ts`: `toReact`. Unit `test/pieces/render.test.ts`: "Escaping", "Deterministic text", "Same drawing through React", "Unknown hyphenated attribute" (normal form parser in the test).
+- [x] 2.2 `src/pieces/render.ts`: `toSvg`; `src/pieces/react.ts`: `toReact`. Unit `test/pieces/render.test.ts`: "Escaping", "Mixed text content", "Deterministic text", "Same drawing through React", "Unknown hyphenated attribute" (normal form parser in the test).
 - [x] 2.3 `src/pieces/pose.ts`. Unit `test/pieces/pose.test.ts`: "Squash keeps the base", "Identity", "Impossible values", "Non-finite values", "Hop over twenty frames".
 - [x] 2.4 Extend `test/brand/no-colour-literals.test.ts` to `src/pieces/` and add an import scan. Unit: "Source without literals", "No file access in piece modules".
 
 ## 3. Pieces and EIP icons (`illustration-pieces`)
 
-- [x] 3.1 Port the prototype's pieces and draw the new ones (design §4) in `src/pieces/`, each with its parameter schema (used by the CLI) and defaults. Unit `test/pieces/catalogue.test.ts`: "Every piece draws with its defaults", "Same parameters, same tree", "Stamp word", "Empty label", "Missing and unknown parameters", "Out of range", "Sizes that would break the drawing", "Road path with something else".
+- [x] 3.1 Port the prototype's pieces and draw the new ones (design §4) in `src/pieces/`, each with its parameter schema (used by the CLI) and defaults. Unit `test/pieces/catalogue.test.ts`: "Every piece draws with its defaults", "Same parameters, same tree", "Stamp word", "Empty label", "Missing and unknown parameters", "Out of range", "Sizes that would break the drawing", "Smallest and largest accepted sizes draw valid geometry", "Too many repeated parts", "Road path with something else".
 - [x] 3.2 `src/pieces/eip-icons.ts` imported once from the 26 published icons with token colours and the CC BY 4.0 credit; `eipIcon`. Unit `test/pieces/eip-icons.test.ts`: "The 26 names", "Icon colours", "Unknown icon".
 - [x] 3.3 `scripts/pieces-sheet.ts` and `npm run pieces:sheet`. Integration `test/scripts/pieces-sheet.test.ts`: "Catalogue sheet" (26 labels, every piece's name).
 
@@ -30,10 +30,10 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the CLI
 
 ## 5. After gate 1: review and documentation
 
-- [ ] 5.1 Run `npm run typecheck && npm run tokens:check && npm test` and `openspec validate illustration-pieces --strict`; Codex code review, findings handled per the engineering playbook.
-- [ ] 5.2 README: pieces, `npm run cover` and the spec format, `npm run pieces:sheet`, the EIP icon credit, status. Check: every documented command runs.
-- [ ] 5.3 `docs/roadmap.md`: mark this change delivered. Check: matches the brain roadmap.
+- [x] 5.1 Run `npm run typecheck && npm run tokens:check && npm test` and `openspec validate illustration-pieces --strict`; Codex code review, findings handled per the engineering playbook.
+- [x] 5.2 README: pieces, `npm run cover` and the spec format, `npm run pieces:sheet`, the EIP icon credit, status. Check: every documented command runs.
+- [x] 5.3 `docs/roadmap.md`: mark this change delivered. Check: matches the brain roadmap.
 
 ## 6. Archive
 
-- [ ] 6.1 `openspec archive illustration-pieces`; `openspec validate --specs --strict` exits 0.
+- [x] 6.1 `openspec archive illustration-pieces`; `openspec validate --specs --strict` exits 0.

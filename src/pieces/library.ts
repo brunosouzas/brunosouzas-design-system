@@ -9,7 +9,7 @@
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { EIP_ICONS, EIP_ICON_NAMES } from "./eip-icons.ts";
 import { drawn, el, g, r2, shadowed, type SvgNode } from "./node.ts";
-import { col, colour, label, PATH_DATA, pos, size, type Schema } from "./params.ts";
+import { col, colour, count, label, PATH_DATA, pos, size, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
 const ink = tokens.color.ink;
@@ -221,7 +221,7 @@ export type BookParams = { x: number; y: number; width?: number; height?: number
 /** A closed book seen from the front: back page, front cover, spine and page edges. */
 export const book = definePiece<BookParams>(
   "book",
-  { x: pos(), y: pos(), width: size(), height: size() },
+  { x: pos(), y: pos(), width: size(false, 30), height: size(false, 30) },
   ({ x, y, width: w = 120, height: h = 200 }) =>
     drawn([
       el("rect", { x: x + 18, y: y + 14, width: w - 2, height: h, rx: 8, fill: ink, stroke: "none" }),
@@ -415,7 +415,7 @@ export type MagnifierParams = { cx: number; cy: number; r?: number; color?: stri
 /** Magnifier: lens centred on (cx, cy), handle to the bottom right. */
 export const magnifier = definePiece<MagnifierParams>(
   "magnifier",
-  { cx: pos(), cy: pos(), r: size(), color: col() },
+  { cx: pos(), cy: pos(), r: size(false, 12), color: col() },
   ({ cx, cy, r = 50, color = "illustration.accent" }) => {
     const c = colour(color, "color");
     const hx = r2(cx + r * 0.88);
@@ -434,7 +434,7 @@ export type ServerStackParams = { x: number; y: number; width?: number; units?: 
 /** Stack of server units; the `failing` unit (0-based) shows a red light. */
 export const serverStack = definePiece<ServerStackParams>(
   "serverStack",
-  { x: pos(), y: pos(), width: size(), units: { kind: "number", min: 1, integer: true }, fill: col(), failing: { kind: "number", min: 0, integer: true } },
+  { x: pos(), y: pos(), width: size(), units: count(1, 20), fill: col(), failing: count(0, 19) },
   ({ x, y, width: w = 150, units = 3, fill = "color.backend", failing }) => {
     const uh = 40;
     const gap = 10;
@@ -462,7 +462,7 @@ export type GearParams = { cx: number; cy: number; r?: number; teeth?: number; f
 /** Gear with square teeth and a white hub, as on the maven-release cover. */
 export const gear = definePiece<GearParams>(
   "gear",
-  { cx: pos(), cy: pos(), r: size(), teeth: { kind: "number", min: 4, integer: true }, fill: col() },
+  { cx: pos(), cy: pos(), r: size(), teeth: count(4, 64), fill: col() },
   ({ cx, cy, r = 84, teeth = 12, fill = "color.transitional" }) => {
     const root = r * 0.78;
     const points: string[] = [];
@@ -490,7 +490,7 @@ export type StepsParams = { x: number; y: number; count?: number; width?: number
 /** Steps climbing to the right from the bottom-left corner (x, y), as on the obsidian-to-site guide cover. */
 export const steps = definePiece<StepsParams>(
   "steps",
-  { x: pos(), y: pos(), count: { kind: "number", min: 1, integer: true }, width: size(), rise: size(), fill: col() },
+  { x: pos(), y: pos(), count: count(1, 20), width: size(), rise: size(), fill: col() },
   ({ x, y, count = 4, width: w = 145, rise = 40, fill = "color.caller" }) => {
     const blocks = Array.from({ length: count }, (_, i) => el("rect", { x: x + i * w, y: y - rise * (i + 1), width: w, height: rise * (i + 1), rx: 10, fill: colour(fill, "fill") }));
     return drawn([...blocks.map((b) => ({ ...b, attrs: { ...b.attrs, fill: ink, transform: `translate(${tokens.shadow.block} ${tokens.shadow.block})` } })), ...blocks]);

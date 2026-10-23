@@ -45,9 +45,12 @@ describe("Frame by frame", () => {
     for (let frame = 0; frame < 20; frame++) {
       const hop = 28 * Math.sin((Math.PI * frame) / 12);
       hops.push(hop);
-      const tree = pose(body(), { x: 400, y: 300, hop: hop === 0 ? 0 : hop, tilt: frame % 5 });
+      const tilt = frame % 5;
+      const tree = pose(body(), { x: 400, y: 300, hop, tilt });
+      if (hop !== 0 || tilt !== 0) expect(tree.attrs.transform).toBe(`translate(400 ${300 - hop}) rotate(${tilt}) scale(1 1) translate(-400 -300)`);
       expect(normalForm(renderToStaticMarkup(toReact(tree)))).toEqual(normalForm(toSvg(tree)));
     }
     expect(hops[6]).toBe(28);
+    expect(pose(body(), { x: 400, y: 300, hop: hops[6] }).attrs.transform).toBe("translate(400 272) rotate(0) scale(1 1) translate(-400 -300)");
   });
 });

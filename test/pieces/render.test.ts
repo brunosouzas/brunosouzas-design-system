@@ -20,6 +20,13 @@ describe("SVG renderer", () => {
     );
   });
 
+  test("Mixed text content", () => {
+    // Inside an svg, as in every real drawing (outside one, React 19 treats <title> as the document title).
+    const tree = el("svg", {}, el("text", {}, "a", el("title", {}, "tooltip"), "b"));
+    expect(toSvg(tree)).toBe("<svg>\n  <text>a<title>tooltip</title>b</text>\n</svg>");
+    expect(normalForm(renderToStaticMarkup(toReact(tree)))).toEqual(normalForm(toSvg(tree)));
+  });
+
   test("Deterministic text", () => {
     const spec = fixture("integration-patterns");
     expect(toSvg(coverTree(spec))).toBe(toSvg(coverTree(spec)));
