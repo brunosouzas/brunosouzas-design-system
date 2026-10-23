@@ -14,8 +14,10 @@
 #
 # Run (in the publish job, from the checkout of the tagged commit):
 #   scripts/release-publish.sh <tarball> <integrity-file>
-# Environment: GITHUB_REF_NAME (the tag, v<version>), GH_TOKEN and GH_REPO for gh, NODE_AUTH_TOKEN
-# only for the very first version (docs/release.md). npm, gh and node must be on PATH.
+# Environment: RELEASE_TAG (the tag, v<version>; GITHUB_REF_NAME when unset), GH_TOKEN and GH_REPO
+# for gh, NODE_AUTH_TOKEN only for the very first version (docs/release.md). RELEASE_COMMIT, when set
+# (a release from a push to main), is the commit the tag is created on, before npm publishing; when
+# unset (a pushed tag), the tag already exists. npm, gh and node must be on PATH.
 # Exit 0: published or already published, and the release exists. 1: stopped, reason on stderr.
 # 2: usage. The tarball is data only: npm publishes it with --ignore-scripts and nothing in it runs.
 set -euo pipefail
@@ -28,7 +30,7 @@ if [ "$#" -ne 2 ]; then
 fi
 tarball=$1
 integrity_file=$2
-tag=${GITHUB_REF_NAME:?GITHUB_REF_NAME must hold the release tag}
+tag=${RELEASE_TAG:-${GITHUB_REF_NAME:?RELEASE_TAG or GITHUB_REF_NAME must hold the release tag}}
 version=${tag#v}
 expected=$(tr -d '[:space:]' < "$integrity_file")
 if [ -z "$expected" ]; then
@@ -40,6 +42,49 @@ fail() {
   echo "release: $*" >&2
   exit 1
 }
+
+# Sets found_commit to the commit the tag names on GitHub, or to nothing when the tag does not exist.
+# An annotated tag is followed to its commit. Any other answer from GitHub stops the release. (It sets
+# a variable instead of printing, so fail stops the script: no command substitution swallows it.)
+found_commit=
+read_tag_commit() {
+  local answer status=0
+  found_commit=
+  answer=$(gh api "repos/$GH_REPO/git/ref/tags/$tag" --jq '.object.type + " " + .object.sha' 2>&1) || status=$?
+  if [ "$status" -ne 0 ]; then
+    printf '%s' "$answer" | grep -q 'HTTP 404' && return 0
+    fail "cannot read tag $tag on GitHub: $answer"
+  fi
+  if [ "${answer% *}" = tag ]; then
+    status=0
+    answer=$(gh api "repos/$GH_REPO/git/tags/${answer#* }" --jq '.object.sha' 2>&1) || status=$?
+    [ "$status" -eq 0 ] || fail "cannot read annotated tag $tag on GitHub: $answer"
+  else
+    answer=${answer#* }
+  fi
+  found_commit=$answer
+}
+
+# From main (RELEASE_COMMIT set), the tag does not exist when the check job ran, but the owner may push
+# it by hand meanwhile. So the tag is reserved first, atomically, on the released commit: GitHub
+# creates the ref, or answers that it exists. An existing tag must name the released commit, or
+# nothing is published. After this the tag is fixed, and the release is created with --verify-tag.
+reserve_tag() {
+  local answer status=0
+  answer=$(gh api -X POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$tag" -f "sha=$RELEASE_COMMIT" 2>&1) || status=$?
+  if [ "$status" -eq 0 ]; then
+    echo "tag $tag created on $RELEASE_COMMIT"
+    return 0
+  fi
+  printf '%s' "$answer" | grep -q 'HTTP 422' || fail "cannot create tag $tag on GitHub: $answer"
+  read_tag_commit
+  [ "$found_commit" = "$RELEASE_COMMIT" ] || fail "tag $tag names ${found_commit:-nothing}, not the released commit $RELEASE_COMMIT; nothing was published"
+  echo "tag $tag already names $RELEASE_COMMIT"
+}
+if [ -n "${RELEASE_COMMIT:-}" ]; then
+  : "${GH_REPO:?GH_REPO must name the repository}"
+  reserve_tag
+fi
 
 # 1. npm. stdout holds JSON both on success and on error (npm --json); stderr only the log.
 lookup_status=0

@@ -1,48 +1,52 @@
 # Releasing @brunosouzas/design-system
 
-A version reaches npm only one way: the owner pushes a tag `v<major>.<minor>.<patch>` on a commit already on `main`, and approves the publishing job. The workflow is [`.github/workflows/release.yml`](../.github/workflows/release.yml). This page says how to release, how the very first version is set up, and how to check what was published.
+A version reaches npm when a commit on `main` changes the `version` in `package.json` (the version pull request is merged) and the owner approves the publishing job; the workflow then creates the tag `v<major>.<minor>.<patch>` and the GitHub release. The owner can also push the tag by hand, as before (to retry, or to release a version whose run he rejected). The workflow is [`.github/workflows/release.yml`](../.github/workflows/release.yml). This page says how to release, how the very first version is set up, and how to check what was published.
 
 ## What the workflow does
 
-The same procedure as stackledger's, in two jobs, so the identity that can publish never exists while dependencies install or run their scripts.
+The workflow runs on every push to `main` and on every pushed tag `v*`, in three jobs, so the identity that can publish never exists while dependencies install or run their scripts.
 
-1. **`check`** has only read access to the repository. It runs [`scripts/check-release-tag.mjs`](../scripts/check-release-tag.mjs) first: the tag must be `v` plus the `version` in `package.json`, digits only (no `-beta`), on a commit that is on `origin/main`. Then `npm ci`, the type-check, the token freshness check, the build, the full test suite (which packs the built package, installs it into an empty project with no network and uses every entry point) and `npm audit --omit=dev` (the package has no runtime dependency; any finding stops the release). Then `npm pack --ignore-scripts` packs the files just built. The tarball and its integrity go to the next job as an artifact.
-2. **`publish`** runs in the GitHub environment `npm`, which waits for the owner's approval. It installs nothing and builds nothing. It checks out the tagged commit only to run [`scripts/release-publish.sh`](../scripts/release-publish.sh) on the downloaded files. The script asks npm whether the version exists:
+0. **`detect`** has only read access. [`scripts/release-detect.mjs`](../scripts/release-detect.mjs) decides whether the push releases anything:
+   - a push to `main` releases only when it moves `main` forward (a merge; never a forced push), changes the `version` in `package.json` compared with the commit before the push, and the tag `v<version>` does not exist yet. A README fix merged later, while the version still waits for approval, releases nothing;
+   - a pushed tag always goes on to `check`;
+   - anything else stops here, in seconds, and the run is green.
+1. **`check`** has only read access to the repository. It runs [`scripts/check-release-tag.mjs`](../scripts/check-release-tag.mjs) first: the tag must be `v` plus the `version` in `package.json`, digits only (no `-beta`), on a commit that is on `origin/main` (from `main`: the pushed commit, and if the tag already exists it must name that commit). Then `npm ci`, the type-check, the token freshness check, the build, the full test suite (which packs the built package, installs it into an empty project with no network and uses every entry point) and `npm audit --omit=dev` (the package has no runtime dependency; any finding stops the release). Then `npm pack --ignore-scripts` packs the files just built. The tarball and its integrity go to the next job as an artifact.
+2. **`publish`** runs in the GitHub environment `npm`, which waits for the owner's approval. It installs nothing and builds nothing. It checks out the released commit only to run [`scripts/release-publish.sh`](../scripts/release-publish.sh) on the downloaded files. The script asks npm whether the version exists:
    - absent: it publishes the tarball with `npm publish --provenance --access public --ignore-scripts`;
    - present with the same integrity and a provenance attestation: it skips publishing;
    - present with other bytes, or without provenance, or npm cannot answer: it stops with exit 1 and changes nothing.
 
-   Then it creates the GitHub release for the tag, or leaves an existing one.
+   From `main`, before asking npm, the script reserves the tag: it creates `v<version>` on the released commit through the GitHub API, which either creates it or answers that it exists. The owner may push the same tag by hand meanwhile; an existing tag must name the released commit, or the script stops and nothing is published. Then it creates the GitHub release on that tag (`--verify-tag`), or leaves an existing one. A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
 
 There is no SBOM: nothing ships but this package's own files.
 
-If a run fails after npm publishing (for example while creating the GitHub release), use "Re-run failed jobs". The script sees the same bytes on npm and only finishes the release.
+If a run fails part way (npm down after the tag was reserved, or the GitHub release failed after npm), use "Re-run failed jobs". The script finds its own tag on the same commit and the same bytes on npm, and only finishes what is missing.
 
 ## Releasing a version
 
-1. In a pull request, set the new version: `npm version 0.2.0 --no-git-tag-version` (it updates `package.json` and `package-lock.json`). Merge it.
-2. Tag the merge commit on `main` and push the tag:
+1. In a pull request, set the new version: `npm version 0.2.0 --no-git-tag-version` (it updates `package.json` and `package-lock.json`). The version may travel with the change it releases or in a pull request of its own; the diff shows the line `"version": "0.2.0"`, and that line is what releases.
+2. Merge it. The run of that merge in the Actions tab goes through `detect` and `check`, then the `publish` job waits for you: review it and approve. To not release it, reject the run; nothing is published and no tag is created.
+3. Check the result (see [Checking a release](#checking-a-release)): the version on npm with provenance, and the tag and GitHub release `v0.2.0`.
 
-   ```sh
-   git switch main && git pull --ff-only
-   git tag v0.2.0
-   git push origin v0.2.0
-   ```
+**By hand, or to retry.** Tag the commit on `main` and push the tag:
 
-3. Open the run in the Actions tab. When `check` has passed, the `publish` job waits for you: review it and approve.
-4. Check the result (see [Checking a release](#checking-a-release)).
+```sh
+git switch main && git pull --ff-only
+git tag v0.2.0
+git push origin v0.2.0
+```
 
-A tag that does not match the version, or a tag on a commit that is not on `main`, fails in the first step of `check`. Delete the tag (`git push origin :refs/tags/v0.2.0`), fix, and tag again.
+A tag that does not match the version, or a tag on a commit that is not on `main`, fails in the first step of `check`. Delete the tag (`git push origin :refs/tags/v0.2.0`), fix, and tag again. If a run fails after npm publishing, "Re-run failed jobs" finishes it.
 
 ## Who can release
 
-Three controls, so a pushed tag alone never publishes:
+Three controls, so neither a merge nor a pushed tag alone publishes:
 
-- **The tag check.** Only a commit on `main`, so only merged and reviewed code, is released.
+- **The tag check.** Only a commit on `main`, so only merged and reviewed code, is released, and only when its version is the tag's.
 - **The environment `npm`.** Its required reviewer is the owner, so every publishing run waits for his approval.
 - **The trusted publisher on npm** (after the first version). npm accepts a publication only from the workflow `release.yml` of `brunosouzas/brunosouzas-design-system`, running in the environment `npm`.
 
-The owner also adds a tag ruleset, so only he can create `v*` tags.
+The owner also adds a tag ruleset, so a `v*` tag cannot be moved or deleted except by him.
 
 ## Setting up the first version
 
@@ -65,7 +69,7 @@ npm lets a package trust a GitHub workflow only once the package exists. So vers
 In the repository: Settings → Environments → New environment, named `npm` ([GitHub docs](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)).
 
 - **Required reviewers:** the owner. Leave "Prevent self-review" off: the owner pushes the tag and approves his own run.
-- **Deployment branches and tags:** "Selected branches and tags", with the tag rule `v*`.
+- **Deployment branches and tags:** "Selected branches and tags", with the branch rule `main` and the tag rule `v*`.
 - **Environment secrets:** add `NPM_TOKEN` with the token from step 1. It is an environment secret, not a repository secret, so only the approved `publish` job can read it.
 
 ### 3. The tag ruleset
@@ -74,7 +78,7 @@ Settings → Rules → Rulesets → New ruleset → New tag ruleset ([GitHub doc
 
 - Name: `release tags`; enforcement: Active.
 - Target tags: include by pattern `v*`.
-- Rules: restrict creations, restrict updates, restrict deletions.
+- Rules: restrict updates, restrict deletions. Not "restrict creations": the `publish` job creates the tag with the workflow's own token, and the ruleset would refuse it. If the bypass list offers the GitHub Actions app, it may keep "restrict creations" with that app allowed instead.
 - Bypass list: Repository admin (the owner), always allowed.
 
 ### 4. Release 0.1.0
@@ -120,3 +124,14 @@ npm audit signatures
 `npm audit signatures` checks the registry signature of every installed package and the provenance attestation of those that have one; @brunosouzas/design-system must be counted under "verified attestation". Then delete the folder.
 
 **What this proves.** Provenance says the tarball on npm was built by `release.yml` in `brunosouzas/brunosouzas-design-system` from the tagged commit; it does not say the code is safe. The tarball on npm is the one the `check` job tested and audited: `publish` uploads those bytes and builds nothing.
+
+## Moving an existing repository to release on merge
+
+Before the first version that should release on merge (card 171), the owner changes two settings once:
+
+1. Settings → Environments → `npm` → Deployment branches and tags: add the branch rule `main` (keep `v*`). Without it the `publish` job of a push to `main` cannot enter the environment.
+2. Settings → Rules → Rulesets → `release tags`: untick "Restrict creations" (or add the GitHub Actions app to the bypass list, if it is offered). Without it the release is published on npm but the tag and the GitHub release fail; "Re-run failed jobs" after the fix finishes them.
+
+The trusted publisher on npm does not change: it names the workflow file `release.yml` and the environment `npm`, not the trigger.
+
+**Why not an app in the bypass list.** The workflow's own token is not an installed app, so the ruleset cannot list it. A GitHub App of the owner's (installed here, its token made in `publish` with `actions/create-github-app-token`) could be listed and keep "Restrict creations", but it adds a long-lived private key to the environment `npm` (today the release holds no secret at all), and a tag pushed with an app token starts the workflow again (a second run asking for approval). With the owner as the only person with write access, the tag check and the approval already stop a stray `v*` tag. Revisit this when the repository has other writers.
