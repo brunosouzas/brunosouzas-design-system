@@ -17,7 +17,17 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, isAbsolute } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-export const GROUPS = ["color", "outline", "shadow", "radius", "font", "motion"] as const;
+export const GROUPS = [
+  "color",
+  "outline",
+  "shadow",
+  "radius",
+  "font",
+  "motion",
+  "illustration",
+  "cover",
+  "coverBackground",
+] as const;
 export const TYPES = ["color", "dimension", "frames", "number", "opacity", "fontFamily", "fontWeight"] as const;
 export type TokenType = (typeof TYPES)[number];
 
@@ -60,7 +70,33 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "motion.focus.damping": "number",
   "motion.focus.stiffness": "number",
   "motion.focus.mass": "number",
+  "illustration.accent": "color",
+  "illustration.codePanel": "color",
+  "illustration.textBar": "color",
+  "illustration.healthyShade": "color",
+  "illustration.transitionalShade": "color",
+  "illustration.road": "color",
+  "illustration.tape": "color",
+  "illustration.iconLine": "color",
+  "cover.width": "dimension",
+  "cover.height": "dimension",
+  "cover.pillHeight": "dimension",
+  "cover.labelSize": "dimension",
+  "cover.ringStep": "dimension",
+  "cover.ringWidth": "dimension",
+  "cover.ringRadius": "dimension",
+  "cover.labelWeight": "fontWeight",
 };
+
+// Every entry of `coverBackground` is a pair: a background and its ring colour,
+// as measured from the published covers (design §2 of illustration-pieces).
+export const COVER_BACKGROUND_GROUP = "coverBackground";
+export const COVER_BACKGROUND_KEYS = ["fill", "ring"] as const;
+const COVER_BACKGROUND_TOKEN = /^coverBackground\.[^.]+\.(fill|ring)$/;
+
+/** The type a token must declare, or undefined when any supported type is accepted. */
+const requiredType = (path: string): TokenType | undefined =>
+  Object.hasOwn(REQUIRED, path) ? REQUIRED[path] : COVER_BACKGROUND_TOKEN.test(path) ? "color" : undefined;
 
 const NAME_PATTERN = /^[a-z][a-zA-Z0-9]*$/;
 const TOKEN_KEYS = ["$value", "$type", "$description"];
@@ -192,7 +228,7 @@ export const validateSource = (root: unknown, sourceLabel = "tokens/source.json"
       report(path, `unsupported type ${describe(type)} (supported: ${TYPES.join(", ")})`);
       return;
     }
-    const required = Object.hasOwn(REQUIRED, path) ? REQUIRED[path] : undefined;
+    const required = requiredType(path);
     if (required !== undefined && required !== type) {
       // One problem per token: a wrong declared type hides the value check.
       report(path, `expected type ${required}, found ${type}`);
@@ -234,6 +270,28 @@ export const validateSource = (root: unknown, sourceLabel = "tokens/source.json"
       continue;
     }
     validateGroup(name, group, 1);
+  }
+
+  // Cover backgrounds: at least one entry, each a group with exactly fill and ring.
+  if (!Object.hasOwn(root, COVER_BACKGROUND_GROUP)) {
+    report(COVER_BACKGROUND_GROUP, "missing required group (one entry per cover background, each with fill and ring)");
+  } else if (isPlainObject(root[COVER_BACKGROUND_GROUP])) {
+    for (const [name, entry] of Object.entries(root[COVER_BACKGROUND_GROUP] as Record<string, unknown>)) {
+      const entryPath = `${COVER_BACKGROUND_GROUP}.${name}`;
+      if (!NAME_PATTERN.test(name) || !isPlainObject(entry)) continue; // already reported
+      if (isToken(entry)) {
+        report(entryPath, "expected a group with fill and ring");
+        continue;
+      }
+      for (const key of COVER_BACKGROUND_KEYS) {
+        if (!Object.hasOwn(entry, key)) report(`${entryPath}.${key}`, "missing required token (type color)");
+      }
+      for (const key of Object.keys(entry)) {
+        if (!(COVER_BACKGROUND_KEYS as readonly string[]).includes(key)) {
+          report(`${entryPath}.${key}`, "unexpected token in a cover background (only fill and ring)");
+        }
+      }
+    }
   }
 
   for (const [path, type] of Object.entries(REQUIRED)) {

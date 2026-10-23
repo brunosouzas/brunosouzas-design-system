@@ -41,6 +41,9 @@ export const token = (value: Json, type: Json): Json => ({ $value: value, $type:
 export const validSource = (): Source => {
   const root: Source = {};
   for (const [path, type] of Object.entries(REQUIRED)) setPath(root, path, token(SAMPLE[type], type));
+  // The cover background rule needs one pair (design-tokens, "Cover background pairs").
+  setPath(root, "coverBackground.sample.fill", token(SAMPLE.color, "color"));
+  setPath(root, "coverBackground.sample.ring", token(SAMPLE.color, "color"));
   return root;
 };
 

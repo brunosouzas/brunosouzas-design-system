@@ -51,5 +51,48 @@
       "stiffness": { "$value": 120, "$type": "number" },
       "mass": { "$value": 1, "$type": "number" }
     }
+  },
+  "illustration": {
+    "accent": { "$value": "#1E6FEB", "$type": "color", "$description": "Block arrows and the magnifier." },
+    "codePanel": { "$value": "#14215A", "$type": "color", "$description": "Dark code and screen panels." },
+    "textBar": { "$value": "#C9D6F5", "$type": "color", "$description": "Text lines on sheets." },
+    "healthyShade": { "$value": "#2BB673", "$type": "color", "$description": "Darker green side (robot ears)." },
+    "transitionalShade": { "$value": "#E8B830", "$type": "color", "$description": "Darker yellow side (folder back)." },
+    "road": { "$value": "#5B6478", "$type": "color", "$description": "Road band." },
+    "tape": { "$value": "#FFE2C8", "$type": "color", "$description": "Parcel tape." },
+    "iconLine": { "$value": "#B9C3E0", "$type": "color", "$description": "Lines inside the EIP icons." }
+  },
+  "cover": {
+    "width": { "$value": 800, "$type": "dimension" },
+    "height": { "$value": 420, "$type": "dimension" },
+    "pillHeight": { "$value": 36, "$type": "dimension" },
+    "labelSize": { "$value": 19, "$type": "dimension" },
+    "labelWeight": { "$value": 800, "$type": "fontWeight", "$description": "Pill labels; Lato 800 falls back to the nearest installed weight." },
+    "ringStep": { "$value": 28, "$type": "dimension" },
+    "ringWidth": { "$value": 2, "$type": "dimension" },
+    "ringRadius": { "$value": 90, "$type": "dimension", "$description": "First ring radius; a cover spec may set its own." }
+  },
+  "coverBackground": {
+    "peach": { "fill": { "$value": "#F4D8BC", "$type": "color", "$description": "Measured from ai-writes-code." }, "ring": { "$value": "#EAC7A3", "$type": "color" } },
+    "navy": { "fill": { "$value": "#14215A", "$type": "color", "$description": "Measured from circuit-breaker." }, "ring": { "$value": "#1C2D74", "$type": "color" } },
+    "raspberry": { "fill": { "$value": "#C94F7C", "$type": "color", "$description": "Measured from eip-catalog-in-mulesoft." }, "ring": { "$value": "#BE4572", "$type": "color" } },
+    "lavender": { "fill": { "$value": "#B8A6F0", "$type": "color", "$description": "Measured from integration-patterns." }, "ring": { "$value": "#AC98EA", "$type": "color" } },
+    "plum": { "fill": { "$value": "#3D2B66", "$type": "color", "$description": "Measured from cloudhub-deploy." }, "ring": { "$value": "#483577", "$type": "color" } },
+    "cobalt": { "fill": { "$value": "#1E4FA0", "$type": "color", "$description": "Measured from delivery-path." }, "ring": { "$value": "#2758AE", "$type": "color" } },
+    "sky": { "fill": { "$value": "#BFE3F7", "$type": "color", "$description": "Measured from gitflow." }, "ring": { "$value": "#AAD5EC", "$type": "color" } },
+    "slate": { "fill": { "$value": "#2E3A59", "$type": "color", "$description": "Measured from maven-release." }, "ring": { "$value": "#38466A", "$type": "color" } },
+    "mustard": { "fill": { "$value": "#F2C14E", "$type": "color", "$description": "Measured from pipeline-templates." }, "ring": { "$value": "#E6B33E", "$type": "color" } },
+    "emerald": { "fill": { "$value": "#2F9E6E", "$type": "color", "$description": "Measured from obsidian-to-site-guide." }, "ring": { "$value": "#38AB79", "$type": "color" } },
+    "violet": { "fill": { "$value": "#5B3CC4", "$type": "color", "$description": "Measured from write-in-obsidian-publish-on-your-site." }, "ring": { "$value": "#6748CF", "$type": "color" } },
+    "wine": { "fill": { "$value": "#6B2340", "$type": "color", "$description": "Measured from dip." }, "ring": { "$value": "#7A2D4C", "$type": "color" } },
+    "cream": { "fill": { "$value": "#FFF1C9", "$type": "color", "$description": "Measured from isp." }, "ring": { "$value": "#F4E2AE", "$type": "color" } },
+    "forest": { "fill": { "$value": "#24604F", "$type": "color", "$description": "Measured from lsp." }, "ring": { "$value": "#2B6E5B", "$type": "color" } },
+    "olive": { "fill": { "$value": "#8A9A3B", "$type": "color", "$description": "Measured from ocp." }, "ring": { "$value": "#7E8E33", "$type": "color" } },
+    "salmon": { "fill": { "$value": "#FF9E7A", "$type": "color", "$description": "Measured from solid-intro." }, "ring": { "$value": "#F48D68", "$type": "color" } },
+    "deepTeal": { "fill": { "$value": "#0F6E6E", "$type": "color", "$description": "Measured from solid-path." }, "ring": { "$value": "#167A79", "$type": "color" } },
+    "lime": { "fill": { "$value": "#D4EC9C", "$type": "color", "$description": "Measured from srp." }, "ring": { "$value": "#C4E086", "$type": "color" } },
+    "blush": { "fill": { "$value": "#F6CFE0", "$type": "color", "$description": "Measured from spec-driven-development." }, "ring": { "$value": "#ECBAD0", "$type": "color" } },
+    "mint": { "fill": { "$value": "#CDE5D3", "$type": "color", "$description": "Measured from validate-ai-api-contract-change." }, "ring": { "$value": "#BCDAC4", "$type": "color" } },
+    "teal": { "fill": { "$value": "#1F8A8A", "$type": "color", "$description": "Measured from where-the-work-moves." }, "ring": { "$value": "#2A9A99", "$type": "color" } }
   }
 }

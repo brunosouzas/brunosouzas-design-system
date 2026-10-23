@@ -1,0 +1,107 @@
+{
+  "peach": {
+    "fill": "#F4D8BC",
+    "ring": "#EAC7A3",
+    "source": "ai-writes-code"
+  },
+  "navy": {
+    "fill": "#14215A",
+    "ring": "#1C2D74",
+    "source": "circuit-breaker"
+  },
+  "raspberry": {
+    "fill": "#C94F7C",
+    "ring": "#BE4572",
+    "source": "eip-catalog-in-mulesoft"
+  },
+  "lavender": {
+    "fill": "#B8A6F0",
+    "ring": "#AC98EA",
+    "source": "integration-patterns"
+  },
+  "plum": {
+    "fill": "#3D2B66",
+    "ring": "#483577",
+    "source": "cloudhub-deploy"
+  },
+  "cobalt": {
+    "fill": "#1E4FA0",
+    "ring": "#2758AE",
+    "source": "delivery-path"
+  },
+  "sky": {
+    "fill": "#BFE3F7",
+    "ring": "#AAD5EC",
+    "source": "gitflow"
+  },
+  "slate": {
+    "fill": "#2E3A59",
+    "ring": "#38466A",
+    "source": "maven-release"
+  },
+  "mustard": {
+    "fill": "#F2C14E",
+    "ring": "#E6B33E",
+    "source": "pipeline-templates"
+  },
+  "emerald": {
+    "fill": "#2F9E6E",
+    "ring": "#38AB79",
+    "source": "obsidian-to-site-guide"
+  },
+  "violet": {
+    "fill": "#5B3CC4",
+    "ring": "#6748CF",
+    "source": "write-in-obsidian-publish-on-your-site"
+  },
+  "wine": {
+    "fill": "#6B2340",
+    "ring": "#7A2D4C",
+    "source": "dip"
+  },
+  "cream": {
+    "fill": "#FFF1C9",
+    "ring": "#F4E2AE",
+    "source": "isp"
+  },
+  "forest": {
+    "fill": "#24604F",
+    "ring": "#2B6E5B",
+    "source": "lsp"
+  },
+  "olive": {
+    "fill": "#8A9A3B",
+    "ring": "#7E8E33",
+    "source": "ocp"
+  },
+  "salmon": {
+    "fill": "#FF9E7A",
+    "ring": "#F48D68",
+    "source": "solid-intro"
+  },
+  "deepTeal": {
+    "fill": "#0F6E6E",
+    "ring": "#167A79",
+    "source": "solid-path"
+  },
+  "lime": {
+    "fill": "#D4EC9C",
+    "ring": "#C4E086",
+    "source": "srp"
+  },
+  "blush": {
+    "fill": "#F6CFE0",
+    "ring": "#ECBAD0",
+    "source": "spec-driven-development"
+  },
+  "mint": {
+    "fill": "#CDE5D3",
+    "ring": "#BCDAC4",
+    "source": "validate-ai-api-contract-change"
+  },
+  "teal": {
+    "fill": "#1F8A8A",
+    "ring": "#2A9A99",
+    "source": "where-the-work-moves"
+  }
+}
