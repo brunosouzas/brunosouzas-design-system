@@ -45,7 +45,7 @@ const coloursOf = (fill: string | undefined, params: Ink): Colours => {
 
 /** Centred lines (bold) and an optional subtitle (11, regular), centred on (cx, cy). */
 const centred = (cx: number, cy: number, text: string[], subtitle: string | undefined, c: Colours, size_: number = M.labelSize): SvgNode[] => {
-  const step = r2(size_ * 1.25);
+  const step = size_ * 1.25;
   const block = (text.length - 1) * step + (subtitle === undefined ? 0 : 15);
   const first = cy + (4.5 * size_) / 13 - block / 2;
   return [

@@ -261,6 +261,9 @@ describe("Piece parameters checked", () => {
     expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
     expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
+    // Change body-diagram-pieces, task 3.2.
+    expect(() => call("altFrame", { x: 0, y: 0, width: 200, height: 100, tag: "a", sections: Array.from({ length: 11 }, (_, i) => ({ y: 1 + i, tag: "b" })) })).toThrow(/^altFrame: sections: expected at most 10 item\(s\)/);
+    expect(() => call("diagramBox", { x: 0, y: 0, width: 120, text: ["a", "b", "c", "d"] })).toThrow(/^diagramBox: text: expected at most 3 item\(s\)/);
   });
 
   test("Road path with something else", () => {

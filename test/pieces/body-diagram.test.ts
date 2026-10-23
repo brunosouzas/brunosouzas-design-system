@@ -102,6 +102,19 @@ describe("Diagram words", () => {
     ]);
   });
 
+  // Code review round 1: the line step is not rounded before the baselines.
+  test("Fractional text size", () => {
+    expect(diagramBox({ x: 0, y: 0, width: 120, text: ["a", "b", "c"], textSize: 6.02 }).text[0].attrs.y).toBe(17.56);
+  });
+
+  // Code review round 1: a hole in a sparse array is a RangeError naming its index, not a TypeError.
+  test("Sparse arrays", () => {
+    expect(() => diagramBox({ x: 0, y: 0, width: 120, text: new Array(1) })).toThrow(/^diagramBox: text\[0\]: expected a string/);
+    expect(() => edgeLabel({ x: 0, y: 0, lines: new Array(2) })).toThrow(/^edgeLabel: lines\[0\]:/);
+    expect(() => altFrame({ x: 0, y: 0, width: 200, height: 100, tag: "a", sections: new Array(1) })).toThrow(/^altFrame: sections\[0\]:/);
+    expect(() => messageArrow({ from: [0, 0], to: [100, 0], controls: new Array(2) as never })).toThrow(/^messageArrow: controls\[0\]:/);
+  });
+
   test("Smaller text", () => {
     const { body, text } = diagramBox({ x: 0, y: 0, width: 160, height: 26, text: ["a note"], textSize: 11, radius: 6, fill: "color.transitional" });
     expect([...at(text[0]), text[0].attrs["font-size"]]).toEqual([80, 16.81, 11]);
