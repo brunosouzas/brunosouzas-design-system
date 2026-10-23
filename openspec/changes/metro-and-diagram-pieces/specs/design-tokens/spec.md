@@ -1,3 +1,51 @@
+## MODIFIED Requirements
+
+### Requirement: Token source
+The repository SHALL keep every token in one source file, `tokens/source.json`, whose root is a JSON object. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`, `illustration`, `cover`, `coverBackground`, `surface`, `map`, `site`; a group may nest one more level (for example `motion.pop.damping`).
+
+#### Scenario: Source file missing or not an object
+- **WHEN** `tokens/source.json` does not exist, or its root is `[]` or `null`
+- **THEN** the build fails, saying which, and writes no file
+
+#### Scenario: Source with an unknown group
+- **WHEN** the source has a top-level group outside the twelve named groups, such as `colour`
+- **THEN** the build fails, names the group, and writes no file
+
+#### Scenario: Token without a type
+- **WHEN** a token has a value but no type, or a type outside the supported types
+- **THEN** the build fails, names the token's full path and the reason, and writes no file
+
+#### Scenario: New groups accepted
+- **WHEN** the source has `illustration.accent`, `cover.width`, `coverBackground.blush.fill`, `surface.dark.shadow`, `map.lineWidth` and `site.light.primary` with valid types and values
+- **THEN** the build accepts them and they appear in all three outputs, for example `--ds-cover-background-blush-fill` and `--ds-surface-dark-shadow` in `tokens.css`
+
+### Requirement: Supported token types and their values
+The build SHALL accept these types and reject a value that does not fit its type: `color` (a `#RRGGBB` hex string, letters in either case, written to the outputs as in the source), `dimension` (a number of pixels from 0 to 10000 with at most two decimal places), `frames` (a positive integer), `number` (a finite number greater than zero), `opacity` (a number greater than 0 and at most 1), `fontFamily` (a non-empty string without `;`, `{`, `}`, `<`, `>` or a line break), `fontWeight` (an integer from 100 to 900 in steps of 100).
+
+#### Scenario: Malformed colour
+- **WHEN** a `color` token has the value `#12345` or `red`
+- **THEN** the build fails, naming the token path and "expected #RRGGBB", and writes no file
+
+#### Scenario: Zero or negative frame count
+- **WHEN** a `frames` token has the value `0` or `-5`
+- **THEN** the build fails, naming the token path, and writes no file
+
+#### Scenario: Non-integer or off-step values
+- **WHEN** a `frames` token is `0.5`, a `dimension` token is `-1`, `1.555` or `10001`, or a `fontWeight` token is `450` or `950`
+- **THEN** the build fails, naming each token path, and writes no file
+
+#### Scenario: Opacity above one
+- **WHEN** an `opacity` token has the value `1.2`
+- **THEN** the build fails, naming the token path, and writes no file
+
+#### Scenario: Font family that would break the CSS
+- **WHEN** `font.sans` is `Lato; } body { color: red`
+- **THEN** the build fails, naming `font.sans`, and writes no file
+
+#### Scenario: Boundary values accepted
+- **WHEN** an `opacity` token is `1`, a `fontWeight` token is `900`, and `dimension` tokens are `0`, `3.5`, `12.8` and `10000`
+- **THEN** the build accepts them, and `tokens.css` writes `3.5px` and `12.8px`
+
 ## ADDED Requirements
 
 ### Requirement: Surface tokens

@@ -12,6 +12,7 @@ This change gives the design system what stackledger needs; stackledger adopts i
   - `surface`: the light and the dark background a map or diagram sits on (background, text, muted, grid, panel, shadow, rim and rim width), measured from stackledger's map themes;
   - `map`: the map and diagram measures (outline, shadow offset, line width, casing, badge, count, stop radius, node height and radius, edge width, label size);
   - `site`: the page palette of brunosouzas.com in light and dark, its two fonts and its type scale, measured from that site's `src/styles/generated-theme.css`.
+- **ADR 0003 amendment.** On a dark surface the hard shadow takes the surface's shadow colour and the outline gets a light rim; on light nothing changes.
 - **Ink sticker on a surface.** New pieces take `surface` (`light`, `dark`) and `inkScale`: the outline, the hard shadow in the surface's shadow colour and, on dark, the light rim, as stackledger draws them today.
 - **Line colours from data.** A map's line colours come from the consumer's catalogue, not from the identity, so `pipe.fill` and `lineBadge.fill` also accept a `#RRGGBB` value. Every other colour stays a token path, and a cover spec still rejects any colour literal.
 - **Nine pieces.** Metro: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`. Diagram: `nodeBlock`, `pillNode`, `hexNode` (states normal, focus, placeholder) and `messageArrow` (curved or straight, with a head and an optional label). Mark: `ledgerMark` (favicon and header mark). Parameters: `design.md` §3.
@@ -22,10 +23,11 @@ This change gives the design system what stackledger needs; stackledger adopts i
 
 ### Modified Capabilities
 
-- `design-tokens`: the `surface`, `map` and `site` groups and their required tokens.
-- `illustration-pieces`: the ink sticker on a surface, data colours for lines, the nine pieces, the catalogue of 35.
+- `design-tokens`: the twelve groups (`surface`, `map`, `site` added) and their required tokens; `dimension` accepts 0 and two decimals, because the measures 3.5, 2.5, 12.8 and 0 are not positive integers.
+- `illustration-pieces`: the ink sticker on a surface, room for the outline, data colours for lines, `pipe.d` checked like `road.d`, the cover pieces' shadow scoped to them, the nine pieces, the catalogue of 35.
+- `cover-cli`: the unknown-piece message lists 35 names. A new piece is accepted in a cover spec like any other, and a colour literal in a spec is still an error.
 
-`cover-cli` keeps its behaviour: the new pieces are accepted in a cover spec like any other piece, and a colour literal in a spec is still an error. `motion-components`, `scene-catalogue` and `scene-rendering` do not change.
+`motion-components`, `scene-catalogue` and `scene-rendering` do not change.
 
 ## Out of scope
 
@@ -51,4 +53,4 @@ This change gives the design system what stackledger needs; stackledger adopts i
 - `README.md`: the pieces section lists the new pieces and the `surface`, `map` and `site` tokens.
 - `docs/roadmap.md`: item 6 (AB#157) delivered.
 - Vault: `10-personal/projects/brunosouzas-design-system/{architecture,roadmap,changelog}.md` after the pull request is ready.
-- No ADR: ADR 0003's colour meanings hold; data colours are the consumer's, not new meanings.
+- ADR 0003: an amendment for the dark-surface shadow (the shadow takes the surface's shadow colour, with a light rim), as stackledger's map already draws it (`design.md` §7). The colour meanings hold; data colours are the consumer's, like the external brand colours ADR 0003 already allows.

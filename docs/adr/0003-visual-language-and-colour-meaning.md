@@ -31,3 +31,7 @@ Option 2.
 ## Amendment, 2026-10-23 (AB#139)
 
 The rule "text is never rotated" is removed. The published covers already turn a stamp's word with the stamp, and a fixed rule like this one limits the drawing more than it helps the reader. Whether a rotated word reads well is judged by the owner when he reviews each image, like any other layout choice. The colour meanings and the outline and shadow rules are unchanged.
+
+## Amendment, 2026-10-23 (AB#157)
+
+On a dark surface the hard shadow is no longer drawn in the ink: ink on the dark navy disappears, so the shadow takes the surface's shadow colour (`surface.dark.shadow`) and the ink outline gets a thin light rim (`surface.dark.rim`), as stackledger's map already draws it. On a light surface nothing changes. The surface tokens hold both values; the cover pieces keep the ink shadow. The colour meanings are unchanged; a map's line colours come from its catalogue, like the external brand colours above.

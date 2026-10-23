@@ -44,27 +44,37 @@ plus `site.font.primary` `Heebo, sans-serif` and `site.font.secondary` `Signika,
 
 ## 3. Pieces
 
-Common parameters of the nine pieces: `surface` (`light` default, `dark`) and, on stickers, `inkScale` (0.25 to 8, default 1), which multiplies the outline (`map.outline`), the rim width and the shadow offset (`map.shadow`), not the geometry. The sticker is: a copy of the shape moved by the offset, filled and stroked in `surface.shadow` with the outline plus twice the rim width; when `rimWidth` > 0, the shape in `surface.rim` with that same width; then the shape with its fill and an ink (`color.ink`) outline. Each node carries its own stroke attributes, so a piece draws the same inside any group.
+**Parameters per piece.** `surface` (`light` default, `dark`) is accepted by `lineBadge`, `stationMarker`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` and `messageArrow`; `inkScale` (0.25 to 8, default 1) by the same pieces except `messageArrow`. `pipe` and `ledgerMark` take neither: a pipe's casing is ink on both surfaces, and the mark is the same on both. An unknown parameter is rejected as for every piece.
+
+**The sticker.** With `o = map.outline × inkScale`, `w = rimWidth × inkScale` and `k = map.shadow × inkScale`: (1) the shape moved by (k, k), fill and stroke `surface.shadow`, stroke-width o + 2w; (2) when `rimWidth` > 0, the shape in place, fill and stroke `surface.rim`, stroke-width o + 2w; (3) the shape in place with its face fill, stroke `color.ink`, stroke-width o. Each node carries its own stroke attributes, so a piece draws the same inside any group. The cover pieces keep their shadow (`illustration-pieces`, "Hard shadow with the outline").
+
+**Room for the outline.** A sticker's smallest dimension (a badge's or node's `height`, a marker's `2 × r`) SHALL be at least 4 × o; a smaller one is rejected naming that parameter (`height` or `r`). Equality is accepted. At the default ink this is 12 (radius 6).
 
 | Piece | Parameters (defaults) | Draws |
 |---|---|---|
-| `lineBadge` | `x`, `y` (centre), `text`, `fill` (token or data colour), `width` (≥ height; default max(30, 7.6 × characters + 18)), `height` (`map.badgeHeight`), `flat` (false), `surface`, `inkScale` | pill sticker; `flat` draws the face only, outline kept inside the box; text in `color.white`, bold, `map.badgeTextSize`, centred |
-| `stationMarker` | `cx`, `cy`, `to` (point, optional), `r` (`map.stopRadius`, plus `map.interchangeExtra` when `to` is given), `state` (`normal`, `deprecated`), `surface`, `inkScale` | disc sticker; with `to`, a capsule from (cx, cy) to `to`; face `color.white`, or `surface.muted` when deprecated |
-| `pipe` | `d` (path data), `fill` (token or data colour), `width` (`map.lineWidth`), `casing` (`map.casing`; 0 = none) | ink casing (width + casing) under the colour stroke, round caps and joins; no shadow |
-| `countBadge` | `cx`, `cy`, `text`, `height` (`map.countHeight`), `width` (default: height for one character, else max(height, 6.4 × characters + 8)), `surface`, `inkScale` | disc or pill sticker in `surface.panel`; text in `surface.text`, bold, `map.countTextSize` |
-| `nodeBlock` | `x`, `y`, `width` (≥ 2 × height), `height` (`map.nodeHeight`), `title`, `subtitle` (optional), `state` (`normal`, `focus`, `placeholder`), `radius` (`map.nodeRadius`), `surface`, `inkScale` | rounded box |
+| `lineBadge` | `x`, `y` (centre), `text`, `fill` (token or data colour), `height` (`map.badgeHeight`), `width` (≥ height; default max(30, 7.6 × characters + 18)), `flat` (false), `surface`, `inkScale` | pill sticker, radius height / 2. `flat`: only the face, inset by o / 2 on every side (rect `width − o` × `height − o`, radius `(height − o) / 2`), no shadow or rim; `inkScale` still sets o. Text in `color.white`, bold, `map.badgeTextSize`, centred, baseline y + 4.5 |
+| `stationMarker` | `cx`, `cy`, `to` (point, optional), `r` (`map.stopRadius`; plus `map.interchangeExtra` when `to` is given), `state` (`normal`, `deprecated`), `surface`, `inkScale` | disc sticker; with `to` different from (cx, cy), a capsule: the closed path `M a+n L b+n A r,r 0 0 0 b−n L a−n A r,r 0 0 0 a+n Z`, where n is the unit normal × r (stackledger's `capsulePath`); with `to` equal to (cx, cy), the disc with the interchange radius. Face `color.white`, or `surface.muted` when deprecated |
+| `pipe` | `d` (path data: non-empty, path characters only, starting with `M` or `m`), `fill` (token or data colour), `width` (`map.lineWidth`), `casing` (`map.casing`; 0 = none) | ink path at width + casing (left out when casing is 0), then the colour path at width; round caps and joins; fill none; no shadow |
+| `countBadge` | `cx`, `cy`, `text`, `height` (`map.countHeight`), `width` (≥ height; default height for one character, else max(height, 6.4 × characters + 8)), `surface`, `inkScale` | sticker in `surface.panel`: a circle of radius height / 2 when width equals height, otherwise a pill (rect, radius height / 2). The shape follows the dimensions, not the text. Text in `surface.text`, bold, `map.countTextSize`, centred, baseline cy + 4 |
+| `nodeBlock` | `x`, `y`, `width` (≥ 2 × height), `height` (`map.nodeHeight`), `title`, `subtitle` (optional), `state` (`normal`, `focus`, `placeholder`), `radius` (`map.nodeRadius`, at most height / 2), `surface`, `inkScale` | rounded box |
 | `pillNode` | as `nodeBlock`, no `radius` | box with radius height / 2 |
-| `hexNode` | as `nodeBlock`, no `radius` | hexagon cut by height / 2 at both ends |
-| `messageArrow` | `from`, `to` (points), `curve` (`bezier`, `straight`), `head` (true), `label` (optional), `width` (`map.edgeWidth`), `surface` | path in `surface.text`; bezier leaves and enters horizontally (controls at the middle x); the head is a filled triangle at `to` along the end direction; the label sits in a small pill at the middle, `surface.background` with a `surface.text` outline |
-| `ledgerMark` | `x`, `y` (top left), `size` (32), `line` (token, `illustration.accent`) | rounded ink square (radius 7/32 of size), a bent line in `line` with one white interchange and one white terminal, ink outlined: the stackledger favicon and header mark, in the shape of the brunosouzas.com favicon |
+| `hexNode` | as `nodeBlock`, no `radius` | hexagon (x + h/2, y) (x + w − h/2, y) (x + w, y + h/2) (x + w − h/2, y + h) (x + h/2, y + h) (x, y + h/2) |
+| `messageArrow` | `from`, `to` (points), `curve` (`bezier`, `straight`), `head` (true), `label` (optional), `width` (`map.edgeWidth`, 1 to 12), `surface` | see "The arrow" |
+| `ledgerMark` | `x`, `y` (top left), `size` (32; 12 to 512), `line` (token, `illustration.accent`) | see "The mark" |
 
-Node states: `normal` is a sticker in `surface.panel`, title in `surface.text` (bold, `map.labelSize`) and subtitle in `surface.muted` (11); `focus` is a sticker in `color.caller` with ink text, as the centre item of stackledger's diagrams; `placeholder` is the shape dashed (`5 4`) in `surface.muted`, stroke 1.5, no fill and no shadow, with the title centred in `surface.muted` and no subtitle. Text sits at `inset` from the left (12 for `nodeBlock`, height / 2 for `pillNode` and `hexNode`); title baseline at y + height / 2 − 3 and subtitle at y + height / 2 + 14, or the title alone at y + height / 2 + 4.5.
+**Nodes.** `normal` is a sticker in `surface.panel`, title in `surface.text` (bold, `map.labelSize`) and subtitle in `surface.muted` (11); `focus` is a sticker in `color.caller` with title and subtitle in `color.ink`, as the centre item of stackledger's diagrams; `placeholder` is the shape alone, fill none, stroke `surface.muted` at 1.5 with dasharray `5 4`, no shadow or rim, the title centred at (x + width / 2, y + height / 2 + 4.5) in `surface.muted`, and a `subtitle` rejected. Text inset from the left: 12 for `nodeBlock`, height / 2 for `pillNode` and `hexNode`; title baseline y + height / 2 − 3 and subtitle y + height / 2 + 14, or the title alone at y + height / 2 + 4.5.
 
-Words: the pieces draw only `text`, `title`, `subtitle` and `label`, non-empty.
+**The arrow.** Head length L = 5 × width and half base 2 × width (12.5 and 5 at the default). `from` equal to `to` is rejected naming `to`; so is a distance below 2 × L when `head` is true. Direction at the end: for `straight`, the unit vector from `from` to `to`; for `bezier`, (sign of to.x − from.x, 0). A `bezier` whose |to.x − from.x| is below 2 × L is drawn `straight`, so a near-vertical arrow keeps a defined head. With a head, the path ends at the base point B = to − direction × L and the head is the polygon `to`, B + normal × 2w, B − normal × 2w, filled and stroked `surface.text` at stroke-width 1 with round joins; without a head the path ends at `to`. Bezier path: `M from C mx,from.y mx,to.y end` with mx = (from.x + to.x) / 2. The path: fill none, stroke `surface.text` at `width`, round caps. The label sits at M = ((from.x + to.x) / 2, (from.y + to.y) / 2): a rect of height 18 and width 6.4 × characters + 16 centred on M, radius 9, fill `surface.background`, stroke `surface.text` at 1.5, then the text at (M.x, M.y + 4), 11, `surface.text`, centred.
+
+**The mark.** A group `translate(x y) scale(size / 32)` holding, in 32-unit coordinates: `rect` 0, 0, 32 × 32, radius 7, fill `color.ink`; `path` `M7 23 L14 16 L25 16`, fill none, stroke `line`, width 4.5, round caps and joins; `circle` (14, 16) r 4, fill `color.white`, stroke `color.ink`, width 2; `circle` (25, 16) r 2.6, fill `color.white`, stroke `color.ink`, width 1.6. No text. On a dark page the square keeps its ink: it stands on its own like the brunosouzas.com favicon.
+
+Words: the pieces draw only `text`, `title`, `subtitle` and `label`, each non-empty.
 
 ## 4. Data colours
 
 A line's colour comes from the consumer's catalogue (a journey colour in stackledger), not from the identity. `pipe.fill` and `lineBadge.fill` accept a token path or `#RRGGBB` (six hex digits, nothing else). The check is a new parameter kind, `dataColor`; `color` keeps rejecting literals. The no-colour-literals test still scans `src/pieces/`: no hex in the code. The cover command keeps rejecting a colour literal anywhere in a spec (`cover-cli`, "Colour literal anywhere"), so covers stay on tokens.
+
+ADR 0003 already allows a colour outside the tokens for an external system (a platform's brand colour); a catalogue's line colour is the same kind of thing: the consumer's, not a meaning of the identity.
 
 Rejected: registering stackledger's line colours as tokens (they are user data and change per catalogue); accepting any CSS colour (opens `url(` and named colours).
 
@@ -72,16 +82,26 @@ Rejected: registering stackledger's line colours as tokens (they are user data a
 
 The sheet adds the nine pieces in the same 240 × 240 cells, on the light surface; `PIECE_NAMES` lists 35. The light and dark sheet next to stackledger's pages stays gate evidence, not a command.
 
-## 6. Decisions for gate 1
+## 6. Token types
+
+Four measured values are not positive integers: `map.shadow` 3.5, `map.edgeWidth` 2.5, `site.fontSize.baseSmall` 12.8 and `surface.light.rimWidth` 0. The `dimension` type changes from "a positive integer of pixels" to "a number of pixels from 0 to 10000 with at most two decimal places". Nothing in the existing tokens relies on the integer rule: every current dimension stays valid, and the outputs write the number as given (`3.5px`). Rejected: a new type for fractional pixels (two pixel types for one CSS unit); rounding the measures (stackledger's layout counts the 3.5 offset).
+
+## 7. Dark-surface shadow (ADR 0003 amendment)
+
+ADR 0003 says the hard shadow is drawn "in the same ink". On the dark navy surface an ink shadow disappears, so stackledger's map (change `map-theme-ink`, approved by the owner) draws it in `#4C5CB8` with a light rim round the outline. This change records that as an amendment to ADR 0003 (on a dark surface the shadow takes the surface's shadow colour and the outline gets a light rim; on a light surface nothing changes), in the same pull request, as the AB#139 amendment did. A new ADR is not used: ADR 0005 is reserved for the cast (AB#152).
+
+## 8. Decisions for gate 1
 
 1. Dark text and rim `#EEF1FF` become `#EEF2FF` (`color.panel`): one unit of green apart, invisible, and one value fewer.
 2. Line colours as data colours on `pipe` and `lineBadge` only (§4).
 3. `site` holds today's brunosouzas.com palette; stackledger's accent stays in stackledger.
-4. `ledgerMark` as drawn in the spike: an ink square like the brunosouzas.com favicon, with the line and two stations.
+4. `ledgerMark` as drawn in the spike (§3, "The mark").
 5. `pillNode` and `hexNode` as their own pieces, as approved in the inventory, over one shared drawing function.
 6. The 26 cover pieces keep their cover scale: no `surface` or `inkScale` for them.
+7. `dimension` accepts 0 and two decimals (§6).
+8. ADR 0003 amended for the dark-surface shadow (§7).
 
-## 7. Risks
+## 9. Risks
 
 - stackledger's layout counts the ink (`inkOf`, `widestInk`): it must read the same values from `map` and `surface`, or obstacles and drawing drift. The adoption in stackledger should replace its constants with the tokens, not copy them again.
 - A data colour with poor contrast against the white badge text is the consumer's choice; the piece does not check contrast.

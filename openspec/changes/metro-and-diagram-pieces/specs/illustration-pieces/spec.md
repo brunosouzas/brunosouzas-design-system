@@ -11,6 +11,48 @@ Pieces SHALL take every colour from the generated tokens; `src/pieces/` holds no
 - **WHEN** `pill` is called with `fill: "#FFFFFF"` or `fill: "outline.block"`
 - **THEN** it throws a `RangeError` naming `fill` and saying a colour token path is expected
 
+### Requirement: Hard shadow with the outline
+A shadowed shape of the 26 cover pieces SHALL be drawn twice: first a copy filled with `color.ink` and translated by the shadow offset (default `shadow.block`), then the shape. Both sit in the outlined group, so the shadow copy carries the outline too. A shape with its own transform casts a shadow with `translate(offset offset)` before that transform. The metro and diagram pieces draw stickers instead ("Ink sticker on a surface").
+
+#### Scenario: Default shadow
+- **WHEN** `sheet` draws its page at `x` 300, `y` 112
+- **THEN** the first body node is a `rect` at the same position with `fill` ink and `transform` `translate(10 10)`, and the next one is the white page
+
+#### Scenario: Shadow of a turned shape
+- **WHEN** a shape with `transform="rotate(30)"` is shadowed with offset 8
+- **THEN** the shadow's transform is `translate(8 8) rotate(30)`
+
+### Requirement: Piece parameters checked
+Each piece SHALL check its parameters before drawing and throw a `RangeError` naming the first problem: a missing required or an unknown parameter, a wrong JSON type, a non-finite or out-of-range number, an unknown enum value, or a colour that is not a token path (data colours: "Line colours from data"). Sizes, coordinates and points lie within ±10000, counts and lists have the limits of the designs, and a size leaves room for fixed insets. `road.d` and `pipe.d` accept only path characters.
+
+#### Scenario: Missing and unknown parameters
+- **WHEN** each piece is called without one of its required parameters, and `pill` with an extra `colour`
+- **THEN** each call throws a `RangeError` naming the missing parameter, and the `pill` call names `colour`
+
+#### Scenario: Out of range
+- **WHEN** `gear` gets `teeth: 3`, `serverStack` gets `units: 1.5`, or `sheet` gets a row with `lead: "star"`
+- **THEN** each call throws a `RangeError` naming `teeth`, `units` or `rows[0].lead`
+
+#### Scenario: Sizes that would break the drawing
+- **WHEN** `stamp` gets `r: 1`, `browserWindow` gets `width: 20`, or `folder` gets `scale: 1e307`
+- **THEN** each call throws a `RangeError` naming `r`, `width` or `scale`
+
+#### Scenario: Smallest and largest accepted sizes draw valid geometry
+- **WHEN** each piece is drawn with each bounded size parameter at its smallest and at its largest accepted value, the stickers also at `inkScale` 0.25 and 8
+- **THEN** no drawn width, height or radius is negative and no value is infinite or NaN
+
+#### Scenario: Too many repeated parts
+- **WHEN** `steps` gets `count: 4294967296`, `gear` gets `teeth: 65`, `rail` gets 51 nodes, or `arcArrow` gets `from: [10001, 0]`
+- **THEN** each call throws a `RangeError` naming `count`, `teeth`, `nodes` or `from` before drawing
+
+#### Scenario: Road path with something else
+- **WHEN** `road` gets `d: "M0,0 L10,10\" onload=\"x"`
+- **THEN** it throws a `RangeError` naming `d`
+
+#### Scenario: Pipe path with something else
+- **WHEN** `pipe` gets `d: ""`, `d: "L10,10"` or `d: "M0,0 L10,10\" onload=\"x"`
+- **THEN** each call throws a `RangeError` naming `d`
+
 ### Requirement: Piece catalogue
 The library SHALL export these pieces, with the anchors, parameters and defaults of the `illustration-pieces` design §4 and the `metro-and-diagram-pieces` design §3: pill, rings, sheet, blockArrow, arcArrow, rail, checkBadge, priceTag, nameTag, codePanel, serverStack, cloud, stamp, robot, magnifier, gear, parcel, road, milestonePin, browserWindow, speechBubble, steps, folder, book, muleFlow, eipIcon, lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark.
 
@@ -25,7 +67,7 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 ## ADDED Requirements
 
 ### Requirement: Ink sticker on a surface
-`lineBadge` (unless flat), `stationMarker`, `countBadge`, `nodeBlock`, `pillNode` and `hexNode` (unless placeholder) SHALL draw a sticker: a copy moved by `map.shadow` × `inkScale` in `surface.shadow`, stroked `map.outline` plus twice `rimWidth`, both × `inkScale`; when `rimWidth` > 0, the shape in `surface.rim` at that width; then the face, outlined in `color.ink` at `map.outline` × `inkScale`. `surface` is `light` (default) or `dark`.
+`lineBadge` (unless flat), `stationMarker`, `countBadge` and the three nodes (unless placeholder) SHALL draw the sticker of `metro-and-diagram-pieces` design §3: a shadow copy moved by `map.shadow` × `inkScale` in `surface.shadow`, a rim in `surface.rim` when `rimWidth` > 0, then the face outlined in `color.ink`. `surface` is `light` (default) or `dark`; `inkScale` is 0.25 to 8; `pipe` and `ledgerMark` take neither.
 
 #### Scenario: Light sticker
 - **WHEN** `stationMarker({ cx: 100, cy: 50 })` is called
@@ -33,15 +75,22 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 
 #### Scenario: Dark sticker with its rim
 - **WHEN** `stationMarker({ cx: 100, cy: 50, surface: "dark" })` is called
-- **THEN** its body is three circles: the shadow in `#4C5CB8` with stroke-width 5, the rim in `#EEF2FF` with stroke-width 5 at (100, 50), then the white face with stroke-width 3
+- **THEN** its body is three circles: the shadow at (103.5, 53.5) in `#4C5CB8` with stroke-width 5, the rim at (100, 50) in `#EEF2FF` with stroke-width 5, then the white face with stroke-width 3
 
 #### Scenario: Ink scale and its bounds
 - **WHEN** `nodeBlock` is drawn with `inkScale: 1.6`, and then with `inkScale: 0.1` and `inkScale: 9`
 - **THEN** the first has outline 4.8 and its shadow moved by 5.6; the other two throw a `RangeError` naming `inkScale`
 
-#### Scenario: Unknown surface
-- **WHEN** `countBadge` gets `surface: "sepia"`
-- **THEN** it throws a `RangeError` naming `surface` and listing `light, dark`
+#### Scenario: Unknown surface or a parameter a piece does not take
+- **WHEN** `countBadge` gets `surface: "sepia"`, or `pipe` gets `surface: "dark"`
+- **THEN** the first throws a `RangeError` naming `surface` and listing `light, dark`; the second names `surface` as an unknown parameter
+
+### Requirement: Room for the outline
+A sticker's smallest dimension (`height` of a badge or node, `2 × r` of a marker) SHALL be at least 4 × `map.outline` × `inkScale`; a smaller one throws a `RangeError` naming `height` or `r`, and equality is accepted.
+
+#### Scenario: Badge too low for its ink
+- **WHEN** `lineBadge` gets `flat: true` and `inkScale: 8` with the default height 20, and then `height: 96` with `inkScale: 8`
+- **THEN** the first throws a `RangeError` naming `height`; the second draws a rect of height 72 inset by 12
 
 ### Requirement: Line colours from data
 `pipe.fill` and `lineBadge.fill` SHALL accept a colour token path or a data colour matching `^#[0-9A-Fa-f]{6}$`, drawn as given. Any other string is rejected. A cover spec still rejects every colour literal, data colours included.
@@ -56,14 +105,18 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 
 #### Scenario: Data colour in a cover spec
 - **WHEN** a cover spec has a `pipe` with `fill: "#7B3FE4"`
-- **THEN** the cover command reports `pieces[i].fill` as a colour literal and writes nothing
+- **THEN** the cover command reports `pieces[0].fill` as a colour literal and writes nothing
 
 ### Requirement: Metro pieces
-`lineBadge`, `stationMarker`, `pipe` and `countBadge` SHALL draw as in `metro-and-diagram-pieces` design §3. `lineBadge` `flat` keeps the outline inside its box and draws no shadow or rim. `stationMarker` with `to` draws one capsule from (cx, cy) to `to` with radius `r`, and `deprecated` fills it with `surface.muted`. `countBadge` is a disc for one character and a pill otherwise.
+`lineBadge`, `stationMarker`, `pipe` and `countBadge` SHALL draw as in `metro-and-diagram-pieces` design §3. `stationMarker` with `to` draws one closed capsule path from (cx, cy) to `to`, or the interchange disc when `to` equals (cx, cy); `deprecated` fills it with `surface.muted`. A count badge is a circle when width equals height and a pill otherwise.
 
 #### Scenario: Interchange capsule
 - **WHEN** `stationMarker({ cx: 0, cy: 0, to: [40, 0] })` is called
-- **THEN** its face is a `path` whose points lie within 14 of the segment from (0, 0) to (40, 0), and no `circle`
+- **THEN** its face is one `path` with two arc commands of radius 14, closed with `Z`, spanning x −14 to 54 and y −14 to 14, and no `circle`
+
+#### Scenario: Interchange at one point
+- **WHEN** `stationMarker({ cx: 5, cy: 5, to: [5, 5] })` is called
+- **THEN** its face is a `circle` at (5, 5) of radius 14
 
 #### Scenario: Flat badge
 - **WHEN** `lineBadge({ x: 50, y: 20, text: "SH", fill: "color.healthy", flat: true })` is called
@@ -73,12 +126,12 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 - **WHEN** `lineBadge` gets `width: 10` with the default height 20
 - **THEN** it throws a `RangeError` naming `width`
 
-#### Scenario: Count of one and of many
-- **WHEN** `countBadge` is drawn with `text: "3"` and with `text: "12"`
-- **THEN** the first face is 16 wide and 16 high, the second wider than 16 with radius 8
+#### Scenario: Count shape follows its size
+- **WHEN** `countBadge` is drawn with `text: "3"`, with `text: "12"`, and with `text: "3", width: 40`
+- **THEN** the first face is a circle of radius 8, the second a rect wider than 16 with radius 8, the third a rect 40 wide
 
 ### Requirement: Diagram nodes
-`nodeBlock`, `pillNode` and `hexNode` SHALL draw a box, a pill or a hexagon with `title` and an optional `subtitle` in the states `normal`, `focus` (face `color.caller`, ink text) and `placeholder` (dashed `5 4` in `surface.muted`, no fill, no shadow, title centred, no subtitle). Width is at least twice the height.
+`nodeBlock`, `pillNode` and `hexNode` SHALL draw a box, a pill or a hexagon with `title` and an optional `subtitle` in the states `normal`, `focus` (face `color.caller`, ink text) and `placeholder` (dashed `5 4` in `surface.muted`, no fill, no shadow, title centred, `subtitle` rejected). Width is at least twice the height; `nodeBlock.radius` is at most height / 2.
 
 #### Scenario: Focus node on dark
 - **WHEN** `nodeBlock` is drawn with `state: "focus"` and `surface: "dark"`
@@ -88,32 +141,36 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 - **WHEN** `hexNode` is drawn with `state: "placeholder"` and `title: "Nothing"`
 - **THEN** its body is one `polygon` with `fill` none and `stroke-dasharray` `5 4`, and its only text is `Nothing`, centred
 
-#### Scenario: Node too narrow or without a title
-- **WHEN** `pillNode` gets `width: 80` with height 46, or `title: ""`
-- **THEN** each call throws a `RangeError` naming `width` or `title`
+#### Scenario: Node too narrow, without a title, or a placeholder with a subtitle
+- **WHEN** `pillNode` gets `width: 80` with height 46, or `title: ""`, or `state: "placeholder"` with a `subtitle`
+- **THEN** each call throws a `RangeError` naming `width`, `title` or `subtitle`
 
 ### Requirement: Message arrow
-`messageArrow` SHALL draw a path from `from` to the base of a filled head at `to`, in `surface.text` at `width`. `bezier` leaves and enters horizontally, with both control points at the middle x; `straight` is a line. `head: false` draws no head and ends at `to`. A `label` sits in a pill at the middle. `from` equal to `to` is rejected.
+`messageArrow` SHALL draw as in `metro-and-diagram-pieces` design §3, "The arrow": a path in `surface.text` to the base of a head of length 5 × `width` at `to`; `bezier` leaves and enters horizontally, and falls back to `straight` when the horizontal distance is below twice the head; `head: false` ends at `to`; a `label` sits in a pill at the middle.
 
 #### Scenario: Curved arrow with a head
 - **WHEN** `messageArrow({ from: [0, 0], to: [200, 100] })` is called
-- **THEN** its path is `M0,0 C100,0 100,100 …` ending left of x 200 at y 100, and its head is a `polygon` with one point at (200, 100)
+- **THEN** its path `d` is `M0,0 C100,0 100,100 187.5,100` and its head is the polygon (200, 100), (187.5, 105), (187.5, 95)
+
+#### Scenario: Vertical arrow
+- **WHEN** `messageArrow({ from: [0, 0], to: [0, 100] })` is called
+- **THEN** it is drawn straight: the path ends at (0, 87.5) and the head points down to (0, 100)
 
 #### Scenario: Labelled straight arrow
-- **WHEN** `messageArrow` gets `curve: "straight"` and `label: "used by"`
-- **THEN** its text holds `used by` once, at the middle of the segment
+- **WHEN** `messageArrow` gets `from: [0, 0]`, `to: [100, 0]`, `curve: "straight"` and `label: "used by"`
+- **THEN** its text holds `used by` once, at (50, 4), in a rect of height 18 centred on (50, 0)
 
-#### Scenario: Zero-length arrow
-- **WHEN** `from` and `to` are both `[10, 10]`
-- **THEN** it throws a `RangeError` naming `to`
+#### Scenario: Arrow too short
+- **WHEN** `from` and `to` are both `[10, 10]`, or 20 apart with the default head
+- **THEN** each call throws a `RangeError` naming `to`
 
 ### Requirement: Ledger mark
-`ledgerMark` SHALL draw stackledger's mark in a `size` square at (`x`, `y`): a rounded ink square, a bent line in `line` (`illustration.accent` by default) and two white stations outlined in ink, scaled from a 32-unit drawing. `size` is from 12 to 512.
+`ledgerMark` SHALL draw the 32-unit mark of `metro-and-diagram-pieces` design §3, "The mark", in a group translated to (`x`, `y`) and scaled by `size` / 32: an ink square, the bent line in `line` and two white ink-outlined stations, no text. `size` is from 12 to 512.
 
 #### Scenario: Favicon size
 - **WHEN** `ledgerMark({ x: 0, y: 0 })` is called
-- **THEN** its first shape is a `rect` 32 × 32 with radius 7 and fill `#0A1033`, and it draws no text
+- **THEN** its group has transform `translate(0 0) scale(1)` and holds the `rect` 32 × 32 with radius 7 and fill `#0A1033`, the `path` `M7 23 L14 16 L25 16` with stroke `#1E6FEB` and width 4.5, and circles at (14, 16) r 4 and (25, 16) r 2.6
 
-#### Scenario: Mark too small
-- **WHEN** `ledgerMark` gets `size: 8`
-- **THEN** it throws a `RangeError` naming `size`
+#### Scenario: Scaled and too small
+- **WHEN** `ledgerMark` gets `size: 16`, and then `size: 8`
+- **THEN** the first group has `scale(0.5)` with the same children; the second throws a `RangeError` naming `size`
