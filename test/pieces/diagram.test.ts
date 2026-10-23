@@ -34,7 +34,20 @@ describe("Diagram nodes", () => {
   test("Node too narrow, without a title, or a placeholder with a subtitle", () => {
     expect(() => pillNode({ x: 0, y: 0, width: 80, title: "a" })).toThrow(/^pillNode: width:/);
     expect(() => pillNode({ x: 0, y: 0, width: 160, title: "" })).toThrow(/^pillNode: title:/);
-    expect(() => pillNode({ x: 0, y: 0, width: 160, title: "a", subtitle: "b", state: "placeholder" })).toThrow(/^pillNode: subtitle:/);
+    // AB#167: an empty subtitle is still refused; a placeholder's subtitle is not.
+    expect(() => pillNode({ x: 0, y: 0, width: 160, title: "a", subtitle: "", state: "placeholder" })).toThrow(/^pillNode: subtitle:/);
+    expect(pillNode({ x: 0, y: 0, width: 160, title: "a", subtitle: "agent", state: "placeholder" }).text).toHaveLength(2);
+  });
+
+  // Change stackledger-map-and-link-pieces (AB#167), task 4.1.
+  test("Placeholder with a subtitle", () => {
+    const { body, text } = nodeBlock({ x: 10, y: 10, width: 200, title: "Stripe", subtitle: "external service", state: "placeholder" });
+    expect(body).toHaveLength(1);
+    expect(body[0].attrs).toMatchObject({ x: 10, y: 10, width: 200, height: 46, fill: "none", "stroke-dasharray": "5 4" });
+    expect(text.map((node) => [node.children[0], node.attrs.x, node.attrs.y, node.attrs["font-size"], node.attrs["font-weight"], node.attrs.fill, node.attrs["text-anchor"]])).toEqual([
+      ["Stripe", 22, 30, 13, 700, "#5B6694", "start"],
+      ["external service", 22, 47, 11, 400, "#5B6694", "start"],
+    ]);
   });
 });
 
@@ -94,5 +107,20 @@ describe("Ledger mark", () => {
     expect(() => ledgerMark({ x: 0, y: 0, size: 8 })).toThrow(/^ledgerMark: size:/);
     // The smallest mark keeps its exact scale: 12 units, not 12.16.
     expect(ledgerMark({ x: 0, y: 0, size: 12 }).body[0].attrs.transform).toBe("translate(0 0) scale(0.375)");
+  });
+});
+
+// Change stackledger-map-and-link-pieces (AB#167), task 4.3.
+describe("Ledger mark on a surface", () => {
+  test("Mark on a dark surface", () => {
+    const light = ledgerMark({ x: 0, y: 0 }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
+    const dark = ledgerMark({ x: 0, y: 0, surface: "dark" }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
+    expect(dark[0]).toEqual({ tag: "rect", attrs: { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: "#EEF2FF", stroke: "none" }, children: [] });
+    expect(dark[1]).toEqual({ tag: "rect", attrs: { x: 2, y: 2, width: 28, height: 28, rx: 5, fill: "#0A1033", stroke: "none" }, children: [] });
+    expect(dark.slice(2)).toEqual(light.slice(1));
+  });
+
+  test("Unknown surface on the mark", () => {
+    expect(() => ledgerMark({ x: 0, y: 0, surface: "navy" as "dark" })).toThrow(/^ledgerMark: surface: expected one of light, dark/);
   });
 });

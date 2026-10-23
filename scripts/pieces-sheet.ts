@@ -69,6 +69,12 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   hexNode: (x, y) => P.hexNode({ x: x + 20, y: y + 80, width: 190, title: "reviewer", subtitle: "agent", inkScale: 1.6 }),
   messageArrow: (x, y) => merge(P.messageArrow({ from: [x + 20, y + 40], to: [x + 220, y + 110] }), P.messageArrow({ from: [x + 20, y + 160], to: [x + 220, y + 160], curve: "straight", label: "used by" })),
   ledgerMark: (x, y) => merge(P.ledgerMark({ x: x + 40, y: y + 60, size: 32 }), P.ledgerMark({ x: x + 90, y: y + 44, size: 64 }), P.ledgerMark({ x: x + 170, y: y + 68, size: 16 })),
+  renewalRing: (x, y) => merge(P.renewalRing({ cx: x + 70, cy: y + 100, r: 30 }), P.stationMarker({ cx: x + 70, cy: y + 100 }), P.renewalRing({ cx: x + 170, cy: y + 100, r: 30, surface: "dark" })),
+  suggestedHalo: (x, y) => merge(P.suggestedHalo({ cx: x + 120, cy: y + 100, r: 33 }), P.stationMarker({ cx: x + 120, cy: y + 100 })),
+  licenceMark: (x, y) => merge(P.stationMarker({ cx: x + 100, cy: y + 100 }), P.licenceMark({ cx: x + 115, cy: y + 85 }), P.licenceMark({ cx: x + 170, cy: y + 100, state: "toBuy" })),
+  zone: (x, y) => P.zone({ points: [[x + 50, y + 80], [x + 190, y + 70], [x + 160, y + 160], [x + 70, y + 150]], fill: "color.caller", title: "zone", titleAt: [x + 30, y + 10] }),
+  uiIcon: (x, y) => merge(...P.UI_ICON_NAMES.map((name, i) => P.uiIcon({ name, x: x + 20 + (i % 4) * 52, y: y + 50 + Math.floor(i / 4) * 52, size: 32 }))),
+  linkIcon: (x, y) => merge(...P.LINK_ICON_NAMES.map((icon, i) => P.linkIcon({ icon, x: x + 20 + (i % 2) * 110, y: y + 30 + Math.floor(i / 2) * 80, size: 64 }))),
 };
 
 export const piecesSheet = (): SvgNode => {

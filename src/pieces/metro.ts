@@ -68,12 +68,13 @@ const pill = (x: number, y: number, w: number, h: number): Shape => (dx, dy, att
 
 // ---------- metro ----------
 
-export type LineBadgeParams = Ink & { x: number; y: number; text: string; fill: string; width?: number; height?: number; flat?: boolean };
-const badgeWidth = ({ width, text }: LineBadgeParams) => width ?? Math.max(30, 7.6 * Array.from(text).length + 18);
-/** A line's terminal badge: a pill in the line colour with its code in white, centred on (x, y). */
+export type LineBadgeParams = Ink & { x: number; y: number; text?: string; fill: string; width?: number; height?: number; flat?: boolean };
+// Without a text, the default width is the one-character width (card 167).
+const badgeWidth = ({ width, text }: LineBadgeParams) => width ?? Math.max(30, 7.6 * (text === undefined ? 1 : Array.from(text).length) + 18);
+/** A line's terminal badge: a pill in the line colour with its code in white, centred on (x, y); without `text`, the pill alone. */
 export const lineBadge = definePiece<LineBadgeParams>(
   "lineBadge",
-  { x: pos(), y: pos(), text: label(), fill: dataColour(), width: size(), height: size(), flat: { kind: "boolean" }, ...inkSchema },
+  { x: pos(), y: pos(), text: label(false), fill: dataColour(), width: size(), height: size(), flat: { kind: "boolean" }, ...inkSchema },
   (params) => {
     const { x, y, text, fill, height = M.badgeHeight, flat = false } = params;
     const width = badgeWidth(params);
@@ -82,7 +83,7 @@ export const lineBadge = definePiece<LineBadgeParams>(
     const inset = flat ? outline / 2 : 0;
     const shape = pill(x - width / 2 + inset, y - height / 2 + inset, width - 2 * inset, height - 2 * inset);
     const body = flat ? [shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" })] : sticker(shape, face, params);
-    return drawn(body, [words(x, y + 4.5, text, { fill: white, "font-size": M.badgeTextSize, "font-weight": bold, "text-anchor": "middle" })]);
+    return drawn(body, text === undefined ? [] : [words(x, y + 4.5, text, { fill: white, "font-size": M.badgeTextSize, "font-weight": bold, "text-anchor": "middle" })]);
   },
   (params) => {
     const height = params.height ?? M.badgeHeight;
@@ -181,13 +182,13 @@ const nodeLimits = (kind: NodeKind) => (params: NodeBlockParams): Problem[] => {
   return limits(
     atLeast("width", width, 2 * height, "twice the height"),
     kind === "box" && radius > height / 2 && { path: "radius", message: `must be at most half the height (${r2(height / 2)}), found ${r2(radius)}` },
-    state === "placeholder" && subtitle !== undefined && { path: "subtitle", message: "a placeholder has no subtitle" },
     state !== "placeholder" && roomFor("height", height, params),
   );
 };
 
 const drawNode = (kind: NodeKind, params: NodeBlockParams) => {
   const { x, y, width, height = M.nodeHeight, title, subtitle, state = "normal" } = params;
+  const inset = kind === "box" ? 12 : height / 2;
   const radius = kind === "pill" ? height / 2 : (params.radius ?? M.nodeRadius);
   const shape: Shape =
     kind === "hex"
@@ -200,13 +201,19 @@ const drawNode = (kind: NodeKind, params: NodeBlockParams) => {
   const { s } = inkOf(params);
   const middle = y + height / 2;
   if (state === "placeholder") {
+    const dashed = [shape(0, 0, { fill: "none", stroke: s.muted, "stroke-width": 1.5, "stroke-dasharray": "5 4", "stroke-linejoin": "round" })];
+    // With a subtitle, a normal node's text layout, every word muted (stackledger's unlinked box; card 167).
     return drawn(
-      [shape(0, 0, { fill: "none", stroke: s.muted, "stroke-width": 1.5, "stroke-dasharray": "5 4", "stroke-linejoin": "round" })],
-      [words(x + width / 2, middle + 4.5, title, { fill: s.muted, "font-size": M.labelSize, "font-weight": 400, "text-anchor": "middle" })],
+      dashed,
+      subtitle === undefined
+        ? [words(x + width / 2, middle + 4.5, title, { fill: s.muted, "font-size": M.labelSize, "font-weight": 400, "text-anchor": "middle" })]
+        : [
+            words(x + inset, middle - 3, title, { fill: s.muted, "font-size": M.labelSize, "font-weight": bold, "text-anchor": "start" }),
+            words(x + inset, middle + 14, subtitle, { fill: s.muted, "font-size": 11, "font-weight": 400, "text-anchor": "start" }),
+          ],
     );
   }
   const focus = state === "focus";
-  const inset = kind === "box" ? 12 : height / 2;
   const titleFill = focus ? ink : s.text;
   const text = subtitle === undefined
     ? [words(x + inset, middle + 4.5, title, { fill: titleFill, "font-size": M.labelSize, "font-weight": bold, "text-anchor": "start" })]
@@ -277,21 +284,109 @@ export const messageArrow = definePiece<MessageArrowParams>(
 
 // ---------- mark ----------
 
-export type LedgerMarkParams = { x: number; y: number; size?: number; line?: string };
-/** stackledger's mark (favicon, header): an ink square with a bent line and two stations, 32 units scaled to `size`. */
+export type LedgerMarkParams = { x: number; y: number; size?: number; line?: string; surface?: SurfaceName };
+/** stackledger's mark (favicon, header): an ink square with a bent line and two stations, 32 units scaled to `size`.
+ * On a surface with a rim (dark), a light rim of 2 × rimWidth lines the square inside its 32 box (card 167). */
 export const ledgerMark = definePiece<LedgerMarkParams>(
   "ledgerMark",
-  { x: pos(), y: pos(), size: { kind: "number", min: 12, max: 512 }, line: col() },
-  ({ x, y, size: side = 32, line = "illustration.accent" }) =>
-    drawn([
+  { x: pos(), y: pos(), size: { kind: "number", min: 12, max: 512 }, line: col(), surface: surfaceParam },
+  ({ x, y, size: side = 32, line = "illustration.accent", surface = "light" }) => {
+    const { rimWidth, rim } = tokens.surface[surface];
+    const band = 2 * rimWidth;
+    const square =
+      rimWidth > 0
+        ? [
+            el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: rim, stroke: "none" }),
+            el("rect", { x: band, y: band, width: 32 - 2 * band, height: 32 - 2 * band, rx: 7 - band, fill: ink, stroke: "none" }),
+          ]
+        : [el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: ink, stroke: "none" })];
+    return drawn([
       g(
         { transform: `translate(${r2(x)} ${r2(y)}) scale(${side / 32})` },
-        el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: ink, stroke: "none" }),
+        ...square,
         el("path", { d: "M7 23 L14 16 L25 16", fill: "none", stroke: colour(line, "line"), "stroke-width": 4.5, "stroke-linecap": "round", "stroke-linejoin": "round" }),
         el("circle", { cx: 14, cy: 16, r: 4, fill: white, stroke: ink, "stroke-width": 2 }),
         el("circle", { cx: 25, cy: 16, r: 2.6, fill: white, stroke: ink, "stroke-width": 1.6 }),
       ),
-    ]),
+    ]);
+  },
 );
 
-export const METRO_PIECES = { lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark } as const;
+// ---------- map markers and zones (card 167, design §3 of stackledger-map-and-link-pieces) ----------
+
+export type RenewalRingParams = Ink & { cx: number; cy: number; r: number; width?: number };
+/** The renewal ring: bands like a bent pipe round a station (rim on dark, ink, then color.blocked), no shadow. */
+export const renewalRing = definePiece<RenewalRingParams>(
+  "renewalRing",
+  { cx: pos(), cy: pos(), r: size(true), width: { kind: "number", min: 0, exclusiveMin: true, max: 50 }, ...inkSchema },
+  (params) => {
+    const { cx, cy, r, width = M.ringWidth } = params;
+    const { s, outline, rim } = inkOf(params);
+    const band = (stroke: string, strokeWidth: number) => el("circle", { cx: r2(cx), cy: r2(cy), r: r2(r), fill: "none", stroke, "stroke-width": r2(strokeWidth) });
+    return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(ink, width + outline), band(tokens.color.blocked, width)]);
+  },
+  (params) => {
+    const { outline, rim } = inkOf(params);
+    const need = ((params.width ?? M.ringWidth) + outline + 2 * rim) / 2;
+    return limits(params.r < need && { path: "r", message: `leaves no room for the ring's bands: needs at least ${r2(need)}` });
+  },
+);
+
+export type SuggestedHaloParams = { cx: number; cy: number; r: number; surface?: SurfaceName };
+/** The suggested-position halo: a dashed muted circle, no ink. */
+export const suggestedHalo = definePiece<SuggestedHaloParams>(
+  "suggestedHalo",
+  { cx: pos(), cy: pos(), r: size(true), surface: surfaceParam },
+  ({ cx, cy, r, surface = "light" }) =>
+    drawn([el("circle", { cx: r2(cx), cy: r2(cy), r: r2(r), fill: "none", stroke: tokens.surface[surface].muted, "stroke-width": M.haloWidth, "stroke-dasharray": "4 3" })]),
+);
+
+export type LicenceMarkParams = Ink & { cx: number; cy: number; state?: "owned" | "toBuy"; size?: number };
+/** A licence: a small disc sticker, green when held, white to buy. Its own room rule: size ≥ 3 × outline. */
+export const licenceMark = definePiece<LicenceMarkParams>(
+  "licenceMark",
+  { cx: pos(), cy: pos(), state: { kind: "enum", values: ["owned", "toBuy"] }, size: size(), ...inkSchema },
+  (params) => {
+    const { cx, cy, state = "owned", size: side = M.licenceSize } = params;
+    const shape: Shape = (dx, dy, attrs) => el("circle", { cx: r2(cx + dx), cy: r2(cy + dy), r: r2(side / 2), ...attrs });
+    return drawn(sticker(shape, state === "owned" ? tokens.color.healthy : white, params));
+  },
+  (params) => {
+    const need = 3 * inkOf(params).outline;
+    const side = params.size ?? M.licenceSize;
+    return limits(side < need && { path: "size", message: `leaves no room for the licence's face: needs at least ${r2(need)} at this ink scale` });
+  },
+);
+
+export type ZoneParams = { points: Point[]; fill: string; title?: string; titleAt?: Point; surface?: SurfaceName };
+/** Mixes a #RRGGBB colour with white by `amount` (stackledger's zone title tint). */
+const tint = (hex: string, amount: number): string =>
+  "#" + [1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * (1 - amount) + 255 * amount).toString(16).padStart(2, "0").toUpperCase()).join("");
+/** A zone: the outline the caller gives (stackledger's hull), widened by a round stroke, at the surface's zone opacity; an optional title. */
+export const zone = definePiece<ZoneParams>(
+  "zone",
+  { points: { kind: "array", required: true, minItems: 1, maxItems: 10000, of: point() }, fill: dataColour(), title: label(false), titleAt: point(false), surface: surfaceParam },
+  ({ points, fill, title, titleAt, surface = "light" }) => {
+    const colourOf = paint(fill);
+    const pad = M.zonePadding;
+    const at = (p: Point) => `${r2(p[0])},${r2(p[1])}`;
+    const shape =
+      points.length === 1
+        ? el("circle", { cx: r2(points[0][0]), cy: r2(points[0][1]), r: pad, fill: colourOf })
+        : points.length === 2
+          ? el("line", { x1: r2(points[0][0]), y1: r2(points[0][1]), x2: r2(points[1][0]), y2: r2(points[1][1]), stroke: colourOf, "stroke-width": 2 * pad, "stroke-linecap": "round" })
+          : el("polygon", { points: points.map(at).join(" "), fill: colourOf, stroke: colourOf, "stroke-width": 2 * pad, "stroke-linejoin": "round" });
+    const titleFill = surface === "dark" ? tint(colourOf, M.zoneTitleTint) : colourOf;
+    const text = title !== undefined && titleAt !== undefined
+      ? [words(titleAt[0], titleAt[1] + 13, title, { fill: titleFill, "font-size": M.labelSize, "font-weight": bold, "text-anchor": "start" })]
+      : [];
+    return drawn([g({ opacity: tokens.surface[surface].zoneOpacity, stroke: "none" }, shape)], text);
+  },
+  ({ title, titleAt }) =>
+    limits(
+      title !== undefined && titleAt === undefined && { path: "titleAt", message: "is required with a title" },
+      titleAt !== undefined && title === undefined && { path: "title", message: "is required with titleAt" },
+    ),
+);
+
+export const METRO_PIECES = { lineBadge, stationMarker, pipe, countBadge, nodeBlock, pillNode, hexNode, messageArrow, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone } as const;
