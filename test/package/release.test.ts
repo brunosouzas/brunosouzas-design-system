@@ -54,6 +54,44 @@ describe("Release tag check", () => {
   });
 });
 
+describe("Release workflow publish step", () => {
+  /** The `run: |` block of the step named `name` in release.yml, as the runner would hand it to bash. */
+  const runBlock = (name: string) => {
+    const lines = readFileSync(join(ROOT, ".github/workflows/release.yml"), "utf8").split("\n");
+    const start = lines.findIndex((line) => line.trim() === `- name: ${name}`);
+    expect(start, `step "${name}" in release.yml`).toBeGreaterThan(-1);
+    const run = lines.findIndex((line, i) => i > start && /^\s+run: \|$/.test(line));
+    const indent = lines[run]!.search(/\S/);
+    const body: string[] = [];
+    for (const line of lines.slice(run + 1)) {
+      if (line.trim() !== "" && line.search(/\S/) <= indent) break;
+      body.push(line.slice(indent + 2));
+    }
+    return body.join("\n");
+  };
+
+  test("Hands the publish script the packed tarball and the integrity file", () => {
+    const dir = temp("workflow-");
+    mkdirSync(join(dir, "scripts"));
+    const log = join(dir, "args.json");
+    writeFileSync(join(dir, "scripts/release-publish.sh"), `#!/bin/sh\nnode -e 'require("node:fs").writeFileSync(process.argv[1], JSON.stringify(process.argv.slice(2)))' "${log}" "$@"\n`);
+    chmodSync(join(dir, "scripts/release-publish.sh"), 0o755);
+    writeFileSync(join(dir, "step.sh"), runBlock("Publish and create the release"));
+    const runnerTemp = join(dir, "runner");
+    // GitHub runs a step's script as `bash -e {0}`.
+    const result = spawnSync("bash", ["-e", join(dir, "step.sh")], {
+      cwd: dir,
+      encoding: "utf8",
+      env: { ...process.env, GITHUB_REF_NAME: "v0.1.0", RUNNER_TEMP: runnerTemp },
+    });
+    expect(result.status, result.stderr).toBe(0);
+    const { name } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as { name: string };
+    // npm pack names @scope/name-<version>.tgz as scope-name-<version>.tgz.
+    const tarball = `${name.replace(/^@/, "").replace("/", "-")}-0.1.0.tgz`;
+    expect(JSON.parse(readFileSync(log, "utf8"))).toEqual([join(runnerTemp, "release", tarball), join(runnerTemp, "release", "integrity")]);
+  });
+});
+
 describe("Release publish script", () => {
   /** Stub npm and gh that log their arguments and answer from environment variables. */
   const stubs = () => {
