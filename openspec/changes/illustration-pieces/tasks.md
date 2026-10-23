@@ -1,6 +1,6 @@
 # Tasks
 
-Before gate 1 the implementer builds tasks 1 to 4 so the owner can judge the pieces from rendered evidence (catalogue sheet and the three proof covers next to the published ones), using the recommended answer to each question of design §9; an answer that differs at the gate is a change to these tasks before task 5. Tasks 5 and 6 wait for the gate. Codex reviews; Claude implements.
+Before gate 1 the implementer builds tasks 1 to 4 so the owner can judge the pieces from rendered evidence (catalogue sheet and the three proof covers next to the published ones), with the owner's answers of design §9. Tasks 5 and 6 wait for the gate. Codex reviews; Claude implements.
 
 Test levels: **unit** (vitest, pure functions), **integration** (vitest, the CLI with temporary folders), **local** (exact command and expected output; needs `rsvg-convert` and ffmpeg, not in CI). Existing tests stay unchanged except the token tests that list the required tokens or the groups, and the no-colour-literals test, which adds `src/pieces/`.
 
@@ -24,7 +24,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the CLI
 
 ## 4. Cover CLI and parity (`cover-cli`)
 
-- [ ] 4.1 `src/pieces/cover.ts` (spec validation, cover frame) and `scripts/cover.ts`, `npm run cover`. Integration `test/scripts/cover.test.ts` with temporary folders: "Proof cover", "Running twice", "Missing out", "Wrong extension and two specs", "Missing folder", "Out names a folder", "Write fails", "Invalid JSON", "Unknown background and piece", "Unsafe id", "Several problems in one piece", "Colour literal anywhere", "Problems sorted", "One problem per path", "Wrong container", "Array of objects", "Allowed object", "Forbidden content", "External reference", "Rotated text", "Layer order", "Ring colour from the pair".
+- [ ] 4.1 `src/pieces/cover.ts` (spec validation, cover frame) and `scripts/cover.ts`, `npm run cover`. Integration `test/scripts/cover.test.ts` with temporary folders: "Proof cover", "Running twice", "Missing out", "Wrong extension and two specs", "Missing folder", "Out names a folder", "Write fails", "Invalid JSON", "Unknown background and piece", "Unsafe id", "Several problems in one piece", "Colour literal anywhere", "Problems sorted", "One problem per path", "Wrong container", "Array of objects", "Allowed object", "Forbidden content", "External reference", "Transform outside the grammar", "Layer order", "Ring colour from the pair".
 - [ ] 4.2 Write the three proof specs in `test/fixtures/covers/` from the published covers' geometry (title and description verbatim), their `README.md` with the published files' SHA-256, and generate the goldens with the CLI. Unit `test/scripts/cover.test.ts`: "Golden output"; `test/pieces/render.test.ts` "Same drawing through React" uses the same fixtures.
 - [ ] 4.3 Local "Visual parity (local)": render each golden and its published cover with `rsvg-convert -w 800`, run `ffmpeg -i published.png -i rebuilt.png -lavfi psnr -f null -`; expected PSNR ≥ 39.4, 31.8, 23.3 dB. Build the gate-1 contact sheet (published | rebuilt, plus the catalogue sheet) and inspect it. Check: values recorded on the pull request.
 

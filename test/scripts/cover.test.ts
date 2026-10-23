@@ -208,10 +208,9 @@ describe("Free-form content", () => {
     expect(problems({ ...minimal(), custom: { tag: "rect", attrs: { d: "url(https://x)" } } })).toEqual(["custom.attrs.d: references are not allowed (url( or //)"]);
   });
 
-  test("Rotated text", () => {
-    expect(problems({ ...minimal(), custom: { tag: "g", attrs: { transform: "rotate(-12 400 200)" } } })).toEqual([
-      "custom.attrs.transform: only translate and scale are allowed",
-    ]);
+  test("Transform outside the grammar", () => {
+    const custom = { tag: "g", attrs: { transform: "matrix(1 0 0 1 0 0)" }, children: [{ tag: "text", attrs: { transform: "rotate(-12 400 200)" }, children: ["GO"] }] };
+    expect(problems({ ...minimal(), custom })).toEqual(["custom.attrs.transform: only translate, rotate and scale are allowed"]);
   });
 });
 

@@ -94,7 +94,7 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 - **THEN** the cover draws them after the pieces' bodies, with `fill` resolved to the token's value and the text with `stroke="none"`
 
 ### Requirement: Free-form content
-`custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
+`custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate`, `rotate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
 
 #### Scenario: Forbidden content
 - **WHEN** `custom` holds a `script` or `image` node, or an attribute `onload`, `href` or `style`
@@ -104,9 +104,9 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 - **WHEN** a `custom` node has `filter: "url(https://example.com/f.svg#f)"` or `fill: "url(#g)"`
 - **THEN** each is reported by its path
 
-#### Scenario: Rotated text
-- **WHEN** a `custom` node has `transform: "rotate(-12 400 200)"`
-- **THEN** `transform` is reported as "only translate and scale are allowed"
+#### Scenario: Transform outside the grammar
+- **WHEN** a `custom` node has `transform: "matrix(1 0 0 1 0 0)"`, and another `transform: "rotate(-12 400 200)"`
+- **THEN** only the first is reported, as "only translate, rotate and scale are allowed"
 
 ### Requirement: Cover output
 The cover SHALL be an 800x420 `svg` with `role="img"`, `aria-labelledby` naming `<id>-title` and `<id>-desc`, the sans font, then `title`, `desc`, a clip-path `<id>-frame`, the background fill, the clipped rings in the background's ring colour, one outlined group with every piece body in paint order and then `custom`, and one label group with every text, ending in LF.

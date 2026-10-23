@@ -22,7 +22,7 @@ const CUSTOM_ATTRS = new Set([
   "font-size", "font-weight", "font-family", "text-anchor", "transform",
 ]);
 const COLOUR_ATTRS = new Set(["fill", "stroke"]);
-const TRANSFORM = /^\s*(?:(?:translate|scale)\(\s*-?[\d.]+(?:[\s,]+-?[\d.]+)?\s*\)\s*)+$/;
+const TRANSFORM = /^\s*(?:(?:translate|rotate|scale)\(\s*-?[\d.]+(?:[\s,]+-?[\d.]+){0,2}\s*\)\s*)+$/;
 
 export type CoverPiece = { piece: PieceName } & Record<string, unknown>;
 export type CustomNode = { tag: string; attrs?: Record<string, unknown>; children?: (CustomNode | string)[] };
@@ -85,7 +85,7 @@ const checkCustom = (node: unknown, path: string, out: Problem[]): void => {
         if (COLOUR_ATTRS.has(name) && value !== "none" && !isColourLiteral(value) && !COLOUR_TOKENS.has(value)) {
           out.push({ path: at, message: `expected none or a colour token path, found ${describe(value)}` });
         } else if (name === "transform" && !TRANSFORM.test(value)) {
-          out.push({ path: at, message: "only translate and scale are allowed" });
+          out.push({ path: at, message: "only translate, rotate and scale are allowed" });
         } else if ((name === "d" || name === "points") && !PATH_DATA.test(value)) {
           out.push({ path: at, message: "expected path characters only (commands, digits, signs, dots, commas, spaces)" });
         }
