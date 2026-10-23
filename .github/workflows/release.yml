@@ -47,7 +47,8 @@ jobs:
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
           BEFORE: ${{ github.event.before }}
-        run: node scripts/release-detect.mjs "$REF_TYPE" "$REF_NAME" "$BEFORE" "$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          FORCED: ${{ github.event.forced }}
+        run: node scripts/release-detect.mjs "$REF_TYPE" "$REF_NAME" "$BEFORE" "$GITHUB_SHA" "$FORCED" >> "$GITHUB_OUTPUT"
 
   check:
     needs: detect

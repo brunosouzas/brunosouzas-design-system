@@ -7,7 +7,7 @@ A version reaches npm when a commit on `main` changes the `version` in `package.
 The workflow runs on every push to `main` and on every pushed tag `v*`, in three jobs, so the identity that can publish never exists while dependencies install or run their scripts.
 
 0. **`detect`** has only read access. [`scripts/release-detect.mjs`](../scripts/release-detect.mjs) decides whether the push releases anything:
-   - a push to `main` releases only when it changes the `version` in `package.json` compared with the commit before the push, and the tag `v<version>` does not exist yet. A README fix merged later, while the version still waits for approval, releases nothing;
+   - a push to `main` releases only when it moves `main` forward (a merge; never a forced push), changes the `version` in `package.json` compared with the commit before the push, and the tag `v<version>` does not exist yet. A README fix merged later, while the version still waits for approval, releases nothing;
    - a pushed tag always goes on to `check`;
    - anything else stops here, in seconds, and the run is green.
 1. **`check`** has only read access to the repository. It runs [`scripts/check-release-tag.mjs`](../scripts/check-release-tag.mjs) first: the tag must be `v` plus the `version` in `package.json`, digits only (no `-beta`), on a commit that is on `origin/main` (from `main`: the pushed commit, and if the tag already exists it must name that commit). Then `npm ci`, the type-check, the token freshness check, the build, the full test suite (which packs the built package, installs it into an empty project with no network and uses every entry point) and `npm audit --omit=dev` (the package has no runtime dependency; any finding stops the release). Then `npm pack --ignore-scripts` packs the files just built. The tarball and its integrity go to the next job as an artifact.
@@ -16,7 +16,7 @@ The workflow runs on every push to `main` and on every pushed tag `v*`, in three
    - present with the same integrity and a provenance attestation: it skips publishing;
    - present with other bytes, or without provenance, or npm cannot answer: it stops with exit 1 and changes nothing.
 
-   Then it creates the GitHub release, or leaves an existing one. From `main` the release creates the tag on the released commit, after npm has the version: the tag records what was published. A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
+   Then it creates the GitHub release, or leaves an existing one. From `main` the release creates the tag on the released commit, after npm has the version: the tag records what was published. Because the owner may push the same tag by hand meanwhile, the script reads the tag on GitHub before publishing and again after the release: if it names another commit, it stops (before npm, nothing is published). A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
 
 There is no SBOM: nothing ships but this package's own files.
 

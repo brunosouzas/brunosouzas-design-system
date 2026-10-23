@@ -43,6 +43,39 @@ fail() {
   exit 1
 }
 
+# Sets found_commit to the commit the tag names on GitHub, or to nothing when the tag does not exist.
+# An annotated tag is followed to its commit. Any other answer from GitHub stops the release. (It sets
+# a variable instead of printing, so fail stops the script: no command substitution swallows it.)
+found_commit=
+read_tag_commit() {
+  local answer status=0
+  found_commit=
+  answer=$(gh api "repos/$GH_REPO/git/ref/tags/$tag" --jq '.object.type + " " + .object.sha' 2>&1) || status=$?
+  if [ "$status" -ne 0 ]; then
+    printf '%s' "$answer" | grep -q 'HTTP 404' && return 0
+    fail "cannot read tag $tag on GitHub: $answer"
+  fi
+  if [ "${answer% *}" = tag ]; then
+    status=0
+    answer=$(gh api "repos/$GH_REPO/git/tags/${answer#* }" --jq '.object.sha' 2>&1) || status=$?
+    [ "$status" -eq 0 ] || fail "cannot read annotated tag $tag on GitHub: $answer"
+  else
+    answer=${answer#* }
+  fi
+  found_commit=$answer
+}
+
+# From main (RELEASE_COMMIT set), the tag may have been pushed by hand since the check job ran: if it
+# exists it must name the released commit, or nothing more is done. Checked before npm and after the release.
+check_tag() {
+  read_tag_commit
+  [ -z "$found_commit" ] || [ "$found_commit" = "$RELEASE_COMMIT" ] || fail "tag $tag names $found_commit, not the released commit $RELEASE_COMMIT; nothing more is done"
+}
+if [ -n "${RELEASE_COMMIT:-}" ]; then
+  : "${GH_REPO:?GH_REPO must name the repository}"
+  check_tag
+fi
+
 # 1. npm. stdout holds JSON both on success and on error (npm --json); stderr only the log.
 lookup_status=0
 lookup=$(npm view "$PACKAGE@$version" dist --json 2>/dev/null) || lookup_status=$?
@@ -85,5 +118,9 @@ elif printf '%s' "$view_error" | grep -q 'release not found'; then
   fi
 else
   fail "gh release view $tag failed: $view_error"
+fi
+if [ -n "${RELEASE_COMMIT:-}" ]; then
+  check_tag
+  [ -n "$found_commit" ] || fail "release $tag exists but GitHub has no tag $tag"
 fi
 echo "release $tag is complete"
