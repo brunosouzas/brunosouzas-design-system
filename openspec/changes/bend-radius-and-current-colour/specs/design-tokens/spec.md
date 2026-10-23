@@ -1,7 +1,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: Map tokens
-The source SHALL define the `map` tokens outline, shadow, lineWidth, casing, badgeHeight, badgeTextSize, countHeight, countTextSize, stopRadius, interchangeExtra, nodeHeight, nodeRadius, edgeWidth, labelSize, ringWidth, haloWidth, licenceSize, zonePadding and bendRadius as `dimension`, and zoneTitleTint as `number`. A missing one, or one with another type, is an error. Values: 3, 3.5, 12, 6, 20, 12, 16, 11, 12, 2, 46, 10, 2.5, 13, 3, 1.5, 10, 32, 32 and 0.6. `bendRadius` is the radius of a bundle's centre line at a 45° or 90° bend, in map units.
+The source SHALL define the `map` tokens outline, shadow, lineWidth, casing, badgeHeight, badgeTextSize, countHeight, countTextSize, stopRadius, interchangeExtra, nodeHeight, nodeRadius, edgeWidth, labelSize, ringWidth, haloWidth, licenceSize, zonePadding and bendRadius as `dimension`, and zoneTitleTint as `number`. A missing one, or one with another type, is an error. Values: 3, 3.5, 12, 6, 20, 12, 16, 11, 12, 2, 46, 10, 2.5, 13, 3, 1.5, 10, 32, 32 and 0.6.
 
 #### Scenario: Map token with the wrong type
 - **WHEN** `map.lineWidth` is declared `number`, `map.bendRadius` is declared `number`, or `map.zoneTitleTint` is declared `dimension`
@@ -14,3 +14,12 @@ The source SHALL define the `map` tokens outline, shadow, lineWidth, casing, bad
 #### Scenario: Missing bend radius
 - **WHEN** `map.bendRadius` is removed from the source
 - **THEN** the build fails naming `map.bendRadius` and writes no file
+
+## ADDED Requirements
+
+### Requirement: Bend radius meaning
+`map.bendRadius` SHALL carry the `$description` "Radius of a bundle's centre line at a 45° or 90° bend, in map units". No piece reads it; a map engine draws its bends with it.
+
+#### Scenario: Described bend radius
+- **WHEN** the build runs on the repository's source
+- **THEN** `tokens.json` has `map.bendRadius` with that description

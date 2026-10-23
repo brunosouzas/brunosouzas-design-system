@@ -8,7 +8,8 @@
 
 - The `color` parameter kind gains an option `currentColor?: boolean`. Only `uiIcon.colour` sets it. With it, the exact string `currentColor` passes the check; every other value is checked as before (token path, no literal). The CSS keyword is case-insensitive, but the piece takes one spelling so the output is predictable; `currentcolor` is rejected like any unknown path.
 - `uiIcon` writes `currentColor` as the group's `fill` and `stroke` instead of resolving a token. The children do not change.
-- The cover command checks each entry with the piece's own schema, then reports `currentColor` at `pieces[<i>].<param>` for any parameter whose spec has the option. Today that is only `uiIcon.colour`.
+- The cover command checks each entry with the piece's own schema, then reports `currentColor` at `pieces[<i>].<param>` only for a parameter whose spec has the option (today only `uiIcon.colour`). In any other colour parameter `currentColor` is just an unknown token path and gets the usual message.
+- 0.3.0 compatibility is proven by a frozen fixture, `test/fixtures/ui-icons-0.3.0.json` (`{ piece, params, tree, svg }` per call, 21 calls), written by a one-off script run on `origin/main` (`2bfe4a5`) and committed before any code. The existing `pieces-0.2.0.json` has no `uiIcon`.
 - Why a keyword and not a parameter such as `inherit: true`: stackledger asked for the value first, and one parameter keeps "one colour for the whole icon" in one place.
 
 ## 3. Use (for the README)
