@@ -86,11 +86,15 @@ The library SHALL export these pieces, with the anchors, parameters and defaults
 - **THEN** the first throws a `RangeError` naming `surface` and listing `light, dark`; the second names `surface` as an unknown parameter
 
 ### Requirement: Room for the outline
-A sticker's smallest dimension (`height` of a badge or node, `2 × r` of a marker) SHALL be at least 4 × `map.outline` × `inkScale`; a smaller one throws a `RangeError` naming `height` or `r`, and equality is accepted.
+The smallest dimension of an outlined shape (`height` of a `lineBadge`, flat or not, of a `countBadge` and of a `normal` or `focus` node; `2 × r` of a `stationMarker`) SHALL be at least 4 × `map.outline` × `inkScale`; a smaller one throws a `RangeError` naming `height` or `r`, equality accepted. A `placeholder` node is exempt: it draws no ink.
 
 #### Scenario: Badge too low for its ink
-- **WHEN** `lineBadge` gets `flat: true` and `inkScale: 8` with the default height 20, and then `height: 96` with `inkScale: 8`
-- **THEN** the first throws a `RangeError` naming `height`; the second draws a rect of height 72 inset by 12
+- **WHEN** `lineBadge` gets `flat: true` and `inkScale: 8` with the default height 20, and then `height: 96`, `width: 120` and `inkScale: 8`
+- **THEN** the first throws a `RangeError` naming `height`; the second draws a rect 96 wide and 72 high, inset by 12
+
+#### Scenario: Placeholder without ink
+- **WHEN** `nodeBlock` is drawn with `state: "placeholder"`, `height: 20`, `width: 40` and `inkScale: 8`
+- **THEN** it draws the dashed box without an error
 
 ### Requirement: Line colours from data
 `pipe.fill` and `lineBadge.fill` SHALL accept a colour token path or a data colour matching `^#[0-9A-Fa-f]{6}$`, drawn as given. Any other string is rejected. A cover spec still rejects every colour literal, data colours included.
@@ -123,8 +127,12 @@ A sticker's smallest dimension (`height` of a badge or node, `2 × r` of a marke
 - **THEN** its body is one `rect` of height 17 inset by 1.5, and its text node is `SH` in `#FFFFFF`
 
 #### Scenario: Badge narrower than tall
-- **WHEN** `lineBadge` gets `width: 10` with the default height 20
-- **THEN** it throws a `RangeError` naming `width`
+- **WHEN** `lineBadge` gets `width: 10` with the default height 20, or `text: "SH"` and `height: 96` without a width
+- **THEN** each call throws a `RangeError` naming `width`
+
+#### Scenario: Pipe widths out of range
+- **WHEN** `pipe` gets `width: 0`, `width: 101`, `casing: -1` or `casing: 51`
+- **THEN** each call throws a `RangeError` naming `width` or `casing`; `casing: 0` draws the colour path alone
 
 #### Scenario: Count shape follows its size
 - **WHEN** `countBadge` is drawn with `text: "3"`, with `text: "12"`, and with `text: "3", width: 40`
@@ -132,6 +140,14 @@ A sticker's smallest dimension (`height` of a badge or node, `2 × r` of a marke
 
 ### Requirement: Diagram nodes
 `nodeBlock`, `pillNode` and `hexNode` SHALL draw a box, a pill or a hexagon with `title` and an optional `subtitle` in the states `normal`, `focus` (face `color.caller`, ink text) and `placeholder` (dashed `5 4` in `surface.muted`, no fill, no shadow, title centred, `subtitle` rejected). Width is at least twice the height; `nodeBlock.radius` is at most height / 2.
+
+#### Scenario: Default state
+- **WHEN** `nodeBlock` is called without `state`
+- **THEN** it draws the `normal` sticker: face `#FFFFFF` on the light surface
+
+#### Scenario: Node radius out of range
+- **WHEN** `nodeBlock` gets `radius: -1` or `radius: 24` with height 46
+- **THEN** each call throws a `RangeError` naming `radius`
 
 #### Scenario: Focus node on dark
 - **WHEN** `nodeBlock` is drawn with `state: "focus"` and `surface: "dark"`
@@ -146,15 +162,15 @@ A sticker's smallest dimension (`height` of a badge or node, `2 × r` of a marke
 - **THEN** each call throws a `RangeError` naming `width`, `title` or `subtitle`
 
 ### Requirement: Message arrow
-`messageArrow` SHALL draw as in `metro-and-diagram-pieces` design §3, "The arrow": a path in `surface.text` to the base of a head of length 5 × `width` at `to`; `bezier` leaves and enters horizontally, and falls back to `straight` when the horizontal distance is below twice the head; `head: false` ends at `to`; a `label` sits in a pill at the middle.
+`messageArrow` SHALL draw as in `metro-and-diagram-pieces` design §3, "The arrow": a path in `surface.text` to the base of a head of length 5 × `width` at `to`; `bezier` leaves and enters horizontally, and falls back to `straight` when the horizontal distance is at most twice the head; `head: false` ends at `to`; a `label` sits in a pill at the middle.
 
 #### Scenario: Curved arrow with a head
 - **WHEN** `messageArrow({ from: [0, 0], to: [200, 100] })` is called
 - **THEN** its path `d` is `M0,0 C100,0 100,100 187.5,100` and its head is the polygon (200, 100), (187.5, 105), (187.5, 95)
 
-#### Scenario: Vertical arrow
-- **WHEN** `messageArrow({ from: [0, 0], to: [0, 100] })` is called
-- **THEN** it is drawn straight: the path ends at (0, 87.5) and the head points down to (0, 100)
+#### Scenario: Vertical arrow and the fallback boundary
+- **WHEN** `messageArrow` goes from `[0, 0]` to `[0, 100]`, and from `[0, 0]` to `[25, 100]` (horizontal distance exactly 2 × 12.5)
+- **THEN** both are drawn straight: the first path ends at (0, 87.5) with the head pointing down to (0, 100); the second's head points along the segment
 
 #### Scenario: Labelled straight arrow
 - **WHEN** `messageArrow` gets `from: [0, 0]`, `to: [100, 0]`, `curve: "straight"` and `label: "used by"`
