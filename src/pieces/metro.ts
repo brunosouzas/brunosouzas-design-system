@@ -10,7 +10,7 @@
 // length) are checked here and thrown as a RangeError naming the parameter.
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { drawn, el, g, r2, type Attrs, type SvgNode } from "./node.ts";
-import { col, colour, label, MAX_SIZE, PATH_DATA, paint, pos, size, type ParamSpec, type Schema } from "./params.ts";
+import { col, colour, label, MAX_SIZE, PATH_DATA, paint, pos, size, type ParamSpec, type Problem, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
 type Point = [number, number];
@@ -30,9 +30,8 @@ const dataColour = (required = true): ParamSpec => ({ kind: "dataColor", require
 const point = (required = true): ParamSpec => ({ kind: "point", required });
 const inkSchema: Schema = { surface: surfaceParam, inkScale: inkScaleParam };
 
-const fail = (piece: string, name: string, message: string): never => {
-  throw new RangeError(`${piece}: ${name}: ${message}`);
-};
+/** Collects the limits between parameters (piece.ts, `relations`). */
+const limits = (...checks: (Problem | false)[]): Problem[] => checks.filter((check): check is Problem => check !== false);
 
 /** The surface's colours and the ink measures at a scale. */
 const inkOf = ({ surface = "light", inkScale = 1 }: Ink) => {
@@ -41,10 +40,12 @@ const inkOf = ({ surface = "light", inkScale = 1 }: Ink) => {
 };
 
 /** Outlined shapes need room for their ink: smallest dimension ≥ 4 × outline. */
-const roomFor = (piece: string, name: string, smallest: number, inkParams: Ink) => {
+const roomFor = (name: string, smallest: number, inkParams: Ink): Problem | false => {
   const need = 4 * inkOf(inkParams).outline;
-  if (smallest < need) fail(piece, name, `leaves no room for the outline: needs at least ${r2(need)} at this ink scale`);
+  return smallest < need && { path: name, message: `leaves no room for the outline: needs at least ${r2(need)} at this ink scale` };
 };
+const atLeast = (name: string, value: number, least: number, what: string): Problem | false =>
+  value < least && { path: name, message: `must be at least ${what} (${r2(least)}), found ${r2(value)}` };
 
 type Shape = (dx: number, dy: number, attrs: Attrs) => SvgNode;
 
@@ -67,15 +68,14 @@ const pill = (x: number, y: number, w: number, h: number): Shape => (dx, dy, att
 // ---------- metro ----------
 
 export type LineBadgeParams = Ink & { x: number; y: number; text: string; fill: string; width?: number; height?: number; flat?: boolean };
+const badgeWidth = ({ width, text }: LineBadgeParams) => width ?? Math.max(30, 7.6 * Array.from(text).length + 18);
 /** A line's terminal badge: a pill in the line colour with its code in white, centred on (x, y). */
 export const lineBadge = definePiece<LineBadgeParams>(
   "lineBadge",
   { x: pos(), y: pos(), text: label(), fill: dataColour(), width: size(), height: size(), flat: { kind: "boolean" }, ...inkSchema },
   (params) => {
     const { x, y, text, fill, height = M.badgeHeight, flat = false } = params;
-    const width = params.width ?? Math.max(30, 7.6 * Array.from(text).length + 18);
-    if (width < height) fail("lineBadge", "width", `must be at least the height ${r2(height)}, found ${r2(width)}`);
-    roomFor("lineBadge", "height", height, params);
+    const width = badgeWidth(params);
     const face = paint(fill);
     const { outline } = inkOf(params);
     const inset = flat ? outline / 2 : 0;
@@ -83,33 +83,40 @@ export const lineBadge = definePiece<LineBadgeParams>(
     const body = flat ? [shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline) })] : sticker(shape, face, params);
     return drawn(body, [words(x, y + 4.5, text, { fill: white, "font-size": M.badgeTextSize, "font-weight": bold, "text-anchor": "middle" })]);
   },
+  (params) => {
+    const height = params.height ?? M.badgeHeight;
+    return limits(atLeast("width", badgeWidth(params), height, "the height"), roomFor("height", height, params));
+  },
 );
 
 /** Closed capsule round the segment a-b (stackledger's capsulePath). */
-const capsule = (a: Point, b: Point, r: number): string => {
+const capsule = (a: Point, b: Point, r: number, dx: number, dy: number): string => {
+  // The normal comes from the segment itself; the shadow's offset moves the result, so a very short
+  // segment never collapses to zero length once moved.
   const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
   const n: Point = [(-(b[1] - a[1]) / length) * r, ((b[0] - a[0]) / length) * r];
-  const p = (q: Point, k: number) => `${r2(q[0] + n[0] * k)},${r2(q[1] + n[1] * k)}`;
+  const p = (q: Point, k: number) => `${r2(q[0] + dx + n[0] * k)},${r2(q[1] + dy + n[1] * k)}`;
   const radius = r2(r);
   return `M${p(a, 1)} L${p(b, 1)} A${radius},${radius} 0 0 0 ${p(b, -1)} L${p(a, -1)} A${radius},${radius} 0 0 0 ${p(a, 1)} Z`;
 };
 
 export type StationMarkerParams = Ink & { cx: number; cy: number; to?: Point; r?: number; state?: "normal" | "deprecated" };
+const markerRadius = ({ r, to }: StationMarkerParams) => r ?? (to ? M.stopRadius + M.interchangeExtra : M.stopRadius);
 /** A stop (disc), or with `to` an interchange (capsule from the centre to `to`); deprecated is muted. */
 export const stationMarker = definePiece<StationMarkerParams>(
   "stationMarker",
   { cx: pos(), cy: pos(), to: point(false), r: size(), state: { kind: "enum", values: ["normal", "deprecated"] }, ...inkSchema },
   (params) => {
     const { cx, cy, to, state = "normal" } = params;
-    const r = params.r ?? (to ? M.stopRadius + M.interchangeExtra : M.stopRadius);
-    roomFor("stationMarker", "r", 2 * r, params);
+    const r = markerRadius(params);
     const face = state === "deprecated" ? inkOf(params).s.muted : white;
-    const long = to !== undefined && (to[0] !== cx || to[1] !== cy);
+    const long = to !== undefined && Math.hypot(to[0] - cx, to[1] - cy) > 0;
     const shape: Shape = long
-      ? (dx, dy, attrs) => el("path", { d: capsule([cx + dx, cy + dy], [to[0] + dx, to[1] + dy], r), ...attrs })
+      ? (dx, dy, attrs) => el("path", { d: capsule([cx, cy], to, r, dx, dy), ...attrs })
       : (dx, dy, attrs) => el("circle", { cx: r2(cx + dx), cy: r2(cy + dy), r: r2(r), ...attrs });
     return drawn(sticker(shape, face, params));
   },
+  (params) => limits(roomFor("r", 2 * markerRadius(params), params)),
 );
 
 export type PipeParams = { d: string; fill: string; width?: number; casing?: number };
@@ -121,27 +128,33 @@ export const pipe = definePiece<PipeParams>(
   ({ d, fill, width = M.lineWidth, casing = M.casing }) => {
     const line = { d, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" } as const;
     return drawn([
-      ...(casing > 0 ? [el("path", { ...line, stroke: ink, "stroke-width": r2(width + casing) })] : []),
-      el("path", { ...line, stroke: paint(fill), "stroke-width": r2(width) }),
+      // Stroke widths as given: a valid hairline must not round to zero.
+      ...(casing > 0 ? [el("path", { ...line, stroke: ink, "stroke-width": width + casing })] : []),
+      el("path", { ...line, stroke: paint(fill), "stroke-width": width }),
     ]);
   },
 );
 
 export type CountBadgeParams = Ink & { cx: number; cy: number; text: string; width?: number; height?: number };
+const countWidth = ({ width, text, height = M.countHeight }: CountBadgeParams) => {
+  const characters = Array.from(text).length;
+  return width ?? (characters === 1 ? height : Math.max(height, 6.4 * characters + 8));
+};
 /** A count (rules of a skill): a circle when as wide as high, a pill otherwise, in the surface's panel colour. */
 export const countBadge = definePiece<CountBadgeParams>(
   "countBadge",
   { cx: pos(), cy: pos(), text: label(), width: size(), height: size(), ...inkSchema },
   (params) => {
     const { cx, cy, text, height = M.countHeight } = params;
-    const characters = Array.from(text).length;
-    const width = params.width ?? (characters === 1 ? height : Math.max(height, 6.4 * characters + 8));
-    if (width < height) fail("countBadge", "width", `must be at least the height ${r2(height)}, found ${r2(width)}`);
-    roomFor("countBadge", "height", height, params);
+    const width = countWidth(params);
     const { s } = inkOf(params);
     const shape: Shape =
       width === height ? (dx, dy, attrs) => el("circle", { cx: r2(cx + dx), cy: r2(cy + dy), r: r2(height / 2), ...attrs }) : pill(cx - width / 2, cy - height / 2, width, height);
     return drawn(sticker(shape, s.panel, params), [words(cx, cy + 4, text, { fill: s.text, "font-size": M.countTextSize, "font-weight": bold, "text-anchor": "middle" })]);
+  },
+  (params) => {
+    const height = params.height ?? M.countHeight;
+    return limits(atLeast("width", countWidth(params), height, "the height"), roomFor("height", height, params));
   },
 );
 
@@ -161,12 +174,20 @@ const nodeSchema: Schema = {
   ...inkSchema,
 };
 
-const drawNode = (piece: string, kind: NodeKind, params: NodeBlockParams) => {
+const nodeLimits = (kind: NodeKind) => (params: NodeBlockParams): Problem[] => {
+  const { width, height = M.nodeHeight, subtitle, state = "normal" } = params;
+  const radius = params.radius ?? M.nodeRadius;
+  return limits(
+    atLeast("width", width, 2 * height, "twice the height"),
+    kind === "box" && radius > height / 2 && { path: "radius", message: `must be at most half the height (${r2(height / 2)}), found ${r2(radius)}` },
+    state === "placeholder" && subtitle !== undefined && { path: "subtitle", message: "a placeholder has no subtitle" },
+    state !== "placeholder" && roomFor("height", height, params),
+  );
+};
+
+const drawNode = (kind: NodeKind, params: NodeBlockParams) => {
   const { x, y, width, height = M.nodeHeight, title, subtitle, state = "normal" } = params;
-  if (width < 2 * height) fail(piece, "width", `must be at least twice the height (${r2(2 * height)}), found ${r2(width)}`);
   const radius = kind === "pill" ? height / 2 : (params.radius ?? M.nodeRadius);
-  if (kind === "box" && radius > height / 2) fail(piece, "radius", `must be at most half the height (${r2(height / 2)}), found ${r2(radius)}`);
-  if (state === "placeholder" && subtitle !== undefined) fail(piece, "subtitle", "a placeholder has no subtitle");
   const shape: Shape =
     kind === "hex"
       ? (dx, dy, attrs) => {
@@ -183,7 +204,6 @@ const drawNode = (piece: string, kind: NodeKind, params: NodeBlockParams) => {
       [words(x + width / 2, middle + 4.5, title, { fill: s.muted, "font-size": M.labelSize, "font-weight": 400, "text-anchor": "middle" })],
     );
   }
-  roomFor(piece, "height", height, params);
   const focus = state === "focus";
   const inset = kind === "box" ? 12 : height / 2;
   const titleFill = focus ? ink : s.text;
@@ -197,11 +217,11 @@ const drawNode = (piece: string, kind: NodeKind, params: NodeBlockParams) => {
 };
 
 /** A diagram box (a skill, a software item): rounded rect with a title and an optional subtitle. */
-export const nodeBlock = definePiece<NodeBlockParams>("nodeBlock", { ...nodeSchema, radius: { kind: "number", min: 0, max: MAX_SIZE } }, (p) => drawNode("nodeBlock", "box", p));
+export const nodeBlock = definePiece<NodeBlockParams>("nodeBlock", { ...nodeSchema, radius: { kind: "number", min: 0, max: MAX_SIZE } }, (p) => drawNode("box", p), nodeLimits("box"));
 /** A diagram pill (a playbook). */
-export const pillNode = definePiece<NodeParams>("pillNode", nodeSchema, (p) => drawNode("pillNode", "pill", p));
+export const pillNode = definePiece<NodeParams>("pillNode", nodeSchema, (p) => drawNode("pill", p), nodeLimits("pill"));
 /** A diagram hexagon (an agent). */
-export const hexNode = definePiece<NodeParams>("hexNode", nodeSchema, (p) => drawNode("hexNode", "hex", p));
+export const hexNode = definePiece<NodeParams>("hexNode", nodeSchema, (p) => drawNode("hex", p), nodeLimits("hex"));
 
 // ---------- arrow ----------
 
@@ -222,8 +242,6 @@ export const messageArrow = definePiece<MessageArrowParams>(
     const s = tokens.surface[surface];
     const length = 5 * width;
     const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
-    if (distance === 0) fail("messageArrow", "to", "must differ from from");
-    if (head && distance < 2 * length) fail("messageArrow", "to", `is too close to from for the head: needs at least ${r2(2 * length)}, found ${r2(distance)}`);
     const dx = to[0] - from[0];
     // A curve whose ends are almost above each other has no horizontal entry: draw it straight.
     const bent = curve === "bezier" && Math.abs(dx) > 2 * length;
@@ -247,6 +265,13 @@ export const messageArrow = definePiece<MessageArrowParams>(
     }
     return drawn(body, words_);
   },
+  ({ from, to, head = true, width = M.edgeWidth }) => {
+    const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    return limits(
+      distance === 0 && { path: "to", message: "must differ from from" },
+      distance > 0 && head && distance < 10 * width && { path: "to", message: `is too close to from for the head: needs at least ${r2(10 * width)}, found ${r2(distance)}` },
+    );
+  },
 );
 
 // ---------- mark ----------
@@ -259,7 +284,7 @@ export const ledgerMark = definePiece<LedgerMarkParams>(
   ({ x, y, size: side = 32, line = "illustration.accent" }) =>
     drawn([
       g(
-        { transform: `translate(${r2(x)} ${r2(y)}) scale(${r2(side / 32)})` },
+        { transform: `translate(${r2(x)} ${r2(y)}) scale(${side / 32})` },
         el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: ink, stroke: "none" }),
         el("path", { d: "M7 23 L14 16 L25 16", fill: "none", stroke: colour(line, "line"), "stroke-width": 4.5, "stroke-linecap": "round", "stroke-linejoin": "round" }),
         el("circle", { cx: 14, cy: 16, r: 4, fill: white, stroke: ink, "stroke-width": 2 }),

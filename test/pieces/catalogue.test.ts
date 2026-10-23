@@ -66,14 +66,16 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   countBadge: [
     { cx: 0, cy: 0, text: "3", height: 3, inkScale: 0.25 },
     { cx: 0, cy: 0, text: "999", height: 5000, width: 10000, inkScale: 8, surface: "dark" },
+    { cx: 0, cy: 0, text: "3", height: 10000, width: 10000, inkScale: 8 },
   ],
   nodeBlock: [
-    ...ink({ x: 0, y: 0, title: "a", height: 96, width: 192, radius: 0 }),
+    { x: 0, y: 0, title: "a", height: 3, width: 6, radius: 0, inkScale: 0.25 },
+    { x: 0, y: 0, title: "a", height: 96, width: 192, radius: 0, inkScale: 8 },
     { x: 0, y: 0, title: "a", subtitle: "b", height: 5000, width: 10000, radius: 2500, state: "focus" },
     { x: 0, y: 0, title: "a", height: 0.01, width: 0.02, radius: 0, state: "placeholder" },
   ],
-  pillNode: [...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }), { x: 0, y: 0, title: "a", height: 5000, width: 10000 }],
-  hexNode: [...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }), { x: 0, y: 0, title: "a", height: 5000, width: 10000, surface: "dark" }],
+  pillNode: [{ x: 0, y: 0, title: "a", height: 3, width: 6, inkScale: 0.25 }, ...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }).slice(1), { x: 0, y: 0, title: "a", height: 5000, width: 10000 }],
+  hexNode: [{ x: 0, y: 0, title: "a", height: 3, width: 6, inkScale: 0.25 }, ...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }).slice(1), { x: 0, y: 0, title: "a", height: 5000, width: 10000, surface: "dark" }],
   messageArrow: [
     { from: [0, 0], to: [5, 0], width: 1, head: false },
     { from: [0, 0], to: [120, 0], width: 12, label: "x" },

@@ -102,6 +102,12 @@ describe("Metro pieces", () => {
     expect(d).toContain("L0,-14 A14,14 0 0 0 0,14");
   });
 
+  test("Interchange whose ends almost meet", () => {
+    // The shadow's offset must not collapse a tiny segment: no NaN anywhere.
+    const { body } = stationMarker({ cx: 0, cy: 0, to: [1e-16, 0] });
+    expect(JSON.stringify(body)).not.toMatch(/NaN|Infinity/);
+  });
+
   test("Interchange at one point", () => {
     const { body } = stationMarker({ cx: 5, cy: 5, to: [5, 5] });
     expect(body.at(-1)!.attrs).toMatchObject({ cx: 5, cy: 5, r: 14 });
@@ -117,7 +123,7 @@ describe("Metro pieces", () => {
   });
 
   test("Badge narrower than tall", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height 20/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height \(20\)/);
     expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 })).toThrow(/^lineBadge: width:/);
   });
 
@@ -125,6 +131,7 @@ describe("Metro pieces", () => {
     for (const extra of [{ width: 0 }, { width: 101 }, { casing: -1 }, { casing: 51 }]) {
       expect(() => pipe({ d: "M0,0 L1,0", fill: "color.caller", ...extra }), JSON.stringify(extra)).toThrow(/^pipe: (width|casing):/);
     }
+    expect(pipe({ d: "M0,0 L1,0", fill: "color.caller", width: 0.001, casing: 0 }).body[0].attrs["stroke-width"]).toBe(0.001);
     const { body } = pipe({ d: "M0,0 L1,0", fill: "color.caller", casing: 0 });
     expect(body).toHaveLength(1);
     expect(body[0].attrs.stroke).toBe("#8FB2FF");

@@ -92,5 +92,7 @@ describe("Ledger mark", () => {
     expect(half.body[0].attrs.transform).toBe("translate(0 0) scale(0.5)");
     expect(half.body[0].children).toEqual(ledgerMark({ x: 0, y: 0 }).body[0].children);
     expect(() => ledgerMark({ x: 0, y: 0, size: 8 })).toThrow(/^ledgerMark: size:/);
+    // The smallest mark keeps its exact scale: 12 units, not 12.16.
+    expect(ledgerMark({ x: 0, y: 0, size: 12 }).body[0].attrs.transform).toBe("translate(0 0) scale(0.375)");
   });
 });

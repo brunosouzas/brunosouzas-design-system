@@ -132,6 +132,20 @@ describe("Safe write through a link", () => {
   });
 });
 
+describe("Every spec problem at once", () => {
+  test("Limits between parameters are listed with their paths", () => {
+    const lines = problems({
+      ...minimal(),
+      pieces: [
+        { piece: "lineBadge", x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 },
+        { piece: "nodeBlock", x: 0, y: 0, width: 80, title: "a" },
+        { piece: "messageArrow", from: [0, 0], to: [20, 0] },
+      ],
+    });
+    expect(lines.map((line) => line.split(":")[0])).toEqual(["pieces[0].width", "pieces[1].width", "pieces[2].to"]);
+  });
+});
+
 describe("Line colours from data", () => {
   test("Data colour in a cover spec", () => {
     const lines = problems({ ...minimal(), pieces: [{ piece: "pipe", d: "M0,0 L100,0", fill: "#7B3FE4" }] });
