@@ -104,7 +104,8 @@
       "panel": { "$value": "#FFFFFF", "$type": "color" },
       "shadow": { "$value": "#0A1033", "$type": "color" },
       "rim": { "$value": "#EEF2FF", "$type": "color" },
-      "rimWidth": { "$value": 0, "$type": "dimension", "$description": "No rim on the light surface." }
+      "rimWidth": { "$value": 0, "$type": "dimension", "$description": "No rim on the light surface." },
+      "zoneOpacity": { "$value": 0.12, "$type": "opacity", "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)." }
     },
     "dark": {
       "background": { "$value": "#14215A", "$type": "color", "$description": "Map or diagram background on the dark surface." },
@@ -114,7 +115,8 @@
       "panel": { "$value": "#1C2D74", "$type": "color" },
       "shadow": { "$value": "#4C5CB8", "$type": "color", "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)." },
       "rim": { "$value": "#EEF2FF", "$type": "color" },
-      "rimWidth": { "$value": 1, "$type": "dimension", "$description": "Light band round the ink outline." }
+      "rimWidth": { "$value": 1, "$type": "dimension", "$description": "Light band round the ink outline." },
+      "zoneOpacity": { "$value": 0.22, "$type": "opacity" }
     }
   },
   "map": {
@@ -131,7 +133,12 @@
     "nodeHeight": { "$value": 46, "$type": "dimension" },
     "nodeRadius": { "$value": 10, "$type": "dimension" },
     "edgeWidth": { "$value": 2.5, "$type": "dimension" },
-    "labelSize": { "$value": 13, "$type": "dimension" }
+    "labelSize": { "$value": 13, "$type": "dimension" },
+    "ringWidth": { "$value": 3, "$type": "dimension", "$description": "Colour band of the renewal ring (stackledger 8db44fe svg.ts)." },
+    "haloWidth": { "$value": 1.5, "$type": "dimension", "$description": "Dashed stroke of the suggested-position halo." },
+    "licenceSize": { "$value": 10, "$type": "dimension", "$description": "Diameter of the licence mark." },
+    "zonePadding": { "$value": 32, "$type": "dimension", "$description": "Round padding of a zone around its outline (zones.ts)." },
+    "zoneTitleTint": { "$value": 0.6, "$type": "number", "$description": "On the dark surface a zone title mixes its colour with white by this amount." }
   },
   "site": {
     "light": {

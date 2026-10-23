@@ -98,6 +98,7 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "surface.light.shadow": "color",
   "surface.light.rim": "color",
   "surface.light.rimWidth": "dimension",
+  "surface.light.zoneOpacity": "opacity",
   "surface.dark.background": "color",
   "surface.dark.text": "color",
   "surface.dark.muted": "color",
@@ -106,6 +107,7 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "surface.dark.shadow": "color",
   "surface.dark.rim": "color",
   "surface.dark.rimWidth": "dimension",
+  "surface.dark.zoneOpacity": "opacity",
   "map.outline": "dimension",
   "map.shadow": "dimension",
   "map.lineWidth": "dimension",
@@ -120,6 +122,12 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "map.nodeRadius": "dimension",
   "map.edgeWidth": "dimension",
   "map.labelSize": "dimension",
+  // Markers and zones (AB#167), measured from stackledger 8db44fe.
+  "map.ringWidth": "dimension",
+  "map.haloWidth": "dimension",
+  "map.licenceSize": "dimension",
+  "map.zonePadding": "dimension",
+  "map.zoneTitleTint": "number",
   // Banner frame (AB#156), measured from the published brunosouzas.com home banner.
   "banner.width": "dimension",
   "banner.height": "dimension",

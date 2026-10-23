@@ -82,14 +82,19 @@
   --ds-map-count-height: 16px;
   --ds-map-count-text-size: 11px;
   --ds-map-edge-width: 2.5px;
+  --ds-map-halo-width: 1.5px;
   --ds-map-interchange-extra: 2px;
   --ds-map-label-size: 13px;
+  --ds-map-licence-size: 10px;
   --ds-map-line-width: 12px;
   --ds-map-node-height: 46px;
   --ds-map-node-radius: 10px;
   --ds-map-outline: 3px;
+  --ds-map-ring-width: 3px;
   --ds-map-shadow: 3.5px;
   --ds-map-stop-radius: 12px;
+  --ds-map-zone-padding: 32px;
+  --ds-map-zone-title-tint: 0.6;
   --ds-motion-dim-opacity: 0.42;
   --ds-motion-draw-arrow: 20;
   --ds-motion-fade: 10;
@@ -152,6 +157,7 @@
   --ds-surface-dark-rim-width: 1px;
   --ds-surface-dark-shadow: #4C5CB8;
   --ds-surface-dark-text: #EEF2FF;
+  --ds-surface-dark-zone-opacity: 0.22;
   --ds-surface-light-background: #EEF2FF;
   --ds-surface-light-grid: #E0E7FB;
   --ds-surface-light-muted: #5B6694;
@@ -160,4 +166,5 @@
   --ds-surface-light-rim-width: 0px;
   --ds-surface-light-shadow: #0A1033;
   --ds-surface-light-text: #0A1033;
+  --ds-surface-light-zone-opacity: 0.12;
 }

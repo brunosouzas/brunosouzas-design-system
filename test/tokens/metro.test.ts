@@ -1,5 +1,6 @@
 // Unit tests of the surface, map and site tokens (spec design-tokens, change
-// metro-and-diagram-pieces; tasks 1.1 and 1.2). Each test title is the spec
+// metro-and-diagram-pieces, tasks 1.1 and 1.2; change
+// stackledger-map-and-link-pieces, task 1.1). Each test title is the spec
 // scenario it proves.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
@@ -19,30 +20,38 @@ describe("Surface tokens", () => {
     expect(problemsOf(sourceWith(remove("surface.dark.shadow")))).toEqual(["surface.dark.shadow: missing required token (type color)"]);
   });
 
+  test("Surface entry without its zone opacity", () => {
+    expect(problemsOf(sourceWith(remove("surface.light.zoneOpacity")))).toEqual(["surface.light.zoneOpacity: missing required token (type opacity)"]);
+  });
+
   test("Extra surface", () => {
     const sepia = Object.fromEntries(["background", "text", "muted", "grid", "panel", "shadow", "rim"].map((key) => [key, token("#FFFFFF", "color")]));
-    const problems = problemsOf(sourceWith(set("surface.sepia", { ...sepia, rimWidth: token(0, "dimension") })));
+    const problems = problemsOf(sourceWith(set("surface.sepia", { ...sepia, rimWidth: token(0, "dimension"), zoneOpacity: token(0.12, "opacity") })));
     expect(problems).toEqual([expect.stringMatching(/^surface\.sepia: unexpected surface \(expected light and dark\)/)]);
   });
 
   test("Measured surfaces", () => {
-    expect(json.surface.light).toEqual({ background: "#EEF2FF", text: "#0A1033", muted: "#5B6694", grid: "#E0E7FB", panel: "#FFFFFF", shadow: "#0A1033", rim: "#EEF2FF", rimWidth: 0 });
-    expect(json.surface.dark).toEqual({ background: "#14215A", text: "#EEF2FF", muted: "#8F9BD0", grid: "#1C2D74", panel: "#1C2D74", shadow: "#4C5CB8", rim: "#EEF2FF", rimWidth: 1 });
+    expect(json.surface.light).toEqual({ background: "#EEF2FF", text: "#0A1033", muted: "#5B6694", grid: "#E0E7FB", panel: "#FFFFFF", shadow: "#0A1033", rim: "#EEF2FF", rimWidth: 0, zoneOpacity: 0.12 });
+    expect(json.surface.dark).toEqual({ background: "#14215A", text: "#EEF2FF", muted: "#8F9BD0", grid: "#1C2D74", panel: "#1C2D74", shadow: "#4C5CB8", rim: "#EEF2FF", rimWidth: 1, zoneOpacity: 0.22 });
   });
 });
 
 describe("Map tokens", () => {
   test("Map token with the wrong type", () => {
     expect(problemsOf(sourceWith(set("map.lineWidth", token(12, "number"))))).toEqual([expect.stringMatching(/^map\.lineWidth: expected type dimension, found number/)]);
+    expect(problemsOf(sourceWith(set("map.zoneTitleTint", token(0.6, "dimension"))))).toEqual([expect.stringMatching(/^map\.zoneTitleTint: expected type number, found dimension/)]);
   });
 
   test("Measured map values", () => {
     expect(tokens.map).toEqual({
       outline: 3, shadow: 3.5, lineWidth: 12, casing: 6, badgeHeight: 20, badgeTextSize: 12, countHeight: 16, countTextSize: 11,
       stopRadius: 12, interchangeExtra: 2, nodeHeight: 46, nodeRadius: 10, edgeWidth: 2.5, labelSize: 13,
+      ringWidth: 3, haloWidth: 1.5, licenceSize: 10, zonePadding: 32, zoneTitleTint: 0.6,
     });
     const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
     expect(css).toContain("--ds-map-line-width: 12px;");
+    expect(css).toContain("--ds-map-halo-width: 1.5px;");
+    expect(css).toContain("--ds-map-zone-title-tint: 0.6;");
   });
 });
 

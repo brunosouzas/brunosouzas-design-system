@@ -25,7 +25,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3) and the metro and diagram pieces (item 6) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) and stackledger's map markers, zones and icons (AB#167, 0.3.0) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
 
 ## What it is
 
@@ -130,17 +130,20 @@ The components take every colour and size from the tokens, and what is visible a
 
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
-- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the two line fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 35 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces) and in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
+- The 41 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
 
 ### Maps and diagrams
 
-Nine pieces draw a metro map and its page diagrams, for [stackledger](https://github.com/brunosouzas/stackledger) and any other map in this style: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` (normal, focus, placeholder), `messageArrow` (curved or straight, with a head and an optional label) and `ledgerMark` (stackledger's mark). They paint what the caller lays out: positions, text measurement and truncation stay with the map engine.
+Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https://github.com/brunosouzas/stackledger) and any other map in this style: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` (normal, focus, placeholder), `messageArrow` (curved or straight, with a head and an optional label) `ledgerMark` (stackledger's mark; `surface: "dark"` lines it with a light rim), `renewalRing` (orange bands round a station), `suggestedHalo` (a dashed muted circle), `licenceMark` (a 10-unit disc, green when held, white to buy) and `zone` (the outline the caller gives, widened by a round 32-unit stroke at the surface's zone opacity, with an optional title). They paint what the caller lays out: positions, hulls, text measurement and truncation stay with the map engine.
 
-- `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe` and `ledgerMark`. On dark the hard shadow takes `surface.dark.shadow` and the outline gets a light rim ([ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md), amendment of AB#157).
+- A `placeholder` node may have a `subtitle` (drawn like a normal node's, all muted), and `lineBadge` may have no `text` (the pill alone, 30 wide by default).
+- The licence's disc is small, so it has its own room rule: `size` at least three outlines (9 at ink scale 1).
+
+- `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe`; `ledgerMark` takes only `surface`. On dark the hard shadow takes `surface.dark.shadow` and the outline gets a light rim ([ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md), amendment of AB#157).
 - `inkScale` (0.25 to 8) thickens the outline, rim and shadow without changing the geometry, on `lineBadge`, `stationMarker`, `countBadge` and the three nodes; the map uses 1, the page diagrams 1.6. A shape's height (a marker's diameter) must be at least four outlines; a placeholder node, which draws no ink, is exempt.
-- A line's colour comes from the map's data, so `pipe.fill` and `lineBadge.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
-- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46…), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+- A line's colour comes from the map's data, so `pipe.fill`, `lineBadge.fill` and `zone.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
+- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
 
 ```ts
 import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
@@ -185,6 +188,17 @@ The banner is one image that scales down as a whole. Words in it become small on
 ### A new piece
 
 Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram piece) with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
+
+### UI and link icons
+
+- `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`).
+- `linkIcon({ icon, x, y, size, surface })` draws a link sticker as brunosouzas.com draws its social icons (46-unit box, light or dark frame): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Neither holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
+
+```ts
+import { el, linkIcon, toSvg } from "@brunosouzas/design-system";
+const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 46 46", width: 28, height: 28 }, ...linkIcon({ icon: "github", x: 0, y: 0, surface: "dark" }).body));
+```
 
 ### EIP icons
 

@@ -1,6 +1,6 @@
 // Unit tests of the piece catalogue (spec illustration-pieces, "Piece
 // catalogue", "Pure pieces", "Piece parameters checked", "Words come from the
-// caller"; tasks 3.1).
+// caller"; tasks 3.1; stackledger-map-and-link-pieces task 5.1).
 import { describe, expect, test } from "vitest";
 import * as P from "../../src/pieces/library";
 import { SVG_TAGS, type SvgNode } from "../../src/pieces/node";
@@ -34,7 +34,7 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   book: { x: 0, y: 0 },
   muleFlow: { x: 0, y: 0, width: 300, tiles: [{ x: 20, kind: "choice" }] },
   eipIcon: { name: "splitter", x: 0, y: 0 },
-  lineBadge: { x: 0, y: 0, text: "SH", fill: "color.healthy" },
+  lineBadge: { x: 0, y: 0, fill: "color.healthy" },
   stationMarker: { cx: 0, cy: 0 },
   pipe: { d: "M0,0 L100,0", fill: "color.caller" },
   countBadge: { cx: 0, cy: 0, text: "3" },
@@ -43,11 +43,17 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   hexNode: { x: 0, y: 0, width: 160, title: "a" },
   messageArrow: { from: [0, 0], to: [200, 100] },
   ledgerMark: { x: 0, y: 0 },
+  renewalRing: { cx: 0, cy: 0, r: 18 },
+  suggestedHalo: { cx: 0, cy: 0, r: 21 },
+  licenceMark: { cx: 0, cy: 0 },
+  zone: { points: [[0, 0], [100, 0], [50, 80]], fill: "color.caller" },
+  uiIcon: { name: "sun", x: 0, y: 0 },
+  linkIcon: { icon: "github", x: 0, y: 0 },
 };
 
 /** The metro and diagram pieces have limits that depend on each other (width against height, room for
  * the ink), so their boundary calls are listed with valid companions instead of one value at a time. */
-const METRO = new Set(["lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark"]);
+const METRO = new Set(["lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark", "renewalRing", "suggestedHalo", "licenceMark", "zone"]);
 const ink = (extra: Record<string, unknown>) => [{ ...extra, inkScale: 0.25 }, { ...extra, inkScale: 8 }];
 export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   lineBadge: [
@@ -81,7 +87,20 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
     { from: [0, 0], to: [120, 0], width: 12, label: "x" },
     { from: [-10000, -10000], to: [10000, 10000], width: 12, curve: "straight" },
   ],
-  ledgerMark: [{ x: 0, y: 0, size: 12 }, { x: 10000, y: 10000, size: 512 }],
+  ledgerMark: [{ x: 0, y: 0, size: 12 }, { x: 10000, y: 10000, size: 512, surface: "dark" }],
+  renewalRing: [
+    { cx: 0, cy: 0, r: 0.75, width: 0.01, inkScale: 0.25 },
+    { cx: 0, cy: 0, r: 10000, width: 50, inkScale: 8, surface: "dark" },
+  ],
+  suggestedHalo: [{ cx: 0, cy: 0, r: 0.01 }, { cx: 0, cy: 0, r: 10000, surface: "dark" }],
+  licenceMark: [
+    { cx: 0, cy: 0, size: 2.25, inkScale: 0.25 },
+    { cx: 0, cy: 0, size: 10000, inkScale: 8, state: "toBuy", surface: "dark" },
+  ],
+  zone: [
+    { points: [[0, 0]], fill: "#7B3FE4", title: "a", titleAt: [0, 0], surface: "dark" },
+    { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.caller" },
+  ],
 };
 
 const call = (name: P.PieceName, params: Record<string, unknown>) => (P.PIECES[name] as unknown as (p: Record<string, unknown>) => ReturnType<typeof P.pill>)(params);
@@ -99,7 +118,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(35);
+    expect(P.PIECE_NAMES).toHaveLength(41);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       expect(drawn.body.length, name).toBeGreaterThan(0);
@@ -120,6 +139,10 @@ describe("Pure pieces", () => {
     const first = P.robot({ cx: 400, top: 140 });
     for (const name of P.PIECE_NAMES) call(name, REQUIRED_ONLY[name]);
     expect(P.robot({ cx: 400, top: 140 })).toEqual(first);
+    // Every piece, called again after all the others (Codex code review round 2 of AB#167).
+    const firsts = P.PIECE_NAMES.map((name) => call(name, REQUIRED_ONLY[name]));
+    for (const name of [...P.PIECE_NAMES].reverse()) call(name, REQUIRED_ONLY[name]);
+    P.PIECE_NAMES.forEach((name, i) => expect(call(name, REQUIRED_ONLY[name]), name).toEqual(firsts[i]));
   });
 });
 

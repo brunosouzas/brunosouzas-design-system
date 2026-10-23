@@ -12,6 +12,7 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 4 | Package for both sites | `@brunosouzas/design-system` on npm, with provenance: tokens CSS and JSON, pieces, the React entry and the cover command, no runtime dependency | AB#155 | delivered |
 | 5 | Static banner format | The cover spec gains a banner format with its measures in tokens; static SVG | AB#156 | delivered |
 | 6 | `metro-and-diagram-pieces` | Surface (light and dark), map and site palette tokens; line badge, station marker, pipe, count badge, node block, pill and hex nodes, message arrow and stackledger's mark, for stackledger's map and diagrams. Decision, store, queue, exchange, lifelines, phase band and alt frame stay with AB#141 | AB#157 | delivered |
+| 6a | `stackledger-map-and-link-pieces` | stackledger's remaining requests in one release (0.3.0): renewal ring, suggested halo, licence mark, map zone, UI icons and link icons as pieces; a subtitle on a placeholder node, a line badge without a letter, the mark on a dark surface | AB#167 | delivered |
 | 7 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces | AB#151 | planned |
 | 8 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it | AB#152 | planned |
 | 9 | Covers on the pieces | Port the 21 published covers to cover specs, one first and then in batches checked on the site | AB#140 | planned |
@@ -45,4 +46,4 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
 - Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
-- Requested by stackledger, not blocking (2026-10-23): an optional subtitle on a `placeholder` node; pieces for the renewal ring, the suggested-position halo, the licence marker at 10 units (below today's minimum of four outlines) and the map zones; UI icons (sun, moon, zoom, calendar, download).
+- The bend radius of stackledger's map lines (AB#166): stackledger decides it with its own spike; a design-system token only if that spike asks for one.

@@ -35,3 +35,7 @@ The rule "text is never rotated" is removed. The published covers already turn a
 ## Amendment, 2026-10-23 (AB#157)
 
 On a dark surface the hard shadow is no longer drawn in the ink: ink on the dark navy disappears, so the shadow takes the surface's shadow colour (`surface.dark.shadow`) and the ink outline gets a thin light rim (`surface.dark.rim`), as stackledger's map already draws it. On a light surface nothing changes. The surface tokens hold both values; the cover pieces keep the ink shadow. The colour meanings are unchanged; a map's line colours come from its catalogue, like the external brand colours above.
+
+## Amendment, 2026-10-23 (AB#167)
+
+A metro map marks a station's state with small markers, and they keep the meanings above. A held licence is green (normal: the licence is in place), and a licence still to buy is the empty white disc. A renewal due within 30 days is an orange ring, because the item will block if nothing is done. Before this, stackledger drew a held licence in yellow, a meaning ("transitional") that does not fit holding a licence. The six meanings are unchanged.
