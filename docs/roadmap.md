@@ -1,6 +1,6 @@
 # Roadmap
 
-Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 after the inventory of the published covers and a review of all 28 articles, and again the same day to put first what a second site needs (package, banner, diagram pieces, designer skill). Each one is a card in Azure Boards (area `site`), a branch and one pull request with its OpenSpec change. Nothing below is implemented until its row says so.
+Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 after the inventory of the published covers and a review of all 28 articles, and again the same day to put first what a second site needs (package, banner, diagram pieces, designer skill), and once more on the same day: the diagram pieces before the designer skill, and the ports of covers and body diagrams done by that skill in brunosouzas.com. Each one is a card in Azure Boards (area `site`), a branch and one pull request with its OpenSpec change. Nothing below is implemented until its row says so.
 
 ## Foundation
 
@@ -13,10 +13,11 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 5 | Static banner format | The cover spec gains a banner format with its measures in tokens; static SVG | AB#156 | delivered |
 | 6 | `metro-and-diagram-pieces` | Surface (light and dark), map and site palette tokens; line badge, station marker, pipe, count badge, node block, pill and hex nodes, message arrow and stackledger's mark, for stackledger's map and diagrams. Decision, store, queue, exchange, lifelines, phase band and alt frame stay with AB#141 | AB#157 | delivered |
 | 6a | `stackledger-map-and-link-pieces` | stackledger's remaining requests in one release (0.3.0): renewal ring, suggested halo, licence mark, map zone, UI icons and link icons as pieces; a subtitle on a placeholder node, a line badge without a letter, the mark on a dark surface | AB#167 | delivered |
-| 7 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces | AB#151 | planned |
-| 8 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it | AB#152 | planned |
-| 9 | Covers on the pieces | Port the 21 published covers to cover specs, one first and then in batches checked on the site | AB#140 | planned |
-| 10 | Body diagram kit | Port the 14 body diagrams to the diagram pieces | AB#141 | planned |
+| 6b | `bend-radius-and-current-colour` | stackledger's last requests before its next release (0.3.1): `map.bendRadius` (32) for its round bends, `uiIcon` with `colour: "currentColor"` for icons in buttons | AB#170 | implemented, pull request open |
+| 7 | Body diagram pieces | The diagram pieces the body diagrams need and the package lacks: decision, store, queue, exchange, tagged container, lifelines, phase band, alt/else frame, and message arrow variants (reply, failure, fail-fast). Release 0.3.2. Porting the 14 diagrams is not here: brunosouzas.com does it with the `designer` skill (row 9) | AB#141 | planned |
+| 8 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces. It comes before the ports, because the skill does them | AB#151 | planned |
+| 9 | Covers and body diagrams on the pieces | Done in brunosouzas.com by the `designer` skill, not in this repository: port the 21 published covers to cover specs (one first, then batches checked on the site) and the 14 body diagrams to the diagram pieces | AB#140 | planned |
+| 10 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it. Release 0.4.0 | AB#152 | planned |
 | 11 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
 | 12 | Designer skill for videos | The `designer` skill decides where a video belongs and writes its script | AB#158 | planned |
 | 13 | Site palette | Two or three palette options (shared ink, one brand accent) shown on a real page; the chosen one becomes a change in the site repository that consumes the CSS tokens | — | planned |
@@ -46,4 +47,4 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
 - Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
-- The bend radius of stackledger's map lines (AB#166): stackledger decides it with its own spike; a design-system token only if that spike asks for one.
+- Drawing stackledger's round bends (AB#166): stackledger draws the arcs with `map.bendRadius`; the banner keeps its own `Q` curves.
