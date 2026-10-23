@@ -16,11 +16,11 @@ The workflow runs on every push to `main` and on every pushed tag `v*`, in three
    - present with the same integrity and a provenance attestation: it skips publishing;
    - present with other bytes, or without provenance, or npm cannot answer: it stops with exit 1 and changes nothing.
 
-   Then it creates the GitHub release, or leaves an existing one. From `main` the release creates the tag on the released commit, after npm has the version: the tag records what was published. Because the owner may push the same tag by hand meanwhile, the script reads the tag on GitHub before publishing and again after the release: if it names another commit, it stops (before npm, nothing is published). A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
+   From `main`, before asking npm, the script reserves the tag: it creates `v<version>` on the released commit through the GitHub API, which either creates it or answers that it exists. The owner may push the same tag by hand meanwhile; an existing tag must name the released commit, or the script stops and nothing is published. Then it creates the GitHub release on that tag (`--verify-tag`), or leaves an existing one. A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
 
 There is no SBOM: nothing ships but this package's own files.
 
-If a run fails after npm publishing (for example while creating the GitHub release), use "Re-run failed jobs". The script sees the same bytes on npm and only finishes the release.
+If a run fails part way (npm down after the tag was reserved, or the GitHub release failed after npm), use "Re-run failed jobs". The script finds its own tag on the same commit and the same bytes on npm, and only finishes what is missing.
 
 ## Releasing a version
 

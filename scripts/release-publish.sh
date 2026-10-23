@@ -16,8 +16,8 @@
 #   scripts/release-publish.sh <tarball> <integrity-file>
 # Environment: RELEASE_TAG (the tag, v<version>; GITHUB_REF_NAME when unset), GH_TOKEN and GH_REPO
 # for gh, NODE_AUTH_TOKEN only for the very first version (docs/release.md). RELEASE_COMMIT, when set
-# (a release from a push to main), is the commit the GitHub release creates the tag on, after npm
-# publishing; when unset (a pushed tag), the tag must already exist. npm, gh and node must be on PATH.
+# (a release from a push to main), is the commit the tag is created on, before npm publishing; when
+# unset (a pushed tag), the tag already exists. npm, gh and node must be on PATH.
 # Exit 0: published or already published, and the release exists. 1: stopped, reason on stderr.
 # 2: usage. The tarball is data only: npm publishes it with --ignore-scripts and nothing in it runs.
 set -euo pipefail
@@ -65,15 +65,25 @@ read_tag_commit() {
   found_commit=$answer
 }
 
-# From main (RELEASE_COMMIT set), the tag may have been pushed by hand since the check job ran: if it
-# exists it must name the released commit, or nothing more is done. Checked before npm and after the release.
-check_tag() {
+# From main (RELEASE_COMMIT set), the tag does not exist when the check job ran, but the owner may push
+# it by hand meanwhile. So the tag is reserved first, atomically, on the released commit: GitHub
+# creates the ref, or answers that it exists. An existing tag must name the released commit, or
+# nothing is published. After this the tag is fixed, and the release is created with --verify-tag.
+reserve_tag() {
+  local answer status=0
+  answer=$(gh api -X POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$tag" -f "sha=$RELEASE_COMMIT" 2>&1) || status=$?
+  if [ "$status" -eq 0 ]; then
+    echo "tag $tag created on $RELEASE_COMMIT"
+    return 0
+  fi
+  printf '%s' "$answer" | grep -q 'HTTP 422' || fail "cannot create tag $tag on GitHub: $answer"
   read_tag_commit
-  [ -z "$found_commit" ] || [ "$found_commit" = "$RELEASE_COMMIT" ] || fail "tag $tag names $found_commit, not the released commit $RELEASE_COMMIT; nothing more is done"
+  [ "$found_commit" = "$RELEASE_COMMIT" ] || fail "tag $tag names ${found_commit:-nothing}, not the released commit $RELEASE_COMMIT; nothing was published"
+  echo "tag $tag already names $RELEASE_COMMIT"
 }
 if [ -n "${RELEASE_COMMIT:-}" ]; then
   : "${GH_REPO:?GH_REPO must name the repository}"
-  check_tag
+  reserve_tag
 fi
 
 # 1. npm. stdout holds JSON both on success and on error (npm --json); stderr only the log.
@@ -111,16 +121,8 @@ view_error=$(gh release view "$tag" 2>&1 >/dev/null) || view_status=$?
 if [ "$view_status" -eq 0 ]; then
   echo "release $tag already exists"
 elif printf '%s' "$view_error" | grep -q 'release not found'; then
-  if [ -n "${RELEASE_COMMIT:-}" ]; then
-    gh release create "$tag" --target "$RELEASE_COMMIT" --generate-notes
-  else
-    gh release create "$tag" --verify-tag --generate-notes
-  fi
+  gh release create "$tag" --verify-tag --generate-notes
 else
   fail "gh release view $tag failed: $view_error"
-fi
-if [ -n "${RELEASE_COMMIT:-}" ]; then
-  check_tag
-  [ -n "$found_commit" ] || fail "release $tag exists but GitHub has no tag $tag"
 fi
 echo "release $tag is complete"

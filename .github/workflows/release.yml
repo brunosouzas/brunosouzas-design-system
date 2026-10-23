@@ -5,7 +5,7 @@ name: Release
 #
 # Two ways in (card 171):
 # - a push to main that changes the version in package.json (the version pull request was merged)
-#   while the tag v<version> does not exist: the publish job creates the tag after publishing;
+#   while the tag v<version> does not exist: the publish job reserves the tag on that commit, then publishes;
 # - a pushed tag v* (by hand, or to retry): as before.
 # Every other push to main stops in detect, in seconds.
 #
@@ -136,7 +136,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ needs.detect.outputs.tag }}
-          # From main the GitHub release creates the tag on this commit; a pushed tag already exists.
+          # From main the script creates the tag on this commit before npm; a pushed tag already exists.
           RELEASE_COMMIT: ${{ github.ref_type == 'branch' && github.sha || '' }}
         # No comment may sit on a continued line: bash ends the command there (test/package/release.test.ts).
         # brunosouzas-design-system-<version>.tgz is the npm pack name of @brunosouzas/design-system.

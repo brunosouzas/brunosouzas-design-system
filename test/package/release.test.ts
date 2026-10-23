@@ -194,8 +194,11 @@ describe("Release publish script", () => {
         `echo "gh $*" >> "${log}"`,
         `S="${state}"`,
         'if [ "$1 $2" = "release view" ]; then [ -f "$S/release" ] && exit 0; echo "$GH_VIEW_ERR" >&2; exit "$GH_VIEW_STATUS"; fi',
-        'if [ "$1 $2" = "release create" ]; then touch "$S/release"; prev=; for a in "$@"; do [ "$prev" = --target ] && [ ! -f "$S/tag" ] && printf "%s" "$a" > "$S/tag"; prev=$a; done; exit 0; fi',
-        'if [ "$1" = api ]; then if [ -n "$GH_API_ERR" ]; then echo "$GH_API_ERR" >&2; exit 1; fi; if [ -f "$S/tag" ]; then echo "commit $(cat "$S/tag")"; exit 0; fi; echo "gh: Not Found (HTTP 404)" >&2; exit 1; fi',
+        'if [ "$1 $2" = "release create" ]; then touch "$S/release"; exit 0; fi',
+        'if [ "$1" = api ] && [ -n "$GH_API_ERR" ]; then echo "$GH_API_ERR" >&2; exit 1; fi',
+        // POST git/refs: create the tag unless it exists (GitHub answers 422).
+        'if [ "$1 $2 $3" = "api -X POST" ]; then [ -f "$S/tag" ] && { echo "gh: Reference already exists (HTTP 422)" >&2; exit 1; }; for a in "$@"; do case "$a" in sha=*) printf "%s" "${a#sha=}" > "$S/tag";; esac; done; exit 0; fi',
+        'if [ "$1" = api ]; then if [ -f "$S/tag" ]; then echo "commit $(cat "$S/tag")"; exit 0; fi; echo "gh: Not Found (HTTP 404)" >&2; exit 1; fi',
         "exit 0",
         "",
       ].join("\n"),
@@ -234,19 +237,21 @@ describe("Release publish script", () => {
   const fromMain = { GITHUB_REF_NAME: "main", RELEASE_TAG: "v0.1.0", RELEASE_COMMIT: "abc123" };
   const sameBytes = { NPM_VIEW_STATUS: "0", NPM_VIEW_OUT: '{"integrity":"sha512-good","attestations":{"provenance":{}}}' };
 
-  test("From main: publishes, then the release creates the tag on the commit", () => {
+  test("From main: reserves the tag on the commit, publishes, then creates the release on that tag", () => {
     const result = stubs()({ ...absent, ...fromMain });
     expect(result.status, result.stderr).toBe(0);
+    const reserve = result.calls.findIndex((call) => call === "gh api -X POST repos/o/r/git/refs -f ref=refs/tags/v0.1.0 -f sha=abc123");
     const publish = result.calls.findIndex((call) => call.startsWith("npm publish"));
-    const create = result.calls.findIndex((call) => call === "gh release create v0.1.0 --target abc123 --generate-notes");
-    expect(publish).toBeGreaterThan(-1);
+    const create = result.calls.findIndex((call) => call === "gh release create v0.1.0 --verify-tag --generate-notes");
+    expect(reserve).toBeGreaterThan(-1);
+    expect(publish).toBeGreaterThan(reserve);
     expect(create).toBeGreaterThan(publish);
   });
 
   test("From main: a tag pushed meanwhile on another commit stops before publishing", () => {
     const result = stubs()({ ...absent, ...fromMain, GH_TAG_PRESET: "def456" });
     expect(result.status).toBe(1);
-    expect(result.stderr).toMatch(/names def456, not the released commit abc123/);
+    expect(result.stderr).toMatch(/names def456, not the released commit abc123; nothing was published/);
     expect(published(result.calls)).toBe(false);
     expect(result.calls.some((call) => call.startsWith("gh release create"))).toBe(false);
   });
@@ -268,8 +273,15 @@ describe("Release publish script", () => {
       const result = stubs()(env);
       expect(result.status, `${JSON.stringify(env)} ${result.stderr}`).toBe(0);
       expect(published(result.calls)).toBe(false);
-      expect(result.calls.some((call) => call.startsWith("gh release create v0.1.0"))).toBe(true);
+      expect(result.calls.some((call) => call.startsWith("gh release create v0.1.0 --verify-tag"))).toBe(true);
     }
+  });
+
+  test("Re-run after the tag was reserved but npm failed: publishes on the same tag", () => {
+    const result = stubs()({ ...absent, ...fromMain, GH_TAG_PRESET: "abc123" });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stderr + result.calls.join("\n")).not.toMatch(/names .* not the released/);
+    expect(published(result.calls)).toBe(true);
   });
 
   test("Same bytes with provenance: does not publish again", () => {
