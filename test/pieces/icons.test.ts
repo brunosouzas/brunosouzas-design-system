@@ -1,12 +1,15 @@
 // Unit tests of the UI and link icons and of the new pieces' own strokes (spec
 // illustration-pieces, change stackledger-map-and-link-pieces; tasks 3.1 to
-// 3.3). Each test title is the spec scenario it proves.
+// 3.3; change bend-radius-and-current-colour, task 2.1). Each test title is the
+// spec scenario it proves.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { LINK_ICONS, LINK_ICON_NAMES, linkIcon } from "../../src/pieces/link-icons";
 import { ledgerMark, licenceMark, renewalRing, suggestedHalo, zone } from "../../src/pieces/metro";
 import { SVG_TAGS, el, type Drawn, type SvgNode } from "../../src/pieces/node";
+import { toReact } from "../../src/pieces/react";
 import { toSvg } from "../../src/pieces/render";
+import { renderToStaticMarkup } from "react-dom/server";
 import { UI_ICONS, UI_ICON_NAMES, uiIcon } from "../../src/pieces/ui-icons";
 
 const walk = (nodes: readonly (SvgNode | string)[], visit: (node: SvgNode | string, ancestors: SvgNode[]) => void, ancestors: SvgNode[] = []) => {
@@ -62,6 +65,40 @@ describe("UI icons as data", () => {
   test("Unknown icon or a hex colour", () => {
     expect(() => uiIcon({ name: "menu", x: 0, y: 0 })).toThrow(/^uiIcon: name: expected one of sun, moon/);
     expect(() => uiIcon({ name: "sun", x: 0, y: 0, colour: "#FFFFFF" })).toThrow(/^uiIcon: colour: colour literals are not allowed/);
+    for (const colour of ["currentcolor", "inherit", " currentColor"]) {
+      expect(() => uiIcon({ name: "sun", x: 0, y: 0, colour }), colour).toThrow(/^uiIcon: colour: /);
+    }
+  });
+});
+
+describe("Current colour on UI icons", () => {
+  test("Current colour", () => {
+    const current = uiIcon({ name: "zoomIn", x: 4, y: 8, size: 16, colour: "currentColor" });
+    const inked = uiIcon({ name: "zoomIn", x: 4, y: 8, size: 16 });
+    expect(current.body).toHaveLength(1);
+    expect(current.body[0].tag).toBe("g");
+    expect(current.body[0].attrs).toEqual({ transform: "translate(4 8) scale(0.6666666666666666)", fill: "currentColor", stroke: "currentColor" });
+    expect(current.body[0].children).toEqual(inked.body[0].children);
+  });
+
+  test("Current colour on every icon", () => {
+    for (const name of UI_ICON_NAMES) {
+      const tree = uiIcon({ name, x: 0, y: 0, colour: "currentColor" });
+      walk([...tree.body, ...tree.text], (node) => {
+        if (typeof node === "string") return void expect(node).not.toMatch(/url\(|:\/\//);
+        expect(SVG_TAGS).toContain(node.tag);
+        for (const [attr, value] of Object.entries(node.attrs)) {
+          expect(attr).not.toMatch(/^(href|xlink:href|style|on.*)$/i);
+          expect(String(value), `${name}: ${attr}`).not.toMatch(/#[0-9A-Fa-f]{3,8}|url\(|:\/\//);
+          if (attr === "fill" || attr === "stroke") expect(["currentColor", "none"], `${name}: ${attr}=${value}`).toContain(value);
+        }
+      });
+      const root = el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24" }, ...tree.body);
+      for (const markup of [toSvg(root), renderToStaticMarkup(toReact(root))]) {
+        expect(markup, name).toContain('fill="currentColor" stroke="currentColor"');
+        expect(markup, name).not.toMatch(/#[0-9A-Fa-f]{3,8}|style=|href=/);
+      }
+    }
   });
 });
 

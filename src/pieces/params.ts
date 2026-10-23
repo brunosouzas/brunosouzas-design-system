@@ -8,7 +8,8 @@ import { tokens } from "../../tokens/generated/tokens.ts";
 
 export type ParamSpec =
   | { kind: "number"; required?: boolean; min?: number; exclusiveMin?: boolean; max?: number; integer?: boolean }
-  | { kind: "color"; required?: boolean }
+  /** A token path; with `currentColor`, also that exact keyword (uiIcon.colour only, card 170). */
+  | { kind: "color"; required?: boolean; currentColor?: boolean }
   /** A token path, or a colour from the consumer's data (#RRGGBB): pipe and lineBadge fills only. */
   | { kind: "dataColor"; required?: boolean }
   | { kind: "string"; required?: boolean; nonEmpty?: boolean; pattern?: RegExp; patternName?: string }
@@ -73,6 +74,7 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       return;
     }
     case "color":
+      if (spec.currentColor && value === CURRENT_COLOUR) return;
       if (typeof value !== "string") return report(`expected a colour token path, found ${describe(value)}`);
       if (isColourLiteral(value)) return report("colour literals are not allowed; use a token path");
       if (!COLOUR_TOKENS.has(value)) return report(`expected a colour token path such as color.healthy, found ${describe(value)}`);
@@ -151,6 +153,10 @@ export const size = (required = false, min?: number): ParamSpec =>
 /** A position: any finite number, because a map position has no maximum. */
 export const pos = (): ParamSpec => ({ kind: "number", required: true });
 export const col = (): ParamSpec => ({ kind: "color" });
+/** The paint keyword that follows the text colour of an inline SVG's element. */
+export const CURRENT_COLOUR = "currentColor";
+/** A token path or `currentColor`: for icons written inline in a page. */
+export const colOrCurrent = (): ParamSpec => ({ kind: "color", currentColor: true });
 /** SVG path data: commands, digits, signs, dots, commas and spaces only. */
 export const PATH_DATA = /^[MmLlHhVvCcSsQqTtAaZz0-9eE.,+\-\s]+$/;
 
