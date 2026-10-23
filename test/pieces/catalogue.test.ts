@@ -139,6 +139,10 @@ describe("Pure pieces", () => {
     const first = P.robot({ cx: 400, top: 140 });
     for (const name of P.PIECE_NAMES) call(name, REQUIRED_ONLY[name]);
     expect(P.robot({ cx: 400, top: 140 })).toEqual(first);
+    // Every piece, called again after all the others (Codex code review round 2 of AB#167).
+    const firsts = P.PIECE_NAMES.map((name) => call(name, REQUIRED_ONLY[name]));
+    for (const name of [...P.PIECE_NAMES].reverse()) call(name, REQUIRED_ONLY[name]);
+    P.PIECE_NAMES.forEach((name, i) => expect(call(name, REQUIRED_ONLY[name]), name).toEqual(firsts[i]));
   });
 });
 

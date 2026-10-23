@@ -322,7 +322,8 @@ export const renewalRing = definePiece<RenewalRingParams>(
   (params) => {
     const { cx, cy, r, width = M.ringWidth } = params;
     const { s, outline, rim } = inkOf(params);
-    const band = (stroke: string, strokeWidth: number) => el("circle", { cx: r2(cx), cy: r2(cy), r: r2(r), fill: "none", stroke, "stroke-width": r2(strokeWidth) });
+    // Radius and band widths as given, like pipe's widths: a valid hairline must not round to zero.
+    const band = (stroke: string, strokeWidth: number) => el("circle", { cx: r2(cx), cy: r2(cy), r, fill: "none", stroke, "stroke-width": strokeWidth });
     return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(ink, width + outline), band(tokens.color.blocked, width)]);
   },
   (params) => {
@@ -338,7 +339,7 @@ export const suggestedHalo = definePiece<SuggestedHaloParams>(
   "suggestedHalo",
   { cx: pos(), cy: pos(), r: size(true), surface: surfaceParam },
   ({ cx, cy, r, surface = "light" }) =>
-    drawn([el("circle", { cx: r2(cx), cy: r2(cy), r: r2(r), fill: "none", stroke: tokens.surface[surface].muted, "stroke-width": M.haloWidth, "stroke-dasharray": "4 3" })]),
+    drawn([el("circle", { cx: r2(cx), cy: r2(cy), r, fill: "none", stroke: tokens.surface[surface].muted, "stroke-width": M.haloWidth, "stroke-dasharray": "4 3" })]),
 );
 
 export type LicenceMarkParams = Ink & { cx: number; cy: number; state?: "owned" | "toBuy"; size?: number };

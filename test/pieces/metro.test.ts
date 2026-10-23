@@ -172,6 +172,9 @@ describe("Renewal ring", () => {
     expect(() => renewalRing({ cx: 0, cy: 0, r: 3.9, surface: "dark" })).toThrow(/^renewalRing: r: leaves no room for the ring's bands: needs at least 4/);
     expect(() => renewalRing({ cx: 0, cy: 0, r: 18, width: 0 })).toThrow(/^renewalRing: width:/);
     expect(() => renewalRing({ cx: 0, cy: 0, r: 18, width: 51 })).toThrow(/^renewalRing: width:/);
+    // A valid hairline keeps its width (Codex code review round 2).
+    expect(renewalRing({ cx: 0, cy: 0, r: 18, width: 0.001 }).body.at(-1)!.attrs["stroke-width"]).toBe(0.001);
+    expect(suggestedHalo({ cx: 0, cy: 0, r: 0.001 }).body[0].attrs.r).toBe(0.001);
   });
 });
 
