@@ -138,6 +138,7 @@
     "haloWidth": { "$value": 1.5, "$type": "dimension", "$description": "Dashed stroke of the suggested-position halo." },
     "licenceSize": { "$value": 10, "$type": "dimension", "$description": "Diameter of the licence mark." },
     "zonePadding": { "$value": 32, "$type": "dimension", "$description": "Round padding of a zone around its outline (zones.ts)." },
+    "bendRadius": { "$value": 32, "$type": "dimension", "$description": "Radius of a bundle's centre line at a 45° or 90° bend, in map units (stackledger round-bends, AB#166)." },
     "zoneTitleTint": { "$value": 0.6, "$type": "number", "$description": "On the dark surface a zone title mixes its colour with white by this amount." }
   },
   "site": {

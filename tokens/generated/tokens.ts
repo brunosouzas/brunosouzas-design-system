@@ -134,6 +134,7 @@ export const tokens = {
   "map": {
     "badgeHeight": 20,
     "badgeTextSize": 12,
+    "bendRadius": 32,
     "casing": 6,
     "countHeight": 16,
     "countTextSize": 11,
