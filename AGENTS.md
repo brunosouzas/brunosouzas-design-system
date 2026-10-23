@@ -4,17 +4,18 @@ The public visual identity of the blog brunosouzas.com: one source of design tok
 
 ## Technology
 
-Stack: TypeScript, Node.js, React, Remotion, vitest, GitHub Actions, OpenSpec
+Stack: TypeScript, Node.js, React, Remotion, vitest, GitHub Actions, OpenSpec, npm package
 
 Layout: `tokens/source.json` (the only place token values are written) generates `tokens/generated/` (committed; never edit by hand); `src/brand/` holds the motion components and their frame logic (`motion.ts`); `src/scenes/<scene>/` holds each scene (`scene.ts` data without React, `layout.ts`, `Scene.tsx`); `scripts/` holds the token build and the stills and render commands; `test/` the vitest suites. Node.js 22.12 or later.
 
 - Build: `npm ci`, then `npm run tokens` after any change to `tokens/source.json` (`npm run tokens:check` fails on stale output)
-- Test: `npm run typecheck && npm run tokens:check && npm test` (what CI runs; no rendering, no network)
+- Test: `npm run typecheck && npm run tokens:check && npm run build && npm test` (what CI runs; no rendering, no network; the package test installs the packed build offline)
 - Run locally: `npm run studio` (Remotion Studio), `npm run stills -- <scene>` (key-frame PNGs in `out/stills/`), `npm run render -- <scene>` (masters in `out/master/`, web copies in `out/web/`); both accept `--dry-run`. Rendering needs the network (headless browser on first use, Lato from Google Fonts).
 
 ## Rules for this repository
 
 - Integration branch: `main`.
+- Releases to npm (`brunosouzas-design-system`) only via a version tag and the owner-approved environment `npm`; see `docs/release.md`. Never publish from a local agent session. The package ships only `dist/` and `tokens/generated/` and has no runtime dependency.
 - Board area: `site` (Azure Boards, project `brunosouzas`).
 - OpenSpec: yes, see `openspec/`. The order of the planned changes is in `docs/roadmap.md`.
 - Project-wide decisions are ADRs in `docs/adr/` (index in `docs/adr/README.md`). Read them before a design; a change that contradicts one needs a new ADR that supersedes it.

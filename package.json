@@ -1,12 +1,50 @@
 {
   "name": "brunosouzas-design-system",
   "version": "0.1.0",
-  "private": true,
-  "description": "Design tokens, Remotion motion components and the scene catalogue of brunosouzas.com.",
+  "description": "Design tokens and illustration pieces of brunosouzas.com: tokens as CSS, JSON and TypeScript, pieces that draw SVG (and React), and a cover command.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunosouzas/brunosouzas-design-system.git"
+  },
+  "homepage": "https://github.com/brunosouzas/brunosouzas-design-system#readme",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/pieces/index.d.ts",
+      "import": "./dist/src/pieces/index.js"
+    },
+    "./react": {
+      "types": "./dist/src/pieces/react.d.ts",
+      "import": "./dist/src/pieces/react.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens/generated/tokens.d.ts",
+      "import": "./dist/tokens/generated/tokens.js"
+    },
+    "./tokens.css": "./tokens/generated/tokens.css",
+    "./tokens.json": "./tokens/generated/tokens.json",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "brunosouzas-cover": "dist/scripts/cover.js"
+  },
+  "files": [
+    "dist/",
+    "tokens/generated/",
+    "!dist/**/*.test.*"
+  ],
+  "sideEffects": false,
   "engines": {
     "node": ">=22.12.0"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "scripts": {
     "tokens": "tsx scripts/tokens.ts",
@@ -17,19 +55,19 @@
     "pieces:sheet": "tsx scripts/pieces-sheet.ts",
     "studio": "remotion studio src/index.ts",
     "test": "vitest run",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
   },
-  "dependencies": {
+  "devDependencies": {
     "@remotion/cli": "4.0.538",
     "@remotion/google-fonts": "4.0.538",
     "@remotion/paths": "4.0.538",
-    "react": "19.3.1",
-    "react-dom": "19.3.1",
-    "remotion": "4.0.538"
-  },
-  "devDependencies": {
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.538",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.0.5"

@@ -1,4 +1,6 @@
-// `npm run cover -- <spec.json> --out <file.svg>` (spec cover-cli; design §6):
+#!/usr/bin/env node
+// `npm run cover -- <spec.json> --out <file.svg>`, installed as the bin
+// `brunosouzas-cover` (spec cover-cli; design §6):
 // builds one blog cover from a cover spec kept with its article in the vault.
 //
 // Why: covers were drawn by hand and drifted; a spec plus the shared pieces
@@ -8,10 +10,10 @@
 // What can go wrong: a bad invocation reports its first problem with the
 // usage; an invalid spec reports every problem by JSON path. In both cases the
 // command exits 1 and writes nothing. An existing output file is replaced.
-import { closeSync, existsSync, openSync, readFileSync, renameSync, rmSync, statSync, writeSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { coverTree, validateCoverSpec, type CoverSpec } from "../src/pieces/cover.ts";
 import { toSvg } from "../src/pieces/render.ts";
 
@@ -124,7 +126,15 @@ export const runCover = (args: string[], io: CoverIo): number => {
   return 0;
 };
 
-const isMain = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
+// Real paths on both sides: an installed bin is a symlink in node_modules/.bin.
+const isMain = (() => {
+  if (process.argv[1] === undefined) return false;
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
+  } catch {
+    return false;
+  }
+})();
 if (isMain) {
   process.exitCode = runCover(process.argv.slice(2), { cwd: process.env.INIT_CWD ?? process.cwd(), log: console.log, error: console.error });
 }

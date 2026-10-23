@@ -35,5 +35,8 @@ jobs:
       - name: Generated tokens are fresh
         run: npm run tokens:check
 
+      - name: Build the package (dist/, used by the package test)
+        run: npm run build
+
       - name: Tests
         run: npm test
