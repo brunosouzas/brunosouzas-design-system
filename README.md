@@ -106,7 +106,7 @@ The components take every colour and size from the tokens, and what is visible a
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
 - Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value. Each piece checks its parameters before drawing and names the first wrong one.
-- The 26 pieces, with their anchors, parameters and defaults, are listed in `openspec/changes/illustration-pieces/design.md` §4 (after the archive, in `openspec/specs/illustration-pieces/`). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+- The 26 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) of the change that added them; the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
 
 ### A cover
 
