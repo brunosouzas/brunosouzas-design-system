@@ -13,6 +13,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 - [Status](#status)
 - [What it is](#what-it-is)
 - [How it works](#how-it-works)
+- [Install](#install)
 - [Commands](#commands)
 - [How a scene is built](#how-a-scene-is-built)
 - [Illustration pieces and covers](#illustration-pieces-and-covers)
@@ -50,6 +51,29 @@ src/pieces (pure functions → SVG node tree) ──► toSvg   ──► covers
 
 The generated files are committed, so a consumer can read them without running Node. CSS custom properties carry the prefix `--ds-` (for example `--ds-color-ink`, `--ds-motion-pop-damping`) so they do not clash with the site's own theme names.
 
+## Install
+
+The tokens and the illustration pieces are published on npm as [`@brunosouzas/design-system`](https://www.npmjs.com/package/@brunosouzas/design-system), with provenance; releases follow [docs/release.md](docs/release.md). The package has no runtime dependency: Remotion, the motion components and the scenes stay in this repository.
+
+```bash
+npm install @brunosouzas/design-system
+```
+
+| Import | What it gives |
+|---|---|
+| `@brunosouzas/design-system` | the pieces, `toSvg`, `pose`, the cover spec helpers and `tokens` |
+| `@brunosouzas/design-system/react` | `toReact`, for React and Remotion (needs `react` 19) |
+| `@brunosouzas/design-system/tokens` | the typed `tokens` object |
+| `@brunosouzas/design-system/tokens.css` | the `--ds-*` custom properties |
+| `@brunosouzas/design-system/tokens.json` | the plain values |
+
+```ts
+import { pill, toSvg, tokens } from "@brunosouzas/design-system";
+const label = pill({ x: 60, y: 30, text: "main" });
+```
+
+The package also installs the cover command as `brunosouzas-cover <spec.json> --out <file.svg>`.
+
 ## Commands
 
 Requirements: Node.js 22.12 or later. Rendering also needs the network: Remotion downloads its headless browser on first use, and every render fetches Lato from Google Fonts.
@@ -65,6 +89,7 @@ npm run render -- circuit-breaker-states          # out/master/<id>.mp4 and the 
 npm run stills -- publish-subscribe               # 24 phase/final PNGs (six per composition)
 npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effects
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
+npm run build                                     # compile the package into dist/ (the package test needs it)
 npm run cover -- cover.json --out card.svg        # build a blog cover from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
 npm run studio                                    # Remotion Studio, for frame-by-frame review
@@ -165,6 +190,6 @@ Issues and pull requests are welcome, especially corrections and ideas for the c
 
 ## Licence
 
-Code and tokens: [Apache-2.0](LICENSE). The licence does not grant use of the name or of the brunosouzas.com identity as someone else's brand: to build your own, fork it and change the token values.
+Code and tokens: [Apache-2.0](LICENSE). The identity (the look of brunosouzas.com) is also the look of the author's other products, such as [stackledger](https://github.com/brunosouzas/stackledger), whose generated sites carry it. The licence does not grant use of the name or of the brunosouzas.com identity as someone else's brand: to build your own, fork it and change the token values.
 
 The animations use [Remotion](https://www.remotion.dev), which has its own licence: free for individuals and for companies of up to three people, a company licence above that ([terms](https://www.remotion.dev/docs/license)). Check it before you render with this code at work.

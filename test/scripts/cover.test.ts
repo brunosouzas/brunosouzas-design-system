@@ -132,6 +132,18 @@ describe("Safe write through a link", () => {
   });
 });
 
+describe("Code panel indent bound", () => {
+  test("An indent beyond the size bound is rejected in code and in a cover spec", async () => {
+    const { codePanel } = await import("../../src/pieces/library");
+    const { validateCoverSpec } = await import("../../src/pieces/cover");
+    const line = { indent: 1e308, w: 40, color: "healthy" as const };
+    expect(() => codePanel({ x: 0, y: 0, width: 100, height: 100, lines: [line] })).toThrow(RangeError);
+    const spec = JSON.parse(readFileSync(new URL("../fixtures/covers/spec-driven-development.json", import.meta.url), "utf8"));
+    spec.pieces = [{ piece: "codePanel", x: 0, y: 0, width: 100, height: 100, lines: [line] }];
+    expect(validateCoverSpec(spec).map((problem) => problem.path)).toEqual(["pieces[0].lines[0].indent"]);
+  });
+});
+
 describe("Cover spec format", () => {
   test("Unknown background and piece", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
