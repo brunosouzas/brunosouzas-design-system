@@ -25,7 +25,7 @@ On a cover, 14 rings from radius 90 cover an 800x420 frame centred near the midd
 - Rejected: a fixed `banner.ringCount` token. It is right for one centre only.
 - Rejected: changing covers too. That would break the proof goldens for no visible gain.
 
-`rings.count` is an integer from 1 to 1000. With positions limited to ±10000 the formula stays below 600. A spec may not set it, as it may not set `rings.color`.
+`rings.count` is an integer from 1 to 1000. A cover spec keeps the rings centre within ±10000 (AB#165), so the formula stays at most 548. A spec may not set it, as it may not set `rings.color`.
 
 ## 4. Clip to the rounded frame
 

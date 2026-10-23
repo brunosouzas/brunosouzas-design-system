@@ -44,7 +44,7 @@ The cover command already validates a JSON spec and draws it from the pieces, bu
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. An unknown or non-string `format` is a spec problem at `format`. A `rings.count` in a spec is a problem. The command keeps its error handling and still writes nothing on any problem.
-- **Limits:** requirement. `rings.count` is an integer from 1 to 1000, enough for a centre anywhere within ±10000 of the frame. Positions keep the ±10000 limit.
+- **Limits:** requirement. `rings.count` is an integer from 1 to 1000, enough for any rings centre a cover spec accepts (±10000 since AB#165, at most 548 rings). Piece positions have no bound since AB#165.
 - **Repetition and idempotency:** requirement. The same spec gives the same bytes (existing "Running twice"), banners included.
 - **Concurrency:** n/a. A one-shot command and pure functions, with no shared state.
 - **Security:** requirement. `format` is checked against two names, and nothing else new enters the SVG. `custom` keeps its allowlist.

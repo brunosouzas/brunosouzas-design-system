@@ -30,6 +30,7 @@ export const GROUPS = [
   "surface",
   "map",
   "site",
+  "banner",
 ] as const;
 export const TYPES = ["color", "dimension", "frames", "number", "opacity", "fontFamily", "fontWeight"] as const;
 export type TokenType = (typeof TYPES)[number];
@@ -119,6 +120,10 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "map.nodeRadius": "dimension",
   "map.edgeWidth": "dimension",
   "map.labelSize": "dimension",
+  // Banner frame (AB#156), measured from the published brunosouzas.com home banner.
+  "banner.width": "dimension",
+  "banner.height": "dimension",
+  "banner.radius": "dimension",
   "site.light.primary": "color",
   "site.light.body": "color",
   "site.light.border": "color",

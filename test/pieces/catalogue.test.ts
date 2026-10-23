@@ -209,3 +209,28 @@ describe("Words come from the caller", () => {
     }
   });
 });
+
+// Change banner-format (AB#156), illustration-pieces "Ring count".
+describe("Ring count", () => {
+  const circles = (drawn: ReturnType<typeof P.rings>) => {
+    expect(drawn.body).toHaveLength(1);
+    expect(drawn.body[0].tag).toBe("g");
+    return (drawn.body[0].children as SvgNode[]).map((c) => (expect(c.tag).toBe("circle"), c.attrs.r));
+  };
+
+  test("Default count", () => {
+    const radii = circles(P.rings({ cx: 400, cy: 210 }));
+    expect(radii).toHaveLength(14);
+    expect([radii[0], radii[13]]).toEqual([90, 454]);
+  });
+
+  test("Given count", () => {
+    const radii = circles(P.rings({ cx: 600, cy: 225, radius: 60, count: 22 }));
+    expect(radii).toEqual(Array.from({ length: 22 }, (_, i) => 60 + 28 * i));
+    expect(radii[21]).toBe(648);
+  });
+
+  test("Count out of range", () => {
+    for (const count of [0, 1001, 2.5]) expect(() => P.rings({ cx: 0, cy: 0, count })).toThrow(/^rings: count: /);
+  });
+});

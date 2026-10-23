@@ -90,7 +90,7 @@ npm run stills -- publish-subscribe               # 24 phase/final PNGs (six per
 npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effects
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
 npm run build                                     # compile the package into dist/ (the package test needs it)
-npm run cover -- cover.json --out card.svg        # build a blog cover from its spec
+npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
 npm run studio                                    # Remotion Studio, for frame-by-frame review
 ```
@@ -151,7 +151,7 @@ const badge = lineBadge({ x: 250, y: 40, text: "SH", fill: "#7B3FE4", surface: "
 
 ### A cover
 
-A cover is a JSON spec kept with its article, outside this repository: drafts are private, and only the pieces are public. `npm run cover -- <spec.json> --out <file.svg>` validates it, reports every problem with its JSON path, and writes an 800x420 SVG; the same spec always gives the same bytes.
+A cover is a JSON spec kept with its article, outside this repository: drafts are private, and only the pieces are public. `npm run cover -- <spec.json> --out <file.svg>` validates it, reports every problem with its JSON path, and writes an 800x420 SVG; the same spec always gives the same bytes. With `"format": "banner"` the same command writes a site banner instead (see below).
 
 ```json
 {
@@ -172,6 +172,15 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 - The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
 - `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead.
 - The three published covers that proved the pieces are the test fixtures in `test/fixtures/covers/`.
+
+### Banners
+
+A spec with `"format": "banner"` (the default is `"cover"`) builds a home banner for a site: `banner.width` x `banner.height` (1200x420) with corners rounded at `banner.radius` (20), the measures of brunosouzas.com's published banner. Same pieces, validation and command. Two things differ from a cover:
+
+- the rings go on until they reach the frame's farthest corner (22 rings for a centre at 600, 225 with radius 60), where a cover draws 14;
+- pieces and labels are clipped to the rounded frame too, so nothing pokes past a corner.
+
+The banner is one image that scales down as a whole. Words in it become small on a phone (a 19px label is about 6px at 375px wide), so keep them few or none. `test/fixtures/covers/home-banner.json` is the brunosouzas.com home banner redrawn from the pieces.
 
 ### A new piece
 

@@ -31,7 +31,7 @@ const driftedPairs = (source: Source): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner\)/),
     ]);
   });
 
@@ -44,6 +44,7 @@ describe("Token source", () => {
       set("surface.dark.shadow", token("#4C5CB8", "color")),
       set("map.lineWidth", token(12, "dimension")),
       set("site.light.primary", token("#121212", "color")),
+      set("banner.radius", token(20, "dimension")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
@@ -51,6 +52,7 @@ describe("Token source", () => {
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-blush-fill: #F6CFE0;");
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-width: 800px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
     expect(result.outputs["tokens.ts"]).toContain('"blush": {');
   });
@@ -141,5 +143,21 @@ describe("Measured cover backgrounds", () => {
     const source = repoSource();
     (source.coverBackground as Record<string, Record<string, { $value: string }>>).blush.ring.$value = "#ECBAD1";
     expect(driftedPairs(source)).toEqual(["blush"]);
+  });
+});
+
+// Change banner-format (AB#156), design-tokens "Required banner tokens".
+describe("Required banner tokens", () => {
+  test("Banner token missing", () => {
+    expect(problemsOf(sourceWith(remove("banner.radius")))).toEqual(["banner.radius: missing required token (type dimension)"]);
+  });
+
+  test("Banner token with the wrong type", () => {
+    expect(problemsOf(sourceWith(set("banner.width", token(1200, "number"))))).toEqual(["banner.width: expected type dimension, found number"]);
+  });
+
+  test("Measured banner values", () => {
+    expect(tokens.banner).toEqual({ width: 1200, height: 420, radius: 20 });
+    expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-banner-width: 1200px;");
   });
 });

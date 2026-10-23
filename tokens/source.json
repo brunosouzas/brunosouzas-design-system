@@ -176,5 +176,10 @@
       "h5Small": { "$value": 1.296, "$type": "number" },
       "h6Small": { "$value": 1.08, "$type": "number" }
     }
+  },
+  "banner": {
+    "width": { "$value": 1200, "$type": "dimension", "$description": "Home banner of both sites, measured from brunosouzas.com public/images/home/home-banner.svg (e8ad098)." },
+    "height": { "$value": 420, "$type": "dimension" },
+    "radius": { "$value": 20, "$type": "dimension", "$description": "Corner radius of the banner's background and clip." }
   }
 }

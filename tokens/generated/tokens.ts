@@ -1,6 +1,11 @@
 // Generated from tokens/source.json by scripts/tokens.ts (npm run tokens). Do not edit by hand.
 
 export const tokens = {
+  "banner": {
+    "height": 420,
+    "radius": 20,
+    "width": 1200
+  },
   "color": {
     "backend": "#FF6B6B",
     "blocked": "#FF8A3D",

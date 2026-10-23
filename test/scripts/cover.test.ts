@@ -307,7 +307,7 @@ describe("Cover output", () => {
 });
 
 describe("Parity with the published proof covers", () => {
-  test.each(PROOF_COVERS)("Golden output (%s)", (name) => {
+  test.each([...PROOF_COVERS, "home-banner"])("Golden output (%s)", (name) => {
     const result = buildCover(readFileSync(join(FIXTURES, `${name}.json`), "utf8"), name);
     expect(result.ok).toBe(true);
     if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${name}.svg`), "utf8"));
@@ -344,5 +344,87 @@ describe("Positions in a cover spec", () => {
     expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
     expect(ws.err[0]).toBe("pieces[1]: the drawing overflows");
     expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toBe("old");
+  });
+});
+
+// Change banner-format (AB#156): cover-cli "Cover spec format", "Cover output", "Banner output", "Banner rings reach the corners".
+const banner = (extra: Record<string, unknown> = {}) => ({ ...minimal(), format: "banner", background: "navy", rings: { cx: 600, cy: 225, radius: 60 }, ...extra });
+const svgOf = (spec: unknown): string => {
+  const result = buildCover(JSON.stringify(spec), "s");
+  expect(result.ok).toBe(true);
+  return result.ok ? result.svg : "";
+};
+const ringRadii = (svg: string): number[] => {
+  const group = /<g fill="none" stroke="#1C2D74" stroke-width="2">([\s\S]*?)<\/g>/.exec(svg)![1];
+  return [...group.matchAll(/ r="([\d.]+)"/g)].map((m) => Number(m[1]));
+};
+
+describe("Banner format", () => {
+  test("Unknown format", () => {
+    expect(problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner"]);
+    expect(problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner"]);
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), format: "poster" });
+    expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+
+  test("Ring count in a spec", () => {
+    for (const spec of [{ ...minimal(), rings: { cx: 400, cy: 215, count: 30 } }, banner({ rings: { cx: 600, cy: 225, count: 30 } })]) {
+      expect(problems(spec)).toEqual(["rings.count: unknown parameter: the ring count comes from the format"]);
+    }
+  });
+
+  test("Default format is the cover", () => {
+    for (const name of PROOF_COVERS) {
+      const spec = JSON.parse(readFileSync(join(FIXTURES, `${name}.json`), "utf8"));
+      const golden = readFileSync(join(FIXTURES, `${name}.svg`), "utf8");
+      expect(svgOf(spec)).toBe(golden);
+      expect(svgOf({ ...spec, format: "cover" })).toBe(golden);
+    }
+  });
+
+  test("Banner frame", () => {
+    const svg = svgOf(banner({ pieces: [{ piece: "pill", x: 300, y: 100, text: "APIs" }] }));
+    expect(svg).toMatch(/^<svg [^>]*width="1200" height="420" viewBox="0 0 1200 420"/);
+    expect(svg).toContain('<clipPath id="t-frame">\n      <rect width="1200" height="420" rx="20"/>');
+    expect(svg).toContain('<rect width="1200" height="420" rx="20" fill="#14215A"/>');
+    const clipped = svg.lastIndexOf('<g clip-path="url(#t-frame)">');
+    expect(clipped).toBeGreaterThan(svg.indexOf('<g clip-path="url(#t-frame)">'));
+    expect(svg.indexOf('height="36" rx="18"')).toBeGreaterThan(clipped);
+    expect(svg.indexOf(">APIs</text>")).toBeGreaterThan(clipped);
+  });
+
+  test("Piece past a corner", () => {
+    const ws = workspace();
+    ws.write("spec.json", banner({ pieces: [{ piece: "cloud", cx: -20, cy: 10 }] }));
+    expect(ws.run("spec.json", "--out", "banner.svg")).toBe(0);
+    const svg = readFileSync(join(ws.root, "banner.svg"), "utf8");
+    expect(svg.indexOf("<path d=\"M-90,40")).toBeGreaterThan(svg.lastIndexOf('<g clip-path="url(#t-frame)">'));
+  });
+
+  test("Same command for both formats", () => {
+    const ws = workspace();
+    mkdirSync(join(ws.root, "out"));
+    ws.write("banner.json", banner());
+    expect(ws.run("banner.json", "--out", "out/banner.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote out/banner.svg"]);
+    const first = readFileSync(join(ws.root, "out/banner.svg"));
+    expect(ws.run("banner.json", "--out", "out/banner.svg")).toBe(0);
+    expect(readFileSync(join(ws.root, "out/banner.svg")).equals(first)).toBe(true);
+  });
+
+  test("Published centre", () => {
+    expect(ringRadii(svgOf(banner()))).toEqual(Array.from({ length: 22 }, (_, i) => 60 + 28 * i));
+  });
+
+  test("First ring beyond every corner", () => {
+    expect(ringRadii(svgOf(banner({ rings: { cx: 600, cy: 210, radius: 700 } })))).toEqual([700]);
+  });
+
+  test("Centre far outside the frame", () => {
+    const radii = ringRadii(svgOf(banner({ rings: { cx: -10000, cy: -10000 } })));
+    expect(radii).toHaveLength(545);
+    expect([radii[0], radii[544]]).toEqual([90, 15322]);
   });
 });

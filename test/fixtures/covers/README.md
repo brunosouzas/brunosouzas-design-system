@@ -4,6 +4,8 @@ The three published covers that proved the pieces (change `illustration-pieces`,
 
 These are the only cover specs in this public repository: they describe covers already published on brunosouzas.com. Every other cover spec lives with its article in the author's private vault.
 
+`home-banner.json` (change `banner-format`, AB#156) is the one banner: brunosouzas.com's home banner (`public/images/home/home-banner.svg` in the site repository, commit `e8ad098`), redrawn from the pieces. It may be public because the banner it redraws is already public. It has a golden SVG but no parity value, because it is a new drawing of the same idea rather than a copy (the hub is a Mule flow in the caller colour, where the published banner uses an orange block).
+
 Published sources used for the visual parity check (brain vault commit `f536637`):
 
 | Fixture | Published file | SHA-256 |
