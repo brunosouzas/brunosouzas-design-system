@@ -18,8 +18,8 @@ describe("Ink sticker on a surface", () => {
   test("Light sticker", () => {
     const { body } = stationMarker({ cx: 100, cy: 50 });
     expect(body.map((node) => node.tag)).toEqual(["circle", "circle"]);
-    expect(body[0].attrs).toEqual({ cx: 103.5, cy: 53.5, r: 12, fill: "#0A1033", stroke: "#0A1033", "stroke-width": 3 });
-    expect(body[1].attrs).toEqual({ cx: 100, cy: 50, r: 12, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 3 });
+    expect(body[0].attrs).toEqual({ cx: 103.5, cy: 53.5, r: 12, fill: "#0A1033", stroke: "#0A1033", "stroke-width": 3, "stroke-linejoin": "round" });
+    expect(body[1].attrs).toEqual({ cx: 100, cy: 50, r: 12, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 3, "stroke-linejoin": "round" });
   });
 
   test("Dark sticker with its rim", () => {
@@ -28,6 +28,8 @@ describe("Ink sticker on a surface", () => {
     expect(body[0].attrs).toMatchObject({ cx: 103.5, cy: 53.5, fill: "#4C5CB8", stroke: "#4C5CB8", "stroke-width": 5 });
     expect(body[1].attrs).toMatchObject({ cx: 100, cy: 50, fill: "#EEF2FF", stroke: "#EEF2FF", "stroke-width": 5 });
     expect(body[2].attrs).toMatchObject({ cx: 100, cy: 50, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 3 });
+    // Every layer carries its own stroke attributes, so a parent group (miter joins, another width) does not change it.
+    expect(body.every((node) => node.attrs["stroke-linejoin"] === "round" && node.attrs["stroke-width"] !== undefined)).toBe(true);
   });
 
   test("Ink scale and its bounds", () => {

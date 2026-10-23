@@ -166,8 +166,18 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
       const definition = PIECES[piece as PieceName] as { schema: typeof rings.schema; relations?: (p: Record<string, unknown>) => Problem[] };
       const own = checkParams(definition.schema, params, at);
       out.push(...own);
-      // Limits between parameters are checked once each parameter is valid on its own.
-      if (own.length === 0 && definition.relations) out.push(...definition.relations(params).map((problem) => ({ path: `${at}.${problem.path}`, message: problem.message })));
+      // Limits between parameters are reported with the schema's problems, except on a parameter
+      // already reported; a relation that cannot read a broken parameter reports nothing.
+      if (definition.relations) {
+        let related: Problem[] = [];
+        try {
+          related = definition.relations(params);
+        } catch {
+          related = [];
+        }
+        const reported = new Set(own.map((problem) => problem.path));
+        out.push(...related.map((problem) => ({ path: `${at}.${problem.path}`, message: problem.message })).filter((problem) => !reported.has(problem.path)));
+      }
     });
   if (spec.custom !== undefined) {
     if (Array.isArray(spec.custom)) out.push({ path: "custom", message: "one free-form object per cover; a repeated object must be a piece" });

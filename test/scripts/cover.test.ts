@@ -143,6 +143,9 @@ describe("Every spec problem at once", () => {
       ],
     });
     expect(lines.map((line) => line.split(":")[0])).toEqual(["pieces[0].width", "pieces[1].width", "pieces[2].to"]);
+    // A schema problem and a limit on another parameter of the same piece are both reported.
+    const mixed = problems({ ...minimal(), pieces: [{ piece: "nodeBlock", x: 0, y: 0, width: 80, title: "" }] });
+    expect(mixed.map((line) => line.split(":")[0])).toEqual(["pieces[0].title", "pieces[0].width"]);
   });
 });
 

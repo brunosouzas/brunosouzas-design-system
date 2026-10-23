@@ -54,9 +54,10 @@ const sticker = (shape: Shape, face: string, inkParams: Ink): SvgNode[] => {
   const { s, outline, rim, offset } = inkOf(inkParams);
   const wide = r2(outline + 2 * rim);
   return [
-    shape(offset, offset, { fill: s.shadow, stroke: s.shadow, "stroke-width": wide }),
-    ...(s.rimWidth > 0 ? [shape(0, 0, { fill: s.rim, stroke: s.rim, "stroke-width": wide })] : []),
-    shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline) }),
+    // Joins are set here, so a sticker draws the same inside any group.
+    shape(offset, offset, { fill: s.shadow, stroke: s.shadow, "stroke-width": wide, "stroke-linejoin": "round" }),
+    ...(s.rimWidth > 0 ? [shape(0, 0, { fill: s.rim, stroke: s.rim, "stroke-width": wide, "stroke-linejoin": "round" })] : []),
+    shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" }),
   ];
 };
 
@@ -80,7 +81,7 @@ export const lineBadge = definePiece<LineBadgeParams>(
     const { outline } = inkOf(params);
     const inset = flat ? outline / 2 : 0;
     const shape = pill(x - width / 2 + inset, y - height / 2 + inset, width - 2 * inset, height - 2 * inset);
-    const body = flat ? [shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline) })] : sticker(shape, face, params);
+    const body = flat ? [shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" })] : sticker(shape, face, params);
     return drawn(body, [words(x, y + 4.5, text, { fill: white, "font-size": M.badgeTextSize, "font-weight": bold, "text-anchor": "middle" })]);
   },
   (params) => {
@@ -200,7 +201,7 @@ const drawNode = (kind: NodeKind, params: NodeBlockParams) => {
   const middle = y + height / 2;
   if (state === "placeholder") {
     return drawn(
-      [shape(0, 0, { fill: "none", stroke: s.muted, "stroke-width": 1.5, "stroke-dasharray": "5 4" })],
+      [shape(0, 0, { fill: "none", stroke: s.muted, "stroke-width": 1.5, "stroke-dasharray": "5 4", "stroke-linejoin": "round" })],
       [words(x + width / 2, middle + 4.5, title, { fill: s.muted, "font-size": M.labelSize, "font-weight": 400, "text-anchor": "middle" })],
     );
   }
