@@ -31,7 +31,7 @@ const driftedPairs = (source: Source): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site\)/),
     ]);
   });
 
@@ -41,12 +41,16 @@ describe("Token source", () => {
       set("cover.width", token(800, "dimension")),
       set("coverBackground.blush.fill", token("#F6CFE0", "color")),
       set("coverBackground.blush.ring", token("#ECBAD0", "color")),
+      set("surface.dark.shadow", token("#4C5CB8", "color")),
+      set("map.lineWidth", token(12, "dimension")),
+      set("site.light.primary", token("#121212", "color")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-blush-fill: #F6CFE0;");
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-width: 800px;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
     expect(result.outputs["tokens.ts"]).toContain('"blush": {');
   });

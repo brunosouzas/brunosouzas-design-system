@@ -27,6 +27,9 @@ export const GROUPS = [
   "illustration",
   "cover",
   "coverBackground",
+  "surface",
+  "map",
+  "site",
 ] as const;
 export const TYPES = ["color", "dimension", "frames", "number", "opacity", "fontFamily", "fontWeight"] as const;
 export type TokenType = (typeof TYPES)[number];
@@ -86,7 +89,74 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "cover.ringWidth": "dimension",
   "cover.ringRadius": "dimension",
   "cover.labelWeight": "fontWeight",
+  "surface.light.background": "color",
+  "surface.light.text": "color",
+  "surface.light.muted": "color",
+  "surface.light.grid": "color",
+  "surface.light.panel": "color",
+  "surface.light.shadow": "color",
+  "surface.light.rim": "color",
+  "surface.light.rimWidth": "dimension",
+  "surface.dark.background": "color",
+  "surface.dark.text": "color",
+  "surface.dark.muted": "color",
+  "surface.dark.grid": "color",
+  "surface.dark.panel": "color",
+  "surface.dark.shadow": "color",
+  "surface.dark.rim": "color",
+  "surface.dark.rimWidth": "dimension",
+  "map.outline": "dimension",
+  "map.shadow": "dimension",
+  "map.lineWidth": "dimension",
+  "map.casing": "dimension",
+  "map.badgeHeight": "dimension",
+  "map.badgeTextSize": "dimension",
+  "map.countHeight": "dimension",
+  "map.countTextSize": "dimension",
+  "map.stopRadius": "dimension",
+  "map.interchangeExtra": "dimension",
+  "map.nodeHeight": "dimension",
+  "map.nodeRadius": "dimension",
+  "map.edgeWidth": "dimension",
+  "map.labelSize": "dimension",
+  "site.light.primary": "color",
+  "site.light.body": "color",
+  "site.light.border": "color",
+  "site.light.light": "color",
+  "site.light.dark": "color",
+  "site.light.text": "color",
+  "site.light.textDark": "color",
+  "site.light.textLight": "color",
+  "site.dark.primary": "color",
+  "site.dark.body": "color",
+  "site.dark.border": "color",
+  "site.dark.light": "color",
+  "site.dark.dark": "color",
+  "site.dark.text": "color",
+  "site.dark.textDark": "color",
+  "site.dark.textLight": "color",
+  "site.font.primary": "fontFamily",
+  "site.font.secondary": "fontFamily",
+  "site.fontSize.base": "dimension",
+  "site.fontSize.baseSmall": "dimension",
+  "site.heading.h1": "number",
+  "site.heading.h2": "number",
+  "site.heading.h3": "number",
+  "site.heading.h4": "number",
+  "site.heading.h5": "number",
+  "site.heading.h6": "number",
+  "site.heading.h1Small": "number",
+  "site.heading.h2Small": "number",
+  "site.heading.h3Small": "number",
+  "site.heading.h4Small": "number",
+  "site.heading.h5Small": "number",
+  "site.heading.h6Small": "number",
 };
+
+// `surface`, `map` and `site` are closed: they hold exactly their required tokens
+// (design §2 of metro-and-diagram-pieces). `surface` has exactly light and dark.
+export const CLOSED_GROUPS = ["surface", "map", "site"] as const;
+export const SURFACE_NAMES = ["light", "dark"] as const;
 
 // Every entry of `coverBackground` is a pair: a background and its ring colour,
 // as measured from the published covers (design §2 of illustration-pieces).
@@ -157,7 +227,10 @@ export const valueProblem = (type: TokenType, value: unknown): string | null => 
         ? null
         : `expected #RRGGBB, found ${describe(value)}`;
     case "dimension":
-      return isPositiveInteger(value) ? null : `expected a positive integer of pixels, found ${describe(value)}`;
+      // Measures such as a 3.5 shadow offset or a 12.8 font size are real; 0 turns a rim off.
+      return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 10000 && Math.round(value * 100) / 100 === value
+        ? null
+        : `expected a number of pixels from 0 to 10000 with at most two decimals, found ${describe(value)}`;
     case "frames":
       return isPositiveInteger(value) ? null : `expected a positive integer frame count, found ${describe(value)}`;
     case "number":
@@ -290,6 +363,29 @@ export const validateSource = (root: unknown, sourceLabel = "tokens/source.json"
         if (!(COVER_BACKGROUND_KEYS as readonly string[]).includes(key)) {
           report(`${entryPath}.${key}`, "unexpected token in a cover background (only fill and ring)");
         }
+      }
+    }
+  }
+
+  // Closed groups: every token must be a required one; surface entries are exactly light and dark.
+  for (const groupName of CLOSED_GROUPS) {
+    const group = root[groupName];
+    if (!isPlainObject(group)) continue; // missing or already reported
+    for (const [name, entry] of Object.entries(group)) {
+      const entryPath = `${groupName}.${name}`;
+      if (!NAME_PATTERN.test(name)) continue; // already reported
+      if (groupName === "surface" && !(SURFACE_NAMES as readonly string[]).includes(name)) {
+        report(entryPath, `unexpected surface (expected ${SURFACE_NAMES.join(" and ")})`);
+        continue;
+      }
+      if (isPlainObject(entry) && isToken(entry)) {
+        if (!Object.hasOwn(REQUIRED, entryPath)) report(entryPath, `unexpected token in ${groupName}`);
+        continue;
+      }
+      if (!isPlainObject(entry)) continue;
+      for (const key of Object.keys(entry)) {
+        const tokenPath = `${entryPath}.${key}`;
+        if (NAME_PATTERN.test(key) && !Object.hasOwn(REQUIRED, tokenPath)) report(tokenPath, `unexpected token in ${groupName}`);
       }
     }
   }

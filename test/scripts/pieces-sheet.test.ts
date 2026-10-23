@@ -25,6 +25,13 @@ describe("Piece catalogue", () => {
     const svg = readFileSync(join(root, "sheet.svg"), "utf8");
     const labels = [...svg.matchAll(/<text [^>]*font-family="([^"]*)" font-size="16"[^>]*>([a-zA-Z]+)<\/text>/g)];
     expect(labels.map((m) => m[2])).toEqual(PIECE_NAMES);
+    // Every cell draws its piece: its group holds more than the cell's own background.
+    for (const name of PIECE_NAMES) {
+      const cell = new RegExp(`<g [^>]*clip-path="url\\(#cell-${name}\\)"[^>]*>([\\s\\S]*?)</g>\\s*<g `).exec(svg);
+      expect(cell, name).not.toBeNull();
+      const shapes = cell![1].match(/<(rect|circle|path|polygon|polyline|line|ellipse)\b/g) ?? [];
+      expect(shapes.length, name).toBeGreaterThan(1);
+    }
     expect(new Set(labels.map((m) => m[1].replace(/&#39;|&quot;/g, "'")))).toEqual(new Set([tokens.font.mono]));
     expect(runPiecesSheet(["--out", "sheet.png"], io)).toBe(1);
     expect(err).toEqual(["the output must be an .svg file, found sheet.png", SHEET_USAGE]);

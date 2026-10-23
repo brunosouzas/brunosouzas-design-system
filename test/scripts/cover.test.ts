@@ -132,6 +132,30 @@ describe("Safe write through a link", () => {
   });
 });
 
+describe("Every spec problem at once", () => {
+  test("Limits between parameters are listed with their paths", () => {
+    const lines = problems({
+      ...minimal(),
+      pieces: [
+        { piece: "lineBadge", x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 },
+        { piece: "nodeBlock", x: 0, y: 0, width: 80, title: "a" },
+        { piece: "messageArrow", from: [0, 0], to: [20, 0] },
+      ],
+    });
+    expect(lines.map((line) => line.split(":")[0])).toEqual(["pieces[0].width", "pieces[1].width", "pieces[2].to"]);
+    // A schema problem and a limit on another parameter of the same piece are both reported.
+    const mixed = problems({ ...minimal(), pieces: [{ piece: "nodeBlock", x: 0, y: 0, width: 80, title: "" }] });
+    expect(mixed.map((line) => line.split(":")[0])).toEqual(["pieces[0].title", "pieces[0].width"]);
+  });
+});
+
+describe("Line colours from data", () => {
+  test("Data colour in a cover spec", () => {
+    const lines = problems({ ...minimal(), pieces: [{ piece: "pipe", d: "M0,0 L100,0", fill: "#7B3FE4" }] });
+    expect(lines).toEqual([expect.stringMatching(/^pieces\[0\]\.fill: colour literals are not allowed/)]);
+  });
+});
+
 describe("Code panel indent bound", () => {
   test("An indent beyond the size bound is rejected in code and in a cover spec", async () => {
     const { codePanel } = await import("../../src/pieces/library");
@@ -149,7 +173,8 @@ describe("Cover spec format", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
     expect(lines[0]).toMatch(/^background: expected one of blush, cobalt, .*, wine, found "pink"$/);
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon\)$/);
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(35);
   });
 
   test("Unsafe id", () => {

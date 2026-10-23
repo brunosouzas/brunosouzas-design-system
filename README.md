@@ -25,7 +25,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3) and the metro and diagram pieces (item 6) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
 
 ## What it is
 
@@ -130,8 +130,24 @@ The components take every colour and size from the tokens, and what is visible a
 
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
-- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value. Each piece checks its parameters before drawing and names the first wrong one.
-- The 26 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) of the change that added them; the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the two line fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one.
+- The 35 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces) and in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+
+### Maps and diagrams
+
+Nine pieces draw a metro map and its page diagrams, for [stackledger](https://github.com/brunosouzas/stackledger) and any other map in this style: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` (normal, focus, placeholder), `messageArrow` (curved or straight, with a head and an optional label) and `ledgerMark` (stackledger's mark). They paint what the caller lays out: positions, text measurement and truncation stay with the map engine.
+
+- `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe` and `ledgerMark`. On dark the hard shadow takes `surface.dark.shadow` and the outline gets a light rim ([ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md), amendment of AB#157).
+- `inkScale` (0.25 to 8) thickens the outline, rim and shadow without changing the geometry, on `lineBadge`, `stationMarker`, `countBadge` and the three nodes; the map uses 1, the page diagrams 1.6. A shape's height (a marker's diameter) must be at least four outlines; a placeholder node, which draws no ink, is exempt.
+- A line's colour comes from the map's data, so `pipe.fill` and `lineBadge.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
+- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46…), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+
+```ts
+import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
+const line = pipe({ d: "M20,40 L220,40", fill: "#7B3FE4" });
+const stop = stationMarker({ cx: 120, cy: 40, surface: "dark" });
+const badge = lineBadge({ x: 250, y: 40, text: "SH", fill: "#7B3FE4", surface: "dark" });
+```
 
 ### A cover
 
@@ -158,7 +174,7 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 
 ### A new piece
 
-Add it to `src/pieces/library.ts` with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
+Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram piece) with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
 
 ### EIP icons
 

@@ -9,6 +9,8 @@ import { tokens } from "../../tokens/generated/tokens.ts";
 export type ParamSpec =
   | { kind: "number"; required?: boolean; min?: number; exclusiveMin?: boolean; max?: number; integer?: boolean }
   | { kind: "color"; required?: boolean }
+  /** A token path, or a colour from the consumer's data (#RRGGBB): pipe and lineBadge fills only. */
+  | { kind: "dataColor"; required?: boolean }
   | { kind: "string"; required?: boolean; nonEmpty?: boolean; pattern?: RegExp; patternName?: string }
   | { kind: "enum"; required?: boolean; values: readonly string[] }
   | { kind: "boolean"; required?: boolean }
@@ -18,6 +20,12 @@ export type ParamSpec =
 
 export type Schema = Readonly<Record<string, ParamSpec>>;
 export type Problem = { path: string; message: string };
+
+/** A data colour: exactly six hex digits after the sign, nothing else. */
+export const DATA_COLOUR = /^#[0-9A-Fa-f]{6}$/;
+
+/** The hex value of a data colour parameter: a token path resolved, a data colour as given. */
+export const paint = (value: string, name = "fill"): string => (DATA_COLOUR.test(value) ? value : colour(value, name));
 
 const COLOUR_LITERAL = /^\s*(#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\()/;
 
@@ -69,6 +77,10 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       if (isColourLiteral(value)) return report("colour literals are not allowed; use a token path");
       if (!COLOUR_TOKENS.has(value)) return report(`expected a colour token path such as color.healthy, found ${describe(value)}`);
       return;
+    case "dataColor":
+      if (typeof value !== "string") return report(`expected a colour token path or #RRGGBB, found ${describe(value)}`);
+      if (DATA_COLOUR.test(value) || COLOUR_TOKENS.has(value)) return;
+      return report(`expected a colour token path or a data colour #RRGGBB, found ${describe(value)}`);
     case "string":
       if (typeof value !== "string") return report(`expected a string, found ${describe(value)}`);
       if (spec.nonEmpty && value.trim() === "") return report("expected a non-empty string");

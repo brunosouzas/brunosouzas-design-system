@@ -17,6 +17,9 @@ const CELL = 240;
 const GAP = 20;
 const COLUMNS = 6;
 
+/** Several drawings of one piece in a cell. */
+const merge = (...parts: Drawn[]): Drawn => ({ body: parts.flatMap((part) => part.body), text: parts.flatMap((part) => part.text) });
+
 /** Each piece drawn inside a 240x240 cell whose top-left corner is (x, y). */
 export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   pill: (x, y) => P.pill({ x: x + 120, y: y + 100, text: "label" }),
@@ -57,6 +60,15 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
     ),
     text: [],
   }),
+  lineBadge: (x, y) => merge(P.lineBadge({ x: x + 70, y: y + 70, text: "SH", fill: "illustration.accent" }), P.lineBadge({ x: x + 160, y: y + 70, text: "INV", fill: "color.blocked", flat: true }), P.lineBadge({ x: x + 115, y: y + 130, text: "OPS", fill: "color.healthy", surface: "dark", inkScale: 1.6, height: 28, width: 70 })),
+  stationMarker: (x, y) => merge(P.stationMarker({ cx: x + 60, cy: y + 70 }), P.stationMarker({ cx: x + 120, cy: y + 70, state: "deprecated" }), P.stationMarker({ cx: x + 70, cy: y + 140, to: [x + 170, y + 140] })),
+  pipe: (x, y) => merge(P.pipe({ d: `M${x + 24},${y + 60} L${x + 120},${y + 60} L${x + 200},${y + 140}`, fill: "illustration.accent" }), P.pipe({ d: `M${x + 24},${y + 140} L${x + 140},${y + 140}`, fill: "color.blocked" })),
+  countBadge: (x, y) => merge(P.countBadge({ cx: x + 80, cy: y + 90, text: "3" }), P.countBadge({ cx: x + 150, cy: y + 90, text: "12", inkScale: 1.6, height: 26 })),
+  nodeBlock: (x, y) => merge(P.nodeBlock({ x: x + 20, y: y + 30, width: 190, title: "designer", subtitle: "skill", inkScale: 1.6 }), P.nodeBlock({ x: x + 20, y: y + 110, width: 190, title: "Nothing", state: "placeholder" })),
+  pillNode: (x, y) => merge(P.pillNode({ x: x + 20, y: y + 40, width: 190, title: "engineering", subtitle: "playbook", inkScale: 1.6 }), P.pillNode({ x: x + 20, y: y + 120, width: 190, title: "This item", subtitle: "focus", state: "focus", inkScale: 1.6 })),
+  hexNode: (x, y) => P.hexNode({ x: x + 20, y: y + 80, width: 190, title: "reviewer", subtitle: "agent", inkScale: 1.6 }),
+  messageArrow: (x, y) => merge(P.messageArrow({ from: [x + 20, y + 40], to: [x + 220, y + 110] }), P.messageArrow({ from: [x + 20, y + 160], to: [x + 220, y + 160], curve: "straight", label: "used by" })),
+  ledgerMark: (x, y) => merge(P.ledgerMark({ x: x + 40, y: y + 60, size: 32 }), P.ledgerMark({ x: x + 90, y: y + 44, size: 64 }), P.ledgerMark({ x: x + 170, y: y + 68, size: 16 })),
 };
 
 export const piecesSheet = (): SvgNode => {

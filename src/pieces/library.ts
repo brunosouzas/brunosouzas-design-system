@@ -11,6 +11,9 @@ import { EIP_ICONS, EIP_ICON_NAMES } from "./eip-icons.ts";
 import { drawn, el, g, r2, shadowed, type SvgNode } from "./node.ts";
 import { col, colour, count, label, MAX_SIZE, PATH_DATA, pos, size, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
+import { METRO_PIECES } from "./metro.ts";
+
+export * from "./metro.ts";
 
 const ink = tokens.color.ink;
 const mono = tokens.font.mono;
@@ -585,6 +588,7 @@ export const PIECES = {
   book,
   muleFlow,
   eipIcon,
+  ...METRO_PIECES,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];

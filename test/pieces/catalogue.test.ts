@@ -34,6 +34,54 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   book: { x: 0, y: 0 },
   muleFlow: { x: 0, y: 0, width: 300, tiles: [{ x: 20, kind: "choice" }] },
   eipIcon: { name: "splitter", x: 0, y: 0 },
+  lineBadge: { x: 0, y: 0, text: "SH", fill: "color.healthy" },
+  stationMarker: { cx: 0, cy: 0 },
+  pipe: { d: "M0,0 L100,0", fill: "color.caller" },
+  countBadge: { cx: 0, cy: 0, text: "3" },
+  nodeBlock: { x: 0, y: 0, width: 160, title: "a" },
+  pillNode: { x: 0, y: 0, width: 160, title: "a" },
+  hexNode: { x: 0, y: 0, width: 160, title: "a" },
+  messageArrow: { from: [0, 0], to: [200, 100] },
+  ledgerMark: { x: 0, y: 0 },
+};
+
+/** The metro and diagram pieces have limits that depend on each other (width against height, room for
+ * the ink), so their boundary calls are listed with valid companions instead of one value at a time. */
+const METRO = new Set(["lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark"]);
+const ink = (extra: Record<string, unknown>) => [{ ...extra, inkScale: 0.25 }, { ...extra, inkScale: 8 }];
+export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
+  lineBadge: [
+    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 3, width: 3, inkScale: 0.25 },
+    { x: 0, y: 0, text: "a", fill: "#7B3FE4", height: 96, width: 10000, inkScale: 8, flat: true },
+    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 10000, width: 10000, inkScale: 8 },
+  ],
+  stationMarker: [
+    { cx: 0, cy: 0, r: 1.5, inkScale: 0.25 },
+    { cx: 0, cy: 0, r: 10000, inkScale: 8, to: [10000, 10000], state: "deprecated", surface: "dark" },
+  ],
+  pipe: [
+    { d: "M0,0 L1,0", fill: "color.caller", width: 0.01, casing: 0 },
+    { d: "M0,0 L10000,0", fill: "#7B3FE4", width: 100, casing: 50 },
+  ],
+  countBadge: [
+    { cx: 0, cy: 0, text: "3", height: 3, inkScale: 0.25 },
+    { cx: 0, cy: 0, text: "999", height: 5000, width: 10000, inkScale: 8, surface: "dark" },
+    { cx: 0, cy: 0, text: "3", height: 10000, width: 10000, inkScale: 8 },
+  ],
+  nodeBlock: [
+    { x: 0, y: 0, title: "a", height: 3, width: 6, radius: 0, inkScale: 0.25 },
+    { x: 0, y: 0, title: "a", height: 96, width: 192, radius: 0, inkScale: 8 },
+    { x: 0, y: 0, title: "a", subtitle: "b", height: 5000, width: 10000, radius: 2500, state: "focus" },
+    { x: 0, y: 0, title: "a", height: 0.01, width: 0.02, radius: 0, state: "placeholder" },
+  ],
+  pillNode: [{ x: 0, y: 0, title: "a", height: 3, width: 6, inkScale: 0.25 }, ...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }).slice(1), { x: 0, y: 0, title: "a", height: 5000, width: 10000 }],
+  hexNode: [{ x: 0, y: 0, title: "a", height: 3, width: 6, inkScale: 0.25 }, ...ink({ x: 0, y: 0, title: "a", height: 96, width: 192 }).slice(1), { x: 0, y: 0, title: "a", height: 5000, width: 10000, surface: "dark" }],
+  messageArrow: [
+    { from: [0, 0], to: [5, 0], width: 1, head: false },
+    { from: [0, 0], to: [120, 0], width: 12, label: "x" },
+    { from: [-10000, -10000], to: [10000, 10000], width: 12, curve: "straight" },
+  ],
+  ledgerMark: [{ x: 0, y: 0, size: 12 }, { x: 10000, y: 10000, size: 512 }],
 };
 
 const call = (name: P.PieceName, params: Record<string, unknown>) => (P.PIECES[name] as unknown as (p: Record<string, unknown>) => ReturnType<typeof P.pill>)(params);
@@ -51,7 +99,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(26);
+    expect(P.PIECE_NAMES).toHaveLength(35);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       expect(drawn.body.length, name).toBeGreaterThan(0);
@@ -105,7 +153,16 @@ describe("Piece parameters checked", () => {
 
   test("Smallest and largest accepted sizes draw valid geometry", () => {
     const bad: string[] = [];
+    const check = (label: string, drawn: ReturnType<typeof P.pill>) =>
+      walk([...drawn.body], (node) => {
+        for (const [attr, v] of Object.entries(node.attrs)) {
+          if (typeof v === "number" && (!Number.isFinite(v) || (["width", "height", "r", "rx", "ry", "stroke-width"].includes(attr) && v < 0))) bad.push(`${label}: ${attr}=${v}`);
+          if (typeof v === "string" && /NaN|Infinity/.test(v)) bad.push(`${label}: ${attr}`);
+        }
+      });
+    for (const [name, calls] of Object.entries(METRO_BOUNDARY)) calls.forEach((params, i) => check(`${name}[${i}]`, call(name as P.PieceName, params)));
     for (const name of P.PIECE_NAMES) {
+      if (METRO.has(name)) continue;
       for (const [key, spec] of Object.entries(P.PIECES[name].schema)) {
         if (spec.kind !== "number" || spec.min === undefined || spec.min < 0 || spec.max === undefined) continue;
         const smallest = spec.exclusiveMin ? spec.min + 0.01 : spec.min;
