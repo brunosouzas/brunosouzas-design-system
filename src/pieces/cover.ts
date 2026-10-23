@@ -10,7 +10,7 @@
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { PIECE_NAMES, PIECES, rings, type PieceName } from "./library.ts";
 import { el, g, type SvgNode, type SvgTag } from "./node.ts";
-import { COLOUR_TOKENS, checkParams, isColourLiteral, MAX_SIZE, PATH_DATA, type Problem } from "./params.ts";
+import { COLOUR_TOKENS, CURRENT_COLOUR, checkParams, isColourLiteral, MAX_SIZE, PATH_DATA, type Problem } from "./params.ts";
 
 export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TOP_LEVEL = ["id", "title", "description", "format", "background", "rings", "pieces", "custom"] as const;
@@ -183,6 +183,12 @@ export const validateCoverSpec = (spec: unknown): Problem[] => {
       if (piece === "rings") return void out.push({ path: `${at}.piece`, message: "rings belong to the cover's rings field" });
       const definition = PIECES[piece as PieceName] as { schema: typeof rings.schema; relations?: (p: Record<string, unknown>) => Problem[] };
       const own = checkParams(definition.schema, params, at);
+      // A cover is a standalone image: currentColor (accepted by uiIcon for inline page icons) is refused.
+      for (const [name, spec] of Object.entries(definition.schema)) {
+        if (spec.kind === "color" && spec.currentColor && params[name] === CURRENT_COLOUR) {
+          own.push({ path: `${at}.${name}`, message: "currentColor is for icons inline in a page; a cover uses a token path" });
+        }
+      }
       out.push(...own);
       // Limits between parameters are reported with the schema's problems, except on a parameter
       // already reported; a relation that cannot read a broken parameter reports nothing.
