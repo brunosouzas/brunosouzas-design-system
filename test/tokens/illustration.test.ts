@@ -31,7 +31,7 @@ const driftedPairs = (source: Source): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner, bodyDiagram\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner, bodyDiagram, cast\)/),
     ]);
   });
 
@@ -46,6 +46,7 @@ describe("Token source", () => {
       set("site.light.primary", token("#121212", "color")),
       set("banner.radius", token(20, "dimension")),
       set("bodyDiagram.radius", token(14, "dimension")),
+      set("cast.dev.fill", token("#5B7CFA", "color")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
@@ -55,6 +56,7 @@ describe("Token source", () => {
     expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
     expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-body-diagram-radius: 14px;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-cast-dev-fill: #5B7CFA;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
     expect(result.outputs["tokens.ts"]).toContain('"blush": {');
   });
@@ -175,5 +177,31 @@ describe("Required body diagram tokens", () => {
   test("Measured body diagram values", () => {
     expect(tokens.bodyDiagram).toEqual({ width: 800, layoutWidth: 560, radius: 14, ringRadius: 70, startRadius: 11 });
     expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-body-diagram-layout-width: 560px;");
+  });
+});
+
+// Spec design-tokens, change cast-and-emotes (task 1.1).
+describe("Required cast tokens", () => {
+  test("Cast token missing", () => {
+    expect(problemsOf(sourceWith(remove("cast.devops.fill")))).toEqual(["cast.devops.fill: missing required token (type color)"]);
+  });
+  test("Cast token with the wrong type", () => {
+    expect(problemsOf(sourceWith(set("cast.emotePop.mass", token(0.7, "dimension"))))).toEqual(["cast.emotePop.mass: expected type number, found dimension"]);
+  });
+  test("Approved cast values", () => {
+    expect(generatedJson.cast).toEqual({
+      ground: "#D3DBF5",
+      metal: "#C9D2E8",
+      mouth: "#B94A3E",
+      glow: "#7FD1FF",
+      dev: { fill: "#5B7CFA", chin: "#8FA6FF", screen: "#DCE6FF" },
+      agent: { neck: "#E3E8F5", shine: "#E6ECFF" },
+      architect: { fill: "#22B5A4", shine: "#9CF0E4" },
+      devops: { fill: "#D76AA5", shine: "#F3B8D6" },
+      data: { fill: "#8C6CF0", lid: "#C2B1FF", shine: "#B39CFF", lens: "#EAF1FF" },
+      request: { shine: "#D6E2FF" },
+      emotePop: { damping: 9, stiffness: 170, mass: 0.7 },
+    });
+    expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-cast-dev-fill: #5B7CFA;");
   });
 });

@@ -12,6 +12,9 @@ import { CircuitBreakerStatesScene, type SceneProps } from "./scenes/circuit-bre
 import { circuitBreakerStates } from "./scenes/circuit-breaker-states/scene.ts";
 
 import { PublishSubscribeScene } from "./scenes/publish-subscribe/Scene.tsx";
+import { CastMotionTest } from "./scenes/cast-motion-test/CastMotionTest.tsx";
+import { CAST_MOTION_TEST } from "./scenes/cast-motion-test/frames.ts";
+import { tokens } from "../tokens/generated/tokens";
 
 const components: Record<string, React.FC<SceneProps>> = {
   "publish-subscribe": PublishSubscribeScene,
@@ -42,5 +45,16 @@ export const RemotionRoot: React.FC = () => (
         ))}
       </Folder>
     ))}
+    {/* The cast's proof (ADR 0005): a composition outside the scene catalogue, because it illustrates no article. */}
+    <Folder name={CAST_MOTION_TEST.folder}>
+      <Composition
+        id={CAST_MOTION_TEST.id}
+        component={CastMotionTest}
+        durationInFrames={CAST_MOTION_TEST.durationInFrames}
+        fps={tokens.motion.fps}
+        width={CAST_MOTION_TEST.width}
+        height={CAST_MOTION_TEST.height}
+      />
+    </Folder>
   </>
 );

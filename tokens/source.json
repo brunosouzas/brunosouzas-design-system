@@ -196,5 +196,42 @@
     "radius": { "$value": 14, "$type": "dimension", "$description": "Corner radius of the panel, at the shown size." },
     "ringRadius": { "$value": 70, "$type": "dimension", "$description": "First ring radius, at the shown size." },
     "startRadius": { "$value": 11, "$type": "dimension", "$description": "Start dot of a state diagram, at the shown size (circuit-breaker-states)." }
+  },
+  "cast": {
+    "ground": { "$value": "#D3DBF5", "$type": "color", "$description": "Flat ground shadow under a mascot (AB#152, approved cast spike)." },
+    "metal": { "$value": "#C9D2E8", "$type": "color", "$description": "Stands, chrome parts, the wrench and the bulb base." },
+    "mouth": { "$value": "#B94A3E", "$type": "color", "$description": "Open mouth on a light face." },
+    "glow": { "$value": "#7FD1FF", "$type": "color", "$description": "The agent's face on its dark screen; sweat drops." },
+    "dev": {
+      "fill": { "$value": "#5B7CFA", "$type": "color", "$description": "Dev: the computer's frame." },
+      "chin": { "$value": "#8FA6FF", "$type": "color" },
+      "screen": { "$value": "#DCE6FF", "$type": "color" }
+    },
+    "agent": {
+      "neck": { "$value": "#E3E8F5", "$type": "color", "$description": "AI agent: the chrome neck; the body stays white." },
+      "shine": { "$value": "#E6ECFF", "$type": "color" }
+    },
+    "architect": {
+      "fill": { "$value": "#22B5A4", "$type": "color", "$description": "Architect: turquoise, kept apart from healthy green." },
+      "shine": { "$value": "#9CF0E4", "$type": "color" }
+    },
+    "devops": {
+      "fill": { "$value": "#D76AA5", "$type": "color", "$description": "DevOps: the gear, magenta so it never reads as blocked orange." },
+      "shine": { "$value": "#F3B8D6", "$type": "color" }
+    },
+    "data": {
+      "fill": { "$value": "#8C6CF0", "$type": "color", "$description": "Data: the cylinder." },
+      "lid": { "$value": "#C2B1FF", "$type": "color" },
+      "shine": { "$value": "#B39CFF", "$type": "color" },
+      "lens": { "$value": "#EAF1FF", "$type": "color" }
+    },
+    "request": {
+      "shine": { "$value": "#D6E2FF", "$type": "color", "$description": "Requester: the bubble is color.caller." }
+    },
+    "emotePop": {
+      "damping": { "$value": 9, "$type": "number", "$description": "Emote pop-in: a quick overshoot, then rest." },
+      "stiffness": { "$value": 170, "$type": "number" },
+      "mass": { "$value": 0.7, "$type": "number" }
+    }
   }
 }

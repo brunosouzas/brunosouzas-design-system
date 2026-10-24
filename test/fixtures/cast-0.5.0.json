@@ -1,0 +1,1698 @@
+{
+  "note": "AB#152: SHA-256 of toSvg(g({}, ...body, ...text)) per call, and of toSvg(frame) per motion-test frame. Written by ~/.hermes/spikes/design-system/cast-and-emotes/fixture.mts.",
+  "pieces": [
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "8dc72acd4d4580f2e711e73afd045e8c54ab5e5fbefc385214744fa64505a1b0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "5ed88d2ced5820e5668d7869ec8c9d4a0b2c40ba4920327e744a5881b5d8ea95"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "3741c3feb6edbd10f131ca13568e315458eae47f80d02d048df5b5619a88d6f6"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "9d6f1f1af45dc1fe5cb90d77c4f347a06a9df4c828a459666b5bf74910709fb6"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "82efdef034ff1fedd899bf3022bb955f77b924a6e5533f72da9a3fc67a7ef6cf"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "005d3db270ea9768586d59f4adb4b7c5daf42386dcfddf5007da50725d914857"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "b78889f4d49874a253d140819b1035b57b434aa66541ddb5862f60393fdf484e"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "a89182e0aaea78290a4e4a367e98d7f3a23fa882b77ecb7dd1f5fef08cb9dbf4"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "4fcfafece28fc95dd3a59f7123c28a62c88d6d5425d2aad8882b46f6f0531157"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "68bbb35c4792cb78c6a1b3c8773d505447aeba0d8efd7536d187135381392141"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "a65db26206339db492af5d991b4d6f3178b627fe6c8791eff85a29faff20a744"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "8fe9efa070fbd3fbbbb02945195769ae9b4df86a69fa755157c8c556b3acf24d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "63d201da7519abe644a93044942cfdb73b6132747b05599ad4de4b3b14e350e9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "3afb1b8549c04c6b859406327e9cbc4238f09e4b86d893bfd9c4820ef6c5e639"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "7538b6cf3ce92840ae8b1eefc1ad30acda94332b77690c0ae73c957d50b09f70"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "f6cc6f7340b91a09be15e6190d5550147b14814e9ef889d1fa2d5da54f1913a2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "a241c36ca0be3d6ad36af258ad93c55a9b0d6078dbe59695e777e9806d413923"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "dca685746b9c90acab96b7aad0e46efba94a690a122cc964b73a8d36626bb385"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "2a9ab05c3008224d386301a440911ec3b452585db1e830ba6c71f0b9eb09bbda"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "b3b2f6c8542fb3ebda0e8c6e68451b014c9724ace855dea2c5303b6c4a066068"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "977f6215eac92b3ee558a4d03a99bc87d998a9b156962a07ff3e8092560ee12d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "134bc7892dc0aaf9f7d0a634fccbeb9c423e27ded504d1178c7f6467d012a9c5"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "379ce2477cc99f89401c539046072429ccbf3265aaf2cbc56cbf06aae3a2784c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "56e12a07e388db5fda67e938f7a9a35c191d7e3845cbeefda66ed3c9cc18cac0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "58f4bab216032ef4864f823b124135d1997cf00a8c139fd5c7590d28ba828d3f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "35be143501d9aa7428bbc77ebb327c74a28a2f0676132ec70f038a8b9eb427ca"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "86f31908c3402a49cb68ea0f0c7be8f496297743b7f6743d81668309df2657e2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "a901d9b6e34a8b1722774c341e8dbd1985ebe1e4169633b07bdcdf6ef76277c7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "f31c57c9795de1187581c53006c7ef5143e342fa5ff3e42a2b850ca3965fa999"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "6d1de5e124d449100cbe8cbeba6390c859e2c0bc752906aac8506a1b64d8b0d3"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "e8c2f4badb1cc7ab4b823850bb88f65ddf96c7ae58550783107e122949d2ce5b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "beff0d6e9f24082ca35cfa104969125ba6fe5948a819d7da3fe149ca82d8619c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "be2b6defae6d3adb891c43ef13765a62b5d335ecda79e350dcca38d834403f1e"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "5d1212ada6e38c3c3abcc6b784310c003e2f3f4c39bf73d7084927c6193e3d05"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "fad995daf9403adcbdcbb14476822f8e151aa42f903240cdc60c64a1f2eebe54"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "84f1923e83af0631d5ec476374131ef6b24aa98ba1eda4265b8bef1fdb4f17f0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "94bbec445271e9e17afcf299d99dffadd22137d7199124fb1cdd3d11c01b1b5a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "166fcff1a5cd26b8aab10b4c28a55e9198893f3a58d7f9820f1e6ff1c514c45a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "a8fa40b602b26a51fe870ffd01fe1088c7fd8b39f6c50d6ed7ae41a514db01c9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "d549e6817aa5be1ccba9be64eb1580a14cb27a4205463b09de357dcf42d57ee7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "697ba5d3f7ccf247e512dcbda3a98127f57a1ea162c0cfedff8e04ea916c1948"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "f80bd10c914319b546df73648b605d2c7a300cf40204358cdbab1a7515541b22"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "45cca1dd184374c6b4b633468f7bb42fc77ca179e4c0798d87081a96e42241cd"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "c0e8c3af824a02728b6ccb5f8e151e2e326ecbf06e1ab3ba3188d1485a886bcc"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "6aa226fa73c82b7bd9dbc16752ffc521b383ead9f062fccf2f50fe2309b492a4"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "4e01ff74c5c9941fc8a9269f53b2eb6f9e0d8146ae7211d7b263ab1df2b735b4"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "17a193d5a2f9c5aedcde86f1bfd18ceb8b9d7c3588d7e026c69f277ed1e801a7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "32a82eb0be7d57406b18199dd4b2924b967867dd06b4ee064e2525f1a1409cbf"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "normal"
+      },
+      "sha256": "d223f04cd550c9662cc2a5abb295eee69561e048b164b221f92fc3b91c5341a4"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "blink"
+      },
+      "sha256": "40d43a3f0114f8fb87949e4d94d982de361ccda955849fb781c525e38cae2036"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "happy"
+      },
+      "sha256": "341beb2ed2035016b26aa3b38665dfc6c25c5df5292917e0e66c10ef2a7388e8"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "wink"
+      },
+      "sha256": "f435dd1a7ff4ce0647dc07780e8f0841881220676ad2b352b3e029bd5c0db57b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "surprised"
+      },
+      "sha256": "6be2c8e5e687678042f428a8a677fad98c7239b766ccb7dda8a77b109a43368c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "worried"
+      },
+      "sha256": "fd017cefbb6cccf18b0239305e8dec501b99a905856f5704bbdc38838fa5240d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "thinking"
+      },
+      "sha256": "2827941d828b473a8bed2a06347319650f17fbf11bdda2087c053aa20eae3f42"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "face": "focused"
+      },
+      "sha256": "42227dc54df92dcf1e82363f804a21265806284fab8d67a7575adaee04ee09e8"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "ed88cc2bb5302f4fc02524b63864478a49001de1ac515e0945af0c11505b27e6"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "ff58c688f04a39f925a31c5785598d49d03d619db948f868bb3cb0d3b9f06f68"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "44ac83690a24d5329b01a17fca94271f9ca6598befb386751ec5261ea5fc8f10"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "a735b8f2e83e265cc2e8c9e2279b376e5ddfe22452d8e1e632ccd92cd7b48412"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "da34d0f22b436aa8628c4b7cb1954a59c126b819899e1ac25c2dd4c120b584fd"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "08e58a63249fa9e784dd23be7dffffde392e27f5c0f53b88b77f46dd808dd089"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "b43892889a88ce604984a89207885c4f578eac8f10018b156874d7875fab0173"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "ed556cd8a9fca250b4b0a1feccb7edc61f514d3e14a0514e5cff0dc886903c63"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "df516a9afb986e153136d50bbba14de8de8d9aaa2c0596ea3f8249747e4912a9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "259f7357c574ad615b85eaecb5e5b5d12ca05a028b583b133de569569bc06f90"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "41ea84208610193940a6462f6342a517938a03af237ae64262eac5261853002f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "2eeefa33523d50753d52f669277e8afdf681e138320d907f2a70692611b726d9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "110228a608a32d8b157eb0a2c8d5e21a4bd4cffe634cf35430fa578fa17a8126"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "b1b7c3af1e8a7a6288226588b4433e9d793ff8f53041b073ed3c22248b3c4297"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "16f3d2020b0a97181697f82683b9b6f5c1a7cbc509803b056cc19a5da4746d12"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "7343561dbb5f716c9725aac8d7739139936144954b7ead76bdb796588ef5893b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "00230205bd29140eda8ceb07efc39087e8736bc044e24f2d1a4fbc1b44f8163f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "55900868b67b2ef15d7b66945cd4284c01996443a0294b6126f7603c18de33c5"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "ae35d929c0df14a77979660ea701de4f86702eacefc909a4e6dc2ea3845c6502"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "33ccdc075c3704d96ee9278f3f46bac042364142f212de030705fa6ea604219d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "754e95fc47356ca7d8403207be8537b9f31d7373efec31f642e0114090132742"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "366ffcd6532bc6716a395dd6acd7b11e307da1e6b5f8a6f7971355e5fe270fc8"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "0cdc0ba608ccc0b1d0830642d69543b2c95b77bff8b08ffdfcb0223687c3347e"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "916dd52cb0c02253f27d2f795f2fd9943e41bbe7061306bb6f34f34df80e6ca0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "49a877b198c65d599a0fd0f6be8390605d86089592b726742d73d1c96593db2a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "fa02b00d76fec219296f9c0ecb8fb061c7cf4146ddb47a11ad8f7da2b407d64e"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "b5fb66e5948d424fd74f693ea3fd790a8e218566e9489e18e2e360624199a226"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "a30d23f2fa24f5806de813955c1d53974d1dab56600d0f1694632912eae0b1a7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "ec1c23ca1d3b92c66dd48671ab0a5ce4ce10791b9b4a1647fef48f0a2c5779fb"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "70fc1ec869f4fe8b3752289c2c68eaa7b8d53bc19e1d6820730989b6ae199538"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "b65e2ad3b7c3af4498858b47b5a9046860f2e15c423e19cb244dd65a2ae90586"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "730fe10a72559fc2f1650af5682ccc3af48eb228b545abd307a629d5f940b20b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "0055a5079efd1e3f9be47a0199e32aeb0105a6fb2072ce5926ee4e5469ba52b9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "d28d40da0f2bc66f6cbde63e4ca183e4caf776fd09250d49a098576da8db23f2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "bd6d67625dbe7902e73934ef9a422d486584725d3f0e022baad8917f7dd83b7d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "d3cb8bd66c094e1319d33eefb6727261b7809053cae0f27ca0f6e219522dba24"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "b5ea7a0bd840585410cbadac93e2f81ab11aafb1f7e91918c02f84ad820c88a6"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "804e0548e64ef187948ebe70cf5c7c5971d30ddacb9c25f15eaebdee2a32cb74"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "f1d177755d7866ef03a7f23baa8b935fa4445e8fe504cd975b0f9a78686bd152"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "80c8f17a5980d4bfc76faced31ad312d41315cf63ef7ec64525c0bdb55439cb2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "c3f133c5498fc896946fefcbcf094d7219856d64865f05384769ecb993f1dc39"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "e1088b085bfa1e924c761f6b7d67a4df531881486c7ffa51e2cfbddb351cc958"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "rest"
+      },
+      "sha256": "827256d2c963b995b008d44a77db0d868f701c77dbcb5b595c578f785a2dacd1"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "wave"
+      },
+      "sha256": "1675f324eb0dee6a6a21f2cb3dfd6b98cfae2a6f1341ba700cbf760dd50f3fd6"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "hold"
+      },
+      "sha256": "1c81b382b66ff0477ba29300dfdc90b5867cdc3d7ca4882eee3dd6649cd98f4c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "reach"
+      },
+      "sha256": "b36f5e067ca374852d27e6afc38025feddcd452266a4a2a4dd19ca6ecdd4447f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "up"
+      },
+      "sha256": "9a4a64361ece575043292287571b02a8b95c9420df4386eb56aa62d65437f88a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "shrug"
+      },
+      "sha256": "c08f7853304b53052873606954e7b4630858c5cb490c80b631891352c3c4de33"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "type"
+      },
+      "sha256": "ffbbaf2f45becf1fed68018efb5d53684161d28006ee125ba6950eaa5ed97fe7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "7b9479d980458c4db9ca7db81e3d2ca96a3c265cd003593a65644fe3e2ddc557"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "1d8e63c8c1d71e0ea459edf714c1a39cc0eb28735a257752f9da429d0ec35f5a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "5689ba4068acfa8d379ae9e9d6c39b8e98d456c4822ae08cc28c67a0a22aee8a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "637acf624ac26a225f537aef948eab0b4120c8fb7215e5a095183fb90da4c156"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "33cc575a411eab9f4288f8a4a6bc6e13745f311fa203585b22f7eb448b26be51"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "74b5f2df41953798e0f4fa71e80520ee67ec13aced42d8a916676c2f00501faa"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 300,
+        "y": 500,
+        "face": "happy",
+        "action": "rest",
+        "scale": 1.9,
+        "look": 1,
+        "prop": false
+      },
+      "sha256": "bf88233fdb95c282184dd9c913ff0e15f92585eef8e7b883d024249eef8b3b6f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "face": "thinking",
+        "headTilt": 12,
+        "look": -1
+      },
+      "sha256": "05bc374056ee665ec0cdeb74758c7df20b2d5b2f81dc76699c82c79bc4fc4b4d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "headTilt": -8,
+        "action": "wave"
+      },
+      "sha256": "60962f483041ea80b1b5d82126128a16181569044b35bcb6e35f632bc11063da"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "idea",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "95e7ae8c2d4e1426e10c92336937bc2fa446f9a221a3fff002f17f7c4a3ad5ed"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "doubt",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "2afbe92f4cf8129d3f723c2468bf7d020bca8976851f730eabe8703d21772305"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "problem",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "2bce80e382078ccd3e7aa1f086add0535318ee0c64fd4a186d6020289c208dbc"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "worked",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "fbc3d1a10f01494598bfe299100e407b9be9eb9e4fd6862f086f0fb2e0c4feb0"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "refused",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "68f85484e28b00e240105fe6e956939acbd85cd1d827a3ea70fab11b357bebe1"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "pressure",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "7ac3443be2d49e189f690e06a2084fec17abf30763e724ee053087b0e91ec047"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "liked",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "da38fd8c5a44aa2dd6e809316c59fe0ed20afe14e9dcf95caa83fe64d2a28974"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "waiting",
+        "x": 0,
+        "y": 0
+      },
+      "sha256": "66716c9575de8f866e598af0408f6f5d32db4181ef9b5937aa79621191e6c293"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "idea",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "99e090ef4b9f24827e5c95f2a7f473b8e24bc9011a2d5325f537348e735686ae"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "doubt",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "d58a04d100fb87739e231bb616b63029ecaa16964635b3d9879f72f00b7a6435"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "problem",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "e48bc774b4b496d388b5899095b08adae2336d1235b6901317a5e7121f54e142"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "worked",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "325ea116ddc602f45171676b8ca24a93e1f1e7567be05685419f86e287c543f5"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "refused",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "9f11b4ae2e734080669eb3e41c220d35857b3b6229f236c176be141ab442ac80"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "pressure",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "03106e92faf90ff720d753ee31cf4ecc5b5497bba7d58e30fbfb0b7e49a0619e"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "liked",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "7e797e46777bab06ee144923b9e0c7eb3b0f9de0e47f6a7d1bb4aa6c4f50188e"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "waiting",
+        "x": 100,
+        "y": 50,
+        "scale": 2.2,
+        "burst": false
+      },
+      "sha256": "7fd6e67ec95bcfb6ca4f3f135849c3d2a354b8d1c130bc95e7be23fac31691a5"
+    }
+  ],
+  "frames": [
+    "d8e6558466033aa2ce83d78f79a769994b8400de2c7e8046f2ee931823bcdf53",
+    "3934a195843e323a4ddf547f63642c8b22ae3df7dd0104c2c4beeb3713fafe1f",
+    "c421bce084084b3f0f815897f11dcec4ed1fa0fbf32ac5a90f06747bf641e252",
+    "749d5a974c171aae386688375259bc5ea8991528fa29327f8547c92861428b1f",
+    "7a14d37bf2675d3b564e72855dddc429c8b38f8b3b2c96126fc2ca3b728414c4",
+    "32656f6bbd4aed0ba8c3cdb018779d8f319f3769a73fae6600718f82b2d616a4",
+    "407b36fab1632c2d2a0bb1185193191b1f9b6129f90cdb67c1a91f1c2034c5af",
+    "5e3d029f300e5b4e2f1c9cf83a45775f238649065eb86609a3941e30c78b86cd",
+    "04dda5203de372512ab0e765fbc82e35d02f19c231ef20e9800a53be24e19ac9",
+    "34f7540e524732729b34f6e3df0605e8822385c8e8440fad4f8f4ac1675b1958",
+    "4ec74922ebd2dcffa3fecfc3f6d971090d6f7100072045cd46170f997b93de55",
+    "823efde178b5feab2d491b4c364904902cdb8f6766e32894ff0f2325bfd392f8",
+    "2d03589257448c4cef88d40b4acc010232dea5fa6625dac13658f96368e10ae9",
+    "859ee124e6b6173827abc04869275902460924b566e1e4cb27fe434c8f1302e7",
+    "9338fa5ba95121e6e012742e255ae132abd16f7fb6f43c05f3b72c972b902fb0",
+    "11fc94193da44aa14e02aa11bbae7d7707d9542c139e92b602a1621d0e773909",
+    "7c5aa013d4dcc1be148da3043de5cad6c4ef9b4183d01ba9f9e53028b2fc0297",
+    "34b0cfd25980d7df854c6f3e6657d80023b9407c9976b4df41bea82a12bd8213",
+    "3070f51ed88a716016788aa90dce8fb7c32f1a527f430901292b6af69b0bdd7a",
+    "ba51064ea94b97d291cdfce6f97156ab34f2e8b62ae74e8b78cd0baac715427c",
+    "7c1768c1ccc1f41972fa08331a90f04915d71d922d33c335e7ee8129c7cd7fd7",
+    "28382999f8972c24415202fc61ea3cace2aa005fa2b1c1c442481450e2805ecd",
+    "a180a6a0f18c6e36d4d06f745ae718dafc84f8b0d00f1f28bc8078a712e18c54",
+    "66faeef4204f41737b0ab8b270581732c6c9e62fad6b67b3a9dc38ef8cc590ca",
+    "cb0672d202f147cf43a34d3d2915074979edea24663a00e3e0884e9b7b0c263b",
+    "4daf556a56952242db1b5f2040470f1d65cc2d0b28cc8c55e1f044475eaa832e",
+    "5c051a28979f9a4c2179fdadd24048f8916fd6e234abeb26b65e84d0a47e0902",
+    "660d88f3b0bacf99874659570ccf08938f1911462151a02b59e4e9193c5b659c",
+    "146bb2d2760bac5ecad9472127ecd6ce9ea4a0f6935675932ed67f22de16a329",
+    "9ccb16895a1a25d7a770a758aeb0fb4139d509286a3b9b3a932ff18341d3bba9",
+    "cbdf0c6d454ddfcf02e2e925779b2ec42a21b81a088ab16290afbc3b54018321",
+    "5503bbbb6b3c572ae4151bf0d8380bbc9704eb9a374d0ae71331e51dd9413bb7",
+    "8f64f0cd1c128910afd941ebe19ce2fc4af9f66a9fed9ccd6e70068ecdcac7d4",
+    "14671ffac9aa45c92410e7bb06079167e733c6f4b462e7a0565d92858e46a916",
+    "b6402bb57b15200cdb5d65d71f8eb6b26533bec9577fbdbb4d503c64fe41858f",
+    "6ef54eb4303ab7cd9d0ff397021eea8f73da9280e5f535ec49f309ca3274a0ca",
+    "44f4f9a46df1d4e5ce1e013e90fa6bbd2147b8590d60daf9f9fea27e8475fb68",
+    "031c253ab33214ce48d2e6d6d7e9de43bc7971c93a1e0513b987ec7cdcab91eb",
+    "f8f68077497d8a38d967da9fbc484cc24c6c1eaadb8595488fe963cc557a9ce4",
+    "6b1efcf912ea07d548d42e704e2f2336a7617beeca946d5985277d69ce6ffe22",
+    "a9974430b940219dac6a43c0980fd5aea7185bdb1a89ad787c25b40bfd14c642",
+    "00147c2d8d716669e7d100b787e2c2109161e7d166e5e3e9f9e7db442eb2a0a5",
+    "8a85bfd182006ed9f49a44908301150f8d0fcc82650f0bce2cc98862799c0d86",
+    "2c5996e4a6b14139530978cfb0c18b830e676580d9cc9cb75935b253b99c37b3",
+    "7837d6094ae82a6eec126121adda36498a1f6b136c2688b98822e64404b39fa2",
+    "2a770b7aab3e2e57025df895dbf3f34e6b0f68a9b959c8b8f7b89edf58a8e622",
+    "cb5c3228573e31f95bb6bed2fb1fae79a98c27cdd90d093eaf2663682a7f35fe",
+    "80672de89b7c4ff01c29ec34a930668db417940746f856fc1837ca56c50603a3",
+    "d603e9e4339aff766afcb20d3d8ba9f04eaa31c9301997b634c2b23f8b28ff37",
+    "f8389f30f0d999c960bf42afb85b61f5e7eb544c2c37ea5c9c090a2ce49175ac",
+    "ecd6154f2008d5fd09af013e34cc5efec06f72f1eaf513e86ec76ebab2494271",
+    "3a7f70d0f4f1bca0c17ba51b5017ad3c2980b795ab7bef555e5cd3ac0333f029",
+    "31b12a4a01835511d0e7c67bd53c59d4b5e42db0e85c7a918cd87ac264c50a65",
+    "2a6f885663bee3859de31410197cdecc6ea9861cdc48d630010f1b68d6f23232",
+    "182a747f8959a55112a1512d419b0c052f51b3ed1734bfea385cf6afb33436e1",
+    "989ba80ad697eb721ce9bf25393c6b59a0fa5b787fefed65a72cf43396119212",
+    "b5cbfe95311eccd62acd80f22ae74e59735f117949baef2758f3ca8bdfbc1cd3",
+    "e74d2ce9c81ecae2cb83e6f208bb7bdb4376f76654b938dabd2c24886a264ca9",
+    "f4f2e96315c68f6b792b01c0c81fb33b7379259d246bb1b72ffb6787c8d6e80f",
+    "879ceb0e3ffe3ebc901ffc9ed5deae624e58d47a02350a1dac4bf2568276644f",
+    "db302d363c744dfd05eccdc99c0f5a9f546a5e9bd79e99ae2aebf0fbd9086c1b",
+    "9ef7ac4b76c16f80464b476bd70e9ff08990f45564a5a8aa31ad94833eed22a2",
+    "ce0e3aa38e2c67a780af26a1a1df7bdd5695f1f76c8c6cbdfeaf9a95512a805a",
+    "b5d4924bbce5451468e10b1cd94ee0872723d79f4fe856e37449e6079e1abd0e",
+    "b139f5e28ecb37b6e6c6c8e325a89364746e0eceda9debb9c40e2193c43a9687",
+    "79bdf93c56b425155cb10ee7d8262e18ec4dd08acc3a8216f7aed8da1a855168",
+    "b11bd8c1d1960b4a904570d7e005d931f27119a3fbd4bc880408e61a46ef6be5",
+    "02a1b273f5503d4aba3bdfe3d7e7dfed44b3e0cb05d23d6a3c304770c913e7d2",
+    "8254ca77deda4dcc9e1136d8f0ab92310693ae96604261c8c01c87a7ec9bedfb",
+    "0fe882f66c66e9f32a5613c6c4358a7961ca01e6d044ed04fe4c62e0609016c8",
+    "68df95cc5e2615c0f838f9284991704a821b65591364f6885c78240d293d642e",
+    "c83c29e83bf03d1a5422500034a0c0c633cafc8c1c51e0ee9ef0bfa13048438d",
+    "b6f24f89aa29dbebf121a80b636223cee40f9e1271dc7cbcfde85f92e6ab15c3",
+    "75de1d6b3dfedd256b0de207f709afdf64da804e00c6ae61bfd52ffa0f6de5ba",
+    "896c6744fd3bb022285a8b98f698da3c1c8dad6a14de1a0f1bb66c0327776060",
+    "90695d855555519a7392b1200f3a584eeafad7b8f2704baea28a8133399e7a14",
+    "52c10b12d86d306abaa54cef92276d8b4dd117ff1617ae587396498657d29b85",
+    "9b7b30eadfbf8854c2f76fe44c944dbb90c8553d381ebd1076fc4996526455b6",
+    "81b3064ba3a1092978048004a9523d5683eaa546fd290257d8484afc8e8d19c4",
+    "550675ac620cbfdd95692b4ee3ca926d8afdcd5dc83a5001b3d9ae751bfa01a5",
+    "8da7b41f7df72c58cec4721ce763979dbf17aed9485f6e71f2ad538134d1e6b4",
+    "73e06cbc22f69a068c89e679a7c5e9cdf81aa6e75631352b41ff1ed7287f6d46",
+    "985d18967efa93f701f84f9043baa0fdc64f0a2214b0dcfcbbb9d76b93f5eebe",
+    "513a130f3bf1c7d2f6e77a4cbaabe052fcd29d1e8d7b179c5be748eacb5162b4",
+    "ca7ceede8efc934438154bfe9574742070df93bdf6a72cec514f26e7729567c9",
+    "a92a7eecda1837ba52868007745caa0acb6c0de5b080ceceb41edf60586d4bc0",
+    "5eb49522e20245dedc876ab66488dd94ded28263c94d5a860e1292e803548012",
+    "7a8703276d718830d9608c8e166fe2dc1d68646717b90c1343f5ab1ad8400b6a",
+    "fddc62e10bbf357e4f9e9a1b6297870fa99da2bbfad2b05758154a73f9303756",
+    "6cb4c2842aaac00aa576c8144c36a32289a354248e731dada1695fe5efcc0e7f",
+    "1bd2935ec4e07ab56d680757b87bc3948f5bf62a297fb79253dd124690372ce9",
+    "ed61653bb80f70c26805c96d3e32a7db6176ec020e4dcf0a65e71db8b363ce1b",
+    "88b7f2ab4820bab616a803c53c98f550c233ad2755462b1a7f343ea862dbdf84",
+    "da2becaed255fe281215110432890397684a15576b31fff44fbe4b2a64c5fe73",
+    "c04db89fc08005ac921ffe76ca2c7b5a9a0b1f544215693eca9952049c770072",
+    "0d078d1dbc70f1b98b7677e8eabf7ab4803c07cbe7759e7b62c1d349b35c6c7e",
+    "d280ea95d9aa2bb9673a6024d5fdae5c2c38559ec25a6ba3869f1c608e14eb4a",
+    "bdd6cc5fae82f71c574eed491c4217028a6270a40e97bc7ca5d6572e76d2e02a",
+    "f14d3440b718b787eaaf3d2cba292213c73d8671c4211db9c057e9394b7c0cad",
+    "b8e60d91bbd81194d6238ddaf31ec64f277542344dcb0e447cd5d4b716ba2204",
+    "d369885a6d99b53b61535793d2a1ffc69a143958f00a3b5e2839b036941edace",
+    "d8f1b51472fd5dbaafabc0839efe67ed7fbd2d134b496633d99fcff8c556e763",
+    "0e780aad209d09d664451c9cc9d7fb12910113d29745c246f7185acd8c0f359f",
+    "7215166297b20ac77ecfbc11f5c05ffe877d284661702798dae2639834c71420",
+    "d8c20b4e5e5e7158ee8a5c9ac3b66016f3eb39b8609316ec01b1a631f4d62669",
+    "c8d94e22794c324aa5dc36765f01e1ab1ebda6825496f993547acb67eb2fc86f",
+    "864c5bf3755f8a65665841290c6deccd1b532ce93fdb0168417f907f62b370eb",
+    "a3833cc73417cd736265d24cbaf31d322adc6018d6896ea708c528a83f64a69e",
+    "0b50e9fc02f0297a0e7e40f322be14f538377e33b38cea5cf76b892f950e23a9",
+    "f7de91b3e3abf3bf6fb56e397a676904c0bb380f9f82298de90798bc56decf31",
+    "7efe3e0d9636eb4a635d6101126c2aa8dd2dd8ccb60a37d1e7ce37c960990d0d",
+    "a214b8eead1a5311e750828f7c08c1c8e8c9055a6bb8b455a8dcb7300221dd94",
+    "c0c31064ddcb577aa4adaa5ca8391f5c5e442011b67733771840f3e33b61d703",
+    "1d0d253f536f5196a5d53a6f7447b26b428866c0bbb51f5030829b1645f48afd",
+    "211abbf6c93e55bdebdb35428063e352c47c54309a3c403023ec66d849c82642",
+    "89f2754e74da4be5b46d19f73617adb4d315898bb64ac804da880a0d3ab3bdf7",
+    "a85390e961833775d91a3d0e96a55d56ff2dd1574bbf7405b3d055d638ce182b",
+    "00eda7b61eb3d262bbca18e395c83105e3d8795658be56b707e7be6eaa6aab7b",
+    "06ea7e17c5e81a0614d7844f12e0f00edc1e1c65bc6ee61d89ce5a098ac17aec",
+    "2d2392d424ec4e7be1960d84b9b20a16f61585033bcc452185c87a8528342593",
+    "22a0a69d4d040925a1246a06e233902c30966498c8259169ce140391b6264d09",
+    "2d130155f27afd1f38b256a4763d167c63346dc283293a89b799021b6539e449",
+    "e93bf8789241ca80bc5d71853f1b5a05a7aba3beb74d667b90c1b3d621adce2d",
+    "8d72e8ed4cefe27f09b7c3c4270024153e5f5cbdc024c68fd72b6735ce2f429b",
+    "285a68ed5a0cf91a6d401ddeb794e5a9d2cde773a3a5d5f8eea04dd0da9775d3",
+    "a5170d9366a618ac2ee771a4653c118c03fb7580d65c07a3657214933a6ca20b",
+    "a5e022028742c02beae49268d3aa2d5a0a5a1859fe7cca5f4f81a4aef54e8dcf",
+    "a11e6e77edcde254619563d47e4835eb699e53b51235e73899a4b8315749bda8",
+    "719dec7e15fbab22085958b3f064925aea78fcb416b23991f74c99e6659e6509",
+    "c2c9d51b183bd6ef96e6cc1faf7561d102b97b0f19efa415c8fc112c94d979f1",
+    "e1dd99e39e777429197122e924e8a7da5bb30c5768c8b4b2a71814610137b5bc",
+    "7f810c7c43c7c4d3a87b6a6dfa110aeab151b65cabf98b6eb29fe16a0061889f",
+    "4aabe8a8b7d6407006560628cdbb2d5a27d1397e4ae16301b55f071cf3377cef",
+    "9fef41ed063df38ff506e1eeb1c8a84ae393e3bb10ac563c1ba2c351c8a64215",
+    "f904bd019192b1775209bd71286c1300abd34ee11212f691784df1f5030a9efd",
+    "862eb9fca93c5a5a78107b58feb07efa570b96b962e5d62686df5d7e0063b146",
+    "328fde499dd13c8daeb224b05e1f54ec9ec7f8101a87a086f34dbdaa0160f89b",
+    "e86c49ba17f080497c75c2e710fcfae933c537c703248f90b165b43e09c785fe",
+    "5bf9a785002c7f4b381075d64992fbcfdabead856636e1d614aeca339833413e",
+    "ea52257bba03c952fea02477ad14ed4344daa51dba1e82c45e47ba20617a9b82",
+    "02af55635ba7099b96c173ef2f4c352f185c3233245ac92212598bef130186ff",
+    "ab71841a605dc26279088fb9dfb9db44a1af02f9b61553f9b2ed20358f4031ab",
+    "0cb4e5d5dd26871e36c4d534659c9b23241fd54e4eace840bfa2f6c68b1f86f5",
+    "a4d6947a5d49268c8a04677ff30015aa84fa98114f2c3b7661aab57e94fcca0a",
+    "ba84f8f08ed597baf89a1d9e0f01ff51ee4978e580b65e44edf3589f0720695c",
+    "d573465be9b184084f284ba4d336c1dceb8abb4a5e20efa5b33bcbb949df4ede",
+    "3adf5b80bbb6187d2d56624fb26029e3bd33e59479217fd8c80a8bb9cc431fc0",
+    "9df3886c20fadd49957ab57b12856511173fd19ad4cc7682c6df4fdbfcf64e2e",
+    "52dd82796a3da29540b0319c18522195b753000d649f4806eb09b1b53167245d",
+    "c5d1c325accf19b1d8787c2800ec3be6be78300c6ddd38de9d406c5be652beb0",
+    "50994d00493384744e013953ce13f9a69af14079b7711f46ca53a8b47588a396",
+    "2a66616002a71922da48f54b0c995e360dc49551dce2c80cc09199e4e81420d5",
+    "1e4e32a957b4fa4f310a182bd03cd327599ac3c3f1386229fb0031e96014914e",
+    "7d3c84ef9f9352bf1ac6e340a9a3725f2447f271963a5861257f36dee40e01d5",
+    "8a7c0894db3de3e791782c7b20c5c33b82ac691a6512a1eb8afd78fd2e3573f2",
+    "3e28eacb49b0b7908d70d3a8dbc333999044b53f80a872a1a00dd9ffe37fa388",
+    "ae8da539319bc455dc001aab5bf3dccbc2dc8b05cc3336f9dc52beef31a92b43",
+    "05ee190a5d3f3db2241639cc964e32f017a071b2e0400c33ffde443173d464f3",
+    "bd75151acc8d770af66ac54b65e9cec861cde66850a997412bebae2ee952d0b2",
+    "c491908f3c1365a5eb662cf7d16858c1bb34622d3024e22635e65e73e845283d",
+    "aa81781a0b29d78f852ae4e06466f1205b5b6a0fbe931635b236b91861bcfdd7",
+    "ad73f55cb74cbd15b79d93d41303fbfc6bb87237f91e0a0e0a777ccf2aa498d2",
+    "8c5d0eb121454f41718b5fbced36912412c93f1200c4b5b77a38cc265560cc3b",
+    "07162004ce560f64c1d67b6eaa0249fd0e6e1a9a417a194742fc9b368b739a11",
+    "c67337c183f0979e4828127d8205f3defa00f379ff646330b919178b31b007b3",
+    "4995b7f6901bcb43fe1ff241d21047849328561dd23cdce1c85400472f43a023",
+    "d3e3ec12d462ed6638ec2f998d7ff73ff3ca09c6c7cae101f1b9b19214ee4394",
+    "2c904a906f070da775461ecde22c47120267fa806b5353e0874a81b4878e6aa7",
+    "8ddfca45711c14960829ca741d4d3bbfc8e6997672ce14b08ca7c6631c11d8e3",
+    "54211ca47e55cb1834e8cbd21917bcb11f8f2b31fb3f78257de1600c364b0f16",
+    "8df894f418a31ad5294944c541335b44e63738f1d38183106238452f4eadd7ef",
+    "4e0f1fb4984cdcb51ff95bf858f20ce1bf729abca9ec04b1b0d14e3f81127b67",
+    "7fc443bdc6b0f82d4b40b76c61688cfe083baa100738883ef79464f24b1d1b4b",
+    "7142f380ac5468c028c9acbf4f4b22acfda691c52605ace3039b9e2a0a5a634b",
+    "a197a57679f2ece9e8a80b6a9cb7ddf8df718e27037cf352c3e79f02e5eef626",
+    "262521867d74b3f484bfca2232031063e889183f816b42fbe26a369fb232dcf4",
+    "70ef8e4ca1ca420e6d25ddd8dd43f4c7ae59292cf6870b258618b0f60879033d",
+    "3eb771b5b5ab72cb09fc7409120031b56cafcd605772597b1806fd9c536c1108",
+    "2a7ed768416aed6dc81492a3e7479c9078dc5697c60f763a17772792221721f3",
+    "323cfa048cbc3990adbe82377e806ff6e98549ccd997a8da683c2746dfc98de0",
+    "738064803c52905650da47a33616eb98af54bfc8900b554eead1cf6bb44ed32a",
+    "353a94ba2613e3de2f197fd500e78fcfc83ac95e96951e0eef80d22162ebed51",
+    "451f3d59728386561ece1b9589e861d71c185f217b690c06d91b0a17cedce113",
+    "79e6a63bc25810fa985a44082c58adc7d382556af05b7230d3ce8c2183681126",
+    "a38993d75538e9eb52fb96ae2be987f5288b01519135aae64e8f117f4a24a8fb",
+    "ee3c26356ef8f941f0ac82e7b757e9377226b2675ad9f58757523eee112d4e30",
+    "27288589a36c9ed68b941f733c83b69639975cfa722edd2dd9012d730c48eeb4",
+    "840802c73e5750575eb65b57045cc42019e4482b6bd2fd2dabab140026a36090",
+    "e7eb7a6f94cc56c5cf30d8127ebedaa4af5e43ff61e7300587d840b13c657e3e",
+    "ca8a35955208a8bd30e34fa80ef89b174a38c230ebf73d5075a09c219e5b6c3e",
+    "9daced33dc0c823fbcde81aab5378a8ce721043844d0004563de1b6b380372a0",
+    "b13b9be9cf0dd9c7b1cf01d5775e97a9c9f3bd0000cf716bd04570fd981d12a3",
+    "d286e2c8628cac6fbcdd02bd30a008fcf116359de6d843e980a9a6d24bd5939d",
+    "d7bbd5d28d47ba8c015d2b0eed5887696e63818dd3111217da3bea94f8327863",
+    "7b7f02dafd68aa021588ed782b559bfee0b4864c412aa6754125f5903a77922f",
+    "618bf321dc1aedfa4d7aa16ea49d5475ef6d53686cdb67a8f6a46a43750fde78",
+    "e009bfefa1451d9eadd78acfda93957df4c140016e10bd0b5187450f1203b7e2",
+    "96043fd463788fb4da762c3b7223d27cdfa1e17ba344d3357110bd5f36043293",
+    "c850491944b69d8c429ba6c81cb032f855ce33a1bca00e278d5d0c052d0284ed",
+    "0a3e3b590f50dae636dcc62d840b31f67924ab3af29c90650da66e7923044487",
+    "79910582546dc42b2e093193696fb0d1541bfa7fc68de6ec06e40fac6d6cdeab",
+    "d873af04b2bb8c49500c7a65ed0b895420fa050b619307fdf784af873c3c30a8",
+    "b1bb53537d6e6a3b452a6f50bbfcd8d8dde75824c699c68c961c20e9ff862d33",
+    "6439a229a05c68f00de42fde1d935f2d00978b7b2e542aa36db1e29cd42495d0",
+    "5fac18aeca3bfca72c2b07222fc49b5789c86eb6a1097763fb2d58caa24c4b8d",
+    "e9dc86f409a514f8eff6b8a358efab498c00e463d75529fcd5068baa6d6676c9",
+    "3e42633cc0df9193804ef83ab91e2a97f7db6cba9bfc594780b33c3d001184a1",
+    "98bc12ac86fb593bdf575a821370d065113a29a738cde39fd66b25379d26d1f6",
+    "215a53d6e99f3fd0fd1bea3faa22c8e801d5bc739fa5e2b6ae8b5531d1745e5a",
+    "7c507f55b828b824a9b904510ff0cec5057bc3ae07abca392481436b509d0eb0",
+    "8ec9a2fdef8083db76cffe2ab0c20db519a7d5c0edf43a94fd6c4bef359b7f42",
+    "0e30cee6117f9e9b030150fe42ecd42deb0211dddd784d565528fb694e5b0f2a",
+    "1640dd7775fc39511163fb3519bd353374cd30faf925b184359465f30c22dc0a",
+    "78c95359fa9c8d288a7ea3b261155a67b6328eb25998a14df8624374ba455391",
+    "0594c1ded68c748e1eda50d5a8a89f2d59926e4aa9f071b87961d9eefbe0e8c8",
+    "44588c9cdfc24bf65bef2515034f2f0156a3ebf492389bc1c586e9658c98281e",
+    "7f69cb379dee9345e99845d27de902ff9926791db4f43e314e5243682e39e4b8",
+    "a00ed8395edd2330ba2eaf10fe7838d1015600f168a8eb8a9fe748e49bf87aab",
+    "bfe1aefb1e370f29656f99e854eab1c6162e3950b713b5cb88602aa9300e29db",
+    "618013cfd3e15d60aa48b58a9c1c1a360047d35f09e7a255ce20619dd4f6caec",
+    "3b138f91ae5146d6cee1dce8cc821309e55dd23f0a2bc3ed25ef15cf24f782c2",
+    "fb0096ce84c20602c6eeb1ee9a4b9b090434d042c5c0f4c170f2a3907935ec21",
+    "6d69aca21d0c290500412c0ce2c2176ed4a63d9f7817d10c46ad312ae1b04f02",
+    "1b09bd3197cb3c69ce3a98c53b2729970a96a8face9e9319c1c03ee4286cfefa",
+    "48c2dd146c6046c8b6a008e68ae34675ba284dfa103463ff526a813aa580459f",
+    "fb10dfbd40ac991f855c90107042b1e7643881ee2fe38031ae9bf75c6022e184",
+    "3024d8b9ed74b45f07efb3194cb10b214538318521107b3a4ad61adc906bd4a7",
+    "6594d315d59623dd8666bb969f51bca950f11ce4f0c2bb86af6109a70e452f46",
+    "e9397977d264fa9ba376ccc7af16cbde556746c758412d5079f6c4095c713f99",
+    "7f2e997381bb6b830e5ec1b24b761be2b5ee55ede9fd0862759f9427fe3f4257",
+    "6725e713402ff2dabd42c0804cc10113cd01ddc9e1235eedb1bc82ffb3625e0d",
+    "4cec68e6fbe8ca5edd4dc1ab52911f94c6932520762cfb2a3f7c9e02385cde30",
+    "9c3461c0b8b0173b8465cba83216a3650822957bde9ef7d9d8cb7736ac30623a",
+    "e3700c98bc7431e6e14e4dd2523c058d325095a03606eb6526ea980b9a952169",
+    "3d1c6cefef0e6cf151f33f06c58497af3e5f0dcc429df0564f7ef46c8640de38",
+    "bb5ad12998ed28326ad011c796bf82bd8181b920f8209ec9f0e01205da2d973b",
+    "504658efa5bfe89d93663aa9a1b80dc435ff3076c2b98bf9dfdbbaf62971e9b9",
+    "2e94d7ee22dfb5dd172eeec62dfa997babba96ee0de5e593200243d752d1581a",
+    "a4a1c1c8d08f58971717a19669a68d58223952a84ae6d2394ce60343ee32d1dc",
+    "8f07867d364aa721e5a4ffbf41ce7cecb308519a16b1f840b2302793a3e95669",
+    "d5fab8cc44b6cfd831d0c16760c2d420fab486acaad32b04ecb18f4c260c9927",
+    "976244ed657e6a318fb93da603bf053c59c92e0342594496193f03fa1ae883f3",
+    "4ddbb5d1493982089c3e9e4e390cdcecc8fbf6dccb5f8fe54af09e647eb1c61b",
+    "a13e7d45ce77a2200893171804ab98415ba004775c243313a869fdcb98cb9dca",
+    "babf2fab12bec68e4a9e191fb483e2f8f02c9e9e3533e97d919f72efd886e5a6",
+    "58701b296777d562d98acfb4b6e22723a5db0c9f6de2e4655bb84758bfd64f9a",
+    "7f3de1104ee66b790b8d2727317261fcf4e49d9fa3720037f55bdeb2bc74a6ea",
+    "b5049067219555da6850fd3c51e66360c6a6fa9b19573bf89692b0d1efcbc6bb",
+    "7930d89ef22e5b81f8bbc67d7e8e00bd79f08ac5fd785438d380293b89df2b18",
+    "7552e911c92cefcbabc71c103c5daf349565ae14a3dbf28b506c938ebcc9d423",
+    "414ee2c6ae35588699fef0ceca8e21018fbe95907f4750548d3a90d61ae90135",
+    "078ca9b28c21022c7842f0ceb3066d468405401b32a94d2ac5f9268e8259a420",
+    "5d00e964d5f7d5ba484eb441a261540cb4e9673da8e535b907090dc2630b3901",
+    "c4f8ae4543b83720b1b8f23b7a4dd69a29059a36c95c9b567c31aac6d7bb8f8c",
+    "296693743528c48bae643b46fff68827be3b181c315033bc155c1b515391be56",
+    "03cc921867abe82cce99ca30caaa715596ed0f2eaaecdf3af019d0558301b256",
+    "eddf37d1f43ed5ac2cc4173aded9918932e95b479415b8385e076029143e169a",
+    "7319ea9814748f9e91fbd733a21b56467db73a4df7b5858b3d1bcd0ec895830e",
+    "194099f8b5024fb4e9e6f9d6e6de14bc86a6a1f73fb4ecd6abcba38ba06f4bef",
+    "33c7c81ae9482393758901b4a992144f7bd16b165ee7d11036129467d7537ba3",
+    "86a8398313149c87a40eb3a0ac1ee28304acb9bc16d250d16f2be6336040dc19",
+    "8f3e3a73220b255495bdd00993fdf11525223df67bcffb4cc4aa6d4ccd8af233",
+    "1382b579be0edf6b686aa72aa64704502bd9bddb576ff9248d20225d3aef5ef9",
+    "df766359bdb24c5d0026443276559337c5d5e0e03e416598ff2a2013486b59f3",
+    "7146f01bf44b7371cf1228c5ccdd6722107c2ce8d71d65d2548785deb54e5646",
+    "8bba1577a824ff797b22143062ccf6747194e0e88e265b7064656b7af491a078",
+    "1f9d3bac8508f750dffa643ccda3b9f6fe90f5d12e3d3119f723494e6bb8b674",
+    "57b29ad607a1e215680f49c4d1d6eb84160a80aa24fe378da1db83e2ada0113f",
+    "23e44e0450a2580378318a244e11dd8c53517c29b45ec7fb14e6156ab7992cee",
+    "37a653ab380c1e2c0f3f1d2e96bf2e8d15df47690e3a91dc6dd3e651dfde9841",
+    "4198226e21185fe1454d508584d389f00c6439404bbba087af613833d8b5265f",
+    "ae921ad517fcfe1620d049a30a5f7162248938ae3e9942e0efd523cec2488dd7",
+    "00776bf9d566a72d85eafe13259618fe85f7fbc3fe5dfb4cb0dedff85bba192d",
+    "ae8fe1ee6cdbd756e0b5483d217bae84aedbe9d2efd0ee1f708f18d552ede61c",
+    "c5159cffd439166882391aaa380768633cbf4014eef89304944c03e67fb919d3",
+    "b951ec031b577ea94b389a860a42b05a2a6f5161f46a18a8051401dc89e9aa9c",
+    "676dc279d9457670b220cfeebf91fe8bed4e187aa230e929b7f15ab70e0de6c6",
+    "e2cd700c98645a4a01e51963e08fa49e153e4abcec9ad8d67ad9675baa73690a",
+    "ebf9c8fd595112f0a4a5b8d3d0f39495b8aa5f537c6964bd468be1b5d1906d60",
+    "f9b791aada9744877b038e844aecbb8a3f1a5ecfb5ff4df823623d03d8c16cba",
+    "4bb6f8cf8f73fbf6d9bc2fd7c6f8465840647194534f8d637429e042c7759e9b",
+    "84c0fc7719b2a3cb91897837f37bdc4e15e75e81762452c027dce61add227811",
+    "76cb1927671b96e4961d798b52e557e7539c933402ba7424333e7c1083c6469f",
+    "401b01e8b2efb9e844d715ab4968b5e1bf1a5aff316d6a650a53c3e06b9be5f1",
+    "5441abe91d922a4a130290e9fdf96e99e05c935d25c19d979cac649a69e3e16a",
+    "fe5171f0929527c67eb87b987305882531129d6ffa5ea41dc457320f06ee280d",
+    "f24a996d1bd33dc48e5f17ebc269bca54974e5b53c9468b5940e0a9a520fe4a8",
+    "7bf755987b6bea69f99868352289dc21b3f6b4574512aebc622de35f55558acf",
+    "2c24ec1080e5ff686939fbf3c72d01e1a129864ae079c2dfd56002b1405a8e5e",
+    "f8a6c520352eb2094fb34925d08607c0f67f38437e0d5d54ef8212097a5a2cc2",
+    "fa8214dcb2e06c744115cfd733269dab40ab648251d73c6f8033dbbe30347604",
+    "32f22bc27ce8722d43f2e38cc3e25d31706c7d3310a5ae665294a86319f7b30a",
+    "93f8300d0a30ed54f94d2aa27b4abaf355ff1de6f3eb8513ee950022bc6f9a3f",
+    "7d11812c8fb1214c182e9ac02338da5ab927567f6da3527e5ca3714788919b8d",
+    "bcbe8f22f753a66ba7fd991cd3b8c10c6a4b3aff419356681454a645a07c31d8",
+    "09cb7d2efffdb73eda4a0d6dcec8edda088e571ec920b7c736926bb9b3be31ae",
+    "2c8aa3f8983006282cf4a951e07aeb1ba1534ce59298ef53d512a333d75e0146",
+    "2f53d9d89d8184d10356f5b28eaec322ce762ab4a361a1930caf13bd7b73e45a",
+    "dbaa31fce49cd63ad7142c092587b4336453feba2875384c47724cbd5f8b188b",
+    "3bf64d132b0bb75f183a0ec980d4523dff59b9e65bc9fad9cc2718238c9a96fb",
+    "d2bfc7adcc7e590dd751ab4d395358e2843b777fc3e54aec2bceefb5abc6c7a6",
+    "55964e78ebb8ada86bbb0f2dcd0b2ec094117d447b8c292f6c9a14e1770700ea",
+    "73d84b371d3aac3c7110f15f7f6148db21389dbd32c8364cbc25921fea44eba4",
+    "ddf7ee90886e258cb98e8f685dd38027abdc1061d59c113572171d80a132523c",
+    "1bea80ee3dc37464839a1719959e578dd9e720df3e8377b71c0bb4e5a8f2b3b1",
+    "371d64bd59511a31e557e795680c6b7b9429aa0b911f11ec8cda477d23218d66",
+    "7f0a54ce2202e2e5d443d6a258646b89367afeeba8c9e6613ef49101fa3ed75f",
+    "89b17b5db460692841e3bde6209e58529a794f8c3ffd563f7b38b2e9245790a9",
+    "0ab408ceaf0110e74d1b2fd866e3ed923b51687911058c297f3ac72ab1873b3d",
+    "6b807a1372366246af19a5906282967a8e1a72ec08b7a9d4c52c2d9b6e78ae08",
+    "aa40ff460604b96b4809de73605960367f67f9d96a3d24ad4fd2637d714e1a7c",
+    "bcad11636c4ad4bef2b9743ff57d648c3d02ec42ff3064ff1091989492a1bd0b",
+    "065645bf9f4b28b7e42b34f32fc5ff3229e7249c7a87c2fd1e072256bbedf910",
+    "46409a6573f79d077fb49cc71d72840121cb621b389837c5c31f1c5defc7b8fe",
+    "e30f40fb8fd44e628923175b414e2de054bdc220674c371d796f2ed956cd1bb7",
+    "c3daea2c3f5ebbb60e9b0d0dea9c7a2b019617a8d6905eb52dfd69d21135df58",
+    "60e7e287ec877f7a4b463f4a7d7e1915cffbf781dd9bdca50c7b9a27d08f0ef8",
+    "3794488b005a3c6243f3615a28f1ff49550198248647232e77b5f151f78f934a",
+    "176b77ef2b22606ec59772145f8c9220d3a13fbef6fb5ae85a02892c364eed9b",
+    "1db46790470b30984962e55341076303443ee098ec206803fe077624eae9bca3",
+    "f78b30d2bec42e8ef9da401736b5780174b27b8b8dc71d86dbb4d440ff557f88",
+    "cadf4a1a1c6a1616b277b357a23af362d786aaba05ddca7cb5b51cf2d90f1aef",
+    "64dc8202087aa7dc8ee762a51ce6711b58d4ac05e4ad1c0afdb5b2a52868976a",
+    "5c3bcbec99dc595f8894d05934192def0f4525199c85a87ad5751e390cb03a6a",
+    "f45135681a353b5c2948da717b241df80484db8fffba6211fb458ff9a91c2f89",
+    "d7b2f853a66f9096cab3248d57c9454739c7eda1d72f7634c577fe734e69ca68",
+    "d8c29c1ef6bda1b284b7b33fbeb103328f36cf717371fd18ff63f70f6d9fb50b",
+    "b7d55fa5d11a20df6cb5454957063f530526da437bf917273aa49d034576911f",
+    "8033884e795d426f21e58afaeebc222610838bb07a8b7418e1499b3204398f92",
+    "20dfe11e1a8d76d3117ba4eb7b5fa2924bf9e3055198b69c6379f912eb9aa3b6",
+    "cb3596c927d563b422c1a98fc33e6bcdea9dae2cdeafb17cbf9f7592de5219d3",
+    "66c784cea766dccdceb9eb7343ebbc99b5152791d99661018a9043ffa60459a6",
+    "fa6417a09e7330b67b2344b28c405cf87b8285349e1ab7abc03c9a4f6ff73130",
+    "18926b482ccdade9a5af5de211e3a8cda69c115ca1e7884dfcbbba7db6ecb3a0",
+    "af561e6309267bc2f4d0918b50e6cfec9b671705dfad8102fa09605cd88ab8c0",
+    "c43f21ed4835e1d046817341cf171411aa4889a6751bc0a9512e3ff36d289162",
+    "c831d65f86b381ca35b2e1078c010a680fc8fd9b74696126e70c51a12b494245",
+    "ea9505e089be0cc2d11b89d0f7301524562ae3a6b9e59dd42dcac8185e45d7d3",
+    "01719e40496f997f12585044046c9265ae94c7b28b902079d318e46ef39b0860",
+    "5b162b434c2756241dd208f562b8b3284a82b7b5645d73e4d50b9cd5bbfc3ad1",
+    "8cab5f8841c6754e7b257bed7d55235b96a82c24c76da11373712c1574e175e9",
+    "23ab22fb33c6b81c44bbe289192a10dbfd26881b8dff71b76740ec879d0e6671",
+    "7be8ca830e5d8fd93c4a3a7e92a24a2cf097a67945928457f1b1bae2697d8787",
+    "f067bc18f79b25bc2bef71618fbf8d81747cd6743f0fc6541c388cbeb5fed8c3",
+    "1b90b35968464600d60de204fc602fe128a1d6d08ffe1aa67c5b7a51fe35669c",
+    "130f13ee550729bd6919075c794f05e0dc309467ac9b688ab44eba8dded31cef",
+    "fcb412a986954dcd899e6a5d35854bca0375a4219cd29c84e62c111555f0e24d",
+    "1fc2b12731fb8567862aa2f16368523610560d68d943773011d94d08b5d580a1",
+    "21e5a09899cc8401d28ac3ddcc0bd9b0e62619c7763456e4cd9bf0f50aee8e8d",
+    "70df7e529953a2fc65f5d4b83d006147b7080524aa4d21a37ee9763ba1a3e4a9",
+    "1c7bd11cb98c90521f6f2e1b920ba9a0c782e7e9134e8625015af68c57a054f6",
+    "1d5a779a2253a29c8ee157ef784f51e30bc326273440180f585cfd2f9a6b8ef1",
+    "b4f341c12f274b6f485e22e0218512c132001f5698c1813bc89f9effba7f5c50",
+    "2591afc7e7ad9df71a2e7c4bd2ea8c5365723603a062c6bb5f6195d6d4489713",
+    "7bb598d5ef438327296dfcb82bc49643b8d7b6d97c38dbd654da67c45cd1c9b9",
+    "975a2a91fe767bdb6235fcff7da13b6c1544ad2b09f51c5624a8ac50551c7bb7",
+    "4017c7d648e47d9df148f434f8d503d6fc601a41b405ec7f285fa078a534626e",
+    "78c5098b2c8b4895b31bbdf976d8ccf926f759ce9c3784bcdc692d2086bf77c6",
+    "1d78070b49773c4b6486fd8145aa0bf9845fe50975b983ecff465d0e69b7e838",
+    "610f9f1cbf197f646054cd52663ff045fe633b1f732b3b67902b062c8180177e"
+  ]
+}

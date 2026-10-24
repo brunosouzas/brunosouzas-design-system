@@ -55,7 +55,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 52 piece names
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 54 piece names
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`
@@ -387,3 +387,14 @@ A spec with `text` SHALL need `--lang` naming one of its languages: without it t
 #### Scenario: Bad customAt
 - **WHEN** a spec without `custom` has `customAt: 0`, then `customAt: 9` with two pieces, and a spec with `custom` and 8 pieces has `customAt: 9`, then `customAt: 1.5`
 - **THEN** `customAt` is reported as "needs custom" twice (one problem each run), then "expected an integer from 0 to 8" twice
+
+### Requirement: Cast on a cover
+A cover, banner or diagram spec SHALL accept `mascot` and `emote` in `pieces` like any other piece, checked with the same schema and relations, with problems reported at their JSON path.
+
+#### Scenario: Mascot and emote drawn
+- **WHEN** a cover spec has the pieces `{ "piece": "mascot", "who": "architect", "x": 400, "y": 380, "action": "rest" }` and `{ "piece": "emote", "kind": "idea", "x": 520, "y": 160 }`
+- **THEN** the command writes the cover, and its outlined group holds a `g` with `data-mascot` `architect` and a `g` with `data-emote` `idea`
+
+#### Scenario: Head tilt on a dev in a spec
+- **WHEN** a cover spec has `{ "piece": "mascot", "who": "dev", "x": 0, "y": 0, "headTilt": 5 }` and `{ "piece": "emote", "kind": "zzz", "x": 0, "y": 0 }`
+- **THEN** both are reported, `pieces[0].headTilt` ("applies only to the agent") before `pieces[1].kind`, the command exits 1 and writes nothing

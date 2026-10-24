@@ -6,14 +6,14 @@ Keeps the visual identity's values (colour, type, outline, shadow, radius, motio
 ## Requirements
 
 ### Requirement: Token source
-The repository SHALL keep every token in one source file, `tokens/source.json`, whose root is a JSON object. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`, `illustration`, `cover`, `coverBackground`, `surface`, `map`, `site`, `banner`, `bodyDiagram`; a group may nest one more level (for example `motion.pop.damping`).
+The repository SHALL keep every token in one source file, `tokens/source.json`, whose root is a JSON object. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`, `illustration`, `cover`, `coverBackground`, `surface`, `map`, `site`, `banner`, `bodyDiagram`, `cast`; a group may nest one more level (for example `motion.pop.damping`).
 
 #### Scenario: Source file missing or not an object
 - **WHEN** `tokens/source.json` does not exist, or its root is `[]` or `null`
 - **THEN** the build fails, saying which, and writes no file
 
 #### Scenario: Source with an unknown group
-- **WHEN** the source has a top-level group outside the fourteen named groups, such as `colour`
+- **WHEN** the source has a top-level group outside the fifteen named groups, such as `colour`
 - **THEN** the build fails, names the group, and writes no file
 
 #### Scenario: Token without a type
@@ -21,8 +21,8 @@ The repository SHALL keep every token in one source file, `tokens/source.json`, 
 - **THEN** the build fails, names the token's full path and the reason, and writes no file
 
 #### Scenario: New groups accepted
-- **WHEN** the source has `illustration.accent`, `cover.width`, `coverBackground.blush.fill`, `surface.dark.shadow`, `map.lineWidth`, `site.light.primary`, `banner.radius` and `bodyDiagram.radius` with valid types and values
-- **THEN** the build accepts them and they appear in all three outputs, for example `--ds-cover-background-blush-fill`, `--ds-surface-dark-shadow`, `--ds-banner-radius` and `--ds-body-diagram-radius` in `tokens.css`
+- **WHEN** the source has `illustration.accent`, `cover.width`, `coverBackground.blush.fill`, `surface.dark.shadow`, `map.lineWidth`, `site.light.primary`, `banner.radius`, `bodyDiagram.radius` and `cast.dev.fill` with valid types and values
+- **THEN** the build accepts them and they appear in all three outputs, for example `--ds-cover-background-blush-fill`, `--ds-surface-dark-shadow`, `--ds-banner-radius`, `--ds-body-diagram-radius` and `--ds-cast-dev-fill` in `tokens.css`
 
 ### Requirement: Token shape, names and nesting
 A token SHALL be an object with `$value` and `$type`, and MAY have a string `$description`, which no output uses; any other key in a token is an error. A group SHALL be an object of tokens or (at the second level) groups. Names SHALL match `^[a-z][a-zA-Z0-9]*$`. A token sits two or three levels deep (`color.ink`, `motion.pop.damping`); deeper nesting or an empty group is an error. Invalid JSON is an error.
@@ -300,3 +300,18 @@ The source SHALL define `bodyDiagram` width, layoutWidth, radius, ringRadius and
 #### Scenario: Measured body diagram values
 - **WHEN** the repository's source is built
 - **THEN** `tokens.ts` exports `bodyDiagram` 800, 560, 14, 70 and 11, and `tokens.css` has `--ds-body-diagram-layout-width: 560px;`
+
+### Requirement: Required cast tokens
+The source SHALL define, of type `color`: `cast` ground, metal, mouth, glow; `cast.dev` fill, chin, screen; `cast.agent` neck, shine; `cast.architect` and `cast.devops` fill, shine; `cast.data` fill, lid, shine, lens; `cast.request.shine`; and, of type `number`, `cast.emotePop` damping, stiffness, mass. A missing one, or one with another type, is an error. Values: design §6 of `cast-and-emotes`, the approved spike's.
+
+#### Scenario: Cast token missing
+- **WHEN** the source lacks `cast.devops.fill`
+- **THEN** the build fails, names `cast.devops.fill` as missing (type color), and writes no file
+
+#### Scenario: Cast token with the wrong type
+- **WHEN** `cast.emotePop.mass` is declared `dimension`
+- **THEN** the build fails, naming `cast.emotePop.mass` and the expected type `number`, and writes no file
+
+#### Scenario: Approved cast values
+- **WHEN** the repository's source is built
+- **THEN** `tokens.json` has the 18 colours and three numbers of design §6, for example `cast.dev.fill` `#5B7CFA`, `cast.glow` `#7FD1FF` and `cast.emotePop.stiffness` 170, and `tokens.css` has `--ds-cast-dev-fill: #5B7CFA;`

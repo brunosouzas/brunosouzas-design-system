@@ -25,7 +25,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). The cast of mascots and the emotes (AB#152, 0.5.0) are pieces too, with the approved cast motion test in the Studio; new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)).
 
 ## What it is
 
@@ -34,7 +34,8 @@ The blog's articles explain how systems behave: a circuit breaker opening, a pip
 - **Design tokens, one source.** Colours with fixed meanings (green healthy, orange blocked, yellow transitional, red the failure path), the Lato type scale, the thick ink outline, the hard offset shadow, radii, and motion timings. Exported as CSS variables for the site, TypeScript for the animations and JSON for anything else (the SVG generators of the static diagrams).
 - **Motion components.** React components for [Remotion](https://www.remotion.dev): an ink block with a hard shadow, a pill label, an arrow that draws itself, a token travelling along a transition, call-result squares, a countdown ring. Flow primitives in `src/brand/flow-components.tsx` add a white hexagonal `Exchange`, rail-ended `Queue`, yellow-tab `TaggedContainer` and persistent `PositionedToken` (stationary or path-positioned). Copy identities, splits and ACK/NACK rules belong to scenes, not to a generic message engine.
 - **Illustration pieces.** The objects the blog's covers and diagrams draw again and again (pill label, sheet, code panel, robot, server stack, gear, road, the 26 EIP icons and more), each a pure TypeScript function that returns an SVG node tree from the tokens. The same tree becomes an SVG file for a cover and React elements for a scene, and a scene animates a piece by recomputing its parameters every frame. See [Illustration pieces and covers](#illustration-pieces-and-covers).
-- **A catalogue of scenes.** Each scene animates something a published article already says, in 16:9 (article) and 4:5 (LinkedIn), in Portuguese and English from one text table. The first is the [circuit-breaker state machine](docs/spikes/2026-10-22-motion-pilot/README.md).
+- **A cast and emotes.** Seven mascots that are the technical objects themselves (Dev, AI agent, Architect, DevOps, Data, Requester, Message) and eight reaction symbols with a fixed meaning, so a video can tell its story without words. See [The cast and the emotes](#the-cast-and-the-emotes).
+- **A catalogue of scenes.** Each scene animates something a published article already says. The first two are in 16:9 (article) and 4:5 (LinkedIn), in Portuguese and English from one text table; new scenes are one language-neutral 16:9 video ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). The first is the [circuit-breaker state machine](docs/spikes/2026-10-22-motion-pilot/README.md).
 
 The style follows the illustration covers of the [Spotify Engineering blog](https://engineering.atspotify.com/): flat shapes, a dark ink outline, a hard shadow with no blur, saturated colours on a calm page.
 
@@ -163,6 +164,41 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 - A body diagram is 800 wide. Lay it out in 560 units and show it 800 wide: the pieces then come out at the sizes of the published diagrams (text about 18, outline about 4); only the hard shadow is shallower (5 instead of 8). The cover command does this for you with `"format": "diagram"` (below).
 - `stateStart({ cx, cy, r, surface })` draws the filled start dot of a state machine (7.7 units, 11 at 800), in the surface's text colour, with no outline and no shadow.
 
+### The cast and the emotes
+
+`mascot({ who, x, y, face, action, scale, look, headTilt, prop })` draws one character standing with the centre of its ground line at `(x, y)`. Each one carries its identity in three layers, so no video has to introduce it: a body shape, a mark always visible, and a prop when its hands are free.
+
+| `who` | Body | Mark | Prop | Colour |
+|---|---|---|---|---|
+| `dev` | modern all-in-one computer, face and code on the screen | `</>` on the chin | | `cast.dev.*` |
+| `agent` | retro lamp all-in-one: dome, chrome neck, the screen is the head | AI spark | | white, glowing face (`cast.glow`) |
+| `architect` | drafting set square with its hole and a pencil | ruler ticks | diagram board | `cast.architect.*` |
+| `devops` | gear | ∞ | wrench | `cast.devops.*` (magenta, never the blocked orange) |
+| `data` | cylinder with a lid | two bands | magnifier | `cast.data.*` |
+| `request` | speech bubble | the request line | | `color.caller` |
+| `message` | envelope (0.7 of the others) | flap and seal | | white |
+
+- `face`: `normal`, `blink`, `happy`, `wink`, `surprised`, `worried`, `thinking`, `focused`. One drawing for everyone; the agent's face glows on its dark screen.
+- `action`: `none` (the default: an expression has no hands or feet), `rest`, `wave`, `hold`, `reach`, `up`, `shrug`, `type`. Arms and legs start at the body's sides; hands are mittens.
+- `look` (-1 to 1) moves the gaze, `headTilt` (-30 to 30) turns the agent's head on its neck, `prop: false` hides the prop. Every part is a group named by `data-part` (`body`, `face`, `eyes`, `brows`, `mouth`, `arm-left`, `arm-right`, `legs`, `prop`, `mark`, …), so a scene can animate it.
+
+`emote({ kind, x, y, scale, burst })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
+
+| `kind` | Shape | Meaning |
+|---|---|---|
+| `idea` | bulb | an idea |
+| `doubt` | ? | doubt, not understood |
+| `problem` | ! in a red triangle | a problem appears |
+| `worked` | green check | it worked |
+| `refused` | red cross | refused |
+| `pressure` | sweat drops | under pressure |
+| `liked` | heart | liked |
+| `waiting` | Z Z Z | waiting |
+
+In a scene, an emote pops in on the frame the face changes (`emotePop` in `src/brand/cast-motion.ts`, with `leave`, `blinking`, `breathe`, `squashAfter` and `hop`), one at a time, and the body acts through `pose`. A mascot's colour is its identity and never changes with state. The approved motion test is the Studio composition `cast-motion-test` (folder `cast`): `npx remotion render src/index.ts cast-motion-test`. It is a proof of the cast, not an article scene, so `npm run stills` and `npm run render` do not list it.
+
+The cast draws the same on any background; a dark-surface variant is planned (AB#187).
+
 ### A cover
 
 A cover is a JSON spec kept with its article, outside this repository: drafts are private, and only the pieces are public. `npm run cover -- <spec.json> --out <file.svg>` validates it, reports every problem with its JSON path, and writes an 800x420 SVG; the same spec always gives the same bytes. With `"format": "banner"` the same command writes a site banner instead (see below).
@@ -236,6 +272,7 @@ Project-wide decisions are recorded as ADRs in [`docs/adr/`](docs/adr/README.md)
 - **One token source.** Colours, type, outline, shadow and motion timings live in one file; the site, the animations and the SVG scripts read generated exports instead of keeping their own copies. [ADR 0002](docs/adr/0002-one-token-source.md)
 - **One visual language, fixed colour meanings.** Green is always healthy, orange always blocked, red always the failure path, so a reader learns the code once. Rotated text is allowed since the 2026-10-23 amendment. [ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md)
 - **Scenes illustrate published articles.** Every string on screen comes from the article, so an animation never says more than the reviewed text. [ADR 0004](docs/adr/0004-scenes-illustrate-published-articles.md)
+- **Neutral videos, told by a fixed cast.** One video for both languages, no words on screen, a caption only when the motion cannot explain itself, and every gesture tied to an article line. [ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)
 
 ## How this project is built
 

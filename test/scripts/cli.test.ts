@@ -132,6 +132,15 @@ describe("Invalid invocation and failures", () => {
     expectNothingWritten(h);
   });
 
+  // Change cast-and-emotes (task 5.1): the cast's proof is a Studio composition, not a catalogue scene.
+  test("Not a scene for the commands", async () => {
+    const h = harness();
+    expect(await runStills(["cast-motion-test", "--dry-run"], h.io)).toBe(1);
+    expect(h.err[0]).toBe("error: unknown scene: cast-motion-test");
+    expect(h.err).toContainEqual("available scenes: circuit-breaker-states, publish-subscribe");
+    expectNothingWritten(h);
+  });
+
   test("Missing argument", async () => {
     const h = harness();
     expect(await runStills([], h.io)).toBe(1);
