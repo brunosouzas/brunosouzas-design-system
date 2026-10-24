@@ -13,7 +13,20 @@ stackledger's `map-backgrounds` change (AB#134, stackledger PR #39, draft) draws
 
 ## Out of scope
 
-- A neutral dashed arrow (the card's second item): it already exists. `messageArrow({ dashed: true })` with the default `kind: "message"` draws a dashed arrow in `surface.text` (spec `illustration-pieces`, "Message arrow dash", since 0.3.2). Nothing to add.
+- A neutral dashed arrow (the card's second item): it already exists. `messageArrow({ dashed: true })` with the default `kind: "message"` draws a dashed arrow in `surface.text` (spec `illustration-pieces`, "Message arrow dash", since 0.5.1, AB#190). Nothing to add; stackledger needs 0.5.1 or later for it.
 - Coastline, rings for a textured `neutral` backdrop, other cities: stackledger did not ask for them.
 - Any piece that draws the backdrop: stackledger draws it with its own writer.
 - Deeper token nesting (`surface.light.backdrop.water`): see design §2.
+
+## Implicit requirements
+
+- **Errors and invalid input:** requirement. A missing backdrop token, an extra one or another type is an error naming the path, and the build writes no file (the existing "Surface tokens" and "writes no file" rules).
+- **Limits:** n/a. Four colours; colour syntax is already validated.
+- **Repetition and idempotency:** the existing build rules hold (same source, same bytes).
+- **Concurrency:** n/a. A build script over one file.
+- **Security:** n/a. Values are validated hex colours, as for every colour token.
+- **Logs and observability:** n/a. The build's existing error output.
+
+## Documentation
+
+README (surface tokens line), `docs/roadmap.md`; vault `10-personal/projects/brunosouzas-design-system/` (`roadmap.md`, `changelog.md`, `architecture.md`) after the pull request is ready. No ADR: the backdrop is decorative, and ADR 0003's meanings are untouched (design §1).
