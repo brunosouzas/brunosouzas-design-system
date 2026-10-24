@@ -10,7 +10,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "69d3f9e927cc4d981785bad8271cdb083d61729d2c38b14552dee03a198bf22d"
+      "sha256": "044a49f1fe1ea7ef737ddd139d0ca33e5e376f1bdc0769611f1390047d5d184d"
     },
     {
       "piece": "mascot",
@@ -21,7 +21,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "c683b112f7b04d954ef51204219eb81ebd45ecaf31eb6265840a37a5bb90f013"
+      "sha256": "e46ecaaa68304da54ac6ec09c5b65697c4209741922b5afe291513397410af73"
     },
     {
       "piece": "mascot",
@@ -32,7 +32,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "329b356e11e7b8d54462a5f38e92d5bd284c61fb097f87e93a09a395b113a765"
+      "sha256": "bc5114def4d9d857dcb130f2e890dd1dc744bb1f34cc3afa531931d6f90bb5c1"
     },
     {
       "piece": "mascot",
@@ -43,7 +43,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "907ba4a8e7f9f7926b5f7f7e183f97c293d7411548b4f90d5745c9319d17f906"
+      "sha256": "555919610f23c2771df3b1e195f388fbfc9d8f89226be7bd96aa36db922d7e54"
     },
     {
       "piece": "mascot",
@@ -54,7 +54,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "ed3a1c7c35eed0e09439853ebdb239ad2d40398a9b9373a9262fefe37c5b750f"
+      "sha256": "1551c7db418fea229ed867c9e2636a47f3add843a939c24ee1a3a950d93b4ca8"
     },
     {
       "piece": "mascot",
@@ -65,7 +65,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "21d12d4773147efddbc8ba86454ac4643b377c49c9288562a0779d667b8d775a"
+      "sha256": "0e21c64848b9cf6469175123bef932fd3e24fd1d64337dac7918df441d9a49e2"
     },
     {
       "piece": "mascot",
@@ -76,7 +76,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "1a8dc67213dbacbac79f0b2ded673bfc0cef50d126971a4156f1c8c1bf7105ed"
+      "sha256": "92df16d0602cd8badf25404286ecb3a8413f7f829cbcbcf7537e78c250857b90"
     },
     {
       "piece": "mascot",
@@ -87,7 +87,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "d6e0be2108503f1d4ab6d242535934d4d5c163a875ff25de7258e2532bcd9021"
+      "sha256": "4028bfdd4f8bc31a3f2797d128e7078612cc6f6a8ff3fd6ebb9846e7d9fd935c"
     },
     {
       "piece": "mascot",
@@ -98,7 +98,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "ae774fb718ba2cbbdc703bab8ffc63a66deb9fe602e53394f704604109737787"
+      "sha256": "de96477bf041270f4e53988e626b448d43da2546756b473d37a1a8611f959705"
     },
     {
       "piece": "mascot",
@@ -109,7 +109,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "3984b8bc8e77e9c536ebe6622985a83cf23c33afa80393c17935e7ba2af1cf2c"
+      "sha256": "1c8fb68823cf24e9c73dff9e995ae9491386e4c553be247a154f6025d1865ae2"
     },
     {
       "piece": "mascot",
@@ -120,7 +120,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "d7f8f620c2f69bea45ddc75f3e557af90cc95cb0686704b9387acfb8698d0b66"
+      "sha256": "108969f122a1b389bbd5a84b932cd24df3bee6f1ea130f55add7f5a5367a8315"
     },
     {
       "piece": "mascot",
@@ -131,7 +131,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "92c08f9694e8b78a7ba947f29fb45ff0b651d6567fcc839009a392064aed5ebf"
+      "sha256": "e8ca4fb16dcb1cd1506e338df1030ec8266e82c9f8b81a49ea175e6800859e2b"
     },
     {
       "piece": "mascot",
@@ -142,7 +142,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "c94312cd9344c8bd3cd4c4ffe9a2027bd2a527a6f3db537b3b3ddf75e71e6f28"
+      "sha256": "d96aa3a7ce9009ba7be4b0b58976d2fb7d5b9a08aecb60e4afd50729921c3046"
     },
     {
       "piece": "mascot",
@@ -153,7 +153,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "7286ad9ec57cf18ed6bfa6d5b10b07dff7d8142a24c64049b0b8f26fd0474307"
+      "sha256": "81364f3a39bddcdf3b20f0f7e19eeb3ae58d8cdb7f21ab8783dc29867c676a16"
     },
     {
       "piece": "mascot",
@@ -164,7 +164,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "64960dc5fe51413479f33679df72a4db6aa73ce19c469e895658a206b78d2362"
+      "sha256": "8d764ef0aca8731f7bee488a3b11e7657f200bb5de04231d220015ba26ae8dfa"
     },
     {
       "piece": "mascot",
@@ -175,7 +175,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "8ae00b283cf616633c7ea9320fab960869c29286b4b11b649076f6665b4fd481"
+      "sha256": "64298e0e228e026981fb0bbb0421faa729c9ba50b9022eead00a30bd6b629314"
     },
     {
       "piece": "mascot",
@@ -186,7 +186,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "f478e38fcc65d77d4cca6589a2d8fe84570c401c334d6929a3ca480d77089b11"
+      "sha256": "6358d8e6c245b00a8f6d05914466cfd74aa09d3d4fbd2c4ee057ac9a3980eff1"
     },
     {
       "piece": "mascot",
@@ -197,7 +197,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "668bf10b4574c5c931e7a83a3fe61f897c4695c2ccf214f5ea2d1c82ffb32385"
+      "sha256": "d1d3aa23ac11855dde985eb8d98d630724322f7b9bb41adf3421970f2f8c94d5"
     },
     {
       "piece": "mascot",
@@ -208,7 +208,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "ad9d1b918723a2307eff79b5979af3a789135e81a665befb23b9981146969817"
+      "sha256": "a8e6e8f62f05fbe2015a27fee211c4dcf3e9c59421c186650f0e747d95033b3f"
     },
     {
       "piece": "mascot",
@@ -219,7 +219,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "aa2657d3d43fa3a2d1ea65dec1add71c24a806dd38d278810036a26a9ce8f104"
+      "sha256": "a486167f4a26a3875df0d31984e309069b02574320fed8157bc220416f59f20f"
     },
     {
       "piece": "mascot",
@@ -230,7 +230,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "3773be51b37f323a9559c16ce38a3b237df438073d0e82c63bcbfca13657357e"
+      "sha256": "9d15c27ce60ec75cf69ea5e6e8648c3e6e1308082040eca2e7cc1623af7e4b7b"
     },
     {
       "piece": "mascot",
@@ -241,7 +241,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "90a92742b5ff454620964577467866d4c328ff83b2b1cd212991798caaf3fb2d"
+      "sha256": "91064586ff9ee9f6e9a83cad311c147356ee4c0bf6131e55bbc49889a2eed870"
     },
     {
       "piece": "mascot",
@@ -252,7 +252,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "e43a5e53097ba6d32e84eb7378efb8889681f7d874f68c2c2f73a9cc43a39a68"
+      "sha256": "f878d047f6115bbf2adf7f60bcd696d8417ed45d913914532f6b1e9f7c9402f9"
     },
     {
       "piece": "mascot",
@@ -263,7 +263,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "a74194f612c201ab45831d21a9c847a31ffac3a7855da313b97c2b975e6ebbf3"
+      "sha256": "ec6712ac974bab9051c24940955056c45c152cd4b57a070e1cb3fa9306d89f7c"
     },
     {
       "piece": "mascot",
@@ -274,7 +274,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "82f9efe1a3484bc4716310492ac9c16a128bfcc22178b804c96b328f36eaf9cc"
+      "sha256": "223e3e2fe3037076e72f68d16f68c0e83666212f5e04aa6e3999744f6fd6897c"
     },
     {
       "piece": "mascot",
@@ -285,7 +285,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "95df30e3827afd9243cc1217a658df95199e35b71f1cebef4b1493eb363b2b8b"
+      "sha256": "a63ebac687186be7355c254e986106cfb622956e4d0547108eebfef7a4ae8821"
     },
     {
       "piece": "mascot",
@@ -296,7 +296,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "291ec6f7a6d135b829ea3d3f16401ee76f2e661744eb1bea455516f24a687b52"
+      "sha256": "f57a2c27102a7ae0b7b6519a6f26eabf31d80c18378ada8532738add4bec3e2d"
     },
     {
       "piece": "mascot",
@@ -307,7 +307,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "db0dd3a2765ba392829c987d1917e04c9f159954186a9a488879044663342253"
+      "sha256": "b0f53f0986ca5299999948befc12296c44147b0f911a33dd93cfa7eb8367321c"
     },
     {
       "piece": "mascot",
@@ -318,7 +318,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "86ab029ece1ff706ab3e7f840cdfaefde3abb3842811b65f595266122a49b2ae"
+      "sha256": "b47357bfbdc77607e7c9c3925e9320b51e0f6bc8c6f7654d861a7f3ecf378ef5"
     },
     {
       "piece": "mascot",
@@ -329,7 +329,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "2f49900c4be5c2a8c0726a432c1b4057478ecd8bbf2e08113a7bdb52e1a1ceb7"
+      "sha256": "b19e76cad2daa7e5bddf3e99e31147548084b3f564810c8b87152868d63717f4"
     },
     {
       "piece": "mascot",
@@ -340,7 +340,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "f11c448eb5fb8101786ec29f0896b80f7a9e75645696ea3fda89a516dc33b035"
+      "sha256": "e5eb681615679e17ddfef4b04e390b2118d3854cbd33e20ccba8384f3e4f266a"
     },
     {
       "piece": "mascot",
@@ -351,7 +351,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "a137df7006c82da07f9d8b6f9decb4a2b362358d7effe9829fa32f550fce0133"
+      "sha256": "217263ae0a9b5f8dfcd28e9d448e67048d235b02c0541f0342f0c9169eaa5fba"
     },
     {
       "piece": "mascot",
@@ -362,7 +362,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "990dc1e93169e690c343783870bb805517478d03687cb06875637137538d2845"
+      "sha256": "e3b655f7810e579257393b195ccf01302d5bd6924f2db105e6ceee2e1f06299c"
     },
     {
       "piece": "mascot",
@@ -373,7 +373,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "f6164795d8b0f681a8b0be25b23a9cbb15e604c3ce3bc82dce43873c044997c4"
+      "sha256": "7de026edc1a690dee459082218f18e91efce31479e81bc3231fb1c45d73ce486"
     },
     {
       "piece": "mascot",
@@ -384,7 +384,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "4173f78d9b59ac036585be5fe3392867baf010c0c00104906045aae92f71d6f1"
+      "sha256": "1824f6811ca54e6d2acc644a79ad93726335a135dcb8fe3950a078b799975aee"
     },
     {
       "piece": "mascot",
@@ -395,7 +395,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "b749c7335be21081ed84a1767c182399d9ace8358d21e9cbbd7fdc80aea73dbf"
+      "sha256": "51ff938214b8c8e37464b2bf3ac5920bdb54dc164963c19dadec0dbfe2614530"
     },
     {
       "piece": "mascot",
@@ -406,7 +406,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "d0f5dca14e1266df1ccb42f91411c4cec119b9002e9a8db2b9a661eb7359e280"
+      "sha256": "198b5c6e92734c7e1338a5a31cfd359bbc32f634ed8af60a1e568e98f404305d"
     },
     {
       "piece": "mascot",
@@ -417,7 +417,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "0158ce7dadbec740dd242832447bc0a77e2ccd797a2ddbfd00f50e0d2e2147ef"
+      "sha256": "d179fa27a03432c2e5fd571b179f550916eae05e8699ddc8fb15cb3d69fd8096"
     },
     {
       "piece": "mascot",
@@ -428,7 +428,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "6afc8fd5f0a4838be9315dcb3faf398a1c19e2a354a6177b20a1c8896b8b309a"
+      "sha256": "ee35594b9c2db2ad5766943e7536b3e0e10f70af7512d12857d693bca38a4a0d"
     },
     {
       "piece": "mascot",
@@ -439,7 +439,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "bd379c93b40843e1d2aa1ba88aa0efef1cd4bd995dad32e23717d11b6ca8491b"
+      "sha256": "4fa451709ffca58ad369127cf89243c1eb37bedd4ca0a23370636065e6de242a"
     },
     {
       "piece": "mascot",
@@ -450,7 +450,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "f5e5ae2d9f02a55eefb9e489cb4e3b2eb43f080139e478af6d66263836c3bc2a"
+      "sha256": "30daba97974f67f6e515e4bccd7e35229e147bbbfc42d8d668a3e422977574f3"
     },
     {
       "piece": "mascot",
@@ -461,7 +461,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "deeacdba4913ed75d1cdb373f3870e6840044d578ecb9a25db95e8416f507569"
+      "sha256": "c9159e504fc6582ae00f71c10192649f575fba4fcd76a944471dec872c3749e0"
     },
     {
       "piece": "mascot",
@@ -472,7 +472,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "03b249f923ebc0a7be3f740fa3fb5b827b6d289ee17207c033a623c1450ea6a5"
+      "sha256": "9a184248b552e9d5ef358615a705c4f603f6593a0538e30b4ef0652ba4eedde9"
     },
     {
       "piece": "mascot",
@@ -483,7 +483,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "1380f1735c0daee9f75ff3c5d8c1178eeb1ea0d8ff7bd510f73e0de906111c8f"
+      "sha256": "a51c9499c5c8190263efc4ded19112be30742ed06c1ab576acfe17caf795c6c0"
     },
     {
       "piece": "mascot",
@@ -494,7 +494,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "4ec01d25540cc63fc1ed20bebc0bf0d42f9e54475679bc38cc94509ef9bea2c5"
+      "sha256": "c17f1879917fb3f31288733db4019fcad78b476f094ab82fc8ffc0ec52a5e404"
     },
     {
       "piece": "mascot",
@@ -505,7 +505,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "8ddf558fd117e33cbae657a3dd033b61e53af69863d5a1d54ecc1843eea0b597"
+      "sha256": "6edb40a72ab1242f9014b356aa9ae4e4166a585f091e4bfd67d3e99a1fc6bc13"
     },
     {
       "piece": "mascot",
@@ -516,7 +516,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "2cd51652f5229e61cddf9a960a172c16c3a46384cfb2ed1459b9eba1e619e8ef"
+      "sha256": "8233b83fc69ad33e246eb6046a00972a24a3d23c645b53fd986e43b9b5849d4b"
     },
     {
       "piece": "mascot",
@@ -527,7 +527,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "c26ef9d6aaf0eb6a12c5dc0bbce9a05dc8cf351abe4d28cfaebfbc4b2aee0681"
+      "sha256": "10e0bb5eb7e6604224d33248b1566bd8c5d2f0bfd2c9d471e6e284eb677cf4a7"
     },
     {
       "piece": "mascot",
@@ -538,7 +538,7 @@
         "action": "none",
         "surface": "dark"
       },
-      "sha256": "959d2a6b2311d7b09e670149fca985495974a3fa946bdc910584e99f100baefb"
+      "sha256": "1cad60130571089cb83cd2dbbace72c648845358bc9a516a4df8c4d9fb789aba"
     },
     {
       "piece": "mascot",
@@ -549,7 +549,7 @@
         "action": "rest",
         "surface": "dark"
       },
-      "sha256": "8ab55ae101648037f94ee1f51b772650729bbc0401350c95f9fa554c2b5f86d8"
+      "sha256": "16052eca6dbb4e6ad242d19ff1a86b43c2e234e32e4d88c519cc199bb41d9821"
     },
     {
       "piece": "mascot",
@@ -560,7 +560,7 @@
         "action": "wave",
         "surface": "dark"
       },
-      "sha256": "bd702ebe708fc16b1d1468d63bbc63a5c2ca72626b65d79f5b64ff7c7fc3f595"
+      "sha256": "bba9d44cf89610981b1c9efecd050813d79104ff9838b5d7d4c74a22ea7a943a"
     },
     {
       "piece": "mascot",
@@ -571,7 +571,7 @@
         "action": "hold",
         "surface": "dark"
       },
-      "sha256": "e3b6a3cf42cfd0450569e6c07cbd08e3ed5fc939a73742be5c5fc593d5be9ebc"
+      "sha256": "06a6faa958b7055cdfee61218fba85dd0a09c26eb3775a9ca07b18c138dcb588"
     },
     {
       "piece": "mascot",
@@ -582,7 +582,7 @@
         "action": "reach",
         "surface": "dark"
       },
-      "sha256": "4700fc3883374804901052f07cfcba2702bb3f3086bef947550bb8eb2d229164"
+      "sha256": "2018caafe5751f50687afe38cad3629e77a0442728c7d6c1a221c8b33d011ab5"
     },
     {
       "piece": "mascot",
@@ -593,7 +593,7 @@
         "action": "up",
         "surface": "dark"
       },
-      "sha256": "7e9fbe03f9698ac05f8db7bcdf25ae5642c6f97544b7f787fe1a23c8426e2809"
+      "sha256": "0192214d3c380adbb530d12b29558a6d528f48f9cdd4265ba3b73cf94027bb02"
     },
     {
       "piece": "mascot",
@@ -604,7 +604,7 @@
         "action": "shrug",
         "surface": "dark"
       },
-      "sha256": "506a25987515996ef8c8f03d71afd39d811099fa8e9fefe436dbc21265e696f2"
+      "sha256": "868511f0337847e14613bc096cc20ead2ca9eee3d57d16ab9a8f83e1444931f9"
     },
     {
       "piece": "mascot",
@@ -615,7 +615,7 @@
         "action": "type",
         "surface": "dark"
       },
-      "sha256": "be6bbd23e28725ac28cc5abf7b3cc7a06f48734e26c092e581d140e01cf6cfe6"
+      "sha256": "bc82af08ff23c385b5fdfbdd9191c518a9ae52fea0db21bdb4f487aa9cc350a9"
     },
     {
       "piece": "mascot",
@@ -630,7 +630,7 @@
         "scale": 0.5,
         "surface": "dark"
       },
-      "sha256": "10cd4085d88b390d6a50010da4509f1c14ec8d03516d905b71482c863f92b455"
+      "sha256": "47663e25fef27bce6c04a6ea9d424f8cb04ecbd6ce4d8f3d48e23ee78731f223"
     },
     {
       "piece": "emote",
@@ -641,7 +641,7 @@
         "burst": true,
         "surface": "dark"
       },
-      "sha256": "0c4d361e8169fad832117483ee90db9ca07c53d063c8ecf43c559c90de155372"
+      "sha256": "da002a9716852438a71b95c7645eb6d7c093619a95c8f4d308ec7af72ccc37a2"
     },
     {
       "piece": "emote",
@@ -652,7 +652,7 @@
         "burst": false,
         "surface": "dark"
       },
-      "sha256": "4d1d92c5ec15707502bfb329cc4895b64599daac53c8391aee731734aa11577a"
+      "sha256": "de88962cde4f12cd49beedbaa2ba9e010f5dad31e901dfffb5ea7e53edb969dd"
     },
     {
       "piece": "emote",
@@ -663,7 +663,7 @@
         "burst": true,
         "surface": "dark"
       },
-      "sha256": "2fee7eca100bf63fc8b37e64a7662fceb465eb7afaaeaab3fae44688da725e12"
+      "sha256": "43189e0f7c4904453eda5299d018b125cb9f5abb9881a4944023d4cd2fc28f06"
     },
     {
       "piece": "emote",
@@ -674,7 +674,7 @@
         "burst": false,
         "surface": "dark"
       },
-      "sha256": "2fee7eca100bf63fc8b37e64a7662fceb465eb7afaaeaab3fae44688da725e12"
+      "sha256": "43189e0f7c4904453eda5299d018b125cb9f5abb9881a4944023d4cd2fc28f06"
     },
     {
       "piece": "emote",
@@ -685,7 +685,7 @@
         "burst": true,
         "surface": "dark"
       },
-      "sha256": "12b7f7dde2986e0c485396c060c157bbec5fb1e3342175f2485b32e16909ec42"
+      "sha256": "ac88e705cc2503182f914dd153a8202349cab34becf95b80a796256a5074a4b9"
     },
     {
       "piece": "emote",
@@ -696,7 +696,7 @@
         "burst": false,
         "surface": "dark"
       },
-      "sha256": "187a0e8914bb3ac2d25c7a300f7c07bcca64f90cd208edf5111b1585b0b1576a"
+      "sha256": "41e917f6784f317eaab9041e6ea5e6b0b8fe01fe74176e240e434659d44ebc98"
     },
     {
       "piece": "emote",
@@ -707,7 +707,7 @@
         "burst": true,
         "surface": "dark"
       },
-      "sha256": "d869f14a00afce27cffeee63fe7986abd72ba9c7cb9535eccbca5d3a8cfa0af7"
+      "sha256": "eca5b83942c5872fa0e9d93439a2810764fabe0acc4b13f78793d0b198474c84"
     },
     {
       "piece": "emote",
@@ -718,7 +718,7 @@
         "burst": false,
         "surface": "dark"
       },
-      "sha256": "7772a2f1eeb3df4374276942194ca5d8968ca4360efb03a8789c7ce3c4e1d1bc"
+      "sha256": "2438a69627303ff5dc3f80db17e58b6d3a2289c37018213f3631e84fda73367f"
     },
     {
       "piece": "emote",
@@ -729,7 +729,7 @@
         "burst": true,
         "surface": "dark"
       },
-      "sha256": "4dc84ae472521d450b4db7d85d5385a5f0bf3033aafa9c97d83c5cd5952384ec"
+      "sha256": "de06d6e1c733736a69a839631d99546eefa4be88fed27b2700b10301ba8eb996"
     },
     {
       "piece": "emote",
@@ -740,7 +740,7 @@
         "burst": false,
         "surface": "dark"
       },
-      "sha256": "4dc84ae472521d450b4db7d85d5385a5f0bf3033aafa9c97d83c5cd5952384ec"
+      "sha256": "de06d6e1c733736a69a839631d99546eefa4be88fed27b2700b10301ba8eb996"
     },
     {
       "piece": "emote",

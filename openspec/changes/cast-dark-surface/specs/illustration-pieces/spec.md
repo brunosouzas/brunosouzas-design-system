@@ -41,6 +41,40 @@ Every shape `mascot` and `emote` draw, on either surface, SHALL carry its own `s
 - **WHEN** the test walks every character in every action and every emote with and without its burst, on `light` and on `dark`
 - **THEN** every `circle`, `ellipse`, `rect`, `path` has a `stroke` attribute or an ancestor `g` inside the piece that has one, and every `fill` and `stroke` is `none` or a token value
 
+### Requirement: Mascot parts
+Every part of a mascot SHALL be a group named by `data-part`, in design §2's order: `ground`, the arms when behind (`arm-left`, `arm-right`), `legs`, the character's parts, `face` (holding `eyes`, `brows` when drawn, and `mouth`), `prop`, the arms when in front (`hold`, `type`). The agent's `face` SHALL sit inside its `head`, which turns `headTilt` degrees round the neck top. On the dark surface a `rim` group SHALL follow `ground`; parts are listed outside it.
+
+#### Scenario: Parts at rest
+- **WHEN** the test lists the `data-part` values, in document order, of each character with `action: "rest"`
+- **THEN** dev gives `ground arm-left arm-right legs stand body screen-code mark face eyes mouth`, agent `ground arm-left arm-right legs neck body mark head face eyes mouth`, architect `ground arm-left arm-right legs pencil body mark face eyes mouth prop`, data `ground arm-left arm-right legs body mark lid face eyes mouth prop`, and devops, request and message as design §2
+
+#### Scenario: Parts at rest on dark
+- **WHEN** the same list is made with `surface: "dark"`, skipping the subtree of `rim`
+- **THEN** each character gives its light list with `rim` inserted after `ground`
+
+#### Scenario: Head tilt
+- **WHEN** the agent is drawn with `headTilt: 10`
+- **THEN** its `head` group has `transform` `rotate(10 124 110)`
+
+### Requirement: Expression without limbs
+With `action: "none"` a mascot SHALL draw no arm and no legs; with any other action it SHALL draw both arms and the legs, at the mitten targets of design §4. The signature prop SHALL be drawn only for `architect`, `devops` and `data`, with `action` `rest` or `hold` and `prop` true. On the dark surface these rules hold outside `rim`, and `rim` copies exactly the arms, legs and prop drawn.
+
+#### Scenario: Face only
+- **WHEN** devops is drawn with only its required parameters
+- **THEN** its parts are `ground body mark face eyes mouth`
+
+#### Scenario: Hold puts the arms in front
+- **WHEN** devops is drawn with `action: "hold"`
+- **THEN** its parts are `ground legs body mark face eyes mouth prop arm-left arm-right`
+
+#### Scenario: Prop switched off or not held
+- **WHEN** data is drawn with `action: "rest", prop: false`, or with `action: "wave"`
+- **THEN** no `prop` part is drawn
+
+#### Scenario: Face only on dark
+- **WHEN** devops is drawn with `surface: "dark"` and no action
+- **THEN** its `rim` holds no `arm-left`, `arm-right` or `legs`
+
 ## ADDED Requirements
 
 ### Requirement: Cast on the light surface unchanged
@@ -60,6 +94,10 @@ With `surface: "dark"`, `mascot` and `emote` SHALL draw as design §3: every har
 #### Scenario: Arms are rimmed
 - **WHEN** the dev is drawn dark with `action: "wave"`
 - **THEN** the `rim` group holds `arm-left`, `arm-right` and `legs` groups, and each arm's path has `stroke-width` 15 + 4 × `surface.dark.rimWidth`
+
+#### Scenario: Only shadows change colour
+- **WHEN** every character in every action and every emote is drawn dark
+- **THEN** no shape inside `rim` is a shadow copy (`transform` `translate(8 8)` or `translate(6 6)`, or fill `surface.dark.shadow`), and the feet and mittens are still filled `color.ink`
 
 #### Scenario: Emote disc shadow
 - **WHEN** `emote` draws `worked` with `surface: "dark"`
