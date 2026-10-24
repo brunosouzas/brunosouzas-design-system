@@ -6,6 +6,13 @@ export const tokens = {
     "radius": 20,
     "width": 1200
   },
+  "bodyDiagram": {
+    "layoutWidth": 560,
+    "radius": 14,
+    "ringRadius": 70,
+    "startRadius": 11,
+    "width": 800
+  },
   "color": {
     "backend": "#FF6B6B",
     "blocked": "#FF8A3D",
