@@ -24,7 +24,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, command
 
 ## 4. Timing helpers (`motion-components`)
 
-- [ ] 4.1 `src/brand/cast-motion.ts` (design §7). Unit tests in a new `test/brand/cast-motion.test.ts`: "Emote pop", "Leave", "Squash after a landing", "Helper inputs checked", "Hop and blink bounds". "Real sources are clean" (`test/brand/no-colour-literals.test.ts`) covers the new file. Check: `npm test -- test/brand`.
+- [x] 4.1 `src/brand/cast-motion.ts` (design §7). Unit tests in a new `test/brand/cast-motion.test.ts`: "Emote pop", "Leave", "Squash after a landing", "Helper inputs checked", "Hop and blink bounds". "Real sources are clean" (`test/brand/no-colour-literals.test.ts`) covers the new file. Check: `npm test -- test/brand`.
 
 ## 5. Motion test (`scene-catalogue`)
 
