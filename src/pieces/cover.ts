@@ -266,7 +266,9 @@ const checkEntry = (piece: PieceName, params: Record<string, unknown>, at: strin
   let related: Problem[] = [];
   if (definition.relations) {
     try {
-      related = definition.relations(params);
+      // A relation that reads a broken parameter may return anything: keep only real problems.
+      const found: unknown = definition.relations(params);
+      related = Array.isArray(found) ? found.filter((p): p is Problem => isPlainObject(p) && typeof p.path === "string" && typeof p.message === "string") : [];
     } catch {
       related = [];
     }
@@ -349,8 +351,11 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
     if (spec.customAt !== undefined) {
       const at = spec.customAt;
       if (spec.custom === undefined) out.push({ path: "customAt", message: "needs custom" });
-      else if (Array.isArray(pieces) && (typeof at !== "number" || !Number.isInteger(at) || at < 0 || at > pieces.length)) {
-        out.push({ path: "customAt", message: `expected an integer from 0 to ${pieces.length}` });
+      else if (Array.isArray(pieces)) {
+        if (typeof at !== "number" || !Number.isInteger(at) || at < 0 || at > pieces.length) out.push({ path: "customAt", message: `expected an integer from 0 to ${pieces.length}` });
+      } else if (typeof at !== "number" || !Number.isInteger(at) || at < 0) {
+        // Without a pieces array the count is unknown: the type is still checked.
+        out.push({ path: "customAt", message: "expected an integer from 0 to the number of pieces" });
       }
     }
   }
@@ -422,7 +427,8 @@ export const validateCoverSpec = (spec: unknown, options: CoverOptions = {}): Pr
   // An unknown text key replaces every other problem at its path.
   const insideBlocked = (path: string) => blocked.some((b) => under(path, b) && path !== b && path !== `${b}.piece`);
   // Unknown references inside a wrong container are not reported either: the container is one problem.
-  const unknownKept = unknown.filter((u) => !insideBlocked(u.path));
+  // A reference in an entry's `piece` names the piece: it is reported even when its container is refused.
+  const unknownKept = unknown.filter((u) => !insideBlocked(u.path) || /^pieces\[\d+\]\.piece$/.test(u.path));
   const kept = problems.filter((p) => !insideBlocked(p.path) && !unknownKept.some((u) => under(p.path, u.path)));
   return finish([...kept, ...unknownKept]);
 };

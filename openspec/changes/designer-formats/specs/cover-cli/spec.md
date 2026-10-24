@@ -271,7 +271,7 @@ A spec with `text` SHALL need `--lang` naming one of its languages: without it t
 - **THEN** the root's `aria-labelledby` is `circuit-breaker-states-pt-title circuit-breaker-states-pt-desc` and the clip-path is `circuit-breaker-states-pt-frame`
 
 ### Requirement: Free-form object's place
-`customAt`, an integer from 0 to the number of pieces, SHALL put `custom` before the body of `pieces[customAt]` in the outlined group; equal to the count, the default, it stays after every body. Labels stay in the label group. A `customAt` without `custom` is reported at `customAt` as "needs custom", and its value is then not checked; with `custom`, a value outside that range or not an integer is "expected an integer from 0 to <count>".
+`customAt`, an integer from 0 to the number of pieces, SHALL put `custom` before the body of `pieces[customAt]` in the outlined group; equal to the count, the default, it stays after every body. Labels stay in the label group. Without `custom` it is reported as "needs custom", its value unchecked; with `custom`, a value outside that range or not an integer is "expected an integer from 0 to <count>" (to "the number of pieces" when `pieces` is not an array).
 
 #### Scenario: Custom under a pill
 - **WHEN** a cover spec has two pills, `A` then `B`, a `custom` `rect`, and `customAt: 1`

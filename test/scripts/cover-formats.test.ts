@@ -383,3 +383,28 @@ describe("Code review round 1", () => {
     expect(coverTree(splitter).attrs.width).toBe(64);
   });
 });
+
+// Code review round 2 (AB#173): relation results of broken parameters, customAt without a pieces array, a reference as an icon's piece.
+describe("Code review round 2", () => {
+  test("Broken parameters are problems, not crashes", () => {
+    expect(problems(cover({ pieces: [{ piece: "messageArrow", from: [0, 0], to: [10, 0], head: null }] })).length).toBeGreaterThan(0);
+    const sections = [, { y: 50, tag: "b" }] as unknown[];
+    const spec = { ...cover(), pieces: [{ piece: "altFrame", x: 0, y: 0, width: 200, height: 100, tag: "a", sections }] };
+    expect(() => validateCoverSpec(spec)).not.toThrow();
+    expect(validateCoverSpec(spec).map((p) => p.path)).toContain("pieces[0].sections[0]");
+  });
+
+  test("customAt is checked without a pieces array", () => {
+    expect(problems(cover({ pieces: null, custom: { tag: "rect" }, customAt: "bad" }))).toEqual([
+      "customAt: expected an integer from 0 to the number of pieces",
+      "pieces: missing or not an array",
+    ]);
+  });
+
+  test("An unknown reference as an icon's piece is reported", () => {
+    expect(problems(icon({ piece: "@missing" }, { title: "T", description: "D", text: tables({ a: "x" }) }), "en")).toEqual([
+      "pieces: an icon spec holds exactly one piece: eipIcon, uiIcon or linkIcon",
+      "pieces[0].piece: unknown text key missing",
+    ]);
+  });
+});
