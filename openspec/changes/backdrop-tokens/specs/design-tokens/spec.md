@@ -1,7 +1,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: Surface tokens
-The source SHALL define a `surface` group with exactly the entries `light` and `dark`, each with exactly `background`, `text`, `muted`, `grid`, `panel`, `shadow`, `rim`, `backdropWater`, `backdropWaterEdge`, `backdropPark`, `backdropCredit` (`color`), `rimWidth` (`dimension`) and `zoneOpacity` (`opacity`). A missing entry or token, an extra one, or another type is an error naming the path. Values: designs `metro-and-diagram-pieces` §2, `stackledger-map-and-link-pieces` §7 and `backdrop-tokens` §1.
+The source SHALL define a `surface` group with exactly the entries `light` and `dark`, each with exactly `background`, `text`, `muted`, `grid`, `panel`, `shadow`, `rim`, `backdropWater`, `backdropWaterEdge`, `backdropPark`, `backdropCredit` (`color`), `rimWidth` (`dimension`) and `zoneOpacity` (`opacity`). A missing entry or token, an extra one, or another type is an error naming the path. Values: "Measured surfaces".
 
 #### Scenario: Surface entry without its shadow
 - **WHEN** the source has `surface.dark` without `shadow`
