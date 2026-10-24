@@ -25,5 +25,5 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, the com
 ## 4. Documentation and release
 
 - [x] 4.1 README (body diagrams and icons through the command, the `npx --package @brunosouzas/design-system@<v> brunosouzas-cover` call, text tables, `customAt`, `stateStart`, `bodyDiagram` tokens, the background sentence of decision 2), `docs/roadmap.md` (AB#173 delivered), `test/fixtures/covers/README.md` (two fixtures, sources, SHA-256). Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
-- [ ] 4.2 Version bump from gate-1 decision 1 with `npm version <v> --no-git-tag-version`, after reading `release.yml` and `docs/release.md` on `origin/main`. Check: `package.json` and `package-lock.json` show it.
-- [ ] 4.3 Vault: `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`, before `openspec archive`.
+- [x] 4.2 Version bump from gate-1 decision 1 with `npm version <v> --no-git-tag-version`, after reading `release.yml` and `docs/release.md` on `origin/main`. Check: `package.json` and `package-lock.json` show it.
+- [x] 4.3 Vault: `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`, before `openspec archive`.

@@ -113,10 +113,10 @@ A scene SHALL be able to recompute a piece and its pose for every frame from fra
 - **THEN** the normal forms match at every frame, each transform carries `translate(400 300−hop)`, and at frame 6 it is `translate(400 272)`
 
 ### Requirement: Piece catalogue
-The library SHALL export 51 pieces with the parameters and defaults of their designs, in this order: the 26 cover pieces of `illustration-pieces` §4, the nine metro and diagram pieces of `metro-and-diagram-pieces` §3, the six map and icon pieces of `stackledger-map-and-link-pieces` §3, and the ten body diagram pieces of `body-diagram-pieces` §3.
+The library SHALL export 52 pieces with the parameters and defaults of their designs, in this order: the 26 cover pieces of `illustration-pieces` §4, the nine metro and diagram pieces of `metro-and-diagram-pieces` §3, the six map and icon pieces of `stackledger-map-and-link-pieces` §3, the ten body diagram pieces of `body-diagram-pieces` §3, and `stateStart` of `designer-formats` §4.
 
 #### Scenario: Every piece draws with its defaults
-- **WHEN** the catalogue test calls each of the 51 pieces with only its required parameters
+- **WHEN** the catalogue test calls each of the 52 pieces with only its required parameters
 - **THEN** each returns valid tags only and colours that are token values; every piece except `edgeLabel` returns a non-empty `body`, and `edgeLabel` returns an empty `body` and a non-empty `text`
 
 #### Scenario: Catalogue sheet
@@ -730,3 +730,22 @@ Every `messageArrow` call valid in 0.3.1 SHALL draw the same tree and the same `
 #### Scenario: Frozen 0.3.1 arrow calls
 - **WHEN** the test re-calls the fixture `test/fixtures/message-arrow-0.3.1.json`, written on `origin/main` (`b0712a9`) before any code, with the eight calls of `body-diagram-pieces` design §5
 - **THEN** each tree deep-equals its frozen tree, and its body nodes then its text nodes, each through `toSvg` and joined with no separator, equal its frozen string
+
+### Requirement: State start
+`stateStart` SHALL draw the initial state of a state machine: one `circle` at (`cx`, `cy`) of radius `r` (default `bodyDiagram.startRadius × bodyDiagram.layoutWidth / bodyDiagram.width`, 7.7), filled with the `text` colour of its `surface` (`light` by default, or `dark`), with `stroke="none"`, no shadow and no text. `r` is a size above 0 and at most 10000.
+
+#### Scenario: Default start dot
+- **WHEN** `stateStart` is called with `cx` 30.8 and `cy` 84
+- **THEN** its body is exactly `<circle cx="30.8" cy="84" r="7.7" fill="#0A1033" stroke="none"/>` and its text is empty
+
+#### Scenario: Start dot on the dark surface
+- **WHEN** it is called with `cx` 0, `cy` 0, `r` 11 and `surface: "dark"`
+- **THEN** the circle has `r="11"` and `fill="#EEF2FF"`
+
+#### Scenario: Start dot inside the outlined group
+- **WHEN** the cover command draws a `stateStart` in its outlined group (stroke ink, width 4)
+- **THEN** the circle keeps `stroke="none"`, so its size does not grow by the group's outline
+
+#### Scenario: Bad radius
+- **WHEN** `stateStart` is called with `r` 0, or without `cy`
+- **THEN** it throws a `RangeError` naming `r`, or `cy`
