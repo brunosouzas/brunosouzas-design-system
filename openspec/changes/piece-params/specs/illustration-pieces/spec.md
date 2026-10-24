@@ -12,7 +12,7 @@
 - **THEN** size 6 draws a circle with `cy` 51.33, `r` 6 and `stroke-width` 1; size 48 a circle with `cy` 18.67, `r` 48 and `stroke-width` 8; the other three throw a `RangeError` naming `size`
 
 ### Requirement: Count badge text size
-`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k) wide; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" names `textSize` instead of `height`.
+`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k rounded to two decimals) wide; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" names `textSize` instead of `height`.
 
 #### Scenario: Larger count
 - **WHEN** `countBadge` is called with `cx: 0`, `cy: 0`, `textSize: 22` and `text: "1"`, then `text: "12"`, then `text: "1"` with `textSize: 20` and `height: 30`
