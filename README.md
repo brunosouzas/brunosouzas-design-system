@@ -146,7 +146,7 @@ Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https:
 - `countBadge` takes `textSize` (6 to 48, default 11): without `height`, the height, width and baseline grow with it.
 - A line's colour comes from the map's data, so `pipe.fill`, `lineBadge.fill` and `zone.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
 - `map.bendRadius` (32) is the radius of a bundle's centre line at a 45° or 90° bend; no piece reads it, the map engine draws the arcs (`pipe.d` takes `A`).
-- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark` and `backdropCredit` the colours of a city backdrop behind a map and its OpenStreetMap credit (no piece draws it; stackledger does), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
 
 ```ts
 import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
