@@ -36,25 +36,36 @@ const TRANSFORM = /^\s*(?:(?:translate|rotate|scale)\(\s*-?[\d.]+(?:[\s,]+-?[\d.
 
 export type CoverPiece = { piece: PieceName } & Record<string, unknown>;
 export type CustomNode = { tag: string; attrs?: Record<string, unknown>; children?: (CustomNode | string)[] };
-export type CoverSpec = {
+export type CoverRings = { cx: number; cy: number; radius?: number };
+type SpecCommon = {
   id: string;
-  /** Not in an eipIcon spec: the icon's own title is drawn. */
-  title: string;
-  description: string;
-  format?: CoverFormat;
-  /** Covers and banners only. */
-  background: string;
-  /** Covers, banners and diagrams. */
-  rings: { cx: number; cy: number; radius?: number };
   pieces: CoverPiece[];
-  custom?: CustomNode;
-  /** `custom` is drawn before `pieces[customAt]`; default after every piece. */
-  customAt?: number;
-  /** Diagrams only, in layout units. */
-  height?: number;
   /** One table per language; `"@key"` strings elsewhere are replaced for the language asked. */
   text?: Record<string, Record<string, string | string[]>>;
 };
+type Framed = SpecCommon & {
+  title: string;
+  description: string;
+  rings: CoverRings;
+  custom?: CustomNode;
+  /** `custom` is drawn before `pieces[customAt]`; default after every piece. */
+  customAt?: number;
+};
+/** A cover spec, by format (spec cover-cli, "Cover spec format" and each format's keys). */
+export type CoverSpec =
+  | (Framed & { format?: "cover" | "banner"; background: string; height?: never })
+  | (Framed & { format: "diagram"; /** Layout units. */ height: number; background?: never })
+  | (SpecCommon & {
+      format: "icon";
+      /** Not in an eipIcon spec: the icon's own title and description, with the credit, are drawn. */
+      title?: string;
+      description?: string;
+      background?: never;
+      rings?: never;
+      custom?: never;
+      customAt?: never;
+      height?: never;
+    });
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -222,7 +233,8 @@ const resolveText = (spec: Record<string, unknown>, table: Record<string, TextVa
 const forLanguage = (spec: CoverSpec, lang: string | undefined): CoverSpec => {
   if (spec.text === undefined || lang === undefined) return spec;
   const resolved = resolveText(spec as unknown as Record<string, unknown>, spec.text[lang]).spec as unknown as CoverSpec;
-  return { ...resolved, id: `${spec.id}-${lang}` };
+  // The id may be a reference too: the language goes on the resolved id.
+  return { ...resolved, id: `${resolved.id}-${lang}` };
 };
 
 // ---------- validation ----------
@@ -408,10 +420,11 @@ export const validateCoverSpec = (spec: unknown, options: CoverOptions = {}): Pr
   const { problems, blocked } = validateResolved(resolved);
   // A container with the wrong shape is one problem: nothing inside it is reported (its `piece` problem stays).
   // An unknown text key replaces every other problem at its path.
-  const kept = problems.filter(
-    (p) => !blocked.some((b) => under(p.path, b) && p.path !== b && p.path !== `${b}.piece`) && !unknown.some((u) => under(p.path, u.path)),
-  );
-  return finish([...kept, ...unknown]);
+  const insideBlocked = (path: string) => blocked.some((b) => under(path, b) && path !== b && path !== `${b}.piece`);
+  // Unknown references inside a wrong container are not reported either: the container is one problem.
+  const unknownKept = unknown.filter((u) => !insideBlocked(u.path));
+  const kept = problems.filter((p) => !insideBlocked(p.path) && !unknownKept.some((u) => under(p.path, u.path)));
+  return finish([...kept, ...unknownKept]);
 };
 
 // ---------- drawing ----------
@@ -451,7 +464,7 @@ const draw = (entry: CoverPiece): Drawing => {
 };
 
 /** The outlined group's children: every body in paint order, `custom` before `pieces[customAt]` (default: last). */
-const bodies = (spec: CoverSpec, drawnPieces: Drawing[]): (SvgNode | null)[] => {
+const bodies = (spec: Extract<CoverSpec, { rings: CoverRings }>, drawnPieces: Drawing[]): (SvgNode | null)[] => {
   const custom = spec.custom ? resolveCustom(spec.custom) : null;
   const at = spec.customAt ?? drawnPieces.length;
   return [...drawnPieces.slice(0, at).flatMap((d) => d.body), custom, ...drawnPieces.slice(at).flatMap((d) => d.body)];
@@ -465,7 +478,7 @@ const root = (id: string, width: number, height: number, viewBox: string, ...chi
   );
 
 /** An icon (spec cover-cli, "Icon output"): the piece at 0,0 in a box of its own size. */
-const iconTree = (spec: CoverSpec): SvgNode => {
+const iconTree = (spec: Extract<CoverSpec, { format: "icon" }>): SvgNode => {
   const entry = spec.pieces[0];
   const [width, height] = iconBox(entry);
   const eip = entry.piece === "eipIcon" ? EIP_ICONS.find((icon) => icon.name === entry.name) : undefined;
@@ -481,9 +494,9 @@ const iconTree = (spec: CoverSpec): SvgNode => {
 };
 
 /** A body diagram (spec cover-cli, "Diagram output"): laid out 560 wide, shown 800 wide, on the panel. */
-const diagramTree = (spec: CoverSpec): SvgNode => {
+const diagramTree = (spec: Extract<CoverSpec, { format: "diagram" }>): SvgNode => {
   const width = tokens.bodyDiagram.layoutWidth;
-  const height = spec.height as number;
+  const height = spec.height;
   const rx = r2(tokens.bodyDiagram.radius * LAYOUT_SCALE);
   const frame = `url(#${spec.id}-frame)`;
   const ring = diagramRings(spec.rings.cx, spec.rings.cy, height, spec.rings.radius);

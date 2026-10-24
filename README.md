@@ -90,7 +90,7 @@ npm run stills -- publish-subscribe               # 24 phase/final PNGs (six per
 npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effects
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
 npm run build                                     # compile the package into dist/ (the package test needs it)
-npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner) from its spec
+npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner, diagram or icon) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
 npm run studio                                    # Remotion Studio, for frame-by-frame review
 ```
@@ -131,7 +131,7 @@ The components take every colour and size from the tokens, and what is visible a
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
 - Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 51 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+- The 52 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
 
 ### Maps and diagrams
 
@@ -160,7 +160,8 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 - The shapes take one to three centred lines (`text`), an optional `subtitle` and `textSize`. Without `fill` the face is the surface's panel; with a fill, every word is ink.
 - Backticks mark code: `` "adopts a `correlationId`" `` draws `correlationId` in the monospace stack, as a `tspan`. An odd number of backticks is drawn as is.
 - Widths the piece estimates (`tagWidth`, `conditionWidth`, a label's `width`) can be passed by a caller that measures its text.
-- A body diagram is 800 wide. Lay it out in 560 units and show it 800 wide: the pieces then come out at the sizes of the published diagrams (text about 18, outline about 4); only the hard shadow is shallower (5 instead of 8).
+- A body diagram is 800 wide. Lay it out in 560 units and show it 800 wide: the pieces then come out at the sizes of the published diagrams (text about 18, outline about 4); only the hard shadow is shallower (5 instead of 8). The cover command does this for you with `"format": "diagram"` (below).
+- `stateStart({ cx, cy, r, surface })` draws the filled start dot of a state machine (7.7 units, 11 at 800), in the surface's text colour, with no outline and no shadow.
 
 ### A cover
 
@@ -180,10 +181,10 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 }
 ```
 
-- `background` names one of the 21 pairs in `coverBackground` (a background and its ring colour, measured from the published covers). Each pair is used by one cover only.
+- `background` names one of the 21 pairs in `coverBackground` (a background and its ring colour, measured from the published covers). Which covers may share a pair is the `designer` skill's rule, not the package's.
 - `pieces` are drawn in order; their words go on top.
 - The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
-- `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead.
+- `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead. It is painted after every piece's shapes; `customAt: <i>` paints it before `pieces[i]` instead, so a pill can sit on top of it (words always stay on top).
 - The three published covers that proved the pieces are the test fixtures in `test/fixtures/covers/`.
 
 ### Banners
@@ -194,6 +195,19 @@ A spec with `"format": "banner"` (the default is `"cover"`) builds a home banner
 - pieces and labels are clipped to the rounded frame too, so nothing pokes past a corner.
 
 The banner is one image that scales down as a whole. Words in it become small on a phone (a 19px label is about 6px at 375px wide), so keep them few or none. `test/fixtures/covers/home-banner.json` is the brunosouzas.com home banner redrawn from the pieces.
+
+### Body diagrams and icons from a spec
+
+The same command draws the blog's body diagrams and icons, so a consumer needs no script and no local install:
+
+```sh
+npx --yes --package @brunosouzas/design-system@<version> brunosouzas-cover design/<topic>.json --lang pt --out images/<topic>-pt.svg
+```
+
+- `"format": "diagram"` takes a `height` in layout units (1 to 10000) and no `background`: the spec is laid out 560 wide and written 800 wide, on the `color.panel` panel with rounded corners (`bodyDiagram.radius`, 14 at 800) and rings in `color.ring` that show at step 28 and width 2, out to the farthest corner. Pieces get the map outline (3) and label size (13), which show at 4.3 and 18.6. `test/fixtures/covers/circuit-breaker-states.json` is the circuit breaker article's state diagram.
+- `"format": "icon"` holds one `eipIcon`, `uiIcon` or `linkIcon` at 0,0 and writes it in a box of its own size (64x40 for an EIP icon). An EIP icon takes its title and description, with the CC BY 4.0 credit, from the icon's data, so its spec has neither; a UI or link icon spec needs both. No `background`, `rings` or `custom`.
+- **Text tables.** `"text": { "pt": { "open": ["taxa de falha", "> limite"] }, "en": { ... } }` holds one table per language with the same keys; any string `"@open"` elsewhere in the spec (pieces, `title`, `description`, even `id`) is replaced by that key's value for the language passed with `--lang <code>`. Every language must define every key, and the ids in the output gain the language (`<id>-pt`). Without `text`, strings are drawn as written, so `"@home"` stays a label.
+- Like a cover, a diagram or icon is a standalone image: `uiIcon` `colour: "currentColor"` is refused in every format.
 
 ### A new piece
 

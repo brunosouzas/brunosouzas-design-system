@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 import { buildCover, COVER_USAGE, runCover } from "../../scripts/cover";
+import { coverTree, validateCoverSpec, type CoverSpec } from "../../src/pieces/cover";
 import { EIP_ICONS } from "../../src/pieces/eip-icons";
 
 const FIXTURES = new URL("../fixtures/covers/", import.meta.url).pathname;
@@ -357,5 +358,28 @@ describe("Free-form object's place", () => {
     const eight = Array.from({ length: 8 }, (_, i) => ({ piece: "pill", x: 50 * i, y: 100, text: "a" }));
     expect(problems(cover({ pieces: eight, custom, customAt: 9 }))).toEqual(["customAt: expected an integer from 0 to 8"]);
     expect(problems(cover({ pieces: eight, custom, customAt: 1.5 }))).toEqual(["customAt: expected an integer from 0 to 8"]);
+  });
+});
+
+// Code review round 1 (AB#173): references in the id, references inside a wrong container, typed specs per format.
+describe("Code review round 1", () => {
+  test("A reference in the id gets the language on its resolved value", () => {
+    const svg = svgOf(diagram({ id: "@slug", text: tables({ slug: "states" }) }), "en");
+    expect(rootOf(svg)).toContain('aria-labelledby="states-en-title states-en-desc"');
+  });
+
+  test("Unknown references inside a wrong container are not reported", () => {
+    expect(problems(diagram({ pieces: { label: "@missing" }, text: tables({ a: "x" }) }), "en")).toEqual(["pieces: missing or not an array"]);
+    expect(problems(diagram({ pieces: [{ piece: "rocket", text: "@missing" }], text: tables({ a: "x" }) }), "en")).toEqual([
+      expect.stringMatching(/^pieces\[0\]\.piece: unknown piece "rocket"/),
+    ]);
+  });
+
+  test("Diagram and icon specs type-check without casts", () => {
+    const states: CoverSpec = { id: "d", title: "T", description: "D", format: "diagram", height: 100, rings: { cx: 0, cy: 0 }, pieces: [] };
+    const splitter: CoverSpec = { id: "i", format: "icon", pieces: [{ piece: "eipIcon", name: "splitter" }] };
+    expect(validateCoverSpec(states)).toEqual([]);
+    expect(validateCoverSpec(splitter)).toEqual([]);
+    expect(coverTree(splitter).attrs.width).toBe(64);
   });
 });
