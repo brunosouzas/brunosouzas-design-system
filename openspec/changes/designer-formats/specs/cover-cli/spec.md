@@ -132,7 +132,7 @@ The repository SHALL keep as spec fixtures, with their golden SVG output: the th
 ## ADDED Requirements
 
 ### Requirement: Diagram output
-When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (800) wide and `height × width / layoutWidth` high (two decimals), with `viewBox="0 0 560 <height>"` (`bodyDiagram.layoutWidth`), and a cover's attributes, `title`, `desc` and LF ending. The clip-path `<id>-frame` and the panel rect, filled `color.panel`, have `rx` `bodyDiagram.radius × 560 / 800` (9.8). Then come the clipped rings, then one group clipped by `<id>-frame` holding the outlined group and the label group.
+When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (800) wide and `height × width / layoutWidth` high (two decimals), with `viewBox="0 0 560 <height>"` (`bodyDiagram.layoutWidth`), and a cover's attributes, `title`, `desc` and LF ending. The clip-path `<id>-frame` and the panel rect, filled `color.panel`, have `rx` `bodyDiagram.radius × 560 / 800` (9.8). Then the clipped rings, then one group clipped by `<id>-frame` holding the outlined group and the label group.
 
 #### Scenario: Diagram frame
 - **WHEN** a diagram spec with `height` 322 and one `diagramBox` is built
