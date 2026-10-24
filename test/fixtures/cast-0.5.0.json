@@ -249,7 +249,7 @@
         "y": 0,
         "face": "normal"
       },
-      "sha256": "976030bacfea8db89473aaf889141eb24b9f85ff64deadaa10e034c9f961a046"
+      "sha256": "58f4bab216032ef4864f823b124135d1997cf00a8c139fd5c7590d28ba828d3f"
     },
     {
       "piece": "mascot",
@@ -259,7 +259,7 @@
         "y": 0,
         "face": "blink"
       },
-      "sha256": "1bab6364c3d42692243bf2716ef974f31b4603f90240c7c58e7d39195d7cf25b"
+      "sha256": "35be143501d9aa7428bbc77ebb327c74a28a2f0676132ec70f038a8b9eb427ca"
     },
     {
       "piece": "mascot",
@@ -269,7 +269,7 @@
         "y": 0,
         "face": "happy"
       },
-      "sha256": "36cf6de2dc80aa01066f1d5768895d978b5594940d5c8b133676b52609d6255b"
+      "sha256": "86f31908c3402a49cb68ea0f0c7be8f496297743b7f6743d81668309df2657e2"
     },
     {
       "piece": "mascot",
@@ -279,7 +279,7 @@
         "y": 0,
         "face": "wink"
       },
-      "sha256": "4c7ab93d19c7bc4c840ee24802576784ab94b3730303a8780ad715e3c100b2b7"
+      "sha256": "a901d9b6e34a8b1722774c341e8dbd1985ebe1e4169633b07bdcdf6ef76277c7"
     },
     {
       "piece": "mascot",
@@ -289,7 +289,7 @@
         "y": 0,
         "face": "surprised"
       },
-      "sha256": "b253d4638d0fa84dba375299f7d4a56adee2adafbe85ee9a1270ececea68ead8"
+      "sha256": "f31c57c9795de1187581c53006c7ef5143e342fa5ff3e42a2b850ca3965fa999"
     },
     {
       "piece": "mascot",
@@ -299,7 +299,7 @@
         "y": 0,
         "face": "worried"
       },
-      "sha256": "bb8233ce41ff2a9ac7c2b15b2b4defe430bf335ff8fb9f21e762b2fce1bfffa8"
+      "sha256": "6d1de5e124d449100cbe8cbeba6390c859e2c0bc752906aac8506a1b64d8b0d3"
     },
     {
       "piece": "mascot",
@@ -309,7 +309,7 @@
         "y": 0,
         "face": "thinking"
       },
-      "sha256": "17676934781a6d47efd8102ceaa24dffd382cf3a2c78d0f98f9cdf0019a2c4e7"
+      "sha256": "e8c2f4badb1cc7ab4b823850bb88f65ddf96c7ae58550783107e122949d2ce5b"
     },
     {
       "piece": "mascot",
@@ -319,7 +319,7 @@
         "y": 0,
         "face": "focused"
       },
-      "sha256": "7e73b030c870f71c176c46c8698f042409ae1381088dd0670145c0b8737e1eb1"
+      "sha256": "beff0d6e9f24082ca35cfa104969125ba6fe5948a819d7da3fe149ca82d8619c"
     },
     {
       "piece": "mascot",
@@ -489,7 +489,7 @@
         "y": 0,
         "face": "normal"
       },
-      "sha256": "6a89352822739a7742eb6a2131b6d44bf26db719b90231aae181116bdc93078f"
+      "sha256": "d223f04cd550c9662cc2a5abb295eee69561e048b164b221f92fc3b91c5341a4"
     },
     {
       "piece": "mascot",
@@ -499,7 +499,7 @@
         "y": 0,
         "face": "blink"
       },
-      "sha256": "31d71a2247639d748d934e4ae711d3ce938518ea56fcd16afd40e684350fe878"
+      "sha256": "40d43a3f0114f8fb87949e4d94d982de361ccda955849fb781c525e38cae2036"
     },
     {
       "piece": "mascot",
@@ -509,7 +509,7 @@
         "y": 0,
         "face": "happy"
       },
-      "sha256": "f10df65a01df87065700f945e6ad3f2c9eca3650e386541401cfec6638abaa7e"
+      "sha256": "341beb2ed2035016b26aa3b38665dfc6c25c5df5292917e0e66c10ef2a7388e8"
     },
     {
       "piece": "mascot",
@@ -519,7 +519,7 @@
         "y": 0,
         "face": "wink"
       },
-      "sha256": "19cf5d7b6f15def2845041b0dacb2cd57bbaae470cdb4db0effdca16abd6ca4b"
+      "sha256": "f435dd1a7ff4ce0647dc07780e8f0841881220676ad2b352b3e029bd5c0db57b"
     },
     {
       "piece": "mascot",
@@ -529,7 +529,7 @@
         "y": 0,
         "face": "surprised"
       },
-      "sha256": "b5fd168a386a0413e9c54572615b303f818661764acc8c820f655eeab7f59313"
+      "sha256": "6be2c8e5e687678042f428a8a677fad98c7239b766ccb7dda8a77b109a43368c"
     },
     {
       "piece": "mascot",
@@ -539,7 +539,7 @@
         "y": 0,
         "face": "worried"
       },
-      "sha256": "7333c754dcadd05fcd4a4be1d32757942df2608284f829d90220b2c02f6cf7d0"
+      "sha256": "fd017cefbb6cccf18b0239305e8dec501b99a905856f5704bbdc38838fa5240d"
     },
     {
       "piece": "mascot",
@@ -549,7 +549,7 @@
         "y": 0,
         "face": "thinking"
       },
-      "sha256": "c1e90fd16937c03f01be703a011e84a10aa1d05e6339a57b902954c80af5a5ef"
+      "sha256": "2827941d828b473a8bed2a06347319650f17fbf11bdda2087c053aa20eae3f42"
     },
     {
       "piece": "mascot",
@@ -559,7 +559,7 @@
         "y": 0,
         "face": "focused"
       },
-      "sha256": "6dc51815107ff1a607756de4a9333b9e11da1d8eeca8790b8ecc71a9109deacb"
+      "sha256": "42227dc54df92dcf1e82363f804a21265806284fab8d67a7575adaee04ee09e8"
     },
     {
       "piece": "mascot",
@@ -779,7 +779,7 @@
         "y": 0,
         "action": "rest"
       },
-      "sha256": "19849f28954efa0f7e42325e0cb37fee1a07ae6a974f0924639b6a30b4a7a54b"
+      "sha256": "366ffcd6532bc6716a395dd6acd7b11e307da1e6b5f8a6f7971355e5fe270fc8"
     },
     {
       "piece": "mascot",
@@ -789,7 +789,7 @@
         "y": 0,
         "action": "wave"
       },
-      "sha256": "af794c620a5f29ada229d5acb417af8b1809ca4de4c70ed69997b2618d726be6"
+      "sha256": "0cdc0ba608ccc0b1d0830642d69543b2c95b77bff8b08ffdfcb0223687c3347e"
     },
     {
       "piece": "mascot",
@@ -799,7 +799,7 @@
         "y": 0,
         "action": "hold"
       },
-      "sha256": "047f23e04484c9a17613971f159a4cee5ffd53684678497ddccf959cde9ceb89"
+      "sha256": "916dd52cb0c02253f27d2f795f2fd9943e41bbe7061306bb6f34f34df80e6ca0"
     },
     {
       "piece": "mascot",
@@ -809,7 +809,7 @@
         "y": 0,
         "action": "reach"
       },
-      "sha256": "b0232c8fc4f33d9f8ff7da43fa1de689d7140780e4ee0d388b4900f1212bd9ed"
+      "sha256": "49a877b198c65d599a0fd0f6be8390605d86089592b726742d73d1c96593db2a"
     },
     {
       "piece": "mascot",
@@ -819,7 +819,7 @@
         "y": 0,
         "action": "up"
       },
-      "sha256": "9aa589fbc3ae0205b4fa20931dea86613fd1bd7e0aea3691e0dcf0f7b9e05f5d"
+      "sha256": "fa02b00d76fec219296f9c0ecb8fb061c7cf4146ddb47a11ad8f7da2b407d64e"
     },
     {
       "piece": "mascot",
@@ -829,7 +829,7 @@
         "y": 0,
         "action": "shrug"
       },
-      "sha256": "a8b97dac1b661a159182d81cd89a04d3da6f2895cb78a2ae7af1405b3d76219a"
+      "sha256": "b5fb66e5948d424fd74f693ea3fd790a8e218566e9489e18e2e360624199a226"
     },
     {
       "piece": "mascot",
@@ -839,7 +839,7 @@
         "y": 0,
         "action": "type"
       },
-      "sha256": "366d21b3ad1bacc026f9f0e4ec38aee87e7d761d7f39730ac429206eac0df46e"
+      "sha256": "a30d23f2fa24f5806de813955c1d53974d1dab56600d0f1694632912eae0b1a7"
     },
     {
       "piece": "mascot",
@@ -989,7 +989,7 @@
         "y": 0,
         "action": "rest"
       },
-      "sha256": "0f3a45fa98607620ae8d5fb0ea11462c8a01b83dc2e832cc91fa4991f279f150"
+      "sha256": "827256d2c963b995b008d44a77db0d868f701c77dbcb5b595c578f785a2dacd1"
     },
     {
       "piece": "mascot",
@@ -999,7 +999,7 @@
         "y": 0,
         "action": "wave"
       },
-      "sha256": "0daece8d9ff09b21b6e8404735206af695cacb43c88d102fcb7ee652b0c57d9a"
+      "sha256": "1675f324eb0dee6a6a21f2cb3dfd6b98cfae2a6f1341ba700cbf760dd50f3fd6"
     },
     {
       "piece": "mascot",
@@ -1009,7 +1009,7 @@
         "y": 0,
         "action": "hold"
       },
-      "sha256": "3f65f4a339ec3b3d80466b9b7078943a9a97139dda1debcdb5c3c922db260d0b"
+      "sha256": "1c81b382b66ff0477ba29300dfdc90b5867cdc3d7ca4882eee3dd6649cd98f4c"
     },
     {
       "piece": "mascot",
@@ -1019,7 +1019,7 @@
         "y": 0,
         "action": "reach"
       },
-      "sha256": "9eeb71117fed69c7d9f09a90e894c59c585a59b0b3a305e0c7388de75d7b3208"
+      "sha256": "b36f5e067ca374852d27e6afc38025feddcd452266a4a2a4dd19ca6ecdd4447f"
     },
     {
       "piece": "mascot",
@@ -1029,7 +1029,7 @@
         "y": 0,
         "action": "up"
       },
-      "sha256": "243c59e71010eaab8905b679c3fa92b20b9271a45f640ab809979dd1581cca5b"
+      "sha256": "9a4a64361ece575043292287571b02a8b95c9420df4386eb56aa62d65437f88a"
     },
     {
       "piece": "mascot",
@@ -1039,7 +1039,7 @@
         "y": 0,
         "action": "shrug"
       },
-      "sha256": "0ba83662eb924d1e7b228d806af8a7e2fe817bd59ba0e6c035d622df6776d93a"
+      "sha256": "c08f7853304b53052873606954e7b4630858c5cb490c80b631891352c3c4de33"
     },
     {
       "piece": "mascot",
@@ -1049,7 +1049,7 @@
         "y": 0,
         "action": "type"
       },
-      "sha256": "2a3f92ad17c5706cec2803317a3dafa5c8068371593fcef0ce04e199ecacbdfd"
+      "sha256": "ffbbaf2f45becf1fed68018efb5d53684161d28006ee125ba6950eaa5ed97fe7"
     },
     {
       "piece": "mascot",
@@ -1105,7 +1105,7 @@
         "look": 1,
         "prop": false
       },
-      "sha256": "71ae9ec4cab7ccecaac8397d4d5e320c60ee87f901f1f53b88a5503c170debcc"
+      "sha256": "637acf624ac26a225f537aef948eab0b4120c8fb7215e5a095183fb90da4c156"
     },
     {
       "piece": "mascot",
@@ -1147,7 +1147,7 @@
         "look": 1,
         "prop": false
       },
-      "sha256": "16de97d5911d346b5a5bb51f436963fc6ec8ac2a57aa790db8993c47bf3eed6e"
+      "sha256": "bf88233fdb95c282184dd9c913ff0e15f92585eef8e7b883d024249eef8b3b6f"
     },
     {
       "piece": "mascot",

@@ -12,12 +12,13 @@ What the approved spike draws, and where each part goes:
 | `cast-motion-test/src/Scene.tsx` | the 12 s motion test, its timing helpers | §7 helpers, §8 composition |
 | `sdd-without-with-spec/{cast,storyboard*,characters,mascots}.ts` | props for the SDD storyboard (laptop, decision chip), earlier drafts | not ported (scene AB#144) |
 
-The spike's code is copied, unchanged in geometry, into `~/.hermes/spikes/design-system/cast-and-emotes/cast.mts` (SHA-256 `8bd766f9…76a80`) and `motion-test.mts` (`cfe83abd…beaa8`) on the package's node contract (`el`, `g`, `drawn`, `pose`). That port is the normative drawing: the implementation moves its functions into `src/pieces/cast.ts` and `src/scenes/cast-motion-test/`, replacing the proposed-token lookup with `colour()`, and must reproduce every hash of §9. The port differs from the approved files only in these points, each visible on the gate-1 sheets:
+The spike's code is copied, unchanged in geometry, into `~/.hermes/spikes/design-system/cast-and-emotes/cast.mts` (SHA-256 `6cd2743c…a3285`) and `motion-test.mts` (`cfe83abd…beaa8`) on the package's node contract (`el`, `g`, `drawn`, `pose`). That port is the normative drawing: the implementation moves its functions into `src/pieces/cast.ts` and `src/scenes/cast-motion-test/`, replacing the proposed-token lookup with `colour()`, and must reproduce every hash of §9. The port differs from the approved files only in these points, each visible on the gate-1 sheets:
 
 1. One face drawing for every character (`macs.ts` `face`, with the eye highlight), split into `eyes`, `brows` and `mouth` groups; `proud` is dropped, because it drew the same as `happy`. The requester's eyes gain the highlight.
 2. Hands and feet only with an action (`action: "none"` draws neither), for every character. In `mascots4.ts` they were always drawn.
 3. Parts are named with `data-part` (not `id`): several mascots share one SVG, and ids must be unique in a document.
 4. `problem` and `refused` are filled `color.failure` (gate-1 decision 4; the spike used `color.backend`).
+7. DevOps is magenta and the message's seal yellow (gate-1 decision 7).
 5. The `waiting` emote draws its three Z as stroked paths (a piece draws no words, requirement "Words come from the caller"); the spike used `text`.
 6. Every root group sets `stroke: none`, so the cover command's outlined group adds no outline (requirement "New pieces carry their own stroke").
 
@@ -54,7 +55,7 @@ Output: `body` holds one group `g { data-mascot: <who>, transform: "translate(x 
 | `request` | `mascots4.ts` | 105, 216 | 1 | 76 | `body` (bubble, shine), `mark` | request line | none |
 | `message` | `mascots4.ts` | 105, 216 | 0.7 | 76 | `body` (envelope), `mark` | flap and seal | none |
 
-Colours per character are the `cast` tokens of §6 plus `color.white` (agent, message), `color.caller` (request), `illustration.codePanel` (agent's screen), and `color.transitional`, `color.backend`, `color.healthy`, `color.panel` in small parts (pencil, seal, board, screen code, the set square's hole), as in the spike.
+Colours per character are the `cast` tokens of §6 plus `color.white` (agent, message), `color.caller` (request), `illustration.codePanel` (agent's screen), and `color.transitional`, `color.backend`, `color.healthy`, `color.panel` in small parts (pencil, board, screen code, the set square's hole), as in the spike. The message's seal is `color.transitional` (the spike had `color.backend`, which means the backend; gate-1 decision 7).
 
 ## 3. Faces
 
@@ -101,8 +102,8 @@ New group `cast` (the fifteenth), all `color` except `emotePop`:
 
 | Token | Value | Token | Value |
 |---|---|---|---|
-| `cast.ground` | `#D3DBF5` | `cast.devops.fill` | `#F2873A` |
-| `cast.metal` | `#C9D2E8` | `cast.devops.shine` | `#FFCDA6` |
+| `cast.ground` | `#D3DBF5` | `cast.devops.fill` | `#D76AA5` |
+| `cast.metal` | `#C9D2E8` | `cast.devops.shine` | `#F3B8D6` |
 | `cast.mouth` | `#B94A3E` | `cast.data.fill` | `#8C6CF0` |
 | `cast.glow` | `#7FD1FF` | `cast.data.lid` | `#C2B1FF` |
 | `cast.dev.fill` | `#5B7CFA` | `cast.data.shine` | `#B39CFF` |
@@ -113,7 +114,7 @@ New group `cast` (the fifteenth), all `color` except `emotePop`:
 | `cast.architect.fill` | `#22B5A4` | `cast.emotePop.mass` | 0.7 (`number`) |
 | `cast.architect.shine` | `#9CF0E4` | | |
 
-Values are the spike's, unchanged. `$description` on `cast.ground` ("Flat ground shadow under a mascot."), `cast.metal`, `cast.mouth`, `cast.glow`, each `*.fill` and `cast.emotePop.damping` ("Emote pop-in: a quick overshoot, then rest."), as written in `~/.hermes/spikes/design-system/cast-and-emotes/proposed-tokens.json`. The agent has no hue of its own: white body, dark screen, glowing face (gate-1 decision 3). The requester's bubble is `color.caller` on purpose: it is the caller.
+Values are the spike's, except DevOps: the approved orange (`#F2873A`) sat next to `color.blocked` (`#FF8A3D`), so the gear is magenta (gate-1 decision 7, from the owner's independent palette research, `~/.hermes/spikes/design-system/cast-and-emotes/research-palette.md`; trial sheet `palette-trial.png`, row C). `$description` on `cast.ground` ("Flat ground shadow under a mascot."), `cast.metal`, `cast.mouth`, `cast.glow`, each `*.fill` and `cast.emotePop.damping` ("Emote pop-in: a quick overshoot, then rest."), as written in `~/.hermes/spikes/design-system/cast-and-emotes/proposed-tokens.json`. The agent has no hue of its own: white body, dark screen, glowing face (gate-1 decision 3). The requester's bubble is `color.caller` on purpose: it is the caller.
 
 ## 7. Timing helpers
 
@@ -156,14 +157,14 @@ Emotes and actors are wrapped with `pose` (emote: `x`, `y` at its centre, `tilt`
 
 ## 9. Frozen look
 
-`test/fixtures/cast-0.5.0.json` (SHA-256 `266e3a021c5285594749884f53dc9faa1ef8132629b04620a690eb0c1b4ba302`), committed with this spec, written by `fixture.mts` in the spike folder from the port:
+`test/fixtures/cast-0.5.0.json` (SHA-256 `2c8589c05b47d379f315769e8a7829fd9aac9833f0fee73923b7532b901ebe33`), committed with this spec, written by `fixture.mts` in the spike folder from the port:
 
 - `pieces`: 130 calls with their parameters and `sha256` of `toSvg(g({}, ...body, ...text))`: every character in every face (56), every character in every action except `none` (49), every character at x 300, y 500, `happy`, `rest`, scale 1.9, look 1, no prop (7), the agent with `thinking`, headTilt 12, look −1, and with headTilt −8, `wave` (2), every emote at 0, 0 (8) and at 100, 50, scale 2.2, no burst (8).
 - `frames`: `sha256` of `toSvg(castMotionTestFrame(f))` for f = 0 to 359.
 
-A test re-makes every call and frame and expects each hash. If gate-1 decision 4 picks coral, the fixture is rewritten from the port with `PROBLEM_COLOUR=color.backend` before implementation, and this paragraph gets the new SHA-256. No existing piece changes, so the existing frozen fixtures (`pieces-0.2.0.json`, `ui-icons-0.3.0.json`, `message-arrow-0.3.1.json`) and the cover goldens must stay byte-identical.
+A test re-makes every call and frame and expects each hash. The fixture was rewritten after gate 1 for decision 7. No existing piece changes, so the existing frozen fixtures (`pieces-0.2.0.json`, `ui-icons-0.3.0.json`, `message-arrow-0.3.1.json`) and the cover goldens must stay byte-identical.
 
-## 10. Gate-1 decisions (built with the recommended answers)
+## 10. Gate-1 decisions (answered by the owner on 2026-10-24: all as recommended)
 
 1. The cast as pieces (covers and diagrams may use them) or only as video components. Recommended: pieces.
 2. Names: faces `normal blink happy wink surprised worried thinking focused`; actions `none rest wave hold reach up shrug type`; emotes by meaning (`idea doubt problem worked refused pressure liked waiting`). Alternative for emotes: by shape (`bulb question alert check cross sweat heart zzz`).
@@ -171,3 +172,4 @@ A test re-makes every call and frame and expects each hash. If gate-1 decision 4
 4. `problem` and `refused` in `color.failure` (ADR 0003: red is the failure path) or in coral as approved.
 5. Dark surface: none now; the pieces draw the same on any background (sheet row 2 shows the shadow lost on navy). A `surface` parameter comes when a consumer needs it.
 6. The motion test outside the catalogue (Studio folder `cast`) rather than as a catalogue scene with no article.
+7. DevOps hue: magenta `#D76AA5` (from the owner's palette research) instead of the approved orange, which read as `color.blocked`; the message's seal yellow. The research's other proposals (new semantic palette, cyan agent, desaturated requester) are not taken: they would change ADR 0003 or bring a character hue next to another one.

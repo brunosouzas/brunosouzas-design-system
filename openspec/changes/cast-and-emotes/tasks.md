@@ -6,7 +6,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, command
 
 ## 0. Frozen look (committed with the spec)
 
-- [x] 0.1 `test/fixtures/cast-0.5.0.json`, copied byte for byte from the spike port (`~/.hermes/spikes/design-system/cast-and-emotes/out/cast-0.5.0.json`, written by `fixture.mts`). Check: `shasum -a 256` gives design §9's hash. If decision 4 picks coral, rewrite it from the port (`PROBLEM_COLOUR=color.backend`) and update §9 before task 2.
+- [x] 0.1 `test/fixtures/cast-0.5.0.json`, copied byte for byte from the spike port (`~/.hermes/spikes/design-system/cast-and-emotes/out/cast-0.5.0.json`, written by `fixture.mts`). Check: `shasum -a 256` gives design §9's hash. Rewritten after gate 1 with decision 7 (magenta DevOps, yellow seal).
 
 ## 1. Tokens (`design-tokens`)
 
