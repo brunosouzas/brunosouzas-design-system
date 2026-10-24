@@ -20,7 +20,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, command
 
 ## 3. Cover command (`cover-cli`)
 
-- [ ] 3.1 Integration tests in `test/scripts/cover.test.ts`: "Mascot and emote drawn", "Head tilt on a dev in a spec", and "Unknown background and piece" (54). "Unsafe id", "Invalid JSON", "Unknown format" and "Ring count in a spec" (all in `test/scripts/cover.test.ts`) keep passing. Golden outputs stay byte-identical. Check: `npm test -- test/scripts`.
+- [x] 3.1 Integration tests in `test/scripts/cover.test.ts`: "Mascot and emote drawn", "Head tilt on a dev in a spec", and "Unknown background and piece" (54). "Unsafe id", "Invalid JSON", "Unknown format" and "Ring count in a spec" (all in `test/scripts/cover.test.ts`) keep passing. Golden outputs stay byte-identical. Check: `npm test -- test/scripts`.
 
 ## 4. Timing helpers (`motion-components`)
 

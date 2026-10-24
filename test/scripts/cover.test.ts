@@ -460,3 +460,38 @@ describe("No current colour in a spec", () => {
     expect(readFileSync(join(ws.root, "cover.svg"), "utf8")).toContain('<g transform="translate(10 10) scale(1)" fill="#FFFFFF" stroke="#FFFFFF">');
   });
 });
+
+// Spec cover-cli, change cast-and-emotes (task 3.1).
+describe("Cast on a cover", () => {
+  test("Mascot and emote drawn", () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "mascot", who: "architect", x: 400, y: 380, action: "rest" },
+        { piece: "emote", kind: "idea", x: 520, y: 160 },
+      ],
+    });
+    expect(ws.run("spec.json", "--out", "cast.svg")).toBe(0);
+    const svg = readFileSync(join(ws.root, "cast.svg"), "utf8");
+    const outlined = svg.slice(svg.indexOf(`<g stroke="${tokens.color.ink}" stroke-width="4" stroke-linejoin="round">`));
+    expect(outlined.length).toBeLessThan(svg.length);
+    expect(outlined).toContain('<g data-mascot="architect" transform="translate(400 380) scale(1) translate(-105 -216)" stroke="none">');
+    expect(outlined).toContain('<g data-emote="idea" stroke="none">');
+  });
+
+  test("Head tilt on a dev in a spec", () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "mascot", who: "dev", x: 0, y: 0, headTilt: 5 },
+        { piece: "emote", kind: "zzz", x: 0, y: 0 },
+      ],
+    });
+    expect(ws.run("spec.json", "--out", "cast.svg")).toBe(1);
+    expect(ws.err[0]).toBe("pieces[0].headTilt: applies only to the agent");
+    expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+});
