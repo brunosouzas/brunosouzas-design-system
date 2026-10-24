@@ -36,6 +36,7 @@ The kit's `designer` skill (AB#151, kit pull request #133, draft) now draws the 
 
 - Porting any published cover, diagram or icon (AB#140, in brunosouzas.com) and any change in the kit or the site.
 - New `coverBackground` pairs (decision 2, alternative A), and the cast (AB#152): the designer uses neither.
+- The reuse rule itself. With decision 2 as recommended, the rule (which covers may share a pair) is COV-4 of the kit's `designer` skill and changes in kit #133 (AB#151), a consumer change that depends on this release; the package only stops claiming one cover per pair.
 - A dark-surface diagram, a second layout width, or text that wraps by itself. A diagram is laid out by its spec, as the proof was.
 - A piece for the tilted request stack of the circuit breaker cover (the consumer uses `rail`).
 - Measuring text: label widths stay the pieces' estimates, or the caller's.
@@ -43,7 +44,7 @@ The kit's `designer` skill (AB#151, kit pull request #133, draft) now draws the 
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. Every new key and option has its problem, reported with the others by JSON path; a bad `--lang` is an invocation problem. Nothing is written on any problem.
-- **Limits:** requirement. `height` from 1 to 10000; the rings centre within ±10000 as for covers (at most 1153 rings on a diagram); `customAt` from 0 to the piece count; language codes `^[a-z]{2}(-[a-z]{2})?$`.
+- **Limits:** requirement. `height` from 1 to 10000; the rings centre within ±10000 as for covers (at most 1155 rings on a diagram); `customAt` from 0 to the piece count; language codes `^[a-z]{2}(-[a-z]{2})?$`.
 - **Repetition and idempotency:** requirement. Same spec and language give the same bytes (existing "Running twice"); a spec without the new keys gives today's bytes.
 - **Concurrency:** n/a. A one-shot command and pure functions.
 - **Security:** requirement. Text references only substitute strings from the spec's own tables, checked afterwards like any other value; the `custom` allowlist and the colour-literal check are unchanged. Icons add no node the pieces do not already draw.

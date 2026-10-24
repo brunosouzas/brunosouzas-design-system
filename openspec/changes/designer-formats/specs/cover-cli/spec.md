@@ -46,6 +46,52 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 - **WHEN** a cover, banner or diagram spec has `rings.count: 30`
 - **THEN** `rings.count` is reported as "unknown parameter: the ring count comes from the format"
 
+### Requirement: Every spec problem at once
+When a readable spec breaks several rules, the command SHALL print every problem, one line each as `<json path>: <message>`, sorted by path (array indexes as numbers, names by code point), then by message, exit 1 and write nothing. Exceptions: a container with the wrong shape (`pieces` not an array, an entry not an object, an unknown `piece`) is one problem, its children unchecked; a colour literal is reported once at its path and replaces any other problem there, format refusals included; "Language choice" stops at text problems.
+
+#### Scenario: Problems sorted
+- **WHEN** a spec has a bad `title`, a bad `pieces[10]` and a bad `pieces[2]`
+- **THEN** the order is `pieces[2]`, `pieces[10]`, `title`
+
+#### Scenario: One problem per path
+- **WHEN** `pieces[0]` is a `pill` with `fill: "#fff"`
+- **THEN** exactly one problem is printed for `pieces[0].fill`: "colour literals are not allowed; use a token path"
+
+#### Scenario: Wrong container
+- **WHEN** `pieces` is an object holding `fill: "#fff"`, or an entry has an unknown `piece` and a colour literal
+- **THEN** one problem is printed for `pieces` (or for that entry's `piece`) and nothing inside it is reported
+
+#### Scenario: Paths in code-point order
+- **WHEN** two problem paths differ only in a character above U+FFFF and one in the private-use area U+E000
+- **THEN** the U+E000 path comes first
+
+#### Scenario: Colour literal in a refused key
+- **WHEN** a diagram spec has `background: "#fff"`
+- **THEN** exactly one problem is printed for `background`: "colour literals are not allowed; use a token path"
+
+#### Scenario: Table problems stop the check
+- **WHEN** a spec has `text.en.open: 5` and `title: ""`
+- **THEN** only `text.en.open` is reported; after the table is fixed, a second run reports `title`
+
+### Requirement: No current colour in a spec
+A spec of any format SHALL refuse `currentColor` in `uiIcon.colour`, the one parameter that accepts it, with the problem "currentColor is for icons inline in a page; a cover uses a token path" at that path, sorted and printed with any other problem; the command exits 1 and writes nothing, because every output is a standalone image. `currentColor` in any other colour parameter gets that parameter's usual token-path problem.
+
+#### Scenario: Current colour in a cover
+- **WHEN** `pieces[0]` is a `uiIcon` with `name: "sun"`, `x: 10`, `y: 10` and `colour: "currentColor"`
+- **THEN** the command prints `pieces[0].colour: currentColor is for icons inline in a page; a cover uses a token path`, exits 1, and an existing output file keeps its bytes
+
+#### Scenario: Current colour on another piece
+- **WHEN** `pieces[0]` is a `pill` with valid parameters and `fill: "currentColor"`
+- **THEN** the command prints `pieces[0].fill: expected a colour token path such as color.healthy, found "currentColor"` and exits 1
+
+#### Scenario: Token colour in a cover
+- **WHEN** `pieces[0]` is the same `uiIcon` with `colour: "color.white"`
+- **THEN** the spec is valid and the cover is written with the icon's group filled and stroked `#FFFFFF`
+
+#### Scenario: Current colour in an icon spec
+- **WHEN** an icon spec holds a `uiIcon` `sun` with `colour: "currentColor"`
+- **THEN** `pieces[0].colour` gets the same problem and nothing is written
+
 ### Requirement: One free-form object
 A spec SHALL have at most one free-form object, `custom`, a single JSON node tree (not an array) drawn in the outlined group after the pieces' bodies, or before `pieces[customAt]` when `customAt` is given, with its colour token paths resolved and every `text` node written with `stroke="none"`.
 
@@ -137,6 +183,10 @@ In a diagram the rings SHALL be stroked `color.ring` at `cover.ringWidth × 560 
 - **WHEN** a diagram spec has `height` 10000 and `rings` `cx` -10000, `cy` -10000, no `radius`
 - **THEN** the diagram is written with 1153 rings, radii 49 to 22628.2
 
+#### Scenario: Most rings
+- **WHEN** the same spec has `rings.radius` 0.01
+- **THEN** the diagram is written with 1155 rings, radii 0.01 to 22618.41, the most a diagram spec can draw
+
 ### Requirement: Icon output
 When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `uiIcon` or `linkIcon`, at `x` 0 and `y` 0 (their default in an icon spec). The output is an `svg` the size of the piece (64 × 40 × `scale` for `eipIcon`, `size` × `size` for the others, defaults 24 and 46) with a `viewBox` from 0 0, the attributes of a cover, `title`, `desc`, then the piece's body, ending in LF.
 
@@ -221,7 +271,7 @@ A spec with `text` SHALL need `--lang` naming one of its languages: without it t
 - **THEN** the root's `aria-labelledby` is `circuit-breaker-states-pt-title circuit-breaker-states-pt-desc` and the clip-path is `circuit-breaker-states-pt-frame`
 
 ### Requirement: Free-form object's place
-`customAt`, an integer from 0 to the number of pieces, SHALL put `custom` before the body of `pieces[customAt]` in the outlined group; equal to the count, the default, it stays after every body. Labels stay in the label group. A `customAt` without `custom`, or outside that range, is reported at `customAt` ("needs custom", "expected an integer from 0 to <count>").
+`customAt`, an integer from 0 to the number of pieces, SHALL put `custom` before the body of `pieces[customAt]` in the outlined group; equal to the count, the default, it stays after every body. Labels stay in the label group. A `customAt` without `custom` is reported at `customAt` as "needs custom", and its value is then not checked; with `custom`, a value outside that range or not an integer is "expected an integer from 0 to <count>".
 
 #### Scenario: Custom under a pill
 - **WHEN** a cover spec has two pills, `A` then `B`, a `custom` `rect`, and `customAt: 1`
@@ -232,5 +282,5 @@ A spec with `text` SHALL need `--lang` naming one of its languages: without it t
 - **THEN** both outputs are byte-identical, with the custom rect after both pills' rects
 
 #### Scenario: Bad customAt
-- **WHEN** a spec without `custom` has `customAt: 0`, and a spec with `custom` and 8 pieces has `customAt: 9`, then `customAt: 1.5`
-- **THEN** `customAt` is reported as "needs custom", then "expected an integer from 0 to 8" twice
+- **WHEN** a spec without `custom` has `customAt: 0`, then `customAt: 9` with two pieces, and a spec with `custom` and 8 pieces has `customAt: 9`, then `customAt: 1.5`
+- **THEN** `customAt` is reported as "needs custom" twice (one problem each run), then "expected an integer from 0 to 8" twice

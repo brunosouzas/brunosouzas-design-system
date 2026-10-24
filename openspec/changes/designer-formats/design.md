@@ -14,7 +14,7 @@ Tokens: `bodyDiagram.width` 800, `layoutWidth` 560, `radius` 14, `ringRadius` 70
 
 Order: `title`, `desc`, `defs` with the clip path (rect `rx` 9.8), panel rect (`rx` 9.8, `color.panel`), the rings clipped by `<id>-frame`, then one group clipped by `<id>-frame` holding the outlined group (ink, `map.outline` 3, round joins) and the label group (`map.labelSize` 13, `cover.labelWeight`, ink, middle). Root: `width` 800, `height` `round(height × 800 / 560)`, `viewBox="0 0 560 <height>"`. When the rounded height is not exact, the image keeps its viewBox and is letterboxed by under half a pixel; the consumer picks heights such as 322 (shown 460) when it wants an exact one.
 
-The rings are drawn by the frame (circles in one stroked group), not by the `rings` piece, whose step and width are the cover's and whose `count` stops at 1000. A diagram's count can reach 1153 (`height` 10000, centre at -10000, -10000).
+The rings are drawn by the frame (circles in one stroked group), not by the `rings` piece, whose step and width are the cover's and whose `count` stops at 1000. A diagram's count can reach 1155 (`height` 10000, centre at -10000, -10000, radius near 0).
 
 Why `map.outline` and `map.labelSize` and not the cover's 4 and 19: a diagram is drawn in map units; at 800/560 they show as 4.3 and 18.6, the published sizes. Pieces that set their own stroke and text size (every diagram piece) are not affected.
 
