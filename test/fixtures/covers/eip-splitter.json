@@ -1,0 +1,5 @@
+{
+  "id": "eip-splitter",
+  "format": "icon",
+  "pieces": [{ "piece": "eipIcon", "name": "splitter" }]
+}

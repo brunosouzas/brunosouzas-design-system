@@ -1,0 +1,44 @@
+{
+  "id": "circuit-breaker-states",
+  "format": "diagram",
+  "height": 322,
+  "title": "@title",
+  "description": "@description",
+  "rings": { "cx": 280, "cy": 161 },
+  "text": {
+    "en": {
+      "title": "Circuit breaker states",
+      "description": "State diagram. The circuit starts CLOSED. CLOSED moves to OPEN when the failure rate in the window exceeds the threshold, with a minimum call count. OPEN moves to HALF_OPEN when the wait period (resetTimeout) elapses. HALF_OPEN moves back to CLOSED after enough successful test calls, and back to OPEN on any failure during the test.",
+      "open": ["failure rate in the window", "> threshold"],
+      "openNote": ["(with a minimum call count)"],
+      "half": ["wait period", "(`resetTimeout`)", "elapses"],
+      "fail": ["any failure", "during the test"],
+      "close": ["enough successful", "test calls"]
+    },
+    "pt": {
+      "title": "Estados do circuit breaker",
+      "description": "Diagrama de estados. O circuito começa em CLOSED. CLOSED vai para OPEN quando a taxa de falha na janela passa do limite, com um mínimo de chamadas. OPEN vai para HALF_OPEN quando o tempo de espera (resetTimeout) expira. HALF_OPEN volta para CLOSED quando há chamadas de teste com sucesso suficiente, e volta para OPEN com qualquer falha durante o teste.",
+      "open": ["taxa de falha na janela", "> limite"],
+      "openNote": ["(com mínimo de chamadas)"],
+      "half": ["tempo de espera", "(`resetTimeout`)", "expira"],
+      "fail": ["qualquer falha", "durante o teste"],
+      "close": ["chamadas de", "teste com sucesso", "suficiente"]
+    }
+  },
+  "pieces": [
+    { "piece": "stateStart", "cx": 30.8, "cy": 84 },
+    { "piece": "messageArrow", "from": [40, 84], "to": [67, 84], "curve": "straight", "width": 2.1 },
+    { "piece": "messageArrow", "from": [203, 84], "to": [373, 84], "curve": "straight", "width": 2.1 },
+    { "piece": "messageArrow", "from": [464.8, 116.2], "controls": [[464.8, 196], [437.5, 243.6]], "to": [366.8, 249.2], "width": 2.1 },
+    { "piece": "messageArrow", "from": [329, 224], "controls": [[350, 189], [392, 154]], "to": [415.8, 119], "width": 2.1 },
+    { "piece": "messageArrow", "from": [210, 249.2], "controls": [[126, 246.4], [105, 196]], "to": [133, 119], "width": 2.1 },
+    { "piece": "diagramBox", "x": 70, "y": 56, "width": 130, "height": 56, "text": ["CLOSED"], "fill": "color.healthy", "textSize": 15.4 },
+    { "piece": "diagramBox", "x": 375.2, "y": 56, "width": 130, "height": 56, "text": ["OPEN"], "fill": "color.blocked", "textSize": 15.4 },
+    { "piece": "diagramBox", "x": 212.8, "y": 221.2, "width": 147, "height": 56, "text": ["HALF_OPEN"], "fill": "color.transitional", "textSize": 15.4 },
+    { "piece": "edgeLabel", "x": 288, "y": 62, "lines": "@open", "textSize": 10.5 },
+    { "piece": "edgeLabel", "x": 288, "y": 101.5, "lines": "@openNote", "textSize": 9.8 },
+    { "piece": "edgeLabel", "x": 473.2, "y": 165.2, "lines": "@half", "anchor": "start", "textSize": 10.5 },
+    { "piece": "edgeLabel", "x": 354.2, "y": 165.2, "lines": "@fail", "anchor": "end", "textSize": 10.5 },
+    { "piece": "edgeLabel", "x": 66.5, "y": 176.4, "lines": "@close", "textSize": 10.5 }
+  ]
+}

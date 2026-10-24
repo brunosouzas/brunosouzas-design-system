@@ -307,10 +307,15 @@ describe("Cover output", () => {
 });
 
 describe("Parity with the published proof covers", () => {
-  test.each([...PROOF_COVERS, "home-banner"])("Golden output (%s)", (name) => {
-    const result = buildCover(readFileSync(join(FIXTURES, `${name}.json`), "utf8"), name);
+  // Seven goldens: three proof covers, the banner, the icon, and the diagram in both languages (change designer-formats).
+  test.each([
+    ...[...PROOF_COVERS, "home-banner", "eip-splitter"].map((name) => [name, name, undefined]),
+    ["circuit-breaker-states-pt", "circuit-breaker-states", "pt"],
+    ["circuit-breaker-states-en", "circuit-breaker-states", "en"],
+  ] as [string, string, string | undefined][])("Golden output (%s)", (golden, spec, lang) => {
+    const result = buildCover(readFileSync(join(FIXTURES, `${spec}.json`), "utf8"), spec, lang);
     expect(result.ok).toBe(true);
-    if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${name}.svg`), "utf8"));
+    if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${golden}.svg`), "utf8"));
   });
 });
 
@@ -361,8 +366,8 @@ const ringRadii = (svg: string): number[] => {
 
 describe("Banner format", () => {
   test("Unknown format", () => {
-    expect(problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner"]);
-    expect(problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner"]);
+    expect(problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner, diagram, icon"]);
+    expect(problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner, diagram, icon"]);
     const ws = workspace();
     ws.write("spec.json", { ...minimal(), format: "poster" });
     expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
@@ -370,7 +375,8 @@ describe("Banner format", () => {
   });
 
   test("Ring count in a spec", () => {
-    for (const spec of [{ ...minimal(), rings: { cx: 400, cy: 215, count: 30 } }, banner({ rings: { cx: 600, cy: 225, count: 30 } })]) {
+    const diagram = { id: "d", title: "T", description: "D", format: "diagram", height: 100, rings: { cx: 0, cy: 0, count: 30 }, pieces: [] };
+    for (const spec of [{ ...minimal(), rings: { cx: 400, cy: 215, count: 30 } }, banner({ rings: { cx: 600, cy: 225, count: 30 } }), diagram]) {
       expect(problems(spec)).toEqual(["rings.count: unknown parameter: the ring count comes from the format"]);
     }
   });

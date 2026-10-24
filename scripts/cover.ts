@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// `npm run cover -- <spec.json> --out <file.svg>`, installed as the bin
+// `npm run cover -- <spec.json> --out <file.svg> [--lang <code>]`, installed as the bin
 // `brunosouzas-cover` (spec cover-cli; design §6):
 // builds one blog cover from a cover spec kept with its article in the vault.
 //
@@ -14,26 +14,30 @@ import { closeSync, existsSync, openSync, readFileSync, realpathSync, renameSync
 import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { coverTree, validateCoverSpec, type CoverSpec } from "../src/pieces/cover.ts";
+import { coverTree, LANGUAGE, validateCoverSpec, type CoverSpec } from "../src/pieces/cover.ts";
 import { toSvg } from "../src/pieces/render.ts";
 
-export const COVER_USAGE = "usage: npm run cover -- <spec.json> --out <file.svg>";
+export const COVER_USAGE = "usage: npm run cover -- <spec.json> --out <file.svg> [--lang <code>]";
 
 export type CoverIo = { cwd: string; log: (line: string) => void; error: (line: string) => void };
 
 /** The first invocation problem, in the order of the spec, or the two paths. */
-export const parseCoverArgs = (args: string[], cwd: string): { ok: true; spec: string; out: string } | { ok: false; problem: string } => {
+export const parseCoverArgs = (args: string[], cwd: string): { ok: true; spec: string; out: string; lang?: string } | { ok: false; problem: string } => {
   const specs: string[] = [];
   const outs: string[] = [];
+  const langs: string[] = [];
   let unknown: string | undefined;
   let outWithoutValue = false;
+  let langWithoutValue = false;
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    if (arg === "--out") {
+    if (arg === "--out" || arg === "--lang") {
       const value = args[i + 1];
-      if (value === undefined || value.startsWith("--")) outWithoutValue = true;
-      else {
-        outs.push(value);
+      if (value === undefined || value.startsWith("--")) {
+        if (arg === "--out") outWithoutValue = true;
+        else langWithoutValue = true;
+      } else {
+        (arg === "--out" ? outs : langs).push(value);
         i++;
       }
     } else if (arg.startsWith("-")) unknown ??= arg;
@@ -49,9 +53,12 @@ export const parseCoverArgs = (args: string[], cwd: string): { ok: true; spec: s
   if (!existsSync(folder) || !statSync(folder).isDirectory()) return { ok: false, problem: `the output folder does not exist: ${dirname(out)}` };
   const target = resolve(cwd, out);
   if (existsSync(target) && statSync(target).isDirectory()) return { ok: false, problem: `the output is a folder: ${out}` };
+  if (langWithoutValue) return { ok: false, problem: "--lang needs a value: <code>" };
+  if (langs.length > 1) return { ok: false, problem: "--lang given more than once" };
+  if (langs.length === 1 && !LANGUAGE.test(langs[0])) return { ok: false, problem: `--lang expects a language code such as pt or en, found ${langs[0]}` };
   if (specs.length === 0) return { ok: false, problem: "missing the cover spec: <spec.json>" };
   if (specs.length > 1) return { ok: false, problem: `one cover spec at a time, found ${specs.length}` };
-  return { ok: true, spec: specs[0], out };
+  return { ok: true, spec: specs[0], out, ...(langs.length === 1 ? { lang: langs[0] } : {}) };
 };
 
 /** Parses the spec text; a syntax error names the line and column. */
@@ -73,12 +80,12 @@ const parseJson = (text: string, label: string): { value: unknown } | { problem:
 };
 
 /** Builds the cover text for a spec file's contents, or the problem lines. */
-export const buildCover = (text: string, label: string): { ok: true; svg: string } | { ok: false; lines: string[] } => {
+export const buildCover = (text: string, label: string, lang?: string): { ok: true; svg: string } | { ok: false; lines: string[] } => {
   const parsed = parseJson(text, label);
   if ("problem" in parsed) return { ok: false, lines: [parsed.problem] };
-  const problems = validateCoverSpec(parsed.value);
+  const problems = validateCoverSpec(parsed.value, { lang });
   if (problems.length > 0) return { ok: false, lines: problems.map((p) => `${p.path}: ${p.message}`) };
-  return { ok: true, svg: `${toSvg(coverTree(parsed.value as CoverSpec))}\n` };
+  return { ok: true, svg: `${toSvg(coverTree(parsed.value as CoverSpec, { lang }))}\n` };
 };
 
 export const runCover = (args: string[], io: CoverIo): number => {
@@ -97,7 +104,7 @@ export const runCover = (args: string[], io: CoverIo): number => {
     io.error(COVER_USAGE);
     return 1;
   }
-  const result = buildCover(text, invocation.spec);
+  const result = buildCover(text, invocation.spec, invocation.lang);
   if (!result.ok) {
     for (const line of result.lines) io.error(line);
     io.error(`cover: ${result.lines.length} problem(s) in ${invocation.spec}; no file written`);
