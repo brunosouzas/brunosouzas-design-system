@@ -34,6 +34,7 @@ export const leave = (frame: number, at: number, len = 10): number => {
 /** True during the four frames that start at any of `starts`. */
 export const blinking = (frame: number, starts: readonly number[]): boolean => {
   finite("blinking", [["frame", frame]]);
+  if (!Array.isArray(starts)) throw new RangeError(`blinking: starts must be an array of finite numbers, found ${JSON.stringify(starts)}`);
   for (let i = 0; i < starts.length; i++) finite("blinking", [[`starts[${i}]`, starts[i]]]);
   return starts.some((start) => frame >= start && frame < start + 4);
 };

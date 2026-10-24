@@ -10,6 +10,7 @@ import { describe, expect, test } from "vitest";
 import { RemotionRoot } from "../../src/Root";
 import { scenes } from "../../src/scenes";
 import { castMotionTestFrame } from "../../src/scenes/cast-motion-test/frames";
+import { mascot } from "../../src/pieces/cast";
 import type { SvgNode } from "../../src/pieces/node";
 import { toReact } from "../../src/pieces/react";
 import { toSvg } from "../../src/pieces/render";
@@ -32,6 +33,14 @@ const emotesAt = (frame: number): string[] => {
   const found: string[] = [];
   walk(castMotionTestFrame(frame), (n) => {
     if (typeof n.attrs["data-emote"] === "string") found.push(n.attrs["data-emote"] as string);
+  });
+  return found;
+};
+/** One part (`eyes`, `mouth`) of one character's face in a tree, as SVG text (local coordinates). */
+const partOf = (tree: SvgNode, who: string, part: string): string => {
+  let found = "";
+  walk(tree, (n, mascot) => {
+    if (mascot === who && n.attrs["data-part"] === part && found === "") found = toSvg(n);
   });
   return found;
 };
@@ -82,7 +91,20 @@ describe("Cast motion test", () => {
       expect(emotesAt(frame)).toEqual([]);
       expect(emotesAt(frame + 1)).toEqual([kind]);
     }
-    expect(faceOf(62, "agent")).toContain('data-part="mouth"');
+    // The expression itself: eyes and mouth equal those of the piece drawn with the expected face
+    // (the agent's head is at tilt 12 at frame 62, which moves its face anchor).
+    const expected = [
+      [62, "agent", mascot({ who: "agent", x: 0, y: 0, face: "happy", headTilt: 12 })],
+      [142, "request", mascot({ who: "request", x: 0, y: 0, face: "thinking" })],
+      [246, "dev", mascot({ who: "dev", x: 0, y: 0, face: "surprised" })],
+    ] as const;
+    for (const [frame, who, piece] of expected) {
+      for (const part of ["eyes", "mouth"]) {
+        expect(partOf(castMotionTestFrame(frame), who, part), `${who} ${part} at ${frame}`).toBe(partOf(piece.body[0], who, part));
+      }
+    }
+    // A wrong expression fails the same comparison.
+    expect(partOf(castMotionTestFrame(246), "dev", "mouth")).not.toBe(partOf(mascot({ who: "dev", x: 0, y: 0, face: "worried" }).body[0], "dev", "mouth"));
   });
 });
 

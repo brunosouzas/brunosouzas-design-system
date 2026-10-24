@@ -31,6 +31,9 @@ describe("Cast timing helpers", () => {
     expect(() => emotePop(0, 0, 0)).toThrow(new RangeError("emotePop: fps must be greater than 0, found 0"));
     expect(() => emotePop(Number.NaN, 0)).toThrow(new RangeError("emotePop: frame must be a finite number, found NaN"));
     expect(() => blinking(0, [1, Infinity])).toThrow(new RangeError("blinking: starts[1] must be a finite number, found Infinity"));
+    expect(() => blinking(0, null as never)).toThrow(new RangeError("blinking: starts must be an array of finite numbers, found null"));
+    expect(() => blinking(0, { length: 0, some: () => true } as never)).toThrow(/^blinking: starts must be an array/);
+    expect(() => blinking(0, new Array(2))).toThrow(new RangeError("blinking: starts[0] must be a finite number, found undefined"));
     expect(breathe(0, 0)).toBe(1);
   });
 
