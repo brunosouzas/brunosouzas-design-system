@@ -7,7 +7,7 @@
 // between parameters are checked in the order of design §3 and the first one is
 // thrown as a RangeError naming the parameter.
 import { tokens } from "../../tokens/generated/tokens.ts";
-import { inkOf, inkSchema, limits, roomFor, sticker, surfaceParam, type Ink, type Point, type Shape, type SurfaceName } from "./ink.ts";
+import { inkOf, inkSchema, limits, roomFor, spans, sticker, surfaceParam, type Ink, type Point, type Shape, type SurfaceName } from "./ink.ts";
 import { drawn, el, r2, type Attrs, type SvgNode } from "./node.ts";
 import { col, colour, label, MAX_SIZE, pos, size, type ParamSpec, type Problem, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
@@ -24,14 +24,6 @@ const textSize: ParamSpec = { kind: "number", min: 6, max: 48 };
 
 /** Characters of a word for a width estimate: backticks do not count. */
 const characters = (value: string) => Array.from(value.replace(/`/g, "")).length;
-
-/** Backticks mark code (design §4): with an even number of them, each part between backticks becomes a tspan in
- * the monospace stack; empty parts are dropped. With an odd number, the string is drawn as is. */
-const spans = (value: string): (SvgNode | string)[] => {
-  const parts = value.split("`");
-  if (parts.length % 2 === 0) return [value];
-  return parts.flatMap<SvgNode | string>((part, i) => (part === "" ? [] : i % 2 === 1 ? [el("tspan", { "font-family": tokens.font.mono }, part)] : [part]));
-};
 
 // Every text sets its own anchor, size and weight, so a surrounding group (a cover's label style) does not leak in.
 const words = (x: number, y: number, value: string, attrs: Attrs): SvgNode => el("text", { x: r2(x), y: r2(y), "font-family": font, ...attrs }, ...spans(value));

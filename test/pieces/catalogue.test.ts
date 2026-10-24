@@ -334,3 +334,28 @@ describe("Ring count", () => {
     }
   });
 });
+
+// Change piece-params, task 2.1 (spec illustration-pieces, "Milestone pin size").
+describe("Milestone pin size", () => {
+  const parts = (params: P.MilestonePinParams) => {
+    const { body, text } = P.milestonePin(params);
+    return { line: body[0].attrs, circle: body[1].attrs, text: text[0].attrs };
+  };
+  test("Larger pin", () => {
+    const { line, circle, text } = parts({ x: 100, y: 200, text: "S", size: 27 });
+    expect(line).toMatchObject({ x1: 100, y1: 200, x2: 100, y2: 156 });
+    expect(circle).toMatchObject({ cx: 100, cy: 135, r: 27, "stroke-width": 4.5 });
+    expect(text).toMatchObject({ y: 145.5, "font-size": 27 });
+  });
+  test("Pin size bounds", () => {
+    const base = { x: 0, y: 100, text: "1" };
+    expect(parts({ ...base, size: 6 }).circle).toMatchObject({ cy: 51.33, r: 6, "stroke-width": 1 });
+    expect(parts({ ...base, size: 48 }).circle).toMatchObject({ cy: 18.67, r: 48, "stroke-width": 8 });
+    for (const size of [5.99, 48.01, "26"]) expect(() => P.milestonePin({ ...base, size } as never)).toThrow(/^milestonePin: size:/);
+  });
+  test("Fractional pin size", () => {
+    const { circle, text } = parts({ x: 0, y: 100, text: "1", size: 18.123 });
+    expect(circle).toMatchObject({ cy: 41.9, r: 18.123, "stroke-width": 3.02 });
+    expect(text).toMatchObject({ y: 48.95, "font-size": 18.123 });
+  });
+});

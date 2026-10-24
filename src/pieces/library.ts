@@ -16,6 +16,7 @@ import { DIAGRAM_PIECES, stateStart } from "./diagram.ts";
 import { uiIcon } from "./ui-icons.ts";
 import { linkIcon } from "./link-icons.ts";
 import { emote, mascot } from "./cast.ts";
+import { codeLength, spans } from "./ink.ts";
 export { emote, mascot };
 
 export * from "./metro.ts";
@@ -30,16 +31,16 @@ type Point = [number, number];
 // ---------- labels ----------
 
 export type PillParams = { x: number; y: number; text: string; fill?: string; width?: number };
-/** Pill label centred on (x, y), usually overlapping the top edge of what it names. */
+/** Pill label centred on (x, y), usually overlapping the top edge of what it names. Backticks mark code (card 190). */
 export const pill = definePiece<PillParams>(
   "pill",
   { x: pos(), y: pos(), text: label(), fill: col(), width: size() },
   ({ x, y, text, fill = "color.white", width }) => {
     const h = tokens.cover.pillHeight;
-    const w = width ?? Math.max(68, Math.round(text.length * 10.5 + 34));
+    const w = width ?? Math.max(68, Math.round(codeLength(text) * 10.5 + 34));
     return drawn(
       [el("rect", { x: x - w / 2, y: y - h / 2, width: w, height: h, rx: h / 2, fill: colour(fill, "fill") })],
-      [el("text", { x, y: y + 7 }, text)],
+      [el("text", { x, y: y + 7 }, ...spans(text))],
     );
   },
 );
@@ -312,16 +313,22 @@ export const road = definePiece<RoadParams>(
   ]),
 );
 
-export type MilestonePinParams = { x: number; y: number; text: string; fill?: string; stem?: number };
-/** A pin standing on (x, y): a stem and a round head with a short label. */
+export type MilestonePinParams = { x: number; y: number; text: string; fill?: string; stem?: number; size?: number };
+const PIN_SIZE = 18;
+/** A pin standing on (x, y): a stem and a round head with a short label. `size` is the head's radius (18) and
+ * scales the head, its outline and the label together (card 190). */
 export const milestonePin = definePiece<MilestonePinParams>(
   "milestonePin",
-  { x: pos(), y: pos(), text: label(), fill: col(), stem: size() },
-  ({ x, y, text, fill = "color.healthy", stem = 44 }) =>
-    drawn(
-      [el("line", { x1: x, y1: y, x2: x, y2: y - stem }), el("circle", { cx: x, cy: y - stem - 14, r: 18, fill: colour(fill, "fill"), "stroke-width": tokens.outline.small })],
-      [el("text", { x, y: y - stem - 7, "font-size": 18, "font-weight": tokens.font.weightHeavy }, text)],
-    ),
+  { x: pos(), y: pos(), text: label(), fill: col(), stem: size(), size: { kind: "number", min: 6, max: 48 } },
+  ({ x, y, text, fill = "color.healthy", stem = 44, size: r }) => {
+    // Without `size`, the 0.5.0 expressions exactly (no rounding), so every 0.5.0 call keeps its bytes.
+    const k = (r ?? PIN_SIZE) / PIN_SIZE;
+    const at = r === undefined ? (v: number) => v : r2;
+    return drawn(
+      [el("line", { x1: x, y1: y, x2: x, y2: y - stem }), el("circle", { cx: x, cy: at(y - stem - 14 * k), r: r ?? PIN_SIZE, fill: colour(fill, "fill"), "stroke-width": at(tokens.outline.small * k) })],
+      [el("text", { x, y: at(y - stem - 7 * k), "font-size": r ?? PIN_SIZE, "font-weight": tokens.font.weightHeavy }, text)],
+    );
+  },
 );
 
 // ---------- tags ----------
