@@ -12,7 +12,7 @@ import { drawn, el, g, r2, shadowed, type SvgNode } from "./node.ts";
 import { col, colour, count, label, MAX_SIZE, PATH_DATA, pos, size, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 import { METRO_PIECES } from "./metro.ts";
-import { DIAGRAM_PIECES } from "./diagram.ts";
+import { DIAGRAM_PIECES, stateStart } from "./diagram.ts";
 import { uiIcon } from "./ui-icons.ts";
 import { linkIcon } from "./link-icons.ts";
 
@@ -600,6 +600,7 @@ export const PIECES = {
   uiIcon,
   linkIcon,
   ...DIAGRAM_PIECES,
+  stateStart,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];

@@ -31,6 +31,7 @@ export const GROUPS = [
   "map",
   "site",
   "banner",
+  "bodyDiagram",
 ] as const;
 export const TYPES = ["color", "dimension", "frames", "number", "opacity", "fontFamily", "fontWeight"] as const;
 export type TokenType = (typeof TYPES)[number];
@@ -133,6 +134,11 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "banner.width": "dimension",
   "banner.height": "dimension",
   "banner.radius": "dimension",
+  "bodyDiagram.width": "dimension",
+  "bodyDiagram.layoutWidth": "dimension",
+  "bodyDiagram.radius": "dimension",
+  "bodyDiagram.ringRadius": "dimension",
+  "bodyDiagram.startRadius": "dimension",
   "site.light.primary": "color",
   "site.light.body": "color",
   "site.light.border": "color",

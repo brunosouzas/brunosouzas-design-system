@@ -3,6 +3,11 @@
   --ds-banner-height: 420px;
   --ds-banner-radius: 20px;
   --ds-banner-width: 1200px;
+  --ds-body-diagram-layout-width: 560px;
+  --ds-body-diagram-radius: 14px;
+  --ds-body-diagram-ring-radius: 70px;
+  --ds-body-diagram-start-radius: 11px;
+  --ds-body-diagram-width: 800px;
   --ds-color-backend: #FF6B6B;
   --ds-color-blocked: #FF8A3D;
   --ds-color-caller: #8FB2FF;

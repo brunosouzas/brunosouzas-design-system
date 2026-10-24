@@ -31,7 +31,7 @@ const driftedPairs = (source: Source): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner, bodyDiagram\)/),
     ]);
   });
 
@@ -45,6 +45,7 @@ describe("Token source", () => {
       set("map.lineWidth", token(12, "dimension")),
       set("site.light.primary", token("#121212", "color")),
       set("banner.radius", token(20, "dimension")),
+      set("bodyDiagram.radius", token(14, "dimension")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
@@ -53,6 +54,7 @@ describe("Token source", () => {
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-width: 800px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
     expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-body-diagram-radius: 14px;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
     expect(result.outputs["tokens.ts"]).toContain('"blush": {');
   });
@@ -159,5 +161,19 @@ describe("Required banner tokens", () => {
   test("Measured banner values", () => {
     expect(tokens.banner).toEqual({ width: 1200, height: 420, radius: 20 });
     expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-banner-width: 1200px;");
+  });
+});
+
+// Change designer-formats (AB#173), design-tokens "Required body diagram tokens".
+describe("Required body diagram tokens", () => {
+  test("Body diagram token missing", () => {
+    expect(problemsOf(sourceWith(remove("bodyDiagram.layoutWidth")))).toEqual(["bodyDiagram.layoutWidth: missing required token (type dimension)"]);
+  });
+  test("Body diagram token with the wrong type", () => {
+    expect(problemsOf(sourceWith(set("bodyDiagram.radius", token(14, "number"))))).toEqual(["bodyDiagram.radius: expected type dimension, found number"]);
+  });
+  test("Measured body diagram values", () => {
+    expect(tokens.bodyDiagram).toEqual({ width: 800, layoutWidth: 560, radius: 14, ringRadius: 70, startRadius: 11 });
+    expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-body-diagram-layout-width: 560px;");
   });
 });

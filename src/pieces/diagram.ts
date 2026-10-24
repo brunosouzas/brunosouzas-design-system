@@ -303,5 +303,18 @@ export const edgeLabel = definePiece<EdgeLabelParams>(
   },
 );
 
+export type StateStartParams = { cx: number; cy: number; r?: number; surface?: SurfaceName };
+/** Default start radius in layout units: the published dot (bodyDiagram.startRadius at the shown width) laid out at 560. */
+const START_RADIUS = (tokens.bodyDiagram.startRadius * tokens.bodyDiagram.layoutWidth) / tokens.bodyDiagram.width;
+/** The initial state of a state machine (change designer-formats, design §4): a filled dot in the surface's text
+ * colour, no outline (its own stroke none, so a cover's outlined group does not grow it), no shadow, no text. */
+export const stateStart = definePiece<StateStartParams>(
+  "stateStart",
+  { cx: pos(), cy: pos(), r: size(), surface: surfaceParam },
+  ({ cx, cy, r = START_RADIUS, surface = "light" }) =>
+    // The radius is written as given (a size, never rounded away); the centre is a position.
+    drawn([el("circle", { cx: r2(cx), cy: r2(cy), r, fill: tokens.surface[surface].text, stroke: "none" })]),
+);
+
 /** The body diagram pieces, in catalogue order (design §3). */
 export const DIAGRAM_PIECES = { diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel } as const;

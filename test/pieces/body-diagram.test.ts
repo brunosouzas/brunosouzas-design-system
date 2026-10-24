@@ -1,7 +1,9 @@
 // Unit tests of the body diagram pieces (spec illustration-pieces, change
 // body-diagram-pieces, task 3.1). Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
-import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, storeNode, taggedContainer } from "../../src/pieces/diagram";
+import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer } from "../../src/pieces/diagram";
+import { coverTree } from "../../src/pieces/cover";
+import { toSvg } from "../../src/pieces/render";
 import { messageArrow } from "../../src/pieces/metro";
 import type { SvgNode } from "../../src/pieces/node";
 
@@ -249,5 +251,33 @@ describe("Edge label", () => {
     expect(() => edgeLabel({ x: 0, y: 0, lines: ["a"], textSize: 49 })).toThrow(/^edgeLabel: textSize:/);
     expect(() => phaseBand({ x: 0, y: 0, width: 200, text: "a", fill: "color.healthy", textSize: 5 })).toThrow(/^phaseBand: textSize:/);
     expect(edgeLabel({ x: 0, y: 0, lines: ["a"], textSize: 48 }).text[0].attrs["font-size"]).toBe(48);
+  });
+});
+
+// Change designer-formats (AB#173), illustration-pieces "State start".
+describe("State start", () => {
+  test("Default start dot", () => {
+    const { body, text } = stateStart({ cx: 30.8, cy: 84 });
+    expect(body).toEqual([{ tag: "circle", attrs: { cx: 30.8, cy: 84, r: 7.7, fill: "#0A1033", stroke: "none" }, children: [] }]);
+    expect(toSvg(body[0])).toBe('<circle cx="30.8" cy="84" r="7.7" fill="#0A1033" stroke="none"/>');
+    expect(text).toEqual([]);
+  });
+
+  test("Start dot on the dark surface", () => {
+    const { body } = stateStart({ cx: 0, cy: 0, r: 11, surface: "dark" });
+    expect(body[0].attrs).toMatchObject({ r: 11, fill: "#EEF2FF" });
+  });
+
+  test("Start dot inside the outlined group", () => {
+    const tree = coverTree({ id: "s", title: "t", description: "d", background: "navy", rings: { cx: 0, cy: 0 }, pieces: [{ piece: "stateStart", cx: 10, cy: 10 }] });
+    const outlined = tree.children.find((c) => typeof c !== "string" && c.tag === "g" && c.attrs["stroke-width"] === 4) as SvgNode;
+    expect(outlined.attrs.stroke).toBe("#0A1033");
+    expect((outlined.children[0] as SvgNode).attrs.stroke).toBe("none");
+  });
+
+  test("Bad radius", () => {
+    expect(() => stateStart({ cx: 0, cy: 0, r: 0 })).toThrow(RangeError);
+    expect(() => stateStart({ cx: 0, cy: 0, r: 0 })).toThrow(/\br\b/);
+    expect(() => stateStart({ cx: 0 } as never)).toThrow(/cy/);
   });
 });

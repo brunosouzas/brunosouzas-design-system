@@ -88,6 +88,11 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
     P.messageArrow({ from: [x + 20, y + 150], to: [x + 220, y + 150], curve: "straight", kind: "failure" }),
     P.edgeLabel({ x: x + 120, y: y + 140, lines: ["error"], backdrop: true }),
   ),
+  stateStart: (x, y) => merge(
+    P.stateStart({ cx: x + 40, cy: y + 100 }),
+    P.messageArrow({ from: [x + 52, y + 100], to: [x + 110, y + 100], curve: "straight" }),
+    P.diagramBox({ x: x + 112, y: y + 77, width: 110, text: ["CLOSED"], fill: "color.healthy" }),
+  ),
   uiIcon: (x, y) => merge(...P.UI_ICON_NAMES.map((name, i) => P.uiIcon({ name, x: x + 20 + (i % 4) * 52, y: y + 50 + Math.floor(i / 4) * 52, size: 32 }))),
   linkIcon: (x, y) => merge(...P.LINK_ICON_NAMES.map((icon, i) => P.linkIcon({ icon, x: x + 20 + (i % 2) * 110, y: y + 30 + Math.floor(i / 2) * 80, size: 64 }))),
 };

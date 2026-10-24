@@ -189,5 +189,12 @@
     "width": { "$value": 1200, "$type": "dimension", "$description": "Home banner of both sites, measured from brunosouzas.com public/images/home/home-banner.svg (e8ad098)." },
     "height": { "$value": 420, "$type": "dimension" },
     "radius": { "$value": 20, "$type": "dimension", "$description": "Corner radius of the banner's background and clip." }
+  },
+  "bodyDiagram": {
+    "width": { "$value": 800, "$type": "dimension", "$description": "Shown width of a blog body diagram, measured from the 28 published diagrams in brain 50-writing (18ffd2e)." },
+    "layoutWidth": { "$value": 560, "$type": "dimension", "$description": "Width a body diagram is laid out in (map units); shown at width." },
+    "radius": { "$value": 14, "$type": "dimension", "$description": "Corner radius of the panel, at the shown size." },
+    "ringRadius": { "$value": 70, "$type": "dimension", "$description": "First ring radius, at the shown size." },
+    "startRadius": { "$value": 11, "$type": "dimension", "$description": "Start dot of a state diagram, at the shown size (circuit-breaker-states)." }
   }
 }

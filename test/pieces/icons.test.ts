@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { LINK_ICONS, LINK_ICON_NAMES, linkIcon } from "../../src/pieces/link-icons";
-import { DIAGRAM_PIECES, altFrame, edgeLabel } from "../../src/pieces/diagram";
+import { DIAGRAM_PIECES, altFrame, edgeLabel, stateStart } from "../../src/pieces/diagram";
 import { ledgerMark, licenceMark, renewalRing, suggestedHalo, zone } from "../../src/pieces/metro";
 
 // Required parameters of the ten body diagram pieces (as catalogue.test.ts REQUIRED_ONLY).
@@ -222,6 +222,8 @@ describe("New pieces carry their own stroke", () => {
       drawings.push(
         ["altFrame sections", altFrame({ x: 0, y: 0, width: 200, height: 100, tag: "alt", condition: "[x]", sections: [{ y: 50, tag: "else", condition: "[y]" }], surface })],
         ["edgeLabel backdrop", edgeLabel({ x: 0, y: 0, lines: ["a"], backdrop: true, surface })],
+        // Change designer-formats (AB#173): the start dot.
+        [`stateStart ${surface}`, stateStart({ cx: 0, cy: 0, surface })],
       );
     }
     const shapes = new Set(["circle", "ellipse", "rect", "line", "polyline", "polygon", "path"]);
