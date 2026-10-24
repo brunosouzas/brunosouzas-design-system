@@ -19,6 +19,7 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 8a | `designer-formats` | The designer's requests in one release (0.4.0): the cover command's `diagram` and `icon` formats, per-language text tables with `--lang`, `customAt`, the `stateStart` piece and the `bodyDiagram` tokens. No new background pair: which covers share one is the skill's rule (COV-4) | AB#173 | delivered (0.4.0) |
 | 9 | Covers and body diagrams on the pieces | Done in brunosouzas.com by the `designer` skill, not in this repository: port the 21 published covers to cover specs (one first, then batches checked on the site) and the 14 body diagrams to the diagram pieces | AB#140 | planned |
 | 10 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it. Release 0.5.0 (0.4.0 went to AB#173) | AB#152 | delivered (0.5.0) |
+| 10a | `piece-params` | The port's requests (0.5.1): `milestonePin.size`, `countBadge.textSize`, code in backticks in a `pill`, `messageArrow` `heads` and `dashed`, each optional and byte-compatible with 0.5.0 | AB#190 | delivered (0.5.1) |
 | 11 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
 | 12 | Designer skill for videos | The `designer` skill decides where a video belongs and writes its script | AB#158 | planned |
 | 13 | Site palette | Two or three palette options (shared ink, one brand accent) shown on a real page; the chosen one becomes a change in the site repository that consumes the CSS tokens | — | planned |
@@ -45,6 +46,7 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 ## Out of scope for now
 
 - The cast on a dark surface (AB#187): before the characters appear on dark pages or covers.
+- Candidate pieces from the blog port (AB#189): each enters only when a new cover or diagram needs it again, or when two covers use it; until then the port draws it with `custom` or existing pieces.
 - Technology props for the cast (an IDE accent, a cloud, a CI badge) and new roles (writer, reviewer): added with the scene that needs them (ADR 0005).
 
 - Sound and music: added per scene only when its context asks for it (a narrated presentation).

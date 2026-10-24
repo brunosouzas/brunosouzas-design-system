@@ -54,3 +54,24 @@ describe("Message arrow calls of 0.3.1 unchanged", () => {
     }
   });
 });
+
+// Calls valid in 0.5.0 draw the same tree and SVG bytes, except a pill with paired
+// backticks (spec illustration-pieces, "Piece calls of 0.5.0 unchanged"; change
+// piece-params, task 1.2). The fixture was written once by
+// scripts/freeze-pieces-0.5.0.ts on f91ba2e, before any code of the change.
+const frozen050 = JSON.parse(readFileSync(new URL("../fixtures/pieces-0.5.0.json", import.meta.url), "utf8")) as FrozenIcon[];
+
+describe("Piece calls of 0.5.0 unchanged", () => {
+  test("Frozen 0.5.0 calls", () => {
+    expect(frozen050).toHaveLength(44);
+    const changed: string[] = [];
+    for (const { piece, params, tree, svg } of frozen050) {
+      const drawn = call(piece, params) as { body: Parameters<typeof toSvg>[0][]; text: Parameters<typeof toSvg>[0][] };
+      const same = JSON.stringify(JSON.parse(JSON.stringify(drawn))) === JSON.stringify(tree) && [...drawn.body, ...drawn.text].map((node) => toSvg(node)).join("") === svg;
+      if (!same) changed.push(`${piece} ${JSON.stringify(params)}`);
+    }
+    expect(changed).toEqual(['pill {"x":0,"y":0,"text":"a `b` c"}']);
+    const pill = call("pill", { x: 0, y: 0, text: "a `b` c" }) as { text: { children: unknown[] }[] };
+    expect(pill.text[0].children).toEqual(["a ", { tag: "tspan", attrs: { "font-family": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" }, children: ["b"] }, " c"]);
+  });
+});

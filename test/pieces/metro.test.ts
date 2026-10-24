@@ -284,3 +284,32 @@ describe("Badge without a letter", () => {
     expect(() => lineBadge({ x: 0, y: 0, fill: "color.healthy", height: 34 })).toThrow(/^lineBadge: width:/);
   });
 });
+
+// Change piece-params, task 2.2 (spec illustration-pieces, "Count badge text size").
+describe("Count badge text size", () => {
+  test("Larger count", () => {
+    const one = countBadge({ cx: 0, cy: 0, text: "1", textSize: 22 });
+    expect(one.body[1]).toMatchObject({ tag: "circle", attrs: { r: 16 } });
+    expect(one.text[0].attrs).toMatchObject({ y: 8, "font-size": 22 });
+    const two = countBadge({ cx: 0, cy: 0, text: "12", textSize: 22 });
+    expect(two.body[1]).toMatchObject({ tag: "rect", attrs: { width: 41.6, height: 32 } });
+    const given = countBadge({ cx: 0, cy: 0, text: "1", textSize: 20, height: 30 });
+    expect(given.body[1]).toMatchObject({ tag: "circle", attrs: { r: 15 } });
+    expect(given.text[0].attrs).toMatchObject({ y: 7.27, "font-size": 20 });
+  });
+  test("Count text size 11 is the default", () => {
+    expect(countBadge({ cx: 13.605, cy: 0, text: "128", textSize: 11 })).toEqual(countBadge({ cx: 13.605, cy: 0, text: "128" }));
+  });
+  test("Count text size bounds", () => {
+    const base = { cx: 0, cy: 0, text: "1" };
+    const big = countBadge({ ...base, textSize: 48 });
+    expect(big.body[1].attrs.r).toBe(34.91);
+    expect(big.text[0].attrs).toMatchObject({ y: 17.45, "font-size": 48 });
+    const small = countBadge({ ...base, textSize: 6, height: 12 });
+    expect(small.body[1].attrs.r).toBe(6);
+    expect(small.text[0].attrs).toMatchObject({ y: 2.18, "font-size": 6 });
+    for (const textSize of [8.25, 8.249]) expect(countBadge({ ...base, textSize }).body[1].attrs.r).toBe(6);
+    for (const textSize of [8.24, 5, 49]) expect(() => countBadge({ ...base, textSize })).toThrow(/^countBadge: textSize:/);
+    expect(() => countBadge({ ...base, textSize: 20, height: 10 })).toThrow(/^countBadge: height:/);
+  });
+});

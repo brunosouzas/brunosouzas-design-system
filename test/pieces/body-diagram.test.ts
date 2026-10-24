@@ -3,6 +3,7 @@
 import { describe, expect, test } from "vitest";
 import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer } from "../../src/pieces/diagram";
 import { coverTree } from "../../src/pieces/cover";
+import { pill } from "../../src/pieces/library";
 import { toSvg } from "../../src/pieces/render";
 import { messageArrow } from "../../src/pieces/metro";
 import type { SvgNode } from "../../src/pieces/node";
@@ -137,6 +138,21 @@ describe("Code in words", () => {
   test("Only code, and an odd backtick", () => {
     expect(edgeLabel({ x: 0, y: 0, lines: ["`200 OK`"] }).text[0].children).toEqual([{ tag: "tspan", attrs: { "font-family": MONO }, children: ["200 OK"] }]);
     expect(edgeLabel({ x: 0, y: 0, lines: ["a `b"] }).text[0].children).toEqual(["a `b"]);
+  });
+
+  test("Code in a pill", () => {
+    const code = pill({ x: 0, y: 0, text: "`main`" });
+    expect(code.body[0].attrs.width).toBe(76);
+    expect(code.text[0].children).toEqual([{ tag: "tspan", attrs: { "font-family": MONO }, children: ["main"] }]);
+    expect(toSvg(code.text[0])).toBe(`<text x="0" y="7"><tspan font-family="${MONO}">main</tspan></text>`);
+    const mixed = pill({ x: 0, y: 0, text: "deploy to `prod`" });
+    expect(mixed.body[0].attrs.width).toBe(181);
+    expect(mixed.text[0].children).toEqual(["deploy to ", { tag: "tspan", attrs: { "font-family": MONO }, children: ["prod"] }]);
+    const odd = pill({ x: 0, y: 0, text: "a `b" });
+    expect(odd.body[0].attrs.width).toBe(76);
+    expect(odd.text[0].children).toEqual(["a `b"]);
+    expect(pill({ x: 0, y: 0, text: "abcd`ef" }).body[0].attrs.width).toBe(108);
+    expect(pill({ x: 0, y: 0, text: "abcd`e`f" }).body[0].attrs.width).toBe(97);
   });
 });
 

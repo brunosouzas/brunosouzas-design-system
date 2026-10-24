@@ -1,0 +1,23 @@
+# Tasks
+
+Requested by the port of the blog's images (AB#140; request copied to `~/.hermes/spikes/design-system/ab190-piece-params/ab140-piece-params-request.md`), card AB#190. Gate 1 with the owner, then tests before code; Codex reviews, Claude implements. Test level: **unit** (vitest) for the pieces; **integration** (vitest running the cover command) for the goldens. The drawing to match is the spike's `spike.diff` (design §6).
+
+Scenarios carried unchanged into MODIFIED requirements keep their existing tests, run again by the full check in 3.2: "Curved arrow with a head", "Vertical arrow and the fallback boundary", "Labelled straight arrow", "Arrow too short", "Reply", "Failure and fail-fast", "Message kind is the 0.3.1 drawing" and "Message arrow label stays plain" (`test/pieces/diagram.test.ts`, unit); "Badge too low for its ink" and "Placeholder without ink" (`test/pieces/metro.test.ts`, unit); "A code run inside a label" and "Only code, and an odd backtick" (`test/pieces/body-diagram.test.ts`, unit); "Code through both renderers" (`test/pieces/render.test.ts`, unit).
+
+## 1. Frozen 0.5.0 calls
+
+- [x] 1.1 Before any code: `scripts/freeze-pieces-0.5.0.ts` run on `origin/main` (`f91ba2e`) writes `test/fixtures/pieces-0.5.0.json` (44 calls, design §6), committed alone (`d65acda`). Check: the file's SHA-256 is the one in design §6.
+- [x] 1.2 Test "Frozen 0.5.0 calls" in `test/pieces/frozen.test.ts` (unit): 44 entries; every call but the backtick pill deep-equals its tree and its `svg`; that pill's text children are `a `, a mono `tspan` `b`, ` c`. Check: on the spec commit it fails only on the pill, then passes after 2.3.
+- [x] 1.3 MODIFIED "Existing calls unchanged" keeps its scenarios and tests: "Goldens unchanged" is "Parity with the published proof covers" (`Golden output (%s)`, seven goldens) in `test/scripts/cover.test.ts` (integration), and "Frozen 0.2.0 calls" in `test/pieces/frozen.test.ts` (unit; the 0.2.0 fixture holds no pill). Check: both pass unchanged after 2.1–2.4.
+
+## 2. Parameters (`illustration-pieces`)
+
+- [x] 2.1 Tests first in `test/pieces/catalogue.test.ts` (unit), new `describe("Milestone pin size")`: "Larger pin", "Pin size bounds" and "Fractional pin size". Then `size` in `milestonePin` (`src/pieces/library.ts`, design §1). Check: both pass, and "Smallest and largest accepted sizes draw valid geometry" passes with the new bounds.
+- [x] 2.2 Tests first in `test/pieces/metro.test.ts` (unit), new `describe("Count badge text size")`: "Larger count", "Count text size 11 is the default" and "Count text size bounds" (accepted 48 and 6 with height 12 included). Then `textSize` in `countBadge` and the `textSize` name in its room check (`src/pieces/metro.ts`, design §2). Check: both pass with "Count shape follows its size", "Badge too low for its ink" and "Placeholder without ink" unchanged.
+- [x] 2.3 Test first in `test/pieces/body-diagram.test.ts` (unit), in `describe("Code in words")`: "Code in a pill" (`toSvg` one line included). Then move `spans` from `src/pieces/diagram.ts` to `src/pieces/ink.ts` (internal, not exported by the package) with the pill's width count, and use them in `pill` (design §3). Check: the new test (both odd and paired widths included), the four carried Code-in-words scenarios and "Frozen 0.5.0 calls" pass.
+- [x] 2.4 Tests first in `test/pieces/diagram.test.ts` (unit), new `describe("Message arrow heads")`: "Two heads on a straight arrow", "Head at the start of a curve", "Heads against head and room"; new `describe("Message arrow dash")`: "Solid failure and dashed message". Then `heads` and `dashed` in `messageArrow` (`src/pieces/metro.ts`, design §4 and §5). Check: the four new tests pass, the eight carried arrow scenarios, the three carried "Message arrow through control points" scenarios ("Vertical curve", "Last control point on the end", "Controls with a curve, or three points", `test/pieces/diagram.test.ts`, unit) and "Frozen 0.3.1 arrow calls" pass unchanged.
+
+## 3. Version and documentation
+
+- [x] 3.1 `npm version 0.5.1 --no-git-tag-version`. Check: `package.json` and the root of `package-lock.json` both say `0.5.1`. The release runs on the owner's merge and his approval of `publish` (`docs/release.md`).
+- [x] 3.2 README (the four parameters) and `docs/roadmap.md` (delivered row for AB#190; under "Out of scope for now", the candidate pieces of AB#189: one enters when a new cover or diagram needs it again, or when two covers use it). No vault edit in this change (the session keeps the vault read-only); the vault's project notes are a follow-up after the release. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.

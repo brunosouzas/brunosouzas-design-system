@@ -99,26 +99,36 @@ export const pipe = definePiece<PipeParams>(
   },
 );
 
-export type CountBadgeParams = Ink & { cx: number; cy: number; text: string; width?: number; height?: number };
-const countWidth = ({ width, text, height = M.countHeight }: CountBadgeParams) => {
+export type CountBadgeParams = Ink & { cx: number; cy: number; text: string; width?: number; height?: number; textSize?: number };
+// `textSize` scales the default height, the per-character width and the baseline with it (card 190);
+// without it, k is 1 and every expression is the 0.5.0 one.
+const countScale = ({ textSize }: CountBadgeParams) => (textSize ?? M.countTextSize) / M.countTextSize;
+const countHeight = (params: CountBadgeParams) => params.height ?? (params.textSize === undefined ? M.countHeight : r2(M.countHeight * countScale(params)));
+const countWidth = (params: CountBadgeParams) => {
+  const { width, text } = params;
+  const height = countHeight(params);
+  const k = countScale(params);
   const characters = Array.from(text).length;
-  return width ?? (characters === 1 ? height : Math.max(height, 6.4 * characters + 8));
+  return width ?? (characters === 1 ? height : Math.max(height, k === 1 ? 6.4 * characters + 8 : r2(k * (6.4 * characters + 8))));
 };
 /** A count (rules of a skill): a circle when as wide as high, a pill otherwise, in the surface's panel colour. */
 export const countBadge = definePiece<CountBadgeParams>(
   "countBadge",
-  { cx: pos(), cy: pos(), text: label(), width: size(), height: size(), ...inkSchema },
+  { cx: pos(), cy: pos(), text: label(), width: size(), height: size(), textSize: { kind: "number", min: 6, max: 48 }, ...inkSchema },
   (params) => {
-    const { cx, cy, text, height = M.countHeight } = params;
+    const { cx, cy, text, textSize = M.countTextSize } = params;
+    const height = countHeight(params);
     const width = countWidth(params);
     const { s } = inkOf(params);
     const shape: Shape =
       width === height ? (dx, dy, attrs) => el("circle", { cx: r2(cx + dx), cy: r2(cy + dy), r: r2(height / 2), ...attrs }) : pill(cx - width / 2, cy - height / 2, width, height);
-    return drawn(sticker(shape, s.panel, params), [words(cx, cy + 4, text, { fill: s.text, "font-size": M.countTextSize, "font-weight": bold, "text-anchor": "middle" })]);
+    return drawn(sticker(shape, s.panel, params), [words(cx, cy + 4 * countScale(params), text, { fill: s.text, "font-size": textSize, "font-weight": bold, "text-anchor": "middle" })]);
   },
   (params) => {
-    const height = params.height ?? M.countHeight;
-    return limits(atLeast("width", countWidth(params), height, "the height"), roomFor("height", height, params));
+    const height = countHeight(params);
+    // A height derived from textSize is reported at textSize, the parameter the caller passed (card 190).
+    const name = params.height === undefined && params.textSize !== undefined ? "textSize" : "height";
+    return limits(atLeast("width", countWidth(params), height, "the height"), roomFor(name, height, params));
   },
 );
 
@@ -196,12 +206,15 @@ export const hexNode = definePiece<NodeParams>("hexNode", nodeSchema, (p) => dra
 // ---------- arrow ----------
 
 export type ArrowKind = "message" | "reply" | "failure" | "failFast";
+export type ArrowHeads = "end" | "start" | "both";
 export type MessageArrowParams = {
   from: Point;
   to: Point;
   curve?: "bezier" | "straight";
   controls?: [Point, Point];
   head?: boolean;
+  heads?: ArrowHeads;
+  dashed?: boolean;
   label?: string;
   width?: number;
   kind?: ArrowKind;
@@ -217,12 +230,14 @@ export const messageArrow = definePiece<MessageArrowParams>(
     curve: { kind: "enum", values: ["bezier", "straight"] },
     controls: { kind: "array", minItems: 2, maxItems: 2, of: point() },
     head: { kind: "boolean" },
+    heads: { kind: "enum", values: ["end", "start", "both"] },
+    dashed: { kind: "boolean" },
     label: label(false),
     width: { kind: "number", min: 1, max: 12 },
     kind: { kind: "enum", values: ["message", "reply", "failure", "failFast"] },
     surface: surfaceParam,
   },
-  ({ from, to, curve = "bezier", controls, head = true, label: text, width = M.edgeWidth, kind = "message", surface = "light" }) => {
+  ({ from, to, curve = "bezier", controls, head = true, heads = "end", dashed, label: text, width = M.edgeWidth, kind = "message", surface = "light" }) => {
     const s = tokens.surface[surface];
     const paint_ = kind === "failure" ? tokens.color.failure : kind === "failFast" ? tokens.color.failFast : s.text;
     const length = 5 * width;
@@ -237,21 +252,33 @@ export const messageArrow = definePiece<MessageArrowParams>(
     };
     const tail = controls && [controls[1], controls[0], from].find((q) => q[0] !== to[0] || q[1] !== to[1]);
     const direction: Point = tail !== undefined ? towards(tail) : bent ? [Math.sign(dx), 0] : [dx / distance, (to[1] - from[1]) / distance];
-    const end: Point = head ? [to[0] - direction[0] * length, to[1] - direction[1] * length] : to;
+    const atEnd = head && heads !== "start";
+    const atStart = head && heads !== "end";
+    const end: Point = atEnd ? [to[0] - direction[0] * length, to[1] - direction[1] * length] : to;
+    // A head at `from` points back at it, from the first of c1, c2, to that differs from `from` (card 190).
+    const away = (q: Point): Point => {
+      const l = Math.hypot(from[0] - q[0], from[1] - q[1]);
+      return [(from[0] - q[0]) / l, (from[1] - q[1]) / l];
+    };
+    const lead = controls && [controls[0], controls[1], to].find((q) => q[0] !== from[0] || q[1] !== from[1]);
+    const back: Point = lead !== undefined ? away(lead) : bent ? [-Math.sign(dx), 0] : [-direction[0], -direction[1]];
+    const start: Point = atStart ? [from[0] - back[0] * length, from[1] - back[1] * length] : from;
     const mx = (from[0] + to[0]) / 2;
     const at = (p: Point) => `${r2(p[0])},${r2(p[1])}`;
     const d = controls
-      ? `M${at(from)} C${at(controls[0])} ${at(controls[1])} ${at(end)}`
+      ? `M${at(start)} C${at(controls[0])} ${at(controls[1])} ${at(end)}`
       : bent
-        ? `M${at(from)} C${r2(mx)},${r2(from[1])} ${r2(mx)},${r2(to[1])} ${at(end)}`
-        : `M${at(from)} L${at(end)}`;
-    const dash: Record<string, string> = kind === "message" ? {} : { "stroke-dasharray": `${r2(2.4 * width)} ${r2(3.2 * width)}` };
+        ? `M${at(start)} C${r2(mx)},${r2(from[1])} ${r2(mx)},${r2(to[1])} ${at(end)}`
+        : `M${at(start)} L${at(end)}`;
+    const dash: Record<string, string> = !(dashed ?? kind !== "message") ? {} : { "stroke-dasharray": `${r2(2.4 * width)} ${r2(3.2 * width)}` };
     const body: SvgNode[] = [el("path", { d, fill: "none", stroke: paint_, "stroke-width": r2(width), "stroke-linecap": "round", ...dash })];
-    if (head) {
-      const normal: Point = [-direction[1] * 2 * width, direction[0] * 2 * width];
-      const points: Point[] = [to, [end[0] + normal[0], end[1] + normal[1]], [end[0] - normal[0], end[1] - normal[1]]];
+    const arrowhead = (tip: Point, base: Point, along: Point) => {
+      const normal: Point = [-along[1] * 2 * width, along[0] * 2 * width];
+      const points: Point[] = [tip, [base[0] + normal[0], base[1] + normal[1]], [base[0] - normal[0], base[1] - normal[1]]];
       body.push(el("polygon", { points: points.map(at).join(" "), fill: paint_, stroke: paint_, "stroke-width": 1, "stroke-linejoin": "round" }));
-    }
+    };
+    if (atEnd) arrowhead(to, end, direction);
+    if (atStart) arrowhead(from, start, back);
     const words_: SvgNode[] = [];
     if (text !== undefined) {
       const middle: Point = [mx, (from[1] + to[1]) / 2];
@@ -261,11 +288,13 @@ export const messageArrow = definePiece<MessageArrowParams>(
     }
     return drawn(body, words_);
   },
-  ({ from, to, head = true, width = M.edgeWidth, controls, curve }) => {
+  ({ from, to, head = true, heads, width = M.edgeWidth, controls, curve }) => {
     const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    const need = (heads === "both" ? 20 : 10) * width;
     return limits(
+      head === false && heads !== undefined && { path: "heads", message: "cannot be combined with head: false" },
       distance === 0 && { path: "to", message: "must differ from from" },
-      distance > 0 && head && distance < 10 * width && { path: "to", message: `is too close to from for the head: needs at least ${r2(10 * width)}, found ${r2(distance)}` },
+      distance > 0 && head && distance < need && { path: "to", message: `is too close to from for the ${heads === "both" ? "heads" : "head"}: needs at least ${r2(need)}, found ${r2(distance)}` },
       controls !== undefined && curve !== undefined && { path: "controls", message: "cannot be combined with curve" },
     );
   },

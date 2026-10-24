@@ -49,5 +49,16 @@ export const sticker = (shape: Shape, face: string, inkParams: Ink): SvgNode[] =
   ];
 };
 
+/** Backticks mark code (body-diagram-pieces design §4; the pill since card 190): with an even number of them, each part between backticks becomes a tspan in
+ * the monospace stack; empty parts are dropped. With an odd number, the string is drawn as is. */
+export const spans = (value: string): (SvgNode | string)[] => {
+  const parts = value.split("`");
+  if (parts.length % 2 === 0) return [value];
+  return parts.flatMap<SvgNode | string>((part, i) => (part === "" ? [] : i % 2 === 1 ? [el("tspan", { "font-family": tokens.font.mono }, part)] : [part]));
+};
+
+/** A pill's text length for its default width: backticks of code runs do not count; otherwise `length` as in 0.5.0. */
+export const codeLength = (value: string): number => (value.split("`").length % 2 === 1 && value.includes("`") ? value.replace(/`/g, "") : value).length;
+
 // Every text sets its own anchor, size and weight, so a surrounding group (a cover's label style) does not leak in.
 export const words = (x: number, y: number, value: string, attrs: Attrs): SvgNode => el("text", { x: r2(x), y: r2(y), "font-family": font, ...attrs }, value);
