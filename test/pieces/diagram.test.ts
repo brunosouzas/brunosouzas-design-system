@@ -171,3 +171,41 @@ describe("Message arrow through control points", () => {
     expect(() => messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 50], [1, 1]] as never })).toThrow(/^messageArrow: controls:/);
   });
 });
+
+// Change piece-params, task 2.4 (spec illustration-pieces, "Message arrow heads", "Message arrow dash").
+describe("Message arrow heads", () => {
+  test("Two heads on a straight arrow", () => {
+    const { body } = messageArrow({ from: [0, 0], to: [100, 0], curve: "straight", heads: "both" });
+    expect(body.map((n) => n.attrs.d ?? n.attrs.points)).toEqual(["M12.5,0 L87.5,0", "100,0 87.5,5 87.5,-5", "0,0 12.5,-5 12.5,5"]);
+  });
+  test("Head at the start of a curve", () => {
+    const start = messageArrow({ from: [0, 0], to: [200, 100], heads: "start" }).body;
+    expect(start.map((n) => n.attrs.d ?? n.attrs.points)).toEqual(["M12.5,0 C100,0 100,100 200,100", "0,0 12.5,-5 12.5,5"]);
+    const both = messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 0], [100, 50]], heads: "both" }).body;
+    expect(both[0].attrs.d).toBe("M11.18,5.59 C0,0 100,50 100,87.5");
+    expect(both[2].attrs.points).toBe("0,0 13.42,1.12 8.94,10.06");
+  });
+  test("Heads against head and room", () => {
+    const base = { from: [0, 0] as [number, number], to: [100, 0] as [number, number] };
+    for (const heads of ["both", "end"] as const) expect(() => messageArrow({ ...base, head: false, heads })).toThrow(/^messageArrow: heads:/);
+    expect(() => messageArrow({ ...base, heads: "up" as never })).toThrow(/^messageArrow: heads:/);
+    expect(() => messageArrow({ from: [0, 0], to: [49.99, 0], heads: "both" })).toThrow(/^messageArrow: to:/);
+    const { body } = messageArrow({ from: [0, 0], to: [50, 0], curve: "straight", heads: "both" });
+    expect(body[0].attrs.d).toBe("M12.5,0 L37.5,0");
+    expect(body.filter((n) => n.tag === "polygon")).toHaveLength(2);
+  });
+});
+
+describe("Message arrow dash", () => {
+  test("Solid failure and dashed message", () => {
+    const base = { from: [0, 0] as [number, number], to: [100, 0] as [number, number], curve: "straight" as const };
+    const solid = messageArrow({ ...base, kind: "failure", dashed: false }).body;
+    expect(solid[0].attrs.stroke).toBe("#E04848");
+    expect(solid[0].attrs).not.toHaveProperty("stroke-dasharray");
+    expect(solid[1].attrs.fill).toBe("#E04848");
+    const dashed = messageArrow({ ...base, dashed: true }).body[0].attrs;
+    expect(dashed.stroke).toBe("#0A1033");
+    expect(Object.entries(dashed).at(-1)).toEqual(["stroke-dasharray", "6 8"]);
+    expect(() => messageArrow({ ...base, dashed: "no" as never })).toThrow(/^messageArrow: dashed:/);
+  });
+});
