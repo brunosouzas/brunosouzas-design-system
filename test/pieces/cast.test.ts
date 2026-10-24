@@ -175,8 +175,11 @@ describe("Cast pieces carry their own stroke", () => {
       if (node.tag === "text") problems.push(`${where}: text`);
       for (const child of node.children) walk(child, inherited, where);
     };
-    for (const who of MASCOTS) for (const action of MASCOT_ACTIONS) walk(root(mascot({ who, x: 0, y: 0, action }).body[0]), false, `${who} ${action}`);
-    for (const kind of EMOTE_KINDS) for (const burst of [true, false]) walk(root(emote({ kind, x: 0, y: 0, burst }).body[0]), false, `${kind} ${burst}`);
+    // Both surfaces (change cast-dark-surface, AB#187).
+    for (const surface of ["light", "dark"] as const) {
+      for (const who of MASCOTS) for (const action of MASCOT_ACTIONS) walk(root(mascot({ who, x: 0, y: 0, action, surface } as MascotParams).body[0]), false, `${who} ${action} ${surface}`);
+      for (const kind of EMOTE_KINDS) for (const burst of [true, false]) walk(root(emote({ kind, x: 0, y: 0, burst, surface } as EmoteParams).body[0]), false, `${kind} ${burst} ${surface}`);
+    }
     expect(problems).toEqual([]);
   });
 });

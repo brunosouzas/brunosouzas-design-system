@@ -1,0 +1,812 @@
+{
+  "version": "0.5.2",
+  "calls": [
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "044a49f1fe1ea7ef737ddd139d0ca33e5e376f1bdc0769611f1390047d5d184d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "e46ecaaa68304da54ac6ec09c5b65697c4209741922b5afe291513397410af73"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "bc5114def4d9d857dcb130f2e890dd1dc744bb1f34cc3afa531931d6f90bb5c1"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "555919610f23c2771df3b1e195f388fbfc9d8f89226be7bd96aa36db922d7e54"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "1551c7db418fea229ed867c9e2636a47f3add843a939c24ee1a3a950d93b4ca8"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "0e21c64848b9cf6469175123bef932fd3e24fd1d64337dac7918df441d9a49e2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "92df16d0602cd8badf25404286ecb3a8413f7f829cbcbcf7537e78c250857b90"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "dev",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "4028bfdd4f8bc31a3f2797d128e7078612cc6f6a8ff3fd6ebb9846e7d9fd935c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "de96477bf041270f4e53988e626b448d43da2546756b473d37a1a8611f959705"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "1c8fb68823cf24e9c73dff9e995ae9491386e4c553be247a154f6025d1865ae2"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "108969f122a1b389bbd5a84b932cd24df3bee6f1ea130f55add7f5a5367a8315"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "e8ca4fb16dcb1cd1506e338df1030ec8266e82c9f8b81a49ea175e6800859e2b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "d96aa3a7ce9009ba7be4b0b58976d2fb7d5b9a08aecb60e4afd50729921c3046"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "81364f3a39bddcdf3b20f0f7e19eeb3ae58d8cdb7f21ab8783dc29867c676a16"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "8d764ef0aca8731f7bee488a3b11e7657f200bb5de04231d220015ba26ae8dfa"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "64298e0e228e026981fb0bbb0421faa729c9ba50b9022eead00a30bd6b629314"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "6358d8e6c245b00a8f6d05914466cfd74aa09d3d4fbd2c4ee057ac9a3980eff1"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "d1d3aa23ac11855dde985eb8d98d630724322f7b9bb41adf3421970f2f8c94d5"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "a8e6e8f62f05fbe2015a27fee211c4dcf3e9c59421c186650f0e747d95033b3f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "a486167f4a26a3875df0d31984e309069b02574320fed8157bc220416f59f20f"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "9d15c27ce60ec75cf69ea5e6e8648c3e6e1308082040eca2e7cc1623af7e4b7b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "91064586ff9ee9f6e9a83cad311c147356ee4c0bf6131e55bbc49889a2eed870"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "f878d047f6115bbf2adf7f60bcd696d8417ed45d913914532f6b1e9f7c9402f9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "architect",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "ec6712ac974bab9051c24940955056c45c152cd4b57a070e1cb3fa9306d89f7c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "223e3e2fe3037076e72f68d16f68c0e83666212f5e04aa6e3999744f6fd6897c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "a63ebac687186be7355c254e986106cfb622956e4d0547108eebfef7a4ae8821"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "f57a2c27102a7ae0b7b6519a6f26eabf31d80c18378ada8532738add4bec3e2d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "b0f53f0986ca5299999948befc12296c44147b0f911a33dd93cfa7eb8367321c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "b47357bfbdc77607e7c9c3925e9320b51e0f6bc8c6f7654d861a7f3ecf378ef5"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "b19e76cad2daa7e5bddf3e99e31147548084b3f564810c8b87152868d63717f4"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "e5eb681615679e17ddfef4b04e390b2118d3854cbd33e20ccba8384f3e4f266a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "devops",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "217263ae0a9b5f8dfcd28e9d448e67048d235b02c0541f0342f0c9169eaa5fba"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "e3b655f7810e579257393b195ccf01302d5bd6924f2db105e6ceee2e1f06299c"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "7de026edc1a690dee459082218f18e91efce31479e81bc3231fb1c45d73ce486"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "1824f6811ca54e6d2acc644a79ad93726335a135dcb8fe3950a078b799975aee"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "51ff938214b8c8e37464b2bf3ac5920bdb54dc164963c19dadec0dbfe2614530"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "198b5c6e92734c7e1338a5a31cfd359bbc32f634ed8af60a1e568e98f404305d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "d179fa27a03432c2e5fd571b179f550916eae05e8699ddc8fb15cb3d69fd8096"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "ee35594b9c2db2ad5766943e7536b3e0e10f70af7512d12857d693bca38a4a0d"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "data",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "4fa451709ffca58ad369127cf89243c1eb37bedd4ca0a23370636065e6de242a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "30daba97974f67f6e515e4bccd7e35229e147bbbfc42d8d668a3e422977574f3"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "c9159e504fc6582ae00f71c10192649f575fba4fcd76a944471dec872c3749e0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "9a184248b552e9d5ef358615a705c4f603f6593a0538e30b4ef0652ba4eedde9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "a51c9499c5c8190263efc4ded19112be30742ed06c1ab576acfe17caf795c6c0"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "c17f1879917fb3f31288733db4019fcad78b476f094ab82fc8ffc0ec52a5e404"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "6edb40a72ab1242f9014b356aa9ae4e4166a585f091e4bfd67d3e99a1fc6bc13"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "8233b83fc69ad33e246eb6046a00972a24a3d23c645b53fd986e43b9b5849d4b"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "request",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "10e0bb5eb7e6604224d33248b1566bd8c5d2f0bfd2c9d471e6e284eb677cf4a7"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "none",
+        "surface": "dark"
+      },
+      "sha256": "1cad60130571089cb83cd2dbbace72c648845358bc9a516a4df8c4d9fb789aba"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "rest",
+        "surface": "dark"
+      },
+      "sha256": "16052eca6dbb4e6ad242d19ff1a86b43c2e234e32e4d88c519cc199bb41d9821"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "wave",
+        "surface": "dark"
+      },
+      "sha256": "bba9d44cf89610981b1c9efecd050813d79104ff9838b5d7d4c74a22ea7a943a"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "hold",
+        "surface": "dark"
+      },
+      "sha256": "06a6faa958b7055cdfee61218fba85dd0a09c26eb3775a9ca07b18c138dcb588"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "reach",
+        "surface": "dark"
+      },
+      "sha256": "2018caafe5751f50687afe38cad3629e77a0442728c7d6c1a221c8b33d011ab5"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "up",
+        "surface": "dark"
+      },
+      "sha256": "0192214d3c380adbb530d12b29558a6d528f48f9cdd4265ba3b73cf94027bb02"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "shrug",
+        "surface": "dark"
+      },
+      "sha256": "868511f0337847e14613bc096cc20ead2ca9eee3d57d16ab9a8f83e1444931f9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "message",
+        "x": 0,
+        "y": 0,
+        "action": "type",
+        "surface": "dark"
+      },
+      "sha256": "bc82af08ff23c385b5fdfbdd9191c518a9ae52fea0db21bdb4f487aa9cc350a9"
+    },
+    {
+      "piece": "mascot",
+      "params": {
+        "who": "agent",
+        "x": 120,
+        "y": 300,
+        "face": "surprised",
+        "action": "wave",
+        "headTilt": 10,
+        "look": 1,
+        "scale": 0.5,
+        "surface": "dark"
+      },
+      "sha256": "47663e25fef27bce6c04a6ea9d424f8cb04ecbd6ce4d8f3d48e23ee78731f223"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "idea",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "da002a9716852438a71b95c7645eb6d7c093619a95c8f4d308ec7af72ccc37a2"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "idea",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "de88962cde4f12cd49beedbaa2ba9e010f5dad31e901dfffb5ea7e53edb969dd"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "doubt",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "43189e0f7c4904453eda5299d018b125cb9f5abb9881a4944023d4cd2fc28f06"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "doubt",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "43189e0f7c4904453eda5299d018b125cb9f5abb9881a4944023d4cd2fc28f06"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "problem",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "ac88e705cc2503182f914dd153a8202349cab34becf95b80a796256a5074a4b9"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "problem",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "41e917f6784f317eaab9041e6ea5e6b0b8fe01fe74176e240e434659d44ebc98"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "worked",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "eca5b83942c5872fa0e9d93439a2810764fabe0acc4b13f78793d0b198474c84"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "worked",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "2438a69627303ff5dc3f80db17e58b6d3a2289c37018213f3631e84fda73367f"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "refused",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "de06d6e1c733736a69a839631d99546eefa4be88fed27b2700b10301ba8eb996"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "refused",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "de06d6e1c733736a69a839631d99546eefa4be88fed27b2700b10301ba8eb996"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "pressure",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "07ec31b900d34a83060c575b7f321b5d80bc3b40276d8e79a8e648d288f9df1b"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "pressure",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "07ec31b900d34a83060c575b7f321b5d80bc3b40276d8e79a8e648d288f9df1b"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "liked",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "e404ce0c77b1672a7cc28a5248f9ae3c596d38782b52639ca56ecdacb5b71ded"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "liked",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "e404ce0c77b1672a7cc28a5248f9ae3c596d38782b52639ca56ecdacb5b71ded"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "waiting",
+        "x": 100,
+        "y": 100,
+        "burst": true,
+        "surface": "dark"
+      },
+      "sha256": "c74eab5e62b7e69b53d3d6ccfb3946a6860f8e703c5af8dda7026144a16c9b14"
+    },
+    {
+      "piece": "emote",
+      "params": {
+        "kind": "waiting",
+        "x": 100,
+        "y": 100,
+        "burst": false,
+        "surface": "dark"
+      },
+      "sha256": "c74eab5e62b7e69b53d3d6ccfb3946a6860f8e703c5af8dda7026144a16c9b14"
+    }
+  ]
+}
