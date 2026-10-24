@@ -176,6 +176,10 @@
   --ds-site-light-text: #444444;
   --ds-site-light-text-dark: #040404;
   --ds-site-light-text-light: #717171;
+  --ds-surface-dark-backdrop-credit: #9AA6D6;
+  --ds-surface-dark-backdrop-park: #183F52;
+  --ds-surface-dark-backdrop-water: #1E3175;
+  --ds-surface-dark-backdrop-water-edge: #2A3F8A;
   --ds-surface-dark-background: #14215A;
   --ds-surface-dark-grid: #1C2D74;
   --ds-surface-dark-muted: #8F9BD0;
@@ -185,6 +189,10 @@
   --ds-surface-dark-shadow: #4C5CB8;
   --ds-surface-dark-text: #EEF2FF;
   --ds-surface-dark-zone-opacity: 0.22;
+  --ds-surface-light-backdrop-credit: #5A6385;
+  --ds-surface-light-backdrop-park: #D4F2DF;
+  --ds-surface-light-backdrop-water: #C9D8FF;
+  --ds-surface-light-backdrop-water-edge: #B5C7F5;
   --ds-surface-light-background: #EEF2FF;
   --ds-surface-light-grid: #E0E7FB;
   --ds-surface-light-muted: #5B6694;

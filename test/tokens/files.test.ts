@@ -114,6 +114,17 @@ const invalidSources: Record<string, Source | string> = {
   "Required token with the wrong type": sourceWith(set("outline.block", token(4, "number"))),
   "Missing motion token": sourceWith(remove("motion.focus.mass")),
   "Frame rate with the wrong type": sourceWith(set("motion.fps", token(30, "number"))),
+  // Change backdrop-tokens, task 1.2: the four failure scenarios of "Surface tokens".
+  "Surface entry without its shadow": sourceWith(remove("surface.dark.shadow")),
+  "Surface entry without its zone opacity": sourceWith(remove("surface.light.zoneOpacity")),
+  "Surface entry without its backdrop water": sourceWith(remove("surface.dark.backdropWater")),
+  "Extra surface": sourceWith(
+    set("surface.sepia", {
+      ...Object.fromEntries(["background", "text", "muted", "grid", "panel", "shadow", "rim", "backdropWater", "backdropWaterEdge", "backdropPark", "backdropCredit"].map((key) => [key, token("#FFFFFF", "color")])),
+      rimWidth: token(0, "dimension"),
+      zoneOpacity: token(0.12, "opacity"),
+    }),
+  ),
 };
 
 describe("writes no file", () => {

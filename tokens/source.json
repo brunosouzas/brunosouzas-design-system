@@ -105,7 +105,11 @@
       "shadow": { "$value": "#0A1033", "$type": "color" },
       "rim": { "$value": "#EEF2FF", "$type": "color" },
       "rimWidth": { "$value": 0, "$type": "dimension", "$description": "No rim on the light surface." },
-      "zoneOpacity": { "$value": 0.12, "$type": "opacity", "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)." }
+      "zoneOpacity": { "$value": 0.12, "$type": "opacity", "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)." },
+      "backdropWater": { "$value": "#C9D8FF", "$type": "color", "$description": "Fill of rivers, docks and lakes behind a map (stackledger map-backgrounds, card 180)." },
+      "backdropWaterEdge": { "$value": "#B5C7F5", "$type": "color" },
+      "backdropPark": { "$value": "#D4F2DF", "$type": "color" },
+      "backdropCredit": { "$value": "#5A6385", "$type": "color", "$description": "The OpenStreetMap credit over the backdrop." }
     },
     "dark": {
       "background": { "$value": "#14215A", "$type": "color", "$description": "Map or diagram background on the dark surface." },
@@ -116,7 +120,11 @@
       "shadow": { "$value": "#4C5CB8", "$type": "color", "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)." },
       "rim": { "$value": "#EEF2FF", "$type": "color" },
       "rimWidth": { "$value": 1, "$type": "dimension", "$description": "Light band round the ink outline." },
-      "zoneOpacity": { "$value": 0.22, "$type": "opacity" }
+      "zoneOpacity": { "$value": 0.22, "$type": "opacity" },
+      "backdropWater": { "$value": "#1E3175", "$type": "color" },
+      "backdropWaterEdge": { "$value": "#2A3F8A", "$type": "color" },
+      "backdropPark": { "$value": "#183F52", "$type": "color" },
+      "backdropCredit": { "$value": "#9AA6D6", "$type": "color" }
     }
   },
   "map": {
