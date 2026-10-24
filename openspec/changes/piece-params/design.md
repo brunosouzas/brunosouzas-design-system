@@ -4,7 +4,7 @@ The normative drawing is the spike's candidate, `~/.hermes/spikes/design-system/
 
 ## 1. `milestonePin.size`
 
-`size` is the head's radius, a number from 6 to 48, default 18. With k = `size` / 18: the head's centre is at `y − stem − 14k`, its `stroke-width` is `3k` (`outline.small` × k), and the label has `font-size` `size` and baseline `y − stem − 7k`. Computed values are rounded to two decimals only when `size` is given; without it the piece evaluates the 0.5.0 expressions unchanged, so no 0.5.0 call changes a byte. The stem keeps its own `stem` and the group's ink outline.
+`size` is the head's radius, a number from 6 to 48, default 18. With k = `size` / 18: the head's centre is at `y − stem − 14k`, its `stroke-width` is `3k` (`outline.small` × k), and the label's baseline is at `y − stem − 7k`; these three are rounded to two decimals, and only when `size` is given. The head's `r` and the label's `font-size` are `size` as given (a size is never rounded); without it the piece evaluates the 0.5.0 expressions unchanged, so no 0.5.0 call changes a byte. The stem keeps its own `stem` and the group's ink outline.
 
 Why the radius and not a scale factor: the request measured the published head as a radius (26), and the port writes measures, not ratios. Why 6 to 48: the same range as the body diagram pieces' `textSize`, so one rule covers every size of text a piece takes; at 6 the outline is 1 and still draws, at 48 the head is 96 across, wider than any published pin.
 
@@ -12,11 +12,11 @@ Why the radius and not a scale factor: the request measured the published head a
 
 `textSize` is a number from 6 to 48, default `map.countTextSize` (11). With k = `textSize` / 11: without `height`, the height is `map.countHeight × k` (16k, rounded to two decimals); without `width`, a text of more than one character is `max(height, (6.4 × characters + 8) × k)` wide, the product rounded to two decimals; the baseline is `cy + 4k`. A given `height` or `width` wins, as today. Without `textSize`, k is 1 and every expression is the 0.5.0 one.
 
-The room rule ("Room for the outline") applies to the derived height too. When the height comes from `textSize` (no `height` given), a height below 4 × `map.outline` × `inkScale` is reported naming `textSize`, the parameter the caller passed; at `inkScale` 1 that is any `textSize` below 8.25.
+The room rule ("Room for the outline") applies to the derived height too. When the height comes from `textSize` (no `height` given), the rounded derived height is checked, and a height below 4 × `map.outline` × `inkScale` is reported naming `textSize`, the parameter the caller passed. At `inkScale` 1, `textSize` 8.249 still passes (16 × 8.249 / 11 rounds to 12) and 8.24 does not (11.99).
 
 ## 3. Code in a pill
 
-`pill.text` follows "Code in words": with an even number of backticks, each part between them becomes a `tspan` with `font-family` `font.mono`. The default width counts the characters without the backticks (`length`, as in 0.5.0, when the text has no code run).
+`pill.text` follows "Code in words": with an even number of backticks, each part between them becomes a `tspan` with `font-family` `font.mono`. With an even number of backticks, the default width counts the characters without them; otherwise it uses `length` as in 0.5.0, backticks included (`"abcd\`ef"` stays 108 wide).
 
 Options (gate-1 decision 1):
 
@@ -30,7 +30,7 @@ The frozen fixture keeps one such call (`text: "a \`b\` c"`); its test expects t
 
 ## 4. `messageArrow.heads`
 
-`heads` is `end` (default), `start` or `both`. A head at `from` mirrors the one at `to`: it points back at `from` from the first of `c1`, `c2`, `to` that differs from `from` when `controls` are given; from the horizontal when the curve is `bezier` and not straight; otherwise along the segment. The path starts at the base of that head (`from` moved 5 × `width` along it). The middle label, the fallback to straight and the controls rule do not change.
+`heads` is `end` (default), `start` or `both`. A head at `from` mirrors the one at `to`: it points back at `from` from the first of `c1`, `c2`, `to` that differs from `from` when `controls` are given; from the horizontal when the curve is `bezier` and not straight; otherwise along the segment. The path starts at the base of that head (`from` moved 5 × `width` along it); with `controls` this is the `start` of `M start C c1 c2 end` ("Message arrow through control points", modified). The middle label, the fallback to straight and the controls rule do not change.
 
 Room: one head needs a distance of 10 × `width` as today; `both` needs 20 × `width`, rejected naming `to` below it.
 

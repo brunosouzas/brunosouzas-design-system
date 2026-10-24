@@ -44,4 +44,4 @@ The port of the blog's images (brunosouzas.com, AB#140) rebuilt 21 covers and 14
 
 - `README.md`: the four parameters in the piece list.
 - `docs/roadmap.md`: the delivered row for AB#190 and, under "Out of scope for now", the candidate pieces of AB#189 with their rule.
-- Vault: `10-personal/projects/brunosouzas-design-system/{architecture,roadmap,changelog}.md`, after the pull request is ready.
+- Vault: none in this change (read-only here). Its project notes (`10-personal/projects/brunosouzas-design-system/`) are updated after the release, outside this pull request.

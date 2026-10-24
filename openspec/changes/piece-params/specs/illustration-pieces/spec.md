@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Milestone pin size
-`milestonePin` SHALL take `size`, the head's radius, a number from 6 to 48, default 18. With k = `size` / 18, the head's centre is at `y − stem − 14k` with `stroke-width` `3k`, and the label has `font-size` `size` and baseline `y − stem − 7k`, each rounded to two decimals when `size` is given. Without `size` the pin draws as in 0.5.0 ("Piece calls of 0.5.0 unchanged").
+`milestonePin` SHALL take `size`, the head's radius, a number from 6 to 48, default 18. With k = `size` / 18, the head's centre is at `y − stem − 14k` with `stroke-width` `3k`, and the label's baseline is at `y − stem − 7k`, these three rounded to two decimals when `size` is given; the head's `r` and the label's `font-size` are `size` as given. Without `size` the pin draws as in 0.5.0 ("Piece calls of 0.5.0 unchanged").
 
 #### Scenario: Larger pin
 - **WHEN** `milestonePin({ x: 100, y: 200, text: "S", size: 27 })` is called
@@ -11,16 +11,20 @@
 - **WHEN** `milestonePin` gets `x: 0`, `y: 100`, `text: "1"` and `size` 6, 48, 5.99, 48.01 or `"26"`
 - **THEN** size 6 draws a circle with `cy` 51.33, `r` 6 and `stroke-width` 1; size 48 a circle with `cy` 18.67, `r` 48 and `stroke-width` 8; the other three throw a `RangeError` naming `size`
 
+#### Scenario: Fractional pin size
+- **WHEN** `milestonePin({ x: 0, y: 100, text: "1", size: 18.123 })` is called
+- **THEN** its circle has `cy` 41.9, `r` 18.123 and `stroke-width` 3.02, and its text node has `y` 48.95 and `font-size` 18.123
+
 ### Requirement: Count badge text size
-`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k rounded to two decimals) wide; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" names `textSize` instead of `height`.
+`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k rounded to two decimals) wide; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" checks that rounded height and names `textSize`.
 
 #### Scenario: Larger count
 - **WHEN** `countBadge` is called with `cx: 0`, `cy: 0`, `textSize: 22` and `text: "1"`, then `text: "12"`, then `text: "1"` with `textSize: 20` and `height: 30`
 - **THEN** the first face is a circle of radius 16 and its text has `y` 8 and `font-size` 22; the second face is a rect 41.6 wide and 32 high; the third face is a circle of radius 15 and its text has `y` 7.27 and `font-size` 20
 
 #### Scenario: Count text size bounds
-- **WHEN** `countBadge({ cx: 0, cy: 0, text: "1" })` gets `textSize` 8.25, 8.24, 5, 49, or 20 with `height: 10`
-- **THEN** 8.25 draws a circle of radius 6; 8.24 throws a `RangeError` naming `textSize` (derived height 11.99, below 12); 5 and 49 throw naming `textSize`; the last throws naming `height`
+- **WHEN** `countBadge({ cx: 0, cy: 0, text: "1" })` gets `textSize` 8.25, 8.249, 8.24, 5, 49, or 20 with `height: 10`
+- **THEN** 8.25 and 8.249 (derived height 12 after rounding) draw a circle of radius 6; 8.24 throws a `RangeError` naming `textSize` (derived height 11.99, below 12); 5 and 49 throw naming `textSize`; the last throws naming `height`
 
 ### Requirement: Message arrow heads
 `messageArrow` SHALL take `heads`: `end` (default), `start` or `both`. A head at `from` points at `from` from the first of `c1`, `c2`, `to` that differs from `from` with `controls`, from the horizontal for a `bezier` not drawn straight, else along the segment; the path starts at its base. `both` needs a distance of 20 × `width`. `heads` with `head: false` is rejected naming `heads`; `head: true` is accepted.
@@ -51,11 +55,18 @@ Every `milestonePin`, `countBadge`, `pill` and `messageArrow` call valid in 0.5.
 - **WHEN** the test re-calls the 44 calls of `test/fixtures/pieces-0.5.0.json`, written on `origin/main` (`f91ba2e`) before any code
 - **THEN** 43 trees deep-equal their frozen trees, and their body then text nodes through `toSvg`, joined with no separator, equal the frozen strings; the pill with ``text: "a `b` c"`` differs from its frozen tree and its text node's children are `a `, a `tspan` holding `b`, and ` c`
 
-#### Scenario: Goldens unchanged
-- **WHEN** the cover command builds every spec of `test/fixtures/covers/`
-- **THEN** each output equals its golden SVG byte for byte
-
 ## MODIFIED Requirements
+
+### Requirement: Existing calls unchanged
+Every call that is valid in 0.2.0 SHALL draw the same tree in this version, except a `pill` whose text has an even number of backticks ("Code in words"): the proof cover and banner goldens stay byte-identical, and the calls frozen from 0.2.0 in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b: `lineBadge` with a text, nodes without a placeholder subtitle, `ledgerMark` without `surface`) draw deep-equal trees.
+
+#### Scenario: Goldens unchanged
+- **WHEN** the four golden fixtures are built
+- **THEN** each output equals its golden byte for byte
+
+#### Scenario: Frozen 0.2.0 calls
+- **WHEN** each call of `test/fixtures/pieces-0.2.0.json` is made again
+- **THEN** its tree is deep-equal to the frozen one, and each `ledgerMark` call with `surface: "light"` added is deep-equal to the same frozen tree
 
 ### Requirement: Message arrow
 `messageArrow` SHALL draw as in `metro-and-diagram-pieces` design §3, "The arrow": a path to the base of a head of length 5 × `width` at `to` (other heads: "Message arrow heads"), in `surface.text` or the colour of its `kind` ("Message arrow kinds"); `bezier` leaves and enters horizontally, and falls back to `straight` when the horizontal distance is at most twice the head; `controls` gives its own curve; `head: false` ends at `to`; a `label` sits in a pill at the middle.
@@ -102,8 +113,23 @@ The smallest dimension of an outlined shape (`height` of a `lineBadge`, flat or 
 - **WHEN** `nodeBlock` is drawn with `state: "placeholder"`, `height: 20`, `width: 40` and `inkScale: 8`
 - **THEN** it draws the dashed box without an error
 
+### Requirement: Message arrow through control points
+`messageArrow` SHALL take `controls`, exactly two points: the path is `M start C c1 c2 end`, `start` being `from` or the base of a head at `from`, `end` the base of a head at `to` or `to`; the head at `to` points from the last of `c2`, `c1`, `from` that differs from `to` (a head at `from`: "Message arrow heads"). `controls` with `curve` is rejected naming `controls`.
+
+#### Scenario: Vertical curve
+- **WHEN** `messageArrow({ from: [0, 0], to: [100, 100], controls: [[0, 50], [100, 50]] })` is called
+- **THEN** its path `d` is `M0,0 C0,50 100,50 100,87.5` and its head is the polygon `100,100 95,87.5 105,87.5`
+
+#### Scenario: Last control point on the end
+- **WHEN** `controls` is `[[0, 50], [100, 100]]` with the same ends
+- **THEN** its path `d` is `M0,0 C0,50 100,100 88.82,94.41` and its head is the polygon `100,100 86.58,98.88 91.06,89.94`
+
+#### Scenario: Controls with a curve, or three points
+- **WHEN** `controls` comes with `curve: "bezier"`, or holds three points
+- **THEN** each call throws a `RangeError` naming `controls`
+
 ### Requirement: Code in words
-In every text parameter of the ten body diagram pieces and in `pill.text`, a string with an even number of backticks SHALL be drawn as a `text` node whose children are the plain parts as strings and each part between backticks as a `tspan` with only `font-family` `font.mono`; empty parts are dropped and the backticks are not drawn. A string with an odd number of backticks is drawn as is. A pill's default width ignores backticks. Other pieces' words are unchanged.
+In every text parameter of the ten body diagram pieces and in `pill.text`, a string with an even number of backticks SHALL be drawn as a `text` node whose children are the plain parts as strings and each part between backticks as a `tspan` with only `font-family` `font.mono`; empty parts are dropped and the backticks are not drawn. A string with an odd number of backticks is drawn as is. With an even number, a pill's default width ignores them. Other pieces' words are unchanged.
 
 #### Scenario: A code run inside a label
 - **WHEN** ``edgeLabel({ x: 0, y: 0, lines: ["adopts a `correlationId`"] })`` is called
@@ -123,4 +149,4 @@ In every text parameter of the ten body diagram pieces and in `pill.text`, a str
 
 #### Scenario: Code in a pill
 - **WHEN** `pill({ x: 0, y: 0 })` gets ``text: "`main`"``, then ``text: "deploy to `prod`"``, then ``text: "a `b"``
-- **THEN** the first rect is 76 wide and its text node's only child is a mono `tspan` holding `main`, written on one line by `toSvg`; the second rect is 181 wide with children `deploy to ` and a `tspan` holding `prod`; the third rect is 76 wide and its only child is the string ``a `b``
+- **THEN** the first rect is 76 wide and its text node's only child is a mono `tspan` holding `main`, written on one line by `toSvg`; the second rect is 181 wide with children `deploy to ` and a `tspan` holding `prod`; the third rect is 76 wide and its only child is the string ``a `b``; ``text: "abcd`ef"`` (odd) gives a rect 108 wide, ``text: "abcd`e`f"`` a rect 97 wide
