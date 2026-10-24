@@ -277,6 +277,10 @@ export const tokens = {
   },
   "surface": {
     "dark": {
+      "backdropCredit": "#9AA6D6",
+      "backdropPark": "#183F52",
+      "backdropWater": "#1E3175",
+      "backdropWaterEdge": "#2A3F8A",
       "background": "#14215A",
       "grid": "#1C2D74",
       "muted": "#8F9BD0",
@@ -288,6 +292,10 @@ export const tokens = {
       "zoneOpacity": 0.22
     },
     "light": {
+      "backdropCredit": "#5A6385",
+      "backdropPark": "#D4F2DF",
+      "backdropWater": "#C9D8FF",
+      "backdropWaterEdge": "#B5C7F5",
       "background": "#EEF2FF",
       "grid": "#E0E7FB",
       "muted": "#5B6694",
