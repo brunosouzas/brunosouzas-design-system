@@ -15,6 +15,12 @@ const problemsOf = (source: Source): string[] => {
   return result.ok ? [] : result.problems.map(formatProblem);
 };
 const json = generatedJson as unknown as Record<string, Record<string, Record<string, unknown>>>;
+// A third surface with the thirteen tokens of a valid one (change backdrop-tokens).
+const SEPIA: Source = {
+  ...Object.fromEntries(["background", "text", "muted", "grid", "panel", "shadow", "rim", "backdropWater", "backdropWaterEdge", "backdropPark", "backdropCredit"].map((key) => [key, token("#FFFFFF", "color")])),
+  rimWidth: token(0, "dimension"),
+  zoneOpacity: token(0.12, "opacity"),
+};
 
 describe("Surface tokens", () => {
   test("Surface entry without its shadow", () => {
@@ -25,15 +31,25 @@ describe("Surface tokens", () => {
     expect(problemsOf(sourceWith(remove("surface.light.zoneOpacity")))).toEqual(["surface.light.zoneOpacity: missing required token (type opacity)"]);
   });
 
+  test("Surface entry without its backdrop water", () => {
+    expect(problemsOf(sourceWith(remove("surface.dark.backdropWater")))).toEqual(["surface.dark.backdropWater: missing required token (type color)"]);
+  });
+
   test("Extra surface", () => {
-    const sepia = Object.fromEntries(["background", "text", "muted", "grid", "panel", "shadow", "rim"].map((key) => [key, token("#FFFFFF", "color")]));
-    const problems = problemsOf(sourceWith(set("surface.sepia", { ...sepia, rimWidth: token(0, "dimension"), zoneOpacity: token(0.12, "opacity") })));
+    const problems = problemsOf(sourceWith(set("surface.sepia", SEPIA)));
+    expect(Object.keys(SEPIA)).toHaveLength(13);
     expect(problems).toEqual([expect.stringMatching(/^surface\.sepia: unexpected surface \(expected light and dark\)/)]);
   });
 
   test("Measured surfaces", () => {
-    expect(json.surface.light).toEqual({ background: "#EEF2FF", text: "#0A1033", muted: "#5B6694", grid: "#E0E7FB", panel: "#FFFFFF", shadow: "#0A1033", rim: "#EEF2FF", rimWidth: 0, zoneOpacity: 0.12 });
-    expect(json.surface.dark).toEqual({ background: "#14215A", text: "#EEF2FF", muted: "#8F9BD0", grid: "#1C2D74", panel: "#1C2D74", shadow: "#4C5CB8", rim: "#EEF2FF", rimWidth: 1, zoneOpacity: 0.22 });
+    expect(json.surface.light).toEqual({ background: "#EEF2FF", text: "#0A1033", muted: "#5B6694", grid: "#E0E7FB", panel: "#FFFFFF", shadow: "#0A1033", rim: "#EEF2FF", rimWidth: 0, zoneOpacity: 0.12, backdropWater: "#C9D8FF", backdropWaterEdge: "#B5C7F5", backdropPark: "#D4F2DF", backdropCredit: "#5A6385" });
+    expect(json.surface.dark).toEqual({ background: "#14215A", text: "#EEF2FF", muted: "#8F9BD0", grid: "#1C2D74", panel: "#1C2D74", shadow: "#4C5CB8", rim: "#EEF2FF", rimWidth: 1, zoneOpacity: 0.22, backdropWater: "#1E3175", backdropWaterEdge: "#2A3F8A", backdropPark: "#183F52", backdropCredit: "#9AA6D6" });
+  });
+
+  test("Backdrop tokens in the CSS", () => {
+    const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(css).toContain("  --ds-surface-light-backdrop-water: #C9D8FF;\n");
+    expect(css).toContain("  --ds-surface-dark-backdrop-credit: #9AA6D6;\n");
   });
 });
 
