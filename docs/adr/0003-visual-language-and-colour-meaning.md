@@ -39,3 +39,7 @@ On a dark surface the hard shadow is no longer drawn in the ink: ink on the dark
 ## Amendment, 2026-10-23 (AB#167)
 
 A metro map marks a station's state with small markers, and they keep the meanings above. A held licence is green (normal: the licence is in place), and a licence still to buy is the empty white disc. A renewal due within 30 days is an orange ring, because the item will block if nothing is done. Before this, stackledger drew a held licence in yellow, a meaning ("transitional") that does not fit holding a licence. The six meanings are unchanged.
+
+## Amendment, 2026-10-24 (AB#152)
+
+The caption is no longer the default in animation: [ADR 0005](0005-neutral-videos-and-the-cast.md) makes new videos language-neutral, with a caption only when the motion cannot explain itself. The scenes that have one keep it. The three-second still final frame stays for article scenes. The cast's colours are identities, not states, and never take a state colour's hue.

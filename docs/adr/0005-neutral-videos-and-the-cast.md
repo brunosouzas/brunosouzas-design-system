@@ -1,6 +1,6 @@
 # ADR 0005: Neutral videos, told by a fixed cast
 
-- Status: proposed (AB#152; accepted when its pull request merges)
+- Status: accepted
 - Date: 2026-10-24
 - Amends: ADR 0003 (the caption default), ADR 0004 (claims made by actions)
 

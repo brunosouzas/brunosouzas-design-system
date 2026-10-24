@@ -22,3 +22,7 @@ Option 2. A scene names its source article, and every string it shows exists in 
 - Portuguese and English versions stay in step, because both come from the same text table that mirrors the two published versions.
 - A scene for something not yet published waits for the article.
 - Rendered videos are build outputs and are not committed; anyone can re-render them from the scene's code.
+
+## Amendment, 2026-10-24 (AB#152)
+
+Actions are claims too: every gesture, reaction and event in a scene names the article line that supports it ([ADR 0005](0005-neutral-videos-and-the-cast.md)). A neutral scene has no per-language text table, because it shows no words.

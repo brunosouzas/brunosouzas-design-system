@@ -18,7 +18,7 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 8 | Designer skill on the pieces | The kit's `designer` skill makes covers, banners, icons and diagrams from specs and pieces. It comes before the ports, because the skill does them | AB#151 | planned |
 | 8a | `designer-formats` | The designer's requests in one release (0.4.0): the cover command's `diagram` and `icon` formats, per-language text tables with `--lang`, `customAt`, the `stateStart` piece and the `bodyDiagram` tokens. No new background pair: which covers share one is the skill's rule (COV-4) | AB#173 | delivered (0.4.0) |
 | 9 | Covers and body diagrams on the pieces | Done in brunosouzas.com by the `designer` skill, not in this repository: port the 21 published covers to cover specs (one first, then batches checked on the site) and the 14 body diagrams to the diagram pieces | AB#140 | planned |
-| 10 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it. Release 0.5.0 (0.4.0 went to AB#173) | AB#152 | planned |
+| 10 | Cast and emotes | The mascot cast and emotes on the pieces, and ADR 0005 (neutral videos, optional caption, every action tied to an article line, 4:5 on demand, storyboard gate before the spec). Every new video depends on it. Release 0.5.0 (0.4.0 went to AB#173) | AB#152 | delivered (0.5.0) |
 | 11 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
 | 12 | Designer skill for videos | The `designer` skill decides where a video belongs and writes its script | AB#158 | planned |
 | 13 | Site palette | Two or three palette options (shared ink, one brand accent) shown on a real page; the chosen one becomes a change in the site repository that consumes the CSS tokens | — | planned |
@@ -27,7 +27,7 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 
 ## Videos per article
 
-A video only where it shows a process unfolding; the other 19 pages keep their static images. Since 2026-10-23 every video is language-neutral by default (one file for PT and EN, no words on screen, told by the cast, gestures and emotes), with a storyboard of two or three concepts before the spec. One scene per change.
+A video only where it shows a process unfolding; the other 19 pages keep their static images. Since 2026-10-23 every video is language-neutral by default (one file for PT and EN, no words on screen, told by the cast, gestures and emotes), with a storyboard of two or three concepts before the spec ([ADR 0005](adr/0005-neutral-videos-and-the-cast.md)). They use the cast and emotes of AB#152. One scene per change.
 
 | Article or wiki | Scenes | Card |
 |---|---|---|
@@ -43,6 +43,9 @@ A video only where it shows a process unfolding; the other 19 pages keep their s
 EIP series: every new pattern gets two neutral videos, the pattern as the book describes it and as Mule implements it. A page may publish with its static diagrams; the videos follow in their own cards.
 
 ## Out of scope for now
+
+- The cast on a dark surface (AB#187): before the characters appear on dark pages or covers.
+- Technology props for the cast (an IDE accent, a cloud, a CI badge) and new roles (writer, reviewer): added with the scene that needs them (ADR 0005).
 
 - Sound and music: added per scene only when its context asks for it (a narrated presentation).
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
