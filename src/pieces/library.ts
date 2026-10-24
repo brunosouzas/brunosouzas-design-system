@@ -15,6 +15,8 @@ import { METRO_PIECES } from "./metro.ts";
 import { DIAGRAM_PIECES, stateStart } from "./diagram.ts";
 import { uiIcon } from "./ui-icons.ts";
 import { linkIcon } from "./link-icons.ts";
+import { emote, mascot } from "./cast.ts";
+export { emote, mascot };
 
 export * from "./metro.ts";
 export * from "./diagram.ts";
@@ -601,6 +603,8 @@ export const PIECES = {
   linkIcon,
   ...DIAGRAM_PIECES,
   stateStart,
+  mascot,
+  emote,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];

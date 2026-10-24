@@ -60,6 +60,8 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   edgeLabel: { x: 0, y: 0, lines: ["a"] },
   stateStart: { cx: 0, cy: 0 },
+  mascot: { who: "dev", x: 0, y: 0 },
+  emote: { kind: "idea", x: 0, y: 0 },
 };
 
 /** The metro and diagram pieces have limits that depend on each other (width against height, room for
@@ -171,7 +173,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(52);
+    expect(P.PIECE_NAMES).toHaveLength(54);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop draws words only (change body-diagram-pieces).

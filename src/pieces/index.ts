@@ -12,3 +12,4 @@ export * from "./library.ts";
 export { EIP_ICONS, EIP_ICON_NAMES, EIP_ICON_HEIGHT, EIP_ICON_WIDTH, type EipIcon } from "./eip-icons.ts";
 export { FORMATS, LANGUAGE, SAFE_ID, backgroundNames, bannerRingCount, comparePaths, coverTree, diagramRings, validateCoverSpec, type CoverFormat, type CoverOptions, type CoverPiece, type CoverRings, type CoverSpec, type CustomNode } from "./cover.ts";
 export { tokens, type Tokens } from "../../tokens/generated/tokens.ts";
+export { EMOTE_KINDS, MASCOTS, MASCOT_ACTIONS, MASCOT_FACES, type EmoteKind, type EmoteParams, type MascotAction, type MascotFace, type MascotName, type MascotParams } from "./cast.ts";

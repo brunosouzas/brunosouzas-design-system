@@ -95,6 +95,8 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   ),
   uiIcon: (x, y) => merge(...P.UI_ICON_NAMES.map((name, i) => P.uiIcon({ name, x: x + 20 + (i % 4) * 52, y: y + 50 + Math.floor(i / 4) * 52, size: 32 }))),
   linkIcon: (x, y) => merge(...P.LINK_ICON_NAMES.map((icon, i) => P.linkIcon({ icon, x: x + 20 + (i % 2) * 110, y: y + 30 + Math.floor(i / 2) * 80, size: 64 }))),
+  mascot: (x, y) => merge(P.mascot({ who: "dev", x: x + 70, y: y + 200, face: "happy", action: "wave", scale: 0.5 }), P.mascot({ who: "devops", x: x + 175, y: y + 200, action: "rest", scale: 0.5 })),
+  emote: (x, y) => merge(P.emote({ kind: "idea", x: x + 70, y: y + 90, scale: 0.8 }), P.emote({ kind: "worked", x: x + 170, y: y + 160, scale: 0.8 })),
 };
 
 export const piecesSheet = (): SvgNode => {
