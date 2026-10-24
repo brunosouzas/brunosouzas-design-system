@@ -168,7 +168,7 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 
 ### The cast and the emotes
 
-`mascot({ who, x, y, face, action, scale, look, headTilt, prop })` draws one character standing with the centre of its ground line at `(x, y)`. Each one carries its identity in three layers, so no video has to introduce it: a body shape, a mark always visible, and a prop when its hands are free.
+`mascot({ who, x, y, face, action, scale, look, headTilt, prop, surface })` draws one character standing with the centre of its ground line at `(x, y)`. Each one carries its identity in three layers, so no video has to introduce it: a body shape, a mark always visible, and a prop when its hands are free.
 
 | `who` | Body | Mark | Prop | Colour |
 |---|---|---|---|---|
@@ -184,7 +184,7 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 - `action`: `none` (the default: an expression has no hands or feet), `rest`, `wave`, `hold`, `reach`, `up`, `shrug`, `type`. Arms and legs start at the body's sides; hands are mittens.
 - `look` (-1 to 1) moves the gaze, `headTilt` (-30 to 30) turns the agent's head on its neck, `prop: false` hides the prop. Every part is a group named by `data-part` (`body`, `face`, `eyes`, `brows`, `mouth`, `arm-left`, `arm-right`, `legs`, `prop`, `mark`, …), so a scene can animate it.
 
-`emote({ kind, x, y, scale, burst })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
+`emote({ kind, x, y, scale, burst, surface })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
 
 | `kind` | Shape | Meaning |
 |---|---|---|
@@ -199,7 +199,7 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 
 In a scene, an emote pops in on the frame the face changes (`emotePop` in `src/brand/cast-motion.ts`, with `leave`, `blinking`, `breathe`, `squashAfter` and `hop`), one at a time, and the body acts through `pose`. A mascot's colour is its identity and never changes with state. The approved motion test is the Studio composition `cast-motion-test` (folder `cast`): `npx remotion render src/index.ts cast-motion-test`. It is a proof of the cast, not an article scene, so `npm run stills` and `npm run render` do not list it.
 
-The cast draws the same on any background; a dark-surface variant is planned (AB#187).
+On a dark page pass `surface: "dark"` (AB#187, 0.5.2): the hard shadows take `surface.dark.shadow`, the ground takes `surface.dark.grid`, and a light rim (`surface.dark.rim`) lines the whole outline, limbs and props included; faces are unchanged. Without `surface`, the cast draws as in 0.5.0.
 
 ### A cover
 
