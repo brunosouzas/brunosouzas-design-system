@@ -13,6 +13,43 @@ export const tokens = {
     "startRadius": 11,
     "width": 800
   },
+  "cast": {
+    "agent": {
+      "neck": "#E3E8F5",
+      "shine": "#E6ECFF"
+    },
+    "architect": {
+      "fill": "#22B5A4",
+      "shine": "#9CF0E4"
+    },
+    "data": {
+      "fill": "#8C6CF0",
+      "lens": "#EAF1FF",
+      "lid": "#C2B1FF",
+      "shine": "#B39CFF"
+    },
+    "dev": {
+      "chin": "#8FA6FF",
+      "fill": "#5B7CFA",
+      "screen": "#DCE6FF"
+    },
+    "devops": {
+      "fill": "#D76AA5",
+      "shine": "#F3B8D6"
+    },
+    "emotePop": {
+      "damping": 9,
+      "mass": 0.7,
+      "stiffness": 170
+    },
+    "glow": "#7FD1FF",
+    "ground": "#D3DBF5",
+    "metal": "#C9D2E8",
+    "mouth": "#B94A3E",
+    "request": {
+      "shine": "#D6E2FF"
+    }
+  },
   "color": {
     "backend": "#FF6B6B",
     "blocked": "#FF8A3D",

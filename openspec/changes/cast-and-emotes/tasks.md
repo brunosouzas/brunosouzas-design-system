@@ -10,7 +10,7 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, command
 
 ## 1. Tokens (`design-tokens`)
 
-- [ ] 1.1 Add `cast` to `GROUPS` and its 21 required tokens to `REQUIRED` in `scripts/tokens.ts`; add them to `tokens/source.json` as text (one token per line, `$description` as design §6) from `proposed-tokens.json`; run `npm run tokens`. Unit tests in `test/tokens/illustration.test.ts`: "Cast token missing", "Cast token with the wrong type", "Approved cast values". In the same file: "Source with an unknown group" (fifteen) and "New groups accepted" (with `cast.dev.fill`). "Source with an unknown group" in `test/tokens/validate.test.ts` and `test/tokens/files.test.ts`, "Source file missing or not an object" and "Token without a type" (`test/tokens/validate.test.ts`) keep passing. Check: `npm test -- test/tokens` and `npm run tokens:check` exit 0.
+- [x] 1.1 Add `cast` to `GROUPS` and its 21 required tokens to `REQUIRED` in `scripts/tokens.ts`; add them to `tokens/source.json` as text (one token per line, `$description` as design §6) from `proposed-tokens.json`; run `npm run tokens`. Unit tests in `test/tokens/illustration.test.ts`: "Cast token missing", "Cast token with the wrong type", "Approved cast values". In the same file: "Source with an unknown group" (fifteen) and "New groups accepted" (with `cast.dev.fill`). "Source with an unknown group" in `test/tokens/validate.test.ts` and `test/tokens/files.test.ts`, "Source file missing or not an object" and "Token without a type" (`test/tokens/validate.test.ts`) keep passing. Check: `npm test -- test/tokens` and `npm run tokens:check` exit 0.
 
 ## 2. Pieces (`illustration-pieces`)
 
