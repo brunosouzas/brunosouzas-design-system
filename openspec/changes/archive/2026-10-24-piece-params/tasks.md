@@ -19,5 +19,5 @@ Scenarios carried unchanged into MODIFIED requirements keep their existing tests
 
 ## 3. Version and documentation
 
-- [ ] 3.1 `npm version 0.5.1 --no-git-tag-version`. Check: `package.json` and the root of `package-lock.json` both say `0.5.1`. The release runs on the owner's merge and his approval of `publish` (`docs/release.md`).
-- [ ] 3.2 README (the four parameters) and `docs/roadmap.md` (delivered row for AB#190; under "Out of scope for now", the candidate pieces of AB#189: one enters when a new cover or diagram needs it again, or when two covers use it). No vault edit in this change (the session keeps the vault read-only); the vault's project notes are a follow-up after the release. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
+- [x] 3.1 `npm version 0.5.1 --no-git-tag-version`. Check: `package.json` and the root of `package-lock.json` both say `0.5.1`. The release runs on the owner's merge and his approval of `publish` (`docs/release.md`).
+- [x] 3.2 README (the four parameters) and `docs/roadmap.md` (delivered row for AB#190; under "Out of scope for now", the candidate pieces of AB#189: one enters when a new cover or diagram needs it again, or when two covers use it). No vault edit in this change (the session keeps the vault read-only); the vault's project notes are a follow-up after the release. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
