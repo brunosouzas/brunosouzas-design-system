@@ -10,7 +10,9 @@
 // (~/.hermes/spikes/design-system/cast-and-emotes/cast.mts). The frozen fixture
 // test/fixtures/cast-0.5.0.json pins every call's output, so a refactor here
 // must keep every hash.
+import { tokens } from "../../tokens/generated/tokens.ts";
 import { drawn, el, g, type Drawn, type SvgNode } from "./node.ts";
+import { surfaceParam, type SurfaceName } from "./ink.ts";
 import { colour, pos, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
@@ -28,11 +30,55 @@ type Pt = [number, number];
 
 const ink = () => c("color.ink");
 const O = () => ({ stroke: ink(), "stroke-width": 4, "stroke-linejoin": "round" as const });
-const shade = (d: string, dx = 8) => el("path", { d, fill: ink(), transform: `translate(${dx} ${dx})` });
+// Every hard shadow is made by `hard`, so the dark drawing finds it by identity, not by its look.
+const SHADOWS = new WeakSet<SvgNode>();
+const hard = (n: SvgNode): SvgNode => (SHADOWS.add(n), n);
+const shade = (d: string, dx = 8) => hard(el("path", { d, fill: ink(), transform: `translate(${dx} ${dx})` }));
 const solid = (d: string, fill: string, dx = 8) => [shade(d, dx), el("path", { d, fill, ...O() })];
 const shine = (d: string, col: string) => el("path", { d, fill: "none", stroke: col, "stroke-width": 9, "stroke-linecap": "round" });
 const rr = (x: number, y: number, w: number, h: number, r: number) =>
   `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
+
+// ---------------------------------------------------------------- dark surface (card 187)
+// On the dark surface (ADR 0003 amendment) the light drawing is rewritten, so the
+// light output stays the frozen 0.5.0 tree: each hard shadow (made by `hard`) takes the surface's
+// shadow colour, the ground takes the surface's grid colour, and a light rim
+// (the drawing in the rim colour, every stroke widened by 2 × 2 × rimWidth) sits
+// behind the whole outline, arms and legs included. The face is unchanged.
+const walk = (n: SvgNode, f: (n: SvgNode) => SvgNode | null): SvgNode | null => {
+  const m = f(n);
+  if (!m) return null;
+  const kids = m.children.map((k) => (typeof k === "string" ? k : walk(k, f))).filter((k): k is SvgNode | string => k !== null);
+  return { ...m, children: kids };
+};
+const part = (n: SvgNode) => String(n.attrs["data-part"] ?? "");
+const onDark = (n: SvgNode): SvgNode => {
+  const d = tokens.surface.dark;
+  return walk(n, (x) => {
+    if (SHADOWS.has(x)) return { ...x, attrs: { ...x.attrs, fill: d.shadow } };
+    if (part(x) === "ground") return { ...x, children: x.children.map((k) => (typeof k === "string" ? k : { ...k, attrs: { ...k.attrs, fill: d.grid } })) };
+    return x;
+  })!;
+};
+const rimOf = (n: SvgNode): SvgNode | null => {
+  const d = tokens.surface.dark;
+  return walk(n, (x) => {
+    if (SHADOWS.has(x) || ["ground", "face"].includes(part(x)) || x.attrs.opacity !== undefined) return null;
+    if (x.tag === "g") return x;
+    const sw = x.attrs.stroke !== undefined && x.attrs.stroke !== "none" ? Number(x.attrs["stroke-width"] ?? 4) : 0;
+    const attrs: Record<string, string | number> = { ...x.attrs, stroke: d.rim, "stroke-width": sw + 4 * d.rimWidth, "stroke-linejoin": "round" };
+    if (x.attrs.fill !== undefined && x.attrs.fill !== "none") attrs.fill = d.rim;
+    return { ...x, attrs };
+  });
+};
+/** The light drawing redrawn for the dark surface: ground, rim, then the drawing. */
+const darken = (root: SvgNode): SvgNode => {
+  // The rim is taken from the light tree, where shadows are still known by identity.
+  const isGround = (k: SvgNode | string) => typeof k === "object" && part(k) === "ground";
+  const rim = rimOf({ ...root, attrs: {}, children: root.children.filter((k) => !isGround(k)) });
+  const dark = onDark(root);
+  return { ...dark, children: [...dark.children.filter(isGround), ...(rim ? [g({ "data-part": "rim" }, ...rim.children)] : []), ...dark.children.filter((k) => !isGround(k))] };
+};
 
 // ---------------------------------------------------------------- face (macs.ts)
 export const face = (cx: number, cy: number, f: MascotFace, col: string, mouthFill: string): SvgNode => {
@@ -233,7 +279,7 @@ const CAST = (): Record<MascotName, Char> => ({
   },
 });
 
-export type MascotParams = { who: MascotName; x: number; y: number; face?: MascotFace; action?: MascotAction; scale?: number; look?: number; headTilt?: number; prop?: boolean };
+export type MascotParams = { who: MascotName; x: number; y: number; face?: MascotFace; action?: MascotAction; scale?: number; look?: number; headTilt?: number; prop?: boolean; surface?: SurfaceName };
 
 const drawMascot = (p: MascotParams): Drawn => {
   const ch = CAST()[p.who];
@@ -278,7 +324,7 @@ const drawMascot = (p: MascotParams): Drawn => {
     showProp ? g({ "data-part": "prop" }, ...ch.prop!()) : null,
     ...(front ? arms : []),
   );
-  return drawn([root]);
+  return drawn([p.surface === "dark" ? darken(root) : root]);
 };
 
 // ---------------------------------------------------------------- emotes (emotes.ts)
@@ -289,7 +335,7 @@ const rays = (cx: number, cy: number, r1: number, r2: number, n: number, from = 
     return el("path", { d: `M${r(cx + r1 * Math.cos(a))},${r(cy + r1 * Math.sin(a))} L${r(cx + r2 * Math.cos(a))},${r(cy + r2 * Math.sin(a))}`, stroke: ink(), "stroke-width": 6, "stroke-linecap": "round" });
   });
 const EO = () => ({ stroke: ink(), "stroke-width": 5, "stroke-linejoin": "round" as const, "stroke-linecap": "round" as const });
-const disc = (cx: number, cy: number, r: number, fill: string) => [el("circle", { cx: cx + 6, cy: cy + 6, r, fill: ink() }), el("circle", { cx, cy, r, fill, ...EO() })];
+const disc = (cx: number, cy: number, r: number, fill: string) => [hard(el("circle", { cx: cx + 6, cy: cy + 6, r, fill: ink() })), el("circle", { cx, cy, r, fill, ...EO() })];
 const zed = (x: number, y: number, s: number) => {
   // A Z of height s with its top-left at (x, y - s): ink casing, caller fill.
   const w = s * 0.72, d = `M${x},${y - s} H${x + w} L${x},${y} H${x + w}`;
@@ -297,7 +343,7 @@ const zed = (x: number, y: number, s: number) => {
     el("path", { d, fill: "none", stroke: c("color.caller"), "stroke-width": s * 0.16, "stroke-linecap": "round", "stroke-linejoin": "round" })];
 };
 
-export type EmoteParams = { kind: EmoteKind; x: number; y: number; scale?: number; burst?: boolean };
+export type EmoteParams = { kind: EmoteKind; x: number; y: number; scale?: number; burst?: boolean; surface?: SurfaceName };
 
 const drawEmote = (p: EmoteParams): Drawn => {
   const { kind, x: cx, y: cy } = p, burst = p.burst ?? true, s = p.scale ?? 1;
@@ -307,7 +353,7 @@ const drawEmote = (p: EmoteParams): Drawn => {
       if (burst) parts.push(el("circle", { cx, cy: cy - 6, r: 62, fill: c("color.transitional"), opacity: 0.35 }), ...rays(cx, cy - 6, 50, 72, 7, -180, 0));
       const bulb = `M${cx - 30},${cy - 10} A34,34 0 1 1 ${cx + 30},${cy - 10} Q${cx + 22},${cy + 6} ${cx + 18},${cy + 22} H${cx - 18} Q${cx - 22},${cy + 6} ${cx - 30},${cy - 10} Z`;
       parts.push(
-        el("path", { d: bulb, fill: ink(), transform: "translate(6 6)" }),
+        hard(el("path", { d: bulb, fill: ink(), transform: "translate(6 6)" })),
         el("path", { d: bulb, fill: c("color.transitional"), ...EO() }),
         el("path", { d: `M${cx - 16},${cy - 22} Q${cx - 12},${cy - 32} ${cx - 2},${cy - 34}`, fill: "none", stroke: c("color.white"), "stroke-width": 6, "stroke-linecap": "round" }),
         el("path", { d: `M${cx - 8},${cy + 22} V${cy} L${cx},${cy + 8} L${cx + 8},${cy} V${cy + 22}`, fill: "none", stroke: ink(), "stroke-width": 4, "stroke-linejoin": "round" }),
@@ -322,7 +368,7 @@ const drawEmote = (p: EmoteParams): Drawn => {
       break;
     case "problem":
       if (burst) parts.push(...rays(cx, cy, 48, 70, 5));
-      parts.push(el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: ink(), transform: "translate(6 6)" }),
+      parts.push(hard(el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: ink(), transform: "translate(6 6)" })),
         el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: c("color.failure"), ...EO() }),
         el("path", { d: `M${cx},${cy - 18} V${cy + 8}`, stroke: ink(), "stroke-width": 9, "stroke-linecap": "round" }),
         el("circle", { cx, cy: cy + 22, r: 5.5, fill: ink() }));
@@ -347,7 +393,8 @@ const drawEmote = (p: EmoteParams): Drawn => {
       break;
   }
   const attrs: Record<string, string> = s === 1 ? { "data-emote": kind, stroke: "none" } : { "data-emote": kind, stroke: "none", transform: `translate(${cx} ${cy}) scale(${s}) translate(${-cx} ${-cy})` };
-  return drawn([g(attrs, ...parts)]);
+  const root = g(attrs, ...parts);
+  return drawn([p.surface === "dark" ? darken(root) : root]);
 };
 
 const unit = { kind: "number", min: 0, exclusiveMin: true, max: 10 } as const;
@@ -365,6 +412,7 @@ export const mascot = definePiece<MascotParams>(
     look: { kind: "number", min: -1, max: 1 },
     headTilt: { kind: "number", min: -30, max: 30 },
     prop: { kind: "boolean" },
+    surface: surfaceParam,
   } satisfies Schema,
   drawMascot,
   ({ who, headTilt }) => (headTilt !== undefined && headTilt !== 0 && who !== "agent" ? [{ path: "headTilt", message: "applies only to the agent" }] : []),
@@ -373,6 +421,6 @@ export const mascot = definePiece<MascotParams>(
 /** One reaction symbol with a fixed meaning, centred on (x, y), beside a head. */
 export const emote = definePiece<EmoteParams>(
   "emote",
-  { kind: { kind: "enum", required: true, values: EMOTE_KINDS }, x: pos(), y: pos(), scale: unit, burst: { kind: "boolean" } } satisfies Schema,
+  { kind: { kind: "enum", required: true, values: EMOTE_KINDS }, x: pos(), y: pos(), scale: unit, burst: { kind: "boolean" }, surface: surfaceParam } satisfies Schema,
   drawEmote,
 );

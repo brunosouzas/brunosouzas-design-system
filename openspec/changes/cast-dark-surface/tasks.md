@@ -7,9 +7,9 @@
 
 ## 2. Code
 
-- [ ] 2.1 Scenario tests for `surface` on `mascot` and `emote`, failing on `main`
-- [ ] 2.2 Apply `spike.diff` (design §1) to `src/pieces/cast.ts`; tests pass
-- [ ] 2.3 Full check: `npm run typecheck && npm run tokens:check && npm run build && npm test`
+- [x] 2.1 Scenario tests for `surface` on `mascot` and `emote`, failing on `main`
+- [x] 2.2 Apply `spike.diff` (design §1) to `src/pieces/cast.ts`; tests pass
+- [x] 2.3 Full check: `npm run typecheck && npm run tokens:check && npm run build && npm test`
 
 ## 3. Delivery
 
