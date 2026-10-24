@@ -35,4 +35,4 @@ Test levels: **unit** (vitest, pure functions), **integration** (vitest, command
 
 - [x] 6.1 ADR 0005 status `accepted`; amendment lines in ADR 0003 (caption default) and ADR 0004 (actions); `AGENTS.md` rules on captions and per-language text point to ADR 0005; README (cast, emotes and meanings, `cast` tokens, the Studio folder); `docs/roadmap.md` row 10 delivered. Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
 - [x] 6.2 Version 0.5.0 with `npm version 0.5.0 --no-git-tag-version`, after reading `release.yml` and `docs/release.md` on `origin/main`. Check: `package.json` and `package-lock.json` show it.
-- [ ] 6.3 Vault: `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`, before `openspec archive`.
+- [x] 6.3 Vault: `architecture.md`, `roadmap.md` and `changelog.md` in `10-personal/projects/brunosouzas-design-system/`, directly on the vault's `main`, before `openspec archive`.
