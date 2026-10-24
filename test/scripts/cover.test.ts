@@ -174,7 +174,7 @@ describe("Cover spec format", () => {
     expect(lines).toHaveLength(2);
     expect(lines[0]).toMatch(/^background: expected one of blush, cobalt, .*, wine, found "pink"$/);
     expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart\)$/);
-    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(51);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(52);
   });
 
   test("Unsafe id", () => {
