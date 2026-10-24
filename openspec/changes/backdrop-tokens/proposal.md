@@ -10,6 +10,7 @@ stackledger's `map-backgrounds` change (AB#134, stackledger PR #39, draft) draws
 - The `surface` group stays closed: each surface now holds exactly thirteen tokens, and a missing backdrop token is an error naming its path.
 - They come out in the three outputs like every surface token (`--ds-surface-light-backdrop-water` in `tokens.css`, `tokens.surface.light.backdropWater` in TypeScript and JSON).
 - Release 0.5.3 (additive tokens asked by a consumer: a patch).
+- A reply for the stackledger session (the flat names, the version, the existing dashed arrow), so its draft spec can rename the four paths.
 
 ## Out of scope
 
