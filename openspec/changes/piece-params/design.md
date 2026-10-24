@@ -10,7 +10,7 @@ Why the radius and not a scale factor: the request measured the published head a
 
 ## 2. `countBadge.textSize`
 
-`textSize` is a number from 6 to 48, default `map.countTextSize` (11). With k = `textSize` / 11: without `height`, the height is `map.countHeight × k` (16k, rounded to two decimals); without `width`, a text of more than one character is `max(height, (6.4 × characters + 8) × k)` wide, the product rounded to two decimals; the baseline is `cy + 4k`. A given `height` or `width` wins, as today. Without `textSize`, k is 1 and every expression is the 0.5.0 one.
+`textSize` is a number from 6 to 48, default `map.countTextSize` (11). With k = `textSize` / 11: without `height`, the height is `map.countHeight × k` (16k, rounded to two decimals); without `width`, a text of more than one character is `max(height, (6.4 × characters + 8) × k)` wide, the product rounded to two decimals unless k is 1 (so `textSize: 11` draws exactly the default); the baseline is `cy + 4k`. A given `height` or `width` wins, as today. Without `textSize`, k is 1 and every expression is the 0.5.0 one.
 
 The room rule ("Room for the outline") applies to the derived height too. When the height comes from `textSize` (no `height` given), the rounded derived height is checked, and a height below 4 × `map.outline` × `inkScale` is reported naming `textSize`, the parameter the caller passed. At `inkScale` 1, `textSize` 8.249 still passes (16 × 8.249 / 11 rounds to 12) and 8.24 does not (11.99).
 

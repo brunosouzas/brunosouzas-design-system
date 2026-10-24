@@ -16,15 +16,19 @@
 - **THEN** its circle has `cy` 41.9, `r` 18.123 and `stroke-width` 3.02, and its text node has `y` 48.95 and `font-size` 18.123
 
 ### Requirement: Count badge text size
-`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k rounded to two decimals) wide; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" checks that rounded height and names `textSize`.
+`countBadge` SHALL take `textSize`, a number from 6 to 48, default `map.countTextSize`. With k = `textSize` / 11: without `height`, the height is `map.countHeight` × k rounded to two decimals; without `width`, a text of two or more characters is max(height, (6.4 × characters + 8) × k) wide, the product rounded to two decimals unless k is 1; the baseline is `cy + 4k`. When the height comes from `textSize`, "Room for the outline" checks that rounded height and names `textSize`.
 
 #### Scenario: Larger count
 - **WHEN** `countBadge` is called with `cx: 0`, `cy: 0`, `textSize: 22` and `text: "1"`, then `text: "12"`, then `text: "1"` with `textSize: 20` and `height: 30`
 - **THEN** the first face is a circle of radius 16 and its text has `y` 8 and `font-size` 22; the second face is a rect 41.6 wide and 32 high; the third face is a circle of radius 15 and its text has `y` 7.27 and `font-size` 20
 
+#### Scenario: Count text size 11 is the default
+- **WHEN** `countBadge({ cx: 13.605, cy: 0, text: "128" })` is called with `textSize: 11` and without it
+- **THEN** both trees are deep-equal
+
 #### Scenario: Count text size bounds
-- **WHEN** `countBadge({ cx: 0, cy: 0, text: "1" })` gets `textSize` 8.25, 8.249, 8.24, 5, 49, or 20 with `height: 10`
-- **THEN** 8.25 and 8.249 (derived height 12 after rounding) draw a circle of radius 6; 8.24 throws a `RangeError` naming `textSize` (derived height 11.99, below 12); 5 and 49 throw naming `textSize`; the last throws naming `height`
+- **WHEN** `countBadge({ cx: 0, cy: 0, text: "1" })` gets `textSize` 48, 6 with `height: 12`, 8.25, 8.249, 8.24, 5, 49, or 20 with `height: 10`
+- **THEN** 48 draws a circle of radius 34.91 with text `y` 17.45 and `font-size` 48; 6 with height 12 a circle of radius 6 with text `y` 2.18 and `font-size` 6; 8.25 and 8.249 (derived height 12 after rounding) draw a circle of radius 6; 8.24 throws a `RangeError` naming `textSize` (derived height 11.99, below 12); 5 and 49 throw naming `textSize`; the last throws naming `height`
 
 ### Requirement: Message arrow heads
 `messageArrow` SHALL take `heads`: `end` (default), `start` or `both`. A head at `from` points at `from` from the first of `c1`, `c2`, `to` that differs from `from` with `controls`, from the horizontal for a `bezier` not drawn straight, else along the segment; the path starts at its base. `both` needs a distance of 20 × `width`. `heads` with `head: false` is rejected naming `heads`; `head: true` is accepted.
