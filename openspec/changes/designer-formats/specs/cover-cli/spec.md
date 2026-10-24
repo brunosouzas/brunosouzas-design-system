@@ -47,7 +47,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 - **THEN** `rings.count` is reported as "unknown parameter: the ring count comes from the format"
 
 ### Requirement: Every spec problem at once
-When a readable spec breaks several rules, the command SHALL print every problem, one line each as `<json path>: <message>`, sorted by path (array indexes as numbers, names by code point), then by message, exit 1 and write nothing. Exceptions: a container with the wrong shape (`pieces` not an array, an entry not an object, an unknown `piece`) is one problem, its children unchecked; a colour literal is reported once at its path and replaces any other problem there, format refusals included; "Language choice" stops at text problems.
+When a readable spec breaks several rules, the command SHALL print every problem as `<json path>: <message>`, sorted by path (indexes as numbers, names by code point), then by message, exit 1 and write nothing. Exceptions: a wrong container (`pieces` not an array, an entry not an object, an unknown `piece`) is one problem, children unchecked; a colour literal is reported once and replaces any other problem at its path, format refusals included; text problems stop the check ("Language choice").
 
 #### Scenario: Problems sorted
 - **WHEN** a spec has a bad `title`, a bad `pieces[10]` and a bad `pieces[2]`
