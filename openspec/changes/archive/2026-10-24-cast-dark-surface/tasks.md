@@ -13,5 +13,5 @@
 
 ## 3. Delivery
 
-- [ ] 3.1 README and `docs/roadmap.md`: `surface` on the cast
-- [ ] 3.2 Version 0.5.2, archive, `openspec validate --specs --strict`
+- [x] 3.1 README and `docs/roadmap.md`: `surface` on the cast
+- [x] 3.2 Version 0.5.2, archive, `openspec validate --specs --strict`
