@@ -148,7 +148,9 @@ Frame by frame (all frames inclusive of the start, exclusive of the end unless s
 | Beat B, emote | `doubt` at 1200, 540; scale `emotePop(f, 142)` until 206, then `leave(f, 206)`; × 2.2; tilt `9·sin((f − 142)/6)` while 142–214 |
 | Beat C, dev | `surprised` 246–272, `worried` 272–316, else `blink` at 70, 120, 200, 350, else `normal`; hop `hop(f, 246, 60, 14)`; squash `squashAfter(f, 260, 0.12)·breathe(f, 40)`; shake `7·sin((f − 246)·2.4)` while 260–274 |
 | Beat C, emote | `problem` at 1740, 510; scale `emotePop(f, 246)` until 310, then `leave(f, 310)`; × 2.2 |
-| End | 330–359 still but for breathing and blinks |
+| End | 320–359 no emote; still but for breathing and the dev's blink at 350. The composition is exempt from the three-second still final frame (ADR 0005, consequences): it is a proof of the cast, not an article scene |
+
+Emotes on screen (design check, frozen by the fixture): `idea` 63–121, `doubt` 143–215, `problem` 247–319, none elsewhere; each starts the frame after its character's face change (62, 142, 246), when its pop leaves 0, and no two overlap.
 
 Emotes and actors are wrapped with `pose` (emote: `x`, `y` at its centre, `tilt`, `scale`); an emote whose scale is ≤ 0.001 is left out.
 
