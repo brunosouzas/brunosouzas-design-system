@@ -44,3 +44,5 @@ Faces stay as drawn (ink on light bodies; `cast.glow` on the agent's dark screen
 ## 4. Fixture
 
 `test/fixtures/cast-dark-0.5.2.json` (SHA-256 `d671f0fccc850b96be826461835db47fb99b67f2acb3c9b31b127dc2c8057805`): `{ version, calls: [{ piece, params, sha256 }] }`, 73 calls: 7 characters × 8 actions, one agent call with every option, 8 emotes × `burst` true/false, all with `surface: "dark"`. Hash = SHA-256 of `toSvg(g({}, ...body, ...text))`. It is committed with the spec, written by the spike's `fixture.mts` on the candidate code.
+
+Codex round 2 (approve-with-fixes): all 130 light and 73 dark hashes replayed and matching; one high finding, the unchanged "Idea without its burst" counts (6/14) contradicted dark (7/15). Fixed by modifying "Emote"; this last fix had no independent review.
