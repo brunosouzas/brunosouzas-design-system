@@ -109,7 +109,7 @@ describe("Faces", () => {
   test("Agent's glowing face", () => {
     const face = (who: "agent" | "dev") => paints(find(root(mascot({ who, x: 0, y: 0, face: "surprised" }).body[0]), "face")!);
     expect([...face("agent")].sort()).toEqual([tokens.cast.glow, tokens.color.white].sort());
-    expect([...face("dev")].every((value) => [tokens.color.ink, tokens.color.white, tokens.cast.mouth].includes(value))).toBe(true);
+    expect([...face("dev")].every((value) => ([tokens.color.ink, tokens.color.white, tokens.cast.mouth] as string[]).includes(value))).toBe(true);
     expect(face("dev").has(tokens.cast.mouth)).toBe(true);
   });
 
