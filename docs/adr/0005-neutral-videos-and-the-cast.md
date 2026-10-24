@@ -28,5 +28,5 @@ Option 2.
 
 - One render and one review per scene instead of one per language; the catalogue keeps supporting localised scenes for the exception.
 - The scene catalogue still registers one composition per language. The first neutral scene (AB#144) changes that rule in its own change; until then the cast is shown by a composition outside the catalogue, the approved motion test.
-- A silent scene is checked with a blind reading (someone narrates the stills without the article) before the owner approves it. That reading is evidence, never approval.
+- A silent scene can be misread. A blind reading (someone narrates the stills without the article) is a useful check to show the owner, as evidence, never as approval; it is not a required step.
 - Videos still do not replace the static diagrams: the diagram carries the detail and the alt text.

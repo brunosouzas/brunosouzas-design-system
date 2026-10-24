@@ -12,7 +12,7 @@ What the approved spike draws, and where each part goes:
 | `cast-motion-test/src/Scene.tsx` | the 12 s motion test, its timing helpers | §7 helpers, §8 composition |
 | `sdd-without-with-spec/{cast,storyboard*,characters,mascots}.ts` | props for the SDD storyboard (laptop, decision chip), earlier drafts | not ported (scene AB#144) |
 
-The spike's code is copied, unchanged in geometry, into `~/.hermes/spikes/design-system/cast-and-emotes/cast.mts` (SHA-256 `0ef4820a…cdbd4`) and `motion-test.mts` (`cfe83abd…beaa8`) on the package's node contract (`el`, `g`, `drawn`, `pose`). That port is the normative drawing: the implementation moves its functions into `src/pieces/cast.ts` and `src/cast/`, replacing the proposed-token lookup with `colour()`, and must reproduce every hash of §9. The port differs from the approved files only in these points, each visible on the gate-1 sheets:
+The spike's code is copied, unchanged in geometry, into `~/.hermes/spikes/design-system/cast-and-emotes/cast.mts` (SHA-256 `8bd766f9…76a80`) and `motion-test.mts` (`cfe83abd…beaa8`) on the package's node contract (`el`, `g`, `drawn`, `pose`). That port is the normative drawing: the implementation moves its functions into `src/pieces/cast.ts` and `src/scenes/cast-motion-test/`, replacing the proposed-token lookup with `colour()`, and must reproduce every hash of §9. The port differs from the approved files only in these points, each visible on the gate-1 sheets:
 
 1. One face drawing for every character (`macs.ts` `face`, with the eye highlight), split into `eyes`, `brows` and `mouth` groups; `proud` is dropped, because it drew the same as `happy`. The requester's eyes gain the highlight.
 2. Hands and feet only with an action (`action: "none"` draws neither), for every character. In `mascots4.ts` they were always drawn.
@@ -42,7 +42,7 @@ Where each character goes: all seven become one piece, `mascot`, usable in cover
 | `headTilt` | number | 0 | -30 to 30 degrees; non-zero only for `agent` (relation problem at `headTilt`: "applies only to the agent") |
 | `prop` | boolean | true | draws the signature prop when `action` is `rest` or `hold` and the character has one |
 
-Output: `body` holds one group `g { data-mascot: <who>, transform: "translate(x y) scale(k) translate(-ax -ay)", stroke: "none" }`, where `k = scale × characterScale` and `(ax, ay)` the character's anchor; `text` is empty. Drawing order inside it: `ground` ellipse, the arms when behind, `legs`, the character's parts, `face`, `prop`, the arms when in front (`hold`, `type`). The transform group means the piece is for covers, diagrams and scenes, not for stackledger's map writer.
+Output: `body` holds one group `g { data-mascot: <who>, transform: "translate(x y) scale(k) translate(-ax -ay)", stroke: "none" }`, where `k = scale × characterScale` and `(ax, ay)` the character's anchor; `text` is empty. Drawing order inside it: `ground` (a group holding the ellipse), the arms when behind, `legs`, the character's parts, `face`, `prop`, the arms when in front (`hold`, `type`). The transform group means the piece is for covers, diagrams and scenes, not for stackledger's map writer.
 
 | `who` | Source | Anchor | Scale | Ground rx | Parts (in order) | Mark | Prop |
 |---|---|---|---|---|---|---|---|
@@ -58,7 +58,7 @@ Colours per character are the `cast` tokens of §6 plus `color.white` (agent, me
 
 ## 3. Faces
 
-`normal`, `blink`, `happy`, `wink`, `surprised`, `worried`, `thinking`, `focused` (gate-1 decision 2). One drawing for all: two eyes 24 apart round the face anchor, brows 22 above (worried, surprised, thinking only), mouth 26 below. The face is ink on every character except the agent, whose face is `cast.glow` on its dark screen (its open mouths are `cast.glow` too; the others' are `cast.mouth`). Face anchors: dev 110, 88; agent 110 (+1.4·headTilt), 58; architect 110, 132; devops 110, 100; data 105, 104; request 105, 82; message 105, 136. Groups: `face` holds `eyes`, `brows` (only when drawn) and `mouth`.
+`normal`, `blink`, `happy`, `wink`, `surprised`, `worried`, `thinking`, `focused` (gate-1 decision 2). One drawing for all: eye centres at horizontal offsets −24 and +24 from the face anchor, brows 22 above (worried, surprised, thinking only), mouth 26 below. The face is ink on every character except the agent, whose face is `cast.glow` on its dark screen (its open mouths are `cast.glow` too; the others' are `cast.mouth`). Face anchors: dev 110, 88; agent 110 (+1.4·headTilt), 58; architect 110, 132; devops 110, 100; data 105, 104; request 105, 82; message 105, 136. Groups: `face` holds `eyes`, `brows` (only when drawn) and `mouth`.
 
 Expression rule (ADR 0005): a face never needs hands. Body acting (squash, tilt, hop, shake) comes from `pose` and the agent's `headTilt`.
 
@@ -128,11 +128,11 @@ Values are the spike's, unchanged. `$description` on `cast.ground` ("Flat ground
 | `squashAfter(frame, at, amp)` | 1 before `at`; then `1 + amp·e^(−d/7)·cos(d/2.2)` with `d = frame − at` |
 | `hop(frame, at, height, len = 14)` | 0 outside `[at, at + len]`; else `height·sin(π·(frame − at)/len)` |
 
-These are the motion test's `pop`, `out`, `blinkAt`, `breathe`, `jiggle` and `hopAt`, renamed.
+These are the motion test's `pop`, `out`, `blinkAt`, `breathe`, `jiggle` and `hopAt`, renamed. Every number they take SHALL be finite, `fps` and `len` greater than 0, and `starts` an array of finite numbers; otherwise the helper throws a `RangeError` naming the first offending parameter in its argument order (`frame` first). `amp` and `height` may be any finite number, negative included.
 
 ## 8. The motion test composition
 
-`src/cast/motion-test.ts` exports `castMotionTestFrame(frame): SvgNode` (pure, the port's `frameTree`), and `src/cast/CastMotionTest.tsx` renders it with `toReact`. `src/Root.tsx` registers it as `cast-motion-test` in a Studio folder `cast`: 1920×1080, `motion.fps`, 360 frames. It is not in `src/scenes/index.ts`, so the catalogue checks, `npm run stills` and `npm run render` do not see it (gate-1 decision 6): it illustrates no article, and ADR 0004 binds catalogue scenes to articles. It renders from the Studio or with `npx remotion render src/index.ts cast-motion-test`.
+`src/scenes/cast-motion-test/frames.ts` exports `castMotionTestFrame(frame): SvgNode` (pure, the port's `frameTree`), and `src/scenes/cast-motion-test/CastMotionTest.tsx` renders it with `toReact`. The folder sits under `src/scenes/`, so the colour-literal rule of `motion-components` covers it, but it is not registered as a scene. `src/Root.tsx` registers it as `cast-motion-test` in a Studio folder `cast`: 1920×1080, `motion.fps`, 360 frames. It is not in `src/scenes/index.ts`, so the catalogue checks, `npm run stills` and `npm run render` do not see it (gate-1 decision 6): it illustrates no article, and ADR 0004 binds catalogue scenes to articles. It renders from the Studio or with `npx remotion render src/index.ts cast-motion-test`.
 
 Frame by frame (all frames inclusive of the start, exclusive of the end unless said):
 
@@ -154,7 +154,7 @@ Emotes and actors are wrapped with `pose` (emote: `x`, `y` at its centre, `tilt`
 
 ## 9. Frozen look
 
-`test/fixtures/cast-0.5.0.json` (SHA-256 `0f07efa7a386614c18842f5f7660bee1d23d558056695301706b5c27b1b0c365`), committed with this spec, written by `fixture.mts` in the spike folder from the port:
+`test/fixtures/cast-0.5.0.json` (SHA-256 `266e3a021c5285594749884f53dc9faa1ef8132629b04620a690eb0c1b4ba302`), committed with this spec, written by `fixture.mts` in the spike folder from the port:
 
 - `pieces`: 130 calls with their parameters and `sha256` of `toSvg(g({}, ...body, ...text))`: every character in every face (56), every character in every action except `none` (49), every character at x 300, y 500, `happy`, `rest`, scale 1.9, look 1, no prop (7), the agent with `thinking`, headTilt 12, look −1, and with headTilt −8, `wave` (2), every emote at 0, 0 (8) and at 100, 50, scale 2.2, no burst (8).
 - `frames`: `sha256` of `toSvg(castMotionTestFrame(f))` for f = 0 to 359.

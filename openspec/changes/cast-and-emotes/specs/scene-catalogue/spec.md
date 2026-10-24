@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Cast motion test
-The Studio SHALL register the approved cast motion test as composition `cast-motion-test` in a folder `cast`: 1920×1080, `motion.fps`, 360 frames, no words. It SHALL draw `castMotionTestFrame(frame)` from `src/cast/motion-test.ts`, the timeline of design §8 of `cast-and-emotes`. It SHALL NOT be a catalogue scene: it illustrates no article (ADR 0004), so it is not in `src/scenes/index.ts`.
+The Studio SHALL register the approved cast motion test as composition `cast-motion-test` in a folder `cast`: 1920×1080, `motion.fps`, 360 frames, no words. It SHALL draw `castMotionTestFrame(frame)` from `src/scenes/cast-motion-test/frames.ts`, the timeline of design §8 of `cast-and-emotes`. It SHALL NOT be a catalogue scene: it illustrates no article (ADR 0004), so it is not in `src/scenes/index.ts`.
 
 #### Scenario: Registered outside the catalogue
 - **WHEN** the Studio root is loaded
