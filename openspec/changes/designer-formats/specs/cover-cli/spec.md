@@ -132,7 +132,7 @@ The repository SHALL keep as spec fixtures, with their golden SVG output: the th
 ## ADDED Requirements
 
 ### Requirement: Diagram output
-When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (800) wide and `round(height × width / layoutWidth)` high, with `viewBox="0 0 560 <height>"` (`bodyDiagram.layoutWidth`), and the attributes, `title`, `desc` and LF ending of a cover. The clip-path `<id>-frame` and the panel rect, filled `color.panel`, have `rx` `bodyDiagram.radius × 560 / 800` (9.8). Then come the clipped rings, then one group clipped by `<id>-frame` holding the outlined group and the label group.
+When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (800) wide and `height × width / layoutWidth` high (two decimals), with `viewBox="0 0 560 <height>"` (`bodyDiagram.layoutWidth`), and a cover's attributes, `title`, `desc` and LF ending. The clip-path `<id>-frame` and the panel rect, filled `color.panel`, have `rx` `bodyDiagram.radius × 560 / 800` (9.8). Then come the clipped rings, then one group clipped by `<id>-frame` holding the outlined group and the label group.
 
 #### Scenario: Diagram frame
 - **WHEN** a diagram spec with `height` 322 and one `diagramBox` is built
@@ -140,7 +140,7 @@ When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (80
 
 #### Scenario: Smallest diagram
 - **WHEN** a diagram spec has `height` 1
-- **THEN** the root has `height="1"` and `viewBox="0 0 560 1"`, and the command writes it
+- **THEN** the root has `width="800" height="1.43"` and `viewBox="0 0 560 1"`, so the panel still fills the 800 width at the scale 800 / 560, and the command writes it
 
 ### Requirement: Diagram keys
 A diagram spec SHALL need `height`, a number from 1 to 10000 in layout units, and refuse `background` with "a diagram is drawn on color.panel; background is for covers and banners". A cover or banner spec SHALL refuse `height` with "only a diagram takes a height". A cover or banner still needs `background`.
@@ -233,15 +233,15 @@ A spec MAY have `text`, an object of one or more languages matching `^[a-z]{2}(-
 - **THEN** each is reported at its path and nothing is written
 
 ### Requirement: Text references
-With `text`, the command SHALL replace every string outside `text` that is exactly `@<key>` by that key's value in the table `--lang` names, once (a value is not resolved again), then check and draw the result; a problem keeps the reference's path. A reference to a key the tables lack is reported at its path as "unknown text key <key>". Without `text`, every string is drawn as written.
+With `text`, the command SHALL replace every string outside `text` that is exactly `@<key>` by that key's value in the table `--lang` names, once (a value is not resolved again), then check and draw the result; a problem keeps the reference's path. A reference to a key the tables lack is reported at its path as "unknown text key <key>", which replaces any other problem at that path; other paths are checked as usual. Without `text`, every string is drawn as written.
 
 #### Scenario: One spec, two languages
 - **WHEN** the `circuit-breaker-states` fixture is built with `--lang pt` and with `--lang en`
 - **THEN** each output equals its golden, the edge labels carry that language's lines, and the title is `Estados do circuit breaker` or `Circuit breaker states`
 
 #### Scenario: Unknown key
-- **WHEN** a spec with `text` has `pieces[3].lines: "@opne"`
-- **THEN** `pieces[3].lines` is reported as "unknown text key opne"
+- **WHEN** a spec with `text` has `pieces[3].lines: "@opne"` (an `edgeLabel`) and `title: ""`
+- **THEN** exactly two problems are printed: `pieces[3].lines: unknown text key opne` and `title: expected a non-empty string`
 
 #### Scenario: Value of the wrong type
 - **WHEN** `text.en.open` is an array and `pieces[0]` is a `pill` with `text: "@open"`

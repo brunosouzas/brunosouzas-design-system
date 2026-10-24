@@ -12,7 +12,7 @@ Tokens: `bodyDiagram.width` 800, `layoutWidth` 560, `radius` 14, `ringRadius` 70
 
 ## 2. Frame of a diagram
 
-Order: `title`, `desc`, `defs` with the clip path (rect `rx` 9.8), panel rect (`rx` 9.8, `color.panel`), the rings clipped by `<id>-frame`, then one group clipped by `<id>-frame` holding the outlined group (ink, `map.outline` 3, round joins) and the label group (`map.labelSize` 13, `cover.labelWeight`, ink, middle). Root: `width` 800, `height` `round(height × 800 / 560)`, `viewBox="0 0 560 <height>"`. When the rounded height is not exact, the image keeps its viewBox and is letterboxed by under half a pixel; the consumer picks heights such as 322 (shown 460) when it wants an exact one.
+Order: `title`, `desc`, `defs` with the clip path (rect `rx` 9.8), panel rect (`rx` 9.8, `color.panel`), the rings clipped by `<id>-frame`, then one group clipped by `<id>-frame` holding the outlined group (ink, `map.outline` 3, round joins) and the label group (`map.labelSize` 13, `cover.labelWeight`, ink, middle). Root: `width` 800, `height` `height × 800 / 560` rounded to two decimals, `viewBox="0 0 560 <height>"`. Rounding to whole pixels would change the scale of small diagrams (`height` 1 would show 560 wide in an 800 box); two decimals keep the scale within 0.005 px at any height. Heights such as 322 (shown 460) give whole pixels.
 
 The rings are drawn by the frame (circles in one stroked group), not by the `rings` piece, whose step and width are the cover's and whose `count` stops at 1000. A diagram's count can reach 1155 (`height` 10000, centre at -10000, -10000, radius near 0).
 
