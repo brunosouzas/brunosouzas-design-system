@@ -1,6 +1,6 @@
 {
   "name": "@brunosouzas/design-system",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Design tokens and illustration pieces of brunosouzas.com: tokens as CSS, JSON and TypeScript, pieces that draw SVG (and React), and a cover command.",
   "license": "Apache-2.0",
   "repository": {
