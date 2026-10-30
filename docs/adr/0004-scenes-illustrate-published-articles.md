@@ -1,6 +1,6 @@
 # ADR 0004: Scenes illustrate published articles
 
-- Status: accepted
+- Status: accepted (amended 2026-10-24 and 2026-10-30)
 - Date: 2026-10-22
 
 ## Context
@@ -26,3 +26,9 @@ Option 2. A scene names its source article, and every string it shows exists in 
 ## Amendment, 2026-10-24 (AB#152)
 
 Actions are claims too: every gesture, reaction and event in a scene names the article line that supports it ([ADR 0005](0005-neutral-videos-and-the-cast.md)). A neutral scene has no per-language text table, because it shows no words.
+
+## Amendment, 2026-10-30 (AB#234)
+
+The design system is used beyond the blog: other sites, LinkedIn posts, pages. The guarantee stays and its source widens. A scene or piece shows only words, facts and actions that come from an **approved source**: a published article of the blog (or its approved diagram labels), or a post or page Bruno approved for publication. It names that source, and it never states what the source does not.
+
+Catalogue scenes in `src/scenes/` keep illustrating published articles until a change to the `scene-catalogue` spec says how another source is named there.
