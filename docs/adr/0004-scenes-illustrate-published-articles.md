@@ -1,6 +1,6 @@
 # ADR 0004: Scenes illustrate published articles
 
-- Status: accepted (amended 2026-10-24 and 2026-10-30)
+- Status: accepted
 - Date: 2026-10-22
 
 ## Context
@@ -29,6 +29,6 @@ Actions are claims too: every gesture, reaction and event in a scene names the a
 
 ## Amendment, 2026-10-30 (AB#234)
 
-The design system is used beyond the blog: other sites, LinkedIn posts, pages. The guarantee stays and its source widens. A scene or piece shows only words, facts and actions that come from an **approved source**: a published article of the blog (or its approved diagram labels), or a post or page Bruno approved for publication. It names that source, and it never states what the source does not.
+The design system is used beyond the blog: other sites, LinkedIn posts, pages. The guarantee stays and its source widens. A scene or piece shows only words, facts and actions that come from an **approved source**: a published article of the blog (or its approved diagram labels), or a post or page the owner approved for publication. It names that source, and it never states what the source does not.
 
-Catalogue scenes in `src/scenes/` keep illustrating published articles until a change to the `scene-catalogue` spec says how another source is named there.
+Catalogue scenes in `src/scenes/` keep illustrating published articles until a change to the `scene-catalogue` spec says how another source is named there. Two consequences above now apply to catalogue scenes only: a scene for something not yet published waits for the article, and the Portuguese and English versions mirror the two published versions. A piece for an approved post or page can exist in the language of its source only. Outside the catalogue, ADR 0005's "article line" reads as the line of the approved source.

@@ -10,8 +10,10 @@ context: |
   scenes renders each one per format (16:9 article, 4:5 LinkedIn) and per
   language (Portuguese, English) from one text table.
 
-  Every on-screen string of a scene comes from an approved, published article
-  of the blog; scenes never add claims. Renders are reproducible from code:
+  Every on-screen string of a scene or piece comes from an approved source: a
+  published article of the blog, or a post or page the owner approved for
+  publication (ADR 0004); catalogue scenes come from published articles; scenes
+  and pieces never add claims. Renders are reproducible from code:
   no hand-edited video. The site itself lives in another repository and only
   consumes the exported tokens.
 
