@@ -5,6 +5,10 @@ The public visual identity of the blog brunosouzas.com: one source of design tok
 ## Technology
 
 Stack: TypeScript, Node.js, React, Remotion, vitest, GitHub Actions, OpenSpec, npm package
+Delivery: B package (npm `@brunosouzas/design-system`)
+Integration branch: `main`
+Trivial: none
+Deliver and verify: a release pull request that bumps `version` in `package.json`; `release.yml` publishes after Bruno approves the `npm` environment (`docs/release.md`); verify with `npm view @brunosouzas/design-system version`
 
 Layout: `tokens/source.json` (the only place token values are written) generates `tokens/generated/` (committed; never edit by hand); `src/brand/` holds the motion components and their frame logic (`motion.ts`); `src/scenes/<scene>/` holds each scene (`scene.ts` data without React, `layout.ts`, `Scene.tsx`); `scripts/` holds the token build and the stills and render commands; `test/` the vitest suites. Node.js 22.12 or later.
 
