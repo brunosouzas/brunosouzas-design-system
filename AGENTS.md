@@ -23,7 +23,7 @@ Layout: `tokens/source.json` (the only place token values are written) generates
 
 - Integration branch: `main`.
 - Releases to npm (`@brunosouzas/design-system`, org `brunosouzas`) only through `release.yml`: the merge of the release pull request that release-please keeps (it changes `version` in `package.json`), or a version tag pushed by the owner, then the owner-approved environment `npm`; see `docs/release.md`. Never publish from a local agent session, and never edit the release pull request: release-please rewrites it. The package ships only `dist/` and `tokens/generated/` and has no runtime dependency.
-- Commit messages and pull request titles are Conventional Commits: release-please releases only feat and fix.
+- Commit messages and pull request titles are Conventional Commits: release-please releases feat, fix, perf and revert; other types release nothing.
 - Board area: `site` (Azure Boards, project `brunosouzas`).
 - OpenSpec: yes, see `openspec/`. The order of the planned changes is in `docs/roadmap.md`.
 - Project-wide decisions are ADRs in `docs/adr/` (index in `docs/adr/README.md`). Read them before a design; a change that contradicts one needs a new ADR that supersedes it.
