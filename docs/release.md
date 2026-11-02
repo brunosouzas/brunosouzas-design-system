@@ -1,6 +1,6 @@
 # Releasing @brunosouzas/design-system
 
-A version reaches npm when a commit on `main` changes the `version` in `package.json` (the version pull request is merged) and the owner approves the publishing job; the workflow then creates the tag `v<major>.<minor>.<patch>` and the GitHub release. The owner can also push the tag by hand, as before (to retry, or to release a version whose run he rejected). The workflow is [`.github/workflows/release.yml`](../.github/workflows/release.yml). This page says how to release, how the very first version is set up, and how to check what was published.
+A version reaches npm when a commit on `main` changes the `version` in `package.json` (the release pull request that release-please keeps is merged) and the owner approves the publishing job; the workflow then creates the tag `v<major>.<minor>.<patch>` and the GitHub release. The owner can also push the tag by hand, as before (to retry, or to release a version whose run he rejected). The workflow is [`.github/workflows/release.yml`](../.github/workflows/release.yml). This page says how to release, how the very first version is set up, and how to check what was published.
 
 ## What the workflow does
 
@@ -24,8 +24,8 @@ If a run fails part way (npm down after the tag was reserved, or the GitHub rele
 
 ## Releasing a version
 
-1. In a pull request, set the new version: `npm version 0.2.0 --no-git-tag-version` (it updates `package.json` and `package-lock.json`). The version may travel with the change it releases or in a pull request of its own; the diff shows the line `"version": "0.2.0"`, and that line is what releases.
-2. Merge it. The run of that merge in the Actions tab goes through `detect` and `check`, then the `publish` job waits for you: review it and approve. To not release it, reject the run; nothing is published and no tag is created.
+1. The release pull request. On every push to `main`, [`.github/workflows/release-pr.yml`](../.github/workflows/release-pr.yml) runs [release-please](https://github.com/googleapis/release-please) through the shared workflow of `brunosouzas/github-reusable-workflows`, acting as the GitHub App `brunosouzas-release` (a pull request opened with the workflow's own token would start no checks). It reads the commits merged since the last release and keeps one pull request open, `chore(main): release <version>`, that sets the new `version` in `package.json` and `package-lock.json`, adds the version's section to `CHANGELOG.md` and records it in `.release-please-manifest.json`. Pull request titles are [Conventional Commits](https://www.conventionalcommits.org/), because the squash merge makes the title the commit release-please reads: `feat:` makes a minor version, `fix:` and `perf:` a patch, and a breaking change (`!`) a minor version while the version is 0.x (`bump-minor-pre-major` in `release-please-config.json`); `chore:`, `docs:`, `ci:`, `build:`, `refactor:` and `test:` release nothing. To force a version, merge a commit with the footer `Release-As: 1.0.0`. release-please only opens that pull request (`skip-github-release`): the tag and the GitHub release stay with `release.yml`, as described above. Never edit the release pull request by hand; release-please rewrites it on every merge.
+2. Merge the release pull request. The run of that merge in the Actions tab goes through `detect` and `check`, then the `publish` job waits for you: review it and approve. To not release it, reject the run; nothing is published and no tag is created.
 3. Check the result (see [Checking a release](#checking-a-release)): the version on npm with provenance, and the tag and GitHub release `v0.2.0`.
 
 **By hand, or to retry.** Tag the commit on `main` and push the tag:
