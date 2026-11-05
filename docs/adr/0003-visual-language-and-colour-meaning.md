@@ -1,6 +1,6 @@
 # ADR 0003: Visual language and fixed colour meanings
 
-- Status: accepted
+- Status: superseded by [ADR 0006](0006-three-layer-tokens-and-brand-colour.md)
 - Date: 2026-10-22
 
 ## Context
@@ -43,3 +43,7 @@ A metro map marks a station's state with small markers, and they keep the meanin
 ## Amendment, 2026-10-24 (AB#152)
 
 The caption is no longer the default in animation: [ADR 0005](0005-neutral-videos-and-the-cast.md) makes new videos language-neutral, with a caption only when the motion cannot explain itself. The scenes that have one keep it. The three-second still final frame stays for article scenes. The cast's colours are identities, not states, and never take a state colour's hue.
+
+## Superseded, 2026-11-05 (AB#268)
+
+[ADR 0006](0006-three-layer-tokens-and-brand-colour.md) replaces this ADR's colour system with a three-layer architecture (primitive → semantic → component) covering the whole package, brand/site colour included. The six meanings and the outline/shadow rules recorded above keep their exact values and meaning, now at `color.state.*` (aliased from the paths above for one release); this ADR stays for its history and is no longer the place new colour decisions are recorded.
