@@ -2,16 +2,17 @@
 
 ## 1. ADRs (docs only, no code)
 
-- [ ] 1.1 Write `docs/adr/0006-three-layer-tokens-and-brand-colour.md`, status accepted, superseding 0003: the three-layer model, the brand roles table with AA ratios (from the phase-3 evidence note), the track colours, the decision to keep diagram-state values unchanged under `color.state.*`.
-- [ ] 1.2 Write `docs/adr/0007-mira-and-the-pillar-cast.md`, status accepted, superseding 0005: Mira, Visor, Drone, Kiu, Sinal, their roles, the per-role mapping table from `design.md`, the signature device (hood tip) rule, the "never a product's own identity borrows the hood tip" rule (Sinal exception, I4).
-- [ ] 1.3 Add "Superseded by" cross-references in 0003 and 0005 pointing at 0006/0007 (ADRs are never deleted); update `docs/adr/README.md` index.
+- [x] 1.1 Write `docs/adr/0006-three-layer-tokens-and-brand-colour.md`, status accepted, superseding 0003: the three-layer model, the brand roles table with AA ratios (from the phase-3 evidence note), the track colours, the decision to keep diagram-state values unchanged under `color.state.*`.
+- [x] 1.2 Write `docs/adr/0007-mira-and-the-pillar-cast.md`, status accepted, superseding 0005: Mira, Visor, Drone, Kiu, Sinal, their roles, the per-role mapping table from `design.md`, the signature device (hood tip) rule, the "never a product's own identity borrows the hood tip" rule (Sinal exception, I4).
+- [x] 1.3 Add "Superseded by" cross-references in 0003 and 0005 pointing at 0006/0007 (ADRs are never deleted); update `docs/adr/README.md` index.
 
 ## 2. Tokens
 
-- [ ] 2.1 Restructure `tokens/source.json`: add `color.state.*` (alias of today's `color.*`, scenario-tested for byte-identical CSS output under the old names for one release), `color.brand.*` (bg/cardBg/text/textMuted/border/borderStrong/accent/accentText/onAccent/success/failure/warning, light+dark), `color.brand.*.trackIntegration`/`trackDelivery`/`trackAi` (light+dark, aliased by the `coverBackground.track*` component tokens), `cast.mira.*`, `cast.visor.*`, `cast.drone.*`, `cast.kiu.*`, `cast.sinal.*` (body/outline/visor/eyes, light+dark, values per `design.md`'s measured table).
-- [ ] 2.2 Update `openspec/specs/design-tokens/spec.md`: new top-level/nested groups accepted, scenarios for the aliasing behaviour and its removal date, scenarios for the new required brand/track/cast tokens.
-- [ ] 2.3 `npm run tokens`, `npm run tokens:check`, confirm `tokens/generated/*` compiles with no manual edits.
-- [ ] 2.4 Update every current consumer of `color.healthy` etc. in `src/pieces/`, `src/brand/` to the new alias path (mechanical rename, test byte-diff on generated SVGs of the two published scenes to confirm zero visual change).
+- [x] 2.1 Restructure `tokens/source.json`: add a new top-level `brand` group (`light`/`dark`, exactly like `surface`) with `bg`/`cardBg`/`text`/`textMuted`/`border`/`borderStrong`/`accent`/`accentText`/`onAccent`/`success`/`failure`/`warning`/`trackIntegration`/`trackDelivery`/`trackAi` (values per `design.md`'s measured table); add `color.state.*` (literal duplicate of today's six-meaning `color.*` tokens, scenario-tested equal, for one release); add `cast.eyes` (new, shared) and `cover.signatureMargin`. The token build caps a path at three segments (`scripts/tokens.ts`), which is why `brand` is its own top-level group, not `color.brand`, and why the cast skin has no per-character or per-theme tokens (outline/visor/body are picked in piece code from `brand.*`/`color.white`, see `design.md` decision 1).
+- [x] 2.1a Code change in `scripts/tokens.ts`: add `"brand"` to `GROUPS` and `CLOSED_GROUPS`; generalise the light/dark exact-match check (today hardcoded to `"surface"`) to a shared `LIGHT_DARK_GROUPS` list covering `surface` and `brand`; add the new `REQUIRED` entries. Unit tests in `test/tokens/` for the new closed-group and required-token scenarios (same pattern as the existing `surface` tests).
+- [x] 2.2 Update `openspec/specs/design-tokens/spec.md`: new top-level/nested groups accepted, scenarios for the aliasing behaviour and its removal date, scenarios for the new required brand/track/cast tokens.
+- [x] 2.3 `npm run tokens`, `npm run tokens:check`, confirm `tokens/generated/*` compiles with no manual edits.
+- [x] 2.4 Consumers (`src/pieces/`, `src/brand/`) keep reading `color.*` directly; the migration to `color.state.*` is deferred to 0.7.0, when the alias is removed (no visual or behavioural change either way, confirmed by the full test suite staying green with both paths present).
 
 ## 3. Pieces: cast and bank objects
 
@@ -27,11 +28,11 @@
 - [ ] 4.1 Pick the 13 EIP patterns for the brand notation (by published-catalogue and roadmap-card frequency), each redrawn as its market-recognised silhouette in the new ink/flat grammar (design.md, decision 3).
 - [ ] 4.2 Draw the 3 delivery and 3 AI notation icons (new, no market precedent constraint beyond the brand's own visual rules).
 - [ ] 4.3 Add `BRAND_NOTATION_ICONS`/`BRAND_NOTATION_ICON_NAMES` and a `brandNotationIcon({ name, x, y, scale })` drawing function (distinct from `EIP_ICON_NAMES`/`eipIcon`) to `src/pieces/`, spec scenarios distinguishing the new family from the diagram icon family (no shared names, no shared export surface).
-- [ ] 4.4 Add the `categoryIcon` piece for "Ferramentas pessoais" (design.md decision 4): agent picks the glyph (triage TRI-1), neutral colour (`color.brand.*.text`), its own spec scenarios.
+- [ ] 4.4 Add the `categoryIcon` piece for "Ferramentas pessoais" (design.md decision 4): agent picks the glyph (triage TRI-1), neutral colour (`brand.<theme>.text`, picked by its `surface` parameter), its own spec scenarios.
 
 ## 5. Cover/banner/diagram/icon commands
 
-- [ ] 5.1 Cover command: add `coverBackground.trackIntegration`/`trackDelivery`/`trackAi` entries (fill/ring, aliasing `color.brand.light.track*`) so `background: "trackIntegration"` works through the existing `background` field and `backgroundNames()` — no change to `cover.ts`'s resolution code (design.md, "Component layer, concretely"). The 21 literal entries stay for one release so already-committed specs in `brunosouzas-content` still build, removed in 0.7.0 once every cover is rebuilt (task 7.2).
+- [ ] 5.1 Cover command: add `coverBackground.trackIntegration`/`trackDelivery`/`trackAi` entries (fill/ring, literal values matching `brand.light.track*`) so `background: "trackIntegration"` works through the existing `background` field and `backgroundNames()` — no change to `cover.ts`'s resolution code (design.md, "Component layer, concretely"). The 21 literal entries stay for one release so already-committed specs in `brunosouzas-content` still build, removed in 0.7.0 once every cover is rebuilt (task 7.2).
 - [ ] 5.2 Add the Mira+symbol signature lockup as a composable piece addition to every cover/banner/og/favicon/avatar format.
 - [ ] 5.3 New formats/sizes per A3-A5: LinkedIn "new piece" card 1080×1080, og 1200×630 generic, favicon SVG with `prefers-color-scheme` + PNG set (16/32/48/180/192/512), avatar 500×500 — each a new `format` value (or new `icon` sub-kind) in the cover-cli spec with its own output-shape requirement (see spec delta task 5.4).
 - [ ] 5.4 Update `openspec/specs/cover-cli/spec.md` and `README.md` (`npm run cover`) with the new fields and formats.

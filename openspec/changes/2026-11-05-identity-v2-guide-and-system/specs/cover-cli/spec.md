@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Track cover backgrounds
-`coverBackground` SHALL gain three entries, `trackIntegration`, `trackDelivery`, `trackAi`, each with `fill` and `ring` (`color`) aliasing `color.brand.light.track*`, usable as a cover, banner or diagram spec's `background` like any existing entry. The 21 existing literal entries SHALL remain accepted for this release.
+`coverBackground` SHALL gain three entries, `trackIntegration`, `trackDelivery`, `trackAi`, each with `fill` and `ring` (`color`) aliasing `brand.light.track*`, usable as a cover, banner or diagram spec's `background` like any existing entry. The 21 existing literal entries SHALL remain accepted for this release.
 
 #### Scenario: Track background accepted
 - **WHEN** a cover spec has `background: "trackIntegration"`

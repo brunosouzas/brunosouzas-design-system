@@ -50,11 +50,11 @@ The package SHALL export a brand notation icon set, distinct from `EIP_ICON_NAME
 - **THEN** it returns a valid `{ body, text }` tree, and calling it with a name outside `BRAND_NOTATION_ICON_NAMES` throws a `RangeError` naming `name`
 
 ### Requirement: Category icon
-The package SHALL export a `categoryIcon` piece for a site category that has no notation or diagram icon, called as `categoryIcon({ category, x, y, scale })`. For this change, `category` accepts `"personalTools"` and is drawn in `color.brand.*.text` (neutral: no track colour), per `design.md`'s decision 4.
+The package SHALL export a `categoryIcon` piece for a site category that has no notation or diagram icon, called as `categoryIcon({ category, x, y, scale, surface })`. For this change, `category` accepts `"personalTools"` and is drawn in `brand.<theme>.text` (neutral: no track colour), per `design.md`'s decision 4.
 
 #### Scenario: Personal tools category icon
 - **WHEN** `categoryIcon({ category: "personalTools", x: 0, y: 0, surface: "light" })` is called
-- **THEN** it returns a valid `{ body, text }` tree whose only colour is `color.brand.light.text`
+- **THEN** it returns a valid `{ body, text }` tree whose only colour is `brand.light.text`
 
 #### Scenario: Unknown category rejected
 - **WHEN** `categoryIcon` is called with `category: "news"`

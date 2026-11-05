@@ -31,7 +31,7 @@ const driftedPairs = (source: Source): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, map, site, banner, bodyDiagram, cast\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, brand, map, site, banner, bodyDiagram, cast\)/),
     ]);
   });
 
@@ -99,6 +99,7 @@ describe("Required cover tokens", () => {
       ringRadius: 90,
       ringStep: 28,
       ringWidth: 2,
+      signatureMargin: 24,
       width: 800,
     });
   });
@@ -138,7 +139,7 @@ describe("Cover background pairs", () => {
 
 describe("Measured cover backgrounds", () => {
   test("Source matches the measured table", () => {
-    expect(Object.keys(measured)).toHaveLength(21);
+    expect(Object.keys(measured)).toHaveLength(24);
     expect(driftedPairs(repoSource())).toEqual([]);
     expect(tokens.coverBackground.blush).toEqual({ fill: "#F6CFE0", ring: "#ECBAD0" });
   });
@@ -201,6 +202,7 @@ describe("Required cast tokens", () => {
       data: { fill: "#8C6CF0", lid: "#C2B1FF", shine: "#B39CFF", lens: "#EAF1FF" },
       request: { shine: "#D6E2FF" },
       emotePop: { damping: 9, stiffness: 170, mass: 0.7 },
+      eyes: "#FFC98A",
     });
     expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-cast-dev-fill: #5B7CFA;");
   });

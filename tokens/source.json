@@ -1,245 +1,1201 @@
 {
   "color": {
-    "ink": { "$value": "#0A1033", "$type": "color", "$description": "Outline, shadow and text." },
-    "white": { "$value": "#FFFFFF", "$type": "color" },
-    "panel": { "$value": "#EEF2FF", "$type": "color", "$description": "Background panel of scenes and diagrams." },
-    "ring": { "$value": "#E0E7FB", "$type": "color", "$description": "Concentric rings on the panel." },
-    "healthy": { "$value": "#3DDC84", "$type": "color", "$description": "Healthy or normal (CLOSED)." },
-    "blocked": { "$value": "#FF8A3D", "$type": "color", "$description": "Blocked or fail-fast (OPEN)." },
-    "transitional": { "$value": "#FFD25A", "$type": "color", "$description": "Transitional (HALF_OPEN)." },
-    "caller": { "$value": "#8FB2FF", "$type": "color", "$description": "The caller." },
-    "backend": { "$value": "#FF6B6B", "$type": "color", "$description": "The backend." },
-    "failure": { "$value": "#E04848", "$type": "color", "$description": "The failure path." },
-    "failFast": { "$value": "#E0661F", "$type": "color", "$description": "Text and lines of a fail-fast path." }
+    "ink": {
+      "$value": "#0A1033",
+      "$type": "color",
+      "$description": "Outline, shadow and text."
+    },
+    "white": {
+      "$value": "#FFFFFF",
+      "$type": "color"
+    },
+    "panel": {
+      "$value": "#EEF2FF",
+      "$type": "color",
+      "$description": "Background panel of scenes and diagrams."
+    },
+    "ring": {
+      "$value": "#E0E7FB",
+      "$type": "color",
+      "$description": "Concentric rings on the panel."
+    },
+    "healthy": {
+      "$value": "#3DDC84",
+      "$type": "color",
+      "$description": "Healthy or normal (CLOSED)."
+    },
+    "blocked": {
+      "$value": "#FF8A3D",
+      "$type": "color",
+      "$description": "Blocked or fail-fast (OPEN)."
+    },
+    "transitional": {
+      "$value": "#FFD25A",
+      "$type": "color",
+      "$description": "Transitional (HALF_OPEN)."
+    },
+    "caller": {
+      "$value": "#8FB2FF",
+      "$type": "color",
+      "$description": "The caller."
+    },
+    "backend": {
+      "$value": "#FF6B6B",
+      "$type": "color",
+      "$description": "The backend."
+    },
+    "failure": {
+      "$value": "#E04848",
+      "$type": "color",
+      "$description": "The failure path."
+    },
+    "failFast": {
+      "$value": "#E0661F",
+      "$type": "color",
+      "$description": "Text and lines of a fail-fast path."
+    },
+    "state": {
+      "healthy": {
+        "$value": "#3DDC84",
+        "$type": "color"
+      },
+      "blocked": {
+        "$value": "#FF8A3D",
+        "$type": "color"
+      },
+      "transitional": {
+        "$value": "#FFD25A",
+        "$type": "color"
+      },
+      "caller": {
+        "$value": "#8FB2FF",
+        "$type": "color"
+      },
+      "backend": {
+        "$value": "#FF6B6B",
+        "$type": "color"
+      },
+      "failure": {
+        "$value": "#E04848",
+        "$type": "color"
+      },
+      "failFast": {
+        "$value": "#E0661F",
+        "$type": "color"
+      }
+    }
   },
   "outline": {
-    "block": { "$value": 4, "$type": "dimension" },
-    "arrow": { "$value": 4, "$type": "dimension" },
-    "small": { "$value": 3, "$type": "dimension" }
+    "block": {
+      "$value": 4,
+      "$type": "dimension"
+    },
+    "arrow": {
+      "$value": 4,
+      "$type": "dimension"
+    },
+    "small": {
+      "$value": 3,
+      "$type": "dimension"
+    }
   },
   "shadow": {
-    "block": { "$value": 10, "$type": "dimension", "$description": "Hard offset shadow, never blurred." },
-    "pill": { "$value": 6, "$type": "dimension" },
-    "small": { "$value": 4, "$type": "dimension" }
+    "block": {
+      "$value": 10,
+      "$type": "dimension",
+      "$description": "Hard offset shadow, never blurred."
+    },
+    "pill": {
+      "$value": 6,
+      "$type": "dimension"
+    },
+    "small": {
+      "$value": 4,
+      "$type": "dimension"
+    }
   },
   "radius": {
-    "block": { "$value": 18, "$type": "dimension" },
-    "pill": { "$value": 22, "$type": "dimension" },
-    "small": { "$value": 6, "$type": "dimension" }
+    "block": {
+      "$value": 18,
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": 22,
+      "$type": "dimension"
+    },
+    "small": {
+      "$value": 6,
+      "$type": "dimension"
+    }
   },
   "font": {
-    "sans": { "$value": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif", "$type": "fontFamily" },
-    "mono": { "$value": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", "$type": "fontFamily" },
-    "weightBold": { "$value": 700, "$type": "fontWeight" },
-    "weightHeavy": { "$value": 900, "$type": "fontWeight", "$description": "Headings; Google's Lato has no 800." }
+    "sans": {
+      "$value": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "$type": "fontFamily"
+    },
+    "mono": {
+      "$value": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+      "$type": "fontFamily"
+    },
+    "weightBold": {
+      "$value": 700,
+      "$type": "fontWeight"
+    },
+    "weightHeavy": {
+      "$value": 900,
+      "$type": "fontWeight",
+      "$description": "Headings; Google's Lato has no 800."
+    }
   },
   "motion": {
-    "fps": { "$value": 30, "$type": "frames", "$description": "Frames per second of every composition." },
-    "drawArrow": { "$value": 20, "$type": "frames", "$description": "Frames to draw a transition arrow." },
-    "travel": { "$value": 22, "$type": "frames", "$description": "Frames for a token to travel along an arrow." },
-    "fade": { "$value": 10, "$type": "frames", "$description": "Frames for text fades." },
-    "readingHold": { "$value": 90, "$type": "frames", "$description": "Minimum frames the final frame stays still." },
-    "dimOpacity": { "$value": 0.42, "$type": "opacity", "$description": "Opacity of states that are not in focus." },
-    "focusScale": { "$value": 1.06, "$type": "number", "$description": "Scale of the state in focus." },
+    "fps": {
+      "$value": 30,
+      "$type": "frames",
+      "$description": "Frames per second of every composition."
+    },
+    "drawArrow": {
+      "$value": 20,
+      "$type": "frames",
+      "$description": "Frames to draw a transition arrow."
+    },
+    "travel": {
+      "$value": 22,
+      "$type": "frames",
+      "$description": "Frames for a token to travel along an arrow."
+    },
+    "fade": {
+      "$value": 10,
+      "$type": "frames",
+      "$description": "Frames for text fades."
+    },
+    "readingHold": {
+      "$value": 90,
+      "$type": "frames",
+      "$description": "Minimum frames the final frame stays still."
+    },
+    "dimOpacity": {
+      "$value": 0.42,
+      "$type": "opacity",
+      "$description": "Opacity of states that are not in focus."
+    },
+    "focusScale": {
+      "$value": 1.06,
+      "$type": "number",
+      "$description": "Scale of the state in focus."
+    },
     "pop": {
-      "damping": { "$value": 13, "$type": "number", "$description": "Pop-in: a short overshoot, then rest." },
-      "stiffness": { "$value": 140, "$type": "number" },
-      "mass": { "$value": 0.7, "$type": "number" }
+      "damping": {
+        "$value": 13,
+        "$type": "number",
+        "$description": "Pop-in: a short overshoot, then rest."
+      },
+      "stiffness": {
+        "$value": 140,
+        "$type": "number"
+      },
+      "mass": {
+        "$value": 0.7,
+        "$type": "number"
+      }
     },
     "focus": {
-      "damping": { "$value": 200, "$type": "number", "$description": "Focus change: no overshoot." },
-      "stiffness": { "$value": 120, "$type": "number" },
-      "mass": { "$value": 1, "$type": "number" }
+      "damping": {
+        "$value": 200,
+        "$type": "number",
+        "$description": "Focus change: no overshoot."
+      },
+      "stiffness": {
+        "$value": 120,
+        "$type": "number"
+      },
+      "mass": {
+        "$value": 1,
+        "$type": "number"
+      }
     }
   },
   "illustration": {
-    "accent": { "$value": "#1E6FEB", "$type": "color", "$description": "Block arrows and the magnifier." },
-    "codePanel": { "$value": "#14215A", "$type": "color", "$description": "Dark code and screen panels." },
-    "textBar": { "$value": "#C9D6F5", "$type": "color", "$description": "Text lines on sheets." },
-    "healthyShade": { "$value": "#2BB673", "$type": "color", "$description": "Darker green side (robot ears)." },
-    "transitionalShade": { "$value": "#E8B830", "$type": "color", "$description": "Darker yellow side (folder back)." },
-    "road": { "$value": "#5B6478", "$type": "color", "$description": "Road band." },
-    "tape": { "$value": "#FFE2C8", "$type": "color", "$description": "Parcel tape." },
-    "iconLine": { "$value": "#B9C3E0", "$type": "color", "$description": "Lines inside the EIP icons." }
+    "accent": {
+      "$value": "#1E6FEB",
+      "$type": "color",
+      "$description": "Block arrows and the magnifier."
+    },
+    "codePanel": {
+      "$value": "#14215A",
+      "$type": "color",
+      "$description": "Dark code and screen panels."
+    },
+    "textBar": {
+      "$value": "#C9D6F5",
+      "$type": "color",
+      "$description": "Text lines on sheets."
+    },
+    "healthyShade": {
+      "$value": "#2BB673",
+      "$type": "color",
+      "$description": "Darker green side (robot ears)."
+    },
+    "transitionalShade": {
+      "$value": "#E8B830",
+      "$type": "color",
+      "$description": "Darker yellow side (folder back)."
+    },
+    "road": {
+      "$value": "#5B6478",
+      "$type": "color",
+      "$description": "Road band."
+    },
+    "tape": {
+      "$value": "#FFE2C8",
+      "$type": "color",
+      "$description": "Parcel tape."
+    },
+    "iconLine": {
+      "$value": "#B9C3E0",
+      "$type": "color",
+      "$description": "Lines inside the EIP icons."
+    }
   },
   "cover": {
-    "width": { "$value": 800, "$type": "dimension" },
-    "height": { "$value": 420, "$type": "dimension" },
-    "pillHeight": { "$value": 36, "$type": "dimension" },
-    "labelSize": { "$value": 19, "$type": "dimension" },
-    "labelWeight": { "$value": 800, "$type": "fontWeight", "$description": "Pill labels; Lato 800 falls back to the nearest installed weight." },
-    "ringStep": { "$value": 28, "$type": "dimension" },
-    "ringWidth": { "$value": 2, "$type": "dimension" },
-    "ringRadius": { "$value": 90, "$type": "dimension", "$description": "First ring radius; a cover spec may set its own." }
+    "width": {
+      "$value": 800,
+      "$type": "dimension"
+    },
+    "height": {
+      "$value": 420,
+      "$type": "dimension"
+    },
+    "pillHeight": {
+      "$value": 36,
+      "$type": "dimension"
+    },
+    "labelSize": {
+      "$value": 19,
+      "$type": "dimension"
+    },
+    "labelWeight": {
+      "$value": 800,
+      "$type": "fontWeight",
+      "$description": "Pill labels; Lato 800 falls back to the nearest installed weight."
+    },
+    "ringStep": {
+      "$value": 28,
+      "$type": "dimension"
+    },
+    "ringWidth": {
+      "$value": 2,
+      "$type": "dimension"
+    },
+    "ringRadius": {
+      "$value": 90,
+      "$type": "dimension",
+      "$description": "First ring radius; a cover spec may set its own."
+    },
+    "signatureMargin": {
+      "$value": 24,
+      "$type": "dimension"
+    }
   },
   "coverBackground": {
-    "peach": { "fill": { "$value": "#F4D8BC", "$type": "color", "$description": "Measured from ai-writes-code." }, "ring": { "$value": "#EAC7A3", "$type": "color" } },
-    "navy": { "fill": { "$value": "#14215A", "$type": "color", "$description": "Measured from circuit-breaker." }, "ring": { "$value": "#1C2D74", "$type": "color" } },
-    "raspberry": { "fill": { "$value": "#C94F7C", "$type": "color", "$description": "Measured from eip-catalog-in-mulesoft." }, "ring": { "$value": "#BE4572", "$type": "color" } },
-    "lavender": { "fill": { "$value": "#B8A6F0", "$type": "color", "$description": "Measured from integration-patterns." }, "ring": { "$value": "#AC98EA", "$type": "color" } },
-    "plum": { "fill": { "$value": "#3D2B66", "$type": "color", "$description": "Measured from cloudhub-deploy." }, "ring": { "$value": "#483577", "$type": "color" } },
-    "cobalt": { "fill": { "$value": "#1E4FA0", "$type": "color", "$description": "Measured from delivery-path." }, "ring": { "$value": "#2758AE", "$type": "color" } },
-    "sky": { "fill": { "$value": "#BFE3F7", "$type": "color", "$description": "Measured from gitflow." }, "ring": { "$value": "#AAD5EC", "$type": "color" } },
-    "slate": { "fill": { "$value": "#2E3A59", "$type": "color", "$description": "Measured from maven-release." }, "ring": { "$value": "#38466A", "$type": "color" } },
-    "mustard": { "fill": { "$value": "#F2C14E", "$type": "color", "$description": "Measured from pipeline-templates." }, "ring": { "$value": "#E6B33E", "$type": "color" } },
-    "emerald": { "fill": { "$value": "#2F9E6E", "$type": "color", "$description": "Measured from obsidian-to-site-guide." }, "ring": { "$value": "#38AB79", "$type": "color" } },
-    "violet": { "fill": { "$value": "#5B3CC4", "$type": "color", "$description": "Measured from write-in-obsidian-publish-on-your-site." }, "ring": { "$value": "#6748CF", "$type": "color" } },
-    "wine": { "fill": { "$value": "#6B2340", "$type": "color", "$description": "Measured from dip." }, "ring": { "$value": "#7A2D4C", "$type": "color" } },
-    "cream": { "fill": { "$value": "#FFF1C9", "$type": "color", "$description": "Measured from isp." }, "ring": { "$value": "#F4E2AE", "$type": "color" } },
-    "forest": { "fill": { "$value": "#24604F", "$type": "color", "$description": "Measured from lsp." }, "ring": { "$value": "#2B6E5B", "$type": "color" } },
-    "olive": { "fill": { "$value": "#8A9A3B", "$type": "color", "$description": "Measured from ocp." }, "ring": { "$value": "#7E8E33", "$type": "color" } },
-    "salmon": { "fill": { "$value": "#FF9E7A", "$type": "color", "$description": "Measured from solid-intro." }, "ring": { "$value": "#F48D68", "$type": "color" } },
-    "deepTeal": { "fill": { "$value": "#0F6E6E", "$type": "color", "$description": "Measured from solid-path." }, "ring": { "$value": "#167A79", "$type": "color" } },
-    "lime": { "fill": { "$value": "#D4EC9C", "$type": "color", "$description": "Measured from srp." }, "ring": { "$value": "#C4E086", "$type": "color" } },
-    "blush": { "fill": { "$value": "#F6CFE0", "$type": "color", "$description": "Measured from spec-driven-development." }, "ring": { "$value": "#ECBAD0", "$type": "color" } },
-    "mint": { "fill": { "$value": "#CDE5D3", "$type": "color", "$description": "Measured from validate-ai-api-contract-change." }, "ring": { "$value": "#BCDAC4", "$type": "color" } },
-    "teal": { "fill": { "$value": "#1F8A8A", "$type": "color", "$description": "Measured from where-the-work-moves." }, "ring": { "$value": "#2A9A99", "$type": "color" } }
+    "peach": {
+      "fill": {
+        "$value": "#F4D8BC",
+        "$type": "color",
+        "$description": "Measured from ai-writes-code."
+      },
+      "ring": {
+        "$value": "#EAC7A3",
+        "$type": "color"
+      }
+    },
+    "navy": {
+      "fill": {
+        "$value": "#14215A",
+        "$type": "color",
+        "$description": "Measured from circuit-breaker."
+      },
+      "ring": {
+        "$value": "#1C2D74",
+        "$type": "color"
+      }
+    },
+    "raspberry": {
+      "fill": {
+        "$value": "#C94F7C",
+        "$type": "color",
+        "$description": "Measured from eip-catalog-in-mulesoft."
+      },
+      "ring": {
+        "$value": "#BE4572",
+        "$type": "color"
+      }
+    },
+    "lavender": {
+      "fill": {
+        "$value": "#B8A6F0",
+        "$type": "color",
+        "$description": "Measured from integration-patterns."
+      },
+      "ring": {
+        "$value": "#AC98EA",
+        "$type": "color"
+      }
+    },
+    "plum": {
+      "fill": {
+        "$value": "#3D2B66",
+        "$type": "color",
+        "$description": "Measured from cloudhub-deploy."
+      },
+      "ring": {
+        "$value": "#483577",
+        "$type": "color"
+      }
+    },
+    "cobalt": {
+      "fill": {
+        "$value": "#1E4FA0",
+        "$type": "color",
+        "$description": "Measured from delivery-path."
+      },
+      "ring": {
+        "$value": "#2758AE",
+        "$type": "color"
+      }
+    },
+    "sky": {
+      "fill": {
+        "$value": "#BFE3F7",
+        "$type": "color",
+        "$description": "Measured from gitflow."
+      },
+      "ring": {
+        "$value": "#AAD5EC",
+        "$type": "color"
+      }
+    },
+    "slate": {
+      "fill": {
+        "$value": "#2E3A59",
+        "$type": "color",
+        "$description": "Measured from maven-release."
+      },
+      "ring": {
+        "$value": "#38466A",
+        "$type": "color"
+      }
+    },
+    "mustard": {
+      "fill": {
+        "$value": "#F2C14E",
+        "$type": "color",
+        "$description": "Measured from pipeline-templates."
+      },
+      "ring": {
+        "$value": "#E6B33E",
+        "$type": "color"
+      }
+    },
+    "emerald": {
+      "fill": {
+        "$value": "#2F9E6E",
+        "$type": "color",
+        "$description": "Measured from obsidian-to-site-guide."
+      },
+      "ring": {
+        "$value": "#38AB79",
+        "$type": "color"
+      }
+    },
+    "violet": {
+      "fill": {
+        "$value": "#5B3CC4",
+        "$type": "color",
+        "$description": "Measured from write-in-obsidian-publish-on-your-site."
+      },
+      "ring": {
+        "$value": "#6748CF",
+        "$type": "color"
+      }
+    },
+    "wine": {
+      "fill": {
+        "$value": "#6B2340",
+        "$type": "color",
+        "$description": "Measured from dip."
+      },
+      "ring": {
+        "$value": "#7A2D4C",
+        "$type": "color"
+      }
+    },
+    "cream": {
+      "fill": {
+        "$value": "#FFF1C9",
+        "$type": "color",
+        "$description": "Measured from isp."
+      },
+      "ring": {
+        "$value": "#F4E2AE",
+        "$type": "color"
+      }
+    },
+    "forest": {
+      "fill": {
+        "$value": "#24604F",
+        "$type": "color",
+        "$description": "Measured from lsp."
+      },
+      "ring": {
+        "$value": "#2B6E5B",
+        "$type": "color"
+      }
+    },
+    "olive": {
+      "fill": {
+        "$value": "#8A9A3B",
+        "$type": "color",
+        "$description": "Measured from ocp."
+      },
+      "ring": {
+        "$value": "#7E8E33",
+        "$type": "color"
+      }
+    },
+    "salmon": {
+      "fill": {
+        "$value": "#FF9E7A",
+        "$type": "color",
+        "$description": "Measured from solid-intro."
+      },
+      "ring": {
+        "$value": "#F48D68",
+        "$type": "color"
+      }
+    },
+    "deepTeal": {
+      "fill": {
+        "$value": "#0F6E6E",
+        "$type": "color",
+        "$description": "Measured from solid-path."
+      },
+      "ring": {
+        "$value": "#167A79",
+        "$type": "color"
+      }
+    },
+    "lime": {
+      "fill": {
+        "$value": "#D4EC9C",
+        "$type": "color",
+        "$description": "Measured from srp."
+      },
+      "ring": {
+        "$value": "#C4E086",
+        "$type": "color"
+      }
+    },
+    "blush": {
+      "fill": {
+        "$value": "#F6CFE0",
+        "$type": "color",
+        "$description": "Measured from spec-driven-development."
+      },
+      "ring": {
+        "$value": "#ECBAD0",
+        "$type": "color"
+      }
+    },
+    "mint": {
+      "fill": {
+        "$value": "#CDE5D3",
+        "$type": "color",
+        "$description": "Measured from validate-ai-api-contract-change."
+      },
+      "ring": {
+        "$value": "#BCDAC4",
+        "$type": "color"
+      }
+    },
+    "teal": {
+      "fill": {
+        "$value": "#1F8A8A",
+        "$type": "color",
+        "$description": "Measured from where-the-work-moves."
+      },
+      "ring": {
+        "$value": "#2A9A99",
+        "$type": "color"
+      }
+    },
+    "trackIntegration": {
+      "fill": {
+        "$value": "#F4E4D8",
+        "$type": "color",
+        "$description": "Cover/track background, from brand.light.trackIntegration (AB#268, ADR 0006)."
+      },
+      "ring": {
+        "$value": "#D7C9BE",
+        "$type": "color",
+        "$description": "Fill mixed 12% toward black (AB#268)."
+      }
+    },
+    "trackDelivery": {
+      "fill": {
+        "$value": "#DFE8E1",
+        "$type": "color",
+        "$description": "Cover/track background, from brand.light.trackDelivery (AB#268, ADR 0006)."
+      },
+      "ring": {
+        "$value": "#C4CCC6",
+        "$type": "color",
+        "$description": "Fill mixed 12% toward black (AB#268)."
+      }
+    },
+    "trackAi": {
+      "fill": {
+        "$value": "#E2E4EC",
+        "$type": "color",
+        "$description": "Cover/track background, from brand.light.trackAi (AB#268, ADR 0006)."
+      },
+      "ring": {
+        "$value": "#C7C9D0",
+        "$type": "color",
+        "$description": "Fill mixed 12% toward black (AB#268)."
+      }
+    }
   },
   "surface": {
     "light": {
-      "background": { "$value": "#EEF2FF", "$type": "color", "$description": "Map or diagram background on the light surface (stackledger 0.4.1 map theme)." },
-      "text": { "$value": "#0A1033", "$type": "color" },
-      "muted": { "$value": "#5B6694", "$type": "color" },
-      "grid": { "$value": "#E0E7FB", "$type": "color" },
-      "panel": { "$value": "#FFFFFF", "$type": "color" },
-      "shadow": { "$value": "#0A1033", "$type": "color" },
-      "rim": { "$value": "#EEF2FF", "$type": "color" },
-      "rimWidth": { "$value": 0, "$type": "dimension", "$description": "No rim on the light surface." },
-      "zoneOpacity": { "$value": 0.12, "$type": "opacity", "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)." },
-      "backdropWater": { "$value": "#C9D8FF", "$type": "color", "$description": "Fill of rivers, docks and lakes behind a map (stackledger map-backgrounds, card 180)." },
-      "backdropWaterEdge": { "$value": "#B5C7F5", "$type": "color" },
-      "backdropPark": { "$value": "#D4F2DF", "$type": "color" },
-      "backdropCredit": { "$value": "#5A6385", "$type": "color", "$description": "The OpenStreetMap credit over the backdrop." }
+      "background": {
+        "$value": "#EEF2FF",
+        "$type": "color",
+        "$description": "Map or diagram background on the light surface (stackledger 0.4.1 map theme)."
+      },
+      "text": {
+        "$value": "#0A1033",
+        "$type": "color"
+      },
+      "muted": {
+        "$value": "#5B6694",
+        "$type": "color"
+      },
+      "grid": {
+        "$value": "#E0E7FB",
+        "$type": "color"
+      },
+      "panel": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "shadow": {
+        "$value": "#0A1033",
+        "$type": "color"
+      },
+      "rim": {
+        "$value": "#EEF2FF",
+        "$type": "color"
+      },
+      "rimWidth": {
+        "$value": 0,
+        "$type": "dimension",
+        "$description": "No rim on the light surface."
+      },
+      "zoneOpacity": {
+        "$value": 0.12,
+        "$type": "opacity",
+        "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)."
+      },
+      "backdropWater": {
+        "$value": "#C9D8FF",
+        "$type": "color",
+        "$description": "Fill of rivers, docks and lakes behind a map (stackledger map-backgrounds, card 180)."
+      },
+      "backdropWaterEdge": {
+        "$value": "#B5C7F5",
+        "$type": "color"
+      },
+      "backdropPark": {
+        "$value": "#D4F2DF",
+        "$type": "color"
+      },
+      "backdropCredit": {
+        "$value": "#5A6385",
+        "$type": "color",
+        "$description": "The OpenStreetMap credit over the backdrop."
+      }
     },
     "dark": {
-      "background": { "$value": "#14215A", "$type": "color", "$description": "Map or diagram background on the dark surface." },
-      "text": { "$value": "#EEF2FF", "$type": "color" },
-      "muted": { "$value": "#8F9BD0", "$type": "color" },
-      "grid": { "$value": "#1C2D74", "$type": "color" },
-      "panel": { "$value": "#1C2D74", "$type": "color" },
-      "shadow": { "$value": "#4C5CB8", "$type": "color", "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)." },
-      "rim": { "$value": "#EEF2FF", "$type": "color" },
-      "rimWidth": { "$value": 1, "$type": "dimension", "$description": "Light band round the ink outline." },
-      "zoneOpacity": { "$value": 0.22, "$type": "opacity" },
-      "backdropWater": { "$value": "#1E3175", "$type": "color" },
-      "backdropWaterEdge": { "$value": "#2A3F8A", "$type": "color" },
-      "backdropPark": { "$value": "#183F52", "$type": "color" },
-      "backdropCredit": { "$value": "#9AA6D6", "$type": "color" }
+      "background": {
+        "$value": "#14215A",
+        "$type": "color",
+        "$description": "Map or diagram background on the dark surface."
+      },
+      "text": {
+        "$value": "#EEF2FF",
+        "$type": "color"
+      },
+      "muted": {
+        "$value": "#8F9BD0",
+        "$type": "color"
+      },
+      "grid": {
+        "$value": "#1C2D74",
+        "$type": "color"
+      },
+      "panel": {
+        "$value": "#1C2D74",
+        "$type": "color"
+      },
+      "shadow": {
+        "$value": "#4C5CB8",
+        "$type": "color",
+        "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)."
+      },
+      "rim": {
+        "$value": "#EEF2FF",
+        "$type": "color"
+      },
+      "rimWidth": {
+        "$value": 1,
+        "$type": "dimension",
+        "$description": "Light band round the ink outline."
+      },
+      "zoneOpacity": {
+        "$value": 0.22,
+        "$type": "opacity"
+      },
+      "backdropWater": {
+        "$value": "#1E3175",
+        "$type": "color"
+      },
+      "backdropWaterEdge": {
+        "$value": "#2A3F8A",
+        "$type": "color"
+      },
+      "backdropPark": {
+        "$value": "#183F52",
+        "$type": "color"
+      },
+      "backdropCredit": {
+        "$value": "#9AA6D6",
+        "$type": "color"
+      }
     }
   },
   "map": {
-    "outline": { "$value": 3, "$type": "dimension", "$description": "Map and page diagrams, measured from stackledger 0.4.1." },
-    "shadow": { "$value": 3.5, "$type": "dimension" },
-    "lineWidth": { "$value": 12, "$type": "dimension" },
-    "casing": { "$value": 6, "$type": "dimension" },
-    "badgeHeight": { "$value": 20, "$type": "dimension" },
-    "badgeTextSize": { "$value": 12, "$type": "dimension" },
-    "countHeight": { "$value": 16, "$type": "dimension" },
-    "countTextSize": { "$value": 11, "$type": "dimension" },
-    "stopRadius": { "$value": 12, "$type": "dimension" },
-    "interchangeExtra": { "$value": 2, "$type": "dimension" },
-    "nodeHeight": { "$value": 46, "$type": "dimension" },
-    "nodeRadius": { "$value": 10, "$type": "dimension" },
-    "edgeWidth": { "$value": 2.5, "$type": "dimension" },
-    "labelSize": { "$value": 13, "$type": "dimension" },
-    "ringWidth": { "$value": 3, "$type": "dimension", "$description": "Colour band of the renewal ring (stackledger 8db44fe svg.ts)." },
-    "haloWidth": { "$value": 1.5, "$type": "dimension", "$description": "Dashed stroke of the suggested-position halo." },
-    "licenceSize": { "$value": 10, "$type": "dimension", "$description": "Diameter of the licence mark." },
-    "zonePadding": { "$value": 32, "$type": "dimension", "$description": "Round padding of a zone around its outline (zones.ts)." },
-    "bendRadius": { "$value": 32, "$type": "dimension", "$description": "Radius of a bundle's centre line at a 45° or 90° bend, in map units (stackledger round-bends, AB#166)." },
-    "zoneTitleTint": { "$value": 0.6, "$type": "number", "$description": "On the dark surface a zone title mixes its colour with white by this amount." }
+    "outline": {
+      "$value": 3,
+      "$type": "dimension",
+      "$description": "Map and page diagrams, measured from stackledger 0.4.1."
+    },
+    "shadow": {
+      "$value": 3.5,
+      "$type": "dimension"
+    },
+    "lineWidth": {
+      "$value": 12,
+      "$type": "dimension"
+    },
+    "casing": {
+      "$value": 6,
+      "$type": "dimension"
+    },
+    "badgeHeight": {
+      "$value": 20,
+      "$type": "dimension"
+    },
+    "badgeTextSize": {
+      "$value": 12,
+      "$type": "dimension"
+    },
+    "countHeight": {
+      "$value": 16,
+      "$type": "dimension"
+    },
+    "countTextSize": {
+      "$value": 11,
+      "$type": "dimension"
+    },
+    "stopRadius": {
+      "$value": 12,
+      "$type": "dimension"
+    },
+    "interchangeExtra": {
+      "$value": 2,
+      "$type": "dimension"
+    },
+    "nodeHeight": {
+      "$value": 46,
+      "$type": "dimension"
+    },
+    "nodeRadius": {
+      "$value": 10,
+      "$type": "dimension"
+    },
+    "edgeWidth": {
+      "$value": 2.5,
+      "$type": "dimension"
+    },
+    "labelSize": {
+      "$value": 13,
+      "$type": "dimension"
+    },
+    "ringWidth": {
+      "$value": 3,
+      "$type": "dimension",
+      "$description": "Colour band of the renewal ring (stackledger 8db44fe svg.ts)."
+    },
+    "haloWidth": {
+      "$value": 1.5,
+      "$type": "dimension",
+      "$description": "Dashed stroke of the suggested-position halo."
+    },
+    "licenceSize": {
+      "$value": 10,
+      "$type": "dimension",
+      "$description": "Diameter of the licence mark."
+    },
+    "zonePadding": {
+      "$value": 32,
+      "$type": "dimension",
+      "$description": "Round padding of a zone around its outline (zones.ts)."
+    },
+    "bendRadius": {
+      "$value": 32,
+      "$type": "dimension",
+      "$description": "Radius of a bundle's centre line at a 45° or 90° bend, in map units (stackledger round-bends, AB#166)."
+    },
+    "zoneTitleTint": {
+      "$value": 0.6,
+      "$type": "number",
+      "$description": "On the dark surface a zone title mixes its colour with white by this amount."
+    }
   },
   "site": {
     "light": {
-      "primary": { "$value": "#121212", "$type": "color", "$description": "Page palette of brunosouzas.com (src/styles/generated-theme.css)." },
-      "body": { "$value": "#FFFFFF", "$type": "color" },
-      "border": { "$value": "#EAEAEA", "$type": "color" },
-      "light": { "$value": "#F6F6F6", "$type": "color" },
-      "dark": { "$value": "#040404", "$type": "color" },
-      "text": { "$value": "#444444", "$type": "color" },
-      "textDark": { "$value": "#040404", "$type": "color" },
-      "textLight": { "$value": "#717171", "$type": "color" }
+      "primary": {
+        "$value": "#121212",
+        "$type": "color",
+        "$description": "Page palette of brunosouzas.com (src/styles/generated-theme.css)."
+      },
+      "body": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#EAEAEA",
+        "$type": "color"
+      },
+      "light": {
+        "$value": "#F6F6F6",
+        "$type": "color"
+      },
+      "dark": {
+        "$value": "#040404",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "#444444",
+        "$type": "color"
+      },
+      "textDark": {
+        "$value": "#040404",
+        "$type": "color"
+      },
+      "textLight": {
+        "$value": "#717171",
+        "$type": "color"
+      }
     },
     "dark": {
-      "primary": { "$value": "#FFFFFF", "$type": "color" },
-      "body": { "$value": "#1C1C1C", "$type": "color" },
-      "border": { "$value": "#3E3E3E", "$type": "color" },
-      "light": { "$value": "#222222", "$type": "color" },
-      "dark": { "$value": "#FFFFFF", "$type": "color" },
-      "text": { "$value": "#B4AFB6", "$type": "color" },
-      "textDark": { "$value": "#FFFFFF", "$type": "color" },
-      "textLight": { "$value": "#B4AFB6", "$type": "color" }
+      "primary": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "body": {
+        "$value": "#1C1C1C",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#3E3E3E",
+        "$type": "color"
+      },
+      "light": {
+        "$value": "#222222",
+        "$type": "color"
+      },
+      "dark": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "#B4AFB6",
+        "$type": "color"
+      },
+      "textDark": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "textLight": {
+        "$value": "#B4AFB6",
+        "$type": "color"
+      }
     },
     "font": {
-      "primary": { "$value": "Heebo, sans-serif", "$type": "fontFamily" },
-      "secondary": { "$value": "Signika, sans-serif", "$type": "fontFamily" }
+      "primary": {
+        "$value": "Heebo, sans-serif",
+        "$type": "fontFamily"
+      },
+      "secondary": {
+        "$value": "Signika, sans-serif",
+        "$type": "fontFamily"
+      }
     },
     "fontSize": {
-      "base": { "$value": 16, "$type": "dimension" },
-      "baseSmall": { "$value": 12.8, "$type": "dimension" }
+      "base": {
+        "$value": 16,
+        "$type": "dimension"
+      },
+      "baseSmall": {
+        "$value": 12.8,
+        "$type": "dimension"
+      }
     },
     "heading": {
-      "h1": { "$value": 2.985984, "$type": "number", "$description": "Heading sizes in rem: calc(var(--ds-site-heading-h1) * 1rem)." },
-      "h2": { "$value": 2.48832, "$type": "number" },
-      "h3": { "$value": 2.0736, "$type": "number" },
-      "h4": { "$value": 1.728, "$type": "number" },
-      "h5": { "$value": 1.44, "$type": "number" },
-      "h6": { "$value": 1.2, "$type": "number" },
-      "h1Small": { "$value": 2.6873856, "$type": "number" },
-      "h2Small": { "$value": 2.239488, "$type": "number" },
-      "h3Small": { "$value": 1.86624, "$type": "number" },
-      "h4Small": { "$value": 1.5552, "$type": "number" },
-      "h5Small": { "$value": 1.296, "$type": "number" },
-      "h6Small": { "$value": 1.08, "$type": "number" }
+      "h1": {
+        "$value": 2.985984,
+        "$type": "number",
+        "$description": "Heading sizes in rem: calc(var(--ds-site-heading-h1) * 1rem)."
+      },
+      "h2": {
+        "$value": 2.48832,
+        "$type": "number"
+      },
+      "h3": {
+        "$value": 2.0736,
+        "$type": "number"
+      },
+      "h4": {
+        "$value": 1.728,
+        "$type": "number"
+      },
+      "h5": {
+        "$value": 1.44,
+        "$type": "number"
+      },
+      "h6": {
+        "$value": 1.2,
+        "$type": "number"
+      },
+      "h1Small": {
+        "$value": 2.6873856,
+        "$type": "number"
+      },
+      "h2Small": {
+        "$value": 2.239488,
+        "$type": "number"
+      },
+      "h3Small": {
+        "$value": 1.86624,
+        "$type": "number"
+      },
+      "h4Small": {
+        "$value": 1.5552,
+        "$type": "number"
+      },
+      "h5Small": {
+        "$value": 1.296,
+        "$type": "number"
+      },
+      "h6Small": {
+        "$value": 1.08,
+        "$type": "number"
+      }
     }
   },
   "banner": {
-    "width": { "$value": 1200, "$type": "dimension", "$description": "Home banner of both sites, measured from brunosouzas.com public/images/home/home-banner.svg (e8ad098)." },
-    "height": { "$value": 420, "$type": "dimension" },
-    "radius": { "$value": 20, "$type": "dimension", "$description": "Corner radius of the banner's background and clip." }
+    "width": {
+      "$value": 1200,
+      "$type": "dimension",
+      "$description": "Home banner of both sites, measured from brunosouzas.com public/images/home/home-banner.svg (e8ad098)."
+    },
+    "height": {
+      "$value": 420,
+      "$type": "dimension"
+    },
+    "radius": {
+      "$value": 20,
+      "$type": "dimension",
+      "$description": "Corner radius of the banner's background and clip."
+    }
   },
   "bodyDiagram": {
-    "width": { "$value": 800, "$type": "dimension", "$description": "Shown width of a blog body diagram, measured from the 28 published diagrams in brain 50-writing (18ffd2e)." },
-    "layoutWidth": { "$value": 560, "$type": "dimension", "$description": "Width a body diagram is laid out in (map units); shown at width." },
-    "radius": { "$value": 14, "$type": "dimension", "$description": "Corner radius of the panel, at the shown size." },
-    "ringRadius": { "$value": 70, "$type": "dimension", "$description": "First ring radius, at the shown size." },
-    "startRadius": { "$value": 11, "$type": "dimension", "$description": "Start dot of a state diagram, at the shown size (circuit-breaker-states)." }
+    "width": {
+      "$value": 800,
+      "$type": "dimension",
+      "$description": "Shown width of a blog body diagram, measured from the 28 published diagrams in brain 50-writing (18ffd2e)."
+    },
+    "layoutWidth": {
+      "$value": 560,
+      "$type": "dimension",
+      "$description": "Width a body diagram is laid out in (map units); shown at width."
+    },
+    "radius": {
+      "$value": 14,
+      "$type": "dimension",
+      "$description": "Corner radius of the panel, at the shown size."
+    },
+    "ringRadius": {
+      "$value": 70,
+      "$type": "dimension",
+      "$description": "First ring radius, at the shown size."
+    },
+    "startRadius": {
+      "$value": 11,
+      "$type": "dimension",
+      "$description": "Start dot of a state diagram, at the shown size (circuit-breaker-states)."
+    }
   },
   "cast": {
-    "ground": { "$value": "#D3DBF5", "$type": "color", "$description": "Flat ground shadow under a mascot (AB#152, approved cast spike)." },
-    "metal": { "$value": "#C9D2E8", "$type": "color", "$description": "Stands, chrome parts, the wrench and the bulb base." },
-    "mouth": { "$value": "#B94A3E", "$type": "color", "$description": "Open mouth on a light face." },
-    "glow": { "$value": "#7FD1FF", "$type": "color", "$description": "The agent's face on its dark screen; sweat drops." },
+    "ground": {
+      "$value": "#D3DBF5",
+      "$type": "color",
+      "$description": "Flat ground shadow under a mascot (AB#152, approved cast spike)."
+    },
+    "metal": {
+      "$value": "#C9D2E8",
+      "$type": "color",
+      "$description": "Stands, chrome parts, the wrench and the bulb base."
+    },
+    "mouth": {
+      "$value": "#B94A3E",
+      "$type": "color",
+      "$description": "Open mouth on a light face."
+    },
+    "glow": {
+      "$value": "#7FD1FF",
+      "$type": "color",
+      "$description": "The agent's face on its dark screen; sweat drops."
+    },
     "dev": {
-      "fill": { "$value": "#5B7CFA", "$type": "color", "$description": "Dev: the computer's frame." },
-      "chin": { "$value": "#8FA6FF", "$type": "color" },
-      "screen": { "$value": "#DCE6FF", "$type": "color" }
+      "fill": {
+        "$value": "#5B7CFA",
+        "$type": "color",
+        "$description": "Dev: the computer's frame."
+      },
+      "chin": {
+        "$value": "#8FA6FF",
+        "$type": "color"
+      },
+      "screen": {
+        "$value": "#DCE6FF",
+        "$type": "color"
+      }
     },
     "agent": {
-      "neck": { "$value": "#E3E8F5", "$type": "color", "$description": "AI agent: the chrome neck; the body stays white." },
-      "shine": { "$value": "#E6ECFF", "$type": "color" }
+      "neck": {
+        "$value": "#E3E8F5",
+        "$type": "color",
+        "$description": "AI agent: the chrome neck; the body stays white."
+      },
+      "shine": {
+        "$value": "#E6ECFF",
+        "$type": "color"
+      }
     },
     "architect": {
-      "fill": { "$value": "#22B5A4", "$type": "color", "$description": "Architect: turquoise, kept apart from healthy green." },
-      "shine": { "$value": "#9CF0E4", "$type": "color" }
+      "fill": {
+        "$value": "#22B5A4",
+        "$type": "color",
+        "$description": "Architect: turquoise, kept apart from healthy green."
+      },
+      "shine": {
+        "$value": "#9CF0E4",
+        "$type": "color"
+      }
     },
     "devops": {
-      "fill": { "$value": "#D76AA5", "$type": "color", "$description": "DevOps: the gear, magenta so it never reads as blocked orange." },
-      "shine": { "$value": "#F3B8D6", "$type": "color" }
+      "fill": {
+        "$value": "#D76AA5",
+        "$type": "color",
+        "$description": "DevOps: the gear, magenta so it never reads as blocked orange."
+      },
+      "shine": {
+        "$value": "#F3B8D6",
+        "$type": "color"
+      }
     },
     "data": {
-      "fill": { "$value": "#8C6CF0", "$type": "color", "$description": "Data: the cylinder." },
-      "lid": { "$value": "#C2B1FF", "$type": "color" },
-      "shine": { "$value": "#B39CFF", "$type": "color" },
-      "lens": { "$value": "#EAF1FF", "$type": "color" }
+      "fill": {
+        "$value": "#8C6CF0",
+        "$type": "color",
+        "$description": "Data: the cylinder."
+      },
+      "lid": {
+        "$value": "#C2B1FF",
+        "$type": "color"
+      },
+      "shine": {
+        "$value": "#B39CFF",
+        "$type": "color"
+      },
+      "lens": {
+        "$value": "#EAF1FF",
+        "$type": "color"
+      }
     },
     "request": {
-      "shine": { "$value": "#D6E2FF", "$type": "color", "$description": "Requester: the bubble is color.caller." }
+      "shine": {
+        "$value": "#D6E2FF",
+        "$type": "color",
+        "$description": "Requester: the bubble is color.caller."
+      }
     },
     "emotePop": {
-      "damping": { "$value": 9, "$type": "number", "$description": "Emote pop-in: a quick overshoot, then rest." },
-      "stiffness": { "$value": 170, "$type": "number" },
-      "mass": { "$value": 0.7, "$type": "number" }
+      "damping": {
+        "$value": 9,
+        "$type": "number",
+        "$description": "Emote pop-in: a quick overshoot, then rest."
+      },
+      "stiffness": {
+        "$value": 170,
+        "$type": "number"
+      },
+      "mass": {
+        "$value": 0.7,
+        "$type": "number"
+      }
+    },
+    "eyes": {
+      "$value": "#FFC98A",
+      "$type": "color"
+    }
+  },
+  "brand": {
+    "light": {
+      "bg": {
+        "$value": "#F6F3EC",
+        "$type": "color"
+      },
+      "cardBg": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "#121212",
+        "$type": "color"
+      },
+      "textMuted": {
+        "$value": "#5C5852",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#D7D1C5",
+        "$type": "color"
+      },
+      "borderStrong": {
+        "$value": "#5C5852",
+        "$type": "color"
+      },
+      "accent": {
+        "$value": "#E04E17",
+        "$type": "color"
+      },
+      "accentText": {
+        "$value": "#B83A0C",
+        "$type": "color"
+      },
+      "onAccent": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#2B7A4B",
+        "$type": "color"
+      },
+      "failure": {
+        "$value": "#A1124B",
+        "$type": "color"
+      },
+      "warning": {
+        "$value": "#8F5F00",
+        "$type": "color"
+      },
+      "trackIntegration": {
+        "$value": "#F4E4D8",
+        "$type": "color"
+      },
+      "trackDelivery": {
+        "$value": "#DFE8E1",
+        "$type": "color"
+      },
+      "trackAi": {
+        "$value": "#E2E4EC",
+        "$type": "color"
+      }
+    },
+    "dark": {
+      "bg": {
+        "$value": "#121110",
+        "$type": "color"
+      },
+      "cardBg": {
+        "$value": "#1D1C1A",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "#F1EEE8",
+        "$type": "color"
+      },
+      "textMuted": {
+        "$value": "#ADA79D",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#3B3834",
+        "$type": "color"
+      },
+      "borderStrong": {
+        "$value": "#ADA79D",
+        "$type": "color"
+      },
+      "accent": {
+        "$value": "#FF7A45",
+        "$type": "color"
+      },
+      "accentText": {
+        "$value": "#FF7A45",
+        "$type": "color"
+      },
+      "onAccent": {
+        "$value": "#121110",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#5BBF86",
+        "$type": "color"
+      },
+      "failure": {
+        "$value": "#FF6696",
+        "$type": "color"
+      },
+      "warning": {
+        "$value": "#EBB34B",
+        "$type": "color"
+      },
+      "trackIntegration": {
+        "$value": "#2A1C15",
+        "$type": "color"
+      },
+      "trackDelivery": {
+        "$value": "#18231D",
+        "$type": "color"
+      },
+      "trackAi": {
+        "$value": "#1B1F28",
+        "$type": "color"
+      }
     }
   }
 }

@@ -103,5 +103,20 @@
     "fill": "#1F8A8A",
     "ring": "#2A9A99",
     "source": "where-the-work-moves"
+  },
+  "trackIntegration": {
+    "fill": "#F4E4D8",
+    "ring": "#D7C9BE",
+    "source": "AB#268 identity v2, ADR 0006 (integration pillar)"
+  },
+  "trackDelivery": {
+    "fill": "#DFE8E1",
+    "ring": "#C4CCC6",
+    "source": "AB#268 identity v2, ADR 0006 (delivery pillar)"
+  },
+  "trackAi": {
+    "fill": "#E2E4EC",
+    "ring": "#C7C9D0",
+    "source": "AB#268 identity v2, ADR 0006 (AI pillar)"
   }
 }
