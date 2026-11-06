@@ -1,5 +1,16 @@
 ## MODIFIED Requirements
 
+### Requirement: Measured cover backgrounds
+The repository's source SHALL hold the 21 pairs measured from the covers published before 0.6.0, with the names and values of `design.md` §2, and the three track pairs of ADR 0006 (`trackIntegration`, `trackDelivery`, `trackAi`), all pinned in `test/fixtures/cover-backgrounds.json`.
+
+#### Scenario: Source matches the measured table
+- **WHEN** the token test reads `tokens/source.json` and the fixture
+- **THEN** both list the same 24 names with the same `fill` and `ring` values, for example `blush` `#F6CFE0` and `#ECBAD0`, and `trackIntegration` `#F4E4D8` and `#D7C9BE`
+
+#### Scenario: A pair drifts
+- **WHEN** a test copy of the source changes `coverBackground.blush.ring` to `#ECBAD1`
+- **THEN** the comparison fails naming `blush`
+
 ### Requirement: Token source
 The repository SHALL keep every token in one source file, `tokens/source.json`, whose root is a JSON object. Each token has a value and a type. Tokens sit in exactly these top-level groups: `color`, `outline`, `shadow`, `radius`, `font`, `motion`, `illustration`, `cover`, `coverBackground`, `surface`, `brand`, `map`, `site`, `banner`, `bodyDiagram`, `cast`; a group may nest one more level (for example `motion.pop.damping`, `brand.light.accent`).
 

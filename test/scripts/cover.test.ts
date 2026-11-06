@@ -169,6 +169,25 @@ describe("Code panel indent bound", () => {
 });
 
 describe("Cover spec format", () => {
+  test("Track background accepted", () => {
+    const result = buildCover(JSON.stringify({ ...minimal(), background: "trackIntegration" }), "spec.json");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.svg).toContain(`fill="${tokens.coverBackground.trackIntegration.fill}"`);
+    expect(result.svg).toContain(`stroke="${tokens.coverBackground.trackIntegration.ring}"`);
+  });
+
+  test("Old literal backgrounds still accepted", () => {
+    // The proof covers were built with literal pairs before 0.6.0 and must keep their bytes.
+    for (const spec of PROOF_COVERS) {
+      const text = readFileSync(join(FIXTURES, `${spec}.json`), "utf8");
+      expect(JSON.parse(text).background).not.toMatch(/^track/);
+      const result = buildCover(text, spec);
+      expect(result.ok).toBe(true);
+      if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${spec}.svg`), "utf8"));
+    }
+  });
+
   test("Unknown background and piece", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
@@ -499,8 +518,22 @@ describe("Cast on a cover", () => {
 // Change identity-v2 (AB#268): cover-cli "Signature lockup", "New icon formats".
 describe("Signature lockup", () => {
   test("Signature drawn", () => {
-    const svg = svgOf({ ...minimal(), signature: true });
-    expect(svg).toContain('data-piece="signature"');
+    const result = buildCover(JSON.stringify({ ...minimal(), signature: true }), "s");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const svg = result.svg;
+    // The lockup closes the outlined group: after it, only the closing tags before the words.
+    const start = svg.indexOf('<g data-piece="signature">');
+    expect(start).toBeGreaterThan(0);
+    const lockup = svg.slice(start);
+    expect(lockup).toContain('data-piece="mira"');
+    // Anchored by cover.signatureMargin: Mira 55 x 43.75, a gap of 6, the symbol 24 (scale 0.75), on an 800 x 420 frame.
+    const m = tokens.cover.signatureMargin;
+    const left = 800 - m - (220 * 0.25 + 6 + 24);
+    const top = 420 - m - 175 * 0.25;
+    const r2 = (n: number) => Math.round(n * 100) / 100;
+    expect(lockup).toContain(`translate(${r2(left + 27.5)} ${r2(top + 43.75)}) scale(0.25)`);
+    expect(lockup).toContain(`translate(${r2(left + 55 + 6)} ${r2(top + (43.75 - 24) / 2)}) scale(0.75)`);
   });
 
   test("No signature by default", () => {
@@ -535,14 +568,9 @@ describe("New icon formats", () => {
     }
   });
 
-  test("LinkedIn card is square", () => {
-    const svg = svgOf({ ...banner(), id: "li", format: "linkedin-card" });
-    expect(svg).toContain('width="1080" height="1080" viewBox="0 0 1080 1080"');
-  });
-
-  test("og image is 1200x630", () => {
-    const svg = svgOf({ ...banner(), id: "og", format: "og" });
-    expect(svg).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
+  test("LinkedIn card and og image are fixed sizes", () => {
+    expect(svgOf({ ...banner(), id: "li", format: "linkedin-card" })).toContain('width="1080" height="1080" viewBox="0 0 1080 1080"');
+    expect(svgOf({ ...banner(), id: "og", format: "og" })).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
   });
 
   test("Avatar draws the symbol filling the frame, no background or pieces", () => {
@@ -551,6 +579,11 @@ describe("New icon formats", () => {
   });
 
   test("Avatar refuses a background and pieces", () => {
+    expect(problems({ ...avatar(), background: "trackIntegration" })).toEqual(["background: not used by the avatar format"]);
+    const ws = workspace();
+    ws.write("a.json", { ...avatar(), background: "trackIntegration" });
+    expect(ws.run("a.json", "--out", "a.svg")).toBe(1);
+    expect(readdirSync(ws.root)).toEqual(["a.json"]);
     expect(problems({ ...avatar(), background: "peach" })).toEqual(["background: not used by the avatar format"]);
     expect(problems({ ...avatar(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the avatar format"]);
   });
