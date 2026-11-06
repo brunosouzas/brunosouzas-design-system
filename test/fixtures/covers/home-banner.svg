@@ -7,9 +7,9 @@
       <rect width="1200" height="420" rx="20"/>
     </clipPath>
   </defs>
-  <rect width="1200" height="420" rx="20" fill="#F4E4D8"/>
+  <rect width="1200" height="420" rx="20" fill="#F7C6A1"/>
   <g clip-path="url(#home-banner-frame)">
-    <g fill="none" stroke="#D7C9BE" stroke-width="2">
+    <g fill="none" stroke="#E3AB84" stroke-width="2">
       <circle cx="600" cy="225" r="60"/>
       <circle cx="600" cy="225" r="88"/>
       <circle cx="600" cy="225" r="116"/>

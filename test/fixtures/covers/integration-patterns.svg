@@ -7,9 +7,9 @@
       <rect width="800" height="420"/>
     </clipPath>
   </defs>
-  <rect width="800" height="420" fill="#F4E4D8"/>
+  <rect width="800" height="420" fill="#F7C6A1"/>
   <g clip-path="url(#ipc-frame)">
-    <g fill="none" stroke="#D7C9BE" stroke-width="2">
+    <g fill="none" stroke="#E3AB84" stroke-width="2">
       <circle cx="480" cy="210" r="90"/>
       <circle cx="480" cy="210" r="118"/>
       <circle cx="480" cy="210" r="146"/>
