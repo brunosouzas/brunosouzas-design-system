@@ -123,3 +123,128 @@ export const mira = definePiece<MiraParams>(
   } satisfies Schema,
   drawMira,
 );
+
+// ---------------------------------------------------------------- Visor (AI pillar)
+// Ported from final.py's `visor()`: an agent at work, the hands do, the face shows the state.
+export type VisorParams = { x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView; holds?: boolean; points?: boolean };
+
+const drawVisor = (p: VisorParams): Drawn => {
+  const s = skin(p.surface ?? "light");
+  const expression = p.expression ?? "idle", view = p.view ?? "front", back = view === "back";
+  const hold = p.holds ?? false, point = p.points ?? true;
+  const handR: SvgNode = point
+    ? g({ transform: "translate(88,-104) rotate(-35)" }, el("rect", { x: -6, y: -30, width: 12, height: 26, rx: 6, ...outlined(s, 4.5) }), el("circle", { cx: 0, cy: 0, r: 15, ...outlined(s) }))
+    : el("circle", { cx: 86, cy: -58, r: 15, ...outlined(s) });
+  const handL: SvgNode[] = hold
+    ? [el("rect", { x: -106, y: -96, width: 28, height: 24, rx: 5, fill: s.accent }), el("circle", { cx: -92, cy: -66, r: 15, ...outlined(s) })]
+    : [el("circle", { cx: -86, cy: -58, r: 15, ...outlined(s) })];
+  const faceG = back ? null : faceAt(-42, -128, 84, 52, s, expression);
+  const pk = back
+    ? el("path", { d: "M-34 -144 Q0 -152 34 -144 Q0 -136 -34 -144 Z", fill: s.accent, stroke: s.outline, "stroke-width": 5, "stroke-linejoin": "round" })
+    : el("path", { d: "M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z", fill: s.accent, stroke: s.outline, "stroke-width": 5, "stroke-linejoin": "round" });
+  const vent = back
+    ? el("path", { d: "M-24 -110 H24 M-24 -96 H24 M-24 -82 H24", stroke: s.outline, "stroke-width": 4, "stroke-linecap": "round" })
+    : null;
+  const body = g({},
+    el("rect", { x: -66, y: -114, width: 14, height: 32, rx: 4, fill: s.outline }),
+    el("rect", { x: 52, y: -114, width: 14, height: 32, rx: 4, fill: s.outline }),
+    el("rect", { x: -56, y: -142, width: 112, height: 88, rx: 30, ...outlined(s) }),
+    faceG, vent, pk,
+    el("path", { d: "M-16 -52 H16 L10 -40 H-10 Z", fill: s.outline }),
+    ...handL, handR);
+  return drawn([g({ "data-piece": "visor", transform: `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`, stroke: "none" }, body)]);
+};
+
+export const visor = definePiece<VisorParams>(
+  "visor",
+  { x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }), expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS }, holds: { kind: "boolean" }, points: { kind: "boolean" } } satisfies Schema,
+  drawVisor,
+);
+
+// ---------------------------------------------------------------- Drone (delivery pillar)
+export type DroneParams = { x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView; carries?: boolean };
+
+const drawDrone = (p: DroneParams): Drawn => {
+  const s = skin(p.surface ?? "light");
+  const expression = p.expression ?? "idle", view = p.view ?? "front", back = view === "back";
+  const cargo = p.carries ?? true;
+  const faceG = back ? null : faceAt(-27, -98, 54, 30, s, expression);
+  const cap = back
+    ? el("path", { d: "M-27.6 -109.6 A39 39 0 0 1 27.6 -109.6 Q0 -102 -27.6 -109.6 Z", fill: s.accent, stroke: s.outline, "stroke-width": 5 })
+    : tipCap(s, 0, -82, 39, 14);
+  const box = cargo
+    ? [el("rect", { x: -15, y: -36, width: 30, height: 26, rx: 6, fill: s.accent }), el("path", { d: "M-15 -27 H15", stroke: s.body, "stroke-width": 3 })]
+    : [];
+  const body = g({},
+    el("path", { d: "M-22 -106 L-46 -126 M22 -106 L46 -126", stroke: s.outline, "stroke-width": 7, "stroke-linecap": "round" }),
+    el("rect", { x: -74, y: -132, width: 54, height: 9, rx: 4.5, fill: s.outline }),
+    el("rect", { x: 20, y: -132, width: 54, height: 9, rx: 4.5, fill: s.outline }),
+    el("circle", { cx: 0, cy: -82, r: 36, ...outlined(s) }), faceG, cap,
+    el("path", { d: "M0 -46 V-36 M-10 -40 H10", stroke: s.outline, "stroke-width": 5, "stroke-linecap": "round" }),
+    ...box);
+  return drawn([g({ "data-piece": "drone", transform: `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`, stroke: "none" }, body)]);
+};
+
+export const drone = definePiece<DroneParams>(
+  "drone",
+  { x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }), expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS }, carries: { kind: "boolean" } } satisfies Schema,
+  drawDrone,
+);
+
+// ---------------------------------------------------------------- Kiu (wiki and series)
+export type KiuParams = { x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView; steps?: number };
+
+const KIU_SEGMENTS: readonly (readonly [number, number])[] = [[-46, 19], [-84, 17], [-118, 15], [-148, 13], [-174, 11]];
+
+const drawKiu = (p: KiuParams): Drawn => {
+  const s = skin(p.surface ?? "light");
+  const expression = p.expression ?? "idle", view = p.view ?? "front", back = view === "back";
+  const n = p.steps ?? 4;
+  const seg = KIU_SEGMENTS.slice(0, n);
+  const parts: SvgNode[] = [];
+  // Farthest segment first, nearest last (on top) — matches the sheet's `reversed(enumerate(seg))`.
+  for (let i = seg.length - 1; i >= 0; i--) {
+    const [dx, r] = seg[i];
+    const cy = -(r + 10);
+    parts.push(el("path", { d: `M${dx - 5} ${cy + r - 3} L${dx - 7} 0 M${dx + 5} ${cy + r - 3} L${dx + 7} 0`, stroke: s.outline, "stroke-width": 4, "stroke-linecap": "round" }));
+    parts.push(el("circle", { cx: dx, cy, r, fill: s.body, stroke: s.outline, "stroke-width": 4.5 }));
+    if (i % 2 === 0) parts.push(el("circle", { cx: dx, cy, r: r * 0.45, fill: s.accent }));
+  }
+  const head = [
+    el("path", { d: "M-6 -10 L-8 0 M8 -10 L10 0", stroke: s.outline, "stroke-width": 4, "stroke-linecap": "round" }),
+    el("circle", { cx: 0, cy: -40, r: 31, ...outlined(s) }),
+    back
+      ? el("path", { d: "M-24 -64 A34 34 0 0 1 24 -64 Q0 -58 -24 -64 Z", fill: s.accent, stroke: s.outline, "stroke-width": 5 })
+      : g({}, faceAt(-21, -54, 44, 26, s, expression), tipCap(s, 0, -40, 34, 12)),
+  ];
+  const inner = g({ transform: "translate(70,0)" }, ...parts, ...head);
+  const body = back ? g({ transform: "scale(-1,1)" }, inner) : inner;
+  return drawn([g({ "data-piece": "kiu", transform: `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`, stroke: "none" }, body)]);
+};
+
+export const kiu = definePiece<KiuParams>(
+  "kiu",
+  { x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }), expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS }, steps: { kind: "number", integer: true, min: 2, max: 5 } } satisfies Schema,
+  drawKiu,
+);
+
+// ---------------------------------------------------------------- Sinal (stackledger, no hood tip — I4)
+export type SinalParams = { x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView };
+
+const drawSinal = (p: SinalParams): Drawn => {
+  const s = skin(p.surface ?? "light");
+  const expression = p.expression ?? "idle", view = p.view ?? "front";
+  const faceG = view === "back" ? null : faceAt(-25, -116, 50, 32, s, expression);
+  const body = g({},
+    el("rect", { x: -22, y: -12, width: 44, height: 12, rx: 6, fill: s.outline }),
+    el("rect", { x: -6, y: -70, width: 12, height: 62, fill: s.outline }),
+    el("circle", { cx: 0, cy: -100, r: 36, ...outlined(s) }),
+    faceG);
+  return drawn([g({ "data-piece": "sinal", transform: `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`, stroke: "none" }, body)]);
+};
+
+export const sinal = definePiece<SinalParams>(
+  "sinal",
+  { x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }), expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS } } satisfies Schema,
+  drawSinal,
+);
