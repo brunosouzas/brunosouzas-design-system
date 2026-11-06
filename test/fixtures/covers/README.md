@@ -1,12 +1,14 @@
 # Proof cover fixtures
 
-The three published covers that proved the pieces (change `illustration-pieces`, design §7), written as cover specs, with the SVG the cover command writes from each (`*.svg`, golden; regenerate with `npm run cover -- <spec> --out <golden>` only when a change means to alter the drawing).
+The three published covers that proved the pieces (change `illustration-pieces`, design §7), written as cover specs, with the SVG the cover command writes from each (`*.svg`, golden; regenerate with `npm run cover -- <spec> --out <golden>`, adding `--lang pt` or `--lang en` for the diagram, only when a change means to alter the drawing).
+
+The goldens were regenerated once for 0.7.0 (change `identity-v2-type-pieces-cleanup`, task 5.6) from the v2 drawing the owner approved: Source type with its faces embedded (ADR 0008), the v2 piece grammar (ADR 0009), and the specs' state colours written `color.state.*`. They no longer match the published originals, and no PSNR against those originals applies: the v2 colours and type differ from them by design. Their descriptions (`<desc>`) were rewritten to the v2 drawing in the same release, which changed only that line of each golden. Parity is now the owner's review of each golden rendered in headless Chrome through an `<img>` next to its 0.6.1 golden (layout, rings and words match; spec cover-cli, "Visual parity (local)").
 
 These are the only cover specs in this public repository: they describe images already published on brunosouzas.com. Every other cover spec lives with its article in the author's private vault.
 
-`home-banner.json` (change `banner-format`, AB#156) is the one banner: brunosouzas.com's home banner (`public/images/home/home-banner.svg` in the site repository, commit `e8ad098`), redrawn from the pieces. It may be public because the banner it redraws is already public. It has a golden SVG but no parity value, because it is a new drawing of the same idea rather than a copy (the hub is a Mule flow in the caller colour, where the published banner uses an orange block).
+`home-banner.json` (change `banner-format`, AB#156) is the one banner: brunosouzas.com's home banner (`public/images/home/home-banner.svg` in the site repository, commit `e8ad098`), redrawn from the pieces. It may be public because the banner it redraws is already public. It has a golden SVG but no parity value, because it is a new drawing of the same idea rather than a copy (the hub is a Mule flow, cream since 0.7.0, where the published banner uses an orange block).
 
-Published sources used for the visual parity check (brain vault commit `f536637`):
+Published sources the fixtures redraw (brain vault commit `f536637`; until 0.6.1 they were also the reference of a PSNR parity check):
 
 | Fixture | Published file | SHA-256 |
 |---|---|---|
@@ -14,7 +16,7 @@ Published sources used for the visual parity check (brain vault commit `f536637`
 | `ai-writes-code.json` | `50-writing/ai-writes-code/images/ai-writes-code-card.svg` | `36f6e2145fcc41e94f47f60c877f9524c97069ba58dfa2304ea6f57991c58ca6` |
 | `integration-patterns.json` | `50-writing/integration-patterns-in-mulesoft/images/integration-patterns-card.svg` | `e8c2ae0c23b61b927c3021b6d9373a3c6d97ae5c2a411a28b6f032315b443692` |
 
-`circuit-breaker-states.json` (change `designer-formats`, AB#173) is the one body diagram: the circuit breaker article's state diagram, PT and EN from one spec with text tables, with a golden per language (`circuit-breaker-states-pt.svg`, `circuit-breaker-states-en.svg`, written with `--lang`). `eip-splitter.json` is the one icon (format `icon`), with golden `eip-splitter.svg`. Both may be public because the images they redraw are already published. Parity: the diagram goldens are at 22.1 dB (PT) and 22.4 dB (EN) against the published files at 800 px (the shadow is shallower and the arrowheads differ; layout, rings and words match), and the icon is pixel-identical (PSNR inf).
+`circuit-breaker-states.json` (change `designer-formats`, AB#173) is the one body diagram: the circuit breaker article's state diagram, PT and EN from one spec with text tables, with a golden per language (`circuit-breaker-states-pt.svg`, `circuit-breaker-states-en.svg`, written with `--lang`). `eip-splitter.json` is the one icon (format `icon`), with golden `eip-splitter.svg`. Both may be public because the images they redraw are already published. Until 0.6.1 the diagram goldens were at 22.1 dB (PT) and 22.4 dB (EN) against the published files at 800 px and the icon was pixel-identical; since 0.7.0 no PSNR applies (see above).
 
 Published sources of the `designer-formats` fixtures (brain vault commit `016a990`):
 

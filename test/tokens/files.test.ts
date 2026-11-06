@@ -82,13 +82,13 @@ describe("Freshness check", () => {
   });
 
   test("Invalid source during the check", () => {
-    const ws = workspace(sourceWith(remove("color.failure")));
+    const ws = workspace(sourceWith(remove("color.state.failure")));
     const build = ws.run(false);
     const before = ws.snapshot();
     const check = ws.run(true);
     expect(check.code).toBe(1);
     expect(check.err).toEqual(build.err);
-    expect(check.err[0]).toBe("color.failure: missing required token (type color)");
+    expect(check.err[0]).toBe("color.state.failure: missing required token (type color)");
     expect(ws.snapshot()).toEqual(before);
   });
 });
@@ -110,7 +110,7 @@ const invalidSources: Record<string, Source | string> = {
   "Non-integer or off-step values": sourceWith(set("font.weightBold", token(450, "fontWeight"))),
   "Opacity above one": sourceWith(set("motion.dimOpacity", token(1.2, "opacity"))),
   "Font family that would break the CSS": sourceWith(set("font.sans", token("Lato; } body { color: red", "fontFamily"))),
-  "Missing required token": sourceWith(remove("color.failure")),
+  "Missing required token": sourceWith(remove("color.state.failure")),
   "Required token with the wrong type": sourceWith(set("outline.block", token(4, "number"))),
   "Missing motion token": sourceWith(remove("motion.focus.mass")),
   "Frame rate with the wrong type": sourceWith(set("motion.fps", token(30, "number"))),

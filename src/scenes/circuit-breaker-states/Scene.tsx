@@ -21,9 +21,9 @@ const { color, font, outline, radius, shadow } = tokens;
 
 // Semantic colour of each state (ADR 0003): green healthy, orange blocked, yellow transitional.
 const fillOf: Record<StateId, string> = {
-  closed: color.healthy,
-  open: color.blocked,
-  half: color.transitional,
+  closed: color.state.healthy,
+  open: color.state.blocked,
+  half: color.state.transitional,
 };
 
 /** The state block that carries the countdown (the reset timeout runs while OPEN). */
@@ -106,7 +106,7 @@ const Caption: React.FC<{ layout: Layout; lang: Lang }> = ({ layout, lang }) => 
 const strokeOf: Record<TransitionId, string> = {
   toOpen: color.ink,
   toHalf: color.ink,
-  halfToOpen: color.failure,
+  halfToOpen: color.state.failure,
   halfToClosed: color.ink,
 };
 const TRANSITIONS: TransitionId[] = ["toOpen", "toHalf", "halfToOpen", "halfToClosed"];
@@ -157,7 +157,7 @@ export const CircuitBreakerStatesScene: React.FC<SceneProps> = ({ lang, format }
         lines={t.halfToOpen.lines}
         size={layout.size.pill}
         appearAt={pillAt(timeline, "halfToOpen")}
-        accent={color.failure}
+        accent={color.state.failure}
       />
       <Pill
         cx={layout.pills.halfToClosed[0]}

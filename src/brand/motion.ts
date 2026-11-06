@@ -243,7 +243,7 @@ export const callAppearance = (kind: SlotKind): CallAppearance => {
     case "ok":
       return { fill: color.white, glyph: "✓", glyphColor: color.ink, dashed: false, shadow: true, opacity: 1 };
     case "fail":
-      return { fill: color.failure, glyph: "✕", glyphColor: color.white, dashed: false, shadow: true, opacity: 1 };
+      return { fill: color.state.failure, glyph: "✕", glyphColor: color.white, dashed: false, shadow: true, opacity: 1 };
     case "blocked":
       return { fill: color.ink, glyph: "–", glyphColor: color.white, dashed: false, shadow: true, opacity: 1 };
     case "empty":

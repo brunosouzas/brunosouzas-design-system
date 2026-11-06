@@ -1,5 +1,5 @@
-// Motion components of the visual language: rings background, ink block with a
-// hard offset shadow, pill label, self-drawing arrow, travelling token,
+// Motion components of the visual language: rings background, ink block with
+// the shadow.* offset (0 since ADR 0009, so no visible shadow), pill label, self-drawing arrow, travelling token,
 // call-result square and countdown ring (ADR 0001, ADR 0003).
 //
 // Every colour and every outline, shadow, radius, font and motion value comes

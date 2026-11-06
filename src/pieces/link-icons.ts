@@ -2,8 +2,10 @@
 // of stackledger-map-and-link-pieces): the social stickers of brunosouzas.com
 // (public/images/home/social-*.svg at e29b3dd), with every colour replaced by
 // its token, plus a `website` globe in the same style. `linkIcon` draws the
-// site's frame (light, or dark with its rim) around the face and the glyph, at
-// the site's measures (46 box, face 38 at 2, radius 9, outline 2.5).
+// face white with its outline and no frame behind it (ADR 0009: no hard shadow,
+// colour only where it means something), then the glyph, at the site's measures
+// (46 box, face 38 at 2, radius 9, outline 2.5). On the dark surface the face's
+// outline is surface.dark.muted; the glyph, inside the white face, stays ink.
 //
 // Credit: the GitHub mark is Font Awesome's (fontawesome.com), licensed
 // CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); its description
@@ -13,14 +15,21 @@
 // a link, a style, a script or a URL, so the output can ship as a static file.
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { drawn, el, g, r2, type SvgNode } from "./node.ts";
-import { colour, pos, size } from "./params.ts";
+import { pos, size } from "./params.ts";
 import { definePiece } from "./piece.ts";
 import { SURFACES, type SurfaceName } from "./metro.ts";
 
 const C = tokens.color;
 const INK = C.ink;
 
-export type LinkIcon = { readonly name: string; readonly title: string; readonly description: string; /** A colour token path. */ readonly face: string; readonly glyph: readonly SvgNode[] };
+export type LinkIcon = {
+  readonly name: string;
+  readonly title: string;
+  readonly description: string;
+  /** The face colour of the site's 0.6 sticker, a colour token path; since 0.7.0 `linkIcon` draws every face white. */
+  readonly face: string;
+  readonly glyph: readonly SvgNode[];
+};
 
 /** Every link icon draws in a 46x46 box. */
 export const LINK_ICON_SIZE = 46;
@@ -37,7 +46,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "linkedin",
     title: "LinkedIn",
     description: "LinkedIn icon.",
-    face: "color.caller",
+    face: "color.state.caller",
     glyph: [
       el("rect", { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: INK, stroke: "none" }),
       el("circle", { cx: 14, cy: 13.8, r: 2.4, fill: INK, stroke: "none" }),
@@ -48,7 +57,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "email",
     title: "Email",
     description: "Email icon.",
-    face: "color.transitional",
+    face: "color.state.transitional",
     glyph: [
       el("rect", { x: 9, y: 13, width: 24, height: 17, rx: 3, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("path", { d: "M10,15 L21,23 L32,15", fill: "none", stroke: INK, "stroke-width": 2.5, "stroke-linejoin": "round" }),
@@ -58,7 +67,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "website",
     title: "Website",
     description: "Website icon: a globe.",
-    face: "color.healthy",
+    face: "color.state.healthy",
     glyph: [
       el("circle", { cx: 21, cy: 21, r: 10.5, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("ellipse", { cx: 21, cy: 21, rx: 4.6, ry: 10.5, fill: "none", stroke: INK, "stroke-width": 2 }),
@@ -69,17 +78,6 @@ export const LINK_ICONS: readonly LinkIcon[] = [
 
 export const LINK_ICON_NAMES = LINK_ICONS.map((icon) => icon.name);
 
-/** The site's frame: the shadow (and on dark the rim) behind the face. */
-const frame = (surface: SurfaceName): SvgNode[] => {
-  const s = tokens.surface[surface];
-  return s.rimWidth > 0
-    ? [
-        el("rect", { x: 4, y: 4, width: 41, height: 41, rx: 11, fill: s.shadow, stroke: "none" }),
-        el("rect", { x: 0.5, y: 0.5, width: 41, height: 41, rx: 11, fill: s.rim, stroke: "none" }),
-      ]
-    : [el("rect", { x: 5, y: 5, width: 38, height: 38, rx: 9, fill: s.shadow, stroke: "none" })];
-};
-
 export type LinkIconParams = { icon: string; x: number; y: number; size?: number; surface?: SurfaceName };
 /** One link sticker at (x, y), `size` wide (46 by default), on the light or the dark page. */
 export const linkIcon = definePiece<LinkIconParams>(
@@ -87,7 +85,7 @@ export const linkIcon = definePiece<LinkIconParams>(
   { icon: { kind: "enum", required: true, values: LINK_ICON_NAMES }, x: pos(), y: pos(), size: size(), surface: { kind: "enum", values: SURFACES } },
   ({ icon, x, y, size: side = LINK_ICON_SIZE, surface = "light" }) => {
     const data = LINK_ICONS.find((candidate) => candidate.name === icon)!;
-    const face = el("rect", { x: 2, y: 2, width: 38, height: 38, rx: 9, fill: colour(data.face, "face"), stroke: INK, "stroke-width": 2.5 });
-    return drawn([g({ transform: `translate(${r2(x)} ${r2(y)}) scale(${side / LINK_ICON_SIZE})`, stroke: "none" }, ...frame(surface), face, ...data.glyph)]);
+    const face = el("rect", { x: 2, y: 2, width: 38, height: 38, rx: 9, fill: C.white, stroke: surface === "dark" ? tokens.surface.dark.muted : INK, "stroke-width": 2.5 });
+    return drawn([g({ transform: `translate(${r2(x)} ${r2(y)}) scale(${side / LINK_ICON_SIZE})`, stroke: "none" }, face, ...data.glyph)]);
   },
 );

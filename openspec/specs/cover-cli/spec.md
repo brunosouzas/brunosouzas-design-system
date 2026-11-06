@@ -55,7 +55,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 63 piece names
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 62 piece names
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`
@@ -119,8 +119,12 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 - **THEN** `custom` is reported as "one free-form object per cover; a repeated object must be a piece"
 
 #### Scenario: Allowed object
-- **WHEN** `custom` is a `g` with a `path` whose `fill` is `color.blocked` and a `text` node `v1`
+- **WHEN** `custom` is a `g` with a `path` whose `fill` is `color.state.blocked` and a `text` node `v1`
 - **THEN** the cover draws them after the pieces' bodies, with `fill` resolved to the token's value and the text with `stroke="none"`
+
+#### Scenario: Removed top-level colour in custom
+- **WHEN** a `custom` `path` has `fill: "color.blocked"`
+- **THEN** that path is reported as not a colour token path, the command exits 1 and writes nothing
 
 ### Requirement: Free-form content
 `custom` SHALL use only the tags `g`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `path`, `text`, and the attributes of `design.md` §6. No value contains `url(` or `//`; `fill`, `stroke` and the grammar attributes (`transform`, `d`, `points`) are strings; `fill` and `stroke` are `none` or a colour token path; `transform` holds only `translate`, `rotate` and `scale`; `d` and `points` hold path characters only; strings appear only in `text`.
@@ -142,30 +146,34 @@ A spec SHALL have at most one free-form object, `custom`, a single JSON node tre
 - **THEN** only the first is reported, as "only translate, rotate and scale are allowed"
 
 ### Requirement: Cover output
-When `format` is `cover` or absent, the output SHALL be an 800x420 `svg` with `role="img"`, `aria-labelledby` naming `<id>-title` and `<id>-desc`, the sans font, then `title`, `desc`, a clip-path `<id>-frame`, the background fill, the clipped rings (14) in the background's ring colour, one outlined group with every piece body in paint order and `custom` where "Free-form object's place" puts it, and one label group with every text, ending in LF.
+When `format` is `cover` or absent, the output SHALL be an 800x420 `svg` with `role="img"`, `aria-labelledby` naming `<id>-title` and `<id>-desc`, the sans font, then `title`, `desc`, the font `<style>` when there is text, a clip-path `<id>-frame`, the background fill, the clipped rings (14) in the background's ring colour, one outlined group with every piece body in paint order and `custom` where "Free-form object's place" puts it, and one label group with every text, ending in LF.
 
 #### Scenario: Layer order
 - **WHEN** a spec has a `pill` before a `sheet`
 - **THEN** the pill's rect comes before the sheet's shapes in the outlined group, and the pill's label is in the label group after all shapes
 
 #### Scenario: Ring colour from the pair
-- **WHEN** a spec has `background: "peach"` and `rings.radius` 100
-- **THEN** the background is `#F4D8BC`, the 14 rings are stroked `#EAC7A3`, width 2, radii 100 to 464 in steps of 28
+- **WHEN** a spec has `background: "trackIntegration"` and `rings.radius` 100
+- **THEN** the background is `#F7C6A1`, the 14 rings are stroked `#E3AB84`, width 2, radii 100 to 464 in steps of 28
 
 #### Scenario: Default format is the cover
 - **WHEN** each proof cover fixture is built once as it is and once with `format: "cover"` added
 - **THEN** both outputs equal its golden SVG byte for byte
 
 ### Requirement: Parity with the published proof covers
-The repository SHALL keep as spec fixtures, with their golden SVG output: the three published proof covers (`spec-driven-development`, `ai-writes-code`, `integration-patterns`), the banner `home-banner`, the body diagram `circuit-breaker-states` (one spec, a golden per language, `-pt` and `-en`) and the icon `eip-splitter`. No other spec enters the repository.
+The repository SHALL keep as spec fixtures, with their golden SVG output: the three published proof covers (`spec-driven-development`, `ai-writes-code`, `integration-patterns`), the banner `home-banner`, the body diagram `circuit-breaker-states` (one spec, a golden per language, `-pt` and `-en`) and the icon `eip-splitter`. No other spec enters the repository. Cover and banner fixtures use a remaining background; goldens are drawn in the v2 grammar.
 
 #### Scenario: Golden output
 - **WHEN** the test builds each fixture, the diagram once with `--lang pt` and once with `--lang en`
 - **THEN** each of the seven results equals its golden SVG byte for byte
 
 #### Scenario: Visual parity (local)
-- **WHEN** the owner renders each golden and its published original at its width (800, or 64 for the icon) with `rsvg-convert` and measures PSNR with ffmpeg
-- **THEN** the proof covers reach at least 39.4, 31.8 and 23.3 dB, both diagram goldens at least 22.0 dB, and the icon is pixel-identical (PSNR inf); the banner has no parity value
+- **WHEN** the owner renders each golden at its width (800, 1200 for the banner, 64 for the icon) in headless Chrome through an `<img>`, next to the 0.6.1 golden
+- **THEN** the text shows in Source, the layout, rings and words match the 0.6.1 golden, and the owner approves the pair; no PSNR against the published originals applies, because the v2 colours and type differ from them by design
+
+#### Scenario: Golden drifts
+- **WHEN** one byte of a golden differs from what the command writes
+- **THEN** the golden test fails naming that fixture
 
 ### Requirement: Spec positions stay in the frame's range
 A cover spec SHALL keep the `rings` centre (`rings.cx`, `rings.cy`) within ±10000, as before this change, although the `rings` piece itself takes any finite number. Piece positions in `pieces` follow the pieces' own rules.
@@ -189,8 +197,8 @@ When a piece of a valid spec throws "the drawing overflows", the command SHALL r
 When `format` is `banner`, the output SHALL be a `banner.width` x `banner.height` (1200x420) `svg` with the attributes, `title`, `desc` and LF ending of a cover. The clip-path `<id>-frame` and the background rect both have `rx` `banner.radius` (20). After the background come the clipped rings, then one group clipped by `<id>-frame` holding the outlined group and the label group.
 
 #### Scenario: Banner frame
-- **WHEN** a spec with `format: "banner"`, `background: "navy"` and one `pill` is built
-- **THEN** the root has `width="1200" height="420" viewBox="0 0 1200 420"`, the clip rect and the background rect have `rx="20"`, the background is `#14215A`, and the pill's rect and label sit inside the clipped group
+- **WHEN** a spec with `format: "banner"`, `background: "trackDelivery"` and one `pill` is built
+- **THEN** the root has `width="1200" height="420" viewBox="0 0 1200 420"`, the clip rect and the background rect have `rx="20"`, the background is `#B9DEC3`, and the pill's rect and label sit inside the clipped group
 
 #### Scenario: Piece past a corner
 - **WHEN** a banner spec places a `cloud` at `cx` -20, `cy` 10
@@ -224,7 +232,7 @@ A spec of any format SHALL refuse `currentColor` in `uiIcon.colour`, the one par
 
 #### Scenario: Current colour on another piece
 - **WHEN** `pieces[0]` is a `pill` with valid parameters and `fill: "currentColor"`
-- **THEN** the command prints `pieces[0].fill: expected a colour token path such as color.healthy, found "currentColor"` and exits 1
+- **THEN** the command prints `pieces[0].fill: expected a colour token path such as color.state.healthy, found "currentColor"` and exits 1
 
 #### Scenario: Token colour in a cover
 - **WHEN** `pieces[0]` is the same `uiIcon` with `colour: "color.white"`
@@ -239,7 +247,7 @@ When `format` is `diagram`, the output SHALL be an `svg` `bodyDiagram.width` (80
 
 #### Scenario: Diagram frame
 - **WHEN** a diagram spec with `height` 322 and one `diagramBox` is built
-- **THEN** the root has `width="800" height="460" viewBox="0 0 560 322"`, the clip rect and the panel rect have `rx="9.8"`, the panel is `#EEF2FF`, and the box's shapes sit inside the clipped group
+- **THEN** the root has `width="800" height="460" viewBox="0 0 560 322"`, the clip rect and the panel rect have `rx="9.8"`, the panel is `#F6F3EC`, and the box's shapes sit inside the clipped group
 
 #### Scenario: Smallest diagram
 - **WHEN** a diagram spec has `height` 1
@@ -253,7 +261,7 @@ A diagram spec SHALL need `height`, a number from 1 to 10000 in layout units, an
 - **THEN** each run prints one problem for `height`, "expected a number from 1 to 10000", exits 1 and writes nothing
 
 #### Scenario: Background in a diagram
-- **WHEN** a diagram spec has `background: "navy"`
+- **WHEN** a diagram spec has `background: "trackIntegration"`
 - **THEN** `background` is reported as "a diagram is drawn on color.panel; background is for covers and banners"
 
 #### Scenario: Height on a cover
@@ -265,7 +273,7 @@ In a diagram the outlined group SHALL be stroked `color.ink` at `map.outline` (3
 
 #### Scenario: Pill in a diagram
 - **WHEN** a diagram spec holds one `pill`
-- **THEN** the outlined group has `stroke="#0A1033" stroke-width="3" stroke-linejoin="round"`, the label group has `font-size="13"`, and the pill's rect and text sit in them
+- **THEN** the outlined group has `stroke="#121212" stroke-width="3" stroke-linejoin="round"`, the label group has `font-size="13"` and `font-weight="700"`, and the pill's rect and text sit in them
 
 #### Scenario: Piece with its own stroke
 - **WHEN** a diagram spec holds a `diagramBox`
@@ -276,7 +284,7 @@ In a diagram the rings SHALL be stroked `color.ring` at `cover.ringWidth × 560 
 
 #### Scenario: Published rings
 - **WHEN** a diagram spec has `height` 322 and `rings` `cx` 280, `cy` 161 and no `radius`
-- **THEN** 15 rings are drawn, stroked `#E0E7FB` at width 1.4, radii 49 to 323.4 in steps of 19.6, which show at step 28 and width 2 at 800
+- **THEN** 15 rings are drawn, stroked `#EDE8DE` at width 1.4, radii 49 to 323.4 in steps of 19.6, which show at step 28 and width 2 at 800
 
 #### Scenario: First ring beyond every corner
 - **WHEN** the same spec has `rings.radius` 400
@@ -298,7 +306,7 @@ When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `u
 - **THEN** the root has `width="64" height="40" viewBox="0 0 64 40"`, the title is `Splitter`, the description is the icon's own with its CC BY 4.0 credit, and the body is `eipIcon` `splitter` drawn at 0,0
 
 #### Scenario: UI icon box
-- **WHEN** an icon spec holds a `uiIcon` `sun` with `size` 48 and `colour` `color.blocked`
+- **WHEN** an icon spec holds a `uiIcon` `sun` with `size` 48 and `colour` `color.state.blocked`
 - **THEN** the root has `width="48" height="48" viewBox="0 0 48 48"`
 
 #### Scenario: Not one icon piece
@@ -310,11 +318,15 @@ When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `u
 - **THEN** `pieces[0].x` is reported as "an icon is drawn at 0, 0"
 
 ### Requirement: Icon keys
-An icon spec SHALL refuse `background`, `rings`, `custom`, `customAt` and `height`, each with "not used by the icon format". An `eipIcon` spec SHALL refuse `title` and `description` with "comes from the EIP icon, with its CC BY 4.0 credit", because both come from the icon's data; a `uiIcon` or `linkIcon` spec needs both.
+An icon spec SHALL refuse `background`, `rings`, `custom`, `customAt`, `height` and `signature`, each with "not used by the icon format". An `eipIcon` spec SHALL refuse `title` and `description` with "comes from the EIP icon, with its CC BY 4.0 credit", because both come from the icon's data; a `uiIcon` or `linkIcon` spec needs both.
 
 #### Scenario: Rings in an icon
 - **WHEN** an icon spec has `rings` `cx` 0, `cy` 0
 - **THEN** `rings` is reported as "not used by the icon format" and nothing is written
+
+#### Scenario: Signature in an icon
+- **WHEN** an icon spec has `signature: true`, and then `signature: false`
+- **THEN** each run reports `signature` as "not used by the icon format", exits 1 and writes nothing
 
 #### Scenario: Title on an EIP icon
 - **WHEN** an `eipIcon` spec has `title: "Splitter"`
@@ -388,30 +400,8 @@ A spec with `text` SHALL need `--lang` naming one of its languages: without it t
 - **WHEN** a spec without `custom` has `customAt: 0`, then `customAt: 9` with two pieces, and a spec with `custom` and 8 pieces has `customAt: 9`, then `customAt: 1.5`
 - **THEN** `customAt` is reported as "needs custom" twice (one problem each run), then "expected an integer from 0 to 8" twice
 
-### Requirement: Cast on a cover
-A cover, banner or diagram spec SHALL accept `mascot` and `emote` in `pieces` like any other piece, checked with the same schema and relations, with problems reported at their JSON path.
-
-#### Scenario: Mascot and emote drawn
-- **WHEN** a cover spec has the pieces `{ "piece": "mascot", "who": "architect", "x": 400, "y": 380, "action": "rest" }` and `{ "piece": "emote", "kind": "idea", "x": 520, "y": 160 }`
-- **THEN** the command writes the cover, and its outlined group holds a `g` with `data-mascot` `architect` and a `g` with `data-emote` `idea`
-
-#### Scenario: Head tilt on a dev in a spec
-- **WHEN** a cover spec has `{ "piece": "mascot", "who": "dev", "x": 0, "y": 0, "headTilt": 5 }` and `{ "piece": "emote", "kind": "zzz", "x": 0, "y": 0 }`
-- **THEN** both are reported, `pieces[0].headTilt` ("applies only to the agent") before `pieces[1].kind`, the command exits 1 and writes nothing
-
-### Requirement: Track cover backgrounds
-`coverBackground` SHALL gain three entries, `trackIntegration`, `trackDelivery`, `trackAi`: `fill` equal to `brand.light.track*`, `ring` that fill mixed 12% toward black, usable as the `background` of a cover, banner, LinkedIn card or og spec like any existing entry. The 21 existing literal entries SHALL remain accepted for this release.
-
-#### Scenario: Track background accepted
-- **WHEN** a cover spec has `background: "trackIntegration"`
-- **THEN** the command writes the cover with the background fill and ring colours of `coverBackground.trackIntegration`
-
-#### Scenario: Old literal backgrounds still accepted
-- **WHEN** a cover spec has `background: "peach"` (an existing entry)
-- **THEN** the command still writes the cover exactly as before this change
-
 ### Requirement: Signature lockup
-A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boolean `signature`; `true` adds the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`. A `diagram`, `favicon` or `avatar` spec refuses the key; an `icon` spec draws no signature.
+A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boolean `signature`; `true` adds the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`. A `diagram`, `favicon`, `avatar` or `icon` spec refuses the key (for the icon: "Icon keys").
 
 #### Scenario: Signature drawn
 - **WHEN** a cover spec has `signature: true`
@@ -419,7 +409,11 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 
 #### Scenario: No signature by default
 - **WHEN** a cover spec omits `signature`
-- **THEN** the written SVG is unchanged from this change (no signature group)
+- **THEN** the written SVG has no signature group
+
+#### Scenario: Signature refused by an icon
+- **WHEN** an icon spec has `signature: true`
+- **THEN** `signature` is reported as "not used by the icon format" and nothing is written, where 0.6.x accepted it and drew nothing
 
 ### Requirement: New icon formats
 `format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square of `brand.light.accentText`; the `background` and `pieces` keys are refused). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
@@ -448,3 +442,59 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 #### Scenario: Neutral background accepted
 - **WHEN** a cover spec has `background: "neutral"`
 - **THEN** the command writes the cover with the fill and ring colours of `coverBackground.neutral`
+
+### Requirement: Fonts embedded in every written image
+Before writing, the command SHALL pass every format's tree through `embedFonts` of `@brunosouzas/design-system/fonts` ("Fonts embedded in an SVG tree"), so the written SVG carries the subset Source faces its text uses and a reader sees Source inside an `<img>` without the fonts installed. A spec whose text needs a character the faces lack is still written; the browser draws that character from the next family of the stack.
+
+#### Scenario: Proof cover carries its faces
+- **WHEN** the `spec-driven-development` fixture is built
+- **THEN** the written SVG has exactly one `<style>`, right after `<desc>`, holding two `@font-face` rules in this order: `Source Sans 3` with `font-weight:550 799` and `font-style:normal` (the labels, at `cover.labelWeight` 700), then `Source Sans 3` with `font-weight:800 900` and `font-style:normal` (the `?` marks and the `GO` stamp, at 900); each `src` is a `data:font/ttf;base64,` URL with `format('truetype')`, and the file equals its golden
+
+#### Scenario: Diagram carries its code face
+- **WHEN** the `circuit-breaker-states` fixture is built with `--lang en`
+- **THEN** its `<style>` holds two `@font-face` rules in this order: `Source Code Pro` at `550 900` (the `resetTimeout` run, which inherits weight 700), then `Source Sans 3` at `550 799` (every other word, at 700)
+
+#### Scenario: Text-free output gets no font style
+- **WHEN** the `eip-splitter` icon fixture and a `favicon` spec are built
+- **THEN** the icon holds no `<style>`, and the favicon holds only its theme `<style>` of "New icon formats", with no `@font-face`
+
+#### Scenario: Character the faces lack
+- **WHEN** a cover spec holds a `pill` with `text: "漢 ok"`
+- **THEN** the command writes the cover and exits 0, and the embedded subset holds the glyphs of `o`, `k` and the space but none for `漢`
+
+#### Scenario: Embedding is deterministic
+- **WHEN** the same diagram spec is built twice with `--lang pt`
+- **THEN** both files are byte-identical, embedded fonts included
+
+### Requirement: Font embedding failure in the command
+When `embedFonts` rejects (a font file cannot be read, or the WebAssembly module fails to load), the command SHALL print the `Error`'s message, which names the file path or `harfbuzzjs`, exit 1 and write nothing: an existing output file keeps its bytes.
+
+#### Scenario: Unreadable font file
+- **WHEN** the test makes the read of the Source Sans 3 Bold file fail and runs the command on the `home-banner` fixture with `--out` naming an existing file
+- **THEN** the command prints one line holding that file's path, exits 1, prints no `wrote` line, and the existing file keeps its bytes
+
+#### Scenario: WebAssembly fails to load
+- **WHEN** the test makes the instantiation of the `harfbuzzjs` wasm module fail and runs the command on a valid cover spec with no output file yet
+- **THEN** the command prints one line naming `harfbuzzjs`, exits 1, and no output file exists
+
+### Requirement: Emote on a cover
+A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other piece, checked with the same schema and relations, with problems reported at their JSON path. `mascot` is no longer a piece: an entry naming it is an unknown piece.
+
+#### Scenario: Emote drawn
+- **WHEN** a cover spec has the piece `{ "piece": "emote", "kind": "idea", "x": 520, "y": 160 }`
+- **THEN** the command writes the cover, and its outlined group holds a `g` with `data-emote` `idea`
+
+#### Scenario: Mascot refused
+- **WHEN** a cover spec has `{ "piece": "mascot", "who": "dev", "x": 0, "y": 0 }` and `{ "piece": "emote", "kind": "zzz", "x": 0, "y": 0 }`
+- **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 62 piece names) before `pieces[1].kind`, the command exits 1 and writes nothing
+
+### Requirement: Only track and neutral cover backgrounds
+`coverBackground` SHALL hold the track families of design-tokens "Measured cover backgrounds": the four defaults `trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal` (`fill` equal to `brand.light.track*`), their seven named tones and `neutral`, each usable as the `background` of a cover, banner, LinkedIn card or og spec. The 21 entries measured before 0.6.0 are removed: these twelve are the only backgrounds.
+
+#### Scenario: Track background accepted
+- **WHEN** a cover spec has `background: "trackIntegration"`, then `background: "deliveryMint"`
+- **THEN** the command writes each cover with the background fill and ring colours of `coverBackground.trackIntegration` (`#F7C6A1`, `#E3AB84`), then of `coverBackground.deliveryMint` (`#A9DCD6`, `#88C4BD`)
+
+#### Scenario: Removed background refused
+- **WHEN** a cover spec has `background: "peach"`, or a banner spec `background: "navy"`
+- **THEN** the command prints `background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "peach"` (or `"navy"`), exits 1 and writes nothing

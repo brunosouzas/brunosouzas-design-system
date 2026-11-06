@@ -1,6 +1,6 @@
 // Unit tests of the token source validation (spec design-tokens; tasks 2.2).
 // Each test title is the spec scenario it proves.
-import { mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
@@ -99,9 +99,9 @@ describe("CSS names", () => {
 
 describe("Every problem reported at once", () => {
   test("Unknown group and missing token together", () => {
-    const problems = problemsOf(sourceWith(set("colour", { accent: token("#FF8A3D", "color") }), remove("color.failure")));
+    const problems = problemsOf(sourceWith(set("colour", { accent: token("#FF8A3D", "color") }), remove("color.state.failure")));
     expect(problems).toEqual([
-      "color.failure: missing required token (type color)",
+      "color.state.failure: missing required token (type color)",
       expect.stringMatching(/^colour: unknown group/),
     ]);
   });
@@ -185,7 +185,24 @@ describe("Supported token types and their values", () => {
 
 describe("Required tokens", () => {
   test("Missing required token", () => {
-    expect(problemsOf(sourceWith(remove("color.failure")))).toEqual(["color.failure: missing required token (type color)"]);
+    expect(problemsOf(sourceWith(remove("color.state.failure")))).toEqual(["color.state.failure: missing required token (type color)"]);
+  });
+
+  test("State colours only under color.state", () => {
+    const json = JSON.parse(readFileSync(new URL("../../tokens/generated/tokens.json", import.meta.url), "utf8"));
+    const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(json.color.state.healthy).toBe("#3DDC84");
+    expect(Object.keys(json.color).sort()).toEqual(["ink", "panel", "ring", "state", "white"]);
+    expect(css).toContain("  --ds-color-state-healthy: #3DDC84;\n");
+    expect(css).toContain("  --ds-color-state-fail-fast: #E0661F;\n");
+    for (const name of ["healthy", "blocked", "transitional", "caller", "backend", "failure", "fail-fast"]) expect(css).not.toContain(`--ds-color-${name}:`);
+  });
+
+  test("Top-level state colour no longer required", () => {
+    // The synthetic source holds exactly the required tokens: every color.state one and no top-level duplicate.
+    const source = sourceWith();
+    expect(Object.keys((source.color as Record<string, unknown>)).sort()).toEqual(["ink", "panel", "ring", "state", "white"]);
+    expect(problemsOf(source)).toEqual([]);
   });
 
   test("Required token with the wrong type", () => {

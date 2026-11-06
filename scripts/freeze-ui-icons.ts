@@ -5,8 +5,12 @@
 //
 // Run once on 2bfe4a5, the 0.3.0 tree, before any code change:
 //   npx tsx scripts/freeze-ui-icons.ts
-// It writes test/fixtures/ui-icons-0.3.0.json. Do not run it again on a later
-// tree: the fixture is the record of 0.3.0.
+// It writes test/fixtures/ui-icons-0.3.0.json.
+//
+// Re-run once for 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6), on
+// the drawing the owner approved from the renders of group 8, with the same
+// calls: the fixture now pins the 0.3.0 calls as 0.7.0 draws them. Do not run
+// it again on a later tree.
 import { writeFileSync } from "node:fs";
 import { toSvg } from "../src/pieces/render.ts";
 import { UI_ICON_NAMES, uiIcon } from "../src/pieces/ui-icons.ts";

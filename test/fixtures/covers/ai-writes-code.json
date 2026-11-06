@@ -1,8 +1,8 @@
 {
   "id": "awc",
   "title": "The AI writes the code; the developer owns both ends",
-  "description": "Illustration. On the left, a developer's spec sheet with a checklist, labelled You. In the middle, a green robot that writes code, labelled AI. On the right, the code it produced under a magnifying glass that finds a problem line, labelled You. Arrows run from the spec to the robot and from the robot to the review.",
-  "background": "peach",
+  "description": "Illustration on a periwinkle background with soft rings. On the left, a developer's white spec sheet with a checklist, three rows ticked and one open, labelled You. In the middle, a white robot with amber eyes and an orange antenna that writes code, labelled AI on a yellow tag. On the right, the dark code panel it produced under an orange magnifying glass that finds the problem line, drawn in orange, labelled You. Orange arrows run from the spec to the robot and from the robot to the review.",
+  "background": "trackAi",
   "rings": {
     "cx": 400,
     "cy": 215,
@@ -111,7 +111,7 @@
       "x": 400,
       "y": 294,
       "text": "AI",
-      "fill": "color.transitional",
+      "fill": "color.state.transitional",
       "width": 68
     },
     {

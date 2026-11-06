@@ -51,7 +51,7 @@ export const isColourLiteral = (value: string): boolean => COLOUR_LITERAL.test(v
 /** The hex value of a colour token path; throws a RangeError for anything else. */
 export const colour = (path: string, name = "colour"): string => {
   const value = COLOUR_TOKENS.get(path);
-  if (value === undefined) throw new RangeError(`${name}: expected a colour token path such as color.healthy, found ${JSON.stringify(path)}`);
+  if (value === undefined) throw new RangeError(`${name}: expected a colour token path such as color.state.healthy, found ${JSON.stringify(path)}`);
   return value;
 };
 
@@ -77,7 +77,7 @@ const checkValue = (spec: ParamSpec, value: unknown, path: string, out: Problem[
       if (spec.currentColor && value === CURRENT_COLOUR) return;
       if (typeof value !== "string") return report(`expected a colour token path, found ${describe(value)}`);
       if (isColourLiteral(value)) return report("colour literals are not allowed; use a token path");
-      if (!COLOUR_TOKENS.has(value)) return report(`expected a colour token path such as color.healthy, found ${describe(value)}`);
+      if (!COLOUR_TOKENS.has(value)) return report(`expected a colour token path such as color.state.healthy, found ${describe(value)}`);
       return;
     case "dataColor":
       if (typeof value !== "string") return report(`expected a colour token path or #RRGGBB, found ${describe(value)}`);

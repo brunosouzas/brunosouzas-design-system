@@ -7,13 +7,19 @@
 // makes every cover reproducible, and only the pieces live in this public
 // repository.
 //
+// Every written image embeds, as subsets, the Source faces its text uses
+// (`embedFonts`, ADR 0008), so a reader sees Source inside an `<img>`.
+//
 // What can go wrong: a bad invocation reports its first problem with the
-// usage; an invalid spec reports every problem by JSON path. In both cases the
-// command exits 1 and writes nothing. An existing output file is replaced.
+// usage; an invalid spec reports every problem by JSON path; a font file that
+// cannot be read or a WebAssembly subsetter that does not load prints the
+// error's one line (naming the file or harfbuzzjs). In each case the command
+// exits 1 and writes nothing. An existing output file is replaced.
 import { closeSync, existsSync, openSync, readFileSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { embedFonts } from "../src/fonts/embed.ts";
 import { coverTree, LANGUAGE, validateCoverSpec, type CoverSpec } from "../src/pieces/cover.ts";
 import { toSvg } from "../src/pieces/render.ts";
 
@@ -79,16 +85,19 @@ const parseJson = (text: string, label: string): { value: unknown } | { problem:
   }
 };
 
-/** Builds the cover text for a spec file's contents, or the problem lines. */
-export const buildCover = (text: string, label: string, lang?: string): { ok: true; svg: string } | { ok: false; lines: string[] } => {
+/**
+ * Builds the cover text for a spec file's contents, its fonts embedded, or the
+ * problem lines. Rejects when embedding fails (a font file, or harfbuzzjs).
+ */
+export const buildCover = async (text: string, label: string, lang?: string): Promise<{ ok: true; svg: string } | { ok: false; lines: string[] }> => {
   const parsed = parseJson(text, label);
   if ("problem" in parsed) return { ok: false, lines: [parsed.problem] };
   const problems = validateCoverSpec(parsed.value, { lang });
   if (problems.length > 0) return { ok: false, lines: problems.map((p) => `${p.path}: ${p.message}`) };
-  return { ok: true, svg: `${toSvg(coverTree(parsed.value as CoverSpec, { lang }))}\n` };
+  return { ok: true, svg: `${toSvg(await embedFonts(coverTree(parsed.value as CoverSpec, { lang })))}\n` };
 };
 
-export const runCover = (args: string[], io: CoverIo): number => {
+export const runCover = async (args: string[], io: CoverIo): Promise<number> => {
   const invocation = parseCoverArgs(args, io.cwd);
   if (!invocation.ok) {
     io.error(invocation.problem);
@@ -104,7 +113,14 @@ export const runCover = (args: string[], io: CoverIo): number => {
     io.error(COVER_USAGE);
     return 1;
   }
-  const result = buildCover(text, invocation.spec, invocation.lang);
+  let result: Awaited<ReturnType<typeof buildCover>>;
+  try {
+    result = await buildCover(text, invocation.spec, invocation.lang);
+  } catch (error) {
+    // The embedding failed: no image ships without its faces.
+    io.error(error instanceof Error ? error.message : String(error));
+    return 1;
+  }
   if (!result.ok) {
     for (const line of result.lines) io.error(line);
     io.error(`cover: ${result.lines.length} problem(s) in ${invocation.spec}; no file written`);
@@ -144,5 +160,5 @@ const isMain = (() => {
   }
 })();
 if (isMain) {
-  process.exitCode = runCover(process.argv.slice(2), { cwd: process.env.INIT_CWD ?? process.cwd(), log: console.log, error: console.error });
+  process.exitCode = await runCover(process.argv.slice(2), { cwd: process.env.INIT_CWD ?? process.cwd(), log: console.log, error: console.error });
 }

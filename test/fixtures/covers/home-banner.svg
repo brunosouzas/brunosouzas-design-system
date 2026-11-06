@@ -1,14 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="home-banner-title home-banner-desc" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="home-banner-title home-banner-desc" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="home-banner-title">Integration, delivery and AI between systems</title>
-  <desc id="home-banner-desc">Illustration. On the left, a browser window labelled APIs and a stack of three server units send blue pipes into a light blue Mule flow labelled Integration, with a Choice and a For Each component. From the flow a pipe runs right through two passing checks labelled CI/CD into a white cloud. A green robot stands above the pipe on the right.</desc>
+  <desc id="home-banner-desc">Illustration on a peach background with soft rings. On the left, a white browser window labelled APIs and a stack of three white server units send orange pipes into a cream Mule flow labelled Integration, with a Choice and a For Each component. From the flow an orange pipe runs right through two green passing checks labelled CI/CD, on a yellow tag, into a white cloud. A white robot with amber eyes stands above the pipe on the right.</desc>
+  <style>@font-face{font-family:'Source Sans 3';font-weight:550 799;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}</style>
   <defs>
     <clipPath id="home-banner-frame">
       <rect width="1200" height="420" rx="20"/>
     </clipPath>
   </defs>
-  <rect width="1200" height="420" rx="20" fill="#14215A"/>
+  <rect width="1200" height="420" rx="20" fill="#F7C6A1"/>
   <g clip-path="url(#home-banner-frame)">
-    <g fill="none" stroke="#1C2D74" stroke-width="2">
+    <g fill="none" stroke="#E3AB84" stroke-width="2">
       <circle cx="600" cy="225" r="60"/>
       <circle cx="600" cy="225" r="88"/>
       <circle cx="600" cy="225" r="116"/>
@@ -34,72 +35,61 @@
     </g>
   </g>
   <g clip-path="url(#home-banner-frame)">
-    <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">
-      <path d="M250,118 C360,118 380,196 470,196" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#0A1033" stroke-width="30"/>
-      <path d="M250,118 C360,118 380,196 470,196" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#1E6FEB" stroke-width="22"/>
-      <path d="M244,262 C360,262 380,244 470,244" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#0A1033" stroke-width="30"/>
-      <path d="M244,262 C360,262 380,244 470,244" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#1E6FEB" stroke-width="22"/>
-      <path d="M730,255 H1010" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#0A1033" stroke-width="30"/>
-      <path d="M730,255 H1010" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#1E6FEB" stroke-width="22"/>
-      <rect x="50" y="62" width="200" height="130" rx="12" fill="#0A1033" transform="translate(10 10)"/>
+    <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+      <path d="M250,118 C360,118 380,196 470,196" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#121212" stroke-width="30"/>
+      <path d="M250,118 C360,118 380,196 470,196" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#E04E17" stroke-width="22"/>
+      <path d="M244,262 C360,262 380,244 470,244" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#121212" stroke-width="30"/>
+      <path d="M244,262 C360,262 380,244 470,244" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#E04E17" stroke-width="22"/>
+      <path d="M730,255 H1010" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#121212" stroke-width="30"/>
+      <path d="M730,255 H1010" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#E04E17" stroke-width="22"/>
       <rect x="50" y="62" width="200" height="130" rx="12" fill="#FFFFFF"/>
       <path d="M50,92 H250" fill="none"/>
-      <circle cx="68" cy="77" r="5" fill="#FF6B6B" stroke-width="2.5"/>
-      <circle cx="84" cy="77" r="5" fill="#FFD25A" stroke-width="2.5"/>
-      <circle cx="100" cy="77" r="5" fill="#3DDC84" stroke-width="2.5"/>
-      <rect x="70" y="108" width="160" height="40" rx="8" fill="#8FB2FF" stroke-width="3"/>
-      <rect x="70" y="162" width="120" height="10" rx="5" fill="#C9D6F5" stroke="none"/>
-      <rect x="70" y="180" width="80" height="10" rx="5" fill="#C9D6F5" stroke="none"/>
-      <rect x="64" y="210" width="180" height="40" rx="8" fill="#0A1033" transform="translate(10 10)"/>
-      <rect x="64" y="210" width="180" height="40" rx="8" fill="#FF6B6B"/>
-      <rect x="80" y="225" width="90" height="10" rx="5" fill="#FFFFFF" stroke="none"/>
+      <circle cx="68" cy="77" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+      <circle cx="84" cy="77" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+      <circle cx="100" cy="77" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+      <rect x="70" y="108" width="160" height="40" rx="8" fill="#F6F3EC" stroke-width="3"/>
+      <rect x="70" y="162" width="120" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
+      <rect x="70" y="180" width="80" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
+      <rect x="64" y="210" width="180" height="40" rx="8" fill="#FFFFFF"/>
+      <rect x="80" y="225" width="90" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
       <circle cx="220" cy="230" r="6" fill="#FFFFFF" stroke-width="3"/>
-      <rect x="64" y="260" width="180" height="40" rx="8" fill="#0A1033" transform="translate(10 10)"/>
-      <rect x="64" y="260" width="180" height="40" rx="8" fill="#FF6B6B"/>
-      <rect x="80" y="275" width="90" height="10" rx="5" fill="#FFFFFF" stroke="none"/>
+      <rect x="64" y="260" width="180" height="40" rx="8" fill="#FFFFFF"/>
+      <rect x="80" y="275" width="90" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
       <circle cx="220" cy="280" r="6" fill="#FFFFFF" stroke-width="3"/>
-      <rect x="64" y="310" width="180" height="40" rx="8" fill="#0A1033" transform="translate(10 10)"/>
-      <rect x="64" y="310" width="180" height="40" rx="8" fill="#FF6B6B"/>
-      <rect x="80" y="325" width="90" height="10" rx="5" fill="#FFFFFF" stroke="none"/>
+      <rect x="64" y="310" width="180" height="40" rx="8" fill="#FFFFFF"/>
+      <rect x="80" y="325" width="90" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
       <circle cx="220" cy="330" r="6" fill="#FFFFFF" stroke-width="3"/>
-      <rect x="470" y="190" width="262" height="130" rx="22" fill="#0A1033" transform="translate(10 10)"/>
-      <rect x="470" y="190" width="262" height="130" rx="22" fill="#8FB2FF"/>
+      <rect x="470" y="190" width="262" height="130" rx="22" fill="#F6F3EC"/>
       <path d="M488,255 H492 M584,255 H612 M704,255 H716" stroke-linecap="round"/>
-      <path d="M604,248 L613,255 L604,262 Z" fill="#0A1033" stroke-width="2"/>
-      <path d="M708,248 L717,255 L708,262 Z" fill="#0A1033" stroke-width="2"/>
-      <rect x="498" y="204" width="86" height="102" rx="14" fill="#0A1033" transform="translate(6 6)"/>
+      <path d="M604,248 L613,255 L604,262 Z" fill="#121212" stroke-width="2"/>
+      <path d="M708,248 L717,255 L708,262 Z" fill="#121212" stroke-width="2"/>
       <rect x="498" y="204" width="86" height="102" rx="14" fill="#FFFFFF"/>
-      <rect x="618" y="204" width="86" height="102" rx="14" fill="#0A1033" transform="translate(6 6)"/>
       <rect x="618" y="204" width="86" height="102" rx="14" fill="#FFFFFF"/>
       <path fill="none" stroke-linecap="round" d="M514,255 H524 M538,241 L552,255 L538,269 L524,255 Z M552,255 L568,241 M552,255 L568,269"/>
       <path fill="none" stroke-linecap="round" d="M679.2,244.5 A21,21 0 1 1 646.2,240.2"/>
-      <path d="M652.5,233.8 L651.1,245.1 L641.2,235.2 Z" fill="#0A1033" stroke-width="2"/>
+      <path d="M652.5,233.8 L651.1,245.1 L641.2,235.2 Z" fill="#121212" stroke-width="2"/>
       <rect x="653" y="247" width="16" height="16" fill="#FFFFFF" stroke-width="3"/>
       <line x1="980" y1="54" x2="980" y2="26"/>
-      <circle cx="980" cy="20" r="10" fill="#FF8A3D"/>
-      <rect x="884" y="98" width="20" height="52" rx="6" fill="#2BB673"/>
-      <rect x="1056" y="98" width="20" height="52" rx="6" fill="#2BB673"/>
-      <rect x="900" y="54" width="160" height="152" rx="22" fill="#0A1033" transform="translate(10 10)"/>
-      <rect x="900" y="54" width="160" height="152" rx="22" fill="#3DDC84"/>
-      <rect x="922" y="76" width="116" height="72" rx="14" fill="#0A1033"/>
-      <circle cx="957" cy="112" r="11" fill="#3DDC84" stroke="none"/>
-      <circle cx="1003" cy="112" r="11" fill="#3DDC84" stroke="none"/>
-      <g stroke="none" fill="#0A1033">
-        <rect x="930" y="162" width="44" height="9" rx="4.5"/>
-        <rect x="982" y="162" width="48" height="9" rx="4.5"/>
-        <rect x="942" y="178" width="60" height="9" rx="4.5"/>
+      <circle cx="980" cy="20" r="10" fill="#E04E17"/>
+      <rect x="884" y="98" width="20" height="52" rx="6" fill="#FFFFFF"/>
+      <rect x="1056" y="98" width="20" height="52" rx="6" fill="#FFFFFF"/>
+      <rect x="900" y="54" width="160" height="152" rx="22" fill="#FFFFFF"/>
+      <rect x="922" y="76" width="116" height="72" rx="14" fill="#121212"/>
+      <rect x="950.6" y="97" width="12.8" height="30" rx="6.4" fill="#FFC98A" stroke="none"/>
+      <rect x="996.6" y="97" width="12.8" height="30" rx="6.4" fill="#FFC98A" stroke="none"/>
+      <g stroke="none" fill="#D7D1C5">
+        <rect x="944" y="168" width="72" height="9" rx="4.5"/>
       </g>
       <circle cx="790" cy="255" r="24" fill="#3DDC84" stroke-width="3"/>
       <path d="M779.92,255 L787.6,263.16 L800.8,247.32" fill="none" stroke-width="3.5" stroke-linecap="round"/>
       <circle cx="860" cy="255" r="24" fill="#3DDC84" stroke-width="3"/>
       <path d="M849.92,255 L857.6,263.16 L870.8,247.32" fill="none" stroke-width="3.5" stroke-linecap="round"/>
-      <path d="M1016.5,293.5 Q989.2,293.5 991.3,266.2 Q995.5,241 1024.9,243.1 Q1035.4,201.1 1079.5,205.3 Q1117.3,207.4 1127.8,236.8 Q1180.3,230.5 1184.5,268.3 Q1186.6,293.5 1159.3,293.5 Z" fill="#0A1033" transform="translate(8 8)"/>
       <path d="M1016.5,293.5 Q989.2,293.5 991.3,266.2 Q995.5,241 1024.9,243.1 Q1035.4,201.1 1079.5,205.3 Q1117.3,207.4 1127.8,236.8 Q1180.3,230.5 1184.5,268.3 Q1186.6,293.5 1159.3,293.5 Z" fill="#FFFFFF"/>
       <rect x="112" y="44" width="76" height="36" rx="18" fill="#FFFFFF"/>
       <rect x="526" y="172" width="150" height="36" rx="18" fill="#FFFFFF"/>
       <rect x="781.5" y="192" width="87" height="36" rx="18" fill="#FFD25A"/>
     </g>
-    <g font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle">
+    <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
       <text x="150" y="69">APIs</text>
       <text x="601" y="197">Integration</text>
       <text x="825" y="217">CI/CD</text>

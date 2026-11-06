@@ -6,8 +6,12 @@
 // Run once on the 0.3.1 tree (origin/main b0712a9; the spec commits on top of it
 // change no source), before any code change:
 //   npx tsx scripts/freeze-message-arrow.ts
-// It writes test/fixtures/message-arrow-0.3.1.json. Do not run it again on a
-// later tree: the fixture is the record of 0.3.1.
+// It writes test/fixtures/message-arrow-0.3.1.json.
+//
+// Re-run once for 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6), on
+// the drawing the owner approved from the renders of group 8, with the same
+// calls: the fixture now pins the 0.3.1 calls as 0.7.0 draws them. Do not run
+// it again on a later tree.
 import { writeFileSync } from "node:fs";
 import { messageArrow } from "../src/pieces/metro.ts";
 import { toSvg } from "../src/pieces/render.ts";

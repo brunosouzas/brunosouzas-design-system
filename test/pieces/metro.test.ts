@@ -17,40 +17,39 @@ const pairs = (d: string): [number, number][] => {
 describe("Ink sticker on a surface", () => {
   test("Light sticker", () => {
     const { body } = stationMarker({ cx: 100, cy: 50 });
-    expect(body.map((node) => node.tag)).toEqual(["circle", "circle"]);
-    expect(body[0].attrs).toEqual({ cx: 103.5, cy: 53.5, r: 12, fill: "#0A1033", stroke: "#0A1033", "stroke-width": 3, "stroke-linejoin": "round" });
-    expect(body[1].attrs).toEqual({ cx: 100, cy: 50, r: 12, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 3, "stroke-linejoin": "round" });
+    // No shadow copy: map.shadow is 0 (ADR 0009).
+    expect(body.map((node) => node.tag)).toEqual(["circle"]);
+    expect(body[0].attrs).toEqual({ cx: 100, cy: 50, r: 12, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 3, "stroke-linejoin": "round" });
   });
 
   test("Dark sticker with its rim", () => {
     const { body } = stationMarker({ cx: 100, cy: 50, surface: "dark" });
-    expect(body).toHaveLength(3);
-    expect(body[0].attrs).toMatchObject({ cx: 103.5, cy: 53.5, fill: "#4C5CB8", stroke: "#4C5CB8", "stroke-width": 5 });
-    expect(body[1].attrs).toMatchObject({ cx: 100, cy: 50, fill: "#EEF2FF", stroke: "#EEF2FF", "stroke-width": 5 });
-    expect(body[2].attrs).toMatchObject({ cx: 100, cy: 50, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 3 });
+    // No shadow copy, and no rim since surface.dark.rimWidth is 0; the outline takes surface.dark.muted.
+    expect(body).toHaveLength(1);
+    expect(body[0].attrs).toMatchObject({ cx: 100, cy: 50, r: 12, fill: "#FFFFFF", stroke: "#ADA79D", "stroke-width": 3 });
     // Every layer carries its own stroke attributes, so a parent group (miter joins, another width) does not change it.
     expect(body.every((node) => node.attrs["stroke-linejoin"] === "round" && node.attrs["stroke-width"] !== undefined)).toBe(true);
   });
 
   test("Ink scale and its bounds", () => {
     const { body } = nodeBlock({ x: 0, y: 0, width: 200, title: "a", inkScale: 1.6 });
-    expect(attrs(body[0])).toMatchObject({ x: 5.6, y: 5.6, "stroke-width": 4.8 });
-    expect(attrs(body[1])).toMatchObject({ x: 0, y: 0, "stroke-width": 4.8 });
+    expect(body).toHaveLength(1);
+    expect(attrs(body[0])).toMatchObject({ x: 0, y: 0, "stroke-width": 4.8 });
     expect(() => nodeBlock({ x: 0, y: 0, width: 200, title: "a", inkScale: 0.1 })).toThrow(/^nodeBlock: inkScale:/);
     expect(() => nodeBlock({ x: 0, y: 0, width: 200, title: "a", inkScale: 9 })).toThrow(/^nodeBlock: inkScale:/);
   });
 
   test("Unknown surface or a parameter a piece does not take", () => {
     expect(() => countBadge({ cx: 0, cy: 0, text: "3", surface: "sepia" as "dark" })).toThrow(/^countBadge: surface: expected one of light, dark/);
-    expect(() => pipe({ d: "M0,0 L1,0", fill: "color.caller", surface: "dark" } as never)).toThrow(/^pipe: surface: unknown parameter/);
+    expect(() => pipe({ d: "M0,0 L1,0", fill: "color.state.caller", surface: "dark" } as never)).toThrow(/^pipe: surface: unknown parameter/);
     expect(() => ledgerMark({ x: 0, y: 0, inkScale: 2 } as never)).toThrow(/^ledgerMark: inkScale: unknown parameter/);
   });
 });
 
 describe("Room for the outline", () => {
   test("Badge too low for its ink", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", flat: true, inkScale: 8 })).toThrow(/^lineBadge: height: leaves no room for the outline/);
-    const { body } = lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", flat: true, inkScale: 8, height: 96, width: 120 });
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, inkScale: 8 })).toThrow(/^lineBadge: height: leaves no room for the outline/);
+    const { body } = lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, inkScale: 8, height: 96, width: 120 });
     expect(body).toHaveLength(1);
     expect(body[0].attrs).toMatchObject({ x: -48, y: -36, width: 96, height: 72, "stroke-width": 24 });
   });
@@ -66,7 +65,7 @@ describe("Line colours from data", () => {
   test("Catalogue line colour", () => {
     const { body } = pipe({ d: "M0,0 L100,0", fill: "#7B3FE4" });
     expect(body.map((node) => [node.attrs.stroke, node.attrs["stroke-width"]])).toEqual([
-      ["#0A1033", 18],
+      ["#121212", 18],
       ["#7B3FE4", 12],
     ]);
   });
@@ -82,7 +81,7 @@ describe("Line colours from data", () => {
 describe("Piece parameters checked", () => {
   test("Pipe path with something else", () => {
     for (const d of ["", "L10,10", 'M0,0 L10,10" onload="x']) {
-      expect(() => pipe({ d, fill: "color.caller" }), d).toThrow(/^pipe: d:/);
+      expect(() => pipe({ d, fill: "color.state.caller" }), d).toThrow(/^pipe: d:/);
     }
   });
 });
@@ -119,7 +118,7 @@ describe("Metro pieces", () => {
   });
 
   test("Flat badge", () => {
-    const { body, text } = lineBadge({ x: 50, y: 20, text: "SH", fill: "color.healthy", flat: true });
+    const { body, text } = lineBadge({ x: 50, y: 20, text: "SH", fill: "color.state.healthy", flat: true });
     expect(body).toHaveLength(1);
     expect(body[0].attrs).toMatchObject({ y: 11.5, height: 17, rx: 8.5 });
     expect(text[0].children).toEqual(["SH"]);
@@ -127,16 +126,16 @@ describe("Metro pieces", () => {
   });
 
   test("Badge narrower than tall", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height \(20\)/);
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 })).toThrow(/^lineBadge: width:/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height \(20\)/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", height: 96 })).toThrow(/^lineBadge: width:/);
   });
 
   test("Pipe widths out of range", () => {
     for (const extra of [{ width: 0 }, { width: 101 }, { casing: -1 }, { casing: 51 }]) {
-      expect(() => pipe({ d: "M0,0 L1,0", fill: "color.caller", ...extra }), JSON.stringify(extra)).toThrow(/^pipe: (width|casing):/);
+      expect(() => pipe({ d: "M0,0 L1,0", fill: "color.state.caller", ...extra }), JSON.stringify(extra)).toThrow(/^pipe: (width|casing):/);
     }
-    expect(pipe({ d: "M0,0 L1,0", fill: "color.caller", width: 0.001, casing: 0 }).body[0].attrs["stroke-width"]).toBe(0.001);
-    const { body } = pipe({ d: "M0,0 L1,0", fill: "color.caller", casing: 0 });
+    expect(pipe({ d: "M0,0 L1,0", fill: "color.state.caller", width: 0.001, casing: 0 }).body[0].attrs["stroke-width"]).toBe(0.001);
+    const { body } = pipe({ d: "M0,0 L1,0", fill: "color.state.caller", casing: 0 });
     expect(body).toHaveLength(1);
     expect(body[0].attrs.stroke).toBe("#8FB2FF");
   });
@@ -159,17 +158,19 @@ describe("Renewal ring", () => {
   test("Light ring", () => {
     const { body, text } = renewalRing({ cx: 0, cy: 0, r: 18 });
     expect(body.every((node) => node.tag === "circle" && node.attrs.r === 18 && node.attrs.fill === "none")).toBe(true);
-    expect(strokes(body)).toEqual([["#0A1033", 6], ["#FF8A3D", 3]]);
+    expect(strokes(body)).toEqual([["#121212", 6], ["#FF8A3D", 3]]);
     expect(text).toEqual([]);
   });
 
   test("Dark ring with its rim", () => {
-    expect(strokes(renewalRing({ cx: 0, cy: 0, r: 18, surface: "dark" }).body)).toEqual([["#EEF2FF", 8], ["#0A1033", 6], ["#FF8A3D", 3]]);
+    // No rim band since surface.dark.rimWidth is 0; the ink band takes surface.dark.muted.
+    expect(strokes(renewalRing({ cx: 0, cy: 0, r: 18, surface: "dark" }).body)).toEqual([["#ADA79D", 6], ["#FF8A3D", 3]]);
   });
 
   test("Ring too small for its bands", () => {
     expect(renewalRing({ cx: 0, cy: 0, r: 3 }).body).toHaveLength(2);
-    expect(() => renewalRing({ cx: 0, cy: 0, r: 3.9, surface: "dark" })).toThrow(/^renewalRing: r: leaves no room for the ring's bands: needs at least 4/);
+    expect(renewalRing({ cx: 0, cy: 0, r: 3, surface: "dark" }).body).toHaveLength(2);
+    expect(() => renewalRing({ cx: 0, cy: 0, r: 2.99, surface: "dark" })).toThrow(/^renewalRing: r: leaves no room for the ring's bands: needs at least 3$/);
     expect(() => renewalRing({ cx: 0, cy: 0, r: 18, width: 0 })).toThrow(/^renewalRing: width:/);
     expect(() => renewalRing({ cx: 0, cy: 0, r: 18, width: 51 })).toThrow(/^renewalRing: width:/);
     // A valid hairline keeps its width (Codex code review round 2).
@@ -180,7 +181,7 @@ describe("Renewal ring", () => {
 
 describe("Suggested halo", () => {
   test("Halo on both surfaces", () => {
-    for (const [surface, stroke] of [["light", "#5B6694"], ["dark", "#8F9BD0"]] as const) {
+    for (const [surface, stroke] of [["light", "#5C5852"], ["dark", "#ADA79D"]] as const) {
       const { body } = suggestedHalo({ cx: 0, cy: 0, r: 21, surface });
       expect(body).toHaveLength(1);
       expect(body[0].attrs).toEqual({ cx: 0, cy: 0, r: 21, fill: "none", stroke, "stroke-width": 1.5, "stroke-dasharray": "4 3" });
@@ -197,14 +198,13 @@ describe("Suggested halo", () => {
 describe("Licence mark", () => {
   test("Owned licence", () => {
     const { body } = licenceMark({ cx: 27, cy: -15 });
-    expect(body).toHaveLength(2);
-    expect(body[0].attrs).toMatchObject({ cx: 30.5, cy: -11.5, r: 5, fill: "#0A1033", stroke: "#0A1033", "stroke-width": 3 });
-    expect(body[1].attrs).toMatchObject({ cx: 27, cy: -15, r: 5, fill: "#3DDC84", stroke: "#0A1033", "stroke-width": 3 });
+    expect(body).toHaveLength(1);
+    expect(body[0].attrs).toMatchObject({ cx: 27, cy: -15, r: 5, fill: "#3DDC84", stroke: "#121212", "stroke-width": 3 });
   });
 
   test("Licence to buy on dark", () => {
     const { body } = licenceMark({ cx: 0, cy: 0, state: "toBuy", surface: "dark" });
-    expect(body.map((node) => [node.attrs.r, node.attrs.fill])).toEqual([[5, "#4C5CB8"], [5, "#EEF2FF"], [5, "#FFFFFF"]]);
+    expect(body.map((node) => [node.attrs.r, node.attrs.fill, node.attrs.stroke])).toEqual([[5, "#FFFFFF", "#ADA79D"]]);
   });
 
   test("Unknown state", () => {
@@ -214,8 +214,8 @@ describe("Licence mark", () => {
 
 describe("Licence room", () => {
   test("Default size at the default ink", () => {
-    expect(licenceMark({ cx: 0, cy: 0 }).body).toHaveLength(2);
-    expect(licenceMark({ cx: 0, cy: 0, size: 9 }).body[1].attrs.r).toBe(4.5);
+    expect(licenceMark({ cx: 0, cy: 0 }).body).toHaveLength(1);
+    expect(licenceMark({ cx: 0, cy: 0, size: 9 }).body[0].attrs.r).toBe(4.5);
   });
 
   test("Too small for its ink", () => {
@@ -267,21 +267,21 @@ describe("Zone title", () => {
 
 describe("Badge without a letter", () => {
   test("Default badge without a letter", () => {
-    const { body, text } = lineBadge({ x: 50, y: 20, fill: "color.healthy" });
+    const { body, text } = lineBadge({ x: 50, y: 20, fill: "color.state.healthy" });
     expect(body.at(-1)!.attrs).toMatchObject({ x: 35, y: 10, width: 30, height: 20, rx: 10 });
     expect(text).toEqual([]);
   });
 
   test("Banner badge without a letter", () => {
-    const params = { x: 110, y: 300, fill: "color.healthy", height: 34, width: 54, surface: "dark", inkScale: 1.6 } as const;
+    const params = { x: 110, y: 300, fill: "color.state.healthy", height: 34, width: 54, surface: "dark", inkScale: 1.6 } as const;
     const bare = lineBadge(params);
     expect(bare.body).toEqual(lineBadge({ ...params, text: "B" }).body);
     expect(bare.text).toEqual([]);
   });
 
   test("Empty letter and narrow badge", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "", fill: "color.healthy" })).toThrow(/^lineBadge: text:/);
-    expect(() => lineBadge({ x: 0, y: 0, fill: "color.healthy", height: 34 })).toThrow(/^lineBadge: width:/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "", fill: "color.state.healthy" })).toThrow(/^lineBadge: text:/);
+    expect(() => lineBadge({ x: 0, y: 0, fill: "color.state.healthy", height: 34 })).toThrow(/^lineBadge: width:/);
   });
 });
 
@@ -289,12 +289,12 @@ describe("Badge without a letter", () => {
 describe("Count badge text size", () => {
   test("Larger count", () => {
     const one = countBadge({ cx: 0, cy: 0, text: "1", textSize: 22 });
-    expect(one.body[1]).toMatchObject({ tag: "circle", attrs: { r: 16 } });
+    expect(one.body.at(-1)!).toMatchObject({ tag: "circle", attrs: { r: 16 } });
     expect(one.text[0].attrs).toMatchObject({ y: 8, "font-size": 22 });
     const two = countBadge({ cx: 0, cy: 0, text: "12", textSize: 22 });
-    expect(two.body[1]).toMatchObject({ tag: "rect", attrs: { width: 41.6, height: 32 } });
+    expect(two.body.at(-1)!).toMatchObject({ tag: "rect", attrs: { width: 41.6, height: 32 } });
     const given = countBadge({ cx: 0, cy: 0, text: "1", textSize: 20, height: 30 });
-    expect(given.body[1]).toMatchObject({ tag: "circle", attrs: { r: 15 } });
+    expect(given.body.at(-1)!).toMatchObject({ tag: "circle", attrs: { r: 15 } });
     expect(given.text[0].attrs).toMatchObject({ y: 7.27, "font-size": 20 });
   });
   test("Count text size 11 is the default", () => {
@@ -303,12 +303,12 @@ describe("Count badge text size", () => {
   test("Count text size bounds", () => {
     const base = { cx: 0, cy: 0, text: "1" };
     const big = countBadge({ ...base, textSize: 48 });
-    expect(big.body[1].attrs.r).toBe(34.91);
+    expect(big.body.at(-1)!.attrs.r).toBe(34.91);
     expect(big.text[0].attrs).toMatchObject({ y: 17.45, "font-size": 48 });
     const small = countBadge({ ...base, textSize: 6, height: 12 });
-    expect(small.body[1].attrs.r).toBe(6);
+    expect(small.body.at(-1)!.attrs.r).toBe(6);
     expect(small.text[0].attrs).toMatchObject({ y: 2.18, "font-size": 6 });
-    for (const textSize of [8.25, 8.249]) expect(countBadge({ ...base, textSize }).body[1].attrs.r).toBe(6);
+    for (const textSize of [8.25, 8.249]) expect(countBadge({ ...base, textSize }).body.at(-1)!.attrs.r).toBe(6);
     for (const textSize of [8.24, 5, 49]) expect(() => countBadge({ ...base, textSize })).toThrow(/^countBadge: textSize:/);
     expect(() => countBadge({ ...base, textSize: 20, height: 10 })).toThrow(/^countBadge: height:/);
   });

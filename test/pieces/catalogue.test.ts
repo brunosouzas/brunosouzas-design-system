@@ -5,73 +5,7 @@ import { describe, expect, test } from "vitest";
 import * as P from "../../src/pieces/library";
 import { SVG_TAGS, type SvgNode } from "../../src/pieces/node";
 import { COLOUR_TOKENS } from "../../src/pieces/params";
-
-/** The smallest valid call of each piece: only its required parameters. */
-export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
-  pill: { x: 0, y: 0, text: "a" },
-  rings: { cx: 0, cy: 0 },
-  sheet: { x: 0, y: 0, width: 100, height: 100, rows: [{ bar: 40 }] },
-  blockArrow: { x: 0, y: 0 },
-  arcArrow: { from: [0, 0], c1: [10, -10], c2: [20, -10], to: [30, 0] },
-  rail: { x: 0, y: 0, width: 200, nodes: ["color.healthy"] },
-  checkBadge: { cx: 0, cy: 0 },
-  priceTag: { x: 0, y: 0, text: "v1" },
-  nameTag: { hangX: 0, hangY: 0, cx: 0, top: 40, icon: "splitter" },
-  codePanel: { x: 0, y: 0, width: 100, height: 100, lines: [{ indent: 0, w: 40, color: "healthy" }] },
-  serverStack: { x: 0, y: 0 },
-  cloud: { cx: 0, cy: 0 },
-  stamp: { cx: 0, cy: 0, word: "GO" },
-  robot: { cx: 0, top: 0 },
-  magnifier: { cx: 0, cy: 0 },
-  gear: { cx: 0, cy: 0 },
-  parcel: { x: 0, y: 0 },
-  road: { d: "M0,0 L100,0" },
-  milestonePin: { x: 0, y: 0, text: "1" },
-  browserWindow: { x: 0, y: 0 },
-  speechBubble: { x: 0, y: 0, width: 100, height: 60 },
-  steps: { x: 0, y: 0 },
-  folder: { x: 0, y: 0 },
-  book: { x: 0, y: 0 },
-  muleFlow: { x: 0, y: 0, width: 300, tiles: [{ x: 20, kind: "choice" }] },
-  eipIcon: { name: "splitter", x: 0, y: 0 },
-  lineBadge: { x: 0, y: 0, fill: "color.healthy" },
-  stationMarker: { cx: 0, cy: 0 },
-  pipe: { d: "M0,0 L100,0", fill: "color.caller" },
-  countBadge: { cx: 0, cy: 0, text: "3" },
-  nodeBlock: { x: 0, y: 0, width: 160, title: "a" },
-  pillNode: { x: 0, y: 0, width: 160, title: "a" },
-  hexNode: { x: 0, y: 0, width: 160, title: "a" },
-  messageArrow: { from: [0, 0], to: [200, 100] },
-  ledgerMark: { x: 0, y: 0 },
-  renewalRing: { cx: 0, cy: 0, r: 18 },
-  suggestedHalo: { cx: 0, cy: 0, r: 21 },
-  licenceMark: { cx: 0, cy: 0 },
-  zone: { points: [[0, 0], [100, 0], [50, 80]], fill: "color.caller" },
-  uiIcon: { name: "sun", x: 0, y: 0 },
-  linkIcon: { icon: "github", x: 0, y: 0 },
-  diagramBox: { x: 0, y: 0, width: 120, text: ["a"] },
-  decisionNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
-  storeNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
-  queueNode: { x: 0, y: 0, width: 120, text: ["a"] },
-  exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
-  taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
-  lifeline: { x: 0, y1: 0, y2: 100 },
-  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.healthy" },
-  altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
-  edgeLabel: { x: 0, y: 0, lines: ["a"] },
-  stateStart: { cx: 0, cy: 0 },
-  mascot: { who: "dev", x: 0, y: 0 },
-  emote: { kind: "idea", x: 0, y: 0 },
-  mira: { x: 0, y: 0 },
-  visor: { x: 0, y: 0 },
-  drone: { x: 0, y: 0 },
-  kiu: { x: 0, y: 0 },
-  sinal: { x: 0, y: 0 },
-  bankObject: { name: "courier", x: 0, y: 0 },
-  symbol: { x: 0, y: 0 },
-  brandNotationIcon: { name: "message", x: 0, y: 0 },
-  categoryIcon: { category: "personalTools", x: 0, y: 0 },
-};
+import { REQUIRED_ONLY } from "./required-only";
 
 /** The metro and diagram pieces have limits that depend on each other (width against height, room for
  * the ink), so their boundary calls are listed with valid companions instead of one value at a time. */
@@ -82,16 +16,16 @@ const METRO = new Set([
 const ink = (extra: Record<string, unknown>) => [{ ...extra, inkScale: 0.25 }, { ...extra, inkScale: 8 }];
 export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   lineBadge: [
-    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 3, width: 3, inkScale: 0.25 },
+    { x: 0, y: 0, text: "a", fill: "color.state.healthy", height: 3, width: 3, inkScale: 0.25 },
     { x: 0, y: 0, text: "a", fill: "#7B3FE4", height: 96, width: 10000, inkScale: 8, flat: true },
-    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 10000, width: 10000, inkScale: 8 },
+    { x: 0, y: 0, text: "a", fill: "color.state.healthy", height: 10000, width: 10000, inkScale: 8 },
   ],
   stationMarker: [
     { cx: 0, cy: 0, r: 1.5, inkScale: 0.25 },
     { cx: 0, cy: 0, r: 10000, inkScale: 8, to: [10000, 10000], state: "deprecated", surface: "dark" },
   ],
   pipe: [
-    { d: "M0,0 L1,0", fill: "color.caller", width: 0.01, casing: 0 },
+    { d: "M0,0 L1,0", fill: "color.state.caller", width: 0.01, casing: 0 },
     { d: "M0,0 L10000,0", fill: "#7B3FE4", width: 100, casing: 50 },
   ],
   countBadge: [
@@ -124,13 +58,13 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   ],
   zone: [
     { points: [[0, 0]], fill: "#7B3FE4", title: "a", titleAt: [0, 0], surface: "dark" },
-    { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.caller" },
+    { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.state.caller" },
   ],
   // Body diagram pieces (change body-diagram-pieces, task 3.2).
   diagramBox: [
     { x: 0, y: 0, width: 3, height: 3, text: ["a"], radius: 0, textSize: 6, inkScale: 0.25 },
     { x: 0, y: 0, width: 10000, height: 10000, text: ["a", "b", "c"], subtitle: "d", radius: 5000, textSize: 48, inkScale: 8, surface: "dark" },
-    { x: 0, y: 0, width: 96, height: 96, text: ["a"], shape: "pill", fill: "color.healthy", inkScale: 8 },
+    { x: 0, y: 0, width: 96, height: 96, text: ["a"], shape: "pill", fill: "color.state.healthy", inkScale: 8 },
   ],
   decisionNode: [
     { x: 0, y: 0, width: 3, height: 3, text: ["a"], inkScale: 0.25 },
@@ -154,8 +88,8 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   ],
   lifeline: [{ x: 0, y1: 0, y2: 0.01, width: 0.01 }, { x: 0, y1: -10000, y2: 10000, width: 12, state: "inactive", surface: "dark" }],
   phaseBand: [
-    { x: 0, y: 0, width: 3, height: 3, text: "a", fill: "color.healthy", textSize: 6, inkScale: 0.25 },
-    { x: 0, y: 0, width: 10000, height: 10000, text: "a", fill: "color.blocked", textSize: 48, inkScale: 8, surface: "dark" },
+    { x: 0, y: 0, width: 3, height: 3, text: "a", fill: "color.state.healthy", textSize: 6, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: "a", fill: "color.state.blocked", textSize: 48, inkScale: 8, surface: "dark" },
   ],
   altFrame: [
     { x: 0, y: 0, width: 0.01, height: 0.02, tag: "a", tagWidth: 0.01, sections: [{ y: 0.01, tag: "b", conditionWidth: 0.01, condition: "c" }] },
@@ -182,7 +116,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(63);
+    expect(P.PIECE_NAMES).toHaveLength(62);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop draws words only (change body-diagram-pieces).
@@ -199,6 +133,16 @@ describe("Piece catalogue", () => {
         }
       });
     }
+  });
+
+  // Change identity-v2-type-pieces-cleanup (card 301), task 5.1: the seven-role cast is removed (ADR 0007 amendment).
+  test("Seven-role cast gone", async () => {
+    const root: Record<string, unknown> = await import("../../src/pieces/index");
+    for (const name of ["mascot", "MASCOTS", "MASCOT_ACTIONS", "MASCOT_FACES"]) expect(name in root, name).toBe(false);
+    expect(P.PIECE_NAMES).not.toContain("mascot");
+    expect(typeof root.emote).toBe("function");
+    expect(root.EMOTE_KINDS).toEqual(["idea", "doubt", "problem", "worked", "refused", "pressure", "liked", "waiting"]);
+    expect(P.PIECE_NAMES).toContain("emote");
   });
 });
 
@@ -272,7 +216,7 @@ describe("Piece parameters checked", () => {
   test("Too many repeated parts", () => {
     expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
-    expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
+    expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.state.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
     // Change body-diagram-pieces, task 3.2.
     expect(() => call("altFrame", { x: 0, y: 0, width: 200, height: 100, tag: "a", sections: Array.from({ length: 11 }, (_, i) => ({ y: 1 + i, tag: "b" })) })).toThrow(/^altFrame: sections: expected at most 10 item\(s\)/);
     expect(() => call("diagramBox", { x: 0, y: 0, width: 120, text: ["a", "b", "c", "d"] })).toThrow(/^diagramBox: text: expected at most 3 item\(s\)/);
@@ -366,5 +310,140 @@ describe("Milestone pin size", () => {
     const { circle, text } = parts({ x: 0, y: 100, text: "1", size: 18.123 });
     expect(circle).toMatchObject({ cy: 41.9, r: 18.123, "stroke-width": 3.02 });
     expect(text).toMatchObject({ y: 48.95, "font-size": 18.123 });
+  });
+});
+
+// ---------- change identity-v2-type-pieces-cleanup (card 301), task 3.4: the per-piece redraws of ADR 0009 ----------
+
+const nodesOf = (nodes: readonly (SvgNode | string)[]): SvgNode[] => nodes.flatMap((node) => (typeof node === "string" ? [] : [node, ...nodesOf(node.children)]));
+const fills = (nodes: readonly SvgNode[]) => nodesOf(nodes).map((node) => node.attrs.fill).filter((fill) => fill !== undefined && fill !== "none");
+
+describe("White defaults of the cover pieces", () => {
+  test("Defaults", () => {
+    const main = (name: P.PieceName, pick: (body: readonly SvgNode[]) => SvgNode) => pick(call(name, REQUIRED_ONLY[name]).body).attrs.fill;
+    expect(main("serverStack", (b) => b[0])).toBe("#FFFFFF");
+    expect(main("gear", (b) => b[0])).toBe("#FFFFFF");
+    expect(main("parcel", (b) => b[0])).toBe("#FFFFFF");
+    expect(new Set(call("steps", REQUIRED_ONLY.steps).body.map((node) => node.attrs.fill))).toEqual(new Set(["#FFFFFF"]));
+    expect(main("speechBubble", (b) => b[0])).toBe("#FFFFFF");
+    expect(main("nameTag", (b) => b[1].children[0] as SvgNode)).toBe("#FFFFFF");
+    expect(main("milestonePin", (b) => b[1])).toBe("#FFFFFF");
+    expect(main("rail", (b) => b[0])).toBe("#FFFFFF");
+    // The parts that are not the main fill.
+    const stack = call("serverStack", REQUIRED_ONLY.serverStack).body;
+    expect(stack.filter((node) => node.attrs.height === 10).map((node) => node.attrs.fill)).toEqual(["#D7D1C5", "#D7D1C5", "#D7D1C5"]);
+    expect(main("gear", (b) => b[1])).toBe("#F6F3EC");
+    expect(main("speechBubble", (b) => b[1])).toBe("#D7D1C5");
+    expect(call("rail", REQUIRED_ONLY.rail).body[1].attrs).toMatchObject({ fill: "none", stroke: "#D7D1C5" });
+    expect(main("muleFlow", (b) => b[0])).toBe("#F6F3EC");
+  });
+
+  test("Explicit colour still drawn", () => {
+    expect(P.serverStack({ x: 0, y: 0, fill: "color.state.backend" }).body.filter((node) => node.attrs.height === 40).map((node) => node.attrs.fill)).toEqual(["#FF6B6B", "#FF6B6B", "#FF6B6B"]);
+    expect(P.gear({ cx: 0, cy: 0, fill: "color.state.transitional" }).body[0].attrs.fill).toBe("#FFD25A");
+  });
+
+  test("Failing light keeps its meaning", () => {
+    const { body } = P.serverStack({ x: 0, y: 0, units: 3, failing: 1 });
+    expect(body.filter((node) => node.tag === "circle").map((node) => node.attrs.fill)).toEqual(["#FFFFFF", "#E04848", "#FFFFFF"]);
+    expect(body.filter((node) => node.attrs.height === 40).map((node) => node.attrs.fill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF"]);
+  });
+});
+
+describe("Ink defaults on pale backgrounds", () => {
+  test("Default arc arrow and price tag string", () => {
+    const arrow = P.arcArrow({ from: [0, 0], c1: [10, -10], c2: [20, -10], to: [30, 0] }).body;
+    expect(arrow.map((node) => node.attrs.stroke)).toEqual(["#121212", "#121212"]);
+    const tag = P.priceTag({ x: 0, y: 0, text: "v1", stringFrom: [40, -40] }).body;
+    expect(tag[0].attrs).toMatchObject({ fill: "none", stroke: "#121212" });
+  });
+
+  test("White arc arrow on request", () => {
+    const arrow = P.arcArrow({ from: [0, 0], c1: [10, -10], c2: [20, -10], to: [30, 0], color: "color.white" }).body;
+    expect(arrow.map((node) => node.attrs.stroke)).toEqual(["#FFFFFF", "#FFFFFF"]);
+  });
+});
+
+describe("Folder, browser window and book in the v2 grammar", () => {
+  test("V2 drawings", () => {
+    expect(new Set(fills(P.folder({ x: 0, y: 0 }).body))).toEqual(new Set(["#FFFFFF", "#D7D1C5"]));
+    const window = P.browserWindow({ x: 0, y: 0 }).body;
+    expect(window.filter((node) => node.tag === "circle").map((node) => node.attrs.fill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF"]);
+    expect(window.find((node) => node.attrs.height === 40)!.attrs.fill).toBe("#F6F3EC");
+    const book = P.book({ x: 10, y: 20 }).body;
+    const ink = nodesOf(book).filter((node) => node.attrs.fill === "#121212");
+    expect(ink).toHaveLength(1);
+    expect(ink[0].attrs).toMatchObject({ x: 10, y: 20, width: 20 });
+    // No ink rect behind the front cover or offset from it.
+    expect(book.filter((node) => node.tag === "rect" && node.attrs.width === 120).map((node) => node.attrs.fill)).toEqual(["#FFFFFF"]);
+  });
+
+  test("Folder takes no colour", () => {
+    expect(() => P.folder({ x: 0, y: 0, fill: "color.white" } as never)).toThrow(/^folder: fill: unknown parameter/);
+  });
+});
+
+describe("Code panel lines in the v2 grammar", () => {
+  test("Lines by kind", () => {
+    const lines: P.CodeLine[] = [
+      { indent: 0, w: 40, color: "healthy" },
+      { indent: 0, w: 40, color: "caller" },
+      { indent: 0, w: 40, color: "white" },
+      { indent: 0, w: 40, color: "backend" },
+      { indent: 0, w: 40, color: "healthy", tall: true },
+    ];
+    const body = P.codePanel({ x: 0, y: 0, width: 200, height: 200, lines }).body;
+    expect(body[0].attrs.fill).toBe("#1D1C1A");
+    expect(fills(body.slice(1))).toEqual(["#ADA79D", "#ADA79D", "#F1EEE8", "#ADA79D", "#FF7A45"]);
+  });
+
+  test("Unknown line colour", () => {
+    expect(() => P.codePanel({ x: 0, y: 0, width: 100, height: 100, lines: [{ indent: 0, w: 40, color: "red" as "healthy" }] })).toThrow(/^codePanel: lines\[0\]\.color:/);
+  });
+});
+
+describe("Sheet marks in the v2 grammar", () => {
+  const rows = [{ lead: "checked" as const, bar: 40 }, { lead: "question" as const, bar: 40 }, { bar: 40, tail: "check" as const }];
+
+  test("Default marks", () => {
+    const { body, text } = P.sheet({ x: 0, y: 0, width: 200, height: 200, rows });
+    const all = nodesOf(body);
+    const box = all.find((node) => node.tag === "rect" && node.attrs.width === 22 && node.attrs.x === 22)!;
+    expect(box.attrs.fill).toBe("#121212");
+    expect(all.find((node) => node.tag === "path" && String(node.attrs.d).startsWith("M27,"))!.attrs.stroke).toBe("#FFFFFF");
+    expect(all.find((node) => node.tag === "circle" && node.attrs.r === 13)!.attrs.fill).toBe("#FFFFFF");
+    expect(nodesOf(text).some((node) => node.children.includes("?"))).toBe(true);
+    const tail = all.filter((node) => node.tag === "rect" && node.attrs.width === 22 && node.attrs.x !== 22);
+    expect(tail.map((node) => node.attrs.fill)).toEqual(["#3DDC84"]);
+  });
+
+  test("Given lead colour", () => {
+    const all = nodesOf(P.sheet({ x: 0, y: 0, width: 200, height: 200, rows, leadFill: "color.state.caller" }).body);
+    expect(all.find((node) => node.tag === "rect" && node.attrs.width === 22 && node.attrs.x === 22)!.attrs.fill).toBe("#8FB2FF");
+  });
+});
+
+
+// Change identity-v2-type-pieces-cleanup (card 301), task 4.1: the robot with the cast's idle eyes.
+describe("Robot in the v2 grammar", () => {
+  test("V2 robot", () => {
+    const body = P.robot({ cx: 400, top: 140 }).body;
+    expect(new Set(fills(body))).toEqual(new Set(["#FFFFFF", "#121212", "#FFC98A", "#E04E17", "#D7D1C5"]));
+    const visor = body.find((node) => node.tag === "rect" && node.attrs.fill === "#121212")!;
+    const eyes = body.filter((node) => node.attrs.fill === "#FFC98A");
+    expect(eyes).toHaveLength(2);
+    for (const eye of eyes) {
+      expect(Number(eye.attrs.x)).toBeGreaterThanOrEqual(Number(visor.attrs.x));
+      expect(Number(eye.attrs.x) + Number(eye.attrs.width)).toBeLessThanOrEqual(Number(visor.attrs.x) + Number(visor.attrs.width));
+      expect(Number(eye.attrs.y)).toBeGreaterThanOrEqual(Number(visor.attrs.y));
+      expect(Number(eye.attrs.y) + Number(eye.attrs.height)).toBeLessThanOrEqual(Number(visor.attrs.y) + Number(visor.attrs.height));
+    }
+    const grille = nodesOf(body).filter((node) => node.tag === "rect" && (node.attrs.fill === "#D7D1C5" || nodesOf(body).some((g) => g.tag === "g" && g.attrs.fill === "#D7D1C5" && g.children.includes(node))));
+    expect(grille).toHaveLength(1);
+    for (const old of ["#3DDC84", "#2BB673", "#FF8A3D"]) expect(fills(body)).not.toContain(old);
+  });
+
+  test("Robot takes no colour", () => {
+    expect(() => P.robot({ cx: 0, top: 0, fill: "color.state.healthy" } as never)).toThrow(/^robot: fill: unknown parameter/);
   });
 });

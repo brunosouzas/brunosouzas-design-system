@@ -1,6 +1,7 @@
 # ADR 0003: Visual language and fixed colour meanings
 
 - Status: superseded by [ADR 0006](0006-three-layer-tokens-and-brand-colour.md)
+- Amended by [ADR 0008](0008-type-inside-the-image.md) (type) and [ADR 0009](0009-one-piece-grammar.md) (outline and shadow)
 - Date: 2026-10-22
 
 ## Context
@@ -47,3 +48,7 @@ The caption is no longer the default in animation: [ADR 0005](0005-neutral-video
 ## Superseded, 2026-11-05 (AB#268)
 
 [ADR 0006](0006-three-layer-tokens-and-brand-colour.md) replaces this ADR's colour system with a three-layer architecture (primitive → semantic → component) covering the whole package, brand/site colour included. The six meanings and the outline/shadow rules recorded above keep their exact values and meaning, now at `color.state.*` (aliased from the paths above for one release); this ADR stays for its history and is no longer the place new colour decisions are recorded.
+
+## Amended, 2026-11-06 (cards 300 and 301)
+
+[ADR 0008](0008-type-inside-the-image.md) replaces the type line: the type is Source Sans 3 and Source Code Pro, embedded as a per-image subset in every SVG the package writes. [ADR 0009](0009-one-piece-grammar.md) replaces the hard offset shadow and the old ink: no hard shadow (the `shadow` tokens are 0), ink `#121212`, white bodies and one accent, and on the dark surface the ink strokes take `surface.dark.muted` instead of the rim of the AB#157 amendment. The six colour meanings are unchanged, at `color.state.*` only.

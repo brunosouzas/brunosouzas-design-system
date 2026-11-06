@@ -88,6 +88,32 @@ describe("Bank objects", () => {
     for (const name of BANK_OBJECT_NAMES) for (const surface of ["light", "dark"] as const) valid(bankObject({ name, x: 0, y: 0, surface }));
   });
 
+  // Change identity-v2-type-pieces-cleanup (card 301), task 4.2: the screen shows the cast's idle eyes (I10 amended).
+  test("Idle eyes on every screen", () => {
+    const nodes = (n: SvgNode | string): SvgNode[] => (typeof n === "string" ? [] : [n, ...n.children.flatMap(nodes)]);
+    for (const name of BANK_OBJECT_NAMES) {
+      const eyesOf = (surface: "light" | "dark") => {
+        const all = nodes(bankObject({ name, x: 0, y: 0, surface }).body[0]);
+        const eyes = all.filter((node) => node.attrs.fill === "#FFC98A");
+        // Each eye sits inside the screen it is drawn on: the rect right before them in the same group.
+        const screen = all.find((node) => node.tag === "g" && node.children.some((child) => typeof child !== "string" && child.attrs.fill === "#FFC98A"))!;
+        const panel = screen.children[0] as SvgNode;
+        for (const eye of eyes) {
+          const [x, y, w, h] = [eye.attrs.x, eye.attrs.y, eye.attrs.width, eye.attrs.height].map(Number);
+          expect(x >= Number(panel.attrs.x) && x + w <= Number(panel.attrs.x) + Number(panel.attrs.width), `${name} ${surface}`).toBe(true);
+          expect(y >= Number(panel.attrs.y) && y + h <= Number(panel.attrs.y) + Number(panel.attrs.height), `${name} ${surface}`).toBe(true);
+        }
+        return eyes;
+      };
+      expect(eyesOf("light"), name).toHaveLength(2);
+      expect(eyesOf("dark"), name).toEqual(eyesOf("light"));
+    }
+  });
+
+  test("Modulo legs", () => {
+    expect(JSON.stringify(bankObject({ name: "modulo", x: 0, y: 0 }).body)).not.toContain("M-22 -40 L-32 -2 M22 -40 L32 -2");
+  });
+
   test("Bank object has no face", () => {
     expect(() => bankObject({ name: "carga", x: 0, y: 0, face: "done" } as never)).toThrow(RangeError);
     expect(() => bankObject({ name: "carga", x: 0, y: 0, face: "done" } as never)).toThrow(/face: unknown parameter/);

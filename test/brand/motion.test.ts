@@ -133,10 +133,10 @@ describe("Call results and countdown", () => {
   test("Blocked call inside the OPEN block", () => {
     const blocked = callAppearance("blocked");
     expect(blocked.fill).toBe(color.ink);
-    expect(blocked.fill).not.toBe(color.blocked);
+    expect(blocked.fill).not.toBe(color.state.blocked);
     expect(blocked.glyphColor).toBe(color.white);
     expect(callAppearance("ok")).toMatchObject({ fill: color.white, glyphColor: color.ink, glyph: "✓" });
-    expect(callAppearance("fail")).toMatchObject({ fill: color.failure, glyphColor: color.white, glyph: "✕" });
+    expect(callAppearance("fail")).toMatchObject({ fill: color.state.failure, glyphColor: color.white, glyph: "✕" });
     expect(callAppearance("empty")).toMatchObject({ fill: "transparent", dashed: true, glyph: "" });
   });
 

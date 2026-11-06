@@ -9,7 +9,7 @@
 // earlier timeline do not linger. --dry-run prints the commands and touches
 // nothing. What can go wrong: a failed still stops the run (exit 1) naming the
 // composition and frame; stills already written stay. Remotion needs the
-// network on first use (headless browser) and on every render (Lato).
+// network on first use (headless browser) and on every render (the Source fonts).
 import { mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { compositionsOf, type CatalogueScene } from "../src/scenes/catalogue";

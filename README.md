@@ -25,19 +25,19 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). The cast of mascots and the emotes (AB#152, 0.5.0) are pieces too, with the approved cast motion test in the Studio; new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). Mira, the four pillar characters, the bank objects and the emotes are pieces too ([ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)); new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). Since 0.7.0 every piece follows one grammar ([ADR 0009](docs/adr/0009-one-piece-grammar.md)) and every written SVG carries its Source faces ([ADR 0008](docs/adr/0008-type-inside-the-image.md)); see [Upgrading to 0.7.0](#upgrading-to-070).
 
 ## What it is
 
 The blog's articles explain how systems behave: a circuit breaker opening, a pipeline promoting a build, a message being retried. Static diagrams show the states; an animation shows the change. This repository keeps both in one visual language, so a reader recognises the site in an article, on LinkedIn and on a slide.
 
-- **Design tokens, one source.** Colours with fixed meanings (green healthy, orange blocked, yellow transitional, red the failure path), the Lato type scale, the thick ink outline, the hard offset shadow, radii, and motion timings. Exported as CSS variables for the site, TypeScript for the animations and JSON for anything else (the SVG generators of the static diagrams).
-- **Motion components.** React components for [Remotion](https://www.remotion.dev): an ink block with a hard shadow, a pill label, an arrow that draws itself, a token travelling along a transition, call-result squares, a countdown ring. Flow primitives in `src/brand/flow-components.tsx` add a white hexagonal `Exchange`, rail-ended `Queue`, yellow-tab `TaggedContainer` and persistent `PositionedToken` (stationary or path-positioned). Copy identities, splits and ACK/NACK rules belong to scenes, not to a generic message engine.
+- **Design tokens, one source.** Colours with fixed meanings (green healthy, orange blocked, yellow transitional, red the failure path, under `color.state.*`), the brand palette, the Source type stacks (Source Sans 3, Source Code Pro, Source Serif 4), the thick ink outline, radii, and motion timings. Exported as CSS variables for the site, TypeScript for the animations and JSON for anything else (the SVG generators of the static diagrams).
+- **Motion components.** React components for [Remotion](https://www.remotion.dev): an ink block, a pill label, an arrow that draws itself, a token travelling along a transition, call-result squares, a countdown ring. Flow primitives in `src/brand/flow-components.tsx` add a white hexagonal `Exchange`, rail-ended `Queue`, white-tab `TaggedContainer` and persistent `PositionedToken` (stationary or path-positioned). Copy identities, splits and ACK/NACK rules belong to scenes, not to a generic message engine.
 - **Illustration pieces.** The objects the blog's covers and diagrams draw again and again (pill label, sheet, code panel, robot, server stack, gear, road, the 26 EIP icons and more), each a pure TypeScript function that returns an SVG node tree from the tokens. The same tree becomes an SVG file for a cover and React elements for a scene, and a scene animates a piece by recomputing its parameters every frame. See [Illustration pieces and covers](#illustration-pieces-and-covers).
-- **A cast and emotes.** Seven mascots that are the technical objects themselves (Dev, AI agent, Architect, DevOps, Data, Requester, Message) and eight reaction symbols with a fixed meaning, so a video can tell its story without words. See [The cast and the emotes](#the-cast-and-the-emotes).
+- **A cast and emotes.** Mira and four pillar characters (Visor, Drone, Kiu, Sinal), six bank objects for scenery, and eight reaction symbols with a fixed meaning, so a video can tell its story without words. See [The cast and the emotes](#the-cast-and-the-emotes).
 - **A catalogue of scenes.** Each scene animates something a published article already says. The first two are in 16:9 (article) and 4:5 (LinkedIn), in Portuguese and English from one text table; new scenes are one language-neutral 16:9 video ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). The first is the [circuit-breaker state machine](docs/spikes/2026-10-22-motion-pilot/README.md).
 
-The style follows the illustration covers of the [Spotify Engineering blog](https://engineering.atspotify.com/): flat shapes, a dark ink outline, a hard shadow with no blur, saturated colours on a calm page.
+The style started from the illustration covers of the [Spotify Engineering blog](https://engineering.atspotify.com/) and, since 0.7.0, follows the brand's own grammar: flat shapes, one rounded ink outline, no hard shadow, white bodies on a warm page, one orange accent, and colour only where it means something ([ADR 0009](docs/adr/0009-one-piece-grammar.md)).
 
 ## How it works
 
@@ -54,7 +54,7 @@ The generated files are committed, so a consumer can read them without running N
 
 ## Install
 
-The tokens and the illustration pieces are published on npm as [`@brunosouzas/design-system`](https://www.npmjs.com/package/@brunosouzas/design-system), with provenance; releases follow [docs/release.md](docs/release.md). The package has no runtime dependency: Remotion, the motion components and the scenes stay in this repository.
+The tokens and the illustration pieces are published on npm as [`@brunosouzas/design-system`](https://www.npmjs.com/package/@brunosouzas/design-system), with provenance; releases follow [docs/release.md](docs/release.md). Its one runtime dependency is `harfbuzzjs`, pinned exactly, which subsets the fonts it ships in `fonts/` (Source Sans 3 and Source Code Pro, under the [SIL Open Font License](fonts/OFL.txt)); Remotion, the motion components and the scenes stay in this repository.
 
 ```bash
 npm install @brunosouzas/design-system
@@ -64,6 +64,7 @@ npm install @brunosouzas/design-system
 |---|---|
 | `@brunosouzas/design-system` | the pieces, `toSvg`, `pose`, the cover spec helpers and `tokens` |
 | `@brunosouzas/design-system/react` | `toReact`, for React and Remotion (needs `react` 19) |
+| `@brunosouzas/design-system/fonts` | `embedFonts`, for Node: embeds the Source faces a tree's text uses (reads `fonts/`, loads WebAssembly) |
 | `@brunosouzas/design-system/tokens` | the typed `tokens` object |
 | `@brunosouzas/design-system/tokens.css` | the `--ds-*` custom properties |
 | `@brunosouzas/design-system/tokens.json` | the plain values |
@@ -75,9 +76,19 @@ const label = pill({ x: 60, y: 30, text: "main" });
 
 The package also installs the cover command as `brunosouzas-cover <spec.json> --out <file.svg>`.
 
+### Type in a written image
+
+An SVG shown through `<img>` cannot load web fonts, so a written image carries its own: `embedFonts(tree)` adds one `<style>` after the `<desc>` with a `@font-face` per Source face the tree's text uses, each a subset holding only the glyphs drawn ([ADR 0008](docs/adr/0008-type-inside-the-image.md)). The cover command and `npm run pieces:sheet` call it before they write; a tree without Source text is returned unchanged. It is async, reads only the faces it needs, and rejects naming the font file or `harfbuzzjs` when one fails to load. It lives in its own entry so the root entry stays importable in a browser. Its output is for written files and `<img>`: when you inline a piece's SVG in an HTML page, skip `embedFonts` and let the page's fonts apply, because an inline `<style>` with `@font-face` applies to the whole document and would replace the page's Source faces with a subset.
+
+```ts
+import { coverTree, toSvg } from "@brunosouzas/design-system";
+import { embedFonts } from "@brunosouzas/design-system/fonts";
+const svg = toSvg(await embedFonts(coverTree(spec)));
+```
+
 ## Commands
 
-Requirements: Node.js 22.12 or later. Rendering also needs the network: Remotion downloads its headless browser on first use, and every render fetches Lato from Google Fonts.
+Requirements: Node.js 22.12 or later. Rendering also needs the network: Remotion downloads its headless browser on first use, and every render fetches Source Sans 3 and Source Code Pro from Google Fonts.
 
 ```bash
 npm ci                                            # install the pinned dependencies
@@ -93,6 +104,7 @@ npm run render -- publish-subscribe --dry-run     # print eight commands; real v
 npm run build                                     # compile the package into dist/ (the package test needs it)
 npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner, diagram or icon) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
+npm run pieces:sheet -- --out out/dark.svg --surface dark  # the same on the dark surface
 npm run studio                                    # Remotion Studio, for frame-by-frame review
 ```
 
@@ -131,22 +143,22 @@ The components take every colour and size from the tokens, and what is visible a
 
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
-- Every colour parameter is a token path (`"color.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 52 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all.
+- Every colour parameter is a token path (`"color.state.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
+- The 62 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
 
 ### Maps and diagrams
 
-Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https://github.com/brunosouzas/stackledger) and any other map in this style: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` (normal, focus, placeholder), `messageArrow` (curved, straight or through two `controls` points, with a head and an optional label; `kind` `reply`, `failure` or `failFast` dashes it and paints it as ADR 0003 says; `heads: "start"` or `"both"` puts heads at `from`, `dashed` overrides the kind's dash), `ledgerMark` (stackledger's mark; `surface: "dark"` lines it with a light rim), `renewalRing` (orange bands round a station), `suggestedHalo` (a dashed muted circle), `licenceMark` (a 10-unit disc, green when held, white to buy) and `zone` (the outline the caller gives, widened by a round 32-unit stroke at the surface's zone opacity, with an optional title). They paint what the caller lays out: positions, hulls, text measurement and truncation stay with the map engine.
+Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https://github.com/brunosouzas/stackledger) and any other map in this style: `lineBadge`, `stationMarker` (stop, interchange as a capsule, deprecated), `pipe`, `countBadge`, `nodeBlock`, `pillNode`, `hexNode` (normal, focus, placeholder), `messageArrow` (curved, straight or through two `controls` points, with a head and an optional label; `kind` `reply`, `failure` or `failFast` dashes it and paints it as ADR 0003 says; `heads: "start"` or `"both"` puts heads at `from`, `dashed` overrides the kind's dash), `ledgerMark` (stackledger's mark; on `surface: "dark"` a muted band lines its ink square), `renewalRing` (orange bands round a station), `suggestedHalo` (a dashed muted circle), `licenceMark` (a 10-unit disc, green when held, white to buy) and `zone` (the outline the caller gives, widened by a round 32-unit stroke at the surface's zone opacity, with an optional title). They paint what the caller lays out: positions, hulls, text measurement and truncation stay with the map engine.
 
 - A `placeholder` node may have a `subtitle` (drawn like a normal node's, all muted), and `lineBadge` may have no `text` (the pill alone, 30 wide by default).
 - The licence's disc is small, so it has its own room rule: `size` at least three outlines (9 at ink scale 1).
 
-- `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe`; `ledgerMark` takes only `surface`. On dark the hard shadow takes `surface.dark.shadow` and the outline gets a light rim ([ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md), amendment of AB#157).
-- `inkScale` (0.25 to 8) thickens the outline, rim and shadow without changing the geometry, on `lineBadge`, `stationMarker`, `countBadge` and the three nodes; the map uses 1, the page diagrams 1.6. A shape's height (a marker's diameter) must be at least four outlines; a placeholder node, which draws no ink, is exempt.
+- `surface: "light" | "dark"` picks the background they sit on (`surface.*` tokens); every map and diagram piece takes it except `pipe`; `ledgerMark` takes only `surface`. On dark, ink strokes on the background or on a dark face take `surface.dark.muted`, since ink vanishes on black; marks over a light or state fill stay ink ([ADR 0009](docs/adr/0009-one-piece-grammar.md)).
+- `inkScale` (0.25 to 8) thickens the outline without changing the geometry, on `lineBadge`, `stationMarker`, `countBadge` and the three nodes; the map uses 1, the page diagrams 1.6. A shape's height (a marker's diameter) must be at least four outlines; a placeholder node, which draws no ink, is exempt.
 - `countBadge` takes `textSize` (6 to 48, default 11): without `height`, the height, width and baseline grow with it.
 - A line's colour comes from the map's data, so `pipe.fill`, `lineBadge.fill` and `zone.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
 - `map.bendRadius` (32) is the radius of a bundle's centre line at a 45° or 90° bend; no piece reads it, the map engine draws the arcs (`pipe.d` takes `A`).
-- The `map.*` tokens hold the measures (outline 3, shadow 3.5, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark` and `backdropCredit` the colours of a city backdrop behind a map and its OpenStreetMap credit (no piece draws it; stackledger does), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+- The `map.*` tokens hold the measures (outline 3, shadow 0, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark` and `backdropCredit` the colours of a city backdrop behind a map and its OpenStreetMap credit (no piece draws it; stackledger does), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
 
 ```ts
 import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
@@ -163,43 +175,31 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 - Backticks mark code: `` "adopts a `correlationId`" `` draws `correlationId` in the monospace stack, as a `tspan`. An odd number of backticks is drawn as is. The cover `pill` follows the same rule (`` "`main`" ``).
 - `milestonePin` takes `size`, the head's radius (6 to 48, default 18); the head, its outline and the label scale with it.
 - Widths the piece estimates (`tagWidth`, `conditionWidth`, a label's `width`) can be passed by a caller that measures its text.
-- A body diagram is 800 wide. Lay it out in 560 units and show it 800 wide: the pieces then come out at the sizes of the published diagrams (text about 18, outline about 4); only the hard shadow is shallower (5 instead of 8). The cover command does this for you with `"format": "diagram"` (below).
+- A body diagram is 800 wide. Lay it out in 560 units and show it 800 wide: the pieces then come out at the sizes of the published diagrams (text about 18, outline about 4). The cover command does this for you with `"format": "diagram"` (below).
 - `stateStart({ cx, cy, r, surface })` draws the filled start dot of a state machine (7.7 units, 11 at 800), in the surface's text colour, with no outline and no shadow.
 
 ### The cast and the emotes
 
-`mascot({ who, x, y, face, action, scale, look, headTilt, prop, surface })` draws one character standing with the centre of its ground line at `(x, y)`. Each one carries its identity in three layers, so no video has to introduce it: a body shape, a mark always visible, and a prop when its hands are free.
+The cast of [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md) shares one skin (white body, ink outline, a near-black visor with the amber idle eyes, `cast.eyes`); a character's identity is its shape, never a colour. Each takes `x`, `y` (the centre of its ground line), `scale`, `surface`, `expression` (`idle`, `done`, `waiting`, `failed`) and `view` (`front`, `back`):
 
-| `who` | Body | Mark | Prop | Colour |
-|---|---|---|---|---|
-| `dev` | modern all-in-one computer, face and code on the screen | `</>` on the chin | | `cast.dev.*` |
-| `agent` | retro lamp all-in-one: dome, chrome neck, the screen is the head | AI spark | | white, glowing face (`cast.glow`) |
-| `architect` | drafting set square with its hole and a pencil | ruler ticks | diagram board | `cast.architect.*` |
-| `devops` | gear | ∞ | wrench | `cast.devops.*` (magenta, never the blocked orange) |
-| `data` | cylinder with a lid | two bands | magnifier | `cast.data.*` |
-| `request` | speech bubble | the request line | | `color.caller` |
-| `message` | envelope (0.7 of the others) | flap and seal | | white |
-
-- `face`: `normal`, `blink`, `happy`, `wink`, `surprised`, `worried`, `thinking`, `focused`. One drawing for everyone; the agent's face glows on its dark screen.
-- `action`: `none` (the default: an expression has no hands or feet), `rest`, `wave`, `hold`, `reach`, `up`, `shrug`, `type`. Arms and legs start at the body's sides; hands are mittens.
-- `look` (-1 to 1) moves the gaze, `headTilt` (-30 to 30) turns the agent's head on its neck, `prop: false` hides the prop. Every part is a group named by `data-part` (`body`, `face`, `eyes`, `brows`, `mouth`, `arm-left`, `arm-right`, `legs`, `prop`, `mark`, …), so a scene can animate it.
+- `mira(…)`: the protagonist, an astrolabe with a screen face; `needleAngle` points the route, `carries` rides a message on the needle's tip.
+- `visor` (AI engineering; `holds`, `points`), `drone` (delivery; `carries`), `kiu` (wiki and series; `steps`), `sinal` (stackledger, without the parent-brand hood tip).
+- `bankObject({ name, x, y, scale, surface })`: six objects for scenery, `courier`, `lume`, `carga`, `anel`, `modulo`, `hub`, with the cast's idle eyes on their screen and no expression.
 
 `emote({ kind, x, y, scale, burst, surface })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
 
 | `kind` | Shape | Meaning |
 |---|---|---|
-| `idea` | bulb | an idea |
+| `idea` | amber bulb with rays | an idea |
 | `doubt` | ? | doubt, not understood |
 | `problem` | ! in a red triangle | a problem appears |
 | `worked` | green check | it worked |
 | `refused` | red cross | refused |
-| `pressure` | sweat drops | under pressure |
-| `liked` | heart | liked |
-| `waiting` | Z Z Z | waiting |
+| `pressure` | white sweat drops | under pressure |
+| `liked` | heart in the accent | liked |
+| `waiting` | white Z Z Z | waiting |
 
-In a scene, an emote pops in on the frame the face changes (`emotePop` in `src/brand/cast-motion.ts`, with `leave`, `blinking`, `breathe`, `squashAfter` and `hop`), one at a time, and the body acts through `pose`. A mascot's colour is its identity and never changes with state. The approved motion test is the Studio composition `cast-motion-test` (folder `cast`): `npx remotion render src/index.ts cast-motion-test`. It is a proof of the cast, not an article scene, so `npm run stills` and `npm run render` do not list it.
-
-On a dark page pass `surface: "dark"` (AB#187, 0.5.2): the hard shadows take `surface.dark.shadow`, the ground takes `surface.dark.grid`, and a light rim (`surface.dark.rim`) lines the whole outline, limbs and props included; faces are unchanged. Without `surface`, the cast draws as in 0.5.0.
+In a scene, an emote pops in on the frame the face changes (`emotePop` in `src/brand/cast-motion.ts`, with `leave`, `blinking`, `breathe`, `squashAfter` and `hop`), one at a time, and the body acts through `pose`. On a dark page pass `surface: "dark"`: the outlines, rays and Z casings take `surface.dark.muted`, the marks over a fill stay ink.
 
 ### A cover
 
@@ -210,7 +210,7 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
   "id": "sdd",
   "title": "A one-line request becomes a reviewed spec before any code",
   "description": "Illustration. On the left, a small slip …",
-  "background": "blush",
+  "background": "trackAi",
   "rings": { "cx": 400, "cy": 220, "radius": 96 },
   "pieces": [
     { "piece": "speechBubble", "x": 52, "y": 174, "width": 160, "height": 74 },
@@ -219,7 +219,23 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 }
 ```
 
-- `background` names one pair in `coverBackground` (a background and its ring colour): `trackIntegration`, `trackDelivery` or `trackAi` for a cover of that track (ADR 0006), `neutral` (the brand background) for a category with no track, or one of the 21 pairs measured from the covers published before 0.6.0, kept until 0.7.0 so their specs still build. Which cover takes which pair is the `illustration` skill's rule, not the package's.
+- `background` names one pair in `coverBackground` (a background and its ring colour). Since 0.7.0 the pairs are track families (ADR 0006, amended 2026-11-06): each track has a default `track<Name>` and named tones `<track><Tone>`, and each article picks one tone of its track, so a series varies and the track stays recognisable; `neutral` (the brand background) is for a cover with no track. These twelve are the only pairs. Which cover takes which tone is the `illustration` skill's rule, not the package's.
+
+  | Track | Name | Tone | Fill | Ring |
+  |---|---|---|---|---|
+  | Integration | `trackIntegration` | peach, default | `#F7C6A1` | `#E3AB84` |
+  | Integration | `integrationClay` | clay | `#E9CDBE` | `#D3B3A3` |
+  | Integration | `integrationSand` | sand | `#EED7A8` | `#D8BF8C` |
+  | Delivery | `trackDelivery` | sage, default | `#B9DEC3` | `#98C6A5` |
+  | Delivery | `deliveryMint` | mint | `#A9DCD6` | `#88C4BD` |
+  | Delivery | `deliveryOlive` | olive | `#D3DFA8` | `#B9C78A` |
+  | AI | `trackAi` | periwinkle, default | `#C5CDF2` | `#A5AEDA` |
+  | AI | `aiSky` | sky | `#B5D5F2` | `#94BBDE` |
+  | AI | `aiLilac` | lilac | `#DCC7F0` | `#C3A9DC` |
+  | Personal tools | `trackPersonal` | butter, default (new) | `#F4DD8E` | `#DDC46C` |
+  | Personal tools | `personalRose` | rose | `#F5C9DA` | `#E0ABC0` |
+  | no track | `neutral` | cream (unchanged) | `#F6F3EC` | `#D8D6D0` |
+
 - `pieces` are drawn in order; their words go on top.
 - The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
 - `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead. It is painted after every piece's shapes; `customAt: <i>` paints it before `pieces[i]` instead, so a pill can sit on top of it (words always stay on top).
@@ -236,7 +252,7 @@ The banner is one image that scales down as a whole. Words in it become small on
 
 ### Signature lockup
 
-A cover, banner, LinkedIn card or og spec takes an optional `"signature": true`: Mira (scale 0.25) and the symbol, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges. Omit it and nothing is added — `signature` isn't used by a diagram, a favicon or an avatar.
+A cover, banner, LinkedIn card or og spec takes an optional `"signature": true`: Mira (scale 0.25) and the symbol, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges. Omit it and nothing is added. A diagram, favicon, avatar or icon spec refuses the key (an icon accepted it and drew nothing before 0.7.0).
 
 ### Social and platform formats
 
@@ -256,7 +272,7 @@ npx --yes --package @brunosouzas/design-system@<version> brunosouzas-cover desig
 ```
 
 - `"format": "diagram"` takes a `height` in layout units (1 to 10000) and no `background`: the spec is laid out 560 wide and written 800 wide, on the `color.panel` panel with rounded corners (`bodyDiagram.radius`, 14 at 800) and rings in `color.ring` that show at step 28 and width 2, out to the farthest corner. Pieces get the map outline (3) and label size (13), which show at 4.3 and 18.6. `test/fixtures/covers/circuit-breaker-states.json` is the circuit breaker article's state diagram.
-- `"format": "icon"` holds one `eipIcon`, `uiIcon` or `linkIcon` at 0,0 and writes it in a box of its own size (64x40 for an EIP icon). An EIP icon takes its title and description, with the CC BY 4.0 credit, from the icon's data, so its spec has neither; a UI or link icon spec needs both. No `background`, `rings` or `custom`.
+- `"format": "icon"` holds one `eipIcon`, `uiIcon` or `linkIcon` at 0,0 and writes it in a box of its own size (64x40 for an EIP icon). An EIP icon takes its title and description, with the CC BY 4.0 credit, from the icon's data, so its spec has neither; a UI or link icon spec needs both. No `background`, `rings`, `custom` or `signature`.
 - **Text tables.** `"text": { "pt": { "open": ["taxa de falha", "> limite"] }, "en": { ... } }` holds one table per language with the same keys; any string `"@open"` elsewhere in the spec (pieces, `title`, `description`, even `id`) is replaced by that key's value for the language passed with `--lang <code>`. Every language must define every key, and the ids in the output gain the language (`<id>-pt`). Without `text`, strings are drawn as written, so `"@home"` stays a label.
 - Like a cover, a diagram or icon is a standalone image: `uiIcon` `colour: "currentColor"` is refused in every format.
 
@@ -267,7 +283,7 @@ Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram
 ### UI and link icons
 
 - `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`). `colour: "currentColor"` makes the icon follow its element's text colour (a button that inverts on hover, say); it only works when the SVG is inline in the page, since an `<img>` does not inherit the page's colour, and a cover spec refuses it.
-- `linkIcon({ icon, x, y, size, surface })` draws a link sticker as brunosouzas.com draws its social icons (46-unit box, light or dark frame): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- `linkIcon({ icon, x, y, size, surface })` draws a link sticker in a 46-unit box, a white face with its outline and no frame (on dark the outline takes `surface.dark.muted`): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - Neither holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
 
 ```ts
@@ -279,6 +295,21 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
 
+## Upgrading to 0.7.0
+
+0.7.0 is a breaking release (cards 300 and 301). Rebuild every image once on it; the output changes appearance (ADR 0009) and carries its fonts (ADR 0008).
+
+| Removed | Use instead |
+|---|---|
+| `color.healthy`, `color.blocked`, `color.transitional`, `color.caller`, `color.backend`, `color.failure`, `color.failFast` (and their `--ds-color-*` variables) | the same values at `color.state.*` (`--ds-color-state-*`); a spec that passes `"color.healthy"` is refused, pass `"color.state.healthy"` |
+| the 21 `coverBackground` pairs from before 0.6.0 (`blush`, `peach`, `lavender`, `navy`, `mustard`, …) | a tone of the cover's track family (`trackIntegration`, `integrationClay`, `deliveryMint`, `aiSky`, `trackPersonal`, … see "Cover spec") or `neutral` |
+| `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES`, the types `MascotName`, `MascotFace`, `MascotAction`, `MascotParams` and the seven-role `cast.*` colours | Mira, the pillar characters or a bank object (ADR 0007); `emote` and `EMOTE_KINDS` stay |
+| `illustration.healthyShade`, `illustration.transitionalShade` | nothing reads them; pass a token path if a drawing needs a shade |
+| `"signature"` in an icon spec | remove it (it drew nothing) |
+| the `cast-motion-test` composition | none; the cast timing helpers in `src/brand/cast-motion.ts` stay |
+
+Other changes a consumer sees: `font.sans` and `font.mono` name Source Sans 3 and Source Code Pro first, and the new `font.serif` names Source Serif 4; `cover.labelWeight` is 700 (Source Sans 3 has no static 800); the `shadow` tokens and `map.shadow` are 0; `color.ink`, `color.panel`, `color.ring`, `illustration.*` and `surface.*` take the v2 values; several pieces have new defaults (a white `taggedContainer` tab, an ink `arcArrow`, white bodies), listed in [ADR 0009](docs/adr/0009-one-piece-grammar.md) and the change's design.
+
 ## Decisions
 
 Project-wide decisions are recorded as ADRs in [`docs/adr/`](docs/adr/README.md).
@@ -288,6 +319,10 @@ Project-wide decisions are recorded as ADRs in [`docs/adr/`](docs/adr/README.md)
 - **One visual language, fixed colour meanings.** Green is always healthy, orange always blocked, red always the failure path, so a reader learns the code once. Rotated text is allowed since the 2026-10-23 amendment. [ADR 0003](docs/adr/0003-visual-language-and-colour-meaning.md)
 - **Scenes illustrate an approved source.** Every string on screen comes from a published article, or from a post or page the owner approved, so a scene or piece never says more than the reviewed text. Catalogue scenes still come from published articles. [ADR 0004](docs/adr/0004-scenes-illustrate-published-articles.md)
 - **Neutral videos, told by a fixed cast.** One video for both languages, no words on screen, a caption only when the motion cannot explain itself, and every gesture tied to an article line. [ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)
+- **Three token layers.** Primitive, semantic and component tokens, with the brand palette measured for AA contrast in both themes and the states under `color.state.*`. [ADR 0006](docs/adr/0006-three-layer-tokens-and-brand-colour.md)
+- **Mira and the pillar cast.** A protagonist and four pillar characters replace the engineering-role cast. [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)
+- **Type inside the image.** Every written SVG embeds a subset of the Source faces its text uses, so readers see Source through `<img>`. [ADR 0008](docs/adr/0008-type-inside-the-image.md)
+- **One piece grammar.** No hard shadow, white bodies, one accent, colour only where it means something, ink muted on dark; a test checks every piece. [ADR 0009](docs/adr/0009-one-piece-grammar.md)
 
 ## How this project is built
 

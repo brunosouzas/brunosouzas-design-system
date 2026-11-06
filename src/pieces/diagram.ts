@@ -115,7 +115,7 @@ export const storeNode = definePiece<StoreNodeParams>(
     const rx = r2(w / 2);
     const body: Shape = (dx, dy, attrs) =>
       el("path", { d: `M${r2(x + dx)},${r2(y + ry + dy)} A${rx},${ry} 0 0 1 ${r2(x + w + dx)},${r2(y + ry + dy)} V${r2(y + h - ry + dy)} A${rx},${ry} 0 0 1 ${r2(x + dx)},${r2(y + h - ry + dy)} Z`, ...attrs });
-    const lid = el("path", { d: `M${r2(x)},${r2(y + ry)} A${rx},${ry} 0 0 0 ${r2(x + w)},${r2(y + ry)}`, fill: "none", stroke: ink, "stroke-width": r2(0.75 * outline) });
+    const lid = el("path", { d: `M${r2(x)},${r2(y + ry)} A${rx},${ry} 0 0 0 ${r2(x + w)},${r2(y + ry)}`, fill: "none", stroke: inkOf(params).line, "stroke-width": r2(0.75 * outline) });
     return drawn([...sticker(body, c.face, params), lid], centred(x + w / 2, y + (h + ry) / 2, text, subtitle, c, params.textSize));
   },
   (params) => {
@@ -133,7 +133,7 @@ export const queueNode = definePiece<ShapeParams>(
     const { x, y, width: w, height: h = M.nodeHeight, text, subtitle, fill } = params;
     const c = coloursOf(fill, params);
     const { outline } = inkOf(params);
-    const rails = el("path", { d: `M${r2(x + RAIL)},${r2(y)} V${r2(y + h)} M${r2(x + w - RAIL)},${r2(y)} V${r2(y + h)}`, fill: "none", stroke: ink, "stroke-width": r2(0.75 * outline) });
+    const rails = el("path", { d: `M${r2(x + RAIL)},${r2(y)} V${r2(y + h)} M${r2(x + w - RAIL)},${r2(y)} V${r2(y + h)}`, fill: "none", stroke: inkOf(params).line, "stroke-width": r2(0.75 * outline) });
     return drawn([...sticker(rect(x, y, w, h, tokens.radius.small), c.face, params), rails], centred(x + w / 2, y + h / 2, text, subtitle, c, params.textSize));
   },
   (params) => {
@@ -173,7 +173,7 @@ export const taggedContainer = definePiece<TaggedContainerParams>(
   "taggedContainer",
   { x: pos(), y: pos(), width: size(true), height: size(true), tag: label(), tagWidth: size(), tagFill: col(), fill: col(), ...inkSchema },
   (params) => {
-    const { x, y, width, height, tag, tagFill = "color.transitional", fill } = params;
+    const { x, y, width, height, tag, tagFill = "color.white", fill } = params;
     const tw = tabWidth(params);
     const c = coloursOf(fill, params);
     return drawn(

@@ -9,5 +9,5 @@
     "rewriteRelativeImportExtensions": true,
     "types": ["node"]
   },
-  "include": ["src/pieces", "tokens/generated/tokens.ts", "scripts/cover.ts"]
+  "include": ["src/pieces", "src/fonts", "tokens/generated/tokens.ts", "scripts/cover.ts"]
 }

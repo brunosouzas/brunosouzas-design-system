@@ -1,6 +1,7 @@
 # ADR 0006: Three-layer tokens and the brand colour system
 
 - Status: accepted
+- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed), and on 2026-11-06 by the owner's track families (see the last section)
 - Date: 2026-11-05
 - Supersedes: ADR 0003 (colour meaning)
 
@@ -54,3 +55,32 @@ Cover backgrounds are a component token, not a new concept: `coverBackground` al
 - Nothing published breaks: diagrams, scenes and the two approved motion pilots keep their exact pixels; only their token's path gains a duplicate.
 - The 21-pair literal `coverBackground` bank and COV-4 (the illustration skill's "never share a background within 9 places" rule) are retired once the published covers are rebuilt on track backgrounds (AB#268, task 7.2); until then both still work.
 - A future theme or sub-brand (a product's own accent, per the brand strategy's "what a product gains") is a new value at the semantic layer, never a new flat list.
+
+## Amended, 2026-11-06 (card 301)
+
+[ADR 0009](0009-one-piece-grammar.md) moves the outline, shadow and component values to the v2 grammar, so published images change appearance when rebuilt (the owner reviews the renders): ink, panel and rings take `brand.light.*` values, the shadows are 0. As planned above, 0.7.0 removes the duplicate state paths (`color.healthy` … `color.failFast`; only `color.state.*` remains), the 21 literal `coverBackground` pairs (the four track and neutral pairs remain) and the seven-role `cast.*` colours; the state hex values and meanings are unchanged.
+
+## Amended, 2026-11-06: track pairs become track families (owner decision)
+
+After seeing the 0.7.0 renders, the owner found that the pale track tints of the table above (`#F4E4D8`, `#DFE8E1`, `#E2E4EC`, beside the cream `neutral`) read as one colour side by side: the covers did not look like a system with a colour palette. He chose, from renders, a family of tones per track (option C): each track has a default `track<Name>` and named tones `<track><Tone>`, and each article picks one tone of its track, so a series varies and the track stays recognisable. A fourth track, personal tools, joins (`trackPersonal`); `neutral` stays for a cover with no track. The rows of the table above are the 0.6.x values, kept as history.
+
+| Track | `coverBackground` name | Tone | Fill | Ring |
+|---|---|---|---|---|
+| Integration | `trackIntegration` | peach, default | `#F7C6A1` | `#E3AB84` |
+| Integration | `integrationClay` | clay | `#E9CDBE` | `#D3B3A3` |
+| Integration | `integrationSand` | sand | `#EED7A8` | `#D8BF8C` |
+| Delivery | `trackDelivery` | sage, default | `#B9DEC3` | `#98C6A5` |
+| Delivery | `deliveryMint` | mint | `#A9DCD6` | `#88C4BD` |
+| Delivery | `deliveryOlive` | olive | `#D3DFA8` | `#B9C78A` |
+| AI | `trackAi` | periwinkle, default | `#C5CDF2` | `#A5AEDA` |
+| AI | `aiSky` | sky | `#B5D5F2` | `#94BBDE` |
+| AI | `aiLilac` | lilac | `#DCC7F0` | `#C3A9DC` |
+| Personal tools | `trackPersonal` | butter, default (new) | `#F4DD8E` | `#DDC46C` |
+| Personal tools | `personalRose` | rose | `#F5C9DA` | `#E0ABC0` |
+| no track | `neutral` | cream (unchanged) | `#F6F3EC` | `#D8D6D0` |
+
+- `brand.light.trackIntegration`, `trackDelivery` and `trackAi` take the default fills (`#F7C6A1`, `#B9DEC3`, `#C5CDF2`); `brand.light.trackPersonal` is `#F4DD8E` and `brand.dark.trackPersonal` `#29240F` (dark butter). The dark track roles keep their values.
+- Rings are the values the owner approved with each fill, not the 12% mix of 0.6.x; `neutral` keeps its mix. Every name stays within the three-segment limit (`coverBackground.<name>.fill`).
+- `color.ink` is at least 11.9:1 on every fill and `surface.light.muted` at least 4.5:1 (lowest on `trackAi`); the full table is in the change `identity-v2-type-pieces-cleanup`, `design.md` Decision 6.
+- Body diagrams stay on `surface.light.background` (the cream page); the two approved Remotion scenes do not change; `illustration.tape` keeps `#F4E4D8` and no longer equals a track role.
+- Which article takes which tone is the `illustration` skill's rule, not the package's.
