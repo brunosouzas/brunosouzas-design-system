@@ -12,7 +12,7 @@
 - **THEN** the command still writes the cover exactly as before this change
 
 ### Requirement: Signature lockup
-A `cover` or `banner` output, and a `favicon` or `avatar` icon output (see "New icon formats"), SHALL accept an optional `signature: true` key, adding the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`.
+A `cover` or `banner` output SHALL accept an optional `signature: true` key, adding the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`.
 
 #### Scenario: Signature drawn
 - **WHEN** a cover spec has `signature: true`
@@ -23,16 +23,16 @@ A `cover` or `banner` output, and a `favicon` or `avatar` icon output (see "New 
 - **THEN** the written SVG is unchanged from this change (no signature group)
 
 ### Requirement: New icon formats
-`format` SHALL accept `favicon` (one SVG switching the symbol's fill by `prefers-color-scheme`, plus PNGs at 16/32/48/180/192/512 px beside it), `linkedin-card` (1080×1080, cover frame conventions) and `avatar` (500×500, symbol only, no background). A generic Open Graph image is a `banner`-format spec, not a new enum value.
+`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions) and `avatar` (500×500, the symbol only, no background, no `pieces`). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
 
-#### Scenario: Favicon writes SVG and PNG set
-- **WHEN** a spec with `format: "favicon"` is built with `--out icons/favicon.svg`
-- **THEN** the command writes `icons/favicon.svg` (with the `prefers-color-scheme` style block) and `icons/favicon-16.png` through `icons/favicon-512.png` for every listed size
+#### Scenario: Favicon is the symbol, both themes, no pieces
+- **WHEN** a spec with `format: "favicon"` is built
+- **THEN** the written SVG is 32×32, holds a light-theme symbol group and a dark-theme symbol group with a `<style>` block switching them by `prefers-color-scheme`, and a `pieces` array in the spec is rejected (`"not used by the favicon format"`)
 
 #### Scenario: LinkedIn card is square
 - **WHEN** a spec with `format: "linkedin-card"` is built
 - **THEN** the written SVG has `width="1080" height="1080" viewBox="0 0 1080 1080"`
 
-#### Scenario: Avatar refuses a background
-- **WHEN** a spec with `format: "avatar"` has `background: "trackIntegration"`
-- **THEN** it is reported as "not used by the avatar format", the command exits 1 and writes nothing
+#### Scenario: Avatar refuses a background and pieces
+- **WHEN** a spec with `format: "avatar"` has `background: "trackIntegration"` or a non-empty `pieces`
+- **THEN** each is reported as "not used by the avatar format", the command exits 1 and writes nothing
