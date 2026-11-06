@@ -1,6 +1,7 @@
 # ADR 0007: Mira and the pillar cast
 
 - Status: accepted
+- Amended by [ADR 0009](0009-one-piece-grammar.md) (bank objects and the robot show the idle eyes; the emotes are kept and restyled)
 - Date: 2026-11-05
 - Supersedes: ADR 0005 (the cast; its neutral-video and storyboard-gate rules are unchanged, only the characters themselves are replaced)
 
@@ -49,3 +50,9 @@ Option 3.
 - `MASCOTS`/`MASCOT_ACTIONS`/`MASCOT_FACES` and the pieces for Dev, Architect, Data, Requester as characters are retired; `EMOTE_KINDS` keeps only the entries the new cast still uses.
 - The planned EIP video cards (AB#144-150) each start with a storyboard that tests this ADR's mapping against a real beat, before any new supporting-role character is built — never speculatively ahead of a scene.
 - stackledger's Sinal keeps its own identity (no hood tip): the parent-brand family and a product's own identity stay visually distinct, as the brand strategy's family architecture requires.
+
+## Amended, 2026-11-06 (card 301, ADR 0009)
+
+- **Idle eyes on the objects.** The bank objects (Correio, Lume, Carga, Anel, Módulo, Hub) and the `robot` piece show the cast's idle eyes (`cast.eyes`) on their screen or visor, where the identity studio's I10 had the screen off: an object with a face-like screen and no eyes read as dead next to Mira. They take no expression and no role; an object that needs one becomes a character with its own sheet, as before. Módulo also loses the two inner strokes between its legs.
+- **Emotes kept.** The consequence above that `EMOTE_KINDS` would keep only some entries does not hold: all eight emotes stay (`idea`, `doubt`, `problem`, `worked`, `refused`, `pressure`, `liked`, `waiting`), restyled in the v2 grammar of ADR 0009, because the new cast uses each of them. `emote` moved to its own module.
+- **Seven-role cast removed.** `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES`, their `cast.*` colours and the cast motion test composition are removed in 0.7.0, as planned above.

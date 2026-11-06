@@ -47,7 +47,27 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 
 ## Out of scope for now
 
-- Candidate pieces from the blog port (AB#189): each enters only when a new cover or diagram needs it again, or when two covers use it; until then the port draws it with `custom` or existing pieces.
+- Candidate pieces from the blog port (AB#189, closed with the owner's approval on 2026-11-06): each enters only when a new cover or diagram needs it again, or when two covers use it; until then the port draws it with `custom` or existing pieces. Checked against 0.6.1: no candidate has a second use, and none fits a bank object (the six objects of ADR 0007 are scenery with a screen, not these symbols). A candidate becomes a card when its second use appears. The specs are in `brunosouzas-content`, under `writing/<article>/design/`.
+
+  | Candidate | Where it is `custom` today | Uses | State in 0.6.1 |
+  |---|---|---|---|
+  | Open electrical circuit breaker | `circuit-breaker-in-mulesoft/design/circuit-breaker-card.json` | 1 | still `custom` |
+  | Rocket | `obsidian-to-site/design/obsidian-to-site-guide-card.json` | 1 | still `custom` (Astro) |
+  | Padlock | `solid-in-mulesoft/design/ocp-card.json` | 1 | still `custom` ("closed for modification") |
+  | Shield with a check | `solid-in-mulesoft/design/srp-card.json` | 1 | still `custom` (validation) |
+  | Lab flask | `mulesoft-delivery-azure-devops/design/gitflow-card.json` | 1 | still `custom` (test environment) |
+  | Git branch sign | `mulesoft-delivery-azure-devops/design/delivery-path-card.json` | 1 | still `custom` |
+  | Monitor with a heartbeat | `mulesoft-delivery-azure-devops/design/cloudhub-deploy-card.json` | 1 | still `custom` (health check) |
+  | Approval barrier | left `cloudhub-deploy-card.json`, because a cover takes one `custom` | 0 | out of the image; returns only if another cover needs it |
+  | Crossed-out pencil (editing forbidden) | `mulesoft-delivery-azure-devops/design/maven-release-card.json` | 1 | still `custom` |
+  | Plug and socket | `solid-in-mulesoft/design/lsp-card.json` | 1 | still `custom` (substitution) |
+  | Hexagonal port and pin | `solid-in-mulesoft/design/dip-card.json` | 1 | still `custom` (abstraction); a `hexNode` variation could cover it |
+  | Filter layer (funnel) | `solid-in-mulesoft/design/isp-card.json` | 1 | still `custom` |
+  | Gap / empty slot | `where-the-work-moves/design/where-the-work-moves-card.json` | 1 | still `custom` (replaced the puzzle) |
+  | Wavy "partial" seal | `solid-in-mulesoft/design/solid-intro-card.json` | 1 | still `custom` |
+  | Filled lens in the magnifier | `integration-patterns-in-mulesoft/design/eip-catalog-in-mulesoft-card.json` | 1 | still `custom`; could become a `magnifier` parameter |
+  | X mark (delivery failed) | `integration-patterns-in-mulesoft/design/dead-letter-channel-in-mulesoft-book.json` (arrow segments) | 1 | still drawn with segments; a diagram piece |
+  | Robot holding an object | `validate-ai-api-contract-change/design/validate-ai-api-contract-change-card.json` (the 200 became a loose label) | 1 | no `custom` in the spec; could become a `robot` parameter |
 - Technology props for the cast (an IDE accent, a cloud, a CI badge) and new roles (writer, reviewer): added with the scene that needs them (ADR 0005).
 
 - Sound and music: added per scene only when its context asks for it (a narrated presentation).

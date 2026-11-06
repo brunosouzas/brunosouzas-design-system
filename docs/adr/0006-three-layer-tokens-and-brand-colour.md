@@ -1,6 +1,7 @@
 # ADR 0006: Three-layer tokens and the brand colour system
 
 - Status: accepted
+- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed)
 - Date: 2026-11-05
 - Supersedes: ADR 0003 (colour meaning)
 
@@ -54,3 +55,7 @@ Cover backgrounds are a component token, not a new concept: `coverBackground` al
 - Nothing published breaks: diagrams, scenes and the two approved motion pilots keep their exact pixels; only their token's path gains a duplicate.
 - The 21-pair literal `coverBackground` bank and COV-4 (the illustration skill's "never share a background within 9 places" rule) are retired once the published covers are rebuilt on track backgrounds (AB#268, task 7.2); until then both still work.
 - A future theme or sub-brand (a product's own accent, per the brand strategy's "what a product gains") is a new value at the semantic layer, never a new flat list.
+
+## Amended, 2026-11-06 (card 301)
+
+[ADR 0009](0009-one-piece-grammar.md) moves the outline, shadow and component values to the v2 grammar, so published images change appearance when rebuilt (the owner reviews the renders): ink, panel and rings take `brand.light.*` values, the shadows are 0. As planned above, 0.7.0 removes the duplicate state paths (`color.healthy` … `color.failFast`; only `color.state.*` remains), the 21 literal `coverBackground` pairs (the four track and neutral pairs remain) and the seven-role `cast.*` colours; the state hex values and meanings are unchanged.
