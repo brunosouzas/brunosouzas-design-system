@@ -7,7 +7,9 @@
 // Run once for 0.7.0, on the drawing the owner approved from the renders of
 // group 8 (2026-11-06, branch feature/ab300-identity-v2-0.7.0 at a70a032):
 //   npx tsx scripts/freeze-emote.ts
-// It writes test/fixtures/emote-0.7.0.json: each kind, with and without its
+// Re-run once more for the code review of 0.7.0 (2026-11-06), after the
+// invisible white highlight of the `pressure` drops was removed; only the
+// pressure entries changed. It writes test/fixtures/emote-0.7.0.json: each kind, with and without its
 // burst, on both surfaces, at scale 1 and 2, with the SHA-256 of
 // toSvg(g({}, ...body, ...text)). Do not run it again on a later tree: the
 // fixture is the record of the approved 0.7.0 emotes.

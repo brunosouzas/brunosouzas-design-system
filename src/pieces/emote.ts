@@ -83,9 +83,9 @@ const drawEmote = (p: EmoteParams): Drawn => {
       );
       break;
     case "pressure":
+      // Two white drops; no highlight (a white stroke on a white drop would not show).
       for (const [dx, dy, k] of [[0, 0, 1], [30, 22, 0.6]]) parts.push(
         el("path", { d: `M${cx + dx},${cy + dy - 34 * k} Q${cx + dx + 24 * k},${cy + dy} ${cx + dx},${cy + dy + 12 * k} Q${cx + dx - 24 * k},${cy + dy} ${cx + dx},${cy + dy - 34 * k} Z`, fill: c("color.white"), ...outline(line), "stroke-width": 4 }),
-        el("path", { d: `M${cx + dx - 6 * k},${cy + dy - 2 * k} Q${cx + dx - 8 * k},${cy + dy + 6 * k} ${cx + dx - 2 * k},${cy + dy + 8 * k}`, fill: "none", stroke: c("color.white"), "stroke-width": 3, "stroke-linecap": "round" }),
       );
       break;
     case "liked":

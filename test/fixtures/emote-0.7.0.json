@@ -489,7 +489,7 @@
       "burst": true,
       "surface": "light"
     },
-    "sha256": "3f45022cb7036a142190e6e4c3b278e32272696f52d9d2588eef5c5c3194d492"
+    "sha256": "e87e578713520c9470bdee817fc7dc4b3ec522e5edb7248df2ad378b222a8b3d"
   },
   {
     "piece": "emote",
@@ -501,7 +501,7 @@
       "burst": true,
       "surface": "light"
     },
-    "sha256": "e7d3c944ffa0fc4419eaf7bbb29b5f293e7f4f4de67eabece6dc4927664ed94c"
+    "sha256": "2e6219e4f27f636b44cd7fe070fc58bf3f793bbf5c6989b76110e2903e459548"
   },
   {
     "piece": "emote",
@@ -513,7 +513,7 @@
       "burst": true,
       "surface": "dark"
     },
-    "sha256": "ba9af74d5f40b16893b54fa59d5f9a6348f2282163430265ad0cacbd1279c8f1"
+    "sha256": "b8688383a423011b834201d83fd94a32bcfb7cd7e597851665ed99adbfecb50f"
   },
   {
     "piece": "emote",
@@ -525,7 +525,7 @@
       "burst": true,
       "surface": "dark"
     },
-    "sha256": "bc5d5626919ecd2d3b533058e7eb3756400aafcf656d3e0afa167e067ff984ca"
+    "sha256": "f68bb2c594675cd81b9c7a75950616a1fda959fcbb4a62fe1b35334ae021e5cf"
   },
   {
     "piece": "emote",
@@ -537,7 +537,7 @@
       "burst": false,
       "surface": "light"
     },
-    "sha256": "3f45022cb7036a142190e6e4c3b278e32272696f52d9d2588eef5c5c3194d492"
+    "sha256": "e87e578713520c9470bdee817fc7dc4b3ec522e5edb7248df2ad378b222a8b3d"
   },
   {
     "piece": "emote",
@@ -549,7 +549,7 @@
       "burst": false,
       "surface": "light"
     },
-    "sha256": "e7d3c944ffa0fc4419eaf7bbb29b5f293e7f4f4de67eabece6dc4927664ed94c"
+    "sha256": "2e6219e4f27f636b44cd7fe070fc58bf3f793bbf5c6989b76110e2903e459548"
   },
   {
     "piece": "emote",
@@ -561,7 +561,7 @@
       "burst": false,
       "surface": "dark"
     },
-    "sha256": "ba9af74d5f40b16893b54fa59d5f9a6348f2282163430265ad0cacbd1279c8f1"
+    "sha256": "b8688383a423011b834201d83fd94a32bcfb7cd7e597851665ed99adbfecb50f"
   },
   {
     "piece": "emote",
@@ -573,7 +573,7 @@
       "burst": false,
       "surface": "dark"
     },
-    "sha256": "bc5d5626919ecd2d3b533058e7eb3756400aafcf656d3e0afa167e067ff984ca"
+    "sha256": "f68bb2c594675cd81b9c7a75950616a1fda959fcbb4a62fe1b35334ae021e5cf"
   },
   {
     "piece": "emote",
