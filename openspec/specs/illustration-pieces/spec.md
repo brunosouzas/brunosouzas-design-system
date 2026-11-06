@@ -1024,11 +1024,11 @@ A text's family, weight and style SHALL be its own `font-family`, `font-weight` 
 - **THEN** `embedFonts` resolves to a tree deep-equal to the input, with no `style` node
 
 ### Requirement: Face weights
-A text's weight SHALL be 400 when its resolved `font-weight` is missing, `normal`, `bolder`, `lighter` or a non-numeric string, 700 for `bold`, and otherwise its number, snapped to a shipped weight: Source Sans 3 below 550 → 400, 550 to below 800 → 700, 800 and above → 900; Source Code Pro below 550 → 400, 550 and above → 700. Each `@font-face` declares the range its weight stands for: `100 549`, `550 799` or `800 900` for Source Sans 3, `100 549` or `550 900` for Source Code Pro.
+A text's weight SHALL be 400 when its resolved `font-weight` is missing, `normal`, `bolder`, `lighter` or a non-numeric string, 700 for `bold`, and otherwise its number. Each `@font-face` declares a range (Source Sans 3: `100 549`, `550 799`, `800 900`; Source Code Pro: `100 549`, `550 900`); a weight takes the first face whose range's upper bound it does not exceed, so a fraction between two ranges takes the heavier face, as browser matching does.
 
 #### Scenario: Weights snapped
 - **WHEN** texts are drawn in Source Sans 3 at 549, 549.5, 550, 799, 799.5 and 800, and in Source Code Pro at 549, 549.5, 550 and 900
-- **THEN** the `style` holds five faces: `Source Code Pro` `100 549` (the 549 and 549.5 texts), `Source Code Pro` `550 900`, `Source Sans 3` `100 549` (the 549 and 549.5 texts), `Source Sans 3` `550 799` (the 550, 799 and 799.5 texts) and `Source Sans 3` `800 900`
+- **THEN** the `style` holds five faces: `Source Code Pro` `100 549` (the 549 text), `Source Code Pro` `550 900` (the 549.5, 550 and 900 texts), `Source Sans 3` `100 549` (the 549 text), `Source Sans 3` `550 799` (the 549.5, 550 and 799 texts) and `Source Sans 3` `800 900` (the 799.5 and 800 texts)
 
 #### Scenario: Weight keywords
 - **WHEN** Source Sans 3 texts have no `font-weight`, then `normal`, `bold`, `bolder`, `lighter` and `heavy`

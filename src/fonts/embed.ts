@@ -27,17 +27,18 @@ import type { SvgNode } from "../pieces/node.ts";
 
 const PACKAGE_NAME = "@brunosouzas/design-system";
 
-// The shipped faces: the five unmodified Adobe files in fonts/. `below` is the
-// lower bound of the next face of the family (a weight under it, fractions
-// included, takes this face); `range` is what its @font-face declares, so the
-// browser's font matching picks it for every weight a text names.
-type Face = { readonly family: string; readonly weight: number; readonly below: number; readonly range: string; readonly file: string };
+// The shipped faces: the five unmodified Adobe files in fonts/. `upTo` is the
+// upper bound of the range its @font-face declares (`range`). A weight up to it
+// takes this face; a fraction between two ranges (549.5, 799.5) takes the next,
+// heavier face, which is what the browser's font matching picks for a weight
+// above 500 that no range holds, so the subset and the drawn face agree.
+type Face = { readonly family: string; readonly weight: number; readonly upTo: number; readonly range: string; readonly file: string };
 const FACES: readonly Face[] = [
-  { family: "Source Code Pro", weight: 400, below: 550, range: "100 549", file: "SourceCodePro-Regular.ttf" },
-  { family: "Source Code Pro", weight: 700, below: Infinity, range: "550 900", file: "SourceCodePro-Bold.ttf" },
-  { family: "Source Sans 3", weight: 400, below: 550, range: "100 549", file: "SourceSans3-Regular.ttf" },
-  { family: "Source Sans 3", weight: 700, below: 800, range: "550 799", file: "SourceSans3-Bold.ttf" },
-  { family: "Source Sans 3", weight: 900, below: Infinity, range: "800 900", file: "SourceSans3-Black.ttf" },
+  { family: "Source Code Pro", weight: 400, upTo: 549, range: "100 549", file: "SourceCodePro-Regular.ttf" },
+  { family: "Source Code Pro", weight: 700, upTo: Infinity, range: "550 900", file: "SourceCodePro-Bold.ttf" },
+  { family: "Source Sans 3", weight: 400, upTo: 549, range: "100 549", file: "SourceSans3-Regular.ttf" },
+  { family: "Source Sans 3", weight: 700, upTo: 799, range: "550 799", file: "SourceSans3-Bold.ttf" },
+  { family: "Source Sans 3", weight: 900, upTo: Infinity, range: "800 900", file: "SourceSans3-Black.ttf" },
 ];
 // FACES is already in the order of the rules: family name by code point, then weight.
 
@@ -64,9 +65,9 @@ const faceOf = (inherited: Inherited): Face | undefined => {
   const family = firstFamily(inherited.family);
   const weight = weightOf(inherited.weight);
   const ofFamily = FACES.filter((face) => face.family === family);
-  // Snapped to the first face whose next face starts above the weight (549.5 is
-  // still 400, 799.5 still 700); above 900, the heaviest.
-  return ofFamily.find((face) => weight < face.below);
+  // Snapped to the first face whose declared range reaches the weight (549.5
+  // goes to 700 and 799.5 to 900, as in the browser); above 900, the heaviest.
+  return ofFamily.find((face) => weight <= face.upTo);
 };
 
 /** Drawn characters per face: the strings of text and tspan nodes, outside title, desc and style. */

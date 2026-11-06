@@ -226,11 +226,11 @@ describe("Face weights", () => {
       ),
     );
     expect(rulesOf(result).map((rule) => `${rule.family} ${rule.weight} ${sorted(rule.characters)}`)).toEqual([
-      "Source Code Pro 100 549 ej",
-      "Source Code Pro 550 900 fg",
-      "Source Sans 3 100 549 ah",
-      "Source Sans 3 550 799 bci",
-      "Source Sans 3 800 900 d",
+      "Source Code Pro 100 549 e",
+      "Source Code Pro 550 900 fgj",
+      "Source Sans 3 100 549 a",
+      "Source Sans 3 550 799 bch",
+      "Source Sans 3 800 900 di",
     ]);
   });
 
