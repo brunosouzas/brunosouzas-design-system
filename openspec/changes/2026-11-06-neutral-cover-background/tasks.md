@@ -4,3 +4,5 @@
 - [x] 1.2 `npm run tokens`; the cover command accepts `background: "neutral"`. Proves "Neutral background accepted" (`test/scripts/cover.test.ts`).
 - [x] 1.3 README: the `background` field.
 - [x] 1.4 `npm version 0.6.1 --no-git-tag-version`.
+- [x] 1.5 Spec delta for design-tokens "Measured cover backgrounds" (25 names); proved by "Source matches the measured table" (`test/tokens/illustration.test.ts`, 25 entries).
+- [ ] 1.6 After brunosouzas-design-system#23 merges: rebase on `main`, `openspec archive 2026-11-06-neutral-cover-background -y`, so the v0.6.1 tag carries the updated main specs.
