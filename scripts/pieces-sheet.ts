@@ -33,10 +33,11 @@ const merge = (...parts: Drawn[]): Drawn => ({ body: parts.flatMap((part) => par
 type Library = typeof Library;
 
 /** The library with every piece that takes `surface` drawing on `surface` (light: the library itself). */
+const takesSurface = (value: unknown): value is Piece<object> =>
+  typeof value === "function" && "schema" in value && Object.hasOwn((value as Piece<object>).schema, "surface");
+
 const onSurface = (surface: SheetSurface): Library => {
   if (surface === "light") return Library;
-  const takesSurface = (value: unknown): value is Piece<object> =>
-    typeof value === "function" && "schema" in value && Object.hasOwn((value as Piece<object>).schema, "surface");
   return Object.fromEntries(
     Object.entries(Library).map(([name, value]) => [name, takesSurface(value) ? (params: object) => value({ ...params, surface }) : value]),
   ) as unknown as Library;
@@ -142,18 +143,22 @@ export const piecesSheet = (surface: SheetSurface = "light"): SvgNode => {
     const x = GAP + (i % COLUMNS) * (CELL + GAP);
     const y = GAP + Math.floor(i / COLUMNS) * (CELL + GAP + 10);
     const piece = samples[name](x, y);
+    // A piece without `surface` cannot adapt to a dark page: it keeps its light cell, as a page would show it on a card.
+    const darkCell = dark && takesSurface(Library[name]);
     // Each cell clips its piece, so the rings (radius up to 400) stay in their cell.
     return {
       clip: el("clipPath", { id: `cell-${name}` }, el("rect", { x, y, width: CELL, height: CELL, rx: 12 })),
       shapes: g(
         { stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round", "clip-path": `url(#cell-${name})` },
-        dark
+        darkCell
           ? el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.surface.dark.background, stroke: tokens.surface.dark.grid, "stroke-width": 2 })
-          : el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.color.white, "fill-opacity": 0.5, stroke: tokens.color.ring, "stroke-width": 2 }),
+          : dark
+            ? el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.color.panel, stroke: tokens.color.ring, "stroke-width": 2 })
+            : el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.color.white, "fill-opacity": 0.5, stroke: tokens.color.ring, "stroke-width": 2 }),
         ...piece.body,
       ),
       text: g({ "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" }, ...piece.text),
-      label: el("text", { x: x + CELL / 2, y: y + CELL - 10, "font-family": tokens.font.mono, "font-size": 16, "font-weight": tokens.font.weightBold, "text-anchor": "middle", fill: dark ? tokens.surface.dark.text : tokens.color.ink }, name),
+      label: el("text", { x: x + CELL / 2, y: y + CELL - 10, "font-family": tokens.font.mono, "font-size": 16, "font-weight": tokens.font.weightBold, "text-anchor": "middle", fill: darkCell ? tokens.surface.dark.text : tokens.color.ink }, name),
     };
   });
   return el(

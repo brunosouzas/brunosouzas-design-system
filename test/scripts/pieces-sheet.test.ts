@@ -98,14 +98,17 @@ describe("Dark catalogue sheet", () => {
     expect(readFileSync(join(ws.root, "default.svg"), "utf8")).toBe(light);
     expect(dark).toMatch(new RegExp(`</defs>\\n  <rect width="\\d+" height="\\d+" fill="${tokens.surface.dark.background}"/>`));
     expect(cellOf(dark, "storeNode")).toContain(`fill="${tokens.surface.dark.panel}" stroke="${tokens.surface.dark.muted}"`);
-    // gear takes no surface: its shapes are those of the light sheet (only the cell's own background differs).
+    // gear takes no surface: it keeps its light cell and its shapes, as on the light sheet.
     const shapes = (svg: string) => cellOf(svg, "gear").split("\n").slice(2).join("\n");
     expect(shapes(dark)).toBe(shapes(light));
+    expect(cellOf(dark, "gear")).toContain(`fill="${tokens.color.panel}" stroke="${tokens.color.ring}"`);
     expect(dark).toMatch(/^<svg [^>]*>\n  <style>@font-face/);
     expect(fontFaces(dark)).toContain("Source Code Pro 550 900");
     const labels = [...dark.matchAll(/<text [^>]*font-size="16"[^>]*fill="([^"]+)">[a-zA-Z]+<\/text>/g)].map((m) => m[1]);
     expect(labels).toHaveLength(PIECE_NAMES.length);
-    expect(new Set(labels)).toEqual(new Set([tokens.surface.dark.text]));
+    expect(new Set(labels)).toEqual(new Set([tokens.surface.dark.text, tokens.color.ink]));
+    const label = (name: string) => new RegExp(`fill="([^"]+)">${name}</text>`).exec(dark)?.[1];
+    expect([label("storeNode"), label("gear")]).toEqual([tokens.surface.dark.text, tokens.color.ink]);
   });
 
   test("Unknown sheet surface", async () => {

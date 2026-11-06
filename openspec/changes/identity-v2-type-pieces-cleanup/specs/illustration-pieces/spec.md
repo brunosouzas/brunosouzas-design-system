@@ -284,11 +284,11 @@ Every shape `emote` draws, on either surface, SHALL carry its own `stroke` or si
 - **THEN** the command prints the `Error`'s message, naming the file, exits 1, and `sheet.svg` does not exist
 
 ### Requirement: Dark catalogue sheet
-`npm run pieces:sheet -- --out <file.svg> --surface dark` SHALL write the sheet on a `surface.dark.background` page with the name labels in `surface.dark.text`, drawing every piece that takes `surface` with `surface: "dark"` and the others as on the light sheet, its fonts embedded as on the light sheet. `--surface light`, or no `--surface`, writes the light sheet. Any other value prints the problem and the usage, exits 1 and writes nothing.
+`npm run pieces:sheet -- --out <file.svg> --surface dark` SHALL write the sheet on a `surface.dark.background` page drawing every piece that takes `surface` with `surface: "dark"` in a dark cell labelled in `surface.dark.text`, and the others in their light cell as on the light sheet, its fonts embedded as on the light sheet. `--surface light`, or no `--surface`, writes the light sheet. Any other value prints the problem and the usage, exits 1 and writes nothing.
 
 #### Scenario: Dark sheet
 - **WHEN** `npm run pieces:sheet -- --out dark.svg --surface dark` runs
-- **THEN** it prints `wrote dark.svg`; the page rect is filled `#121110`; the `storeNode` face is filled `#1D1C1A` and stroked `#ADA79D`; the `gear` shapes equal those of the light sheet; and the first child is a `style` holding a `Source Code Pro` face at `550 900`
+- **THEN** it prints `wrote dark.svg`; the page rect is filled `#121110`; the `storeNode` face is filled `#1D1C1A` and stroked `#ADA79D`; the `gear` cell (no `surface`) keeps its light cell and shapes; and the first child is a `style` holding a `Source Code Pro` face at `550 900`
 
 #### Scenario: Unknown sheet surface
 - **WHEN** `npm run pieces:sheet -- --out dark.svg --surface blue` runs
