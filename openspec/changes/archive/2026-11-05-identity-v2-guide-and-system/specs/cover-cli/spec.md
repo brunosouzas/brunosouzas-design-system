@@ -38,3 +38,28 @@ A `cover` or `banner` output SHALL accept an optional `signature: true` key, add
 #### Scenario: Avatar refuses a background and pieces
 - **WHEN** a spec with `format: "avatar"` has `background: "trackIntegration"` or a non-empty `pieces`
 - **THEN** each is reported as "not used by the avatar format", the command exits 1 and writes nothing
+
+## MODIFIED Requirements
+
+### Requirement: Cover spec format
+A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), optional `format` (`cover`, `banner`, `diagram`, `icon`, `favicon`, `linkedin-card`, `og`, `avatar`; default `cover`), and the keys its format allows: `background`, `rings` (`cx`, `cy`, optional `radius`), `pieces`, `custom`, `customAt`, `height`, `text`, `signature`. Each format's requirement says which it refuses or needs. Any other top-level key is an error.
+
+#### Scenario: Unknown background and piece
+- **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 63 piece names
+
+#### Scenario: Unsafe id
+- **WHEN** `id` is `../sdd` or `SDD`
+- **THEN** `id` is reported as not a safe slug
+
+#### Scenario: Invalid JSON
+- **WHEN** the spec has a trailing comma
+- **THEN** the command prints the parser's line and column, exits 1 and writes nothing
+
+#### Scenario: Unknown format
+- **WHEN** a spec has `format: "poster"`, or `format: 1`
+- **THEN** exactly one problem is printed for `format`: "expected one of cover, banner, diagram, icon", the command exits 1 and writes nothing
+
+#### Scenario: Ring count in a spec
+- **WHEN** a cover, banner or diagram spec has `rings.count: 30`
+- **THEN** `rings.count` is reported as "unknown parameter: the ring count comes from the format"

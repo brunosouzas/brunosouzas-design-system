@@ -51,11 +51,11 @@ The command SHALL write the cover to a new temporary file with an unpredictable 
 - **THEN** the other file keeps its bytes and `cover.svg` becomes a regular file holding the cover
 
 ### Requirement: Cover spec format
-A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), optional `format` (`cover`, `banner`, `diagram` or `icon`; default `cover`), `background` (a `coverBackground` name), `rings` (`cx`, `cy`, optional `radius`; finite numbers), `pieces` (array of objects with `piece` and its parameters), and the optional `custom`, `customAt`, `height` and `text`. Each format's requirement says which keys it refuses or needs. Any other top-level key is an error.
+A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), optional `format` (`cover`, `banner`, `diagram`, `icon`, `favicon`, `linkedin-card`, `og`, `avatar`; default `cover`), and the keys its format allows: `background`, `rings` (`cx`, `cy`, optional `radius`), `pieces`, `custom`, `customAt`, `height`, `text`, `signature`. Each format's requirement says which it refuses or needs. Any other top-level key is an error.
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 54 piece names
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 63 piece names
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`

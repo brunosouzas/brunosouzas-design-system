@@ -978,60 +978,64 @@ For each of the 73 calls in `test/fixtures/cast-dark-0.5.2.json` (design §4), t
 - **THEN** every hash matches and the test names any call that differs
 
 ### Requirement: Mira and the pillar cast pieces
-The package SHALL export a `mira` piece and four pillar-character pieces (`visor`, `drone`, `kiu`, `sinal`), each a pure function of its parameters and the generated tokens, returning `{ body, text }` with every colour a token path, no literal, overflow guarded, like any existing piece. Each accepts `surface: "light" | "dark"`, `view: "front" | "back"` (default `"front"`), a `face` limited to the character's defined states (ignored on the back view), and `scale`.
+The package SHALL export `mira` and the pillar pieces `visor`, `drone`, `kiu`, `sinal`: pure functions of their parameters and the tokens, returning `{ body, text }`. Each accepts `x`, `y`, `surface`, `scale` (0.25 to 4), `view` (`front`, `back`) and `expression` (`idle`, `done`, `waiting`, `failed`; none on the back), plus its own actions: `needleAngle`, `carries`, `stride` (Mira); `holds`, `points` (Visor); `carries` (Drone); `steps` (Kiu).
 
 #### Scenario: Mira state faces
-- **WHEN** `mira({ x: 0, y: 0, face: "done", surface: "light" })` and `mira({ x: 0, y: 0, face: "waiting", surface: "light" })` are called
-- **THEN** both return a valid `{ body, text }` tree and the only difference between them is the visor's drawn expression
+- **WHEN** `mira({ x: 0, y: 0, expression: "done" })` and `mira({ x: 0, y: 0, expression: "waiting" })` are called
+- **THEN** both return a valid `{ body, text }` tree, and the trees differ
 
-#### Scenario: Mira every face, both themes
-- **WHEN** `mira` is called once for each of `idle`, `done`, `waiting`, `failed`, with `surface: "light"` and again with `surface: "dark"`
-- **THEN** all eight calls return a valid tree, and the four light-theme trees differ from each other only in the visor's expression, as do the four dark-theme ones
+#### Scenario: Every expression, both themes
+- **WHEN** each of the five pieces is called once for each of `idle`, `done`, `waiting`, `failed`, with `surface: "light"` and again with `surface: "dark"`
+- **THEN** every call returns a valid tree, and for each piece and theme the four trees are pairwise different
 
 #### Scenario: Back view has no face
-- **WHEN** `mira` is called with `view: "back"` and any `face`
-- **THEN** the returned tree draws no visor expression (the back carries no face)
+- **WHEN** `mira` is called with `view: "back"` and `expression: "done"`, and again with `expression: "failed"`
+- **THEN** the two trees are identical (the back carries no face)
 
 #### Scenario: Scale resizes without changing the drawing
-- **WHEN** `mira({ x: 0, y: 0, face: "idle", surface: "light", scale: 1 })` and the same call with `scale: 0.25` are compared
-- **THEN** the second tree's root group carries a `scale(0.25)` transform (0.25 to 4 accepted) and is otherwise the same tree as the first
+- **WHEN** `mira({ x: 0, y: 0 })` and `mira({ x: 0, y: 0, scale: 0.25 })` are compared
+- **THEN** the second tree's root group carries `scale(0.25)` in its transform and is otherwise the same tree as the first
 
-#### Scenario: Unknown face rejected
-- **WHEN** `visor` is called with `face: "confused"`
-- **THEN** it throws a `RangeError` naming `face` and listing the character's valid faces
+#### Scenario: Unknown expression rejected
+- **WHEN** `visor` is called with `expression: "confused"`, and again with an unknown parameter `face`
+- **THEN** each throws a `RangeError` naming the parameter (`expression`, listing the four valid values; `face`, as an unknown parameter)
 
 #### Scenario: Pure and token-only
 - **WHEN** the no-colour-literals test scans `src/pieces/` after this change
-- **THEN** it still finds nothing, including inside the five new piece modules
+- **THEN** it still finds nothing, including inside the new piece modules
 
 ### Requirement: Bank objects
-The package SHALL export six bank-object pieces, `correio`, `lume`, `carga`, `anel`, `modulo`, `hub`, each drawn with its screen off (no face), for use on track covers. A bank object SHALL NOT accept a `face` parameter.
+The package SHALL export one `bankObject({ name, x, y, surface, scale })` piece and `BANK_OBJECT_NAMES` (`courier`, `lume`, `carga`, `anel`, `modulo`, `hub`), each object drawn with its screen off (no face), for use on track covers. A bank object SHALL NOT accept an `expression` or `face` parameter.
+
+#### Scenario: Every bank object draws
+- **WHEN** `bankObject` is called once for each name in `BANK_OBJECT_NAMES`, in both themes
+- **THEN** every call returns a valid tree
 
 #### Scenario: Bank object has no face
-- **WHEN** `carga` is called with a `face` parameter
-- **THEN** it throws a `RangeError` naming `face` as not supported by this piece
+- **WHEN** `bankObject({ name: "carga", x: 0, y: 0, face: "done" })` is called
+- **THEN** it throws a `RangeError` naming `face` as an unknown parameter
 
 ### Requirement: Brand notation icons
-The package SHALL export a brand notation icon set, distinct from `EIP_ICON_NAMES` (the 26 diagram icons), named `BRAND_NOTATION_ICON_NAMES`, plus a drawing function `brandNotationIcon({ name, x, y, scale })`, parallel to the existing `eipIcon({ name, x, y, scale })`. No name SHALL appear in both sets, and no export is shared between the two families.
+The package SHALL export the brand notation, a family separate from the 26 diagram icons (`EIP_ICONS`, `EIP_ICON_NAMES`, `eipIcon`): `BRAND_NOTATION_ICON_NAMES` (19 camelCase names: 13 EIP, 3 delivery, 3 AI) and the piece `brandNotationIcon({ name, x, y, surface, scale })`. The two families share no export and no piece; the same pattern may carry the same word in both name lists (`splitter`, `aggregator`), each drawn only by its own piece.
 
-#### Scenario: No overlap between the two EIP icon families
-- **WHEN** `BRAND_NOTATION_ICON_NAMES` and `EIP_ICON_NAMES` are compared
-- **THEN** their intersection is empty
+#### Scenario: Two families, no shared export
+- **WHEN** the package's exports are read
+- **THEN** `brandNotationIcon` and `eipIcon` are different pieces, and `BRAND_NOTATION_ICON_NAMES` and `EIP_ICON_NAMES` are different lists
 
 #### Scenario: Notation icon count
 - **WHEN** `BRAND_NOTATION_ICON_NAMES` is read
-- **THEN** it has exactly 19 entries, with the 13 EIP ones each naming the same canonical pattern name used in `EIP_ICON_NAMES`'s existing diagram icon, where that pattern is also in the notation
+- **THEN** it has exactly 19 entries
 
 #### Scenario: Drawing a notation icon
-- **WHEN** `brandNotationIcon({ name: "content-based-router", x: 100, y: 100 })` is called
+- **WHEN** `brandNotationIcon({ name: "contentBasedRouter", x: 100, y: 100 })` is called
 - **THEN** it returns a valid `{ body, text }` tree, and calling it with a name outside `BRAND_NOTATION_ICON_NAMES` throws a `RangeError` naming `name`
 
 ### Requirement: Category icon
-The package SHALL export a `categoryIcon` piece for a site category that has no notation or diagram icon, called as `categoryIcon({ category, x, y, scale, surface })`. For this change, `category` accepts `"personalTools"` and is drawn in `brand.<theme>.text` (neutral: no track colour), per `design.md`'s decision 4.
+The package SHALL export a `categoryIcon` piece for a site category that has no notation or diagram icon, called as `categoryIcon({ category, x, y, scale, surface })`. For this change, `category` accepts `"personalTools"`, drawn in `brand.<theme>.text` with one part in `brand.<theme>.accent` (the bolt ring) and no track colour, per `design.md`'s decision 4.
 
 #### Scenario: Personal tools category icon
 - **WHEN** `categoryIcon({ category: "personalTools", x: 0, y: 0, surface: "light" })` is called
-- **THEN** it returns a valid `{ body, text }` tree whose only colour is `brand.light.text`
+- **THEN** it returns a valid `{ body, text }` tree whose only colours are `brand.light.text` and `brand.light.accent`
 
 #### Scenario: Unknown category rejected
 - **WHEN** `categoryIcon` is called with `category: "news"`

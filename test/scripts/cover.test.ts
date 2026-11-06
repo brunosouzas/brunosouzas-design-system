@@ -169,6 +169,25 @@ describe("Code panel indent bound", () => {
 });
 
 describe("Cover spec format", () => {
+  test("Track background accepted", () => {
+    const result = buildCover(JSON.stringify({ ...minimal(), background: "trackIntegration" }), "spec.json");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.svg).toContain(`fill="${tokens.coverBackground.trackIntegration.fill}"`);
+    expect(result.svg).toContain(`stroke="${tokens.coverBackground.trackIntegration.ring}"`);
+  });
+
+  test("Old literal backgrounds still accepted", () => {
+    // The proof covers were built with literal pairs before 0.6.0 and must keep their bytes.
+    for (const spec of PROOF_COVERS) {
+      const text = readFileSync(join(FIXTURES, `${spec}.json`), "utf8");
+      expect(JSON.parse(text).background).not.toMatch(/^track/);
+      const result = buildCover(text, spec);
+      expect(result.ok).toBe(true);
+      if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${spec}.svg`), "utf8"));
+    }
+  });
+
   test("Unknown background and piece", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
@@ -535,14 +554,9 @@ describe("New icon formats", () => {
     }
   });
 
-  test("LinkedIn card is square", () => {
-    const svg = svgOf({ ...banner(), id: "li", format: "linkedin-card" });
-    expect(svg).toContain('width="1080" height="1080" viewBox="0 0 1080 1080"');
-  });
-
-  test("og image is 1200x630", () => {
-    const svg = svgOf({ ...banner(), id: "og", format: "og" });
-    expect(svg).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
+  test("LinkedIn card and og image are fixed sizes", () => {
+    expect(svgOf({ ...banner(), id: "li", format: "linkedin-card" })).toContain('width="1080" height="1080" viewBox="0 0 1080 1080"');
+    expect(svgOf({ ...banner(), id: "og", format: "og" })).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
   });
 
   test("Avatar draws the symbol filling the frame, no background or pieces", () => {
