@@ -1,18 +1,28 @@
-// `npm run pieces:sheet -- --out <file.svg>` (spec illustration-pieces,
-// "Piece catalogue"): one SVG with every piece once, labelled with its name,
-// on the neutral panel. The owner reviews the pieces from this sheet.
+// `npm run pieces:sheet -- --out <file.svg> [--surface light|dark]` (spec
+// illustration-pieces, "Piece catalogue", "Catalogue sheet in Source", "Dark
+// catalogue sheet"): one SVG with every piece once, labelled with its name, on
+// the neutral panel, its Source faces embedded (`embedFonts`), so the owner
+// reviews the pieces from this sheet in Chrome. `--surface dark` draws every
+// piece that takes `surface` with `surface: "dark"` on `surface.dark.background`,
+// and the others as on the light sheet.
 //
-// What can go wrong: a missing or non-.svg --out, or a missing folder, prints
-// the problem with the usage and exits 1 before writing.
+// What can go wrong: a missing or non-.svg --out, a missing folder or another
+// --surface prints the problem with the usage and exits 1 before writing; a
+// font file that cannot be read, or harfbuzzjs failing to load, prints the
+// error's message and exits 1 without writing.
 import { existsSync, statSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { tokens } from "../tokens/generated/tokens.ts";
-import * as P from "../src/pieces/library.ts";
+import { embedFonts } from "../src/fonts/embed.ts";
+import * as Library from "../src/pieces/library.ts";
 import { el, g, type Drawn, type SvgNode } from "../src/pieces/node.ts";
+import type { Piece } from "../src/pieces/piece.ts";
 import { toSvg } from "../src/pieces/render.ts";
 
-export const SHEET_USAGE = "usage: npm run pieces:sheet -- --out <file.svg>";
+export const SHEET_USAGE = "usage: npm run pieces:sheet -- --out <file.svg> [--surface light|dark]";
+export const SHEET_SURFACES = ["light", "dark"] as const;
+export type SheetSurface = (typeof SHEET_SURFACES)[number];
 const CELL = 240;
 const GAP = 20;
 const COLUMNS = 6;
@@ -20,8 +30,20 @@ const COLUMNS = 6;
 /** Several drawings of one piece in a cell. */
 const merge = (...parts: Drawn[]): Drawn => ({ body: parts.flatMap((part) => part.body), text: parts.flatMap((part) => part.text) });
 
+type Library = typeof Library;
+
+/** The library with every piece that takes `surface` drawing on `surface` (light: the library itself). */
+const onSurface = (surface: SheetSurface): Library => {
+  if (surface === "light") return Library;
+  const takesSurface = (value: unknown): value is Piece<object> =>
+    typeof value === "function" && "schema" in value && Object.hasOwn((value as Piece<object>).schema, "surface");
+  return Object.fromEntries(
+    Object.entries(Library).map(([name, value]) => [name, takesSurface(value) ? (params: object) => value({ ...params, surface }) : value]),
+  ) as unknown as Library;
+};
+
 /** Each piece drawn inside a 240x240 cell whose top-left corner is (x, y). */
-export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
+const samplesOf = (P: Library): Record<Library.PieceName, (x: number, y: number) => Drawn> => ({
   pill: (x, y) => P.pill({ x: x + 120, y: y + 100, text: "label" }),
   rings: (x, y) => P.rings({ cx: x + 120, cy: y + 100, radius: 20, color: "color.state.caller" }),
   sheet: (x, y) => P.sheet({ x: x + 34, y: y + 14, width: 170, height: 180, top: 34, step: 36, rows: [{ lead: "checked", bar: 80 }, { lead: "question", bar: 60, tail: "check" }, { bar: 120 }, { lead: "checkbox", bar: 70 }] }),
@@ -102,58 +124,87 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   drone: (x, y) => merge(P.drone({ x: x + 90, y: y + 150, scale: 0.9 }), P.drone({ x: x + 180, y: y + 150, scale: 0.9, surface: "dark", view: "back" })),
   kiu: (x, y) => P.kiu({ x: x + 60, y: y + 160, scale: 0.9, steps: 4 }),
   sinal: (x, y) => merge(P.sinal({ x: x + 90, y: y + 180, scale: 0.9 }), P.sinal({ x: x + 180, y: y + 180, scale: 0.9, surface: "dark" })),
-  bankObject: (x, y) => merge(...["courier", "lume", "carga", "anel"].map((name, i) => P.bankObject({ name: name as P.BankObjectName, x: x + 60 + (i % 2) * 100, y: y + 80 + Math.floor(i / 2) * 90, scale: 0.65 }))),
+  bankObject: (x, y) => merge(...["courier", "lume", "carga", "anel"].map((name, i) => P.bankObject({ name: name as Library.BankObjectName, x: x + 60 + (i % 2) * 100, y: y + 80 + Math.floor(i / 2) * 90, scale: 0.65 }))),
   symbol: (x, y) => merge(P.symbol({ x: x + 70, y: y + 60, scale: 2 }), P.symbol({ x: x + 170, y: y + 170, scale: 2, surface: "dark" })),
-  brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as P.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
+  brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as Library.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
   categoryIcon: (x, y) => P.categoryIcon({ category: "personalTools", x: x + 100, y: y + 100, scale: 2.4 }),
-};
+});
 
-export const piecesSheet = (): SvgNode => {
-  const rows = Math.ceil(P.PIECE_NAMES.length / COLUMNS);
+/** The light sheet's samples. */
+export const SAMPLES = samplesOf(Library);
+
+export const piecesSheet = (surface: SheetSurface = "light"): SvgNode => {
+  const samples = surface === "light" ? SAMPLES : samplesOf(onSurface(surface));
+  const dark = surface === "dark";
+  const rows = Math.ceil(Library.PIECE_NAMES.length / COLUMNS);
   const width = GAP + COLUMNS * (CELL + GAP);
   const height = GAP + rows * (CELL + GAP + 10);
-  const cells = P.PIECE_NAMES.map((name, i) => {
+  const cells = Library.PIECE_NAMES.map((name, i) => {
     const x = GAP + (i % COLUMNS) * (CELL + GAP);
     const y = GAP + Math.floor(i / COLUMNS) * (CELL + GAP + 10);
-    const piece = SAMPLES[name](x, y);
+    const piece = samples[name](x, y);
     // Each cell clips its piece, so the rings (radius up to 400) stay in their cell.
     return {
       clip: el("clipPath", { id: `cell-${name}` }, el("rect", { x, y, width: CELL, height: CELL, rx: 12 })),
       shapes: g(
         { stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round", "clip-path": `url(#cell-${name})` },
-        el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.color.white, "fill-opacity": 0.5, stroke: tokens.color.ring, "stroke-width": 2 }),
+        dark
+          ? el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.surface.dark.background, stroke: tokens.surface.dark.grid, "stroke-width": 2 })
+          : el("rect", { x, y, width: CELL, height: CELL, rx: 12, fill: tokens.color.white, "fill-opacity": 0.5, stroke: tokens.color.ring, "stroke-width": 2 }),
         ...piece.body,
       ),
       text: g({ "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" }, ...piece.text),
-      label: el("text", { x: x + CELL / 2, y: y + CELL - 10, "font-family": tokens.font.mono, "font-size": 16, "font-weight": tokens.font.weightBold, "text-anchor": "middle", fill: tokens.color.ink }, name),
+      label: el("text", { x: x + CELL / 2, y: y + CELL - 10, "font-family": tokens.font.mono, "font-size": 16, "font-weight": tokens.font.weightBold, "text-anchor": "middle", fill: dark ? tokens.surface.dark.text : tokens.color.ink }, name),
     };
   });
   return el(
     "svg",
     { xmlns: "http://www.w3.org/2000/svg", width, height, viewBox: `0 0 ${width} ${height}`, "font-family": tokens.font.sans },
     el("defs", {}, ...cells.map((cell) => cell.clip)),
-    el("rect", { width, height, fill: tokens.color.panel }),
+    el("rect", { width, height, fill: dark ? tokens.surface.dark.background : tokens.color.panel }),
     ...cells.flatMap((cell) => [cell.shapes, cell.text, cell.label]),
   );
 };
 
-export const runPiecesSheet = (args: string[], io: { cwd: string; log: (l: string) => void; error: (l: string) => void }): number => {
+/** `--out <file.svg>` once and `--surface light|dark` at most once, in any order. */
+const parseSheetArgs = (args: string[]): { out: string; surface: string } | undefined => {
+  const options = new Map<string, string>();
+  for (let i = 0; i < args.length; i += 2) {
+    const [name, value] = [args[i], args[i + 1]];
+    if ((name !== "--out" && name !== "--surface") || value === undefined || value.startsWith("--") || options.has(name)) return undefined;
+    options.set(name, value);
+  }
+  const out = options.get("--out");
+  return out === undefined ? undefined : { out, surface: options.get("--surface") ?? "light" };
+};
+
+export const runPiecesSheet = async (args: string[], io: { cwd: string; log: (l: string) => void; error: (l: string) => void }): Promise<number> => {
   const fail = (problem: string) => {
     io.error(problem);
     io.error(SHEET_USAGE);
     return 1;
   };
-  if (args.length !== 2 || args[0] !== "--out") return fail("expected exactly --out <file.svg>");
-  const out = args[1];
+  const parsed = parseSheetArgs(args);
+  if (parsed === undefined) return fail("expected --out <file.svg> and at most one --surface light|dark");
+  const { out, surface } = parsed;
   if (!out.endsWith(".svg")) return fail(`the output must be an .svg file, found ${out}`);
+  if (!(SHEET_SURFACES as readonly string[]).includes(surface)) return fail(`--surface expects light or dark, found ${surface}`);
   const folder = dirname(resolve(io.cwd, out));
   if (!existsSync(folder) || !statSync(folder).isDirectory()) return fail(`the output folder does not exist: ${dirname(out)}`);
-  writeFileSync(resolve(io.cwd, out), `${toSvg(piecesSheet())}\n`);
+  const drawing = piecesSheet(surface as SheetSurface);
+  let sheet: SvgNode;
+  try {
+    sheet = await embedFonts(drawing);
+  } catch (error) {
+    io.error(error instanceof Error ? error.message : String(error));
+    return 1;
+  }
+  writeFileSync(resolve(io.cwd, out), `${toSvg(sheet)}\n`);
   io.log(`wrote ${out}`);
   return 0;
 };
 
 const isMain = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
-  process.exitCode = runPiecesSheet(process.argv.slice(2), { cwd: process.env.INIT_CWD ?? process.cwd(), log: console.log, error: console.error });
+  process.exitCode = await runPiecesSheet(process.argv.slice(2), { cwd: process.env.INIT_CWD ?? process.cwd(), log: console.log, error: console.error });
 }

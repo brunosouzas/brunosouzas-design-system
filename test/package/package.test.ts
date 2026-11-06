@@ -3,13 +3,15 @@
 // every entry point from there. Needs `npm run build` first (CI runs it before
 // the tests).
 import { execFileSync, spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
 const ROOT = new URL("../..", import.meta.url).pathname;
 const FIXTURE = join(ROOT, "test/fixtures/covers/spec-driven-development.json");
+// The five Adobe files the pieces draw (spec illustration-pieces, "Fonts shipped with the package").
+const FONT_FILES = ["SourceCodePro-Bold.ttf", "SourceCodePro-Regular.ttf", "SourceSans3-Black.ttf", "SourceSans3-Bold.ttf", "SourceSans3-Regular.ttf"];
 let work = "";
 let files: string[] = [];
 
@@ -41,6 +43,8 @@ afterAll(() => {
 describe("Package contents", () => {
   test("Only the built code and the generated tokens ship", () => {
     expect(files).toContain("dist/src/pieces/index.js");
+    expect(files).toContain("dist/src/fonts/embed.js");
+    expect(files).toContain("fonts/OFL.txt");
     expect(files).toContain("dist/src/pieces/index.d.ts");
     expect(files).toContain("dist/scripts/cover.js");
     expect(files).toContain("tokens/generated/tokens.css");
@@ -48,9 +52,19 @@ describe("Package contents", () => {
     expect(files.filter((file) => /^(src|test|scripts|openspec|docs)\//.test(file) || file.endsWith(".tsx"))).toEqual([]);
   });
 
-  test("No runtime dependency", () => {
+  test("Font file missing", () => {
+    // A font absent from the packed package fails here, naming it.
+    for (const name of FONT_FILES) expect(files, `fonts/${name} is missing from the packed package`).toContain(`fonts/${name}`);
+    expect(files.filter((file) => file.startsWith("fonts/")).sort()).toEqual(["fonts/OFL.txt", ...FONT_FILES.map((name) => `fonts/${name}`)].sort());
+  });
+
+  test("One pinned dependency", () => {
     const manifest = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
-    expect(manifest.dependencies).toBeUndefined();
+    expect(Object.keys(manifest.dependencies)).toEqual(["harfbuzzjs"]);
+    expect(manifest.dependencies.harfbuzzjs).toMatch(/^\d+\.\d+\.\d+$/);
+    // The piece modules stay free of file access: the dependency is used only by src/fonts/.
+    const pieces = join(ROOT, "src/pieces");
+    for (const name of readdirSync(pieces)) expect(readFileSync(join(pieces, name), "utf8"), name).not.toMatch(/from "node:|require\("node:/);
     // The stylesheet must survive tree shaking in a consumer's bundle.
     expect(manifest.sideEffects).toEqual(["**/*.css"]);
     expect(manifest.peerDependenciesMeta.react.optional).toBe(true);
@@ -74,7 +88,7 @@ describe("Installed package", () => {
     // The ink helpers stay internal (change body-diagram-pieces, task 2.2).
     expect(result.helpers).toEqual([]);
     expect(result.svg).toMatch(/^<rect /);
-    expect(result.ink).toBe("#0A1033");
+    expect(result.ink).toBe("#121212");
     expect(result.same).toBe(true);
     expect(result.pieces).toBe(63);
     expect(existsSync(join(consumer(), "node_modules/react"))).toBe(false);
@@ -87,8 +101,29 @@ describe("Installed package", () => {
       console.log(require.resolve("@brunosouzas/design-system/tokens.css") + "\\n" + require.resolve("@brunosouzas/design-system/tokens.json"));
     `);
     const [css, json] = out.trim().split("\n");
-    expect(readFileSync(css, "utf8")).toContain("--ds-color-ink: #0A1033;");
-    expect(JSON.parse(readFileSync(json, "utf8")).color.ink).toBe("#0A1033");
+    expect(readFileSync(css, "utf8")).toContain("--ds-color-ink: #121212;");
+    expect(JSON.parse(readFileSync(json, "utf8")).color.ink).toBe("#121212");
+  });
+
+  test("Files in the installed package", () => {
+    const installed = join(consumer(), "node_modules/@brunosouzas/design-system/fonts");
+    expect(readdirSync(installed).sort()).toEqual([...FONT_FILES, "OFL.txt"].sort());
+    for (const name of [...FONT_FILES, "OFL.txt"]) expect(readFileSync(join(installed, name)).equals(readFileSync(join(ROOT, "fonts", name))), name).toBe(true);
+  });
+
+  test("Subpath in the installed package", () => {
+    const out = node(`
+      import { embedFonts } from "@brunosouzas/design-system/fonts";
+      import * as root from "@brunosouzas/design-system";
+      const spec = { id: "t", title: "Title", description: "Description", background: "trackIntegration", rings: { cx: 400, cy: 215 }, pieces: [{ piece: "pill", x: 100, y: 100, text: "request" }] };
+      const tree = await embedFonts(root.coverTree(spec));
+      const style = tree.children.find((child) => typeof child !== "string" && child.tag === "style");
+      console.log(JSON.stringify({ css: style.children.join(""), fromRoot: typeof root.embedFonts }));
+    `);
+    const { css, fromRoot } = JSON.parse(out);
+    expect(css.match(/@font-face/g)).toHaveLength(1);
+    expect(css).toContain("font-family:'Source Sans 3'");
+    expect(fromRoot).toBe("undefined");
   });
 
   test("The React entry renders the same drawing as the SVG renderer", () => {

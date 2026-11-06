@@ -1,0 +1,13 @@
+@brunosouzas/design-system
+Copyright Bruno Souza. Licensed under the Apache License, Version 2.0 (LICENSE).
+
+This package ships third-party font files, unmodified, in fonts/:
+
+- Source Sans 3, release 3.052R (SourceSans3-Regular.ttf, SourceSans3-Bold.ttf,
+  SourceSans3-Black.ttf), from https://github.com/adobe-fonts/source-sans
+- Source Code Pro, release 2.042R (SourceCodePro-Regular.ttf,
+  SourceCodePro-Bold.ttf), from https://github.com/adobe-fonts/source-code-pro
+
+Copyright Adobe, with Reserved Font Name 'Source'. Licensed under the SIL Open
+Font License, Version 1.1: fonts/OFL.txt. The cover command embeds a subset of
+these faces in the SVG files it writes (an embedded document font, OFL-FAQ 1.12).

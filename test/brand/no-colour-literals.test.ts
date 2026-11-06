@@ -53,4 +53,15 @@ describe("Components take values only from the tokens", () => {
       .filter((name) => /from\s+["']node:/.test(readFileSync(join(repoRoot, "src/pieces", name), "utf8")));
     expect(offenders).toEqual([]);
   });
+
+  // Spec illustration-pieces, "Fonts entry point" (change identity-v2-type-pieces-cleanup, task 1.3):
+  // the embedding reads files and loads WebAssembly, so only the subpath ./fonts exports it.
+  test("Root entry stays pure", async () => {
+    const offenders = readdirSync(join(repoRoot, "src/pieces"))
+      .filter((name) => /\.(ts|tsx)$/.test(name))
+      .filter((name) => /from\s+["'](node:|\.\.\/fonts\/)/.test(readFileSync(join(repoRoot, "src/pieces", name), "utf8")));
+    expect(offenders).toEqual([]);
+    const root = await import("../../src/pieces/index");
+    expect("embedFonts" in root).toBe(false);
+  });
 });

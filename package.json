@@ -18,6 +18,10 @@
       "types": "./dist/src/pieces/react.d.ts",
       "import": "./dist/src/pieces/react.js"
     },
+    "./fonts": {
+      "types": "./dist/src/fonts/embed.d.ts",
+      "import": "./dist/src/fonts/embed.js"
+    },
     "./tokens": {
       "types": "./dist/tokens/generated/tokens.d.ts",
       "import": "./dist/tokens/generated/tokens.js"
@@ -32,6 +36,8 @@
   "files": [
     "dist/",
     "tokens/generated/",
+    "fonts/",
+    "NOTICE",
     "!dist/**/*.test.*"
   ],
   "sideEffects": [
@@ -39,6 +45,9 @@
   ],
   "engines": {
     "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "harfbuzzjs": "1.6.4"
   },
   "peerDependencies": {
     "react": ">=19"
