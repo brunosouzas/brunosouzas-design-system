@@ -202,8 +202,16 @@ describe("Icon output", () => {
     expect(rootOf(svg)).toContain('width="48" height="48" viewBox="0 0 48 48"');
   });
 
+  // Change site-palette-and-category-badges, task 3.1.
+  test("Category badge box", async () => {
+    const svg = await svgOf(icon({ piece: "categoryIcon", category: "integration", scale: 4 }, { title: "Integration", description: "Integration category." }));
+    expect(rootOf(svg)).toContain('width="168" height="168" viewBox="0 0 168 168"');
+    expect(svg).toContain('<g data-piece="category-icon-integration" transform="translate(0 0) scale(4)">');
+    expect(svg).not.toContain("<style");
+  });
+
   test("Not one icon piece", async () => {
-    const message = "pieces: an icon spec holds exactly one piece: eipIcon, uiIcon or linkIcon";
+    const message = "pieces: an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon";
     expect(await problems({ id: "i", title: "T", description: "D", format: "icon", pieces: [{ piece: "eipIcon", name: "splitter" }, { piece: "eipIcon", name: "aggregator" }] })).toEqual([message]);
     expect(await problems(icon({ piece: "pill", x: 0, y: 0, text: "a" }, { title: "T", description: "D" }))).toEqual([message]);
   });
@@ -243,6 +251,15 @@ describe("Icon keys", () => {
 
   test("UI icon without a title", async () => {
     expect(await problems(icon({ piece: "uiIcon", name: "sun" }, { description: "Light theme" }))).toEqual(["title: expected a non-empty string"]);
+  });
+
+  // Change site-palette-and-category-badges, task 3.1.
+  test("Category badge without a description", async () => {
+    const ws = workspace();
+    ws.write("spec.json", icon({ piece: "categoryIcon", category: "delivery" }, { title: "Delivery" }));
+    expect(await ws.run("spec.json", "--out", "i.svg")).toBe(1);
+    expect(ws.err[0]).toBe("description: expected a non-empty string");
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
 });
 
@@ -415,7 +432,7 @@ describe("Code review round 2", () => {
 
   test("An unknown reference as an icon's piece is reported", async () => {
     expect(await problems(icon({ piece: "@missing" }, { title: "T", description: "D", text: tables({ a: "x" }) }), "en")).toEqual([
-      "pieces: an icon spec holds exactly one piece: eipIcon, uiIcon or linkIcon",
+      "pieces: an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon",
       "pieces[0].piece: unknown text key missing",
     ]);
   });

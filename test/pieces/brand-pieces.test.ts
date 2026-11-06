@@ -9,6 +9,7 @@ import {
   BANK_OBJECT_NAMES,
   BRAND_NOTATION_ICON_NAMES,
   CAST_EXPRESSIONS,
+  CATEGORY_ICON_NAMES,
   EIP_ICON_NAMES,
   bankObject,
   brandNotationIcon,
@@ -141,15 +142,54 @@ describe("Brand notation icons", () => {
 });
 
 describe("Category icon", () => {
-  test("Personal tools category icon", () => {
-    const icon = categoryIcon({ category: "personalTools", x: 0, y: 0, surface: "light" });
+  // Change site-palette-and-category-badges, task 2.1.
+  const root = (category: (typeof CATEGORY_ICON_NAMES)[number], extra: { x?: number; y?: number; scale?: number } = {}) => {
+    const icon = categoryIcon({ category, x: extra.x ?? 0, y: extra.y ?? 0, ...(extra.scale === undefined ? {} : { scale: extra.scale }) });
     valid(icon);
-    expect([...colours(icon.body)].sort()).toEqual([tokens.brand.light.accent, tokens.brand.light.text].sort());
+    expect(icon.body).toHaveLength(1);
+    return icon.body[0] as SvgNode;
+  };
+  const child = (node: SvgNode, i: number) => node.children[i] as SvgNode;
+
+  test("Integration badge", () => {
+    const group = root("integration");
+    expect(group.attrs.transform).toBe("translate(0 0) scale(1)");
+    expect(child(group, 0)).toMatchObject({ tag: "circle", attrs: { cx: 21, cy: 21, r: 19.5, fill: "#F7C6A1", stroke: "#E3AB84", "stroke-width": 1 } });
+    expect(child(group, 1)).toEqual(brandNotationIcon({ name: "pointToPointChannel", x: 9, y: 9, scale: 0.5, surface: "light" }).body[0]);
+    expect(group.children).toHaveLength(2);
+  });
+
+  test("Personal tools category icon", () => {
+    const group = root("personalTools");
+    expect(child(group, 0).attrs).toMatchObject({ fill: "#F4DD8E", stroke: "#DDC46C" });
+    const glyph = child(group, 1);
+    expect(glyph.attrs.transform).toBe("translate(9 9) scale(0.5)");
+    expect(child(glyph, 0).attrs).toMatchObject({ d: "M12 36 L28 20 M24 12 L36 24", stroke: tokens.brand.light.text });
+    expect(child(glyph, 1).attrs).toMatchObject({ stroke: tokens.brand.light.accent });
+  });
+
+  test("One track tone per category", () => {
+    expect([...CATEGORY_ICON_NAMES]).toEqual(["integration", "delivery", "aiEngineering", "personalTools"]);
+    expect(CATEGORY_ICON_NAMES.map((name) => child(root(name), 0).attrs.fill)).toEqual(["#F7C6A1", "#B9DEC3", "#C5CDF2", "#F4DD8E"]);
+    expect(CATEGORY_ICON_NAMES.map((name) => child(root(name), 0).attrs.stroke)).toEqual(["#E3AB84", "#98C6A5", "#A5AEDA", "#DDC46C"]);
+    expect(child(root("delivery"), 1)).toEqual(brandNotationIcon({ name: "gateToProduction", x: 9, y: 9, scale: 0.5, surface: "light" }).body[0]);
+    expect(child(root("aiEngineering"), 1)).toEqual(brandNotationIcon({ name: "contextWindow", x: 9, y: 9, scale: 0.5, surface: "light" }).body[0]);
+  });
+
+  test("Placed and scaled", () => {
+    const placed = root("delivery", { x: 10, y: 20, scale: 4 });
+    expect(placed.attrs.transform).toBe("translate(10 20) scale(4)");
+    expect(placed.children).toEqual(root("delivery").children);
   });
 
   test("Unknown category rejected", () => {
     expect(() => categoryIcon({ category: "news", x: 0, y: 0 } as never)).toThrow(RangeError);
     expect(() => categoryIcon({ category: "news", x: 0, y: 0 } as never)).toThrow(/category: expected one of/);
+  });
+
+  test("Surface no longer a parameter", () => {
+    expect(() => categoryIcon({ category: "delivery", x: 0, y: 0, surface: "dark" } as never)).toThrow(RangeError);
+    expect(() => categoryIcon({ category: "delivery", x: 0, y: 0, surface: "dark" } as never)).toThrow(/surface: unknown parameter/);
   });
 });
 

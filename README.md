@@ -25,7 +25,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). Mira, the four pillar characters, the bank objects and the emotes are pieces too ([ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)); new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). Since 0.7.0 every piece follows one grammar ([ADR 0009](docs/adr/0009-one-piece-grammar.md)) and every written SVG carries its Source faces ([ADR 0008](docs/adr/0008-type-inside-the-image.md)); see [Upgrading to 0.7.0](#upgrading-to-070).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). Mira, the four pillar characters, the bank objects and the emotes are pieces too ([ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)); new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). Since 0.7.0 every piece follows one grammar ([ADR 0009](docs/adr/0009-one-piece-grammar.md)) and every written SVG carries its Source faces ([ADR 0008](docs/adr/0008-type-inside-the-image.md)); see [Upgrading to 0.7.0](#upgrading-to-070). 0.8.0 maps the site palette onto the brand roles and adds the category badges; see [Upgrading to 0.8.0](#upgrading-to-080).
 
 ## What it is
 
@@ -158,7 +158,7 @@ Thirteen pieces draw a metro map and its page diagrams, for [stackledger](https:
 - `countBadge` takes `textSize` (6 to 48, default 11): without `height`, the height, width and baseline grow with it.
 - A line's colour comes from the map's data, so `pipe.fill`, `lineBadge.fill` and `zone.fill` also accept `#RRGGBB`. Every other colour is a token path, and a cover spec rejects any hex.
 - `map.bendRadius` (32) is the radius of a bundle's centre line at a 45° or 90° bend; no piece reads it, the map engine draws the arcs (`pipe.d` takes `A`).
-- The `map.*` tokens hold the measures (outline 3, shadow 0, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark` and `backdropCredit` the colours of a city backdrop behind a map and its OpenStreetMap credit (no piece draws it; stackledger does), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark.
+- The `map.*` tokens hold the measures (outline 3, shadow 0, line 12, casing 6, badge 20, node 46, ring 3, halo 1.5, licence 10, zone padding 32, bend radius 32…), `surface.*.zoneOpacity` the zone's opacity (0.12, dark 0.22), `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark` and `backdropCredit` the colours of a city backdrop behind a map and its OpenStreetMap credit (no piece draws it; stackledger does), and `site.*` the page palette, fonts and type scale of brunosouzas.com in light and dark. Since 0.8.0 each `site` colour is the brand role it stands for (ADR 0006, amended): `primary`, `dark`, `text` and `textDark` are `brand.<theme>.text`, `body` is `bg`, `light` is `cardBg`, `border` is `border`, `textLight` is `textMuted` and `link` is `accentText`; `site.font` names Source Sans 3 (`primary`), Source Serif 4 (`secondary`) and Source Code Pro (`mono`). Against body text a link is 3.25:1 in light and 2.23:1 in dark, so a page keeps its link underline: colour alone does not mark a link (WCAG 1.4.1).
 
 ```ts
 import { lineBadge, pipe, stationMarker, toSvg } from "@brunosouzas/design-system";
@@ -272,7 +272,7 @@ npx --yes --package @brunosouzas/design-system@<version> brunosouzas-cover desig
 ```
 
 - `"format": "diagram"` takes a `height` in layout units (1 to 10000) and no `background`: the spec is laid out 560 wide and written 800 wide, on the `color.panel` panel with rounded corners (`bodyDiagram.radius`, 14 at 800) and rings in `color.ring` that show at step 28 and width 2, out to the farthest corner. Pieces get the map outline (3) and label size (13), which show at 4.3 and 18.6. `test/fixtures/covers/circuit-breaker-states.json` is the circuit breaker article's state diagram.
-- `"format": "icon"` holds one `eipIcon`, `uiIcon` or `linkIcon` at 0,0 and writes it in a box of its own size (64x40 for an EIP icon). An EIP icon takes its title and description, with the CC BY 4.0 credit, from the icon's data, so its spec has neither; a UI or link icon spec needs both. No `background`, `rings`, `custom` or `signature`.
+- `"format": "icon"` holds one `eipIcon`, `uiIcon`, `linkIcon` or `categoryIcon` at 0,0 and writes it in a box of its own size (64x40 for an EIP icon, 42 × `scale` for a category badge). An EIP icon takes its title and description, with the CC BY 4.0 credit, from the icon's data, so its spec has neither; a UI, link or category icon spec needs both. No `background`, `rings`, `custom` or `signature`.
 - **Text tables.** `"text": { "pt": { "open": ["taxa de falha", "> limite"] }, "en": { ... } }` holds one table per language with the same keys; any string `"@open"` elsewhere in the spec (pieces, `title`, `description`, even `id`) is replaced by that key's value for the language passed with `--lang <code>`. Every language must define every key, and the ids in the output gain the language (`<id>-pt`). Without `text`, strings are drawn as written, so `"@home"` stays a label.
 - Like a cover, a diagram or icon is a standalone image: `uiIcon` `colour: "currentColor"` is refused in every format.
 
@@ -284,7 +284,8 @@ Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram
 
 - `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`). `colour: "currentColor"` makes the icon follow its element's text colour (a button that inverts on hover, say); it only works when the SVG is inline in the page, since an `<img>` does not inherit the page's colour, and a cover spec refuses it.
 - `linkIcon({ icon, x, y, size, surface })` draws a link sticker in a 46-unit box, a white face with its outline and no frame (on dark the outline takes `surface.dark.muted`): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-- Neither holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
+- `categoryIcon({ category, x, y, scale })` draws the site's category badge in a 42-unit box: a disc in the default tone of the category's track (`coverBackground.<track>.fill`, ringed in its `.ring`) with a glyph on it, the same on light and dark pages. `integration` (`trackIntegration`, the notation's `pointToPointChannel`), `delivery` (`trackDelivery`, `gateToProduction`), `aiEngineering` (`trackAi`, `contextWindow`), `personalTools` (`trackPersonal`, its own wrench and screwdriver); names in `CATEGORY_ICON_NAMES`. At `scale` 4 it is the 168-pixel badge the site shows.
+- None holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
 
 ```ts
 import { el, linkIcon, toSvg } from "@brunosouzas/design-system";
@@ -294,6 +295,19 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 ### EIP icons
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+
+## Upgrading to 0.8.0
+
+0.8.0 (card 302) changes what the site palette holds and the category icon's call.
+
+| Changed | Before | Now |
+|---|---|---|
+| `site.light.*`, `site.dark.*` colours (`--ds-site-*`) | the Astroplate palette (`body` `#FFFFFF` / `#1C1C1C`, `text` `#444444` / `#B4AFB6`…) | the brand roles above (`body` `#F6F3EC` / `#121110`, `text` `#121212` / `#F1EEE8`…); same names |
+| `site.light.link`, `site.dark.link`, `site.font.mono` | absent | `#B83A0C`, `#FF7A45`, `'Source Code Pro', monospace` |
+| `categoryIcon` | `personalTools` only, a glyph with `surface` | four category badges on a track-tone disc; `surface` is refused |
+| `icon` format | `eipIcon`, `uiIcon`, `linkIcon` | also `categoryIcon` |
+
+A page that reads `--ds-site-*` changes colour when it moves to 0.8.0. With `primary` equal to `text`, a hover that turns text-coloured links `primary` no longer shows: move it to `link`.
 
 ## Upgrading to 0.7.0
 

@@ -208,16 +208,18 @@ export const tokens = {
   },
   "site": {
     "dark": {
-      "body": "#1C1C1C",
-      "border": "#3E3E3E",
-      "dark": "#FFFFFF",
-      "light": "#222222",
-      "primary": "#FFFFFF",
-      "text": "#B4AFB6",
-      "textDark": "#FFFFFF",
-      "textLight": "#B4AFB6"
+      "body": "#121110",
+      "border": "#3B3834",
+      "dark": "#F1EEE8",
+      "light": "#1D1C1A",
+      "link": "#FF7A45",
+      "primary": "#F1EEE8",
+      "text": "#F1EEE8",
+      "textDark": "#F1EEE8",
+      "textLight": "#ADA79D"
     },
     "font": {
+      "mono": "'Source Code Pro', monospace",
       "primary": "'Source Sans 3', sans-serif",
       "secondary": "'Source Serif 4', serif"
     },
@@ -240,14 +242,15 @@ export const tokens = {
       "h6Small": 1.08
     },
     "light": {
-      "body": "#FFFFFF",
-      "border": "#EAEAEA",
-      "dark": "#040404",
-      "light": "#F6F6F6",
+      "body": "#F6F3EC",
+      "border": "#D7D1C5",
+      "dark": "#121212",
+      "light": "#FFFFFF",
+      "link": "#B83A0C",
       "primary": "#121212",
-      "text": "#444444",
-      "textDark": "#040404",
-      "textLight": "#717171"
+      "text": "#121212",
+      "textDark": "#121212",
+      "textLight": "#5C5852"
     }
   },
   "surface": {

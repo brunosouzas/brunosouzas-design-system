@@ -7,7 +7,7 @@
 // decorative colour through another path with the same value would still pass,
 // which is what the reader sees.
 import { describe, expect, test } from "vitest";
-import { EMOTE_KINDS } from "../../src/pieces/index";
+import { CATEGORY_ICON_NAMES, EMOTE_KINDS } from "../../src/pieces/index";
 import * as P from "../../src/pieces/library";
 import type { Drawn, SvgNode } from "../../src/pieces/node";
 import { tokens } from "../../tokens/generated/tokens";
@@ -26,6 +26,11 @@ const ALLOWED = new Set<string>([
   tokens.color.panel,
   ...valuesOf(tokens.illustration),
   tokens.cast.eyes,
+  // The category badge's disc rings (change site-palette-and-category-badges, design.md Decision 2); its fills are brand.light.track*.
+  tokens.coverBackground.trackIntegration.ring,
+  tokens.coverBackground.trackDelivery.ring,
+  tokens.coverBackground.trackAi.ring,
+  tokens.coverBackground.trackPersonal.ring,
   "none",
 ]);
 const STATE = new Set<string>(valuesOf(tokens.color.state));
@@ -121,7 +126,9 @@ const calls = (): { label: string; drawn: Drawn }[] =>
     const variants =
       name === "emote"
         ? EMOTE_KINDS.map((kind) => ({ label: `emote:${kind}`, params: { ...base, kind } }))
-        : [{ label: name, params: base }, ...(STATE_CALLS[name] ?? []).map(({ label, params }) => ({ label, params: { ...base, ...params } }))];
+        : name === "categoryIcon"
+          ? CATEGORY_ICON_NAMES.map((category) => ({ label: `categoryIcon:${category}`, params: { ...base, category } }))
+          : [{ label: name, params: base }, ...(STATE_CALLS[name] ?? []).map(({ label, params }) => ({ label, params: { ...base, ...params } }))];
     const surfaces = takesSurface(name) ? (["light", "dark"] as const) : [undefined];
     return variants.flatMap(({ label, params }) => surfaces.map((surface) => ({ label, drawn: draw(name, surface === undefined ? params : { ...params, surface }) })));
   });
@@ -152,6 +159,17 @@ describe("V2 palette of every piece", () => {
     const moved: Drawn = { ...badge, body: badge.body.map((node, index) => (index === tick && typeof node !== "string" ? { ...node, attrs: { ...node.attrs, stroke: S.healthy } } : node)) };
     expect(paletteProblems("checkBadge", moved)).toEqual([`checkBadge: #3DDC84 at ${tick} stroke`]);
   });
+  // Change site-palette-and-category-badges, task 2.2.
+  test("Only the default track rings", () => {
+    const rose = tokens.coverBackground.personalRose.ring;
+    expect(rose).toBe("#E0ABC0");
+    const pill = P.pill({ x: 0, y: 0, text: "a" });
+    const roseFill = (nodes: readonly (SvgNode | string)[]): (SvgNode | string)[] =>
+      nodes.map((node) => (typeof node === "string" ? node : { ...node, attrs: node.attrs.fill === undefined || node.attrs.fill === "none" ? node.attrs : { ...node.attrs, fill: rose }, children: roseFill(node.children) }));
+    expect(paletteProblems("pill", { body: roseFill(pill.body) as SvgNode[], text: pill.text })).toContain(`pill: ${rose}`);
+    for (const category of CATEGORY_ICON_NAMES) expect(paletteProblems(`categoryIcon:${category}`, P.categoryIcon({ category, x: 0, y: 0 }))).toEqual([]);
+  });
+
 });
 
 describe("State colours that keep a meaning", () => {
