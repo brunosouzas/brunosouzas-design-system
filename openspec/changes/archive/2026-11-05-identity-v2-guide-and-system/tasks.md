@@ -42,21 +42,21 @@
 - [x] 6.1 `npm run typecheck && npm run tokens:check && npm run build && npm test`.
 - [x] 6.2 `npm run pieces:sheet` + rendered proof images attached to the pull request (preview, destination B).
 - [x] 6.3 Bump `package.json` to `0.6.0` in a release pull request per `docs/release.md`; owner merges and approves the `npm` environment.
-- [ ] 6.4 Verify `npm view @brunosouzas/design-system version` after publish.
+- [x] 6.4 Verify `npm view @brunosouzas/design-system version` after publish. Re-checked 2026-11-06: `npm view @brunosouzas/design-system version` answers `0.6.0`.
 
 ## 7. Consumers (S8, after the release is published)
 
-Tracked outside this repository, on card 268 (the kit, `brunosouzas-content`, `brunosouzas.com`, `stackledger`); this change is archived with them open.
+Tracked outside this repository, on card 268 (the kit, `brunosouzas-content`, `brunosouzas.com`, `stackledger`); this change is archived with them open, so they are listed without checkboxes (they are not work in this repository): kit pull requests brunosouzas/ai-engineering-kit#164 and #165, `brunosouzas.com` #66, `stackledger` #48, and the covers pull request in `brunosouzas-content`.
 
-- [ ] 7.1 `illustration` kit skill: bump the pinned version in `SKILL.md` to 0.6.0, update `references/covers-and-banners.md` for the track-based background and the new signature, own PR with the rebuilt-proof reference.
-- [ ] 7.2 `brunosouzas-content`: rebuild the 21 existing cover specs against 0.6.0 (reuse each spec, new track background, new signature, new type), render and diff every PNG, follow-up pull request, owner reviews the renders before merge (precedent AB#140).
-- [ ] 7.3 Version-bump follow-up pull requests in `brunosouzas.com` and `stackledger` (level 1 once CI is green and review is clean).
+- 7.1 `illustration` kit skill: bump the pinned version in `SKILL.md` to 0.6.0, update `references/covers-and-banners.md` for the track-based background and the new signature, own PR with the rebuilt-proof reference.
+- 7.2 `brunosouzas-content`: rebuild the 21 existing cover specs against 0.6.0 (reuse each spec, new track background, new signature, new type), render and diff every PNG, follow-up pull request, owner reviews the renders before merge (precedent AB#140).
+- 7.3 Version-bump follow-up pull requests in `brunosouzas.com` and `stackledger` (level 1 once CI is green and review is clean).
 
 ## 8. Kit rules
 
-Tracked in the kit repository, on card 268.
+Tracked in the kit repository, on card 268 (brunosouzas/ai-engineering-kit#164), listed without checkboxes.
 
-- [ ] 8.1 `illustration`/rules.md: replace COV-4 with the track-based grouping rule; add a rule distinguishing the brand notation family from the diagram EIP icon family (WORK-7's "missing piece" test now names which family to request from).
-- [ ] 8.2 `motion`/rules.md: point CAST-1..5 at the new cast; add a rule for when a technical scene may reuse a pillar character vs must request a new supporting role (design.md's per-role test).
-- [ ] 8.3 `art-direction`/rules.md: remove STU-2 (resolved: the shipped pieces now have a real source in the design system's code, not a Penpot file).
-- [ ] 8.4 Kit PR: `kit.py map --check`, stackledger skills validate, tests; independent review (skills are code).
+- 8.1 `illustration`/rules.md: replace COV-4 with the track-based grouping rule; add a rule distinguishing the brand notation family from the diagram EIP icon family (WORK-7's "missing piece" test now names which family to request from).
+- 8.2 `motion`/rules.md: point CAST-1..5 at the new cast; add a rule for when a technical scene may reuse a pillar character vs must request a new supporting role (design.md's per-role test).
+- 8.3 `art-direction`/rules.md: remove STU-2 (resolved: the shipped pieces now have a real source in the design system's code, not a Penpot file).
+- 8.4 Kit PR: `kit.py map --check`, stackledger skills validate, tests; independent review (skills are code).
