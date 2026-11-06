@@ -1,7 +1,7 @@
 // The brand notation: 19 icons (13 EIP + 3 delivery + 3 AI), one grammar,
 // used on covers, home, LinkedIn and GitHub (identity studio I11). Separate
 // from the 26 body-diagram icons (`eip-icons.ts`): never shared, never the
-// same export (review finding S of AB#268's spec round). Redraws each
+// same export (review finding S of card 268's spec round). Redraws each
 // pattern's market-recognised silhouette in the new ink-outline grammar —
 // never the EIP book's own artwork, per the brand strategy.
 //

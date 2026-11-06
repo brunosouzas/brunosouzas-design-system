@@ -97,6 +97,15 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   linkIcon: (x, y) => merge(...P.LINK_ICON_NAMES.map((icon, i) => P.linkIcon({ icon, x: x + 20 + (i % 2) * 110, y: y + 30 + Math.floor(i / 2) * 80, size: 64 }))),
   mascot: (x, y) => merge(P.mascot({ who: "dev", x: x + 70, y: y + 200, face: "happy", action: "wave", scale: 0.5 }), P.mascot({ who: "devops", x: x + 175, y: y + 200, action: "rest", scale: 0.5 })),
   emote: (x, y) => merge(P.emote({ kind: "idea", x: x + 70, y: y + 90, scale: 0.8 }), P.emote({ kind: "worked", x: x + 170, y: y + 160, scale: 0.8 })),
+  mira: (x, y) => merge(P.mira({ x: x + 90, y: y + 200, scale: 0.9, expression: "done" }), P.mira({ x: x + 180, y: y + 200, scale: 0.9, surface: "dark", needleAngle: -10, carries: true })),
+  visor: (x, y) => merge(P.visor({ x: x + 90, y: y + 120, scale: 0.75 }), P.visor({ x: x + 180, y: y + 120, scale: 0.75, surface: "dark", holds: true, points: false })),
+  drone: (x, y) => merge(P.drone({ x: x + 90, y: y + 150, scale: 0.9 }), P.drone({ x: x + 180, y: y + 150, scale: 0.9, surface: "dark", view: "back" })),
+  kiu: (x, y) => P.kiu({ x: x + 60, y: y + 160, scale: 0.9, steps: 4 }),
+  sinal: (x, y) => merge(P.sinal({ x: x + 90, y: y + 180, scale: 0.9 }), P.sinal({ x: x + 180, y: y + 180, scale: 0.9, surface: "dark" })),
+  bankObject: (x, y) => merge(...["courier", "lume", "carga", "anel"].map((name, i) => P.bankObject({ name: name as P.BankObjectName, x: x + 60 + (i % 2) * 100, y: y + 80 + Math.floor(i / 2) * 90, scale: 0.65 }))),
+  symbol: (x, y) => merge(P.symbol({ x: x + 70, y: y + 70, scale: 3 }), P.symbol({ x: x + 70, y: y + 150, scale: 3, surface: "dark" })),
+  brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as P.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
+  categoryIcon: (x, y) => P.categoryIcon({ category: "personalTools", x: x + 100, y: y + 100, scale: 2.4 }),
 };
 
 export const piecesSheet = (): SvgNode => {

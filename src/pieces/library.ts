@@ -16,8 +16,14 @@ import { DIAGRAM_PIECES, stateStart } from "./diagram.ts";
 import { uiIcon } from "./ui-icons.ts";
 import { linkIcon } from "./link-icons.ts";
 import { emote, mascot } from "./cast.ts";
+import { mira, visor, drone, kiu, sinal, type MiraParams, type VisorParams, type DroneParams, type KiuParams, type SinalParams } from "./brand-cast.ts";
+import { bankObject, type BankObjectName, type BankObjectParams } from "./bank-objects.ts";
+import { symbol, type SymbolParams } from "./symbol.ts";
+import { brandNotationIcon, type BrandNotationIconName, type BrandNotationIconParams } from "./brand-notation-icons.ts";
+import { categoryIcon, type CategoryIconParams } from "./category-icon.ts";
 import { codeLength, spans } from "./ink.ts";
-export { emote, mascot };
+export { emote, mascot, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon };
+export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams };
 
 export * from "./metro.ts";
 export * from "./diagram.ts";
@@ -612,6 +618,15 @@ export const PIECES = {
   stateStart,
   mascot,
   emote,
+  mira,
+  visor,
+  drone,
+  kiu,
+  sinal,
+  bankObject,
+  symbol,
+  brandNotationIcon,
+  categoryIcon,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];
