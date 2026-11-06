@@ -51,7 +51,7 @@ The v2 rules (identity sheet, `skin.ts`): flat shapes, one rounded ink outline, 
 | `illustration.codePanel` | `#14215A` | `#1D1C1A` | `brand.dark.cardBg` |
 | `illustration.textBar`, `iconLine` | `#C9D6F5`, `#B9C3E0` | `#D7D1C5` | `brand.light.border` |
 | `illustration.road` | `#5B6478` | `#5C5852` | `brand.light.textMuted` |
-| `illustration.tape` | `#FFE2C8` | `#F4E4D8` | `brand.light.trackIntegration` |
+| `illustration.tape` | `#FFE2C8` | `#F4E4D8` | `brand.light.trackIntegration` as drawn in the renders the owner approved; its own value since Decision 6 moved the track roles |
 | `shadow.block`, `shadow.pill`, `shadow.small`, `map.shadow` | 10, 6, 4, 3.5 | 0 | no hard shadow |
 | `surface.light` background, text, muted, grid, shadow, rim | `#EEF2FF`, `#0A1033`, `#5B6694`, `#E0E7FB`, `#0A1033`, `#EEF2FF` | `#F6F3EC`, `#121212`, `#5C5852`, `#EDE8DE`, `#121212`, `#F6F3EC` | `brand.light.*` |
 | `surface.dark` background, text, muted, grid, panel, shadow, rimWidth | `#14215A`, `#EEF2FF`, `#8F9BD0`, `#1C2D74`, `#1C2D74`, `#4C5CB8`, 1 | `#121110`, `#F1EEE8`, `#ADA79D`, `#3B3834`, `#1D1C1A`, `#121110`, 0 | `brand.dark.*` |
@@ -118,3 +118,28 @@ The spec author listed the points below as open; the agent resolved them as foll
 ## Decision 5: release and order
 
 One minor release, `0.7.0`, carrying the three parts, so every consumer rebuilds its art once. This pull request holds the change and its archive: after the owner's approval and before the merge, `openspec archive` runs in this branch (the engineering playbook's rule; CI runs `openspec validate --archived`); the version bump is its own release pull request (`docs/release.md`). Golden fixtures and the frozen piece hashes are regenerated in this change and reviewed as renders, not as hashes.
+
+## Decision 6: track families (owner, 2026-11-06)
+
+**Why.** The owner saw the 0.7.0 renders: the four pale track tints of I8 (`#F4E4D8`, `#DFE8E1`, `#E2E4EC`, cream) read as one colour side by side, so covers of different tracks looked alike and the system did not read as having a palette. He chose option C from renders: a family of tones per track. Each article picks one tone of its track, so a series varies and the track stays recognisable.
+
+**Rule.** Each track has a default `track<Name>` and named tones `<track><Tone>`; `neutral` is for a cover with no track. Names stay within three path segments (`coverBackground.<name>.fill`, `scripts/tokens.ts`). The four defaults are also the `brand.light.track*` roles (`trackIntegration` `#F7C6A1`, `trackDelivery` `#B9DEC3`, `trackAi` `#C5CDF2`, new `trackPersonal` `#F4DD8E`); `brand.dark.trackPersonal` is `#29240F` (dark butter), beside the dark tracks, which keep their values. Rings are the owner's approved values, not a fixed mix.
+
+| Family | Name | Tone | `fill` | `ring` | `color.ink` on fill | `surface.light.muted` on fill |
+|---|---|---|---|---|---|---|
+| Integration | `trackIntegration` | peach, default | `#F7C6A1` | `#E3AB84` | 12.09:1 | 4.56:1 |
+| Integration | `integrationClay` | clay | `#E9CDBE` | `#D3B3A3` | 12.44:1 | 4.69:1 |
+| Integration | `integrationSand` | sand | `#EED7A8` | `#D8BF8C` | 13.31:1 | 5.02:1 |
+| Delivery | `trackDelivery` | sage, default | `#B9DEC3` | `#98C6A5` | 12.76:1 | 4.81:1 |
+| Delivery | `deliveryMint` | mint | `#A9DCD6` | `#88C4BD` | 12.40:1 | 4.67:1 |
+| Delivery | `deliveryOlive` | olive | `#D3DFA8` | `#B9C78A` | 13.28:1 | 5.01:1 |
+| AI | `trackAi` | periwinkle, default | `#C5CDF2` | `#A5AEDA` | 11.94:1 | 4.50:1 |
+| AI | `aiSky` | sky | `#B5D5F2` | `#94BBDE` | 12.28:1 | 4.63:1 |
+| AI | `aiLilac` | lilac | `#DCC7F0` | `#C3A9DC` | 12.02:1 | 4.53:1 |
+| Personal tools | `trackPersonal` | butter, default (new) | `#F4DD8E` | `#DDC46C` | 13.90:1 | 5.24:1 |
+| Personal tools | `personalRose` | rose | `#F5C9DA` | `#E0ABC0` | 12.71:1 | 4.79:1 |
+| no track | `neutral` | cream (unchanged) | `#F6F3EC` | `#D8D6D0` | 16.90:1 | 6.37:1 |
+
+**What does not change.** Body diagrams stay on `surface.light.background` (they sit on the cream page). The two approved Remotion scenes are not changed. `illustration.tape` (the parcel's tape) keeps `#F4E4D8`, the value the owner approved in the piece renders, so no piece or frozen fixture changes; it is no longer equal to `brand.light.trackIntegration`. Only the cover goldens on a default track (the proof covers and the banner) change, in their background fill and ring alone.
+
+**Contrast.** WCAG 2.x contrast ratio, measured from the hex values: `color.ink` (`#121212`) is at least 11.94:1 on every fill (AA needs 4.5:1), and `surface.light.muted` (`#5C5852`) at least 4.50:1 (lowest on `trackAi`, 4.504:1: AA for body text, with no margin). On the dark surface, `brand.dark.text` (`#F1EEE8`) on `#29240F` is 13.40:1 and `brand.dark.textMuted` (`#ADA79D`) 6.50:1.

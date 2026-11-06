@@ -67,7 +67,7 @@ The source SHALL define these tokens with these types; a missing one, or one wit
 - **THEN** the build accepts it
 
 ### Requirement: Required illustration tokens
-The source SHALL define these `color` tokens: `illustration` accent, codePanel, textBar, road, tape, iconLine. A missing one, or one with another type, is an error. Their values are the v2 values of ADR 0009, each taken from a `brand` role.
+The source SHALL define these `color` tokens: `illustration` accent, codePanel, textBar, road, tape, iconLine. A missing one, or one with another type, is an error. Their values are the v2 values of ADR 0009, each taken from a `brand` role, except `tape`, which keeps the pale integration tint `#F4E4D8` when the track roles move to the families (`design.md`, "Track families").
 
 #### Scenario: Missing illustration token
 - **WHEN** the source lacks `illustration.iconLine`
@@ -93,14 +93,22 @@ The source SHALL define `cover` width, height, pillHeight, labelSize, ringStep, 
 - **THEN** `tokens.ts` exports `tokens.cover.width` 800, `height` 420, `pillHeight` 36, `labelSize` 19, `ringStep` 28, `ringWidth` 2, `ringRadius` 90 and `labelWeight` 700
 
 ### Requirement: Measured cover backgrounds
-The repository's source SHALL hold exactly four `coverBackground` pairs, pinned in `test/fixtures/cover-backgrounds.json`: the three track pairs of ADR 0006 (`trackIntegration`, `trackDelivery`, `trackAi`) and `neutral`. The 21 pairs measured from the covers published before 0.6.0 are removed.
+The repository's source SHALL hold exactly twelve `coverBackground` pairs, pinned in `test/fixtures/cover-backgrounds.json`, as track families: each track has a default `track<Name>` (`trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal`) and named tones `<track><Tone>` (`integrationClay`, `integrationSand`, `deliveryMint`, `deliveryOlive`, `aiSky`, `aiLilac`, `personalRose`); `neutral` is for a cover with no track. Values: `design.md`, "Track families".
 
 #### Scenario: Source matches the measured table
 - **WHEN** the token test reads `tokens/source.json` and the fixture
-- **THEN** both list the same 4 names with the same `fill` and `ring` values, for example `trackIntegration` `#F4E4D8` and `#D7C9BE`, and `neutral` `#F6F3EC` and `#D8D6D0`
+- **THEN** both list the same 12 names with the same `fill` and `ring` values, for example `trackIntegration` `#F7C6A1` and `#E3AB84`, `deliveryMint` `#A9DCD6` and `#88C4BD`, `trackPersonal` `#F4DD8E` and `#DDC46C`, and `neutral` `#F6F3EC` and `#D8D6D0`
+
+#### Scenario: Every tone belongs to a family
+- **WHEN** the token test reads the fixture's names
+- **THEN** each is `neutral`, one of the four defaults `track<Name>`, or a tone `<name><Tone>` whose default `track<Name>` is in the table, and each default's `fill` equals `brand.light.track<Name>`
+
+#### Scenario: A tone without its family
+- **WHEN** a test copy of the source adds `coverBackground.opsTeal` with `#B5E0E0` and `#94C8C8`
+- **THEN** the family check fails naming `opsTeal`, and the comparison with the fixture fails naming `opsTeal`
 
 #### Scenario: A pair drifts
-- **WHEN** a test copy of the source changes `coverBackground.trackIntegration.ring` to `#D7C9BF`
+- **WHEN** a test copy of the source changes `coverBackground.trackIntegration.ring` to `#E3AB85`
 - **THEN** the comparison fails naming `trackIntegration`
 
 #### Scenario: A removed pair comes back
@@ -178,6 +186,25 @@ The source SHALL define `cast.emotePop` damping, stiffness and mass, of type `nu
 #### Scenario: Seven-role colour no longer required
 - **WHEN** a source lacks `cast.devops.fill` and every other seven-role colour
 - **THEN** the build accepts it
+
+### Requirement: Brand colour roles
+The source SHALL define a `brand` group with exactly the entries `light` and `dark`, each with exactly `bg`, `cardBg`, `text`, `textMuted`, `border`, `borderStrong`, `accent`, `accentText`, `onAccent`, `success`, `failure`, `warning`, `trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal` (`color`). A missing entry, an extra one, or a wrong type is an error naming the path; an entry other than `light` or `dark` is an error, the same rule `surface` already follows.
+
+#### Scenario: Missing brand role
+- **WHEN** the source has `brand.light` without `accent`, or `brand.dark` without `trackPersonal`
+- **THEN** the build fails, naming `brand.light.accent` (or `brand.dark.trackPersonal`) as missing (type color), and writes no file
+
+#### Scenario: Extra brand theme
+- **WHEN** the source also has `brand.sepia` with the sixteen tokens
+- **THEN** the build fails, naming `brand.sepia` and "expected light and dark", and writes no file
+
+#### Scenario: Measured brand roles, light theme
+- **WHEN** the build runs on the repository's source
+- **THEN** `tokens.json`'s `brand.light` has `bg` `#F6F3EC`, `cardBg` `#FFFFFF`, `text` `#121212`, `textMuted` `#5C5852`, `border` `#D7D1C5`, `borderStrong` `#5C5852`, `accent` `#E04E17`, `accentText` `#B83A0C`, `onAccent` `#FFFFFF`, `success` `#2B7A4B`, `failure` `#A1124B`, `warning` `#8F5F00`, `trackIntegration` `#F7C6A1`, `trackDelivery` `#B9DEC3`, `trackAi` `#C5CDF2`, `trackPersonal` `#F4DD8E`
+
+#### Scenario: Measured brand roles, dark theme
+- **WHEN** the build runs on the repository's source
+- **THEN** `tokens.json`'s `brand.dark` has `bg` `#121110`, `cardBg` `#1D1C1A`, `text` `#F1EEE8`, `textMuted` `#ADA79D`, `border` `#3B3834`, `borderStrong` `#ADA79D`, `accent` `#FF7A45`, `accentText` `#FF7A45`, `onAccent` `#121110`, `success` `#5BBF86`, `failure` `#FF6696`, `warning` `#EBB34B`, `trackIntegration` `#2A1C15`, `trackDelivery` `#18231D`, `trackAi` `#1B1F28`, `trackPersonal` `#29240F`
 
 ## REMOVED Requirements
 

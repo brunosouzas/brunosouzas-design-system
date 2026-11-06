@@ -46,15 +46,15 @@ A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other 
 - **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 62 piece names) before `pieces[1].kind`, the command exits 1 and writes nothing
 
 ### Requirement: Only track and neutral cover backgrounds
-`coverBackground` SHALL hold the three track entries `trackIntegration`, `trackDelivery`, `trackAi`: `fill` equal to `brand.light.track*`, `ring` that fill mixed 12% toward black, usable as the `background` of a cover, banner, LinkedIn card or og spec. The 21 entries measured before 0.6.0 are removed: with `neutral`, these are the only four backgrounds.
+`coverBackground` SHALL hold the track families of design-tokens "Measured cover backgrounds": the four defaults `trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal` (`fill` equal to `brand.light.track*`), their seven named tones and `neutral`, each usable as the `background` of a cover, banner, LinkedIn card or og spec. The 21 entries measured before 0.6.0 are removed: these twelve are the only backgrounds.
 
 #### Scenario: Track background accepted
-- **WHEN** a cover spec has `background: "trackIntegration"`
-- **THEN** the command writes the cover with the background fill and ring colours of `coverBackground.trackIntegration`
+- **WHEN** a cover spec has `background: "trackIntegration"`, then `background: "deliveryMint"`
+- **THEN** the command writes each cover with the background fill and ring colours of `coverBackground.trackIntegration` (`#F7C6A1`, `#E3AB84`), then of `coverBackground.deliveryMint` (`#A9DCD6`, `#88C4BD`)
 
 #### Scenario: Removed background refused
 - **WHEN** a cover spec has `background: "peach"`, or a banner spec `background: "navy"`
-- **THEN** the command prints `background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "peach"` (or `"navy"`), exits 1 and writes nothing
+- **THEN** the command prints `background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "peach"` (or `"navy"`), exits 1 and writes nothing
 
 ## MODIFIED Requirements
 
@@ -105,7 +105,7 @@ When `format` is `cover` or absent, the output SHALL be an 800x420 `svg` with `r
 
 #### Scenario: Ring colour from the pair
 - **WHEN** a spec has `background: "trackIntegration"` and `rings.radius` 100
-- **THEN** the background is `#F4E4D8`, the 14 rings are stroked `#D7C9BE`, width 2, radii 100 to 464 in steps of 28
+- **THEN** the background is `#F7C6A1`, the 14 rings are stroked `#E3AB84`, width 2, radii 100 to 464 in steps of 28
 
 #### Scenario: Default format is the cover
 - **WHEN** each proof cover fixture is built once as it is and once with `format: "cover"` added
@@ -131,7 +131,7 @@ When `format` is `banner`, the output SHALL be a `banner.width` x `banner.height
 
 #### Scenario: Banner frame
 - **WHEN** a spec with `format: "banner"`, `background: "trackDelivery"` and one `pill` is built
-- **THEN** the root has `width="1200" height="420" viewBox="0 0 1200 420"`, the clip rect and the background rect have `rx="20"`, the background is `#DFE8E1`, and the pill's rect and label sit inside the clipped group
+- **THEN** the root has `width="1200" height="420" viewBox="0 0 1200 420"`, the clip rect and the background rect have `rx="20"`, the background is `#B9DEC3`, and the pill's rect and label sit inside the clipped group
 
 #### Scenario: Piece past a corner
 - **WHEN** a banner spec places a `cloud` at `cx` -20, `cy` 10
@@ -277,4 +277,4 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 
 ### Requirement: Track cover backgrounds
 **Reason**: It kept the 21 pre-0.6.0 backgrounds accepted for one release; they are removed in 0.7.0.
-**Migration**: "Only track and neutral cover backgrounds" holds the same three track entries; move a spec on a removed background (`peach`, `navy`…) to `trackIntegration`, `trackDelivery`, `trackAi` or `neutral`.
+**Migration**: "Only track and neutral cover backgrounds" holds the track entries (now the track families); move a spec on a removed background (`peach`, `navy`…) to `trackIntegration`, `trackDelivery`, `trackAi` or `neutral`.
