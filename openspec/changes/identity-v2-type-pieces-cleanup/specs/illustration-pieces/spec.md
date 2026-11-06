@@ -49,6 +49,10 @@
 - **WHEN** the read of the Source Sans 3 Bold file fails on a first call on a tree with a Source Sans 3 text at 700, and succeeds on a second call on the same tree
 - **THEN** the first call rejects naming that file, the second resolves with the `550 799` face, and the file has been read twice
 
+#### Scenario: Subsetter not resolvable, not cached
+- **WHEN** the resolution of the `harfbuzzjs` wasm file fails on a first call on a tree with a Source Sans 3 text at 400, before any await, and succeeds on a second call on the same tree
+- **THEN** the first call rejects naming `harfbuzzjs`, the second resolves with the `100 549` face, and the wasm file has been resolved twice
+
 ### Requirement: Drawn text
 The drawn text of a tree SHALL be the string children of its `text` and `tspan` nodes, excluding every string inside a `title`, `desc` or `style` subtree, wherever that subtree sits. Each string is drawn in the face of the nearest `text` or `tspan` that holds it.
 
@@ -87,8 +91,8 @@ A text's family, weight and style SHALL be its own `font-family`, `font-weight` 
 A text's weight SHALL be 400 when its resolved `font-weight` is missing, `normal`, `bolder`, `lighter` or a non-numeric string, 700 for `bold`, and otherwise its number, snapped to a shipped weight: Source Sans 3 below 550 → 400, 550 to below 800 → 700, 800 and above → 900; Source Code Pro below 550 → 400, 550 and above → 700. Each `@font-face` declares the range its weight stands for: `100 549`, `550 799` or `800 900` for Source Sans 3, `100 549` or `550 900` for Source Code Pro.
 
 #### Scenario: Weights snapped
-- **WHEN** texts are drawn in Source Sans 3 at 549, 550, 799 and 800, and in Source Code Pro at 549, 550 and 900
-- **THEN** the `style` holds five faces: `Source Code Pro` `100 549`, `Source Code Pro` `550 900`, `Source Sans 3` `100 549`, `Source Sans 3` `550 799` (the 550 and 799 texts) and `Source Sans 3` `800 900`
+- **WHEN** texts are drawn in Source Sans 3 at 549, 549.5, 550, 799, 799.5 and 800, and in Source Code Pro at 549, 549.5, 550 and 900
+- **THEN** the `style` holds five faces: `Source Code Pro` `100 549` (the 549 and 549.5 texts), `Source Code Pro` `550 900`, `Source Sans 3` `100 549` (the 549 and 549.5 texts), `Source Sans 3` `550 799` (the 550, 799 and 799.5 texts) and `Source Sans 3` `800 900`
 
 #### Scenario: Weight keywords
 - **WHEN** Source Sans 3 texts have no `font-weight`, then `normal`, `bold`, `bolder`, `lighter` and `heavy`

@@ -5,8 +5,9 @@
 // spec scenario it proves.
 //
 // File reads are observed (and failed on demand) through a mock of
-// node:fs/promises; the WebAssembly instantiation through a spy on
-// WebAssembly.instantiate. Each test imports a fresh copy of the module, so the
+// node:fs/promises; the resolution of the harfbuzzjs wasm file through a mock
+// of node:module's createRequire; the WebAssembly instantiation through a spy
+// on WebAssembly.instantiate. Each test imports a fresh copy of the module, so the
 // once-per-process caches start empty.
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
@@ -17,7 +18,7 @@ import { toSvg } from "../../src/pieces/render";
 import { tokens } from "../../tokens/generated/tokens";
 import { codePoints } from "./cmap";
 
-const io = vi.hoisted(() => ({ failing: new Set<string>(), reads: [] as string[] }));
+const io = vi.hoisted(() => ({ failing: new Set<string>(), reads: [] as string[], unresolvable: 0, resolves: [] as string[] }));
 vi.mock("node:fs/promises", async (importOriginal) => {
   const actual = await importOriginal<typeof import("node:fs/promises")>();
   const readFile = async (...args: Parameters<typeof actual.readFile>) => {
@@ -27,6 +28,24 @@ vi.mock("node:fs/promises", async (importOriginal) => {
     return actual.readFile(...args);
   };
   return { ...actual, readFile, default: { ...actual, readFile } };
+});
+// `io.unresolvable` calls of `resolve` throw, as when harfbuzzjs is not installed.
+vi.mock("node:module", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:module")>();
+  const createRequire = (...args: Parameters<typeof actual.createRequire>) => {
+    const require = actual.createRequire(...args);
+    const original = require.resolve;
+    const resolve = (request: string, options?: { paths?: string[] }) => {
+      io.resolves.push(request);
+      if (io.unresolvable > 0) {
+        io.unresolvable -= 1;
+        throw new Error(`Cannot find module '${request}' (test)`);
+      }
+      return original(request, options);
+    };
+    return Object.assign(require, { resolve: Object.assign(resolve, { paths: original.paths }) });
+  };
+  return { ...actual, createRequire, default: { ...actual, createRequire } };
 });
 
 const FONTS = new URL("../../fonts/", import.meta.url).pathname;
@@ -40,6 +59,8 @@ const fresh = async () => {
 beforeEach(() => {
   io.failing.clear();
   io.reads.length = 0;
+  io.unresolvable = 0;
+  io.resolves.length = 0;
 });
 afterEach(() => vi.restoreAllMocks());
 
@@ -199,13 +220,16 @@ describe("Face weights", () => {
         text("e", { "font-family": MONO, "font-weight": 549 }),
         text("f", { "font-family": MONO, "font-weight": 550 }),
         text("g", { "font-family": MONO, "font-weight": 900 }),
+        text("h", { "font-weight": 549.5 }),
+        text("i", { "font-weight": "799.5" }),
+        text("j", { "font-family": MONO, "font-weight": 549.5 }),
       ),
     );
     expect(rulesOf(result).map((rule) => `${rule.family} ${rule.weight} ${sorted(rule.characters)}`)).toEqual([
-      "Source Code Pro 100 549 e",
+      "Source Code Pro 100 549 ej",
       "Source Code Pro 550 900 fg",
-      "Source Sans 3 100 549 a",
-      "Source Sans 3 550 799 bc",
+      "Source Sans 3 100 549 ah",
+      "Source Sans 3 550 799 bci",
       "Source Sans 3 800 900 d",
     ]);
   });
@@ -275,6 +299,14 @@ describe("Fonts loaded on first need", () => {
     io.failing.clear();
     expect(faces(await embedFonts(boldTree()))).toEqual(["Source Sans 3 550 799"]);
     expect(fontReads()).toEqual([`${FONTS}${BOLD}`, `${FONTS}${BOLD}`]);
+  });
+
+  test("Subsetter not resolvable, not cached", async () => {
+    io.unresolvable = 1;
+    const embedFonts = await fresh();
+    await expect(embedFonts(svg(text("words")))).rejects.toThrow(/harfbuzzjs/);
+    expect(faces(await embedFonts(svg(text("words"))))).toEqual(["Source Sans 3 100 549"]);
+    expect(io.resolves).toEqual(["harfbuzzjs/dist/harfbuzz-subset.wasm", "harfbuzzjs/dist/harfbuzz-subset.wasm"]);
   });
 });
 
