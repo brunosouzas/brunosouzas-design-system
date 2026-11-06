@@ -1,7 +1,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: Icon output
-When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `uiIcon`, `linkIcon` or `categoryIcon`, at `x` 0 and `y` 0 (their default in an icon spec). The output is an `svg` the size of the piece (64 × 40 × `scale` for `eipIcon`, 48 × 48 × `scale` for `categoryIcon`, `size` × `size` for the others, defaults 24 and 46) with a `viewBox` from 0 0, the attributes of a cover, `title`, `desc`, then the piece's body, ending in LF.
+When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `uiIcon`, `linkIcon` or `categoryIcon`, at `x` 0 and `y` 0 (their default in an icon spec). The output is an `svg` the size of the piece (64 × 40 × `scale` for `eipIcon`, 42 × 42 × `scale` for `categoryIcon`, `size` × `size` for the others, defaults 24 and 46) with a `viewBox` from 0 0, the attributes of a cover, `title`, `desc`, then the piece's body, ending in LF.
 
 #### Scenario: EIP icon
 - **WHEN** the `eip-splitter` fixture is built
@@ -12,7 +12,7 @@ When `format` is `icon`, the spec SHALL hold exactly one piece, an `eipIcon`, `u
 - **THEN** the root has `width="48" height="48" viewBox="0 0 48 48"`
 
 #### Scenario: Category badge box
-- **WHEN** an icon spec holds a `categoryIcon` `integration` with `scale` 3.5, a `title` and a `description`
+- **WHEN** an icon spec holds a `categoryIcon` `integration` with `scale` 4, a `title` and a `description`
 - **THEN** the root has `width="168" height="168" viewBox="0 0 168 168"`, the body is that badge drawn at 0,0, and the file holds no `<style>`
 
 #### Scenario: Not one icon piece

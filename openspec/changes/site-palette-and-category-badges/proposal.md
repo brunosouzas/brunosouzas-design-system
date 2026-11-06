@@ -9,12 +9,12 @@ brunosouzas.com adopts identity v2 (AB#302). Release 0.7.0 already moved `site.f
 
 ## What changes
 
-- **`site.<theme>.*` values** become the brand roles they stand for. The role names stay, because the site's Tailwind theme and stackledger's CSS read them (`--ds-site-*`). The mapping and the values are in `design.md`. Each `site` colour equals a `brand` role of the same theme, and a test checks it.
+- **`site.<theme>.*` values** become the brand roles they stand for. The role names stay, because the site's Tailwind theme and stackledger's CSS read them (`--ds-site-*`). The mapping and the values are in `design.md`. Each `site` colour equals a `brand` role of the same theme, and the token test checks the mapping and the WCAG contrast of the text, muted and link colours on the page and card backgrounds.
 - **`site.<theme>.link`**, a new colour token: `brand.light.accentText` (`#B83A0C`) and `brand.dark.accentText` (`#FF7A45`).
 - **`site.font.mono`**, a new token: `'Source Code Pro', monospace`, the site's code face (I9).
 - **`categoryIcon`** draws a category badge for each of the four site categories (`integration`, `delivery`, `aiEngineering`, `personalTools`). The badge is a disc filled with the default tone of the category's track (`coverBackground.track<Name>`), outlined in that tone's ring colour, with a glyph on it. The three first categories take a brand notation glyph (`pointToPointChannel`, `gateToProduction`, `contextWindow`), and `personalTools` keeps its own glyph. The disc is light on both themes, so the glyph is ink on both and the piece drops its `surface` parameter (breaking).
-- **The `icon` format** accepts `categoryIcon` too, written in a box 48 × `scale` wide and high.
-- **ADR 0006** gets an amendment: `site.*` is the site's component layer over the brand roles.
+- **The `icon` format** accepts `categoryIcon` too, written in a box 42 × `scale` wide and high.
+- **ADR 0006** gets an amendment: `site.*` is the site's component layer over the brand roles. **ADR 0009** gets an amendment: the badge's disc is a background (a cover tone and its ring), so the white-body and ink-outline rules apply to its glyph, and the palette check admits the four default track rings.
 - **README:** "Upgrading to 0.8.0", the site tokens and the icon format.
 
 ## Out of scope
@@ -29,7 +29,7 @@ brunosouzas.com adopts identity v2 (AB#302). Release 0.7.0 already moved `site.f
 ## Implicit requirements
 
 - **Errors and invalid input:** an unknown `category`, and a `surface` passed to `categoryIcon` (no longer a parameter), throw a `RangeError` naming the parameter. In the CLI, an `icon` spec with any piece outside `eipIcon`, `uiIcon`, `linkIcon` and `categoryIcon` is refused with the updated message. A missing or extra `site` token fails the token build, as today.
-- **Limits:** `categoryIcon.scale` keeps its 0.25 to 8 range.
+- **Limits:** `categoryIcon.scale` keeps its 0.25 to 8 range; an icon box is written as JavaScript prints `42 × scale` (no rounding, as for `eipIcon`). The contrast floor is 4.5:1.
 - **Repetition and idempotency:** same input, same bytes (no text in the badge, so nothing is embedded).
 - **Concurrency:** n/a: pure functions and a one-shot command.
 - **Security:** n/a: no input crosses a trust boundary beyond the spec checks that already exist.
@@ -37,4 +37,4 @@ brunosouzas.com adopts identity v2 (AB#302). Release 0.7.0 already moved `site.f
 
 ## Documentation
 
-`README.md` (site tokens, icon format, Upgrading to 0.8.0), ADR 0006 (amendment), `docs/roadmap.md` (the row for this change). Vault notes (the project's changelog and roadmap) are updated after the merge.
+`README.md` (site tokens, icon format, Upgrading to 0.8.0), ADR 0006 and ADR 0009 (amendments), `docs/roadmap.md` (the row for this change). Vault notes (the project's changelog and roadmap) are updated after the merge.
