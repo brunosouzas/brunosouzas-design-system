@@ -366,8 +366,8 @@ const ringRadii = (svg: string): number[] => {
 
 describe("Banner format", () => {
   test("Unknown format", () => {
-    expect(problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner, diagram, icon"]);
-    expect(problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner, diagram, icon"]);
+    expect(problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar"]);
+    expect(problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar"]);
     const ws = workspace();
     ws.write("spec.json", { ...minimal(), format: "poster" });
     expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
@@ -493,5 +493,65 @@ describe("Cast on a cover", () => {
     expect(ws.err[0]).toBe("pieces[0].headTilt: applies only to the agent");
     expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+});
+
+// Change identity-v2 (AB#268): cover-cli "Signature lockup", "New icon formats".
+describe("Signature lockup", () => {
+  test("Signature drawn", () => {
+    const svg = svgOf({ ...minimal(), signature: true });
+    expect(svg).toContain('data-piece="signature"');
+  });
+
+  test("No signature by default", () => {
+    const svg = svgOf(minimal());
+    expect(svg).not.toContain('data-piece="signature"');
+  });
+
+  test("Signature rejected on a diagram", () => {
+    const diagram = { id: "d", title: "T", description: "D", format: "diagram", height: 100, rings: { cx: 0, cy: 0 }, pieces: [], signature: true };
+    expect(problems(diagram)).toEqual(["signature: not used by the diagram format"]);
+  });
+
+  test("Signature must be a boolean", () => {
+    expect(problems({ ...minimal(), signature: "yes" })).toEqual(["signature: expected true or false"]);
+  });
+});
+
+describe("New icon formats", () => {
+  const favicon = () => ({ id: "fav", title: "Symbol", description: "The b-with-moon symbol, favicon-sized.", format: "favicon" });
+  const avatar = () => ({ id: "av", title: "Symbol", description: "The b-with-moon symbol, filling the frame.", format: "avatar" });
+
+  test("Favicon is the symbol, both themes, no pieces", () => {
+    const svg = svgOf(favicon());
+    expect(svg).toContain('width="32" height="32" viewBox="0 0 32 32"');
+    expect(svg).toContain("prefers-color-scheme:dark");
+    expect(svg).toContain('class="ds-favicon-light"');
+    expect(svg).toContain('class="ds-favicon-dark"');
+    expect(problems({ ...favicon(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the favicon format"]);
+    for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) {
+      const value = key === "height" ? 100 : key === "signature" ? true : key === "rings" ? { cx: 0, cy: 0 } : "x";
+      expect(problems({ ...favicon(), [key]: value })).toEqual([`${key}: not used by the favicon format`]);
+    }
+  });
+
+  test("LinkedIn card is square", () => {
+    const svg = svgOf({ ...banner(), id: "li", format: "linkedin-card" });
+    expect(svg).toContain('width="1080" height="1080" viewBox="0 0 1080 1080"');
+  });
+
+  test("og image is 1200x630", () => {
+    const svg = svgOf({ ...banner(), id: "og", format: "og" });
+    expect(svg).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
+  });
+
+  test("Avatar draws the symbol filling the frame, no background or pieces", () => {
+    const svg = svgOf(avatar());
+    expect(svg).toContain('width="500" height="500" viewBox="0 0 500 500"');
+  });
+
+  test("Avatar refuses a background and pieces", () => {
+    expect(problems({ ...avatar(), background: "peach" })).toEqual(["background: not used by the avatar format"]);
+    expect(problems({ ...avatar(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the avatar format"]);
   });
 });

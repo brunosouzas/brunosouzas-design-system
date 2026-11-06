@@ -23,15 +23,17 @@ A `cover` or `banner` output SHALL accept an optional `signature: true` key, add
 - **THEN** the written SVG is unchanged from this change (no signature group)
 
 ### Requirement: New icon formats
-`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions) and `avatar` (500×500, the symbol only, no background, no `pieces`). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
+`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol only, no background, no `pieces`). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
 
 #### Scenario: Favicon is the symbol, both themes, no pieces
 - **WHEN** a spec with `format: "favicon"` is built
 - **THEN** the written SVG is 32×32, holds a light-theme symbol group and a dark-theme symbol group with a `<style>` block switching them by `prefers-color-scheme`, and a `pieces` array in the spec is rejected (`"not used by the favicon format"`)
 
-#### Scenario: LinkedIn card is square
+#### Scenario: LinkedIn card and og image are fixed sizes
 - **WHEN** a spec with `format: "linkedin-card"` is built
 - **THEN** the written SVG has `width="1080" height="1080" viewBox="0 0 1080 1080"`
+- **WHEN** a spec with `format: "og"` is built
+- **THEN** the written SVG has `width="1200" height="630" viewBox="0 0 1200 630"`
 
 #### Scenario: Avatar refuses a background and pieces
 - **WHEN** a spec with `format: "avatar"` has `background: "trackIntegration"` or a non-empty `pieces`

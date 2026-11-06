@@ -16,6 +16,7 @@ export const SVG_TAGS = [
   "desc",
   "defs",
   "clipPath",
+  "style",
   "rect",
   "circle",
   "ellipse",

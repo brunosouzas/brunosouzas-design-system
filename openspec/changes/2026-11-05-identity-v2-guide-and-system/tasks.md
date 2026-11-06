@@ -32,10 +32,10 @@
 
 ## 5. Cover/banner/diagram/icon commands
 
-- [ ] 5.1 Cover command: add `coverBackground.trackIntegration`/`trackDelivery`/`trackAi` entries (fill/ring, literal values matching `brand.light.track*`) so `background: "trackIntegration"` works through the existing `background` field and `backgroundNames()` — no change to `cover.ts`'s resolution code (design.md, "Component layer, concretely"). The 21 literal entries stay for one release so already-committed specs in `brunosouzas-content` still build, removed in 0.7.0 once every cover is rebuilt (task 7.2).
-- [ ] 5.2 Add the Mira+symbol signature lockup as a composable piece addition to every cover/banner/og/favicon/avatar format.
-- [ ] 5.3 New formats/sizes per A3-A5: LinkedIn "new piece" card 1080×1080, og 1200×630 generic, favicon SVG with `prefers-color-scheme` + PNG set (16/32/48/180/192/512), avatar 500×500 — each a new `format` value (or new `icon` sub-kind) in the cover-cli spec with its own output-shape requirement (see spec delta task 5.4).
-- [ ] 5.4 Update `openspec/specs/cover-cli/spec.md` and `README.md` (`npm run cover`) with the new fields and formats.
+- [x] 5.1 Cover command: add `coverBackground.trackIntegration`/`trackDelivery`/`trackAi` entries (fill/ring, literal values matching `brand.light.track*`) so `background: "trackIntegration"` works through the existing `background` field and `backgroundNames()` — no change to `cover.ts`'s resolution code (design.md, "Component layer, concretely"). The 21 literal entries stay for one release so already-committed specs in `brunosouzas-content` still build, removed in 0.7.0 once every cover is rebuilt (task 7.2).
+- [x] 5.2 Add the Mira+symbol signature lockup as a composable piece addition to every cover/banner/og/favicon/avatar format.
+- [x] 5.3 New formats/sizes per A3-A5: LinkedIn "new piece" card 1080×1080, og 1200×630 generic, favicon SVG with `prefers-color-scheme` (PNG set is the consuming site's build step, not this package's — Bruno's call), avatar 500×500 — each a new `format` value in the cover-cli spec with its own output-shape requirement (see spec delta task 5.4).
+- [x] 5.4 Update `openspec/specs/cover-cli/spec.md` and `README.md` (`npm run cover`) with the new fields and formats.
 
 ## 6. Tests, build, release
 
