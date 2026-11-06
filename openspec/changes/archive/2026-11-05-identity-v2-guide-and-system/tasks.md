@@ -16,19 +16,19 @@
 
 ## 3. Pieces: cast and bank objects
 
-- [ ] 3.1 `mira` piece: front/back, light/dark, four state faces (idle/done/waiting/failed), reusing the phase-3/4 scratch generator geometry (`~/.hermes/cache/scratch/ab266/final.py`, `ab267/phase4.py`) as the starting point, ported to pure TypeScript token-driven functions (no literal colours, per STY-2/illustration-pieces spec).
-- [ ] 3.2 `visor`, `drone`, `kiu`, `sinal` pieces: same treatment from the approved cast sheet (`ab266/sheet5.py`/`sheet6.py`/`sheet7.py`).
-- [ ] 3.3 Bank objects: `correio`, `lume`, `carga`, `anel`, `modulo`, `hub`, each with a screen-off state (no face) and promotable to a character sheet later if reused with a face in 2+ pieces (E8).
-- [ ] 3.4 Retire `MASCOTS`/`MASCOT_ACTIONS`/`MASCOT_FACES` of the old seven-role cast per the per-role mapping in `design.md`: keep what maps cleanly (reusing Visor for "AI agent", Drone for "DevOps") as named exports of the new pieces, drop `EMOTE_KINDS` entries that no longer apply, keep the rest. Dev/Architect/Data supporting-role pieces are **not** built in this task (out of scope, see proposal.md and design.md decision 2); they are created by the first AB#144-150 scene that needs one.
-- [ ] 3.5 Update `openspec/specs/illustration-pieces/spec.md` with the new piece contracts and scenarios (shape, pure-function, token-only colour, overflow guard — same pattern as existing pieces).
-- [ ] 3.6 `npm run pieces:sheet` to render every piece once for review; `vision_analyze` every new piece before moving on.
+- [x] 3.1 `mira` piece: front/back, light/dark, four state faces (idle/done/waiting/failed), reusing the phase-3/4 scratch generator geometry (`~/.hermes/cache/scratch/ab266/final.py`, `ab267/phase4.py`) as the starting point, ported to pure TypeScript token-driven functions (no literal colours, per STY-2/illustration-pieces spec).
+- [x] 3.2 `visor`, `drone`, `kiu`, `sinal` pieces: same treatment from the approved cast sheet (`ab266/sheet5.py`/`sheet6.py`/`sheet7.py`).
+- [x] 3.3 Bank objects: `correio`, `lume`, `carga`, `anel`, `modulo`, `hub`, each with a screen-off state (no face) and promotable to a character sheet later if reused with a face in 2+ pieces (E8).
+- [x] 3.4 **Deferred to 0.7.0 (owner, 2026-11-06):** `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES` and `EMOTE_KINDS` still ship in 0.6.0 unchanged, so the published scenes and the site's home banner keep building; they are retired with the `color.*` alias in 0.7.0. Original task: retire `MASCOTS`/`MASCOT_ACTIONS`/`MASCOT_FACES` of the old seven-role cast per the per-role mapping in `design.md`: keep what maps cleanly (reusing Visor for "AI agent", Drone for "DevOps") as named exports of the new pieces, drop `EMOTE_KINDS` entries that no longer apply, keep the rest. Dev/Architect/Data supporting-role pieces are **not** built in this task (out of scope, see proposal.md and design.md decision 2); they are created by the first AB#144-150 scene that needs one.
+- [x] 3.5 Update `openspec/specs/illustration-pieces/spec.md` with the new piece contracts and scenarios (shape, pure-function, token-only colour, overflow guard — same pattern as existing pieces).
+- [x] 3.6 `npm run pieces:sheet` to render every piece once for review; `vision_analyze` every new piece before moving on.
 
 ## 4. Pieces: notation (19 icons)
 
-- [ ] 4.1 Pick the 13 EIP patterns for the brand notation (by published-catalogue and roadmap-card frequency), each redrawn as its market-recognised silhouette in the new ink/flat grammar (design.md, decision 3).
-- [ ] 4.2 Draw the 3 delivery and 3 AI notation icons (new, no market precedent constraint beyond the brand's own visual rules).
-- [ ] 4.3 Add `BRAND_NOTATION_ICONS`/`BRAND_NOTATION_ICON_NAMES` and a `brandNotationIcon({ name, x, y, scale })` drawing function (distinct from `EIP_ICON_NAMES`/`eipIcon`) to `src/pieces/`, spec scenarios distinguishing the new family from the diagram icon family (no shared names, no shared export surface).
-- [ ] 4.4 Add the `categoryIcon` piece for "Ferramentas pessoais" (design.md decision 4): agent picks the glyph (triage TRI-1), neutral colour (`brand.<theme>.text`, picked by its `surface` parameter), its own spec scenarios.
+- [x] 4.1 Pick the 13 EIP patterns for the brand notation (by published-catalogue and roadmap-card frequency), each redrawn as its market-recognised silhouette in the new ink/flat grammar (design.md, decision 3).
+- [x] 4.2 Draw the 3 delivery and 3 AI notation icons (new, no market precedent constraint beyond the brand's own visual rules).
+- [x] 4.3 Add `BRAND_NOTATION_ICONS`/`BRAND_NOTATION_ICON_NAMES` and a `brandNotationIcon({ name, x, y, scale })` drawing function (distinct from `EIP_ICON_NAMES`/`eipIcon`) to `src/pieces/`, spec scenarios distinguishing the new family from the diagram icon family (no shared names, no shared export surface).
+- [x] 4.4 Add the `categoryIcon` piece for "Ferramentas pessoais" (design.md decision 4): agent picks the glyph (triage TRI-1), neutral colour (`brand.<theme>.text`, picked by its `surface` parameter), its own spec scenarios.
 
 ## 5. Cover/banner/diagram/icon commands
 
@@ -46,11 +46,15 @@
 
 ## 7. Consumers (S8, after the release is published)
 
+Tracked outside this repository, on card 268 (the kit, `brunosouzas-content`, `brunosouzas.com`, `stackledger`); this change is archived with them open.
+
 - [ ] 7.1 `illustration` kit skill: bump the pinned version in `SKILL.md` to 0.6.0, update `references/covers-and-banners.md` for the track-based background and the new signature, own PR with the rebuilt-proof reference.
 - [ ] 7.2 `brunosouzas-content`: rebuild the 21 existing cover specs against 0.6.0 (reuse each spec, new track background, new signature, new type), render and diff every PNG, follow-up pull request, owner reviews the renders before merge (precedent AB#140).
 - [ ] 7.3 Version-bump follow-up pull requests in `brunosouzas.com` and `stackledger` (level 1 once CI is green and review is clean).
 
 ## 8. Kit rules
+
+Tracked in the kit repository, on card 268.
 
 - [ ] 8.1 `illustration`/rules.md: replace COV-4 with the track-based grouping rule; add a rule distinguishing the brand notation family from the diagram EIP icon family (WORK-7's "missing piece" test now names which family to request from).
 - [ ] 8.2 `motion`/rules.md: point CAST-1..5 at the new cast; add a rule for when a technical scene may reuse a pillar character vs must request a new supporting role (design.md's per-role test).
