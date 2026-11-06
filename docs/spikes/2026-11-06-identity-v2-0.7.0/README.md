@@ -1,6 +1,6 @@
 # Spike: how Source reaches an image shown through `<img>` (card 300, 2026-11-06)
 
-Evidence for [ADR 0008](../../adr/0008-type-inside-the-image.md) and Decision 1 of the change `identity-v2-type-pieces-cleanup` (`openspec/changes/identity-v2-type-pieces-cleanup/design.md`).
+Evidence for [ADR 0008](../../adr/0008-type-inside-the-image.md) and Decision 1 of the change `identity-v2-type-pieces-cleanup` (`openspec/changes/archive/2026-11-06-identity-v2-type-pieces-cleanup/design.md`).
 
 ## Question
 

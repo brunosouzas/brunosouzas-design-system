@@ -80,4 +80,4 @@ All renders in headless Chrome through an `<img>` (rsvg-convert ignores embedded
 
 ## 11. Archive
 
-- [ ] 11.1 In this pull request, after the owner's approval and before the merge (the engineering playbook's rule): `openspec archive identity-v2-type-pieces-cleanup` in this branch, committed; then `openspec validate --specs --strict` passes on the merged main specs, and CI's `openspec validate --archived --no-interactive` passes. The `0.7.0` version bump is its own release pull request (`docs/release.md`).
+- [x] 11.1 In this pull request, after the owner's approval and before the merge (the engineering playbook's rule): `openspec archive identity-v2-type-pieces-cleanup` in this branch, committed; then `openspec validate --specs --strict` passes on the merged main specs, and CI's `openspec validate --archived --no-interactive` passes. The `0.7.0` version bump is its own release pull request (`docs/release.md`).
