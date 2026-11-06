@@ -41,7 +41,7 @@
 
 - [x] 6.1 `npm run typecheck && npm run tokens:check && npm run build && npm test`.
 - [x] 6.2 `npm run pieces:sheet` + rendered proof images attached to the pull request (preview, destination B).
-- [ ] 6.3 Bump `package.json` to `0.6.0` in a release pull request per `docs/release.md`; owner merges and approves the `npm` environment.
+- [x] 6.3 Bump `package.json` to `0.6.0` in a release pull request per `docs/release.md`; owner merges and approves the `npm` environment.
 - [ ] 6.4 Verify `npm view @brunosouzas/design-system version` after publish.
 
 ## 7. Consumers (S8, after the release is published)
