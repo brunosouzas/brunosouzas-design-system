@@ -9,7 +9,7 @@ The package SHALL export `CATEGORY_ICON_NAMES` and `categoryIcon({ category, x, 
 
 #### Scenario: Personal tools category icon
 - **WHEN** `categoryIcon({ category: "personalTools", x: 0, y: 0 })` is called
-- **THEN** its disc is filled `#F4DD8E` and ringed `#DDC46C`, and its own glyph (wrench and screwdriver) is drawn in `brand.light.text` with the bolt ring in `brand.light.accent`
+- **THEN** its disc is filled `#F4DD8E` and ringed `#DDC46C`, and the group's second child is a group `translate(9 9) scale(0.5)` holding its own glyph (the wrench-and-screwdriver path in `brand.light.text` and the bolt ring in `brand.light.accent`)
 
 #### Scenario: One track tone per category
 - **WHEN** each name of `CATEGORY_ICON_NAMES` is drawn

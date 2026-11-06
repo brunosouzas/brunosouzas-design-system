@@ -58,13 +58,23 @@ At `scale` 4 the output matches the preview, figure for figure. Like every piece
 
 **`surface` is removed.** The disc is a light tone on both themes, as a cover is, so the glyph is drawn in ink on both. Under ADR 0009's dark ink rule, marks over a light fill stay ink, so the dark surface would draw the same thing. A parameter that changes nothing was rejected. No consumer calls `categoryIcon` (checked in brunosouzas.com, brunosouzas-content, stackledger and the kit), so removing it breaks nothing that is published.
 
-**The grammar (ADR 0009).** The disc is a background, the cover's own tone and ring, not a body. The white-body and ink-outline rules apply to the glyph on it, not to the disc. ADR 0009 gets an amendment that says so, as the owner chose in Q7.
+**The grammar (ADR 0009).** The disc is a background, the cover's own tone and ring, not a body. The white-body and ink-outline rules apply to the glyph on it, not to the disc. The owner chose the badge in Q7; recording it as an ADR 0009 amendment is the agent's proposal.
 
-**The palette check** gains the four default track rings: `coverBackground.trackIntegration.ring`, `trackDelivery.ring`, `trackAi.ring` and `trackPersonal.ring`. The fills are already `brand.light.track*` values. Admitting every `coverBackground.*` value was rejected: it would let any piece paint any cover tone, and only the badge draws one.
+**The palette check** gains the four default track rings: `coverBackground.trackIntegration.ring`, `trackDelivery.ring`, `trackAi.ring` and `trackPersonal.ring`. The fills are already `brand.light.track*` values. The allowance covers every piece, as the whole allowlist does (it compares hex values, not pieces), but it is kept to these four values. Admitting every `coverBackground.*` value was rejected: it would let any piece paint any of the 24 cover fills and rings.
 
 ## Decision 3: the `icon` format takes `categoryIcon`
 
 The `icon` format adds `categoryIcon` to its pieces, in a box `42 × scale` wide and high. `title` and `description` are required, as for `uiIcon` and `linkIcon`, because the badge has no data of its own to take them from. The site builds its four badges with the command at `scale` 4, like its other icons, with no script. The box size is written as JavaScript prints `42 × scale`, as the `eipIcon` box is today; rounding a fractional box is out of scope.
+
+## Agent decisions (the owner may veto them at G1)
+
+The owner approved Q1, Q2 and Q7 from renders. These five points are the agent's, made inside those answers:
+
+1. `site.font.mono` added (Decision 1).
+2. `categoryIcon` drops `surface` (Decision 2).
+3. The badge geometry is the preview at a quarter of its size, a 42 box (Decision 2).
+4. The palette check admits the four default track rings, and no other cover value (Decision 2).
+5. ADR 0009 gets an amendment saying the badge's disc is a background (Decision 2).
 
 ## Decision 4: the version is 0.8.0
 

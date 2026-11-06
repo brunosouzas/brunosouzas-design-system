@@ -11,7 +11,7 @@
 
 ## 3. Icon format
 
-- [ ] 3.1 In `src/pieces/cover.ts`, add `categoryIcon` to `ICON_PIECES` with a `42 × scale` box in `iconBox`, require `title` and `description` for it, and update the "exactly one piece" message. Verify: scenarios "Category badge box", "Not one icon piece" (new message) and "Category badge without a description" in `test/scripts/cover-formats.test.ts` (integration); "EIP icon", "UI icon box", "Icon off the origin", "Rings in an icon", "Signature in an icon", "Title on an EIP icon" and "UI icon without a title" in the same file still pass.
+- [ ] 3.1 In `src/pieces/cover.ts`, add `categoryIcon` to `ICON_PIECES` with a `42 × scale` box in `iconBox`, require `title` and `description` for it, and update the "exactly one piece" message. Verify: scenarios "Category badge box", "Not one icon piece" (new message) and "Category badge without a description" in `test/scripts/cover-formats.test.ts` (integration), plus the existing "An unknown reference as an icon's piece is reported" test, which now expects the new message; "EIP icon", "UI icon box", "Icon off the origin", "Rings in an icon", "Signature in an icon", "Title on an EIP icon" and "UI icon without a title" in the same file still pass.
 
 ## 4. Renders, documentation and checks
 

@@ -25,7 +25,7 @@ Each `site.<theme>` colour SHALL equal the `brand.<theme>` role it stands for: p
 - **THEN** it returns exactly `site.dark.textLight ≠ brand.dark.textMuted`
 
 ### Requirement: Site palette contrast
-In each theme, `site.<theme>.text`, `textLight` and `link` SHALL each reach a WCAG 2.x contrast of at least 4.5:1 on `site.<theme>.body` and on `site.<theme>.light`. The token test's contrast check, `siteContrastBelow(source, 4.5)`, returns every pair under the floor with its ratio rounded to two decimals.
+In each theme, `site.<theme>.text`, `textLight` and `link` SHALL each reach a WCAG 2.x contrast of at least 4.5:1 on `site.<theme>.body` and on `site.<theme>.light`. The token test's contrast check, `siteContrastBelow(source, 4.5)`, returns every pair under the floor, comparing the unrounded ratio and reporting it rounded to two decimals.
 
 #### Scenario: Site pairs above the floor
 - **WHEN** the contrast check runs on the repository's source
