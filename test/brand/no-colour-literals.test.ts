@@ -2,6 +2,7 @@
 // 3.2): no `#` with three or six hex digits, `rgb(` or `hsl(` in src/brand/ or
 // src/scenes/. `transparent` and `none` are allowed.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { builtinModules } from "node:module";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
@@ -9,8 +10,12 @@ import { describe, expect, test } from "vitest";
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 const COLOUR_LITERAL = /#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-zA-Z_])|\b(?:rgba?|hsla?)\(/g;
 
-/** An import of a `node:` module or of `../fonts/`, in any form: `from`, side-effect, dynamic `import()` or `require()`. */
-const UNSAFE_IMPORT = /(?:from\s+|import\s*\(?\s*|require\(\s*)["'](?:node:|\.\.\/fonts\/)/;
+/** Node built-ins without the `node:` prefix (`fs`, `module`, `fs/promises`), and the subsetter package. */
+const UNSAFE_BARE = [...builtinModules.filter((name) => !name.startsWith("_")), "harfbuzzjs"]
+  .map((name) => name.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&"))
+  .join("|");
+/** An import of a `node:` module, a bare built-in, `harfbuzzjs` or `../fonts/`, in any form: `from`, side-effect, dynamic `import()` or `require()`. */
+const UNSAFE_IMPORT = new RegExp(`(?:from\\s+|import\\s*\\(?\\s*|require\\(\\s*)["'](?:node:|\\.\\./fonts/|(?:${UNSAFE_BARE})(?:/[^"']*)?["'])`);
 /** Relative specifiers a module imports or re-exports, in any form. */
 const relativeImports = (source: string): string[] =>
   [...source.matchAll(/(?:\bfrom\s+|\bimport\s*\(?\s*|\brequire\(\s*)["'](\.{1,2}\/[^"']+)["']/g)].map((m) => m[1]);
@@ -111,10 +116,12 @@ describe("Components take values only from the tokens", () => {
   // Every import form counts (static, side-effect, dynamic, require), in every
   // piece module and in every module the root entry reaches by relative imports.
   test("Root entry stays pure", async () => {
-    for (const line of ['import "node:fs";', 'await import("node:fs")', 'import ( "../fonts/embed.ts" )', 'require("node:path")', 'require( "../fonts/x")', 'export * from "../fonts/embed.ts"']) {
+    for (const line of ['import "node:fs";', 'await import("node:fs")', 'import ( "../fonts/embed.ts" )', 'require("node:path")', 'require( "../fonts/x")', 'export * from "../fonts/embed.ts"', 'import { readFileSync } from "fs";', 'import "harfbuzzjs";', 'await import("fs/promises")', 'require("module")']) {
       expect(UNSAFE_IMPORT.test(line), line).toBe(true);
     }
     expect(UNSAFE_IMPORT.test('import { el } from "./node.ts"')).toBe(false);
+    expect(UNSAFE_IMPORT.test('import { tokens } from "../../tokens/generated/tokens.ts"')).toBe(false);
+    expect(UNSAFE_IMPORT.test('import { fsLike } from "./fs.ts"')).toBe(false);
     const pieceModules = readdirSync(join(repoRoot, "src/pieces"))
       .filter((name) => /\.(ts|tsx)$/.test(name))
       .map((name) => join(repoRoot, "src/pieces", name));
