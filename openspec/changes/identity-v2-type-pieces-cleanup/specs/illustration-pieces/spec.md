@@ -1,11 +1,11 @@
 ## ADDED Requirements
 
 ### Requirement: Fonts embedded in an SVG tree
-The package root SHALL export `embedFonts(tree)`, async, returning a new tree with one `style` node right after the root's `desc` (or as its first child without one) that holds one `@font-face` per face the tree's text uses, each with `src: url(data:font/ttf;base64,…) format('truetype')` and a subset of only the characters drawn in that face. Faces are ordered by family name (code point), then weight, then style. A tree without text is returned unchanged.
+`embedFonts(tree)`, async, SHALL resolve to a new tree with one `style` node right after the root's `desc` (or as its first child without one) holding one `@font-face` per face of the tree's drawn text ("Drawn text", "Face of a text", "Face weights"), each with `src: url(data:font/ttf;base64,…) format('truetype')` and a subset of only the characters drawn in that face. The input tree is not modified. A tree without drawn text in a Source face resolves deep-equal to the input.
 
 #### Scenario: Cover tree with labels
 - **WHEN** `embedFonts` gets the tree of a cover whose only text is the label `request` at `cover.labelWeight`
-- **THEN** the result's root holds `title`, `desc`, then one `style` with exactly one `@font-face` naming `Source Sans 3`, weight 700, style normal, whose font holds the glyphs of `r`, `e`, `q`, `u`, `s`, `t` and no other character
+- **THEN** the result's root holds `title`, `desc`, then one `style` with exactly one `@font-face`, naming `Source Sans 3`, `font-weight:550 799` and `font-style:normal`, whose font holds the glyphs of `r`, `e`, `q`, `u`, `s`, `t` and no other character
 
 #### Scenario: Tree without text
 - **WHEN** `embedFonts` gets the tree of an `eipIcon` or a `stateStart` wrapped in an `svg`
@@ -19,20 +19,75 @@ The package root SHALL export `embedFonts(tree)`, async, returning a new tree wi
 - **WHEN** `embedFonts` runs twice on the same tree, with other calls in between
 - **THEN** `toSvg` of both results is byte-identical, and the input tree is not modified
 
+### Requirement: Fonts entry point
+`embedFonts` SHALL be exported only from the subpath `@brunosouzas/design-system/fonts` (`package.json` `exports["./fonts"]`, module `src/fonts/embed.ts`), never from the package root. The root entry (`src/pieces/index.ts`) imports nothing from `src/fonts/`, reads no file and loads no WebAssembly, so a browser bundle can import it; "Pure pieces" holds unchanged. The wasm module and the font files load on the first call, never at import.
+
+#### Scenario: Root entry stays pure
+- **WHEN** the test scans the imports of every module under `src/pieces/` and reads the root entry's exports
+- **THEN** no module imports from `src/fonts/` or a `node:` module, and the root exports no `embedFonts`
+
+#### Scenario: Nothing loads at import
+- **WHEN** the test imports `src/fonts/embed.ts` with file reads and WebAssembly instantiation observed, then calls `embedFonts` once on a tree with one Source Sans 3 text
+- **THEN** no font file is read and no wasm module instantiated before the call, and both have happened after it
+
+#### Scenario: Subpath in the installed package
+- **WHEN** the package test imports `embedFonts` from `@brunosouzas/design-system/fonts` in the installed package and passes it the `coverTree` of a valid cover spec with one `pill`, imported from the root
+- **THEN** it resolves to a tree whose `style` holds one `@font-face` for `Source Sans 3`, and importing `embedFonts` from the root gives `undefined`
+
+### Requirement: Drawn text
+The drawn text of a tree SHALL be the string children of its `text` and `tspan` nodes, excluding every string inside a `title`, `desc` or `style` subtree, wherever that subtree sits. Each string is drawn in the face of the nearest `text` or `tspan` that holds it.
+
+#### Scenario: Title inside a text
+- **WHEN** `embedFonts` gets an `svg` whose only `text`, in Source Sans 3 at 700, holds `a`, a `title` holding `tooltip`, then `b`
+- **THEN** the one `@font-face`'s subset holds the glyphs of `a` and `b` and none of `t`, `o`, `l`, `i`, `p`
+
+#### Scenario: Icon with only a title and a description
+- **WHEN** `embedFonts` gets the `coverTree` of the `eip-splitter` fixture, whose root holds a `title` and a `desc` but no `text`
+- **THEN** it resolves deep-equal to the input, with no `style` node
+
 ### Requirement: Face of a text
-A text's face SHALL be the first family of its resolved `font-family` (its own or the nearest ancestor's), its resolved `font-weight` snapped to a shipped weight (Source Sans 3: 100–500 → 400, 600–799 → 700, 800–900 → 900; Source Code Pro and Source Serif 4: 100–500 → 400, 600–900 → 700; none given or `normal`: 400; `bold`: 700) and its `font-style`; an italic Source Code Pro run uses the upright face. A text whose first family is not one of the three Source families adds no face.
+A text's family SHALL be the first comma-separated entry of its resolved `font-family` (its own or the nearest ancestor's), trimmed, with surrounding single or double quotes stripped, compared exactly (case-sensitive) with `Source Sans 3`, `Source Code Pro` and `Source Serif 4`; any other family adds no face. Its style is its resolved `font-style` (`normal` when none); an italic Source Code Pro run uses the upright face.
 
 #### Scenario: Label with a code run
 - **WHEN** `embedFonts` gets a tree holding ``edgeLabel({ x: 0, y: 0, lines: ["adopts a `correlationId`"] })``
-- **THEN** the `style` holds two faces in this order: `Source Code Pro` at 700 (the `tspan`, whose own `font-family` wins) holding `correlationId`'s characters, then `Source Sans 3` at 700 holding those of `adopts a `
+- **THEN** the `style` holds two faces in this order: `Source Code Pro` at `550 900` (the `tspan`, whose own `font-family` wins) holding `correlationId`'s characters, then `Source Sans 3` at `550 799` holding those of `adopts a `
 
-#### Scenario: Weights snapped
-- **WHEN** texts are drawn in Source Sans 3 at 500, 600, 799 and 800, and in Source Code Pro at 800
-- **THEN** their faces are Source Sans 3 at 400, 700, 700 and 900, and Source Code Pro at 700
+#### Scenario: Family names compared exactly
+- **WHEN** four texts at 400 have the `font-family` `"Source Sans 3", serif`, then `'Source Serif 4' , serif` with a leading space, then `source sans 3, sans-serif`, then `Source Code Pro` with `font-style` `italic`
+- **THEN** the faces are `Source Code Pro` normal, `Source Sans 3` normal and `Source Serif 4` normal, and the lower-case family adds none
 
 #### Scenario: First family outside Source
 - **WHEN** a tree's only text has `font-family` `Georgia, serif`
 - **THEN** `embedFonts` returns the tree unchanged, with no `style` node
+
+### Requirement: Face weights
+A text's weight SHALL be its resolved `font-weight` (400 when none or `normal`, 700 for `bold`) snapped to a shipped weight: Source Sans 3 below 550 → 400, 550 to below 800 → 700, 800 and above → 900; Source Code Pro and Source Serif 4 below 550 → 400, 550 and above → 700. Each `@font-face` declares the range its weight stands for: `font-weight:100 549` (400), `550 799` (700) or `800 900` (900) for Source Sans 3, `100 549` or `550 900` for the other two.
+
+#### Scenario: Weights snapped
+- **WHEN** texts are drawn in Source Sans 3 at 549, 550, 799 and 800, and in Source Code Pro at 549, 550 and 900
+- **THEN** the `style` holds five faces: `Source Code Pro` `100 549`, `Source Code Pro` `550 900`, `Source Sans 3` `100 549`, `Source Sans 3` `550 799` (the 550 and 799 texts) and `Source Sans 3` `800 900`
+
+#### Scenario: Weight keywords
+- **WHEN** Source Sans 3 texts have no `font-weight`, `normal` and `bold`
+- **THEN** the first two share the `100 549` face and the third uses the `550 799` face
+
+### Requirement: Order of the faces
+The `@font-face` rules SHALL be ordered by family name in code-point order, then by weight ascending, then by style, `normal` before `italic`; each rule names `font-family`, `font-weight` (its range) and `font-style`.
+
+#### Scenario: Every sort key
+- **WHEN** a tree draws, in this order, Source Serif 4 italic at 400, Source Sans 3 italic at 700, Source Sans 3 at 700 and Source Code Pro at 400
+- **THEN** the rules are `Source Code Pro` 400 normal, `Source Sans 3` 700 normal, `Source Sans 3` 700 italic, `Source Serif 4` 400 italic
+
+### Requirement: Font embedding failure
+When a font file cannot be read or the WebAssembly module fails to load, `embedFonts` SHALL reject with an `Error` naming the cause: the path of the file that could not be read, or `harfbuzzjs` for the module. It never resolves with a tree that lacks a face its text uses.
+
+#### Scenario: Unreadable font file
+- **WHEN** the test makes the read of the Source Sans 3 Bold file in `fonts/` fail and calls `embedFonts` on a tree with a Source Sans 3 text at 700
+- **THEN** the promise rejects with an `Error` whose message holds that file's path
+
+#### Scenario: WebAssembly fails to load
+- **WHEN** the test makes the instantiation of the `harfbuzzjs` wasm module fail and calls `embedFonts` on a tree with text
+- **THEN** the promise rejects with an `Error` whose message names `harfbuzzjs`
 
 ### Requirement: Fonts shipped with the package
 The package SHALL ship in `fonts/` the unmodified static TTF files of Source Sans 3 3.052R (Regular, Italic, Bold, Bold Italic, Black, Black Italic), Source Code Pro 2.042R (Regular, Bold) and Source Serif 4 4.005R (Regular, Italic, Bold, Bold Italic), with `OFL.txt`; `embedFonts` reads only these files, never the network, through `harfbuzzjs`, the package's one runtime dependency, pinned exactly. The piece modules stay free of file access.
@@ -84,11 +139,11 @@ On the dark surface, every ink stroke that sits on a dark face or on the dark ba
 - **THEN** both trees are deep-equal, their ink strokes are `#121212`, and `#ADA79D` appears in neither
 
 ### Requirement: Robot in the v2 grammar
-`robot({ cx, top })` SHALL draw a white body and white ears, a `brand.light.text` visor showing the cast's idle eyes in `cast.eyes`, one grille bar in a neutral, and an antenna tip in `brand.light.accent`. No shape takes a state colour: the 0.6.1 green body and eyes, mouth bars and red tip are gone.
+`robot({ cx, top })` SHALL draw a white body and white ears, a `brand.light.text` visor showing the cast's idle eyes in `cast.eyes`, one grille bar in `brand.light.border`, and an antenna tip in `brand.light.accent`. No shape takes a state colour: the 0.6.1 green body, green ears and eyes, three mouth bars and orange `color.blocked` tip are gone.
 
 #### Scenario: V2 robot
 - **WHEN** `robot({ cx: 400, top: 140 })` is called
-- **THEN** its body fills are only `#FFFFFF`, `#121212`, `#FFC98A`, `#E04E17` and a neutral of `brand.light`, with `#FFC98A` inside the visor, and no fill is `#3DDC84` or `#E04848`
+- **THEN** its body fills are only `#FFFFFF`, `#121212`, `#FFC98A`, `#E04E17` and `#D7D1C5`, with `#FFC98A` inside the visor and exactly one grille bar filled `#D7D1C5`, and no fill is `#3DDC84`, `#2BB673` or `#FF8A3D`
 
 #### Scenario: Robot takes no colour
 - **WHEN** `robot` gets `fill: "color.state.healthy"`
@@ -121,11 +176,11 @@ Without a colour from the caller, `serverStack`, `gear`, `parcel`, `steps`, `spe
 - **THEN** its path and head are `#FFFFFF`
 
 ### Requirement: Folder, browser window and book in the v2 grammar
-`folder` SHALL draw a white front over a `brand.light.border` back; `browserWindow` SHALL draw white dots and a `brand.light.bg` hero block; `book` SHALL draw its stack with no ink back page behind it.
+`folder` SHALL draw a white front over a `brand.light.border` back; `browserWindow` SHALL draw its three dots in `color.white` and a `brand.light.bg` hero block; `book` SHALL draw no ink shape behind or offset from its front cover (the 0.6.1 offset ink back page goes), and its spine stays `color.ink`.
 
 #### Scenario: V2 drawings
 - **WHEN** `folder`, `browserWindow` and `book` are drawn with their required parameters
-- **THEN** the folder's fills are `#FFFFFF` and `#D7D1C5`, the window has no fill `#E04848`, `#FFD25A` or `#3DDC84` and its hero block is `#F6F3EC`, and the book has no shape filled `#121212`
+- **THEN** the folder's fills are `#FFFFFF` and `#D7D1C5`; the window's three dots are filled `#FFFFFF` (0.6.1: `#FF6B6B`, `#FFD25A`, `#3DDC84`) and its hero block `#F6F3EC`; the book's only shape filled `#121212` is its spine, the 20-wide rect at (`x`, `y`), with no ink rect behind the front cover or offset from it
 
 #### Scenario: Folder takes no colour
 - **WHEN** `folder` gets `fill: "color.white"`
@@ -181,6 +236,39 @@ Every shape `emote` draws, on either surface, SHALL carry its own `stroke` or si
 #### Scenario: Inside the outlined group
 - **WHEN** the test walks every emote with and without its burst, on `light` and on `dark`
 - **THEN** every `circle`, `ellipse`, `rect`, `path` has a `stroke` attribute or an ancestor `g` inside the piece that has one, and every `fill` and `stroke` is `none` or a token value
+
+### Requirement: Catalogue sheet in Source
+`npm run pieces:sheet` SHALL pass the sheet's tree through `embedFonts` before writing, so the owner's Chrome review of the sheet shows the pieces' text and the name labels in Source. When `embedFonts` rejects, the command prints the error's message, exits 1 and writes nothing.
+
+#### Scenario: Sheet carries its faces
+- **WHEN** `npm run pieces:sheet -- --out <file.svg>` runs
+- **THEN** it prints `wrote <file>`, and the written SVG's first child is a `style` whose `@font-face` rules include `Source Code Pro` at `550 900` (the name labels) and `Source Sans 3` at `550 799` (the pieces' labels), each with a `data:font/ttf;base64,` source
+
+#### Scenario: Sheet font failure
+- **WHEN** the test makes a font file unreadable and runs the sheet with `--out sheet.svg`
+- **THEN** the command prints the `Error`'s message, naming the file, exits 1, and `sheet.svg` does not exist
+
+### Requirement: V2 palette of every piece
+Each of the 62 pieces drawn with its defaults, on `light` and on `dark` when it takes `surface`, SHALL use as `fill` and `stroke` only `none` or a value of `color.white`, `color.ink`, `surface.<surface>.*`, `brand.<surface>.*`, `illustration.*` or `cast.eyes`, apart from "State colours that keep a meaning": every piece goes through the grammar of the new cast.
+
+#### Scenario: Every piece in the v2 palette
+- **WHEN** the test walks every node of each piece's required-only call of the catalogue test (`REQUIRED_ONLY`), with every required colour parameter (`rail.nodes`, `lineBadge.fill`, `pipe.fill`, `zone.fill`, `phaseBand.fill`) set to `illustration.accent` and `emote` drawn once per kind
+- **THEN** each `fill` and `stroke` is `none` or one of those values, and a `color.state.*` value appears only in a piece and part listed in "State colours that keep a meaning"
+
+#### Scenario: A decorative state colour is caught
+- **WHEN** the palette check is given a `gear` tree whose body is filled `#FFD25A` (its 0.6.1 default, `color.transitional`)
+- **THEN** it reports `gear` and `#FFD25A`
+
+### Requirement: State colours that keep a meaning
+A `color.state.*` value SHALL appear in the output of "V2 palette of every piece" only where it means a state: `checkBadge`'s disc and a `sheet` `tail` check (done), `stamp`'s face (approved), `serverStack`'s failing light, the emotes `problem`, `refused` (failure) and `worked` (done), `renewalRing`'s inner band (renewal due), an owned `licenceMark`, `eipIcon` and `nameTag`'s icon ("Icon colours"), and `taggedContainer`'s tab.
+
+#### Scenario: State colours where they mean a state
+- **WHEN** `checkBadge`, `stamp`, `licenceMark` and `renewalRing` are drawn with their required parameters
+- **THEN** the badge's disc, the stamp's face and the licence's face are `#3DDC84`, and the ring's inner band is `#FF8A3D`
+
+#### Scenario: Failing light only when failing
+- **WHEN** `serverStack` is drawn with `units: 3`, once without `failing` and once with `failing: 1`
+- **THEN** the first holds no `color.state.*` value, and the second holds `#E04848` only on that unit's light
 
 ## MODIFIED Requirements
 
@@ -431,7 +519,7 @@ The library SHALL hold `LINK_ICONS`, the four stickers of `stackledger-map-and-l
 - **THEN** the first throws a `RangeError` naming `text`; the second names `width`
 
 ### Requirement: Existing calls unchanged
-Every call valid in 0.2.0 SHALL stay valid and draw the tree pinned in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b: `lineBadge` with a text, nodes without a placeholder subtitle, `ledgerMark` without `surface`), which this change regenerates once, with the same calls, from the v2 drawing the owner approved; the proof cover and banner goldens are regenerated with it.
+Every call valid in 0.2.0, with each top-level `color.<state>` value written `color.state.<state>`, SHALL stay valid and draw the tree pinned in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b). This change regenerates the fixture once from the v2 drawing the owner approved, with the same calls except that rewrite; the proof cover and banner goldens are regenerated with it.
 
 #### Scenario: Goldens unchanged
 - **WHEN** the four golden fixtures are built
@@ -443,10 +531,10 @@ Every call valid in 0.2.0 SHALL stay valid and draw the tree pinned in `test/fix
 
 #### Scenario: Same calls after the regeneration
 - **WHEN** the regenerated fixture is compared with the 0.6.1 one
-- **THEN** both list the same calls with the same parameters, in the same order; only the trees differ
+- **THEN** both list the same calls in the same order with the same parameters, except that each `color.<state>` value (`lineBadge.fill`, `ledgerMark.line`) is now `color.state.<state>`; only the trees differ
 
 ### Requirement: UI icon calls of 0.3.0 unchanged
-Every `uiIcon` call valid in 0.3.0 SHALL stay valid and draw the tree and `toSvg` bytes pinned in `test/fixtures/ui-icons-0.3.0.json`, which this change regenerates once with the same 21 calls; only the colours of the drawing change.
+Every `uiIcon` call valid in 0.3.0 SHALL stay valid and draw the tree and `toSvg` bytes pinned in `test/fixtures/ui-icons-0.3.0.json`, which this change regenerates once with 0.7.0 output and the same 21 calls (none passes a top-level `color.<state>`, so no call is rewritten); only the colours of the drawing change.
 
 #### Scenario: Frozen 0.3.0 icon calls
 - **WHEN** the test re-calls the fixture's 21 calls: each of the seven icons with no colour at (0, 0), with `colour: "surface.dark.text"` at (0, 0), and with `colour: "color.white"` at (3.5, -2) with `size` 18
@@ -631,7 +719,7 @@ In every text parameter of the ten body diagram pieces and in `pill.text`, a str
 - **THEN** its tree is deep-equal to the pinned one
 
 ### Requirement: Message arrow calls of 0.3.1 unchanged
-Every `messageArrow` call valid in 0.3.1 SHALL stay valid and draw the tree and the `toSvg` bytes pinned in `test/fixtures/message-arrow-0.3.1.json`, which this change regenerates once, with the same eight calls of `body-diagram-pieces` design §5, from the v2 drawing.
+Every `messageArrow` call valid in 0.3.1 SHALL stay valid and draw the tree and the `toSvg` bytes pinned in `test/fixtures/message-arrow-0.3.1.json`, which this change regenerates once with 0.7.0 output and the same eight calls of `body-diagram-pieces` design §5 (none passes a top-level `color.<state>`, so no call is rewritten).
 
 #### Scenario: Frozen 0.3.1 arrow calls
 - **WHEN** the test re-calls the eight calls of `test/fixtures/message-arrow-0.3.1.json`
@@ -698,7 +786,7 @@ Every `messageArrow` call valid in 0.3.1 SHALL stay valid and draw the tree and 
 - **THEN** the first path has stroke `#E04848` and no `stroke-dasharray`, its head is `#E04848`; the second path has stroke `#121212` and `stroke-dasharray` `6 8` as its last attribute; the third throws a `RangeError` naming `dashed`
 
 ### Requirement: Piece calls of 0.5.0 unchanged
-Every `milestonePin`, `countBadge`, `pill` and `messageArrow` call valid in 0.5.0 SHALL stay valid and draw the tree and the `toSvg` bytes pinned in `test/fixtures/pieces-0.5.0.json`, which this change regenerates once, with the same 44 calls, from the v2 drawing.
+Every `milestonePin`, `countBadge`, `pill` and `messageArrow` call valid in 0.5.0, with each top-level `color.<state>` value written `color.state.<state>`, SHALL stay valid and draw the tree and the `toSvg` bytes pinned in `test/fixtures/pieces-0.5.0.json`, which this change regenerates once with 0.7.0 output and the same 44 calls except that rewrite.
 
 #### Scenario: Frozen 0.5.0 calls
 - **WHEN** the test re-calls the 44 calls of `test/fixtures/pieces-0.5.0.json`
@@ -707,6 +795,10 @@ Every `milestonePin`, `countBadge`, `pill` and `messageArrow` call valid in 0.5.
 #### Scenario: A changed pin is caught
 - **WHEN** the default stem of `milestonePin` changes
 - **THEN** the test fails and names the pin calls that differ
+
+#### Scenario: Same 0.5.0 calls after the regeneration
+- **WHEN** the regenerated fixture is compared with the 0.6.1 one
+- **THEN** both list the same 44 calls in the same order with the same parameters, except that each `color.<state>` value (for example a `milestonePin` or `pill` `fill: "color.transitional"`) is now `color.state.<state>`
 
 ### Requirement: Bank objects
 The package SHALL export one `bankObject({ name, x, y, surface, scale })` piece and `BANK_OBJECT_NAMES` (`courier`, `lume`, `carga`, `anel`, `modulo`, `hub`), each object drawn with the cast's idle eyes in `cast.eyes` on its screen and no other expression, for use on track covers; `modulo` has no inner strokes between its legs. A bank object SHALL NOT accept an `expression` or `face` parameter.
@@ -721,7 +813,7 @@ The package SHALL export one `bankObject({ name, x, y, surface, scale })` piece 
 
 #### Scenario: Modulo legs
 - **WHEN** `bankObject({ name: "modulo", x: 0, y: 0 })` is called
-- **THEN** no stroke is drawn between its two legs: the 0.6.1 drawing's two inner strokes are gone
+- **THEN** its tree holds no path `M-22 -40 L-32 -2 M22 -40 L32 -2`, the 0.6.1 drawing's two inner strokes between its legs
 
 #### Scenario: Bank object has no face
 - **WHEN** `bankObject({ name: "carga", x: 0, y: 0, face: "done" })` is called

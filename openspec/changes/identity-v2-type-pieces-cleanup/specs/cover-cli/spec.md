@@ -1,11 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Fonts embedded in every written image
-Before writing, the command SHALL pass every format's tree through the package's `embedFonts` ("Fonts embedded in an SVG tree"), so the written SVG carries the subset Source faces its text uses and a reader sees Source inside an `<img>` without the fonts installed. A spec whose text needs a character the faces lack is still written; the browser draws that character from the next family of the stack.
+Before writing, the command SHALL pass every format's tree through `embedFonts` of `@brunosouzas/design-system/fonts` ("Fonts embedded in an SVG tree"), so the written SVG carries the subset Source faces its text uses and a reader sees Source inside an `<img>` without the fonts installed. A spec whose text needs a character the faces lack is still written; the browser draws that character from the next family of the stack.
 
 #### Scenario: Proof cover carries its faces
 - **WHEN** the `spec-driven-development` fixture is built
-- **THEN** the written SVG has exactly one `<style>`, right after `<desc>`, holding one `@font-face` for `Source Sans 3` at weight 700, style normal, whose `src` is a `data:font/ttf;base64,` URL with `format('truetype')`, and the file equals its golden
+- **THEN** the written SVG has exactly one `<style>`, right after `<desc>`, holding two `@font-face` rules in this order: `Source Sans 3` with `font-weight:550 799` and `font-style:normal` (the labels, at `cover.labelWeight` 700), then `Source Sans 3` with `font-weight:800 900` and `font-style:normal` (the `?` marks and the `GO` stamp, at 900); each `src` is a `data:font/ttf;base64,` URL with `format('truetype')`, and the file equals its golden
+
+#### Scenario: Diagram carries its code face
+- **WHEN** the `circuit-breaker-states` fixture is built with `--lang en`
+- **THEN** its `<style>` holds two `@font-face` rules in this order: `Source Code Pro` at `550 900` (the `resetTimeout` run, which inherits weight 700), then `Source Sans 3` at `550 799` (every other word, at 700)
 
 #### Scenario: Text-free output gets no font style
 - **WHEN** the `eip-splitter` icon fixture and a `favicon` spec are built
@@ -18,6 +22,17 @@ Before writing, the command SHALL pass every format's tree through the package's
 #### Scenario: Embedding is deterministic
 - **WHEN** the same diagram spec is built twice with `--lang pt`
 - **THEN** both files are byte-identical, embedded fonts included
+
+### Requirement: Font embedding failure in the command
+When `embedFonts` rejects (a font file cannot be read, or the WebAssembly module fails to load), the command SHALL print the `Error`'s message, which names the file path or `harfbuzzjs`, exit 1 and write nothing: an existing output file keeps its bytes.
+
+#### Scenario: Unreadable font file
+- **WHEN** the test makes the read of the Source Sans 3 Bold file fail and runs the command on the `home-banner` fixture with `--out` naming an existing file
+- **THEN** the command prints one line holding that file's path, exits 1, prints no `wrote` line, and the existing file keeps its bytes
+
+#### Scenario: WebAssembly fails to load
+- **WHEN** the test makes the instantiation of the `harfbuzzjs` wasm module fail and runs the command on a valid cover spec with no output file yet
+- **THEN** the command prints one line naming `harfbuzzjs`, exits 1, and no output file exists
 
 ### Requirement: Emote on a cover
 A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other piece, checked with the same schema and relations, with problems reported at their JSON path. `mascot` is no longer a piece: an entry naming it is an unknown piece.
