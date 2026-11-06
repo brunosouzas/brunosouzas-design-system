@@ -1,0 +1,770 @@
+[
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "b72e050cd35ffdf584f59a44674c3ab6916851d5d056d65c00c7fd7f97ad9ca8"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "c5c7ead5bc90c5ca111b32edfb665611991ed34d88c63bb2bd258159b418878c"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "9c618f437586eca3ced0486795d788bdeaa0c604b932ec030777e11035384136"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "112d3eef60e1aac9452d85d11f7a1f3f1deea92007b08bdb3c303416310cf676"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "761119994a83440c1ab34ff688f51a4b9c37e730fbb1b928689cea39fab2d4db"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "9e939146b66425a667ccb6eaeb044a319dbe2d34000a5ca506dda1249a8ede60"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "7bd6edfc95330c0ac396300734c5a5362e525800fa63984ff232659460d54684"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "idea",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "f67b192221f5b0caac3b004e2fa1c2785831c5d46bc78b9c75ceb6aff7e8b466"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "ec1280292c3c5fc054a5d74d929466deac31d8d6317724d584a4217496cadb95"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "1f75e90987a53e7223a332f115fdd6dedec0d29034e35ba2b887e328378f1799"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "a6737ca9e0197b4c074053f26c0bbf59a31d897c016718956068cb1c09ec09f3"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "79b4245eb7b57da55702176036faeb9d7524bfd082fabd479ed5872eac83dcfc"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "ec1280292c3c5fc054a5d74d929466deac31d8d6317724d584a4217496cadb95"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "1f75e90987a53e7223a332f115fdd6dedec0d29034e35ba2b887e328378f1799"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "a6737ca9e0197b4c074053f26c0bbf59a31d897c016718956068cb1c09ec09f3"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "doubt",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "79b4245eb7b57da55702176036faeb9d7524bfd082fabd479ed5872eac83dcfc"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "71399b5e0c1887929455231899c3516ebda1502c0a0eb3d740343cc212ff7c0d"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "8f108bd1a1003ea463601b676bbb3ef51ca371d60cfffe45c690b2ab5b6c1924"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "7daa7ec07b3fbcb8d5f2ce4211ac48b7a6b0acd0d000792f89ac0359208dd980"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "34f033057f23249a4ea98694a838f2112aaa09b93c62b7cd9400fa8a75016e48"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "a15cc7f01f2a7670ef5651ad1abc3db6659c503e35eca4eee284da5f33d2156d"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "8270220dcc1c501a03b55b4429b51f0831539939d5a4fcd18a0f48fd967798f9"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "4ea3af8e18aeacc79c058d01d78d8cb2aa764729d79d158d4aa519de6b836a3f"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "problem",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "841747b17c4199a57eed360f3f4edb0ddd2f995ef50103e2936ef5fe90d7f99f"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "23eca1111a3ed7e0bfe2f83a12827674b5dba816b509824c8e54562b95a3433a"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "94919117d8ee1dadc1e758b991017fcf9574fb17654be4e5a06f5d287ebd9ee0"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "b01048ff486a5739a7e0f3c8e5cf65a0f340419e154485f24e1ff25b383f99ed"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "965b49abdb27748fd188b24da5532dfb2d45e45e7faeeb5c8aeadf58d608cd5b"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "f4d3230437b56696c528d48ee4f1819e71771bbf118d1ecf75c49ed925025cef"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "fcde6bf4afd4b60a9a4dc79b2cfce564495ac95c5d022f6252187f6e3fb49636"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "8e282fd12c88f0e541aba5fda9335fb0977fdcb28de322c066457b758d9b0369"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "worked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "b60295ad2802a2c17011ef8f4909620a5ac9777201df42374756397f2d991a1e"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "23ad7c6fe092d9c2c2eb75e13513778b4e52d0d81d0ae3dae05287c217620a42"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "357cdd322ee274fc7df972804765b6272a5bdb549b5e8c3c21e4cb731ddf2a7f"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "c68dfe018b66f0f0d55a5a5056bb223d30f8b9d1ecdcb755282365eef9cecbbf"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "c6ac098e7d9c911ce44dc0546449b834ca2c20a5ce0513ee87e48be3f6634b63"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "23ad7c6fe092d9c2c2eb75e13513778b4e52d0d81d0ae3dae05287c217620a42"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "357cdd322ee274fc7df972804765b6272a5bdb549b5e8c3c21e4cb731ddf2a7f"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "c68dfe018b66f0f0d55a5a5056bb223d30f8b9d1ecdcb755282365eef9cecbbf"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "refused",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "c6ac098e7d9c911ce44dc0546449b834ca2c20a5ce0513ee87e48be3f6634b63"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "3f45022cb7036a142190e6e4c3b278e32272696f52d9d2588eef5c5c3194d492"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "e7d3c944ffa0fc4419eaf7bbb29b5f293e7f4f4de67eabece6dc4927664ed94c"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "ba9af74d5f40b16893b54fa59d5f9a6348f2282163430265ad0cacbd1279c8f1"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "bc5d5626919ecd2d3b533058e7eb3756400aafcf656d3e0afa167e067ff984ca"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "3f45022cb7036a142190e6e4c3b278e32272696f52d9d2588eef5c5c3194d492"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "e7d3c944ffa0fc4419eaf7bbb29b5f293e7f4f4de67eabece6dc4927664ed94c"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "ba9af74d5f40b16893b54fa59d5f9a6348f2282163430265ad0cacbd1279c8f1"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "pressure",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "bc5d5626919ecd2d3b533058e7eb3756400aafcf656d3e0afa167e067ff984ca"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "6f08f7d642682e8b869b8dec9ad8972ed0812b2d3dc201620ac066a48bd171ef"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "9cf23c7d59f5a24a360374203fb2887d929d05d1f37393fb429c0f7c1804edd1"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "2ba631429a26c1e9ec17f194ae6ff872ae6729040ddc4ebdeeb1f5bd9fbe3591"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "7cb2a9310202b715df5a4af8c8d5f87fb78cbc4ca5ec858b6cff5c92a9af8e17"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "6f08f7d642682e8b869b8dec9ad8972ed0812b2d3dc201620ac066a48bd171ef"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "9cf23c7d59f5a24a360374203fb2887d929d05d1f37393fb429c0f7c1804edd1"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "2ba631429a26c1e9ec17f194ae6ff872ae6729040ddc4ebdeeb1f5bd9fbe3591"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "liked",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "7cb2a9310202b715df5a4af8c8d5f87fb78cbc4ca5ec858b6cff5c92a9af8e17"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "e6b1cd3f2dfd47e09e2f6fc6d2ed5ea4099f5585699e1a4933fa536fe102fc02"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "light"
+    },
+    "sha256": "a732f2180f4f587865dff7a507c7eb6725890e61db10a4ec53fdb1ded7bb575b"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "1f26ff882daffc7828a027aefb3eace3ae1f933cafde7609ae7bfe69ba028375"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": true,
+      "surface": "dark"
+    },
+    "sha256": "c26ce7c9b35d79f478593ea85d1eb65a163a377bf2036a2a45f2111deca5ad3a"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "e6b1cd3f2dfd47e09e2f6fc6d2ed5ea4099f5585699e1a4933fa536fe102fc02"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "light"
+    },
+    "sha256": "a732f2180f4f587865dff7a507c7eb6725890e61db10a4ec53fdb1ded7bb575b"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 1,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "1f26ff882daffc7828a027aefb3eace3ae1f933cafde7609ae7bfe69ba028375"
+  },
+  {
+    "piece": "emote",
+    "params": {
+      "kind": "waiting",
+      "x": 100,
+      "y": 80,
+      "scale": 2,
+      "burst": false,
+      "surface": "dark"
+    },
+    "sha256": "c26ce7c9b35d79f478593ea85d1eb65a163a377bf2036a2a45f2111deca5ad3a"
+  }
+]

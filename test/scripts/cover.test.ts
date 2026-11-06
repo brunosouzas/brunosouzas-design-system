@@ -378,9 +378,27 @@ describe("Parity with the published proof covers", () => {
   ] as [string, string, string | undefined][])("Golden output (%s)", async (golden, spec, lang) => {
     const result = await buildCover(readFileSync(join(FIXTURES, `${spec}.json`), "utf8"), spec, lang);
     expect(result.ok).toBe(true);
-    if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${golden}.svg`), "utf8"));
+    if (result.ok) expect(goldenDrift(golden, result.svg, readFileSync(join(FIXTURES, `${golden}.svg`), "utf8"))).toEqual([]);
+  });
+
+  // Change identity-v2-type-pieces-cleanup (cover-cli "Golden drifts").
+  test("Golden drifts", async () => {
+    const result = await buildCover(readFileSync(join(FIXTURES, "ai-writes-code.json"), "utf8"), "ai-writes-code");
+    expect(result.ok).toBe(true);
+    const golden = readFileSync(join(FIXTURES, "ai-writes-code.svg"), "utf8");
+    const at = golden.indexOf("<title");
+    const drifted = `${golden.slice(0, at)}<Title${golden.slice(at + 6)}`;
+    if (result.ok) expect(goldenDrift("ai-writes-code", result.svg, drifted)).toEqual([`ai-writes-code: differs from its golden at offset ${at + 1}`]);
   });
 });
+
+/** Empty when `built` equals the golden byte for byte, otherwise one line naming the fixture and the offset of the first character that differs. */
+function goldenDrift(name: string, built: string, golden: string): string[] {
+  if (built === golden) return [];
+  let at = 0;
+  while (at < built.length && built[at] === golden[at]) at++;
+  return [`${name}: differs from its golden at offset ${at}`];
+}
 
 // Change unbounded-positions (cover-cli "Spec positions stay in the frame's range", "Overflow reported as a spec problem").
 describe("Positions in a cover spec", () => {

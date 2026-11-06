@@ -1,12 +1,16 @@
 // Unit tests of the emotes (spec illustration-pieces, "Emote", "Emote colours",
 // "Emotes carry their own stroke", "Ink on the dark surface", "Emote
-// parameters"; task 4.3 of identity-v2-type-pieces-cleanup). Each test title is
-// the spec scenario it proves. They replace the emote parts of the removed
-// cast.test.ts and cast-dark.test.ts.
+// parameters", "Emote look frozen"; tasks 4.3 and 4.4 of
+// identity-v2-type-pieces-cleanup). Each test title is the spec scenario it
+// proves. They replace the emote parts of the removed cast.test.ts and
+// cast-dark.test.ts.
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { EMOTE_KINDS, emote, type EmoteKind, type EmoteParams } from "../../src/pieces/emote";
-import type { SvgNode } from "../../src/pieces/node";
+import { g, type SvgNode } from "../../src/pieces/node";
 import { COLOUR_TOKENS } from "../../src/pieces/params";
+import { toSvg } from "../../src/pieces/render";
 import { tokens } from "../../tokens/generated/tokens";
 
 const INK = tokens.color.ink;
@@ -141,5 +145,45 @@ describe("Emote parameters", () => {
 
   test("Unknown surface", () => {
     expect(() => emote({ kind: "idea", x: 0, y: 0, surface: "navy" as "dark" })).toThrow(/^emote: surface: expected one of light, dark/);
+  });
+});
+
+// Frozen look (requirement "Emote look frozen", task 4.4). The fixture was written
+// once by scripts/freeze-emote.ts from the drawing the owner approved in group 8.
+type Call = { piece: "emote"; params: EmoteParams; sha256: string };
+type Draw = (params: EmoteParams) => { body: readonly SvgNode[]; text: readonly SvgNode[] };
+const FROZEN = JSON.parse(readFileSync(new URL("../fixtures/emote-0.7.0.json", import.meta.url), "utf8")) as Call[];
+const sha = (text: string) => createHash("sha256").update(text).digest("hex");
+/** The calls whose hash differs from the recorded one, drawn by `draw`. */
+const changedCalls = (calls: readonly Call[], draw: Draw = emote): string[] =>
+  calls
+    .filter((call) => {
+      const drawn = draw(call.params);
+      return sha(toSvg(g({}, ...drawn.body, ...drawn.text))) !== call.sha256;
+    })
+    .map((call) => `${call.piece} ${JSON.stringify(call.params)}`);
+
+describe("Emote look frozen", () => {
+  test("Every call matches", () => {
+    // Each kind, with and without its burst, on both surfaces, at scale 1 and 2.
+    expect(FROZEN).toHaveLength(EMOTE_KINDS.length * 2 * 2 * 2);
+    expect(new Set(FROZEN.map((call) => `${call.params.kind} ${call.params.burst} ${call.params.surface} ${call.params.scale}`)).size).toBe(FROZEN.length);
+    expect(changedCalls(FROZEN)).toEqual([]);
+  });
+
+  test("A changed drawing is caught", () => {
+    // Move the idea's bulb (the path filled with cast.eyes) one unit to the right.
+    const moveBulb = (node: SvgNode): SvgNode => ({
+      ...node,
+      attrs: node.attrs.fill === tokens.cast.eyes ? { ...node.attrs, d: String(node.attrs.d).replace(/^M(-?[\d.]+)/, (_, x: string) => `M${Number(x) + 1}`) } : node.attrs,
+      children: node.children.map((child) => (typeof child === "string" ? child : moveBulb(child))),
+    });
+    const altered: Draw = (params) => {
+      const drawn = emote(params);
+      return params.kind === "idea" ? { body: drawn.body.map(moveBulb), text: drawn.text } : drawn;
+    };
+    const ideas = FROZEN.filter((call) => call.params.kind === "idea").map((call) => `emote ${JSON.stringify(call.params)}`);
+    expect(ideas).toHaveLength(8);
+    expect(changedCalls(FROZEN, altered)).toEqual(ideas);
   });
 });

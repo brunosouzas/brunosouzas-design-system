@@ -103,7 +103,7 @@
       "x": 825,
       "y": 210,
       "text": "CI/CD",
-      "fill": "color.transitional"
+      "fill": "color.state.transitional"
     }
   ]
 }

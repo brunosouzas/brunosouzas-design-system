@@ -7,8 +7,13 @@
 // Run once on the 0.5.0 tree (origin/main f91ba2e; the spec commits on top of it
 // change no source), before any code change:
 //   npx tsx scripts/freeze-pieces-0.5.0.ts
-// It writes test/fixtures/pieces-0.5.0.json. Do not run it again on a later
-// tree: the fixture is the record of 0.5.0.
+// It writes test/fixtures/pieces-0.5.0.json.
+//
+// Re-run once for 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6), on
+// the drawing the owner approved from the renders of group 8, with each
+// top-level color.<state> value written color.state.<state> (same calls
+// otherwise): the fixture now pins the 0.5.0 calls as 0.7.0 draws them. Do not
+// run it again on a later tree.
 import { writeFileSync } from "node:fs";
 import { PIECES, type PieceName } from "../src/pieces/library.ts";
 import { toSvg } from "../src/pieces/render.ts";
@@ -20,7 +25,7 @@ const add = (piece: PieceName, ...variants: Record<string, unknown>[]) => varian
 add(
   "milestonePin",
   { x: 224, y: 292, text: "1" },
-  { x: 306, y: 252, text: "S", fill: "color.transitional" },
+  { x: 306, y: 252, text: "S", fill: "color.state.transitional" },
   { x: 100, y: 200, text: "42", fill: "color.white", stem: 60 },
   { x: 0, y: 0, text: "D", stem: 0.5 },
 );
@@ -38,9 +43,9 @@ add(
   "pill",
   { x: 132, y: 174, text: "request" },
   { x: 200, y: 110, text: "main", width: 84 },
-  { x: 445, y: 220, text: "uat", width: 68, fill: "color.transitional" },
+  { x: 445, y: 220, text: "uat", width: 68, fill: "color.state.transitional" },
   { x: 0, y: 0, text: "a `b` c" },
-  { x: 0, y: 0, text: "Azure DevOps", width: 150, fill: "color.healthy" },
+  { x: 0, y: 0, text: "Azure DevOps", width: 150, fill: "color.state.healthy" },
 );
 const ends = { from: [0, 0], to: [200, 100] };
 const straight = { from: [0, 0], to: [100, 0], curve: "straight" };

@@ -5,27 +5,12 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": false
     },
     "tree": {
       "body": [
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 36.9,
-            "y": 13.5,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
         {
           "tag": "rect",
           "attrs": {
@@ -35,7 +20,7 @@
             "height": 20,
             "rx": 10,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -48,7 +33,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -67,7 +52,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": false,
       "inkScale": 1.6
@@ -77,28 +62,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 39,
-            "y": 15.6,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 4.8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 33.4,
             "y": 10,
             "width": 33.2,
             "height": 20,
             "rx": 10,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -111,7 +81,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -130,7 +100,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": false,
       "inkScale": 1.6,
@@ -142,28 +112,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 28.6,
-            "y": 8.6,
-            "width": 54,
-            "height": 34,
-            "rx": 17,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 4.8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 23,
             "y": 3,
             "width": 54,
             "height": 34,
             "rx": 17,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -176,7 +131,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -195,7 +150,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": true
     },
@@ -210,7 +165,7 @@
             "height": 17,
             "rx": 8.5,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -223,7 +178,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -242,7 +197,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": true,
       "inkScale": 1.6
@@ -258,7 +213,7 @@
             "height": 15.2,
             "rx": 7.6,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -271,7 +226,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -290,7 +245,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "light",
       "flat": true,
       "inkScale": 1.6,
@@ -308,7 +263,7 @@
             "height": 29.2,
             "rx": 14.6,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -321,7 +276,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -340,42 +295,12 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": false
     },
     "tree": {
       "body": [
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 36.9,
-            "y": 13.5,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 33.4,
-            "y": 10,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
         {
           "tag": "rect",
           "attrs": {
@@ -385,7 +310,7 @@
             "height": 20,
             "rx": 10,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -398,7 +323,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -417,7 +342,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": false,
       "inkScale": 1.6
@@ -427,43 +352,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 39,
-            "y": 15.6,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 33.4,
-            "y": 10,
-            "width": 33.2,
-            "height": 20,
-            "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 33.4,
             "y": 10,
             "width": 33.2,
             "height": 20,
             "rx": 10,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -476,7 +371,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -495,7 +390,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": false,
       "inkScale": 1.6,
@@ -507,43 +402,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 28.6,
-            "y": 8.6,
-            "width": 54,
-            "height": 34,
-            "rx": 17,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 23,
-            "y": 3,
-            "width": 54,
-            "height": 34,
-            "rx": 17,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 8,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 23,
             "y": 3,
             "width": 54,
             "height": 34,
             "rx": 17,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -556,7 +421,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -575,7 +440,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": true
     },
@@ -590,7 +455,7 @@
             "height": 17,
             "rx": 8.5,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -603,7 +468,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -622,7 +487,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": true,
       "inkScale": 1.6
@@ -638,7 +503,7 @@
             "height": 15.2,
             "rx": 7.6,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -651,7 +516,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -670,7 +535,7 @@
       "x": 50,
       "y": 20,
       "text": "SH",
-      "fill": "color.healthy",
+      "fill": "color.state.healthy",
       "surface": "dark",
       "flat": true,
       "inkScale": 1.6,
@@ -688,7 +553,7 @@
             "height": 29.2,
             "rx": 14.6,
             "fill": "#3DDC84",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 4.8,
             "stroke-linejoin": "round"
           },
@@ -701,7 +566,7 @@
           "attrs": {
             "x": 50,
             "y": 24.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "fill": "#FFFFFF",
             "font-size": 12,
             "font-weight": 700,
@@ -729,28 +594,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -763,8 +613,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -792,28 +642,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -826,8 +661,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -855,28 +690,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -889,8 +709,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -904,8 +724,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -934,28 +754,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -968,8 +773,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -983,8 +788,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1011,28 +816,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1045,8 +835,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1074,28 +864,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1108,8 +883,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1137,28 +912,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1171,8 +931,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1186,8 +946,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1216,28 +976,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1250,8 +995,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1265,8 +1010,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1299,7 +1044,7 @@
             "height": 46,
             "rx": 10,
             "fill": "none",
-            "stroke": "#5B6694",
+            "stroke": "#5C5852",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -1313,8 +1058,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -1348,7 +1093,7 @@
             "height": 46,
             "rx": 6,
             "fill": "none",
-            "stroke": "#5B6694",
+            "stroke": "#5C5852",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -1362,8 +1107,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -1390,43 +1135,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1439,8 +1154,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1468,43 +1183,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1517,8 +1202,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1546,43 +1231,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1595,8 +1250,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1610,8 +1265,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1640,43 +1295,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1689,8 +1314,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1704,8 +1329,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1732,43 +1357,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1781,8 +1376,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1810,43 +1405,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1859,8 +1424,8 @@
           "attrs": {
             "x": 22,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1888,43 +1453,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 10,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 10,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -1937,8 +1472,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -1952,8 +1487,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -1982,43 +1517,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 6,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 6,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2031,8 +1536,8 @@
           "attrs": {
             "x": 22,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2046,8 +1551,8 @@
           "attrs": {
             "x": 22,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -2080,7 +1585,7 @@
             "height": 46,
             "rx": 10,
             "fill": "none",
-            "stroke": "#8F9BD0",
+            "stroke": "#ADA79D",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -2094,8 +1599,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -2129,7 +1634,7 @@
             "height": 46,
             "rx": 6,
             "fill": "none",
-            "stroke": "#8F9BD0",
+            "stroke": "#ADA79D",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -2143,8 +1648,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -2171,28 +1676,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2205,8 +1695,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2234,28 +1724,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2268,8 +1743,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2283,8 +1758,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -2311,28 +1786,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2345,8 +1805,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2374,28 +1834,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2408,8 +1853,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2423,8 +1868,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -2457,7 +1902,7 @@
             "height": 46,
             "rx": 23,
             "fill": "none",
-            "stroke": "#5B6694",
+            "stroke": "#5C5852",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -2471,8 +1916,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -2499,43 +1944,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2548,8 +1963,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2577,43 +1992,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2626,8 +2011,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2641,8 +2026,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -2669,43 +2054,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2718,8 +2073,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2747,43 +2102,13 @@
         {
           "tag": "rect",
           "attrs": {
-            "x": 13.5,
-            "y": 13.5,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
-            "x": 10,
-            "y": 10,
-            "width": 200,
-            "height": 46,
-            "rx": 23,
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "rect",
-          "attrs": {
             "x": 10,
             "y": 10,
             "width": 200,
             "height": 46,
             "rx": 23,
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2796,8 +2121,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2811,8 +2136,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -2845,7 +2170,7 @@
             "height": 46,
             "rx": 23,
             "fill": "none",
-            "stroke": "#8F9BD0",
+            "stroke": "#ADA79D",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -2859,8 +2184,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -2884,23 +2209,12 @@
     },
     "tree": {
       "body": [
-        {
-          "tag": "polygon",
-          "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
         {
           "tag": "polygon",
           "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2913,8 +2227,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2942,20 +2256,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#FFFFFF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -2968,8 +2271,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -2983,8 +2286,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -3011,20 +2314,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3037,8 +2329,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3066,20 +2358,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#0A1033",
-            "stroke": "#0A1033",
-            "stroke-width": 3,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#121212",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3092,8 +2373,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3107,8 +2388,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -3137,7 +2418,7 @@
           "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "none",
-            "stroke": "#5B6694",
+            "stroke": "#5C5852",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -3151,8 +2432,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#5B6694",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#5C5852",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -3179,31 +2460,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
-            "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3216,8 +2475,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3245,31 +2504,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
-            "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#1C2D74",
-            "stroke": "#0A1033",
+            "fill": "#1D1C1A",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3282,8 +2519,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#EEF2FF",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#F1EEE8",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3297,8 +2534,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -3325,31 +2562,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
-            "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3362,8 +2577,8 @@
           "attrs": {
             "x": 33,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3391,31 +2606,9 @@
         {
           "tag": "polygon",
           "attrs": {
-            "points": "36.5,13.5 190.5,13.5 213.5,36.5 190.5,59.5 36.5,59.5 13.5,36.5",
-            "fill": "#4C5CB8",
-            "stroke": "#4C5CB8",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
-            "points": "33,10 187,10 210,33 187,56 33,56 10,33",
-            "fill": "#EEF2FF",
-            "stroke": "#EEF2FF",
-            "stroke-width": 5,
-            "stroke-linejoin": "round"
-          },
-          "children": []
-        },
-        {
-          "tag": "polygon",
-          "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "#8FB2FF",
-            "stroke": "#0A1033",
+            "stroke": "#ADA79D",
             "stroke-width": 3,
             "stroke-linejoin": "round"
           },
@@ -3428,8 +2621,8 @@
           "attrs": {
             "x": 33,
             "y": 30,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 13,
             "font-weight": 700,
             "text-anchor": "start"
@@ -3443,8 +2636,8 @@
           "attrs": {
             "x": 33,
             "y": 47,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#0A1033",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#121212",
             "font-size": 11,
             "font-weight": 400,
             "text-anchor": "start"
@@ -3473,7 +2666,7 @@
           "attrs": {
             "points": "33,10 187,10 210,33 187,56 33,56 10,33",
             "fill": "none",
-            "stroke": "#8F9BD0",
+            "stroke": "#ADA79D",
             "stroke-width": 1.5,
             "stroke-dasharray": "5 4",
             "stroke-linejoin": "round"
@@ -3487,8 +2680,8 @@
           "attrs": {
             "x": 110,
             "y": 37.5,
-            "font-family": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            "fill": "#8F9BD0",
+            "font-family": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "fill": "#ADA79D",
             "font-size": 13,
             "font-weight": 400,
             "text-anchor": "middle"
@@ -3522,7 +2715,7 @@
                 "width": 32,
                 "height": 32,
                 "rx": 7,
-                "fill": "#0A1033",
+                "fill": "#121212",
                 "stroke": "none"
               },
               "children": []
@@ -3532,7 +2725,7 @@
               "attrs": {
                 "d": "M7 23 L14 16 L25 16",
                 "fill": "none",
-                "stroke": "#1E6FEB",
+                "stroke": "#E04E17",
                 "stroke-width": 4.5,
                 "stroke-linecap": "round",
                 "stroke-linejoin": "round"
@@ -3546,7 +2739,7 @@
                 "cy": 16,
                 "r": 4,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 2
               },
               "children": []
@@ -3558,7 +2751,7 @@
                 "cy": 16,
                 "r": 2.6,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 1.6
               },
               "children": []
@@ -3592,7 +2785,7 @@
                 "width": 32,
                 "height": 32,
                 "rx": 7,
-                "fill": "#0A1033",
+                "fill": "#121212",
                 "stroke": "none"
               },
               "children": []
@@ -3602,7 +2795,7 @@
               "attrs": {
                 "d": "M7 23 L14 16 L25 16",
                 "fill": "none",
-                "stroke": "#1E6FEB",
+                "stroke": "#E04E17",
                 "stroke-width": 4.5,
                 "stroke-linecap": "round",
                 "stroke-linejoin": "round"
@@ -3616,7 +2809,7 @@
                 "cy": 16,
                 "r": 4,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 2
               },
               "children": []
@@ -3628,7 +2821,7 @@
                 "cy": 16,
                 "r": 2.6,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 1.6
               },
               "children": []
@@ -3645,7 +2838,7 @@
       "x": 0,
       "y": 0,
       "size": 120,
-      "line": "color.healthy"
+      "line": "color.state.healthy"
     },
     "tree": {
       "body": [
@@ -3663,7 +2856,7 @@
                 "width": 32,
                 "height": 32,
                 "rx": 7,
-                "fill": "#0A1033",
+                "fill": "#121212",
                 "stroke": "none"
               },
               "children": []
@@ -3687,7 +2880,7 @@
                 "cy": 16,
                 "r": 4,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 2
               },
               "children": []
@@ -3699,7 +2892,7 @@
                 "cy": 16,
                 "r": 2.6,
                 "fill": "#FFFFFF",
-                "stroke": "#0A1033",
+                "stroke": "#121212",
                 "stroke-width": 1.6
               },
               "children": []
