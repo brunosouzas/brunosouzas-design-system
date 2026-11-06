@@ -2,7 +2,7 @@
   "id": "sdd",
   "title": "A one-line request becomes a reviewed spec before any code",
   "description": "Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.",
-  "background": "blush",
+  "background": "trackAi",
   "rings": {
     "cx": 400,
     "cy": 220,

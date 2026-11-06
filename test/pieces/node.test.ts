@@ -71,7 +71,7 @@ describe("No hard offset shadow", () => {
       // Siblings at every level of the piece's own body.
       const groups = [{ children: drawn.body }, ...nodesOf(drawn.body)];
       for (const group of groups) {
-        const children = group.children.filter((child): child is SvgNode => typeof child !== "string");
+        const children = (group.children as readonly (SvgNode | string)[]).filter((child): child is SvgNode => typeof child !== "string");
         children.slice(0, -1).forEach((node, i) => expect(isShadowOf(node, children[i + 1]), `${name}: ${JSON.stringify(node.attrs)}`).toBe(false));
       }
     }

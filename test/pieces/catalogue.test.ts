@@ -116,7 +116,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(63);
+    expect(P.PIECE_NAMES).toHaveLength(62);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop draws words only (change body-diagram-pieces).
@@ -133,6 +133,16 @@ describe("Piece catalogue", () => {
         }
       });
     }
+  });
+
+  // Change identity-v2-type-pieces-cleanup (card 301), task 5.1: the seven-role cast is removed (ADR 0007 amendment).
+  test("Seven-role cast gone", async () => {
+    const root: Record<string, unknown> = await import("../../src/pieces/index");
+    for (const name of ["mascot", "MASCOTS", "MASCOT_ACTIONS", "MASCOT_FACES"]) expect(name in root, name).toBe(false);
+    expect(P.PIECE_NAMES).not.toContain("mascot");
+    expect(typeof root.emote).toBe("function");
+    expect(root.EMOTE_KINDS).toEqual(["idea", "doubt", "problem", "worked", "refused", "pressure", "liked", "waiting"]);
+    expect(P.PIECE_NAMES).toContain("emote");
   });
 });
 
@@ -413,3 +423,27 @@ describe("Sheet marks in the v2 grammar", () => {
   });
 });
 
+
+// Change identity-v2-type-pieces-cleanup (card 301), task 4.1: the robot with the cast's idle eyes.
+describe("Robot in the v2 grammar", () => {
+  test("V2 robot", () => {
+    const body = P.robot({ cx: 400, top: 140 }).body;
+    expect(new Set(fills(body))).toEqual(new Set(["#FFFFFF", "#121212", "#FFC98A", "#E04E17", "#D7D1C5"]));
+    const visor = body.find((node) => node.tag === "rect" && node.attrs.fill === "#121212")!;
+    const eyes = body.filter((node) => node.attrs.fill === "#FFC98A");
+    expect(eyes).toHaveLength(2);
+    for (const eye of eyes) {
+      expect(Number(eye.attrs.x)).toBeGreaterThanOrEqual(Number(visor.attrs.x));
+      expect(Number(eye.attrs.x) + Number(eye.attrs.width)).toBeLessThanOrEqual(Number(visor.attrs.x) + Number(visor.attrs.width));
+      expect(Number(eye.attrs.y)).toBeGreaterThanOrEqual(Number(visor.attrs.y));
+      expect(Number(eye.attrs.y) + Number(eye.attrs.height)).toBeLessThanOrEqual(Number(visor.attrs.y) + Number(visor.attrs.height));
+    }
+    const grille = nodesOf(body).filter((node) => node.tag === "rect" && (node.attrs.fill === "#D7D1C5" || nodesOf(body).some((g) => g.tag === "g" && g.attrs.fill === "#D7D1C5" && g.children.includes(node))));
+    expect(grille).toHaveLength(1);
+    for (const old of ["#3DDC84", "#2BB673", "#FF8A3D"]) expect(fills(body)).not.toContain(old);
+  });
+
+  test("Robot takes no colour", () => {
+    expect(() => P.robot({ cx: 0, top: 0, fill: "color.state.healthy" } as never)).toThrow(/^robot: fill: unknown parameter/);
+  });
+});

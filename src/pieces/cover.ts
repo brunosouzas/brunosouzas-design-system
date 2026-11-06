@@ -363,7 +363,8 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
   }
 
   if (format === "icon") {
-    for (const key of ["background", "rings", "custom", "customAt", "height"]) if (spec[key] !== undefined) out.push({ path: key, message: NOT_FOR_ICONS });
+    // signature too since 0.7.0 (0.6.x accepted it and drew nothing).
+    for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) if (spec[key] !== undefined) out.push({ path: key, message: NOT_FOR_ICONS });
     for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined) blocked.push(key);
   } else if (format === "favicon" || format === "avatar") {
     for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) {

@@ -111,7 +111,7 @@ describe("Drawing overflow", () => {
   });
 
   test("Large but finite", () => {
-    const svg = toSvg(P.stationMarker({ cx: 1e15, cy: 0 }).body[1] as SvgNode);
+    const svg = toSvg(P.stationMarker({ cx: 1e15, cy: 0 }).body[0] as SvgNode);
     expect(svg).toContain('cx="1000000000000000"');
   });
 });

@@ -3,7 +3,7 @@
   "title": "Integration, delivery and AI between systems",
   "description": "Illustration. On the left, a browser window labelled APIs and a stack of three server units send blue pipes into a light blue Mule flow labelled Integration, with a Choice and a For Each component. From the flow a pipe runs right through two passing checks labelled CI/CD into a white cloud. A green robot stands above the pipe on the right.",
   "format": "banner",
-  "background": "navy",
+  "background": "trackIntegration",
   "rings": {
     "cx": 600,
     "cy": 225,

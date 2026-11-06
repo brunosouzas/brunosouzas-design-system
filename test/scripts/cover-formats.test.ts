@@ -34,7 +34,7 @@ const workspace = () => {
   return { root, out, err, run, write };
 };
 
-const cover = (extra: Record<string, unknown> = {}) => ({ id: "t", title: "Title", description: "Description", background: "peach", rings: { cx: 400, cy: 215 }, pieces: [] as unknown[], ...extra });
+const cover = (extra: Record<string, unknown> = {}) => ({ id: "t", title: "Title", description: "Description", background: "trackAi", rings: { cx: 400, cy: 215 }, pieces: [] as unknown[], ...extra });
 const diagram = (extra: Record<string, unknown> = {}) => ({ id: "d", title: "Title", description: "Description", format: "diagram", height: 322, rings: { cx: 280, cy: 161 }, pieces: [] as unknown[], ...extra });
 const icon = (piece: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({ id: "i", format: "icon", pieces: [piece], ...extra });
 const tables = (en: Record<string, unknown>, pt: Record<string, unknown> = en) => ({ en, pt });
@@ -105,7 +105,8 @@ describe("Diagram output", () => {
     const svg = await svgOf(diagram({ pieces: [{ piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.state.healthy" }] }));
     expect(rootOf(svg)).toContain('width="800" height="460" viewBox="0 0 560 322"');
     expect(svg).toContain('<rect width="560" height="322" rx="9.8"/>');
-    expect(svg).toContain('<rect width="560" height="322" rx="9.8" fill="#EEF2FF"/>');
+    expect(svg).toContain('<rect width="560" height="322" rx="9.8" fill="#F6F3EC"/>');
+    expect(svg).toContain('<g fill="none" stroke="#EDE8DE" stroke-width="1.4">');
     const clipped = groupOf(svg, '<g clip-path="url(#d-frame)">\n    <g stroke=');
     expect(clipped).toContain('<rect x="70" y="56" width="130"');
   });
@@ -131,7 +132,7 @@ describe("Diagram keys", () => {
   });
 
   test("Background in a diagram", async () => {
-    expect(await problems(diagram({ background: "navy" }))).toEqual(["background: a diagram is drawn on color.panel; background is for covers and banners"]);
+    expect(await problems(diagram({ background: "trackIntegration" }))).toEqual(["background: a diagram is drawn on color.panel; background is for covers and banners"]);
   });
 
   test("Height on a cover", async () => {
@@ -144,7 +145,7 @@ describe("Diagram outline and labels", () => {
     const svg = await svgOf(diagram({ pieces: [{ piece: "pill", x: 100, y: 100, text: "OPEN" }] }));
     const outlined = groupOf(svg, '<g stroke="#121212" stroke-width="3" stroke-linejoin="round">');
     expect(outlined).toContain("<rect ");
-    const labels = groupOf(svg, '<g font-size="13" font-weight="800" fill="#121212" text-anchor="middle">');
+    const labels = groupOf(svg, '<g font-size="13" font-weight="700" fill="#121212" text-anchor="middle">');
     expect(labels).toContain(">OPEN</text>");
   });
 
@@ -220,8 +221,19 @@ describe("Icon keys", () => {
     expect(ws.err[0]).toBe("rings: not used by the icon format");
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
     for (const key of ["background", "custom", "customAt", "height"]) {
-      const value = key === "custom" ? { tag: "rect" } : key === "background" ? "navy" : 1;
+      const value = key === "custom" ? { tag: "rect" } : key === "background" ? "trackIntegration" : 1;
       expect(await problems(icon({ piece: "eipIcon", name: "splitter" }, { [key]: value }))).toEqual([`${key}: not used by the icon format`]);
+    }
+  });
+
+  // Change identity-v2-type-pieces-cleanup, task 5.4.
+  test("Signature in an icon", async () => {
+    for (const signature of [true, false]) {
+      const ws = workspace();
+      ws.write("spec.json", icon({ piece: "eipIcon", name: "splitter" }, { signature }));
+      expect(await ws.run("spec.json", "--out", "i.svg")).toBe(1);
+      expect(ws.err[0]).toBe("signature: not used by the icon format");
+      expect(readdirSync(ws.root)).toEqual(["spec.json"]);
     }
   });
 

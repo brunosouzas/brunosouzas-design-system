@@ -146,7 +146,7 @@ describe("Installed package", () => {
       'import { toReact } from "@brunosouzas/design-system/react";',
       'import { tokens as t } from "@brunosouzas/design-system/tokens";',
       'const ink: "#121212" = tokens.color.ink;',
-      'const spec: Pick<CoverSpec, "background"> = { background: "blush" };',
+      'const spec: Pick<CoverSpec, "background"> = { background: "trackIntegration" };',
       'export const out = [toSvg(pill({ x: 1, y: 1, text: "a" }).body[0]), toReact, t.cover.width, ink, spec];',
     ].join("\n"));
     writeFileSync(join(consumerDir, "tsconfig.json"), JSON.stringify({ compilerOptions: { module: "nodenext", moduleResolution: "nodenext", strict: true, noEmit: true, skipLibCheck: false, types: [] }, files: ["use.ts"] }));

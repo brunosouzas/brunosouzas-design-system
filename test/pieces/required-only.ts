@@ -57,7 +57,6 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   edgeLabel: { x: 0, y: 0, lines: ["a"] },
   stateStart: { cx: 0, cy: 0 },
-  mascot: { who: "dev", x: 0, y: 0 },
   emote: { kind: "idea", x: 0, y: 0 },
   mira: { x: 0, y: 0 },
   visor: { x: 0, y: 0 },

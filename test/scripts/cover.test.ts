@@ -203,15 +203,16 @@ describe("Cover spec format", () => {
     expect(result.svg).toContain(`stroke="${tokens.coverBackground.trackIntegration.ring}"`);
   });
 
-  test("Old literal backgrounds still accepted", async () => {
-    // The proof covers were built with literal pairs before 0.6.0 and must keep their bytes.
-    for (const spec of PROOF_COVERS) {
-      const text = readFileSync(join(FIXTURES, `${spec}.json`), "utf8");
-      expect(JSON.parse(text).background).not.toMatch(/^track/);
-      const result = await buildCover(text, spec);
-      expect(result.ok).toBe(true);
-      if (result.ok) expect(result.svg).toBe(readFileSync(join(FIXTURES, `${spec}.svg`), "utf8"));
-    }
+  // Change identity-v2-type-pieces-cleanup: the 21 pre-0.6.0 backgrounds are removed; only the four track and neutral pairs remain.
+  test("Removed background refused", async () => {
+    const ws = workspace();
+    ws.write("cover.json", { ...minimal(), background: "peach" });
+    expect(await ws.run("cover.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err[0]).toBe('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "peach"');
+    ws.write("banner.json", banner({ background: "navy" }));
+    expect(await ws.run("banner.json", "--out", "banner.svg")).toBe(1);
+    expect(ws.err).toContain('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "navy"');
+    expect(readdirSync(ws.root).sort()).toEqual(["banner.json", "cover.json"]);
   });
 
   test("Neutral background accepted", async () => {
@@ -225,9 +226,9 @@ describe("Cover spec format", () => {
   test("Unknown background and piece", async () => {
     const lines = await problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
-    expect(lines[0]).toMatch(/^background: expected one of blush, cobalt, .*, wine, found "pink"$/);
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, mascot, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon\)$/);
-    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(63);
+    expect(lines[0]).toBe('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "pink"');
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(62);
   });
 
   test("Unsafe id", async () => {
@@ -361,8 +362,8 @@ describe("Cover output", () => {
     const result = await buildCover(JSON.stringify({ ...minimal(), rings: { cx: 400, cy: 215, radius: 100 } }), "s");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.svg).toContain('<rect width="800" height="420" fill="#F4D8BC"/>');
-    expect(result.svg).toContain('<g fill="none" stroke="#EAC7A3" stroke-width="2">');
+    expect(result.svg).toContain('<rect width="800" height="420" fill="#F4E4D8"/>');
+    expect(result.svg).toContain('<g fill="none" stroke="#D7C9BE" stroke-width="2">');
     const radii = [...result.svg.matchAll(/<circle cx="400" cy="215" r="(\d+)"\/>/g)].map((m) => Number(m[1]));
     expect(radii).toEqual(Array.from({ length: 14 }, (_, i) => 100 + 28 * i));
   });
@@ -415,14 +416,14 @@ describe("Positions in a cover spec", () => {
 });
 
 // Change banner-format (AB#156): cover-cli "Cover spec format", "Cover output", "Banner output", "Banner rings reach the corners".
-const banner = (extra: Record<string, unknown> = {}) => ({ ...minimal(), format: "banner", background: "navy", rings: { cx: 600, cy: 225, radius: 60 }, ...extra });
+const banner = (extra: Record<string, unknown> = {}) => ({ ...minimal(), format: "banner", background: "trackIntegration", rings: { cx: 600, cy: 225, radius: 60 }, ...extra });
 const svgOf = async (spec: unknown): Promise<string> => {
   const result = await buildCover(JSON.stringify(spec), "s");
   expect(result.ok).toBe(true);
   return result.ok ? result.svg : "";
 };
 const ringRadii = (svg: string): number[] => {
-  const group = /<g fill="none" stroke="#1C2D74" stroke-width="2">([\s\S]*?)<\/g>/.exec(svg)![1];
+  const group = /<g fill="none" stroke="#D7C9BE" stroke-width="2">([\s\S]*?)<\/g>/.exec(svg)![1];
   return [...group.matchAll(/ r="([\d.]+)"/g)].map((m) => Number(m[1]));
 };
 
@@ -453,10 +454,10 @@ describe("Banner format", () => {
   });
 
   test("Banner frame", async () => {
-    const svg = await svgOf(banner({ pieces: [{ piece: "pill", x: 300, y: 100, text: "APIs" }] }));
+    const svg = await svgOf(banner({ background: "trackDelivery", pieces: [{ piece: "pill", x: 300, y: 100, text: "APIs" }] }));
     expect(svg).toMatch(/^<svg [^>]*width="1200" height="420" viewBox="0 0 1200 420"/);
     expect(svg).toContain('<clipPath id="t-frame">\n      <rect width="1200" height="420" rx="20"/>');
-    expect(svg).toContain('<rect width="1200" height="420" rx="20" fill="#14215A"/>');
+    expect(svg).toContain('<rect width="1200" height="420" rx="20" fill="#DFE8E1"/>');
     const clipped = svg.lastIndexOf('<g clip-path="url(#t-frame)">');
     expect(clipped).toBeGreaterThan(svg.indexOf('<g clip-path="url(#t-frame)">'));
     expect(svg.indexOf('height="36" rx="18"')).toBeGreaterThan(clipped);
@@ -523,36 +524,30 @@ describe("No current colour in a spec", () => {
   });
 });
 
-// Spec cover-cli, change cast-and-emotes (task 3.1).
-describe("Cast on a cover", () => {
-  test("Mascot and emote drawn", async () => {
+// Spec cover-cli, change identity-v2-type-pieces-cleanup (task 4.5): only the emote stays of the cast pieces.
+describe("Emote on a cover", () => {
+  test("Emote drawn", async () => {
     const ws = workspace();
-    ws.write("spec.json", {
-      ...minimal(),
-      pieces: [
-        { piece: "mascot", who: "architect", x: 400, y: 380, action: "rest" },
-        { piece: "emote", kind: "idea", x: 520, y: 160 },
-      ],
-    });
-    expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(0);
-    const svg = readFileSync(join(ws.root, "cast.svg"), "utf8");
+    ws.write("spec.json", { ...minimal(), pieces: [{ piece: "emote", kind: "idea", x: 520, y: 160 }] });
+    expect(await ws.run("spec.json", "--out", "emote.svg")).toBe(0);
+    const svg = readFileSync(join(ws.root, "emote.svg"), "utf8");
     const outlined = svg.slice(svg.indexOf(`<g stroke="${tokens.color.ink}" stroke-width="4" stroke-linejoin="round">`));
     expect(outlined.length).toBeLessThan(svg.length);
-    expect(outlined).toContain('<g data-mascot="architect" transform="translate(400 380) scale(1) translate(-105 -216)" stroke="none">');
     expect(outlined).toContain('<g data-emote="idea" stroke="none">');
   });
 
-  test("Head tilt on a dev in a spec", async () => {
+  test("Mascot refused", async () => {
     const ws = workspace();
     ws.write("spec.json", {
       ...minimal(),
       pieces: [
-        { piece: "mascot", who: "dev", x: 0, y: 0, headTilt: 5 },
+        { piece: "mascot", who: "dev", x: 0, y: 0 },
         { piece: "emote", kind: "zzz", x: 0, y: 0 },
       ],
     });
     expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(1);
-    expect(ws.err[0]).toBe("pieces[0].headTilt: applies only to the agent");
+    expect(ws.err[0]).toMatch(/^pieces\[0\]\.piece: unknown piece "mascot"/);
+    expect(ws.err[0].split(", ")).toHaveLength(62);
     expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
@@ -587,6 +582,15 @@ describe("Signature lockup", () => {
   test("Signature rejected on a diagram", async () => {
     const diagram = { id: "d", title: "T", description: "D", format: "diagram", height: 100, rings: { cx: 0, cy: 0 }, pieces: [], signature: true };
     expect(await problems(diagram)).toEqual(["signature: not used by the diagram format"]);
+  });
+
+  test("Signature refused by an icon", async () => {
+    const icon = { id: "i", title: "Sun", description: "D", format: "icon", pieces: [{ piece: "uiIcon", name: "sun" }], signature: true };
+    expect(await problems(icon)).toEqual(["signature: not used by the icon format"]);
+    const ws = workspace();
+    ws.write("icon.json", icon);
+    expect(await ws.run("icon.json", "--out", "icon.svg")).toBe(1);
+    expect(readdirSync(ws.root)).toEqual(["icon.json"]);
   });
 
   test("Signature must be a boolean", async () => {
@@ -627,7 +631,7 @@ describe("New icon formats", () => {
     ws.write("a.json", { ...avatar(), background: "trackIntegration" });
     expect(await ws.run("a.json", "--out", "a.svg")).toBe(1);
     expect(readdirSync(ws.root)).toEqual(["a.json"]);
-    expect(await problems({ ...avatar(), background: "peach" })).toEqual(["background: not used by the avatar format"]);
+    expect(await problems({ ...avatar(), background: "trackAi" })).toEqual(["background: not used by the avatar format"]);
     expect(await problems({ ...avatar(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the avatar format"]);
   });
 });
