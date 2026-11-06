@@ -110,7 +110,12 @@ describe("Site palette tokens", () => {
 // The brand role each site colour stands for (design.md Decision 1, change site-palette-and-category-badges).
 const SITE_ROLES = { primary: "text", body: "bg", border: "border", light: "cardBg", dark: "text", text: "text", textDark: "text", textLight: "textMuted", link: "accentText" } as const;
 type SourceTree = Record<string, Record<string, Record<string, { $value?: unknown }>>>;
-const valueAt = (source: SourceTree, group: string, theme: string, name: string): string => String(source[group]?.[theme]?.[name]?.$value ?? "").toUpperCase();
+/** A colour of the source; a missing or non-hex value throws, so no check skips a pair silently. */
+const valueAt = (source: SourceTree, group: string, theme: string, name: string): string => {
+  const value = source[group]?.[theme]?.[name]?.$value;
+  if (typeof value !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(value)) throw new Error(`${group}.${theme}.${name}: expected a #RRGGBB colour, found ${JSON.stringify(value)}`);
+  return value.toUpperCase();
+};
 const repoSource = (): SourceTree => JSON.parse(readFileSync(new URL("../../tokens/source.json", import.meta.url), "utf8")) as SourceTree;
 
 /** Every site colour that differs from its brand role, as `<site path> ≠ <brand path>` (requirement "Site colours are brand roles"). */
@@ -148,6 +153,13 @@ describe("Site colours are brand roles", () => {
   test("Every site colour matches its role", () => {
     expect(Object.keys(SITE_ROLES)).toHaveLength(9);
     expect(siteRoleMismatches(repoSource())).toEqual([]);
+  });
+
+  test("A missing site colour is not skipped", () => {
+    const source = repoSource();
+    delete (source.site.light as Record<string, unknown>).link;
+    expect(() => siteRoleMismatches(source)).toThrow(/site\.light\.link: expected a #RRGGBB colour/);
+    expect(() => siteContrastBelow(source, 4.5)).toThrow(/site\.light\.link: expected a #RRGGBB colour/);
   });
 
   test("A site colour that drifts from its role", () => {

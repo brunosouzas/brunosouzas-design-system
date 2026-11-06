@@ -207,6 +207,8 @@ describe("Icon output", () => {
     const svg = await svgOf(icon({ piece: "categoryIcon", category: "integration", scale: 4 }, { title: "Integration", description: "Integration category." }));
     expect(rootOf(svg)).toContain('width="168" height="168" viewBox="0 0 168 168"');
     expect(svg).toContain('<g data-piece="category-icon-integration" transform="translate(0 0) scale(4)">');
+    expect(svg).toContain('<circle cx="21" cy="21" r="19.5" fill="#F7C6A1" stroke="#E3AB84" stroke-width="1"/>');
+    expect(svg).toContain('<g data-piece="brand-icon-pointToPointChannel" transform="translate(9 9) scale(0.5)" stroke="none">');
     expect(svg).not.toContain("<style");
   });
 
@@ -258,7 +260,7 @@ describe("Icon keys", () => {
     const ws = workspace();
     ws.write("spec.json", icon({ piece: "categoryIcon", category: "delivery" }, { title: "Delivery" }));
     expect(await ws.run("spec.json", "--out", "i.svg")).toBe(1);
-    expect(ws.err[0]).toBe("description: expected a non-empty string");
+    expect(ws.err).toEqual(["description: expected a non-empty string", "cover: 1 problem(s) in spec.json; no file written"]);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
 });
