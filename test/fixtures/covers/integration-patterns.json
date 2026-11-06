@@ -1,7 +1,7 @@
 {
   "id": "ipc",
   "title": "Integration patterns in Mule: you already use them, you just don't know their names",
-  "description": "Illustration. On the left, a white book marked EIP with six pattern icons on its cover. On the right, a blue Mule flow with three components: Scatter-Gather, Choice and For Each. Each component has a yellow name tag hanging from it on a string, and each tag shows the book's icon for the pattern the component implements: Scatter-Gather, Content-Based Router and Splitter. The components already carry the book's patterns; the tags give them their names.",
+  "description": "Illustration on a peach background with soft rings. On the left, a white book with a black spine, marked EIP, with six pattern icons on its cover. On the right, a cream Mule flow labelled Mule with three components: Scatter-Gather, Choice and For Each. Each component has a white name tag hanging from it on a string, and each tag shows the book's icon for the pattern the component implements: Scatter-Gather, Content-Based Router and Splitter. The components already carry the book's patterns; the tags give them their names.",
   "background": "trackIntegration",
   "rings": {
     "cx": 480,
