@@ -23,7 +23,7 @@
 `embedFonts` SHALL be exported only from the subpath `@brunosouzas/design-system/fonts` (`package.json` `exports["./fonts"]`, module `src/fonts/embed.ts`), never from the package root. The root entry (`src/pieces/index.ts`) imports nothing from `src/fonts/`, reads no file and loads no WebAssembly, so a browser bundle can import it; "Pure pieces" holds unchanged. The wasm module and the font files load only when a call needs them ("Fonts loaded on first need"), never at import.
 
 #### Scenario: Root entry stays pure
-- **WHEN** the test scans the imports of every module under `src/pieces/` and reads the root entry's exports
+- **WHEN** the test scans the imports (static, side-effect, dynamic `import()` and `require()`) of every module under `src/pieces/` and of every module reachable by relative imports from the root entry (the source of `package.json` `exports["."]`), and reads the root entry's exports
 - **THEN** no module imports from `src/fonts/` or a `node:` module, and the root exports no `embedFonts`
 
 #### Scenario: Nothing loads at import
