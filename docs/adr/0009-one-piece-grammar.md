@@ -2,6 +2,7 @@
 
 - Status: accepted
 - Date: 2026-11-06
+- Amended on 2026-11-06 by the category badge (see the last section)
 - Supersedes: the outline and shadow values of ADR 0003 and ADR 0006 ("keep their exact values", "nothing published changes appearance"), and the dark-surface rim of cards 167 and 187
 
 ## Context
@@ -32,3 +33,8 @@ The six state meanings of ADR 0003 and their hex values are unchanged, now only 
 - A cover reads as one family: the cast, the bank objects (now with the cast's idle eyes, ADR 0007 as amended) and the cover pieces share one outline, one accent and white bodies.
 - stackledger's map turns to the v2 palette when it adopts 0.7.0 and passes its own line colours (AB#303).
 - The palette check makes the grammar a test, not a review comment.
+
+## Amended, 2026-11-06: the category badge's disc is a background (card 302)
+
+The site's category badge (`categoryIcon` since 0.8.0) draws its glyph on a disc in the default tone of the category's track, ringed in that tone's cover ring, as the owner chose from renders (AB#302, Q7). The disc is a background, a cover's own tone and ring, not a body: the white-body and ink-outline rules apply to the glyph on it, which follows them. The palette check admits the four default track rings (`coverBackground.trackIntegration.ring`, `trackDelivery.ring`, `trackAi.ring`, `trackPersonal.ring`); the fills were already `brand.light.track*` values. No other cover tone enters the allowlist.
+

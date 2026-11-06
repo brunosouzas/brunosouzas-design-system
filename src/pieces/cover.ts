@@ -11,6 +11,7 @@
 import { tokens } from "../../tokens/generated/tokens.ts";
 import { PIECE_NAMES, PIECES, rings, type PieceName } from "./library.ts";
 import { EIP_ICON_HEIGHT, EIP_ICON_WIDTH, EIP_ICONS } from "./eip-icons.ts";
+import { CATEGORY_ICON_SIZE } from "./category-icon.ts";
 import { LINK_ICON_SIZE } from "./link-icons.ts";
 import { mira } from "./brand-cast.ts";
 import { symbol } from "./symbol.ts";
@@ -276,11 +277,15 @@ const forLanguage = (spec: CoverSpec, lang: string | undefined): CoverSpec => {
 // ---------- validation ----------
 
 /** Icon pieces and the box each draws in (spec cover-cli, "Icon output"). */
-const ICON_PIECES = ["eipIcon", "uiIcon", "linkIcon"] as const;
+const ICON_PIECES = ["eipIcon", "uiIcon", "linkIcon", "categoryIcon"] as const;
 const iconBox = (entry: CoverPiece): [number, number] => {
   if (entry.piece === "eipIcon") {
     const scale = (entry.scale as number | undefined) ?? 1;
     return [EIP_ICON_WIDTH * scale, EIP_ICON_HEIGHT * scale];
+  }
+  if (entry.piece === "categoryIcon") {
+    const side = CATEGORY_ICON_SIZE * ((entry.scale as number | undefined) ?? 1);
+    return [side, side];
   }
   const side = (entry.size as number | undefined) ?? (entry.piece === "uiIcon" ? UI_ICON_SIZE : LINK_ICON_SIZE);
   return [side, side];
@@ -413,7 +418,7 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
   } else if (format === "icon") {
     const entry = pieces[0];
     if (pieces.length !== 1 || !isPlainObject(entry) || !(ICON_PIECES as readonly unknown[]).includes(entry.piece)) {
-      out.push({ path: "pieces", message: "an icon spec holds exactly one piece: eipIcon, uiIcon or linkIcon" });
+      out.push({ path: "pieces", message: "an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon" });
       blocked.push("pieces");
     } else {
       const { piece, ...params } = entry;

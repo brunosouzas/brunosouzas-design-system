@@ -1,7 +1,7 @@
 # ADR 0006: Three-layer tokens and the brand colour system
 
 - Status: accepted
-- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed), and on 2026-11-06 by the owner's track families (see the last section)
+- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed), on 2026-11-06 by the owner's track families, and on 2026-11-06 by the site palette on the brand roles (see the last sections)
 - Date: 2026-11-05
 - Supersedes: ADR 0003 (colour meaning)
 
@@ -84,3 +84,19 @@ After seeing the 0.7.0 renders, the owner found that the pale track tints of the
 - `color.ink` is at least 11.9:1 on every fill and `surface.light.muted` at least 4.5:1 (lowest on `trackAi`); the full table is in the change `identity-v2-type-pieces-cleanup`, `design.md` Decision 6.
 - Body diagrams stay on `surface.light.background` (the cream page); the two approved Remotion scenes do not change; `illustration.tape` keeps `#F4E4D8` and no longer equals a track role.
 - Which article takes which tone is the `illustration` skill's rule, not the package's.
+
+## Amended, 2026-11-06: the site palette on the brand roles (card 302)
+
+`site.light.*` and `site.dark.*` held the palette measured from brunosouzas.com's Astroplate theme before the redesign, so the site could not follow the brand. They become the site's component layer over the semantic roles above: the names stay (the site's theme and stackledger read `--ds-site-*`), and each value is the brand role it stands for, written as a literal and checked equal by a test, as the state duplicates were.
+
+| `site.<theme>.` | Brand role |
+|---|---|
+| `primary`, `dark`, `text`, `textDark` | `text` |
+| `body` | `bg` |
+| `light` | `cardBg` |
+| `border` | `border` |
+| `textLight` | `textMuted` |
+| `link` (new) | `accentText` |
+
+`site.font.mono` (Source Code Pro) joins the site's fonts. The owner approved the mapping from renders of the site (AB#302, Q1). Text, muted text and links reach at least 5.19:1 on the page and the card backgrounds in both themes; the token test checks a 4.5:1 floor.
+

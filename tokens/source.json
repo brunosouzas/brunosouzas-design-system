@@ -615,69 +615,94 @@
       "primary": {
         "$value": "#121212",
         "$type": "color",
-        "$description": "Page palette of brunosouzas.com (src/styles/generated-theme.css)."
+        "$description": "Page palette of brunosouzas.com: each site colour is the brand role of ADR 0006 it stands for (site-palette-and-category-badges, design.md Decision 1)."
       },
       "body": {
-        "$value": "#FFFFFF",
-        "$type": "color"
+        "$value": "#F6F3EC",
+        "$type": "color",
+        "$description": "brand.light.bg"
       },
       "border": {
-        "$value": "#EAEAEA",
-        "$type": "color"
+        "$value": "#D7D1C5",
+        "$type": "color",
+        "$description": "brand.light.border"
       },
       "light": {
-        "$value": "#F6F6F6",
-        "$type": "color"
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "brand.light.cardBg"
       },
       "dark": {
-        "$value": "#040404",
-        "$type": "color"
+        "$value": "#121212",
+        "$type": "color",
+        "$description": "brand.light.text"
       },
       "text": {
-        "$value": "#444444",
-        "$type": "color"
+        "$value": "#121212",
+        "$type": "color",
+        "$description": "brand.light.text"
       },
       "textDark": {
-        "$value": "#040404",
-        "$type": "color"
+        "$value": "#121212",
+        "$type": "color",
+        "$description": "brand.light.text"
       },
       "textLight": {
-        "$value": "#717171",
-        "$type": "color"
+        "$value": "#5C5852",
+        "$type": "color",
+        "$description": "brand.light.textMuted"
+      },
+      "link": {
+        "$value": "#B83A0C",
+        "$type": "color",
+        "$description": "brand.light.accentText"
       }
     },
     "dark": {
       "primary": {
-        "$value": "#FFFFFF",
-        "$type": "color"
+        "$value": "#F1EEE8",
+        "$type": "color",
+        "$description": "brand.dark.text"
       },
       "body": {
-        "$value": "#1C1C1C",
-        "$type": "color"
+        "$value": "#121110",
+        "$type": "color",
+        "$description": "brand.dark.bg"
       },
       "border": {
-        "$value": "#3E3E3E",
-        "$type": "color"
+        "$value": "#3B3834",
+        "$type": "color",
+        "$description": "brand.dark.border"
       },
       "light": {
-        "$value": "#222222",
-        "$type": "color"
+        "$value": "#1D1C1A",
+        "$type": "color",
+        "$description": "brand.dark.cardBg"
       },
       "dark": {
-        "$value": "#FFFFFF",
-        "$type": "color"
+        "$value": "#F1EEE8",
+        "$type": "color",
+        "$description": "brand.dark.text"
       },
       "text": {
-        "$value": "#B4AFB6",
-        "$type": "color"
+        "$value": "#F1EEE8",
+        "$type": "color",
+        "$description": "brand.dark.text"
       },
       "textDark": {
-        "$value": "#FFFFFF",
-        "$type": "color"
+        "$value": "#F1EEE8",
+        "$type": "color",
+        "$description": "brand.dark.text"
       },
       "textLight": {
-        "$value": "#B4AFB6",
-        "$type": "color"
+        "$value": "#ADA79D",
+        "$type": "color",
+        "$description": "brand.dark.textMuted"
+      },
+      "link": {
+        "$value": "#FF7A45",
+        "$type": "color",
+        "$description": "brand.dark.accentText"
       }
     },
     "font": {
@@ -687,6 +712,10 @@
       },
       "secondary": {
         "$value": "'Source Serif 4', serif",
+        "$type": "fontFamily"
+      },
+      "mono": {
+        "$value": "'Source Code Pro', monospace",
         "$type": "fontFamily"
       }
     },

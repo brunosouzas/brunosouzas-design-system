@@ -91,14 +91,92 @@ describe("Map tokens", () => {
 describe("Site palette tokens", () => {
   test("Site palette entry missing", () => {
     expect(problemsOf(sourceWith(remove("site.dark.textLight")))).toEqual(["site.dark.textLight: missing required token (type color)"]);
+    expect(problemsOf(sourceWith(remove("site.light.link")))).toEqual(["site.light.link: missing required token (type color)"]);
     expect(problemsOf(sourceWith(set("site.dark.accent", token("#9DA8FF", "color"))))).toEqual([expect.stringMatching(/^site\.dark\.accent: unexpected token in site/)]);
   });
 
   test("Measured site palette", () => {
-    expect(json.site.light).toEqual({ primary: "#121212", body: "#FFFFFF", border: "#EAEAEA", light: "#F6F6F6", dark: "#040404", text: "#444444", textDark: "#040404", textLight: "#717171" });
-    expect(json.site.dark).toEqual({ primary: "#FFFFFF", body: "#1C1C1C", border: "#3E3E3E", light: "#222222", dark: "#FFFFFF", text: "#B4AFB6", textDark: "#FFFFFF", textLight: "#B4AFB6" });
-    expect(json.site.font).toEqual({ primary: "'Source Sans 3', sans-serif", secondary: "'Source Serif 4', serif" });
+    expect(json.site.light).toEqual({ primary: "#121212", body: "#F6F3EC", border: "#D7D1C5", light: "#FFFFFF", dark: "#121212", text: "#121212", textDark: "#121212", textLight: "#5C5852", link: "#B83A0C" });
+    expect(json.site.dark).toEqual({ primary: "#F1EEE8", body: "#121110", border: "#3B3834", light: "#1D1C1A", dark: "#F1EEE8", text: "#F1EEE8", textDark: "#F1EEE8", textLight: "#ADA79D", link: "#FF7A45" });
+    expect(json.site.font).toEqual({ primary: "'Source Sans 3', sans-serif", secondary: "'Source Serif 4', serif", mono: "'Source Code Pro', monospace" });
     expect(json.site.fontSize).toEqual({ base: 16, baseSmall: 12.8 });
     expect(json.site.heading).toEqual({ h1: 2.985984, h2: 2.48832, h3: 2.0736, h4: 1.728, h5: 1.44, h6: 1.2, h1Small: 2.6873856, h2Small: 2.239488, h3Small: 1.86624, h4Small: 1.5552, h5Small: 1.296, h6Small: 1.08 });
+    const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(css).toContain("--ds-site-light-link: #B83A0C;");
+    expect(css).toContain("--ds-site-font-mono: 'Source Code Pro', monospace;");
+  });
+});
+
+// The brand role each site colour stands for (design.md Decision 1, change site-palette-and-category-badges).
+const SITE_ROLES = { primary: "text", body: "bg", border: "border", light: "cardBg", dark: "text", text: "text", textDark: "text", textLight: "textMuted", link: "accentText" } as const;
+type SourceTree = Record<string, Record<string, Record<string, { $value?: unknown }>>>;
+/** A colour of the source; a missing or non-hex value throws, so no check skips a pair silently. */
+const valueAt = (source: SourceTree, group: string, theme: string, name: string): string => {
+  const value = source[group]?.[theme]?.[name]?.$value;
+  if (typeof value !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(value)) throw new Error(`${group}.${theme}.${name}: expected a #RRGGBB colour, found ${JSON.stringify(value)}`);
+  return value.toUpperCase();
+};
+const repoSource = (): SourceTree => JSON.parse(readFileSync(new URL("../../tokens/source.json", import.meta.url), "utf8")) as SourceTree;
+
+/** Every site colour that differs from its brand role, as `<site path> ≠ <brand path>` (requirement "Site colours are brand roles"). */
+const siteRoleMismatches = (source: SourceTree): string[] =>
+  ["light", "dark"].flatMap((theme) =>
+    Object.entries(SITE_ROLES)
+      .filter(([site, role]) => valueAt(source, "site", theme, site) !== valueAt(source, "brand", theme, role))
+      .map(([site, role]) => `site.${theme}.${site} ≠ brand.${theme}.${role}`),
+  );
+
+const luminance = (hex: string): number => {
+  const channel = (i: number) => {
+    const c = parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * channel(0) + 0.7152 * channel(1) + 0.0722 * channel(2);
+};
+const contrast = (a: string, b: string): number => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+/** Every text, textLight or link pair on body or light under `floor`, compared unrounded, reported rounded (requirement "Site palette contrast"). */
+const siteContrastBelow = (source: SourceTree, floor: number): string[] =>
+  ["light", "dark"].flatMap((theme) =>
+    ["text", "textLight", "link"].flatMap((fg) =>
+      ["body", "light"].flatMap((bg) => {
+        const ratio = contrast(valueAt(source, "site", theme, fg), valueAt(source, "site", theme, bg));
+        return ratio < floor ? [`site.${theme}.${fg} on site.${theme}.${bg} at ${ratio.toFixed(2)}`] : [];
+      }),
+    ),
+  );
+
+describe("Site colours are brand roles", () => {
+  test("Every site colour matches its role", () => {
+    expect(Object.keys(SITE_ROLES)).toHaveLength(9);
+    expect(siteRoleMismatches(repoSource())).toEqual([]);
+  });
+
+  test("A missing site colour is not skipped", () => {
+    const source = repoSource();
+    delete (source.site.light as Record<string, unknown>).link;
+    expect(() => siteRoleMismatches(source)).toThrow(/site\.light\.link: expected a #RRGGBB colour/);
+    expect(() => siteContrastBelow(source, 4.5)).toThrow(/site\.light\.link: expected a #RRGGBB colour/);
+  });
+
+  test("A site colour that drifts from its role", () => {
+    const source = repoSource();
+    source.site.dark.textLight = { $value: "#B4AFB6" };
+    expect(siteRoleMismatches(source)).toEqual(["site.dark.textLight ≠ brand.dark.textMuted"]);
+  });
+});
+
+describe("Site palette contrast", () => {
+  test("Site pairs above the floor", () => {
+    expect(siteContrastBelow(repoSource(), 4.5)).toEqual([]);
+  });
+
+  test("A link below the floor", () => {
+    const source = repoSource();
+    source.site.light.link = { $value: "#E04E17" };
+    expect(siteContrastBelow(source, 4.5)).toEqual(["site.light.link on site.light.body at 3.59", "site.light.link on site.light.light at 3.98"]);
   });
 });
