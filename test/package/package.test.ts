@@ -26,7 +26,11 @@ beforeAll(() => {
   const consumer = join(work, "consumer");
   run("mkdir", ["-p", consumer], work);
   writeFileSync(join(consumer, "package.json"), JSON.stringify({ name: "consumer", private: true, type: "module" }));
-  run("npm", ["install", "--offline", "--no-audit", "--no-fund", "--ignore-scripts", join(work, packed.filename)], consumer);
+  // The one runtime dependency (harfbuzzjs) is packed from this repository's node_modules and installed beside
+  // the package, so the install needs neither the network nor npm's metadata cache (CI's `npm ci` fills the
+  // cache with tarballs only, not the registry metadata an install by version needs).
+  const [dependency] = JSON.parse(run("npm", ["pack", "--json", "--ignore-scripts", "--pack-destination", work, join(ROOT, "node_modules/harfbuzzjs")], ROOT)) as { filename: string }[];
+  run("npm", ["install", "--offline", "--no-audit", "--no-fund", "--ignore-scripts", join(work, packed.filename), join(work, dependency.filename)], consumer);
   // A second consumer that has React: linked from this repository, so the test stays offline.
   const withReact = join(work, "with-react");
   mkdirSync(join(withReact, "node_modules"), { recursive: true });
