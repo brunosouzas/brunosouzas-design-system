@@ -13,9 +13,9 @@ const problemsOf = (source: Source): string[] => {
   return result.ok ? [] : result.problems.map(formatProblem);
 };
 
-// A third brand theme with the fifteen tokens of a valid one.
+// A third brand theme with the sixteen tokens of a valid one.
 const SEPIA_BRAND: Source = Object.fromEntries(
-  ["bg", "cardBg", "text", "textMuted", "border", "borderStrong", "accent", "accentText", "onAccent", "success", "failure", "warning", "trackIntegration", "trackDelivery", "trackAi"].map((key) => [
+  ["bg", "cardBg", "text", "textMuted", "border", "borderStrong", "accent", "accentText", "onAccent", "success", "failure", "warning", "trackIntegration", "trackDelivery", "trackAi", "trackPersonal"].map((key) => [
     key,
     token("#FFFFFF", "color"),
   ]),
@@ -24,11 +24,12 @@ const SEPIA_BRAND: Source = Object.fromEntries(
 describe("Brand colour roles", () => {
   test("Missing brand role", () => {
     expect(problemsOf(sourceWith(remove("brand.light.accent")))).toEqual(["brand.light.accent: missing required token (type color)"]);
+    expect(problemsOf(sourceWith(remove("brand.dark.trackPersonal")))).toEqual(["brand.dark.trackPersonal: missing required token (type color)"]);
   });
 
   test("Extra brand theme", () => {
     const problems = problemsOf(sourceWith(set("brand.sepia", SEPIA_BRAND)));
-    expect(Object.keys(SEPIA_BRAND)).toHaveLength(15);
+    expect(Object.keys(SEPIA_BRAND)).toHaveLength(16);
     expect(problems).toEqual([expect.stringMatching(/^brand\.sepia: unexpected surface \(expected light and dark\)/)]);
   });
 
@@ -46,9 +47,10 @@ describe("Brand colour roles", () => {
       success: "#2B7A4B",
       failure: "#A1124B",
       warning: "#8F5F00",
-      trackIntegration: "#F4E4D8",
-      trackDelivery: "#DFE8E1",
-      trackAi: "#E2E4EC",
+      trackIntegration: "#F7C6A1",
+      trackDelivery: "#B9DEC3",
+      trackAi: "#C5CDF2",
+      trackPersonal: "#F4DD8E",
     });
   });
 
@@ -69,6 +71,7 @@ describe("Brand colour roles", () => {
       trackIntegration: "#2A1C15",
       trackDelivery: "#18231D",
       trackAi: "#1B1F28",
+      trackPersonal: "#29240F",
     });
   });
 });

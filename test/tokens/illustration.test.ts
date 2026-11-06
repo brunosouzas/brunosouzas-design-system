@@ -28,6 +28,22 @@ const driftedPairs = (source: Source): string[] => {
     .sort();
 };
 
+/**
+ * Names that break the family rule of design.md Decision 6: each name is
+ * `neutral`, a default `track<Name>`, or a tone `<name><Tone>` whose default
+ * `track<Name>` is among the names.
+ */
+const orphanTones = (names: string[]): string[] => {
+  const families = new Set(names.filter((name) => /^track[A-Z][A-Za-z]*$/.test(name)).map((name) => name.slice(5, 6).toLowerCase() + name.slice(6)));
+  return names
+    .filter((name) => name !== "neutral" && !/^track[A-Z]/.test(name))
+    .filter((name) => {
+      const match = /^([a-z]+)[A-Z][A-Za-z]*$/.exec(name);
+      return !match || !families.has(match[1]);
+    })
+    .sort();
+};
+
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
@@ -39,8 +55,8 @@ describe("Token source", () => {
     const source = sourceWith(
       set("illustration.accent", token("#1E6FEB", "color")),
       set("cover.width", token(800, "dimension")),
-      set("coverBackground.trackIntegration.fill", token("#F4E4D8", "color")),
-      set("coverBackground.trackIntegration.ring", token("#D7C9BE", "color")),
+      set("coverBackground.trackIntegration.fill", token("#F7C6A1", "color")),
+      set("coverBackground.trackIntegration.ring", token("#E3AB84", "color")),
       set("surface.dark.shadow", token("#4C5CB8", "color")),
       set("map.lineWidth", token(12, "dimension")),
       set("site.light.primary", token("#121212", "color")),
@@ -51,7 +67,7 @@ describe("Token source", () => {
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-track-integration-fill: #F4E4D8;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-track-integration-fill: #F7C6A1;");
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-width: 800px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
     expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
@@ -82,7 +98,8 @@ describe("Required illustration tokens", () => {
     expect(generatedJson.illustration.accent).toBe(generatedJson.brand.light.accent);
     expect(generatedJson.illustration.codePanel).toBe(generatedJson.brand.dark.cardBg);
     expect(generatedJson.illustration.road).toBe(generatedJson.brand.light.textMuted);
-    expect(generatedJson.illustration.tape).toBe(generatedJson.brand.light.trackIntegration);
+    // tape keeps the pale integration tint the pieces were approved with; the track roles moved to the families (design.md Decision 6).
+    expect(generatedJson.illustration.tape).not.toBe(generatedJson.brand.light.trackIntegration);
     expect(generatedJson.illustration.textBar).toBe(generatedJson.brand.light.border);
     expect("healthyShade" in generatedJson.illustration || "transitionalShade" in generatedJson.illustration).toBe(false);
   });
@@ -117,7 +134,7 @@ describe("Required cover tokens", () => {
 
 describe("Cover background pairs", () => {
   test("Entry without a ring", () => {
-    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", { fill: token("#F4E4D8", "color") })))).toEqual([
+    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", { fill: token("#F7C6A1", "color") })))).toEqual([
       "coverBackground.trackIntegration.ring: missing required token (type color)",
     ]);
   });
@@ -129,7 +146,7 @@ describe("Cover background pairs", () => {
   });
 
   test("Token directly under the group", () => {
-    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", token("#F4E4D8", "color"))))).toEqual([
+    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", token("#F7C6A1", "color"))))).toEqual([
       "coverBackground.trackIntegration: expected a group with fill and ring",
     ]);
   });
@@ -149,9 +166,24 @@ describe("Cover background pairs", () => {
 
 describe("Measured cover backgrounds", () => {
   test("Source matches the measured table", () => {
-    expect(Object.keys(measured).sort()).toEqual(["neutral", "trackAi", "trackDelivery", "trackIntegration"]);
+    expect(Object.keys(measured).sort()).toEqual([
+      "aiLilac",
+      "aiSky",
+      "deliveryMint",
+      "deliveryOlive",
+      "integrationClay",
+      "integrationSand",
+      "neutral",
+      "personalRose",
+      "trackAi",
+      "trackDelivery",
+      "trackIntegration",
+      "trackPersonal",
+    ]);
     expect(driftedPairs(repoSource())).toEqual([]);
-    expect(tokens.coverBackground.trackIntegration).toEqual({ fill: "#F4E4D8", ring: "#D7C9BE" });
+    expect(tokens.coverBackground.trackIntegration).toEqual({ fill: "#F7C6A1", ring: "#E3AB84" });
+    expect(tokens.coverBackground.deliveryMint).toEqual({ fill: "#A9DCD6", ring: "#88C4BD" });
+    expect(tokens.coverBackground.trackPersonal).toEqual({ fill: "#F4DD8E", ring: "#DDC46C" });
     expect(tokens.coverBackground.neutral).toEqual({ fill: "#F6F3EC", ring: "#D8D6D0" });
   });
 
@@ -160,9 +192,24 @@ describe("Measured cover backgrounds", () => {
     expect(tokens.coverBackground.neutral.ring).toBe("#D8D6D0");
   });
 
+  test("Every tone belongs to a family", () => {
+    expect(orphanTones(Object.keys(measured))).toEqual([]);
+    const defaults = Object.keys(measured).filter((name) => /^track[A-Z]/.test(name)).sort();
+    expect(defaults).toEqual(["trackAi", "trackDelivery", "trackIntegration", "trackPersonal"]);
+    const brandLight = generatedJson.brand.light as Record<string, string>;
+    for (const name of defaults) expect((measured as Record<string, Pair>)[name].fill).toBe(brandLight[name]);
+  });
+
+  test("A tone without its family", () => {
+    const source = repoSource();
+    (source.coverBackground as Record<string, unknown>).opsTeal = { fill: token("#B5E0E0", "color"), ring: token("#94C8C8", "color") };
+    expect(orphanTones(Object.keys(source.coverBackground as Record<string, unknown>))).toEqual(["opsTeal"]);
+    expect(driftedPairs(source)).toEqual(["opsTeal"]);
+  });
+
   test("A pair drifts", () => {
     const source = repoSource();
-    (source.coverBackground as Record<string, Record<string, { $value: string }>>).trackIntegration.ring.$value = "#D7C9BF";
+    (source.coverBackground as Record<string, Record<string, { $value: string }>>).trackIntegration.ring.$value = "#E3AB85";
     expect(driftedPairs(source)).toEqual(["trackIntegration"]);
   });
 

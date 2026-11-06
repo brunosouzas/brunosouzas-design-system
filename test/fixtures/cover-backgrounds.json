@@ -1,22 +1,62 @@
 {
   "trackIntegration": {
-    "fill": "#F4E4D8",
-    "ring": "#D7C9BE",
-    "source": "AB#268 identity v2, ADR 0006 (integration pillar)"
+    "fill": "#F7C6A1",
+    "ring": "#E3AB84",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "integrationClay": {
+    "fill": "#E9CDBE",
+    "ring": "#D3B3A3",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "integrationSand": {
+    "fill": "#EED7A8",
+    "ring": "#D8BF8C",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
   },
   "trackDelivery": {
-    "fill": "#DFE8E1",
-    "ring": "#C4CCC6",
-    "source": "AB#268 identity v2, ADR 0006 (delivery pillar)"
+    "fill": "#B9DEC3",
+    "ring": "#98C6A5",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "deliveryMint": {
+    "fill": "#A9DCD6",
+    "ring": "#88C4BD",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "deliveryOlive": {
+    "fill": "#D3DFA8",
+    "ring": "#B9C78A",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
   },
   "trackAi": {
-    "fill": "#E2E4EC",
-    "ring": "#C7C9D0",
-    "source": "AB#268 identity v2, ADR 0006 (AI pillar)"
+    "fill": "#C5CDF2",
+    "ring": "#A5AEDA",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "aiSky": {
+    "fill": "#B5D5F2",
+    "ring": "#94BBDE",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "aiLilac": {
+    "fill": "#DCC7F0",
+    "ring": "#C3A9DC",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "trackPersonal": {
+    "fill": "#F4DD8E",
+    "ring": "#DDC46C",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
+  },
+  "personalRose": {
+    "fill": "#F5C9DA",
+    "ring": "#E0ABC0",
+    "source": "owner decision 2026-11-06, track families (design.md Decision 6)"
   },
   "neutral": {
     "fill": "#F6F3EC",
     "ring": "#D8D6D0",
-    "source": "card 299, brand.light.bg (Personal tools, no track)"
+    "source": "card 299, brand.light.bg (no track)"
   }
 }

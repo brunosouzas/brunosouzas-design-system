@@ -201,17 +201,25 @@ describe("Cover spec format", () => {
     if (!result.ok) return;
     expect(result.svg).toContain(`fill="${tokens.coverBackground.trackIntegration.fill}"`);
     expect(result.svg).toContain(`stroke="${tokens.coverBackground.trackIntegration.ring}"`);
+    expect(result.svg).toContain('fill="#F7C6A1"');
+    expect(result.svg).toContain('stroke="#E3AB84"');
+    // A named tone of a track family (design.md Decision 6).
+    const tone = await buildCover(JSON.stringify({ ...minimal(), background: "deliveryMint" }), "spec.json");
+    expect(tone.ok).toBe(true);
+    if (!tone.ok) return;
+    expect(tone.svg).toContain('fill="#A9DCD6"');
+    expect(tone.svg).toContain('stroke="#88C4BD"');
   });
 
-  // Change identity-v2-type-pieces-cleanup: the 21 pre-0.6.0 backgrounds are removed; only the four track and neutral pairs remain.
+  // Change identity-v2-type-pieces-cleanup: the 21 pre-0.6.0 backgrounds are removed; only the twelve pairs of the track families and neutral remain.
   test("Removed background refused", async () => {
     const ws = workspace();
     ws.write("cover.json", { ...minimal(), background: "peach" });
     expect(await ws.run("cover.json", "--out", "cover.svg")).toBe(1);
-    expect(ws.err[0]).toBe('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "peach"');
+    expect(ws.err[0]).toBe('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "peach"');
     ws.write("banner.json", banner({ background: "navy" }));
     expect(await ws.run("banner.json", "--out", "banner.svg")).toBe(1);
-    expect(ws.err).toContain('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "navy"');
+    expect(ws.err).toContain('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "navy"');
     expect(readdirSync(ws.root).sort()).toEqual(["banner.json", "cover.json"]);
   });
 
@@ -226,7 +234,7 @@ describe("Cover spec format", () => {
   test("Unknown background and piece", async () => {
     const lines = await problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
-    expect(lines[0]).toBe('background: expected one of neutral, trackAi, trackDelivery, trackIntegration, found "pink"');
+    expect(lines[0]).toBe('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "pink"');
     expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon\)$/);
     expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(62);
   });
@@ -362,8 +370,8 @@ describe("Cover output", () => {
     const result = await buildCover(JSON.stringify({ ...minimal(), rings: { cx: 400, cy: 215, radius: 100 } }), "s");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.svg).toContain('<rect width="800" height="420" fill="#F4E4D8"/>');
-    expect(result.svg).toContain('<g fill="none" stroke="#D7C9BE" stroke-width="2">');
+    expect(result.svg).toContain('<rect width="800" height="420" fill="#F7C6A1"/>');
+    expect(result.svg).toContain('<g fill="none" stroke="#E3AB84" stroke-width="2">');
     const radii = [...result.svg.matchAll(/<circle cx="400" cy="215" r="(\d+)"\/>/g)].map((m) => Number(m[1]));
     expect(radii).toEqual(Array.from({ length: 14 }, (_, i) => 100 + 28 * i));
   });
@@ -441,7 +449,7 @@ const svgOf = async (spec: unknown): Promise<string> => {
   return result.ok ? result.svg : "";
 };
 const ringRadii = (svg: string): number[] => {
-  const group = /<g fill="none" stroke="#D7C9BE" stroke-width="2">([\s\S]*?)<\/g>/.exec(svg)![1];
+  const group = /<g fill="none" stroke="#E3AB84" stroke-width="2">([\s\S]*?)<\/g>/.exec(svg)![1];
   return [...group.matchAll(/ r="([\d.]+)"/g)].map((m) => Number(m[1]));
 };
 
@@ -475,7 +483,7 @@ describe("Banner format", () => {
     const svg = await svgOf(banner({ background: "trackDelivery", pieces: [{ piece: "pill", x: 300, y: 100, text: "APIs" }] }));
     expect(svg).toMatch(/^<svg [^>]*width="1200" height="420" viewBox="0 0 1200 420"/);
     expect(svg).toContain('<clipPath id="t-frame">\n      <rect width="1200" height="420" rx="20"/>');
-    expect(svg).toContain('<rect width="1200" height="420" rx="20" fill="#DFE8E1"/>');
+    expect(svg).toContain('<rect width="1200" height="420" rx="20" fill="#B9DEC3"/>');
     const clipped = svg.lastIndexOf('<g clip-path="url(#t-frame)">');
     expect(clipped).toBeGreaterThan(svg.indexOf('<g clip-path="url(#t-frame)">'));
     expect(svg.indexOf('height="36" rx="18"')).toBeGreaterThan(clipped);

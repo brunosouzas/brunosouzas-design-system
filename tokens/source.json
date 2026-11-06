@@ -259,50 +259,146 @@
   "coverBackground": {
     "trackIntegration": {
       "fill": {
-        "$value": "#F4E4D8",
+        "$value": "#F7C6A1",
         "$type": "color",
-        "$description": "Cover/track background, from brand.light.trackIntegration (AB#268, ADR 0006)."
+        "$description": "Integration track, default tone (peach), from brand.light.trackIntegration (owner, 2026-11-06)."
       },
       "ring": {
-        "$value": "#D7C9BE",
+        "$value": "#E3AB84",
         "$type": "color",
-        "$description": "Fill mixed 12% toward black (AB#268)."
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "integrationClay": {
+      "fill": {
+        "$value": "#E9CDBE",
+        "$type": "color",
+        "$description": "Integration track, clay tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#D3B3A3",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "integrationSand": {
+      "fill": {
+        "$value": "#EED7A8",
+        "$type": "color",
+        "$description": "Integration track, sand tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#D8BF8C",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
       }
     },
     "trackDelivery": {
       "fill": {
-        "$value": "#DFE8E1",
+        "$value": "#B9DEC3",
         "$type": "color",
-        "$description": "Cover/track background, from brand.light.trackDelivery (AB#268, ADR 0006)."
+        "$description": "Delivery track, default tone (sage), from brand.light.trackDelivery (owner, 2026-11-06)."
       },
       "ring": {
-        "$value": "#C4CCC6",
+        "$value": "#98C6A5",
         "$type": "color",
-        "$description": "Fill mixed 12% toward black (AB#268)."
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "deliveryMint": {
+      "fill": {
+        "$value": "#A9DCD6",
+        "$type": "color",
+        "$description": "Delivery track, mint tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#88C4BD",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "deliveryOlive": {
+      "fill": {
+        "$value": "#D3DFA8",
+        "$type": "color",
+        "$description": "Delivery track, olive tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#B9C78A",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
       }
     },
     "trackAi": {
       "fill": {
-        "$value": "#E2E4EC",
+        "$value": "#C5CDF2",
         "$type": "color",
-        "$description": "Cover/track background, from brand.light.trackAi (AB#268, ADR 0006)."
+        "$description": "AI track, default tone (periwinkle), from brand.light.trackAi (owner, 2026-11-06)."
       },
       "ring": {
-        "$value": "#C7C9D0",
+        "$value": "#A5AEDA",
         "$type": "color",
-        "$description": "Fill mixed 12% toward black (AB#268)."
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "aiSky": {
+      "fill": {
+        "$value": "#B5D5F2",
+        "$type": "color",
+        "$description": "AI track, sky tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#94BBDE",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "aiLilac": {
+      "fill": {
+        "$value": "#DCC7F0",
+        "$type": "color",
+        "$description": "AI track, lilac tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#C3A9DC",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "trackPersonal": {
+      "fill": {
+        "$value": "#F4DD8E",
+        "$type": "color",
+        "$description": "Personal tools track, default tone (butter), from brand.light.trackPersonal (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#DDC46C",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
+      }
+    },
+    "personalRose": {
+      "fill": {
+        "$value": "#F5C9DA",
+        "$type": "color",
+        "$description": "Personal tools track, rose tone (owner, 2026-11-06)."
+      },
+      "ring": {
+        "$value": "#E0ABC0",
+        "$type": "color",
+        "$description": "Ring approved from renders with its fill (owner, 2026-11-06)."
       }
     },
     "neutral": {
       "fill": {
         "$value": "#F6F3EC",
         "$type": "color",
-        "$description": "Cover background of a category with no track (Personal tools), from brand.light.bg (card 299, ADR 0006)."
+        "$description": "Cover background of a cover with no track, from brand.light.bg (card 299, ADR 0006)."
       },
       "ring": {
         "$value": "#D8D6D0",
         "$type": "color",
-        "$description": "Fill mixed 12% toward black, like the track rings (card 299)."
+        "$description": "Fill mixed 12% toward black (card 299)."
       }
     }
   },
@@ -771,15 +867,19 @@
         "$type": "color"
       },
       "trackIntegration": {
-        "$value": "#F4E4D8",
+        "$value": "#F7C6A1",
         "$type": "color"
       },
       "trackDelivery": {
-        "$value": "#DFE8E1",
+        "$value": "#B9DEC3",
         "$type": "color"
       },
       "trackAi": {
-        "$value": "#E2E4EC",
+        "$value": "#C5CDF2",
+        "$type": "color"
+      },
+      "trackPersonal": {
+        "$value": "#F4DD8E",
         "$type": "color"
       }
     },
@@ -842,6 +942,10 @@
       },
       "trackAi": {
         "$value": "#1B1F28",
+        "$type": "color"
+      },
+      "trackPersonal": {
+        "$value": "#29240F",
         "$type": "color"
       }
     }
