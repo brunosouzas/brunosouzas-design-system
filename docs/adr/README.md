@@ -8,4 +8,6 @@ Project-wide decisions, one file each (`NNNN-<slug>.md`, with Status, Context, O
 | [0002](0002-one-token-source.md) | One token source, with generated CSS, TypeScript and JSON exports | accepted |
 | [0003](0003-visual-language-and-colour-meaning.md) | Flat shapes, ink outline, hard shadow, and colours with one fixed meaning | accepted |
 | [0004](0004-scenes-illustrate-published-articles.md) | Every on-screen string of a scene or piece comes from an approved source: a published article, or a post or page the owner approved | accepted |
-| [0005](0005-neutral-videos-and-the-cast.md) | Neutral videos by default, told by a fixed cast and emotes; caption optional; every action tied to an article line | accepted |
+| [0005](0005-neutral-videos-and-the-cast.md) | Neutral videos by default, told by a fixed cast and emotes; caption optional; every action tied to an article line | superseded by [0007](0007-mira-and-the-pillar-cast.md) |
+| [0006](0006-three-layer-tokens-and-brand-colour.md) | Three-layer token architecture (primitive, semantic, component); the brand/site colour roles and track colours, AA-measured in both themes | accepted |
+| [0007](0007-mira-and-the-pillar-cast.md) | Mira and four pillar characters (Visor, Drone, Kiu, Sinal) replace the engineering-role cast; reuse only where the story still reads | accepted |

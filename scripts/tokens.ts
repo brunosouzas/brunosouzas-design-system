@@ -28,6 +28,7 @@ export const GROUPS = [
   "cover",
   "coverBackground",
   "surface",
+  "brand",
   "map",
   "site",
   "banner",
@@ -202,11 +203,62 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "site.heading.h4Small": "number",
   "site.heading.h5Small": "number",
   "site.heading.h6Small": "number",
+  // Brand/site semantic colour roles (AB#268, ADR 0006), measured in the
+  // identity studio with AA confirmed in both themes.
+  "brand.light.bg": "color",
+  "brand.light.cardBg": "color",
+  "brand.light.text": "color",
+  "brand.light.textMuted": "color",
+  "brand.light.border": "color",
+  "brand.light.borderStrong": "color",
+  "brand.light.accent": "color",
+  "brand.light.accentText": "color",
+  "brand.light.onAccent": "color",
+  "brand.light.success": "color",
+  "brand.light.failure": "color",
+  "brand.light.warning": "color",
+  "brand.light.trackIntegration": "color",
+  "brand.light.trackDelivery": "color",
+  "brand.light.trackAi": "color",
+  "brand.dark.bg": "color",
+  "brand.dark.cardBg": "color",
+  "brand.dark.text": "color",
+  "brand.dark.textMuted": "color",
+  "brand.dark.border": "color",
+  "brand.dark.borderStrong": "color",
+  "brand.dark.accent": "color",
+  "brand.dark.accentText": "color",
+  "brand.dark.onAccent": "color",
+  "brand.dark.success": "color",
+  "brand.dark.failure": "color",
+  "brand.dark.warning": "color",
+  "brand.dark.trackIntegration": "color",
+  "brand.dark.trackDelivery": "color",
+  "brand.dark.trackAi": "color",
+  // Diagram-state colours, aliased under their new three-layer path (AB#268,
+  // ADR 0006); same values and meaning as color.healthy etc, removed in 0.7.0.
+  "color.state.healthy": "color",
+  "color.state.blocked": "color",
+  "color.state.transitional": "color",
+  "color.state.caller": "color",
+  "color.state.backend": "color",
+  "color.state.failure": "color",
+  "color.state.failFast": "color",
+  // Mira and the pillar cast (AB#268, ADR 0007): one skin shared by all five
+  // characters; body is color.white, outline/visor pick brand.<theme>.text or
+  // .textMuted in the piece's own code by its surface parameter (no separate
+  // per-character or per-theme token needed). Only the eyes are new.
+  "cast.eyes": "color",
+  // Signature lockup (AB#268): fixed margin from a cover/banner/icon frame's
+  // bottom-right corner.
+  "cover.signatureMargin": "dimension",
 };
 
-// `surface`, `map` and `site` are closed: they hold exactly their required tokens
-// (design §2 of metro-and-diagram-pieces). `surface` has exactly light and dark.
-export const CLOSED_GROUPS = ["surface", "map", "site"] as const;
+// `surface`, `brand`, `map` and `site` are closed: they hold exactly their
+// required tokens (design §2 of metro-and-diagram-pieces; `brand` added by
+// AB#268). `surface` and `brand` have exactly light and dark.
+export const CLOSED_GROUPS = ["surface", "brand", "map", "site"] as const;
+export const LIGHT_DARK_GROUPS = ["surface", "brand"] as const;
 export const SURFACE_NAMES = ["light", "dark"] as const;
 
 // Every entry of `coverBackground` is a pair: a background and its ring colour,
@@ -425,7 +477,7 @@ export const validateSource = (root: unknown, sourceLabel = "tokens/source.json"
     for (const [name, entry] of Object.entries(group)) {
       const entryPath = `${groupName}.${name}`;
       if (!NAME_PATTERN.test(name)) continue; // already reported
-      if (groupName === "surface" && !(SURFACE_NAMES as readonly string[]).includes(name)) {
+      if ((LIGHT_DARK_GROUPS as readonly string[]).includes(groupName) && !(SURFACE_NAMES as readonly string[]).includes(name)) {
         report(entryPath, `unexpected surface (expected ${SURFACE_NAMES.join(" and ")})`);
         continue;
       }

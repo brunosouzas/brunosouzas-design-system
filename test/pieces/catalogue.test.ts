@@ -62,6 +62,15 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   stateStart: { cx: 0, cy: 0 },
   mascot: { who: "dev", x: 0, y: 0 },
   emote: { kind: "idea", x: 0, y: 0 },
+  mira: { x: 0, y: 0 },
+  visor: { x: 0, y: 0 },
+  drone: { x: 0, y: 0 },
+  kiu: { x: 0, y: 0 },
+  sinal: { x: 0, y: 0 },
+  bankObject: { name: "courier", x: 0, y: 0 },
+  symbol: { x: 0, y: 0 },
+  brandNotationIcon: { name: "message", x: 0, y: 0 },
+  categoryIcon: { category: "personalTools", x: 0, y: 0 },
 };
 
 /** The metro and diagram pieces have limits that depend on each other (width against height, room for
@@ -173,7 +182,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(54);
+    expect(P.PIECE_NAMES).toHaveLength(63);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop draws words only (change body-diagram-pieces).

@@ -12,16 +12,25 @@ import { tokens } from "../../tokens/generated/tokens.ts";
 import { PIECE_NAMES, PIECES, rings, type PieceName } from "./library.ts";
 import { EIP_ICON_HEIGHT, EIP_ICON_WIDTH, EIP_ICONS } from "./eip-icons.ts";
 import { LINK_ICON_SIZE } from "./link-icons.ts";
+import { mira } from "./brand-cast.ts";
+import { symbol } from "./symbol.ts";
 import { el, g, r2, type SvgNode, type SvgTag } from "./node.ts";
 import { UI_ICON_SIZE } from "./ui-icons.ts";
 import { COLOUR_TOKENS, CURRENT_COLOUR, checkParams, isColourLiteral, MAX_SIZE, PATH_DATA, type Problem } from "./params.ts";
 
 export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const TOP_LEVEL = ["id", "title", "description", "format", "background", "rings", "pieces", "custom", "customAt", "height", "text"] as const;
-/** Cover (800x420, the default), banner (1200x420, rounded corners), body diagram (560 laid out, 800 shown) or icon:
- * spec cover-cli, "Banner output", "Diagram output", "Icon output". */
-export const FORMATS = ["cover", "banner", "diagram", "icon"] as const;
+const TOP_LEVEL = ["id", "title", "description", "format", "background", "rings", "pieces", "custom", "customAt", "height", "text", "signature"] as const;
+/** Cover (800x420, the default), banner (1200x420, rounded corners), body diagram (560 laid out, 800 shown),
+ * icon, favicon (the symbol, both themes), linkedin-card (1080x1080) or avatar (500x500, the symbol only):
+ * spec cover-cli, "Banner output", "Diagram output", "Icon output", "New icon formats". */
+export const FORMATS = ["cover", "banner", "diagram", "icon", "favicon", "linkedin-card", "og", "avatar"] as const;
 export type CoverFormat = (typeof FORMATS)[number];
+/** Fixed frame sizes of the platform-shaped formats (not style, so not tokens — like EIP_ICON_WIDTH). */
+export const FAVICON_SIZE = 32;
+export const AVATAR_SIZE = 500;
+export const LINKEDIN_CARD_SIZE = 1080;
+export const OG_WIDTH = 1200;
+export const OG_HEIGHT = 630;
 const CUSTOM_TAGS: readonly SvgTag[] = ["g", "rect", "circle", "ellipse", "line", "polyline", "polygon", "path", "text"];
 // Attributes a free-form object may use (design §6): geometry, paint, text and transform.
 const CUSTOM_ATTRS = new Set([
@@ -50,10 +59,12 @@ type Framed = SpecCommon & {
   custom?: CustomNode;
   /** `custom` is drawn before `pieces[customAt]`; default after every piece. */
   customAt?: number;
+  /** Mira and the symbol, bottom-right corner, `cover.signatureMargin` from both edges (spec cover-cli, "Signature lockup"). */
+  signature?: boolean;
 };
 /** A cover spec, by format (spec cover-cli, "Cover spec format" and each format's keys). */
 export type CoverSpec =
-  | (Framed & { format?: "cover" | "banner"; background: string; height?: never })
+  | (Framed & { format?: "cover" | "banner" | "linkedin-card" | "og"; background: string; height?: never })
   | (Framed & { format: "diagram"; /** Layout units. */ height: number; background?: never })
   | (SpecCommon & {
       format: "icon";
@@ -65,6 +76,31 @@ export type CoverSpec =
       custom?: never;
       customAt?: never;
       height?: never;
+      signature?: never;
+    })
+  | (Omit<SpecCommon, "pieces"> & {
+      format: "favicon";
+      pieces?: never[];
+      title?: string;
+      description?: string;
+      background?: never;
+      rings?: never;
+      custom?: never;
+      customAt?: never;
+      height?: never;
+      signature?: never;
+    })
+  | (Omit<SpecCommon, "pieces"> & {
+      format: "avatar";
+      pieces?: never[];
+      title?: string;
+      description?: string;
+      background?: never;
+      rings?: never;
+      custom?: never;
+      customAt?: never;
+      height?: never;
+      signature?: never;
     });
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
@@ -329,9 +365,15 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
   if (format === "icon") {
     for (const key of ["background", "rings", "custom", "customAt", "height"]) if (spec[key] !== undefined) out.push({ path: key, message: NOT_FOR_ICONS });
     for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined) blocked.push(key);
+  } else if (format === "favicon" || format === "avatar") {
+    for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) {
+      if (spec[key] !== undefined) out.push({ path: key, message: `not used by the ${format} format` });
+    }
+    for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined) blocked.push(key);
   } else {
     if (format === "diagram") {
       if (spec.background !== undefined) out.push({ path: "background", message: "a diagram is drawn on color.panel; background is for covers and banners" });
+      if (spec.signature !== undefined) out.push({ path: "signature", message: "not used by the diagram format" });
       const height = spec.height;
       if (typeof height !== "number" || !Number.isFinite(height) || height < 1 || height > MAX_SIZE) out.push({ path: "height", message: `expected a number from 1 to ${MAX_SIZE}` });
     } else {
@@ -339,6 +381,7 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
         out.push({ path: "background", message: `expected one of ${backgroundNames().join(", ")}, found ${describe(spec.background)}` });
       }
       if (spec.height !== undefined) out.push({ path: "height", message: "only a diagram takes a height" });
+      if (spec.signature !== undefined && typeof spec.signature !== "boolean") out.push({ path: "signature", message: "expected true or false" });
     }
     checkRings(spec, out);
     if (!isPlainObject(spec.rings) && spec.rings !== undefined) blocked.push("rings");
@@ -361,8 +404,11 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
   }
 
   if (!Array.isArray(pieces)) {
-    out.push({ path: "pieces", message: "missing or not an array" });
-    if (pieces !== undefined) blocked.push("pieces");
+    const piecesOptional = (format === "favicon" || format === "avatar") && pieces === undefined;
+    if (!piecesOptional) {
+      out.push({ path: "pieces", message: "missing or not an array" });
+      if (pieces !== undefined) blocked.push("pieces");
+    }
   } else if (format === "icon") {
     const entry = pieces[0];
     if (pieces.length !== 1 || !isPlainObject(entry) || !(ICON_PIECES as readonly unknown[]).includes(entry.piece)) {
@@ -372,6 +418,11 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
       const { piece, ...params } = entry;
       for (const axis of ["x", "y"] as const) if (params[axis] !== undefined && params[axis] !== 0) out.push({ path: `pieces[0].${axis}`, message: "an icon is drawn at 0, 0" });
       checkEntry(piece as PieceName, { ...params, x: 0, y: 0 }, "pieces[0]", out);
+    }
+  } else if (format === "favicon" || format === "avatar") {
+    if (pieces.length > 0) {
+      out.push({ path: "pieces", message: `not used by the ${format} format` });
+      blocked.push("pieces");
     }
   } else {
     for (let index = 0; index < pieces.length; index++) {
@@ -531,21 +582,84 @@ const diagramTree = (spec: Extract<CoverSpec, { format: "diagram" }>): SvgNode =
   );
 };
 
-/** The cover's (banner's, diagram's, icon's) node tree. The spec must be valid for `lang` (validateCoverSpec returned no problem). */
+/** Mira (scale 0.25) and the symbol, bottom-right corner, `cover.signatureMargin` from both edges (spec cover-cli, "Signature lockup"). */
+const signatureGroup = (width: number, height: number): SvgNode => {
+  const margin = tokens.cover.signatureMargin;
+  const miraScale = 0.25;
+  // Mira's own viewBox (sheet7.py's VB): 220 wide, 175 tall, ground at the box's bottom.
+  const miraWidth = 220 * miraScale;
+  const miraHeight = 175 * miraScale;
+  const symbolSize = 24;
+  const gap = 6;
+  const groupWidth = miraWidth + gap + symbolSize;
+  const groupHeight = Math.max(miraHeight, symbolSize);
+  const left = width - margin - groupWidth;
+  const top = height - margin - groupHeight;
+  return g(
+    { "data-piece": "signature" },
+    ...mira({ x: r2(left + miraWidth / 2), y: r2(top + miraHeight), scale: miraScale }).body,
+    ...symbol({ x: r2(left + miraWidth + gap), y: r2(top + (groupHeight - symbolSize) / 2), scale: symbolSize / 32 }).body,
+  );
+};
+
+/** A favicon (spec cover-cli, "New icon formats"): the symbol, both themes, switched by `prefers-color-scheme`. */
+const faviconTree = (spec: Extract<CoverSpec, { format: "favicon" }>): SvgNode => {
+  const size = FAVICON_SIZE;
+  return root(
+    spec.id,
+    size,
+    size,
+    `0 0 ${size} ${size}`,
+    el("title", { id: `${spec.id}-title` }, spec.title),
+    el("desc", { id: `${spec.id}-desc` }, spec.description),
+    el("style", {}, `.ds-favicon-dark{display:none}@media (prefers-color-scheme:dark){.ds-favicon-light{display:none}.ds-favicon-dark{display:inline}}`),
+    g({ class: "ds-favicon-light" }, ...symbol({ x: 0, y: 0, surface: "light" }).body),
+    g({ class: "ds-favicon-dark" }, ...symbol({ x: 0, y: 0, surface: "dark" }).body),
+  );
+};
+
+/** An avatar (spec cover-cli, "New icon formats"): the symbol only, filling the frame. */
+const avatarTree = (spec: Extract<CoverSpec, { format: "avatar" }>): SvgNode => {
+  const size = AVATAR_SIZE;
+  const scale = size / 32;
+  return root(
+    spec.id,
+    size,
+    size,
+    `0 0 ${size} ${size}`,
+    el("title", { id: `${spec.id}-title` }, spec.title),
+    el("desc", { id: `${spec.id}-desc` }, spec.description),
+    el("rect", { width: size, height: size, fill: tokens.brand.light.accentText }),
+    g({ transform: `scale(${scale})` }, ...symbol({ x: 0, y: 0, surface: "light" }).body),
+  );
+};
+
+/** The cover's (banner's, diagram's, icon's, favicon's, avatar's) node tree. The spec must be valid for `lang` (validateCoverSpec returned no problem). */
 export const coverTree = (input: CoverSpec, options: CoverOptions = {}): SvgNode => {
   const spec = forLanguage(input, options.lang);
   if (spec.format === "icon") return iconTree(spec);
   if (spec.format === "diagram") return diagramTree(spec);
+  if (spec.format === "favicon") return faviconTree(spec);
+  if (spec.format === "avatar") return avatarTree(spec);
   const banner = spec.format === "banner";
-  const { width, height } = banner ? tokens.banner : tokens.cover;
-  // A banner's corners are rounded; a cover keeps today's square frame, attribute for attribute.
+  const linkedinCard = spec.format === "linkedin-card";
+  const og = spec.format === "og";
+  const { width, height } = linkedinCard
+    ? { width: LINKEDIN_CARD_SIZE, height: LINKEDIN_CARD_SIZE }
+    : og
+      ? { width: OG_WIDTH, height: OG_HEIGHT }
+      : banner
+        ? tokens.banner
+        : tokens.cover;
+  // A banner's corners are rounded; a cover, a LinkedIn card and an og image keep the square frame, attribute for attribute.
   const corner: Record<string, number> = banner ? { rx: tokens.banner.radius } : {};
   const pair = tokens.coverBackground[spec.background as keyof typeof tokens.coverBackground];
   const drawnPieces = spec.pieces.map(draw);
   const ringPath = `coverBackground.${spec.background}.ring`;
   const ringCount: { count?: number } = banner ? { count: bannerRingCount(spec.rings.cx, spec.rings.cy, spec.rings.radius) } : {};
   const frame = `url(#${spec.id}-frame)`;
-  const outlined = g({ stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" }, ...bodies(spec, drawnPieces));
+  const signature = spec.signature ? signatureGroup(width, height) : null;
+  const outlined = g({ stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" }, ...bodies(spec, drawnPieces), signature);
   const labels = g(
     { "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" },
     ...drawnPieces.flatMap((d) => d.text),

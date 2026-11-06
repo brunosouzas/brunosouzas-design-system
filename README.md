@@ -234,6 +234,19 @@ A spec with `"format": "banner"` (the default is `"cover"`) builds a home banner
 
 The banner is one image that scales down as a whole. Words in it become small on a phone (a 19px label is about 6px at 375px wide), so keep them few or none. `test/fixtures/covers/home-banner.json` is the brunosouzas.com home banner redrawn from the pieces.
 
+### Signature lockup
+
+A cover, banner, LinkedIn card or og spec takes an optional `"signature": true`: Mira (scale 0.25) and the symbol, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges. Omit it and nothing is added — `signature` isn't used by a diagram, a favicon or an avatar.
+
+### Social and platform formats
+
+Four more formats hold the symbol or a reduced cover frame, fixed size, no `height`:
+
+- `"format": "linkedin-card"` — 1080x1080, cover frame conventions (`background`, `rings`, `pieces`, `custom`, `signature`). The "new piece" announcement card.
+- `"format": "og"` — 1200x630, cover frame conventions. The site's generic social-preview image (not an article's own cover, which already serves as its og:image).
+- `"format": "favicon"` — 32x32, no `pieces`: the symbol drawn twice, a light-theme group and a dark-theme group switched by a `prefers-color-scheme` media query. This command writes the SVG only; a favicon PNG set (16/32/48/180/192/512) is the consuming site's own build step.
+- `"format": "avatar"` — 500x500, no `background`, no `pieces`: the symbol filling the frame on an accent-coloured ground. One static image (GitHub profile, etc.), not theme-switching.
+
 ### Body diagrams and icons from a spec
 
 The same command draws the blog's body diagrams and icons, so a consumer needs no script and no local install:

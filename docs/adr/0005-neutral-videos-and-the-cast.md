@@ -1,6 +1,6 @@
 # ADR 0005: Neutral videos, told by a fixed cast
 
-- Status: accepted
+- Status: superseded by [ADR 0007](0007-mira-and-the-pillar-cast.md) (the cast only; every other rule here is unchanged)
 - Date: 2026-10-24
 - Amends: ADR 0003 (the caption default), ADR 0004 (claims made by actions)
 
@@ -31,3 +31,7 @@ Option 2.
 - A silent scene can be misread. A blind reading (someone narrates the stills without the article) is a useful check to show the owner, as evidence, never as approval; it is not a required step.
 - Videos still do not replace the static diagrams: the diagram carries the detail and the alt text.
 - The cast motion test is a proof of the cast, not an article scene: it keeps its approved 12 s timing, whose last second still breathes and blinks, and is exempt from ADR 0003's three-second still final frame. Article scenes keep that rule.
+
+## Superseded, 2026-11-05 (AB#268)
+
+[ADR 0007](0007-mira-and-the-pillar-cast.md) replaces this ADR's cast (Dev, AI agent, Architect, DevOps, Data, Requester, Message) with Mira and four pillar characters (Visor, Drone, Kiu, Sinal), reusing only the roles whose story the new cast tells without ambiguity. Every other rule here (neutral by default, caption optional, actions are claims, one gesture vocabulary, 16:9 only, storyboard before the spec) is unchanged and still governs every scene.
