@@ -188,6 +188,14 @@ describe("Cover spec format", () => {
     }
   });
 
+  test("Neutral background accepted", () => {
+    const result = buildCover(JSON.stringify({ ...minimal(), background: "neutral" }), "spec.json");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.svg).toContain(`fill="${tokens.coverBackground.neutral.fill}"`);
+    expect(result.svg).toContain(`stroke="${tokens.coverBackground.neutral.ring}"`);
+  });
+
   test("Unknown background and piece", () => {
     const lines = problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);

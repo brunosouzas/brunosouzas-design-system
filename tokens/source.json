@@ -563,6 +563,18 @@
         "$type": "color",
         "$description": "Fill mixed 12% toward black (AB#268)."
       }
+    },
+    "neutral": {
+      "fill": {
+        "$value": "#F6F3EC",
+        "$type": "color",
+        "$description": "Cover background of a category with no track (Personal tools), from brand.light.bg (card 299, ADR 0006)."
+      },
+      "ring": {
+        "$value": "#D8D6D0",
+        "$type": "color",
+        "$description": "Fill mixed 12% toward black, like the track rings (card 299)."
+      }
     }
   },
   "surface": {

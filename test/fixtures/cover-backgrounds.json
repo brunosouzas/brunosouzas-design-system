@@ -118,5 +118,10 @@
     "fill": "#E2E4EC",
     "ring": "#C7C9D0",
     "source": "AB#268 identity v2, ADR 0006 (AI pillar)"
+  },
+  "neutral": {
+    "fill": "#F6F3EC",
+    "ring": "#D8D6D0",
+    "source": "card 299, brand.light.bg (Personal tools, no track)"
   }
 }
