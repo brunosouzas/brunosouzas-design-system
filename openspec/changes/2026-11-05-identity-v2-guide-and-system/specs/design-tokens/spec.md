@@ -52,7 +52,7 @@ The source SHALL keep every token currently required under `color` unchanged, an
 - **THEN** the build does not require `color.state.ink`, `color.state.white`, `color.state.panel` or `color.state.ring`
 
 ### Requirement: Cast eyes colour and signature margin
-`cast` SHALL gain `eyes` (`color`), shared by every character in both themes (the body is `color.white` and the outline/visor read `brand.<theme>.text` or `brand.<theme>.textMuted` directly in the piece's own code by its `surface` parameter, like any existing surface-aware piece; neither needs a dedicated token). `cover` SHALL gain `signatureMargin` (`dimension`), the signature lockup's fixed distance from a frame's right and bottom edges.
+`cast` SHALL gain `eyes` (`color`), shared by every character in both themes (the body is `color.white`; the outline reads `brand.light.text`/`brand.dark.textMuted` and the visor reads `brand.light.text`/`brand.dark.bg`, directly in the piece's own code by its `surface` parameter, like any existing surface-aware piece — neither needs a dedicated token, and the visor is deliberately not the mirror of the outline, since the screen face stays near-black in both themes). `cover` SHALL gain `signatureMargin` (`dimension`), the signature lockup's fixed distance from a frame's right and bottom edges.
 
 #### Scenario: Cast eyes present
 - **WHEN** the build runs on the repository's source
