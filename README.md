@@ -219,7 +219,7 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 }
 ```
 
-- `background` names one of the 21 pairs in `coverBackground` (a background and its ring colour, measured from the published covers). Which covers may share a pair is the `designer` skill's rule, not the package's.
+- `background` names one pair in `coverBackground` (a background and its ring colour): `trackIntegration`, `trackDelivery` or `trackAi` for a cover of that track (ADR 0006), `neutral` (the brand background) for a category with no track, or one of the 21 pairs measured from the covers published before 0.6.0, kept until 0.7.0 so their specs still build. Which cover takes which pair is the `illustration` skill's rule, not the package's.
 - `pieces` are drawn in order; their words go on top.
 - The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
 - `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead. It is painted after every piece's shapes; `customAt: <i>` paints it before `pieces[i]` instead, so a pill can sit on top of it (words always stay on top).

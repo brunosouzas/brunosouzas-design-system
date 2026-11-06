@@ -139,9 +139,14 @@ describe("Cover background pairs", () => {
 
 describe("Measured cover backgrounds", () => {
   test("Source matches the measured table", () => {
-    expect(Object.keys(measured)).toHaveLength(24);
+    expect(Object.keys(measured)).toHaveLength(25);
     expect(driftedPairs(repoSource())).toEqual([]);
     expect(tokens.coverBackground.blush).toEqual({ fill: "#F6CFE0", ring: "#ECBAD0" });
+  });
+
+  test("Neutral background equals the brand background", () => {
+    expect(tokens.coverBackground.neutral.fill).toBe(tokens.brand.light.bg);
+    expect(tokens.coverBackground.neutral.ring).toBe("#D8D6D0");
   });
 
   test("A pair drifts", () => {

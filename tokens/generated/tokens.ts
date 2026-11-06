@@ -165,6 +165,10 @@ export const tokens = {
       "fill": "#14215A",
       "ring": "#1C2D74"
     },
+    "neutral": {
+      "fill": "#F6F3EC",
+      "ring": "#D8D6D0"
+    },
     "olive": {
       "fill": "#8A9A3B",
       "ring": "#7E8E33"
