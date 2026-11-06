@@ -56,7 +56,9 @@ describe("Mira and the pillar cast pieces", () => {
   test("Every expression, both themes", () => {
     for (const [name, piece] of Object.entries(CAST)) {
       for (const surface of ["light", "dark"] as const) {
-        const trees = CAST_EXPRESSIONS.map((expression) => json(piece({ x: 0, y: 0, surface, expression })));
+        const drawnTrees = CAST_EXPRESSIONS.map((expression) => piece({ x: 0, y: 0, surface, expression }));
+        drawnTrees.forEach(valid);
+        const trees = drawnTrees.map(json);
         expect(new Set(trees).size, `${name} ${surface}`).toBe(CAST_EXPRESSIONS.length);
       }
     }
@@ -107,6 +109,7 @@ describe("Brand notation icons", () => {
 
   test("Drawing a notation icon", () => {
     valid(brandNotationIcon({ name: "contentBasedRouter", x: 100, y: 100 }));
+    expect(() => brandNotationIcon({ name: "content-based-router", x: 0, y: 0 } as never)).toThrow(RangeError);
     expect(() => brandNotationIcon({ name: "content-based-router", x: 0, y: 0 } as never)).toThrow(/name: expected one of/);
   });
 });
@@ -119,6 +122,7 @@ describe("Category icon", () => {
   });
 
   test("Unknown category rejected", () => {
+    expect(() => categoryIcon({ category: "news", x: 0, y: 0 } as never)).toThrow(RangeError);
     expect(() => categoryIcon({ category: "news", x: 0, y: 0 } as never)).toThrow(/category: expected one of/);
   });
 });

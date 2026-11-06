@@ -518,8 +518,22 @@ describe("Cast on a cover", () => {
 // Change identity-v2 (AB#268): cover-cli "Signature lockup", "New icon formats".
 describe("Signature lockup", () => {
   test("Signature drawn", () => {
-    const svg = svgOf({ ...minimal(), signature: true });
-    expect(svg).toContain('data-piece="signature"');
+    const result = buildCover(JSON.stringify({ ...minimal(), signature: true }), "s");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const svg = result.svg;
+    // The lockup closes the outlined group: after it, only the closing tags before the words.
+    const start = svg.indexOf('<g data-piece="signature">');
+    expect(start).toBeGreaterThan(0);
+    const lockup = svg.slice(start);
+    expect(lockup).toContain('data-piece="mira"');
+    // Anchored by cover.signatureMargin: Mira 55 x 43.75, a gap of 6, the symbol 24 (scale 0.75), on an 800 x 420 frame.
+    const m = tokens.cover.signatureMargin;
+    const left = 800 - m - (220 * 0.25 + 6 + 24);
+    const top = 420 - m - 175 * 0.25;
+    const r2 = (n: number) => Math.round(n * 100) / 100;
+    expect(lockup).toContain(`translate(${r2(left + 27.5)} ${r2(top + 43.75)}) scale(0.25)`);
+    expect(lockup).toContain(`translate(${r2(left + 55 + 6)} ${r2(top + (43.75 - 24) / 2)}) scale(0.75)`);
   });
 
   test("No signature by default", () => {
@@ -565,6 +579,11 @@ describe("New icon formats", () => {
   });
 
   test("Avatar refuses a background and pieces", () => {
+    expect(problems({ ...avatar(), background: "trackIntegration" })).toEqual(["background: not used by the avatar format"]);
+    const ws = workspace();
+    ws.write("a.json", { ...avatar(), background: "trackIntegration" });
+    expect(ws.run("a.json", "--out", "a.svg")).toBe(1);
+    expect(readdirSync(ws.root)).toEqual(["a.json"]);
     expect(problems({ ...avatar(), background: "peach" })).toEqual(["background: not used by the avatar format"]);
     expect(problems({ ...avatar(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the avatar format"]);
   });

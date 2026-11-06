@@ -18,7 +18,7 @@
 
 - [x] 3.1 `mira` piece: front/back, light/dark, four state faces (idle/done/waiting/failed), reusing the phase-3/4 scratch generator geometry (`~/.hermes/cache/scratch/ab266/final.py`, `ab267/phase4.py`) as the starting point, ported to pure TypeScript token-driven functions (no literal colours, per STY-2/illustration-pieces spec).
 - [x] 3.2 `visor`, `drone`, `kiu`, `sinal` pieces: same treatment from the approved cast sheet (`ab266/sheet5.py`/`sheet6.py`/`sheet7.py`).
-- [x] 3.3 Bank objects: `correio`, `lume`, `carga`, `anel`, `modulo`, `hub`, each with a screen-off state (no face) and promotable to a character sheet later if reused with a face in 2+ pieces (E8).
+- [x] 3.3 Bank objects: `correio`, `lume`, `carga`, `anel`, `modulo`, `hub`, each with a screen-off state (no face) and promotable to a character sheet later if reused with a face in 2+ pieces (E8). **Shipped as** one `bankObject({ name })` piece with `BANK_OBJECT_NAMES` (`courier`, not `correio`), per the archived spec.
 - [x] 3.4 **Deferred to 0.7.0 (owner, 2026-11-06):** `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES` and `EMOTE_KINDS` still ship in 0.6.0 unchanged, so the published scenes and the site's home banner keep building; they are retired with the `color.*` alias in 0.7.0. Original task: retire `MASCOTS`/`MASCOT_ACTIONS`/`MASCOT_FACES` of the old seven-role cast per the per-role mapping in `design.md`: keep what maps cleanly (reusing Visor for "AI agent", Drone for "DevOps") as named exports of the new pieces, drop `EMOTE_KINDS` entries that no longer apply, keep the rest. Dev/Architect/Data supporting-role pieces are **not** built in this task (out of scope, see proposal.md and design.md decision 2); they are created by the first AB#144-150 scene that needs one.
 - [x] 3.5 Update `openspec/specs/illustration-pieces/spec.md` with the new piece contracts and scenarios (shape, pure-function, token-only colour, overflow guard — same pattern as existing pieces).
 - [x] 3.6 `npm run pieces:sheet` to render every piece once for review; `vision_analyze` every new piece before moving on.
@@ -27,13 +27,13 @@
 
 - [x] 4.1 Pick the 13 EIP patterns for the brand notation (by published-catalogue and roadmap-card frequency), each redrawn as its market-recognised silhouette in the new ink/flat grammar (design.md, decision 3).
 - [x] 4.2 Draw the 3 delivery and 3 AI notation icons (new, no market precedent constraint beyond the brand's own visual rules).
-- [x] 4.3 Add `BRAND_NOTATION_ICONS`/`BRAND_NOTATION_ICON_NAMES` and a `brandNotationIcon({ name, x, y, scale })` drawing function (distinct from `EIP_ICON_NAMES`/`eipIcon`) to `src/pieces/`, spec scenarios distinguishing the new family from the diagram icon family (no shared names, no shared export surface).
+- [x] 4.3 Add `BRAND_NOTATION_ICONS`/`BRAND_NOTATION_ICON_NAMES` and a `brandNotationIcon({ name, x, y, scale })` drawing function (distinct from `EIP_ICON_NAMES`/`eipIcon`) to `src/pieces/`, spec scenarios distinguishing the new family from the diagram icon family (no shared names, no shared export surface). **Shipped as** `BRAND_NOTATION_ICON_NAMES` and `brandNotationIcon` (no `BRAND_NOTATION_ICONS` export); the two families share no export or piece, and `splitter`/`aggregator` appear in both name lists, per the archived spec.
 - [x] 4.4 Add the `categoryIcon` piece for "Ferramentas pessoais" (design.md decision 4): agent picks the glyph (triage TRI-1), neutral colour (`brand.<theme>.text`, picked by its `surface` parameter), its own spec scenarios.
 
 ## 5. Cover/banner/diagram/icon commands
 
 - [x] 5.1 Cover command: add `coverBackground.trackIntegration`/`trackDelivery`/`trackAi` entries (fill/ring, literal values matching `brand.light.track*`) so `background: "trackIntegration"` works through the existing `background` field and `backgroundNames()` — no change to `cover.ts`'s resolution code (design.md, "Component layer, concretely"). The 21 literal entries stay for one release so already-committed specs in `brunosouzas-content` still build, removed in 0.7.0 once every cover is rebuilt (task 7.2).
-- [x] 5.2 Add the Mira+symbol signature lockup as a composable piece addition to every cover/banner/og/favicon/avatar format.
+- [x] 5.2 Add the Mira+symbol signature lockup as a composable piece addition to every cover/banner/og/favicon/avatar format. **Shipped as** `signature: true` on `cover`, `banner`, `linkedin-card` and `og`; `favicon` and `avatar` draw the symbol alone and refuse the key.
 - [x] 5.3 New formats/sizes per A3-A5: LinkedIn "new piece" card 1080×1080, og 1200×630 generic, favicon SVG with `prefers-color-scheme` (PNG set is the consuming site's build step, not this package's — Bruno's call), avatar 500×500 — each a new `format` value in the cover-cli spec with its own output-shape requirement (see spec delta task 5.4).
 - [x] 5.4 Update `openspec/specs/cover-cli/spec.md` and `README.md` (`npm run cover`) with the new fields and formats.
 

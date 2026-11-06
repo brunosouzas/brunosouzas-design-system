@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Track cover backgrounds
-`coverBackground` SHALL gain three entries, `trackIntegration`, `trackDelivery`, `trackAi`, each with `fill` and `ring` (`color`) aliasing `brand.light.track*`, usable as a cover, banner or diagram spec's `background` like any existing entry. The 21 existing literal entries SHALL remain accepted for this release.
+`coverBackground` SHALL gain three entries, `trackIntegration`, `trackDelivery`, `trackAi`: `fill` equal to `brand.light.track*`, `ring` that fill mixed 12% toward black, usable as the `background` of a cover, banner, LinkedIn card or og spec like any existing entry. The 21 existing literal entries SHALL remain accepted for this release.
 
 #### Scenario: Track background accepted
 - **WHEN** a cover spec has `background: "trackIntegration"`
@@ -12,7 +12,7 @@
 - **THEN** the command still writes the cover exactly as before this change
 
 ### Requirement: Signature lockup
-A `cover` or `banner` output SHALL accept an optional `signature: true` key, adding the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`.
+A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boolean `signature`; `true` adds the Mira-and-symbol lockup after every piece and before the labels, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges, with `mira` at `scale: 0.25`. A `diagram`, `favicon` or `avatar` spec refuses the key; an `icon` spec draws no signature.
 
 #### Scenario: Signature drawn
 - **WHEN** a cover spec has `signature: true`
@@ -23,7 +23,7 @@ A `cover` or `banner` output SHALL accept an optional `signature: true` key, add
 - **THEN** the written SVG is unchanged from this change (no signature group)
 
 ### Requirement: New icon formats
-`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol only, no background, no `pieces`). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
+`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square of `brand.light.accentText`; the `background` and `pieces` keys are refused). This command writes SVG only; a PNG set (favicon sizes, social previews) is the consuming site's build step.
 
 #### Scenario: Favicon is the symbol, both themes, no pieces
 - **WHEN** a spec with `format: "favicon"` is built
@@ -58,7 +58,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown format
 - **WHEN** a spec has `format: "poster"`, or `format: 1`
-- **THEN** exactly one problem is printed for `format`: "expected one of cover, banner, diagram, icon", the command exits 1 and writes nothing
+- **THEN** exactly one problem is printed for `format`: "expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar", the command exits 1 and writes nothing
 
 #### Scenario: Ring count in a spec
 - **WHEN** a cover, banner or diagram spec has `rings.count: 30`
