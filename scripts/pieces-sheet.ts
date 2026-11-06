@@ -103,7 +103,7 @@ export const SAMPLES: Record<P.PieceName, (x: number, y: number) => Drawn> = {
   kiu: (x, y) => P.kiu({ x: x + 60, y: y + 160, scale: 0.9, steps: 4 }),
   sinal: (x, y) => merge(P.sinal({ x: x + 90, y: y + 180, scale: 0.9 }), P.sinal({ x: x + 180, y: y + 180, scale: 0.9, surface: "dark" })),
   bankObject: (x, y) => merge(...["courier", "lume", "carga", "anel"].map((name, i) => P.bankObject({ name: name as P.BankObjectName, x: x + 60 + (i % 2) * 100, y: y + 80 + Math.floor(i / 2) * 90, scale: 0.65 }))),
-  symbol: (x, y) => merge(P.symbol({ x: x + 70, y: y + 70, scale: 3 }), P.symbol({ x: x + 70, y: y + 150, scale: 3, surface: "dark" })),
+  symbol: (x, y) => merge(P.symbol({ x: x + 70, y: y + 60, scale: 2 }), P.symbol({ x: x + 170, y: y + 170, scale: 2, surface: "dark" })),
   brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as P.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
   categoryIcon: (x, y) => P.categoryIcon({ category: "personalTools", x: x + 100, y: y + 100, scale: 2.4 }),
 };
