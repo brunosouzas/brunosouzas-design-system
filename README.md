@@ -219,7 +219,23 @@ A cover is a JSON spec kept with its article, outside this repository: drafts ar
 }
 ```
 
-- `background` names one pair in `coverBackground` (a background and its ring colour): `trackIntegration`, `trackDelivery` or `trackAi` for a cover of that track (ADR 0006), or `neutral` (the brand background) for a category with no track; these four are the only pairs since 0.7.0. Which cover takes which pair is the `illustration` skill's rule, not the package's.
+- `background` names one pair in `coverBackground` (a background and its ring colour). Since 0.7.0 the pairs are track families (ADR 0006, amended 2026-11-06): each track has a default `track<Name>` and named tones `<track><Tone>`, and each article picks one tone of its track, so a series varies and the track stays recognisable; `neutral` (the brand background) is for a cover with no track. These twelve are the only pairs. Which cover takes which tone is the `illustration` skill's rule, not the package's.
+
+  | Track | Name | Tone | Fill | Ring |
+  |---|---|---|---|---|
+  | Integration | `trackIntegration` | peach, default | `#F7C6A1` | `#E3AB84` |
+  | Integration | `integrationClay` | clay | `#E9CDBE` | `#D3B3A3` |
+  | Integration | `integrationSand` | sand | `#EED7A8` | `#D8BF8C` |
+  | Delivery | `trackDelivery` | sage, default | `#B9DEC3` | `#98C6A5` |
+  | Delivery | `deliveryMint` | mint | `#A9DCD6` | `#88C4BD` |
+  | Delivery | `deliveryOlive` | olive | `#D3DFA8` | `#B9C78A` |
+  | AI | `trackAi` | periwinkle, default | `#C5CDF2` | `#A5AEDA` |
+  | AI | `aiSky` | sky | `#B5D5F2` | `#94BBDE` |
+  | AI | `aiLilac` | lilac | `#DCC7F0` | `#C3A9DC` |
+  | Personal tools | `trackPersonal` | butter, default (new) | `#F4DD8E` | `#DDC46C` |
+  | Personal tools | `personalRose` | rose | `#F5C9DA` | `#E0ABC0` |
+  | no track | `neutral` | cream (unchanged) | `#F6F3EC` | `#D8D6D0` |
+
 - `pieces` are drawn in order; their words go on top.
 - The `rings` centre stays within ±10000 in a cover spec, and a piece that overflows is reported at its entry (`pieces[1]: the drawing overflows`).
 - `custom` (optional) is the cover's one free-form object, a JSON node tree limited to drawing tags and a fixed list of attributes, with no external references. An object that repeats becomes a piece instead. It is painted after every piece's shapes; `customAt: <i>` paints it before `pieces[i]` instead, so a pill can sit on top of it (words always stay on top).
@@ -286,7 +302,7 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 | Removed | Use instead |
 |---|---|
 | `color.healthy`, `color.blocked`, `color.transitional`, `color.caller`, `color.backend`, `color.failure`, `color.failFast` (and their `--ds-color-*` variables) | the same values at `color.state.*` (`--ds-color-state-*`); a spec that passes `"color.healthy"` is refused, pass `"color.state.healthy"` |
-| the 21 `coverBackground` pairs from before 0.6.0 (`blush`, `peach`, `lavender`, `navy`, `mustard`, …) | `trackIntegration`, `trackDelivery`, `trackAi` or `neutral` |
+| the 21 `coverBackground` pairs from before 0.6.0 (`blush`, `peach`, `lavender`, `navy`, `mustard`, …) | a tone of the cover's track family (`trackIntegration`, `integrationClay`, `deliveryMint`, `aiSky`, `trackPersonal`, … see "Cover spec") or `neutral` |
 | `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES` and the seven-role `cast.*` colours | Mira, the pillar characters or a bank object (ADR 0007); `emote` and `EMOTE_KINDS` stay |
 | `illustration.healthyShade`, `illustration.transitionalShade` | nothing reads them; pass a token path if a drawing needs a shade |
 | `"signature"` in an icon spec | remove it (it drew nothing) |

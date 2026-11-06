@@ -74,6 +74,6 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
 - Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
-- New `coverBackground` pairs: none until a new cover needs a hue no pair gives (the designer reuses pairs under its COV-4, AB#173).
+- New `coverBackground` tones: none until a series needs a tone its track family lacks; a new tone joins its family (`<track><Tone>`) only from renders the owner approves (ADR 0006, amended 2026-11-06).
 - A dark-surface body diagram, a second layout width and text that wraps by itself (not asked by the designer, AB#173).
 - Drawing stackledger's round bends (AB#166): stackledger draws the arcs with `map.bendRadius`; the banner keeps its own `Q` curves.
