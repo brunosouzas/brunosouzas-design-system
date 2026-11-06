@@ -145,7 +145,7 @@ describe("Installed package", () => {
       'import { pill, toSvg, tokens, type CoverSpec } from "@brunosouzas/design-system";',
       'import { toReact } from "@brunosouzas/design-system/react";',
       'import { tokens as t } from "@brunosouzas/design-system/tokens";',
-      'const ink: "#0A1033" = tokens.color.ink;',
+      'const ink: "#121212" = tokens.color.ink;',
       'const spec: Pick<CoverSpec, "background"> = { background: "blush" };',
       'export const out = [toSvg(pill({ x: 1, y: 1, text: "a" }).body[0]), toReact, t.cover.width, ink, spec];',
     ].join("\n"));

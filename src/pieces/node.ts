@@ -49,11 +49,13 @@ export const g = (attrs: Attrs, ...children: Child[]): SvgNode => el("g", attrs,
 export const drawn = (body: readonly SvgNode[], text: readonly SvgNode[] = []): Drawn => ({ body, text });
 
 /**
- * Hard offset shadow (STY-1): an ink copy of the shape translated by `offset`,
- * then the shape. Inside the outlined group the copy keeps the outline too, as
- * the motion components' shadow does.
+ * Hard offset shadow: the pieces draw none since 0.7.0 (ADR 0009, `shadow.block`
+ * is 0), so with offset 0 this returns the shape alone and the output carries no
+ * hidden node. With an offset above 0, for a caller that still wants one: an ink
+ * copy of the shape translated by `offset`, then the shape. Inside the outlined
+ * group the copy keeps the outline too.
  */
-export const shadowed = (shape: SvgNode, offset: number = tokens.shadow.block): SvgNode[] => [
+export const shadowed = (shape: SvgNode, offset: number = tokens.shadow.block): SvgNode[] => offset === 0 ? [shape] : [
   {
     ...shape,
     attrs: {

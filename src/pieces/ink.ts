@@ -21,10 +21,14 @@ export const inkSchema: Schema = { surface: surfaceParam, inkScale: inkScalePara
 /** Collects the limits between parameters (piece.ts, `relations`). */
 export const limits = (...checks: (Problem | false)[]): Problem[] => checks.filter((check): check is Problem => check !== false);
 
-/** The surface's colours and the ink measures at a scale. */
+/**
+ * The surface's colours and the ink measures at a scale. `line` is the colour of
+ * an ink stroke on the surface's background or on a dark face: ink on light, the
+ * surface's muted grey on dark, where ink vanishes (ADR 0009, the cast's rule).
+ */
 export const inkOf = ({ surface = "light", inkScale = 1 }: Ink) => {
   const s = tokens.surface[surface];
-  return { s, outline: M.outline * inkScale, rim: s.rimWidth * inkScale, offset: M.shadow * inkScale };
+  return { s, line: surface === "dark" ? s.muted : ink, outline: M.outline * inkScale, rim: s.rimWidth * inkScale, offset: M.shadow * inkScale };
 };
 
 /** Outlined shapes need room for their ink: smallest dimension ≥ 4 × outline. */
@@ -37,15 +41,20 @@ export const atLeast = (name: string, value: number, least: number, what: string
 
 export type Shape = (dx: number, dy: number, attrs: Attrs) => SvgNode;
 
-/** The ink sticker (metro-and-diagram-pieces design §3): shadow copy, rim on dark, then the face. */
+/**
+ * The ink sticker (metro-and-diagram-pieces design §3): a shadow copy when the
+ * offset is above 0 (`map.shadow` is 0 since ADR 0009, so none), a rim when the
+ * surface has one (none while `rimWidth` is 0), then the face outlined in the
+ * surface's ink line.
+ */
 export const sticker = (shape: Shape, face: string, inkParams: Ink): SvgNode[] => {
-  const { s, outline, rim, offset } = inkOf(inkParams);
+  const { s, line, outline, rim, offset } = inkOf(inkParams);
   const wide = r2(outline + 2 * rim);
   return [
     // Joins are set here, so a sticker draws the same inside any group.
-    shape(offset, offset, { fill: s.shadow, stroke: s.shadow, "stroke-width": wide, "stroke-linejoin": "round" }),
+    ...(offset > 0 ? [shape(offset, offset, { fill: s.shadow, stroke: s.shadow, "stroke-width": wide, "stroke-linejoin": "round" })] : []),
     ...(s.rimWidth > 0 ? [shape(0, 0, { fill: s.rim, stroke: s.rim, "stroke-width": wide, "stroke-linejoin": "round" })] : []),
-    shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" }),
+    shape(0, 0, { fill: face, stroke: line, "stroke-width": r2(outline), "stroke-linejoin": "round" }),
   ];
 };
 

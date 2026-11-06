@@ -40,7 +40,7 @@ describe("UI icons as data", () => {
     const { body, text } = uiIcon({ name: "sun", x: 0, y: 0 });
     expect(body).toHaveLength(1);
     expect(body[0].tag).toBe("g");
-    expect(body[0].attrs).toEqual({ transform: "translate(0 0) scale(1)", fill: "#0A1033", stroke: "#0A1033" });
+    expect(body[0].attrs).toEqual({ transform: "translate(0 0) scale(1)", fill: "#121212", stroke: "#121212" });
     expect(body[0].children.map((child) => (child as SvgNode).tag)).toEqual(["circle", "path"]);
     expect(text).toEqual([]);
   });
@@ -121,9 +121,10 @@ describe("Link icons as data", () => {
   test("GitHub on light", () => {
     const group = linkIcon({ icon: "github", x: 0, y: 0 }).body[0];
     expect(group.attrs).toEqual({ transform: "translate(0 0) scale(1)", stroke: "none" });
-    const [shadow, face, mark] = group.children as SvgNode[];
-    expect(shadow.attrs).toEqual({ x: 5, y: 5, width: 38, height: 38, rx: 9, fill: "#0A1033", stroke: "none" });
-    expect(face.attrs).toEqual({ x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFFFFF", stroke: "#0A1033", "stroke-width": 2.5 });
+    // The face first, with its outline and no frame behind it (ADR 0009).
+    const [face, mark] = group.children as SvgNode[];
+    expect(group.children).toHaveLength(2);
+    expect(face.attrs).toEqual({ x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 2.5 });
     expect(mark.attrs.transform).toBe("translate(9.5 9) scale(0.0455)");
     const site = readFileSync(new URL("../fixtures/link-icons/social-github.svg", import.meta.url), "utf8");
     const path = /<path d="([^"]+)"/.exec(site)![1];
@@ -132,17 +133,18 @@ describe("Link icons as data", () => {
   });
 
   test("Faces and glyphs as designed", () => {
-    // design §6: faces as token paths; glyphs of brunosouzas.com e29b3dd, and the website globe.
+    // design §6: the site's face colours stay in the data; since 0.7.0 every face is drawn white (ADR 0009).
+    // Glyphs of brunosouzas.com e29b3dd, and the website globe.
     expect(LINK_ICONS.map((icon) => [icon.name, icon.title, icon.face])).toEqual([
       ["github", "GitHub", "color.white"],
       ["linkedin", "LinkedIn", "color.state.caller"],
       ["email", "Email", "color.state.transitional"],
       ["website", "Website", "color.state.healthy"],
     ]);
-    const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(2);
-    const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[1]).attrs.fill;
-    expect(["github", "linkedin", "email", "website"].map(faceFill)).toEqual(["#FFFFFF", "#8FB2FF", "#FFD25A", "#3DDC84"]);
-    const ink = "#0A1033";
+    const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(1);
+    const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[0]).attrs.fill;
+    expect(["github", "linkedin", "email", "website"].map(faceFill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
+    const ink = "#121212";
     expect(glyph("linkedin")).toEqual([
       { tag: "rect", attrs: { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: ink, stroke: "none" }, children: [] },
       { tag: "circle", attrs: { cx: 14, cy: 13.8, r: 2.4, fill: ink, stroke: "none" }, children: [] },
@@ -161,10 +163,16 @@ describe("Link icons as data", () => {
   });
 
   test("Dark frame", () => {
-    const [shadow, rim, face] = linkIcon({ icon: "email", x: 0, y: 0, surface: "dark" }).body[0].children as SvgNode[];
-    expect(shadow.attrs).toMatchObject({ x: 4, y: 4, width: 41, height: 41, rx: 11, fill: "#4C5CB8" });
-    expect(rim.attrs).toMatchObject({ x: 0.5, y: 0.5, width: 41, height: 41, rx: 11, fill: "#EEF2FF" });
-    expect(face.attrs).toMatchObject({ x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFD25A" });
+    // No frame rect before the face: the group starts with it, white, outlined in surface.dark.muted.
+    const [face] = linkIcon({ icon: "email", x: 0, y: 0, surface: "dark" }).body[0].children as SvgNode[];
+    expect(face.attrs).toEqual({ x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFFFFF", stroke: "#ADA79D", "stroke-width": 2.5 });
+  });
+
+  // Spec illustration-pieces "Ink on the dark surface" (task 3.5).
+  test("Link icon on dark", () => {
+    const [face, mark] = linkIcon({ icon: "github", x: 0, y: 0, surface: "dark" }).body[0].children as SvgNode[];
+    expect(face.attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#ADA79D" });
+    expect((mark.children[0] as SvgNode).attrs.fill).toBe("#121212");
   });
 
   test("Unknown icon", () => {

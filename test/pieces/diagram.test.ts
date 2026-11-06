@@ -3,12 +3,14 @@
 // Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
-import { hexNode, ledgerMark, messageArrow, nodeBlock, pillNode } from "../../src/pieces/metro";
+import { linkIcon, queueNode, storeNode } from "../../src/pieces/library";
+import { hexNode, ledgerMark, lineBadge, messageArrow, nodeBlock, pillNode, renewalRing, stationMarker } from "../../src/pieces/metro";
+import type { SvgNode } from "../../src/pieces/node";
 
 describe("Diagram nodes", () => {
   test("Default state", () => {
     const { body } = nodeBlock({ x: 0, y: 0, width: 160, title: "a" });
-    expect(body.at(-1)!.attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#0A1033" });
+    expect(body.at(-1)!.attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#121212" });
   });
 
   test("Node radius out of range", () => {
@@ -19,7 +21,7 @@ describe("Diagram nodes", () => {
   test("Focus node on dark", () => {
     const { body, text } = nodeBlock({ x: 0, y: 0, width: 160, title: "This item", state: "focus", surface: "dark" });
     expect(body.at(-1)!.attrs.fill).toBe("#8FB2FF");
-    expect(text[0].attrs.fill).toBe("#0A1033");
+    expect(text[0].attrs.fill).toBe("#121212");
   });
 
   test("Placeholder", () => {
@@ -46,8 +48,8 @@ describe("Diagram nodes", () => {
     expect(body).toHaveLength(1);
     expect(body[0].attrs).toMatchObject({ x: 10, y: 10, width: 200, height: 46, fill: "none", "stroke-dasharray": "5 4" });
     expect(text.map((node) => [node.children[0], node.attrs.x, node.attrs.y, node.attrs["font-size"], node.attrs["font-weight"], node.attrs.fill, node.attrs["text-anchor"]])).toEqual([
-      ["Stripe", 22, 30, 13, 700, "#5B6694", "start"],
-      ["external service", 22, 47, 11, 400, "#5B6694", "start"],
+      ["Stripe", 22, 30, 13, 700, "#5C5852", "start"],
+      ["external service", 22, 47, 11, 400, "#5C5852", "start"],
     ]);
   });
 });
@@ -95,8 +97,8 @@ describe("Ledger mark", () => {
     const [group] = body;
     expect(group.attrs.transform).toBe("translate(0 0) scale(1)");
     const [rect, path, big, small] = group.children as typeof body;
-    expect(rect.attrs).toMatchObject({ width: 32, height: 32, rx: 7, fill: "#0A1033" });
-    expect(path.attrs).toMatchObject({ d: "M7 23 L14 16 L25 16", stroke: "#1E6FEB", "stroke-width": 4.5 });
+    expect(rect.attrs).toMatchObject({ width: 32, height: 32, rx: 7, fill: "#121212" });
+    expect(path.attrs).toMatchObject({ d: "M7 23 L14 16 L25 16", stroke: "#E04E17", "stroke-width": 4.5 });
     expect(big.attrs).toMatchObject({ cx: 14, cy: 16, r: 4 });
     expect(small.attrs).toMatchObject({ cx: 25, cy: 16, r: 2.6 });
   });
@@ -116,8 +118,9 @@ describe("Ledger mark on a surface", () => {
   test("Mark on a dark surface", () => {
     const light = ledgerMark({ x: 0, y: 0 }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
     const dark = ledgerMark({ x: 0, y: 0, surface: "dark" }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
-    expect(dark[0]).toEqual({ tag: "rect", attrs: { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: "#EEF2FF", stroke: "none" }, children: [] });
-    expect(dark[1]).toEqual({ tag: "rect", attrs: { x: 2, y: 2, width: 28, height: 28, rx: 5, fill: "#0A1033", stroke: "none" }, children: [] });
+    // A 2-unit band in surface.dark.muted, whatever rimWidth is (0 since ADR 0009), so the ink square never sits bare on dark.
+    expect(dark[0]).toEqual({ tag: "rect", attrs: { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: "#ADA79D", stroke: "none" }, children: [] });
+    expect(dark[1]).toEqual({ tag: "rect", attrs: { x: 2, y: 2, width: 28, height: 28, rx: 5, fill: "#121212", stroke: "none" }, children: [] });
     expect(dark.slice(2)).toEqual(light.slice(1));
   });
 
@@ -133,8 +136,8 @@ const straight = { from: [0, 0] as [number, number], to: [100, 0] as [number, nu
 describe("Message arrow kinds", () => {
   test("Reply", () => {
     const { body } = messageArrow({ ...straight, kind: "reply" });
-    expect(body[0].attrs).toEqual({ d: "M0,0 L87.5,0", fill: "none", stroke: "#0A1033", "stroke-width": 2.5, "stroke-linecap": "round", "stroke-dasharray": "6 8" });
-    expect(body[1].attrs).toMatchObject({ points: "100,0 87.5,5 87.5,-5", fill: "#0A1033", stroke: "#0A1033" });
+    expect(body[0].attrs).toEqual({ d: "M0,0 L87.5,0", fill: "none", stroke: "#121212", "stroke-width": 2.5, "stroke-linecap": "round", "stroke-dasharray": "6 8" });
+    expect(body[1].attrs).toMatchObject({ points: "100,0 87.5,5 87.5,-5", fill: "#121212", stroke: "#121212" });
   });
 
   test("Failure and fail-fast", () => {
@@ -204,8 +207,55 @@ describe("Message arrow dash", () => {
     expect(solid[0].attrs).not.toHaveProperty("stroke-dasharray");
     expect(solid[1].attrs.fill).toBe("#E04848");
     const dashed = messageArrow({ ...base, dashed: true }).body[0].attrs;
-    expect(dashed.stroke).toBe("#0A1033");
+    expect(dashed.stroke).toBe("#121212");
     expect(Object.entries(dashed).at(-1)).toEqual(["stroke-dasharray", "6 8"]);
     expect(() => messageArrow({ ...base, dashed: "no" as never })).toThrow(/^messageArrow: dashed:/);
+  });
+});
+
+// Change identity-v2-type-pieces-cleanup (card 301), task 3.2: spec illustration-pieces "Ink on the dark surface".
+const nodesOf = (nodes: readonly (SvgNode | string)[]): SvgNode[] => nodes.flatMap((node) => (typeof node === "string" ? [] : [node, ...nodesOf(node.children)]));
+const strokesOf = (nodes: readonly SvgNode[]) => new Set(nodesOf(nodes).map((node) => node.attrs.stroke).filter((stroke) => stroke !== undefined && stroke !== "none"));
+
+describe("Ink on the dark surface", () => {
+  const dark = {
+    stationMarker: () => stationMarker({ cx: 0, cy: 0, surface: "dark" }).body,
+    storeNode: () => storeNode({ x: 0, y: 0, width: 100, height: 60, text: ["IDs"], surface: "dark" }).body,
+    queueNode: () => queueNode({ x: 0, y: 0, width: 100, text: ["orders"], surface: "dark" }).body,
+    lineBadge: () => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, surface: "dark" }).body,
+  };
+
+  test("Stickers and diagram strokes on dark", () => {
+    // The marker's face, the store's face and lid, the queue's face and rails, the flat badge's outline.
+    for (const [name, draw] of Object.entries(dark)) expect([...strokesOf(draw())], name).toEqual(["#ADA79D"]);
+    const store = dark.storeNode();
+    expect(store.map((node) => node.attrs.stroke)).toEqual(["#ADA79D", "#ADA79D"]);
+    expect(dark.queueNode().at(-1)!.attrs).toMatchObject({ d: "M10,0 V46 M90,0 V46", stroke: "#ADA79D" });
+  });
+
+  test("Stations inside the ink square", () => {
+    const children = ledgerMark({ x: 0, y: 0, surface: "dark" }).body[0].children as SvgNode[];
+    const stations = children.filter((node) => node.tag === "circle");
+    expect(stations).toHaveLength(2);
+    for (const station of stations) expect(station.attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#121212" });
+    expect(children[1].attrs).toMatchObject({ x: 2, y: 2, width: 28, height: 28, fill: "#121212" });
+  });
+
+  test("Light surface unchanged", () => {
+    const calls: Record<string, (surface?: "light") => readonly SvgNode[]> = {
+      stationMarker: (surface) => stationMarker({ cx: 0, cy: 0, surface }).body,
+      storeNode: (surface) => storeNode({ x: 0, y: 0, width: 100, height: 60, text: ["IDs"], surface }).body,
+      queueNode: (surface) => queueNode({ x: 0, y: 0, width: 100, text: ["orders"], surface }).body,
+      lineBadge: (surface) => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, surface }).body,
+      renewalRing: (surface) => renewalRing({ cx: 0, cy: 0, r: 18, surface }).body,
+      ledgerMark: (surface) => ledgerMark({ x: 0, y: 0, surface }).body,
+      linkIcon: (surface) => linkIcon({ icon: "github", x: 0, y: 0, surface }).body,
+    };
+    for (const [name, draw] of Object.entries(calls)) {
+      const light = draw("light");
+      expect(light, name).toEqual(draw());
+      expect(JSON.stringify(light), name).not.toContain("#ADA79D");
+      expect(strokesOf(light).has("#121212"), name).toBe(true);
+    }
   });
 });

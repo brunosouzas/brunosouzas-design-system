@@ -105,7 +105,7 @@ export const sheet = definePiece<SheetParams>(
     leadFill: col(),
     tick: col(),
   },
-  ({ x, y, width, height, rows, top = 46, step = 38, fill = "color.white", leadFill = "color.state.caller", tick = "illustration.accent" }) => {
+  ({ x, y, width, height, rows, top = 46, step = 38, fill = "color.white", leadFill = "color.ink", tick = "color.white" }) => {
     const marks: SvgNode[] = [];
     const bars: SvgNode[] = [];
     const ticks: SvgNode[] = [];
@@ -119,7 +119,7 @@ export const sheet = definePiece<SheetParams>(
         if (checked) ticks.push(el("path", { d: `M${x + 27},${cy} L${x + 32},${cy + 6} L${x + 40},${cy - 6}`, stroke: colour(tick, "tick") }));
         barX = x + 56;
       } else if (row.lead === "question") {
-        marks.push(el("circle", { cx: x + 30, cy, r: 13, fill: tokens.color.state.transitional }));
+        marks.push(el("circle", { cx: x + 30, cy, r: 13, fill: tokens.color.white }));
         glyphs.push(el("text", { x: x + 30, y: cy + 7, "font-size": 19, "font-weight": tokens.font.weightHeavy }, "?"));
         barX = x + 52;
       }
@@ -142,10 +142,12 @@ export const sheet = definePiece<SheetParams>(
   },
 );
 
-const CODE_COLOURS = { healthy: tokens.color.state.healthy, caller: tokens.color.state.caller, white: tokens.color.white, backend: tokens.color.state.backend } as const;
-export type CodeLine = { indent: number; w: number; color: keyof typeof CODE_COLOURS; tall?: boolean };
+// The line kinds of 0.6.x specs, kept so they stay valid (ADR 0009): on the dark card every line is
+// brand.dark.textMuted, a `white` line brand.dark.text, and the `tall` line (the one under review) the accent.
+const CODE_LINE_COLOURS = ["healthy", "caller", "white", "backend"] as const;
+export type CodeLine = { indent: number; w: number; color: (typeof CODE_LINE_COLOURS)[number]; tall?: boolean };
 export type CodePanelParams = { x: number; y: number; width: number; height: number; lines: CodeLine[]; top?: number; step?: number };
-/** Dark code panel with coloured lines; a tall line marks the one under review. */
+/** Dark code panel with neutral lines; a tall line, the one under review, takes the accent (ADR 0009). */
 export const codePanel = definePiece<CodePanelParams>(
   "codePanel",
   {
@@ -158,7 +160,7 @@ export const codePanel = definePiece<CodePanelParams>(
       required: true,
       of: {
         kind: "object",
-        fields: { indent: { kind: "number", required: true, min: 0, max: MAX_SIZE }, w: size(true), color: { kind: "enum", required: true, values: Object.keys(CODE_COLOURS) }, tall: { kind: "boolean" } },
+        fields: { indent: { kind: "number", required: true, min: 0, max: MAX_SIZE }, w: size(true), color: { kind: "enum", required: true, values: CODE_LINE_COLOURS }, tall: { kind: "boolean" } },
       },
     },
     top: size(),
@@ -176,7 +178,7 @@ export const codePanel = definePiece<CodePanelParams>(
             width: line.w,
             height: line.tall ? 16 : 10,
             rx: line.tall ? 8 : 5,
-            fill: CODE_COLOURS[line.color],
+            fill: line.tall ? tokens.brand.dark.accent : line.color === "white" ? tokens.brand.dark.text : tokens.brand.dark.textMuted,
           }),
         ),
       ),
@@ -184,17 +186,17 @@ export const codePanel = definePiece<CodePanelParams>(
 );
 
 export type SpeechBubbleParams = { x: number; y: number; width: number; height: number; fill?: string };
-/** Chat slip with a tail at the bottom left and one white text line. */
+/** Chat slip with a tail at the bottom left and one text line. */
 export const speechBubble = definePiece<SpeechBubbleParams>(
   "speechBubble",
   { x: pos(), y: pos(), width: size(true, 60), height: size(true, 50), fill: col() },
-  ({ x, y, width: w, height: h, fill = "color.state.caller" }) => {
+  ({ x, y, width: w, height: h, fill = "color.white" }) => {
     const r = 12;
     const b = y + h;
     const d = `M${x},${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${b - r} Q${x + w},${b} ${x + w - r},${b} H${x + 44} L${x + 20},${b + 20} L${x + 24},${b} H${x + r} Q${x},${b} ${x},${b - r} Z`;
     return drawn([
       ...shadowed(el("path", { d, fill: colour(fill, "fill") })),
-      el("rect", { x: x + 22, y: y + 31, width: w - 44, height: 13, rx: 6.5, fill: tokens.color.white, stroke: "none" }),
+      el("rect", { x: x + 22, y: y + 31, width: w - 44, height: 13, rx: 6.5, fill: tokens.illustration.textBar, stroke: "none" }),
     ]);
   },
 );
@@ -208,10 +210,10 @@ export const browserWindow = definePiece<BrowserWindowParams>(
     drawn([
       ...shadowed(el("rect", { x, y, width: w, height: h, rx: 12, fill: tokens.color.white })),
       el("path", { d: `M${x},${y + 30} H${x + w}`, fill: "none" }),
-      ...[tokens.color.state.backend, tokens.color.state.transitional, tokens.color.state.healthy].map((fill, i) =>
+      ...[tokens.color.white, tokens.color.white, tokens.color.white].map((fill, i) =>
         el("circle", { cx: x + 18 + i * 16, cy: y + 15, r: 5, fill, "stroke-width": 2.5 }),
       ),
-      el("rect", { x: x + 20, y: y + 46, width: w - 40, height: 40, rx: 8, fill: tokens.color.state.caller, "stroke-width": tokens.outline.small }),
+      el("rect", { x: x + 20, y: y + 46, width: w - 40, height: 40, rx: 8, fill: tokens.brand.light.bg, "stroke-width": tokens.outline.small }),
       el("rect", { x: x + 20, y: y + 100, width: r2(w * 0.6), height: 10, rx: 5, fill: tokens.illustration.textBar, stroke: "none" }),
       el("rect", { x: x + 20, y: y + 118, width: r2(w * 0.4), height: 10, rx: 5, fill: tokens.illustration.textBar, stroke: "none" }),
     ]),
@@ -229,10 +231,10 @@ export const folder = definePiece<FolderParams>(
     const paper = (dx: number, dy: number, rot: number) =>
       el("rect", { x: r2(x + dx * s), y: r2(y + dy * s), width: r2(96 * s), height: r2(120 * s), rx: 8, fill: tokens.color.white, transform: `rotate(${rot} ${r2(x + (dx + 48) * s)} ${r2(y + (dy + 60) * s)})` });
     return drawn([
-      ...shadowed(el("path", { d: back, fill: tokens.illustration.transitionalShade })),
+      ...shadowed(el("path", { d: back, fill: tokens.brand.light.border })),
       paper(24, -8, -8),
       paper(66, -16, 6),
-      el("path", { d: front, fill: tokens.color.state.transitional }),
+      el("path", { d: front, fill: tokens.color.white }),
     ]);
   },
 );
@@ -244,9 +246,8 @@ export const book = definePiece<BookParams>(
   { x: pos(), y: pos(), width: size(false, 30), height: size(false, 30) },
   ({ x, y, width: w = 120, height: h = 200 }) =>
     drawn([
-      el("rect", { x: x + 18, y: y + 14, width: w - 2, height: h, rx: 8, fill: ink, stroke: "none" }),
+      // The back page stays white; no ink shape behind or offset from the front cover (it read as the old shadow, ADR 0009).
       el("rect", { x: x + 14, y: y + 10, width: w - 2, height: h, rx: 8, fill: tokens.color.white }),
-      el("rect", { x, y, width: w, height: h, rx: 8, fill: ink, stroke: "none" }),
       el("rect", { x, y, width: w, height: h, rx: 8, fill: tokens.color.white }),
       el("rect", { x, y, width: 20, height: h, rx: 8, fill: ink }),
       el("path", { d: `M${x + w + 4},${y + 16} V${y + h - 6} M${x + w + 8},${y + 20} V${y + h - 2}`, "stroke-width": 2 }),
@@ -276,7 +277,7 @@ export type ArcArrowParams = { from: Point; c1: Point; c2: Point; to: Point; col
 export const arcArrow = definePiece<ArcArrowParams>(
   "arcArrow",
   { from: { kind: "point", required: true }, c1: { kind: "point", required: true }, c2: { kind: "point", required: true }, to: { kind: "point", required: true }, color: col(), dashed: { kind: "boolean" }, width: size() },
-  ({ from, c1, c2, to, color = "color.white", dashed = false, width }) => {
+  ({ from, c1, c2, to, color = "color.ink", dashed = false, width }) => {
     const stroke = colour(color, "color");
     const strokeWidth = width ?? (dashed ? 4 : 6);
     const angle = Math.atan2(to[1] - c2[1], to[0] - c2[0]);
@@ -297,10 +298,10 @@ export type RailParams = { x: number; y: number; width: number; nodes: string[];
 export const rail = definePiece<RailParams>(
   "rail",
   { x: pos(), y: pos(), width: size(true, 100), nodes: { kind: "array", required: true, minItems: 1, of: { kind: "color" } }, fill: col(), thickness: size() },
-  ({ x, y, width: w, nodes, fill = "illustration.codePanel", thickness: t = 44 }) =>
+  ({ x, y, width: w, nodes, fill = "color.white", thickness: t = 44 }) =>
     drawn([
-      ...shadowed(el("rect", { x, y, width: w, height: t, rx: t / 2, fill: colour(fill, "fill") }), 8),
-      el("path", { d: `M${x + 30},${y + t / 2} H${x + w - 30}`, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small }),
+      el("rect", { x, y, width: w, height: t, rx: t / 2, fill: colour(fill, "fill") }),
+      el("path", { d: `M${x + 30},${y + t / 2} H${x + w - 30}`, fill: "none", stroke: tokens.brand.light.border, "stroke-width": tokens.outline.small }),
       ...nodes.map((node, i) =>
         el("rect", { x: r2(x + 40 + i * ((w - 100) / Math.max(1, nodes.length - 1)) - 10), y: y + t / 2 - 10, width: 20, height: 20, rx: 4, fill: colour(node, `nodes[${i}]`), "stroke-width": tokens.outline.small }),
       ),
@@ -326,7 +327,7 @@ const PIN_SIZE = 18;
 export const milestonePin = definePiece<MilestonePinParams>(
   "milestonePin",
   { x: pos(), y: pos(), text: label(), fill: col(), stem: size(), size: { kind: "number", min: 6, max: 48 } },
-  ({ x, y, text, fill = "color.state.healthy", stem = 44, size: r }) => {
+  ({ x, y, text, fill = "color.white", stem = 44, size: r }) => {
     // Without `size`, the 0.5.0 expressions exactly (no rounding), so every 0.5.0 call keeps its bytes.
     const k = (r ?? PIN_SIZE) / PIN_SIZE;
     const at = r === undefined ? (v: number) => v : r2;
@@ -352,9 +353,9 @@ export const priceTag = definePiece<PriceTagParams>(
     const d = `M${x + 20},${top} L${right - 10},${top} Q${right},${top} ${right},${top + 10} L${right},${bottom - 10} Q${right},${bottom} ${right - 10},${bottom} L${x + 20},${bottom} L${x},${y} Z`;
     const body: SvgNode[] = [];
     if (stringFrom) {
-      body.push(el("path", { d: `M${stringFrom[0]},${stringFrom[1]} C${stringFrom[0] - 14},${r2((stringFrom[1] + y) / 2)} ${x + 2},${y + 4} ${x + 20},${y}`, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.block }));
+      body.push(el("path", { d: `M${stringFrom[0]},${stringFrom[1]} C${stringFrom[0] - 14},${r2((stringFrom[1] + y) / 2)} ${x + 2},${y + 4} ${x + 20},${y}`, fill: "none", stroke: ink, "stroke-width": tokens.outline.block }));
     }
-    body.push(...shadowed(el("path", { d, fill: colour(fill, "fill") }), 6), el("circle", { cx: x + 16, cy: y, r: 5, fill: ink, stroke: "none" }));
+    body.push(el("path", { d, fill: colour(fill, "fill") }), el("circle", { cx: x + 16, cy: y, r: 5, fill: ink, stroke: "none" }));
     return drawn(body, [el("text", { x: r2(x + 20 + (w - 20) / 2 - 2), y: y + 8, "font-family": mono, "font-size": 22 }, text)]);
   },
 );
@@ -364,7 +365,7 @@ export type NameTagParams = { hangX: number; hangY: number; cx: number; top: num
 export const nameTag = definePiece<NameTagParams>(
   "nameTag",
   { hangX: pos(), hangY: pos(), cx: pos(), top: pos(), rotate: { kind: "number" }, icon: { kind: "enum", required: true, values: EIP_ICON_NAMES }, fill: col() },
-  ({ hangX: sx, hangY: sy, cx, top, rotate = 0, icon, fill = "color.state.transitional" }) => {
+  ({ hangX: sx, hangY: sy, cx, top, rotate = 0, icon, fill = "color.white" }) => {
     const w = 96;
     const h = 92;
     const x = cx - w / 2;
@@ -373,7 +374,7 @@ export const nameTag = definePiece<NameTagParams>(
       el("path", { d: `M${sx},${sy} C${sx - 13},${sy + 28} ${sx + 6},${sy + 36} ${cx},${top + 20}`, fill: "none", "stroke-width": tokens.outline.small }),
       g(
         { transform: `rotate(${rotate} ${cx} ${top + 20})` },
-        ...shadowed(el("path", { d, fill: colour(fill, "fill") }), 8),
+        el("path", { d, fill: colour(fill, "fill") }),
         el("circle", { cx, cy: top + 14, r: 5, fill: tokens.color.white, "stroke-width": tokens.outline.small }),
         ...eipIcon({ name: icon, x: cx - 38, y: top + 27, scale: 1.18 }).body,
       ),
@@ -402,11 +403,11 @@ export const stamp = definePiece<StampParams>(
     const face =
       shape === "round"
         ? [
-            ...shadowed(el("circle", { cx, cy, r, fill: colour(fill, "fill") }), 8),
+            el("circle", { cx, cy, r, fill: colour(fill, "fill") }),
             el("circle", { cx, cy, r: r - 10, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small, "stroke-dasharray": "6 5" }),
           ]
         : [
-            ...shadowed(el("rect", { x: cx - r * 1.6, y: cy - r * 0.7, width: r * 3.2, height: r * 1.4, rx: 8, fill: colour(fill, "fill") }), 8),
+            el("rect", { x: cx - r * 1.6, y: cy - r * 0.7, width: r * 3.2, height: r * 1.4, rx: 8, fill: colour(fill, "fill") }),
             el("rect", { x: cx - r * 1.6 + 8, y: cy - r * 0.7 + 8, width: r * 3.2 - 16, height: r * 1.4 - 16, rx: 4, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small }),
           ];
     return drawn([g({ transform: turn }, ...face)], [el("text", { x: cx, y: cy + 10, "font-size": 27, "font-weight": tokens.font.weightHeavy, transform: turn }, word)]);
@@ -414,25 +415,22 @@ export const stamp = definePiece<StampParams>(
 );
 
 export type RobotParams = { cx: number; top: number };
-/** Robot: antenna, ears, green body with a visor and two eyes, mouth bars. Scale it with pose. */
+/** Robot in the v2 grammar: white body and ears, a dark visor with the cast's idle eyes, one grille bar, the accent on the antenna tip. Scale it with pose. */
 export const robot = definePiece<RobotParams>("robot", { cx: pos(), top: pos() }, ({ cx, top }) => {
   const w = 160;
   const h = 152;
   const x = cx - w / 2;
   return drawn([
     el("line", { x1: cx, y1: top, x2: cx, y2: top - 28 }),
-    el("circle", { cx, cy: top - 34, r: 10, fill: tokens.color.state.blocked }),
-    el("rect", { x: x - 16, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.illustration.healthyShade }),
-    el("rect", { x: x + w - 4, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.illustration.healthyShade }),
-    ...shadowed(el("rect", { x, y: top, width: w, height: h, rx: 22, fill: tokens.color.state.healthy })),
-    el("rect", { x: x + 22, y: top + 22, width: w - 44, height: 72, rx: 14, fill: ink }),
-    el("circle", { cx: cx - 23, cy: top + 58, r: 11, fill: tokens.color.state.healthy, stroke: "none" }),
-    el("circle", { cx: cx + 23, cy: top + 58, r: 11, fill: tokens.color.state.healthy, stroke: "none" }),
+    el("circle", { cx, cy: top - 34, r: 10, fill: tokens.brand.light.accent }),
+    el("rect", { x: x - 16, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.color.white }),
+    el("rect", { x: x + w - 4, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.color.white }),
+    el("rect", { x, y: top, width: w, height: h, rx: 22, fill: tokens.color.white }),
+    el("rect", { x: x + 22, y: top + 22, width: w - 44, height: 72, rx: 14, fill: tokens.brand.light.text }),
+    ...[-23, 23].map((dx) => el("rect", { x: r2(cx + dx - 6.4), y: top + 43, width: 12.8, height: 30, rx: 6.4, fill: tokens.cast.eyes, stroke: "none" })),
     g(
-      { stroke: "none", fill: ink },
-      el("rect", { x: x + 30, y: top + 108, width: 44, height: 9, rx: 4.5 }),
-      el("rect", { x: x + 82, y: top + 108, width: 48, height: 9, rx: 4.5 }),
-      el("rect", { x: x + 42, y: top + 124, width: 60, height: 9, rx: 4.5 }),
+      { stroke: "none", fill: tokens.brand.light.border },
+      el("rect", { x: x + 44, y: top + 114, width: 72, height: 9, rx: 4.5 }),
     ),
   ]);
 });
@@ -461,7 +459,7 @@ export type ServerStackParams = { x: number; y: number; width?: number; units?: 
 export const serverStack = definePiece<ServerStackParams>(
   "serverStack",
   { x: pos(), y: pos(), width: size(), units: count(1, 20), fill: col(), failing: count(0, 19) },
-  ({ x, y, width: w = 150, units = 3, fill = "color.state.backend", failing }) => {
+  ({ x, y, width: w = 150, units = 3, fill = "color.white", failing }) => {
     const uh = 40;
     const gap = 10;
     return drawn(
@@ -469,7 +467,7 @@ export const serverStack = definePiece<ServerStackParams>(
         const uy = y + i * (uh + gap);
         return [
           ...shadowed(el("rect", { x, y: uy, width: w, height: uh, rx: 8, fill: colour(fill, "fill") })),
-          el("rect", { x: x + 16, y: uy + 15, width: r2(w * 0.5), height: 10, rx: 5, fill: tokens.color.white, stroke: "none" }),
+          el("rect", { x: x + 16, y: uy + 15, width: r2(w * 0.5), height: 10, rx: 5, fill: tokens.illustration.textBar, stroke: "none" }),
           el("circle", { cx: x + w - 24, cy: uy + 20, r: 6, fill: i === failing ? tokens.color.state.failure : tokens.color.white, "stroke-width": tokens.outline.small }),
         ];
       }).flat(),
@@ -481,15 +479,15 @@ export type CloudParams = { cx: number; cy: number; scale?: number; fill?: strin
 export const cloud = definePiece<CloudParams>("cloud", { cx: pos(), cy: pos(), scale: size(), fill: col() }, ({ cx, cy, scale: s = 1, fill = "color.white" }) => {
   const p = (dx: number, dy: number) => `${r2(cx + dx * s)},${r2(cy + dy * s)}`;
   const d = `M${p(-70, 30)} Q${p(-96, 30)} ${p(-94, 4)} Q${p(-90, -20)} ${p(-62, -18)} Q${p(-52, -58)} ${p(-10, -54)} Q${p(26, -52)} ${p(36, -24)} Q${p(86, -30)} ${p(90, 6)} Q${p(92, 30)} ${p(66, 30)} Z`;
-  return drawn(shadowed(el("path", { d, fill: colour(fill, "fill") }), 8));
+  return drawn([el("path", { d, fill: colour(fill, "fill") })]);
 });
 
 export type GearParams = { cx: number; cy: number; r?: number; teeth?: number; fill?: string };
-/** Gear with square teeth and a white hub, as on the maven-release cover. */
+/** Gear with square teeth and a hub, as on the maven-release cover. */
 export const gear = definePiece<GearParams>(
   "gear",
   { cx: pos(), cy: pos(), r: size(), teeth: count(4, 64), fill: col() },
-  ({ cx, cy, r = 84, teeth = 12, fill = "color.state.transitional" }) => {
+  ({ cx, cy, r = 84, teeth = 12, fill = "color.white" }) => {
     const root = r * 0.78;
     const points: string[] = [];
     const step = (2 * Math.PI) / teeth;
@@ -498,13 +496,13 @@ export const gear = definePiece<GearParams>(
       const a = i * step;
       points.push(at(root, a - step * 0.3), at(r, a - step * 0.18), at(r, a + step * 0.18), at(root, a + step * 0.3));
     }
-    return drawn([...shadowed(el("polygon", { points: points.join(" "), fill: colour(fill, "fill") })), el("circle", { cx, cy, r: r2(r * 0.36), fill: tokens.color.white })]);
+    return drawn([...shadowed(el("polygon", { points: points.join(" "), fill: colour(fill, "fill") })), el("circle", { cx, cy, r: r2(r * 0.36), fill: tokens.brand.light.bg })]);
   },
 );
 
 export type ParcelParams = { x: number; y: number; size?: number; fill?: string };
 /** Parcel (box) with a lid line and a tape strip. */
-export const parcel = definePiece<ParcelParams>("parcel", { x: pos(), y: pos(), size: size(), fill: col() }, ({ x, y, size: s = 96, fill = "color.state.blocked" }) =>
+export const parcel = definePiece<ParcelParams>("parcel", { x: pos(), y: pos(), size: size(), fill: col() }, ({ x, y, size: s = 96, fill = "color.white" }) =>
   drawn([
     ...shadowed(el("rect", { x, y, width: s, height: r2(s * 0.8), rx: 6, fill: colour(fill, "fill") })),
     el("path", { d: `M${x},${r2(y + s * 0.3)} H${x + s}`, fill: "none", "stroke-width": tokens.outline.small }),
@@ -517,9 +515,9 @@ export type StepsParams = { x: number; y: number; count?: number; width?: number
 export const steps = definePiece<StepsParams>(
   "steps",
   { x: pos(), y: pos(), count: count(1, 20), width: size(), rise: size(), fill: col() },
-  ({ x, y, count = 4, width: w = 145, rise = 40, fill = "color.state.caller" }) => {
+  ({ x, y, count = 4, width: w = 145, rise = 40, fill = "color.white" }) => {
     const blocks = Array.from({ length: count }, (_, i) => el("rect", { x: x + i * w, y: y - rise * (i + 1), width: w, height: rise * (i + 1), rx: 10, fill: colour(fill, "fill") }));
-    return drawn([...blocks.map((b) => ({ ...b, attrs: { ...b.attrs, fill: ink, transform: `translate(${tokens.shadow.block} ${tokens.shadow.block})` } })), ...blocks]);
+    return drawn(blocks);
   },
 );
 
@@ -551,7 +549,7 @@ export const muleFlow = definePiece<MuleFlowParams>(
     tileWidth: size(false, 40),
     fill: col(),
   },
-  ({ x, y, width: w, height: h = 104, tiles, tileWidth = 86, fill = "color.state.caller" }) => {
+  ({ x, y, width: w, height: h = 104, tiles, tileWidth = 86, fill = "brand.light.bg" }) => {
     const cy = y + h / 2;
     const links: string[] = [`M${x + 18},${cy} H${tiles[0].x - 6}`];
     const heads: SvgNode[] = [];
@@ -564,7 +562,7 @@ export const muleFlow = definePiece<MuleFlowParams>(
       ...shadowed(el("rect", { x, y, width: w, height: h, rx: 22, fill: colour(fill, "fill") })),
       el("path", { d: links.join(" "), "stroke-linecap": "round" }),
       ...heads,
-      ...tiles.flatMap((tile) => shadowed(el("rect", { x: tile.x, y: y + 14, width: tileWidth, height: h - 28, rx: 14, fill: tokens.color.white }), 6)),
+      ...tiles.map((tile) => el("rect", { x: tile.x, y: y + 14, width: tileWidth, height: h - 28, rx: 14, fill: tokens.color.white })),
       ...tiles.flatMap((tile) => muleGlyph(tile.kind, tile.x + tileWidth / 2, cy)),
     ]);
   },

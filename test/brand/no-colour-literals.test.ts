@@ -28,6 +28,26 @@ const colourLiterals = (folder: string): string[] => {
   return found;
 };
 
+const TOP_LEVEL_STATE = /\bcolor\.(healthy|blocked|transitional|caller|backend|failure|failFast)\b/g;
+/** Every read of a top-level state colour under `folder`, as "file:line: path". */
+const topLevelStateColours = (folder: string): string[] => {
+  const found: string[] = [];
+  const visit = (path: string) => {
+    if (statSync(path).isDirectory()) {
+      for (const name of readdirSync(path).sort()) visit(join(path, name));
+      return;
+    }
+    if (!/\.(ts|tsx)$/.test(path)) return;
+    readFileSync(path, "utf8")
+      .split("\n")
+      .forEach((line, index) => {
+        for (const match of line.matchAll(TOP_LEVEL_STATE)) found.push(`${relative(repoRoot, path)}:${index + 1}: ${match[0]}`);
+      });
+  };
+  visit(join(repoRoot, folder));
+  return found;
+};
+
 describe("Components take values only from the tokens", () => {
   test("Colour literal in a component", () => {
     expect(colourLiterals("test/fixtures/colour-literals")).toEqual([
@@ -39,6 +59,8 @@ describe("Components take values only from the tokens", () => {
   test("Real sources are clean", () => {
     expect(colourLiterals("src/brand")).toEqual([]);
     expect(colourLiterals("src/scenes")).toEqual([]);
+    // No file reads a removed top-level state colour instead of color.state.* (change identity-v2-type-pieces-cleanup).
+    expect([...topLevelStateColours("src/brand"), ...topLevelStateColours("src/scenes")]).toEqual([]);
   });
 
   // Spec illustration-pieces, "Colours only from tokens" (change illustration-pieces, tasks 2.4).

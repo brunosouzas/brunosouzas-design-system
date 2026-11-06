@@ -31,7 +31,7 @@ describe("SVG renderer", () => {
   // Change body-diagram-pieces, task 2.1.
   test("Text holding only a tspan", () => {
     expect(toSvg(edgeLabel({ x: 0, y: 0, lines: ["`200 OK`"] }).text[0])).toBe(
-      `<text x="0" y="0" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#0A1033" font-size="11" font-weight="700" text-anchor="middle"><tspan font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">200 OK</tspan></text>`,
+      `<text x="0" y="0" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#121212" font-size="11" font-weight="700" text-anchor="middle"><tspan font-family="'Source Code Pro', ui-monospace, 'SF Mono', Menlo, Consolas, monospace">200 OK</tspan></text>`,
     );
   });
 

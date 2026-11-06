@@ -41,10 +41,10 @@ export const lineBadge = definePiece<LineBadgeParams>(
     const { x, y, text, fill, height = M.badgeHeight, flat = false } = params;
     const width = badgeWidth(params);
     const face = paint(fill);
-    const { outline } = inkOf(params);
+    const { line, outline } = inkOf(params);
     const inset = flat ? outline / 2 : 0;
     const shape = pill(x - width / 2 + inset, y - height / 2 + inset, width - 2 * inset, height - 2 * inset);
-    const body = flat ? [shape(0, 0, { fill: face, stroke: ink, "stroke-width": r2(outline), "stroke-linejoin": "round" })] : sticker(shape, face, params);
+    const body = flat ? [shape(0, 0, { fill: face, stroke: line, "stroke-width": r2(outline), "stroke-linejoin": "round" })] : sticker(shape, face, params);
     return drawn(body, text === undefined ? [] : [words(x, y + 4.5, text, { fill: white, "font-size": M.badgeTextSize, "font-weight": bold, "text-anchor": "middle" })]);
   },
   (params) => {
@@ -304,17 +304,17 @@ export const messageArrow = definePiece<MessageArrowParams>(
 
 export type LedgerMarkParams = { x: number; y: number; size?: number; line?: string; surface?: SurfaceName };
 /** stackledger's mark (favicon, header): an ink square with a bent line and two stations, 32 units scaled to `size`.
- * On a surface with a rim (dark), a light rim of 2 × rimWidth lines the square inside its 32 box (card 167). */
+ * On the dark surface a 2-unit band in surface.dark.muted lines the square inside its 32 box, whatever rimWidth is,
+ * so the ink square never sits bare on the dark background (ADR 0009). The stations inside the square stay ink. */
 export const ledgerMark = definePiece<LedgerMarkParams>(
   "ledgerMark",
   { x: pos(), y: pos(), size: { kind: "number", min: 12, max: 512 }, line: col(), surface: surfaceParam },
   ({ x, y, size: side = 32, line = "illustration.accent", surface = "light" }) => {
-    const { rimWidth, rim } = tokens.surface[surface];
-    const band = 2 * rimWidth;
+    const band = 2;
     const square =
-      rimWidth > 0
+      surface === "dark"
         ? [
-            el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: rim, stroke: "none" }),
+            el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: tokens.surface.dark.muted, stroke: "none" }),
             el("rect", { x: band, y: band, width: 32 - 2 * band, height: 32 - 2 * band, rx: 7 - band, fill: ink, stroke: "none" }),
           ]
         : [el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: ink, stroke: "none" })];
@@ -333,16 +333,17 @@ export const ledgerMark = definePiece<LedgerMarkParams>(
 // ---------- map markers and zones (card 167, design §3 of stackledger-map-and-link-pieces) ----------
 
 export type RenewalRingParams = Ink & { cx: number; cy: number; r: number; width?: number };
-/** The renewal ring: bands like a bent pipe round a station (rim on dark, ink, then color.state.blocked), no shadow. */
+/** The renewal ring: bands like a bent pipe round a station (a rim when the surface has one, the ink line, then
+ * color.state.blocked), no shadow. */
 export const renewalRing = definePiece<RenewalRingParams>(
   "renewalRing",
   { cx: pos(), cy: pos(), r: size(true), width: { kind: "number", min: 0, exclusiveMin: true, max: 50 }, ...inkSchema },
   (params) => {
     const { cx, cy, r, width = M.ringWidth } = params;
-    const { s, outline, rim } = inkOf(params);
+    const { s, line, outline, rim } = inkOf(params);
     // Radius and band widths as given, like pipe's widths: a valid hairline must not round to zero.
     const band = (stroke: string, strokeWidth: number) => el("circle", { cx: r2(cx), cy: r2(cy), r, fill: "none", stroke, "stroke-width": strokeWidth });
-    return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(ink, width + outline), band(tokens.color.state.blocked, width)]);
+    return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(line, width + outline), band(tokens.color.state.blocked, width)]);
   },
   (params) => {
     const { outline, rim } = inkOf(params);

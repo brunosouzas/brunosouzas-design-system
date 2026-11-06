@@ -49,7 +49,7 @@ const svgOf = async (spec: unknown, lang?: string): Promise<string> => {
   return result.ok ? result.svg : "";
 };
 const rootOf = (svg: string) => /^<svg [^>]*>/.exec(svg)![0];
-const ringRadii = (svg: string, stroke = "#E0E7FB", width = "1.4"): number[] => {
+const ringRadii = (svg: string, stroke = "#EDE8DE", width = "1.4"): number[] => {
   const group = new RegExp(`<g fill="none" stroke="${stroke}" stroke-width="${width}">([\\s\\S]*?)</g>`).exec(svg)![1];
   return [...group.matchAll(/ r="([\d.]+)"/g)].map((m) => Number(m[1]));
 };
@@ -142,18 +142,18 @@ describe("Diagram keys", () => {
 describe("Diagram outline and labels", () => {
   test("Pill in a diagram", async () => {
     const svg = await svgOf(diagram({ pieces: [{ piece: "pill", x: 100, y: 100, text: "OPEN" }] }));
-    const outlined = groupOf(svg, '<g stroke="#0A1033" stroke-width="3" stroke-linejoin="round">');
+    const outlined = groupOf(svg, '<g stroke="#121212" stroke-width="3" stroke-linejoin="round">');
     expect(outlined).toContain("<rect ");
-    const labels = groupOf(svg, '<g font-size="13" font-weight="800" fill="#0A1033" text-anchor="middle">');
+    const labels = groupOf(svg, '<g font-size="13" font-weight="800" fill="#121212" text-anchor="middle">');
     expect(labels).toContain(">OPEN</text>");
   });
 
   test("Piece with its own stroke", async () => {
     const params = { piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.state.healthy" };
     const own = await svgOf(diagram({ pieces: [params] }));
-    expect(own).toContain('stroke="#0A1033" stroke-width="3" stroke-linejoin="round"/>');
+    expect(own).toContain('stroke="#121212" stroke-width="3" stroke-linejoin="round"/>');
     // The same piece in a cover's outlined group (width 4) keeps its own width 3.
-    expect(await svgOf(cover({ pieces: [params] }))).toContain('fill="#3DDC84" stroke="#0A1033" stroke-width="3" stroke-linejoin="round"/>');
+    expect(await svgOf(cover({ pieces: [params] }))).toContain('fill="#3DDC84" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>');
   });
 });
 
@@ -336,7 +336,7 @@ describe("Free-form object's place", () => {
 
   test("Custom under a pill", async () => {
     const svg = await svgOf(cover({ pieces: pills, custom, customAt: 1 }));
-    const outlined = groupOf(svg, '<g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">');
+    const outlined = groupOf(svg, '<g stroke="#121212" stroke-width="4" stroke-linejoin="round">');
     const a = outlined.indexOf('fill="#FFFFFF"');
     const c = outlined.indexOf('<rect x="0" y="0" width="10" height="10" fill="#FF8A3D"/>');
     const b = outlined.indexOf('fill="#3DDC84"');

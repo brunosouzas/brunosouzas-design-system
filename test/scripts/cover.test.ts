@@ -288,6 +288,15 @@ describe("One free-form object", () => {
     ]);
   });
 
+  // Change identity-v2-type-pieces-cleanup, task 3.6: the top-level state colours are no longer token paths.
+  test("Removed top-level colour in custom", async () => {
+    const ws = workspace();
+    ws.write("spec.json", { ...minimal(), custom: { tag: "g", children: [{ tag: "path", attrs: { d: "M0,0 L10,10", fill: "color.blocked" } }] } });
+    expect(await ws.run("spec.json", "--out", "cover.svg")).toBe(1);
+    expect(ws.err[0]).toBe('custom.children[0].attrs.fill: expected none or a colour token path, found "color.blocked"');
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+
   test("Allowed object", async () => {
     const custom = { tag: "g", children: [{ tag: "path", attrs: { d: "M0,0 L10,10", fill: "color.state.blocked" } }, { tag: "text", attrs: { x: 5, y: 5 }, children: ["v1"] }] };
     const result = await buildCover(JSON.stringify({ ...minimal(), pieces: [{ piece: "checkBadge", cx: 1, cy: 1 }], custom }), "spec.json");
