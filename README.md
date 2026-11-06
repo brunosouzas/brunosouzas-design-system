@@ -78,7 +78,7 @@ The package also installs the cover command as `brunosouzas-cover <spec.json> --
 
 ### Type in a written image
 
-An SVG shown through `<img>` cannot load web fonts, so a written image carries its own: `embedFonts(tree)` adds one `<style>` after the `<desc>` with a `@font-face` per Source face the tree's text uses, each a subset holding only the glyphs drawn ([ADR 0008](docs/adr/0008-type-inside-the-image.md)). The cover command and `npm run pieces:sheet` call it before they write; a tree without Source text is returned unchanged. It is async, reads only the faces it needs, and rejects naming the font file or `harfbuzzjs` when one fails to load. It lives in its own entry so the root entry stays importable in a browser.
+An SVG shown through `<img>` cannot load web fonts, so a written image carries its own: `embedFonts(tree)` adds one `<style>` after the `<desc>` with a `@font-face` per Source face the tree's text uses, each a subset holding only the glyphs drawn ([ADR 0008](docs/adr/0008-type-inside-the-image.md)). The cover command and `npm run pieces:sheet` call it before they write; a tree without Source text is returned unchanged. It is async, reads only the faces it needs, and rejects naming the font file or `harfbuzzjs` when one fails to load. It lives in its own entry so the root entry stays importable in a browser. Its output is for written files and `<img>`: when you inline a piece's SVG in an HTML page, skip `embedFonts` and let the page's fonts apply, because an inline `<style>` with `@font-face` applies to the whole document and would replace the page's Source faces with a subset.
 
 ```ts
 import { coverTree, toSvg } from "@brunosouzas/design-system";
@@ -303,7 +303,7 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 |---|---|
 | `color.healthy`, `color.blocked`, `color.transitional`, `color.caller`, `color.backend`, `color.failure`, `color.failFast` (and their `--ds-color-*` variables) | the same values at `color.state.*` (`--ds-color-state-*`); a spec that passes `"color.healthy"` is refused, pass `"color.state.healthy"` |
 | the 21 `coverBackground` pairs from before 0.6.0 (`blush`, `peach`, `lavender`, `navy`, `mustard`, …) | a tone of the cover's track family (`trackIntegration`, `integrationClay`, `deliveryMint`, `aiSky`, `trackPersonal`, … see "Cover spec") or `neutral` |
-| `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES` and the seven-role `cast.*` colours | Mira, the pillar characters or a bank object (ADR 0007); `emote` and `EMOTE_KINDS` stay |
+| `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES`, the types `MascotName`, `MascotFace`, `MascotAction`, `MascotParams` and the seven-role `cast.*` colours | Mira, the pillar characters or a bank object (ADR 0007); `emote` and `EMOTE_KINDS` stay |
 | `illustration.healthyShade`, `illustration.transitionalShade` | nothing reads them; pass a token path if a drawing needs a shade |
 | `"signature"` in an icon spec | remove it (it drew nothing) |
 | the `cast-motion-test` composition | none; the cast timing helpers in `src/brand/cast-motion.ts` stay |

@@ -40,5 +40,6 @@ Option 2: every SVG the package writes (the cover command in every format, and `
 
 - Readers see Source in every cover, diagram and icon, at 2-8 KB more per image than today.
 - The package gains its first runtime dependency and ships `fonts/`; a font or wasm failure stops the cover command before it writes, so no image ships without its faces.
+- The embedded output is for written files and `<img>`. An SVG inlined in an HTML page skips `embedFonts` and uses the page's fonts: its `<style>` would become document-wide, and its `@font-face` subsets would override the page's full Source faces.
 - `rsvg-convert` ignores embedded fonts: renders for review, and the kit's illustration check, use headless Chrome through `<img>`.
 - A future piece that draws serif or italic text adds its face file in its own change, with its hash pinned.
