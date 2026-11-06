@@ -17,7 +17,7 @@ const BODY_DIAGRAM: Record<keyof typeof DIAGRAM_PIECES, object> = {
   exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
   taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   lifeline: { x: 0, y1: 0, y2: 100 },
-  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.healthy" },
+  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.state.healthy" },
   altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   edgeLabel: { x: 0, y: 0, lines: ["a"] },
 };
@@ -135,9 +135,9 @@ describe("Link icons as data", () => {
     // design §6: faces as token paths; glyphs of brunosouzas.com e29b3dd, and the website globe.
     expect(LINK_ICONS.map((icon) => [icon.name, icon.title, icon.face])).toEqual([
       ["github", "GitHub", "color.white"],
-      ["linkedin", "LinkedIn", "color.caller"],
-      ["email", "Email", "color.transitional"],
-      ["website", "Website", "color.healthy"],
+      ["linkedin", "LinkedIn", "color.state.caller"],
+      ["email", "Email", "color.state.transitional"],
+      ["website", "Website", "color.state.healthy"],
     ]);
     const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(2);
     const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[1]).attrs.fill;
@@ -208,9 +208,9 @@ describe("New pieces carry their own stroke", () => {
         ["renewalRing", renewalRing({ cx: 0, cy: 0, r: 18, surface })],
         ["suggestedHalo", suggestedHalo({ cx: 0, cy: 0, r: 21, surface })],
         ["licenceMark", licenceMark({ cx: 0, cy: 0, surface })],
-        ["zone 1", zone({ points: [[0, 0]], fill: "color.caller", surface })],
-        ["zone 2", zone({ points: [[0, 0], [10, 0]], fill: "color.caller", surface })],
-        ["zone 3", zone({ points: [[0, 0], [10, 0], [5, 8]], fill: "color.caller", surface })],
+        ["zone 1", zone({ points: [[0, 0]], fill: "color.state.caller", surface })],
+        ["zone 2", zone({ points: [[0, 0], [10, 0]], fill: "color.state.caller", surface })],
+        ["zone 3", zone({ points: [[0, 0], [10, 0], [5, 8]], fill: "color.state.caller", surface })],
         ...UI_ICON_NAMES.map((name) => [`uiIcon ${name}`, uiIcon({ name, x: 0, y: 0 })] as [string, Drawn]),
         ...LINK_ICON_NAMES.map((icon) => [`linkIcon ${icon}`, linkIcon({ icon, x: 0, y: 0, surface })] as [string, Drawn]),
       );

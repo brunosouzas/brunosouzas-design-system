@@ -13,7 +13,7 @@ export const flowCaptionAt = (frame: number, data: FlowTimeline = timeline) => {
 };
 
 const failureAt = (data: FlowTimeline) => data.marks.find(mark => mark.kind === "fail")?.at ?? data.duration;
-/** The failed application turns `color.failure`, so its mark must not use that
+/** The failed application turns `color.state.failure`, so its mark must not use that
  * hue (ADR 0003): a white square with an ink cross, like the ink-on-white checks. */
 const markAppearance = (kind: "ok" | "fail") => kind === "fail"
   ? { ...callAppearance("fail"), fill: tokens.color.white, glyphColor: tokens.color.ink }
@@ -22,15 +22,15 @@ const markAppearance = (kind: "ok" | "fail") => kind === "fail"
 export const frameAt = (frame: number, data: FlowTimeline = timeline) => {
   const failed = frame >= failureAt(data);
   return {
-    // Copies are filled with `color.caller` so they read inside white queues and
+    // Copies are filled with `color.state.caller` so they read inside white queues and
     // on the panel; the returning invoice copy keeps its failure outline.
     tokens: data.ownership.filter(item => frame >= item.from && frame < item.to).map(item => ({
       copy: item.copy, node: item.node, route: item.route,
       progress: item.route ? (frame - item.from) / (item.to - item.from) : null,
-      fill: tokens.color.caller,
-      stroke: item.copy === "invoice" && failed ? tokens.color.failure : tokens.color.ink,
+      fill: tokens.color.state.caller,
+      stroke: item.copy === "invoice" && failed ? tokens.color.state.failure : tokens.color.ink,
     })),
-    fills: { api: tokens.color.healthy, payment: tokens.color.healthy, inventory: tokens.color.healthy, invoice: failed ? tokens.color.failure : tokens.color.healthy } as Record<string, string>,
+    fills: { api: tokens.color.state.healthy, payment: tokens.color.state.healthy, inventory: tokens.color.state.healthy, invoice: failed ? tokens.color.state.failure : tokens.color.state.healthy } as Record<string, string>,
     marks: data.marks.filter(mark => frame >= mark.at).map(mark => ({ ...mark, appearance: markAppearance(mark.kind) })),
     caption: flowCaptionAt(frame, data),
   };

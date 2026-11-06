@@ -22,7 +22,7 @@ export const PublishSubscribeScene:React.FC<{lang:Lang;format:Format}> = ({lang,
   return <AbsoluteFill style={{background:color.panel,fontFamily:sans,color:color.ink}}>
     <Rings width={l.width} height={l.height} cx={l.width/2} cy={l.height/2} fade={timeline.ringsFade}/>
     <TaggedContainer {...l.mq} appearAt={14}/>
-    {timeline.routes.map(route=><Arrow key={route.id} d={l.arrows[route.id]} drawAt={route.drawAt} stroke={route.id==="invoice-return"?color.failure:color.ink} width={l.width} height={l.height}/>)}
+    {timeline.routes.map(route=><Arrow key={route.id} d={l.arrows[route.id]} drawAt={route.drawAt} stroke={route.id==="invoice-return"?color.state.failure:color.ink} width={l.width} height={l.height}/>)}
     <Exchange {...l.boxes.exchange} appearAt={22}>
       <div style={{position:"absolute",top:18,width:"100%",textAlign:"center",fontSize:l.size.name,fontWeight:font.weightHeavy,lineHeight:1.05}}>{t.exchange}</div>
       <div style={{position:"absolute",top:format==="4x5"?75:83,width:"100%",textAlign:"center",fontSize:l.size.label,fontFamily:font.mono,fontWeight:font.weightBold}}>{t.exchangeId}</div>

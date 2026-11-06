@@ -50,53 +50,17 @@ export const tokens = {
     }
   },
   "cast": {
-    "agent": {
-      "neck": "#E3E8F5",
-      "shine": "#E6ECFF"
-    },
-    "architect": {
-      "fill": "#22B5A4",
-      "shine": "#9CF0E4"
-    },
-    "data": {
-      "fill": "#8C6CF0",
-      "lens": "#EAF1FF",
-      "lid": "#C2B1FF",
-      "shine": "#B39CFF"
-    },
-    "dev": {
-      "chin": "#8FA6FF",
-      "fill": "#5B7CFA",
-      "screen": "#DCE6FF"
-    },
-    "devops": {
-      "fill": "#D76AA5",
-      "shine": "#F3B8D6"
-    },
     "emotePop": {
       "damping": 9,
       "mass": 0.7,
       "stiffness": 170
     },
-    "eyes": "#FFC98A",
-    "glow": "#7FD1FF",
-    "ground": "#D3DBF5",
-    "metal": "#C9D2E8",
-    "mouth": "#B94A3E",
-    "request": {
-      "shine": "#D6E2FF"
-    }
+    "eyes": "#FFC98A"
   },
   "color": {
-    "backend": "#FF6B6B",
-    "blocked": "#FF8A3D",
-    "caller": "#8FB2FF",
-    "failFast": "#E0661F",
-    "failure": "#E04848",
-    "healthy": "#3DDC84",
-    "ink": "#0A1033",
-    "panel": "#EEF2FF",
-    "ring": "#E0E7FB",
+    "ink": "#121212",
+    "panel": "#F6F3EC",
+    "ring": "#EDE8DE",
     "state": {
       "backend": "#FF6B6B",
       "blocked": "#FF8A3D",
@@ -106,13 +70,12 @@ export const tokens = {
       "healthy": "#3DDC84",
       "transitional": "#FFD25A"
     },
-    "transitional": "#FFD25A",
     "white": "#FFFFFF"
   },
   "cover": {
     "height": 420,
     "labelSize": 19,
-    "labelWeight": 800,
+    "labelWeight": 700,
     "pillHeight": 36,
     "ringRadius": 90,
     "ringStep": 28,
@@ -121,85 +84,9 @@ export const tokens = {
     "width": 800
   },
   "coverBackground": {
-    "blush": {
-      "fill": "#F6CFE0",
-      "ring": "#ECBAD0"
-    },
-    "cobalt": {
-      "fill": "#1E4FA0",
-      "ring": "#2758AE"
-    },
-    "cream": {
-      "fill": "#FFF1C9",
-      "ring": "#F4E2AE"
-    },
-    "deepTeal": {
-      "fill": "#0F6E6E",
-      "ring": "#167A79"
-    },
-    "emerald": {
-      "fill": "#2F9E6E",
-      "ring": "#38AB79"
-    },
-    "forest": {
-      "fill": "#24604F",
-      "ring": "#2B6E5B"
-    },
-    "lavender": {
-      "fill": "#B8A6F0",
-      "ring": "#AC98EA"
-    },
-    "lime": {
-      "fill": "#D4EC9C",
-      "ring": "#C4E086"
-    },
-    "mint": {
-      "fill": "#CDE5D3",
-      "ring": "#BCDAC4"
-    },
-    "mustard": {
-      "fill": "#F2C14E",
-      "ring": "#E6B33E"
-    },
-    "navy": {
-      "fill": "#14215A",
-      "ring": "#1C2D74"
-    },
     "neutral": {
       "fill": "#F6F3EC",
       "ring": "#D8D6D0"
-    },
-    "olive": {
-      "fill": "#8A9A3B",
-      "ring": "#7E8E33"
-    },
-    "peach": {
-      "fill": "#F4D8BC",
-      "ring": "#EAC7A3"
-    },
-    "plum": {
-      "fill": "#3D2B66",
-      "ring": "#483577"
-    },
-    "raspberry": {
-      "fill": "#C94F7C",
-      "ring": "#BE4572"
-    },
-    "salmon": {
-      "fill": "#FF9E7A",
-      "ring": "#F48D68"
-    },
-    "sky": {
-      "fill": "#BFE3F7",
-      "ring": "#AAD5EC"
-    },
-    "slate": {
-      "fill": "#2E3A59",
-      "ring": "#38466A"
-    },
-    "teal": {
-      "fill": "#1F8A8A",
-      "ring": "#2A9A99"
     },
     "trackAi": {
       "fill": "#E2E4EC",
@@ -212,31 +99,22 @@ export const tokens = {
     "trackIntegration": {
       "fill": "#F4E4D8",
       "ring": "#D7C9BE"
-    },
-    "violet": {
-      "fill": "#5B3CC4",
-      "ring": "#6748CF"
-    },
-    "wine": {
-      "fill": "#6B2340",
-      "ring": "#7A2D4C"
     }
   },
   "font": {
-    "mono": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
-    "sans": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "mono": "'Source Code Pro', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+    "sans": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "serif": "'Source Serif 4', Georgia, 'Times New Roman', serif",
     "weightBold": 700,
     "weightHeavy": 900
   },
   "illustration": {
-    "accent": "#1E6FEB",
-    "codePanel": "#14215A",
-    "healthyShade": "#2BB673",
-    "iconLine": "#B9C3E0",
-    "road": "#5B6478",
-    "tape": "#FFE2C8",
-    "textBar": "#C9D6F5",
-    "transitionalShade": "#E8B830"
+    "accent": "#E04E17",
+    "codePanel": "#1D1C1A",
+    "iconLine": "#D7D1C5",
+    "road": "#5C5852",
+    "tape": "#F4E4D8",
+    "textBar": "#D7D1C5"
   },
   "map": {
     "badgeHeight": 20,
@@ -255,7 +133,7 @@ export const tokens = {
     "nodeRadius": 10,
     "outline": 3,
     "ringWidth": 3,
-    "shadow": 3.5,
+    "shadow": 0,
     "stopRadius": 12,
     "zonePadding": 32,
     "zoneTitleTint": 0.6
@@ -290,9 +168,9 @@ export const tokens = {
     "small": 6
   },
   "shadow": {
-    "block": 10,
-    "pill": 6,
-    "small": 4
+    "block": 0,
+    "pill": 0,
+    "small": 0
   },
   "site": {
     "dark": {
@@ -306,8 +184,8 @@ export const tokens = {
       "textLight": "#B4AFB6"
     },
     "font": {
-      "primary": "Heebo, sans-serif",
-      "secondary": "Signika, sans-serif"
+      "primary": "'Source Sans 3', sans-serif",
+      "secondary": "'Source Serif 4', serif"
     },
     "fontSize": {
       "base": 16,
@@ -344,14 +222,14 @@ export const tokens = {
       "backdropPark": "#183F52",
       "backdropWater": "#1E3175",
       "backdropWaterEdge": "#2A3F8A",
-      "background": "#14215A",
-      "grid": "#1C2D74",
-      "muted": "#8F9BD0",
-      "panel": "#1C2D74",
-      "rim": "#EEF2FF",
-      "rimWidth": 1,
-      "shadow": "#4C5CB8",
-      "text": "#EEF2FF",
+      "background": "#121110",
+      "grid": "#3B3834",
+      "muted": "#ADA79D",
+      "panel": "#1D1C1A",
+      "rim": "#F1EEE8",
+      "rimWidth": 0,
+      "shadow": "#121110",
+      "text": "#F1EEE8",
       "zoneOpacity": 0.22
     },
     "light": {
@@ -359,14 +237,14 @@ export const tokens = {
       "backdropPark": "#D4F2DF",
       "backdropWater": "#C9D8FF",
       "backdropWaterEdge": "#B5C7F5",
-      "background": "#EEF2FF",
-      "grid": "#E0E7FB",
-      "muted": "#5B6694",
+      "background": "#F6F3EC",
+      "grid": "#EDE8DE",
+      "muted": "#5C5852",
       "panel": "#FFFFFF",
-      "rim": "#EEF2FF",
+      "rim": "#F6F3EC",
       "rimWidth": 0,
-      "shadow": "#0A1033",
-      "text": "#0A1033",
+      "shadow": "#121212",
+      "text": "#121212",
       "zoneOpacity": 0.12
     }
   }

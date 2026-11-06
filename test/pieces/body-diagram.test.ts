@@ -96,7 +96,7 @@ describe("Room in the body diagram pieces", () => {
 
 describe("Diagram words", () => {
   test("Two lines and a subtitle on a fill", () => {
-    const { body, text } = diagramBox({ x: 0, y: 0, width: 200, height: 70, text: ["Payment", "consumer"], subtitle: "Idempotent Receiver", fill: "color.healthy" });
+    const { body, text } = diagramBox({ x: 0, y: 0, width: 200, height: 70, text: ["Payment", "consumer"], subtitle: "Idempotent Receiver", fill: "color.state.healthy" });
     expect(body[1].attrs.fill).toBe("#3DDC84");
     expect(text.map((n) => [word(n), ...at(n), n.attrs["font-size"], n.attrs.fill])).toEqual([
       ["Payment", 100, 23.88, 13, "#0A1033"],
@@ -123,7 +123,7 @@ describe("Diagram words", () => {
   });
 
   test("Smaller text", () => {
-    const { body, text } = diagramBox({ x: 0, y: 0, width: 160, height: 26, text: ["a note"], textSize: 11, radius: 6, fill: "color.transitional" });
+    const { body, text } = diagramBox({ x: 0, y: 0, width: 160, height: 26, text: ["a note"], textSize: 11, radius: 6, fill: "color.state.transitional" });
     expect([...at(text[0]), text[0].attrs["font-size"]]).toEqual([80, 16.81, 11]);
     expect(body[1].attrs).toMatchObject({ fill: "#FFD25A", rx: 6 });
   });
@@ -198,14 +198,14 @@ describe("Lifeline", () => {
 
 describe("Phase band", () => {
   test("Band", () => {
-    const { body, text } = phaseBand({ x: 0, y: 0, width: 400, text: "Circuit CLOSED", fill: "color.healthy" });
+    const { body, text } = phaseBand({ x: 0, y: 0, width: 400, text: "Circuit CLOSED", fill: "color.state.healthy" });
     expect(body[1].attrs).toMatchObject({ width: 400, height: 26, rx: 13, fill: "#3DDC84" });
     expect([...at(text[0]), text[0].attrs["font-size"], text[0].attrs.fill]).toEqual([200, 17.5, 13, "#0A1033"]);
   });
 
   test("Band without a fill, or too narrow", () => {
     expect(() => phaseBand({ x: 0, y: 0, width: 200, text: "x" } as never)).toThrow(/^phaseBand: fill:/);
-    expect(() => phaseBand({ x: 0, y: 0, width: 20, text: "x", fill: "color.healthy" })).toThrow(/^phaseBand: width:/);
+    expect(() => phaseBand({ x: 0, y: 0, width: 20, text: "x", fill: "color.state.healthy" })).toThrow(/^phaseBand: width:/);
   });
 });
 
@@ -265,7 +265,7 @@ describe("Edge label", () => {
 
   test("Text size bounds", () => {
     expect(() => edgeLabel({ x: 0, y: 0, lines: ["a"], textSize: 49 })).toThrow(/^edgeLabel: textSize:/);
-    expect(() => phaseBand({ x: 0, y: 0, width: 200, text: "a", fill: "color.healthy", textSize: 5 })).toThrow(/^phaseBand: textSize:/);
+    expect(() => phaseBand({ x: 0, y: 0, width: 200, text: "a", fill: "color.state.healthy", textSize: 5 })).toThrow(/^phaseBand: textSize:/);
     expect(edgeLabel({ x: 0, y: 0, lines: ["a"], textSize: 48 }).text[0].attrs["font-size"]).toBe(48);
   });
 });

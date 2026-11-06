@@ -1,58 +1,23 @@
 {
   "color": {
     "ink": {
-      "$value": "#0A1033",
+      "$value": "#121212",
       "$type": "color",
-      "$description": "Outline, shadow and text."
+      "$description": "Outline and text (brand.light.text, ADR 0009)."
     },
     "white": {
       "$value": "#FFFFFF",
       "$type": "color"
     },
     "panel": {
-      "$value": "#EEF2FF",
+      "$value": "#F6F3EC",
       "$type": "color",
-      "$description": "Background panel of scenes and diagrams."
+      "$description": "Background panel of scenes and diagrams (brand.light.bg, ADR 0009)."
     },
     "ring": {
-      "$value": "#E0E7FB",
+      "$value": "#EDE8DE",
       "$type": "color",
-      "$description": "Concentric rings on the panel."
-    },
-    "healthy": {
-      "$value": "#3DDC84",
-      "$type": "color",
-      "$description": "Healthy or normal (CLOSED)."
-    },
-    "blocked": {
-      "$value": "#FF8A3D",
-      "$type": "color",
-      "$description": "Blocked or fail-fast (OPEN)."
-    },
-    "transitional": {
-      "$value": "#FFD25A",
-      "$type": "color",
-      "$description": "Transitional (HALF_OPEN)."
-    },
-    "caller": {
-      "$value": "#8FB2FF",
-      "$type": "color",
-      "$description": "The caller."
-    },
-    "backend": {
-      "$value": "#FF6B6B",
-      "$type": "color",
-      "$description": "The backend."
-    },
-    "failure": {
-      "$value": "#E04848",
-      "$type": "color",
-      "$description": "The failure path."
-    },
-    "failFast": {
-      "$value": "#E0661F",
-      "$type": "color",
-      "$description": "Text and lines of a fail-fast path."
+      "$description": "Concentric rings on the panel: between brand.light.bg and border (ADR 0009)."
     },
     "state": {
       "healthy": {
@@ -101,16 +66,16 @@
   },
   "shadow": {
     "block": {
-      "$value": 10,
+      "$value": 0,
       "$type": "dimension",
-      "$description": "Hard offset shadow, never blurred."
+      "$description": "Hard offset shadow, retired by ADR 0009: 0, so no piece draws an ink copy."
     },
     "pill": {
-      "$value": 6,
+      "$value": 0,
       "$type": "dimension"
     },
     "small": {
-      "$value": 4,
+      "$value": 0,
       "$type": "dimension"
     }
   },
@@ -130,12 +95,17 @@
   },
   "font": {
     "sans": {
-      "$value": "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "$value": "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif",
       "$type": "fontFamily"
     },
     "mono": {
-      "$value": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+      "$value": "'Source Code Pro', ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
       "$type": "fontFamily"
+    },
+    "serif": {
+      "$value": "'Source Serif 4', Georgia, 'Times New Roman', serif",
+      "$type": "fontFamily",
+      "$description": "Titles and the wordmark; no piece draws serif text yet (ADR 0008)."
     },
     "weightBold": {
       "$value": 700,
@@ -144,7 +114,7 @@
     "weightHeavy": {
       "$value": 900,
       "$type": "fontWeight",
-      "$description": "Headings; Google's Lato has no 800."
+      "$description": "Headings and marks (Source Sans 3 Black)."
     }
   },
   "motion": {
@@ -216,42 +186,32 @@
   },
   "illustration": {
     "accent": {
-      "$value": "#1E6FEB",
+      "$value": "#E04E17",
       "$type": "color",
       "$description": "Block arrows and the magnifier."
     },
     "codePanel": {
-      "$value": "#14215A",
+      "$value": "#1D1C1A",
       "$type": "color",
       "$description": "Dark code and screen panels."
     },
     "textBar": {
-      "$value": "#C9D6F5",
+      "$value": "#D7D1C5",
       "$type": "color",
       "$description": "Text lines on sheets."
     },
-    "healthyShade": {
-      "$value": "#2BB673",
-      "$type": "color",
-      "$description": "Darker green side (robot ears)."
-    },
-    "transitionalShade": {
-      "$value": "#E8B830",
-      "$type": "color",
-      "$description": "Darker yellow side (folder back)."
-    },
     "road": {
-      "$value": "#5B6478",
+      "$value": "#5C5852",
       "$type": "color",
       "$description": "Road band."
     },
     "tape": {
-      "$value": "#FFE2C8",
+      "$value": "#F4E4D8",
       "$type": "color",
       "$description": "Parcel tape."
     },
     "iconLine": {
-      "$value": "#B9C3E0",
+      "$value": "#D7D1C5",
       "$type": "color",
       "$description": "Lines inside the EIP icons."
     }
@@ -274,9 +234,9 @@
       "$type": "dimension"
     },
     "labelWeight": {
-      "$value": 800,
+      "$value": 700,
       "$type": "fontWeight",
-      "$description": "Pill labels; Lato 800 falls back to the nearest installed weight."
+      "$description": "Pill labels: Source Sans 3 Bold (it ships no static 800)."
     },
     "ringStep": {
       "$value": 28,
@@ -297,237 +257,6 @@
     }
   },
   "coverBackground": {
-    "peach": {
-      "fill": {
-        "$value": "#F4D8BC",
-        "$type": "color",
-        "$description": "Measured from ai-writes-code."
-      },
-      "ring": {
-        "$value": "#EAC7A3",
-        "$type": "color"
-      }
-    },
-    "navy": {
-      "fill": {
-        "$value": "#14215A",
-        "$type": "color",
-        "$description": "Measured from circuit-breaker."
-      },
-      "ring": {
-        "$value": "#1C2D74",
-        "$type": "color"
-      }
-    },
-    "raspberry": {
-      "fill": {
-        "$value": "#C94F7C",
-        "$type": "color",
-        "$description": "Measured from eip-catalog-in-mulesoft."
-      },
-      "ring": {
-        "$value": "#BE4572",
-        "$type": "color"
-      }
-    },
-    "lavender": {
-      "fill": {
-        "$value": "#B8A6F0",
-        "$type": "color",
-        "$description": "Measured from integration-patterns."
-      },
-      "ring": {
-        "$value": "#AC98EA",
-        "$type": "color"
-      }
-    },
-    "plum": {
-      "fill": {
-        "$value": "#3D2B66",
-        "$type": "color",
-        "$description": "Measured from cloudhub-deploy."
-      },
-      "ring": {
-        "$value": "#483577",
-        "$type": "color"
-      }
-    },
-    "cobalt": {
-      "fill": {
-        "$value": "#1E4FA0",
-        "$type": "color",
-        "$description": "Measured from delivery-path."
-      },
-      "ring": {
-        "$value": "#2758AE",
-        "$type": "color"
-      }
-    },
-    "sky": {
-      "fill": {
-        "$value": "#BFE3F7",
-        "$type": "color",
-        "$description": "Measured from gitflow."
-      },
-      "ring": {
-        "$value": "#AAD5EC",
-        "$type": "color"
-      }
-    },
-    "slate": {
-      "fill": {
-        "$value": "#2E3A59",
-        "$type": "color",
-        "$description": "Measured from maven-release."
-      },
-      "ring": {
-        "$value": "#38466A",
-        "$type": "color"
-      }
-    },
-    "mustard": {
-      "fill": {
-        "$value": "#F2C14E",
-        "$type": "color",
-        "$description": "Measured from pipeline-templates."
-      },
-      "ring": {
-        "$value": "#E6B33E",
-        "$type": "color"
-      }
-    },
-    "emerald": {
-      "fill": {
-        "$value": "#2F9E6E",
-        "$type": "color",
-        "$description": "Measured from obsidian-to-site-guide."
-      },
-      "ring": {
-        "$value": "#38AB79",
-        "$type": "color"
-      }
-    },
-    "violet": {
-      "fill": {
-        "$value": "#5B3CC4",
-        "$type": "color",
-        "$description": "Measured from write-in-obsidian-publish-on-your-site."
-      },
-      "ring": {
-        "$value": "#6748CF",
-        "$type": "color"
-      }
-    },
-    "wine": {
-      "fill": {
-        "$value": "#6B2340",
-        "$type": "color",
-        "$description": "Measured from dip."
-      },
-      "ring": {
-        "$value": "#7A2D4C",
-        "$type": "color"
-      }
-    },
-    "cream": {
-      "fill": {
-        "$value": "#FFF1C9",
-        "$type": "color",
-        "$description": "Measured from isp."
-      },
-      "ring": {
-        "$value": "#F4E2AE",
-        "$type": "color"
-      }
-    },
-    "forest": {
-      "fill": {
-        "$value": "#24604F",
-        "$type": "color",
-        "$description": "Measured from lsp."
-      },
-      "ring": {
-        "$value": "#2B6E5B",
-        "$type": "color"
-      }
-    },
-    "olive": {
-      "fill": {
-        "$value": "#8A9A3B",
-        "$type": "color",
-        "$description": "Measured from ocp."
-      },
-      "ring": {
-        "$value": "#7E8E33",
-        "$type": "color"
-      }
-    },
-    "salmon": {
-      "fill": {
-        "$value": "#FF9E7A",
-        "$type": "color",
-        "$description": "Measured from solid-intro."
-      },
-      "ring": {
-        "$value": "#F48D68",
-        "$type": "color"
-      }
-    },
-    "deepTeal": {
-      "fill": {
-        "$value": "#0F6E6E",
-        "$type": "color",
-        "$description": "Measured from solid-path."
-      },
-      "ring": {
-        "$value": "#167A79",
-        "$type": "color"
-      }
-    },
-    "lime": {
-      "fill": {
-        "$value": "#D4EC9C",
-        "$type": "color",
-        "$description": "Measured from srp."
-      },
-      "ring": {
-        "$value": "#C4E086",
-        "$type": "color"
-      }
-    },
-    "blush": {
-      "fill": {
-        "$value": "#F6CFE0",
-        "$type": "color",
-        "$description": "Measured from spec-driven-development."
-      },
-      "ring": {
-        "$value": "#ECBAD0",
-        "$type": "color"
-      }
-    },
-    "mint": {
-      "fill": {
-        "$value": "#CDE5D3",
-        "$type": "color",
-        "$description": "Measured from validate-ai-api-contract-change."
-      },
-      "ring": {
-        "$value": "#BCDAC4",
-        "$type": "color"
-      }
-    },
-    "teal": {
-      "fill": {
-        "$value": "#1F8A8A",
-        "$type": "color",
-        "$description": "Measured from where-the-work-moves."
-      },
-      "ring": {
-        "$value": "#2A9A99",
-        "$type": "color"
-      }
-    },
     "trackIntegration": {
       "fill": {
         "$value": "#F4E4D8",
@@ -580,20 +309,20 @@
   "surface": {
     "light": {
       "background": {
-        "$value": "#EEF2FF",
+        "$value": "#F6F3EC",
         "$type": "color",
         "$description": "Map or diagram background on the light surface (stackledger 0.4.1 map theme)."
       },
       "text": {
-        "$value": "#0A1033",
+        "$value": "#121212",
         "$type": "color"
       },
       "muted": {
-        "$value": "#5B6694",
+        "$value": "#5C5852",
         "$type": "color"
       },
       "grid": {
-        "$value": "#E0E7FB",
+        "$value": "#EDE8DE",
         "$type": "color"
       },
       "panel": {
@@ -601,11 +330,11 @@
         "$type": "color"
       },
       "shadow": {
-        "$value": "#0A1033",
+        "$value": "#121212",
         "$type": "color"
       },
       "rim": {
-        "$value": "#EEF2FF",
+        "$value": "#F6F3EC",
         "$type": "color"
       },
       "rimWidth": {
@@ -639,39 +368,40 @@
     },
     "dark": {
       "background": {
-        "$value": "#14215A",
+        "$value": "#121110",
         "$type": "color",
         "$description": "Map or diagram background on the dark surface."
       },
       "text": {
-        "$value": "#EEF2FF",
+        "$value": "#F1EEE8",
         "$type": "color"
       },
       "muted": {
-        "$value": "#8F9BD0",
+        "$value": "#ADA79D",
         "$type": "color"
       },
       "grid": {
-        "$value": "#1C2D74",
+        "$value": "#3B3834",
         "$type": "color"
       },
       "panel": {
-        "$value": "#1C2D74",
+        "$value": "#1D1C1A",
         "$type": "color"
       },
       "shadow": {
-        "$value": "#4C5CB8",
+        "$value": "#121110",
         "$type": "color",
-        "$description": "Hard shadow on the dark surface, where ink would disappear (ADR 0003 amendment, AB#157)."
+        "$description": "Shadow colour on the dark surface; unused while map.shadow is 0 (ADR 0009)."
       },
       "rim": {
-        "$value": "#EEF2FF",
-        "$type": "color"
+        "$value": "#F1EEE8",
+        "$type": "color",
+        "$description": "Light band round the ink outline; off while rimWidth is 0 (ADR 0009)."
       },
       "rimWidth": {
-        "$value": 1,
+        "$value": 0,
         "$type": "dimension",
-        "$description": "Light band round the ink outline."
+        "$description": "Width of that band; 0 turns it off (ADR 0009)."
       },
       "zoneOpacity": {
         "$value": 0.22,
@@ -702,7 +432,7 @@
       "$description": "Map and page diagrams, measured from stackledger 0.4.1."
     },
     "shadow": {
-      "$value": 3.5,
+      "$value": 0,
       "$type": "dimension"
     },
     "lineWidth": {
@@ -856,11 +586,11 @@
     },
     "font": {
       "primary": {
-        "$value": "Heebo, sans-serif",
+        "$value": "'Source Sans 3', sans-serif",
         "$type": "fontFamily"
       },
       "secondary": {
-        "$value": "Signika, sans-serif",
+        "$value": "'Source Serif 4', serif",
         "$type": "fontFamily"
       }
     },
@@ -970,100 +700,6 @@
     }
   },
   "cast": {
-    "ground": {
-      "$value": "#D3DBF5",
-      "$type": "color",
-      "$description": "Flat ground shadow under a mascot (AB#152, approved cast spike)."
-    },
-    "metal": {
-      "$value": "#C9D2E8",
-      "$type": "color",
-      "$description": "Stands, chrome parts, the wrench and the bulb base."
-    },
-    "mouth": {
-      "$value": "#B94A3E",
-      "$type": "color",
-      "$description": "Open mouth on a light face."
-    },
-    "glow": {
-      "$value": "#7FD1FF",
-      "$type": "color",
-      "$description": "The agent's face on its dark screen; sweat drops."
-    },
-    "dev": {
-      "fill": {
-        "$value": "#5B7CFA",
-        "$type": "color",
-        "$description": "Dev: the computer's frame."
-      },
-      "chin": {
-        "$value": "#8FA6FF",
-        "$type": "color"
-      },
-      "screen": {
-        "$value": "#DCE6FF",
-        "$type": "color"
-      }
-    },
-    "agent": {
-      "neck": {
-        "$value": "#E3E8F5",
-        "$type": "color",
-        "$description": "AI agent: the chrome neck; the body stays white."
-      },
-      "shine": {
-        "$value": "#E6ECFF",
-        "$type": "color"
-      }
-    },
-    "architect": {
-      "fill": {
-        "$value": "#22B5A4",
-        "$type": "color",
-        "$description": "Architect: turquoise, kept apart from healthy green."
-      },
-      "shine": {
-        "$value": "#9CF0E4",
-        "$type": "color"
-      }
-    },
-    "devops": {
-      "fill": {
-        "$value": "#D76AA5",
-        "$type": "color",
-        "$description": "DevOps: the gear, magenta so it never reads as blocked orange."
-      },
-      "shine": {
-        "$value": "#F3B8D6",
-        "$type": "color"
-      }
-    },
-    "data": {
-      "fill": {
-        "$value": "#8C6CF0",
-        "$type": "color",
-        "$description": "Data: the cylinder."
-      },
-      "lid": {
-        "$value": "#C2B1FF",
-        "$type": "color"
-      },
-      "shine": {
-        "$value": "#B39CFF",
-        "$type": "color"
-      },
-      "lens": {
-        "$value": "#EAF1FF",
-        "$type": "color"
-      }
-    },
-    "request": {
-      "shine": {
-        "$value": "#D6E2FF",
-        "$type": "color",
-        "$description": "Requester: the bubble is color.caller."
-      }
-    },
     "emotePop": {
       "damping": {
         "$value": 9,

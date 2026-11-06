@@ -173,7 +173,7 @@ export const taggedContainer = definePiece<TaggedContainerParams>(
   "taggedContainer",
   { x: pos(), y: pos(), width: size(true), height: size(true), tag: label(), tagWidth: size(), tagFill: col(), fill: col(), ...inkSchema },
   (params) => {
-    const { x, y, width, height, tag, tagFill = "color.transitional", fill } = params;
+    const { x, y, width, height, tag, tagFill = "color.state.transitional", fill } = params;
     const tw = tabWidth(params);
     const c = coloursOf(fill, params);
     return drawn(

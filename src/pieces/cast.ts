@@ -133,9 +133,9 @@ const arm = (from: Pt, to: Pt, side: number, w: number) => [
 const boardProp = (x: number, y: number) => [
   shade(rr(x, y, 104, 78, 10), 6), el("path", { d: rr(x, y, 104, 78, 10), fill: c("color.white"), ...O() }),
   el("path", { d: `M${x + 30},${y + 28} H${x + 52} V${y + 52} H${x + 74}`, fill: "none", stroke: ink(), "stroke-width": 3 }),
-  el("rect", { x: x + 12, y: y + 18, width: 22, height: 20, rx: 4, fill: c("color.caller"), stroke: ink(), "stroke-width": 3 }),
-  el("rect", { x: x + 70, y: y + 42, width: 22, height: 20, rx: 4, fill: c("color.healthy"), stroke: ink(), "stroke-width": 3 }),
-  el("rect", { x: x + 42, y: y + 8, width: 20, height: 18, rx: 4, fill: c("color.transitional"), stroke: ink(), "stroke-width": 3 }),
+  el("rect", { x: x + 12, y: y + 18, width: 22, height: 20, rx: 4, fill: c("color.state.caller"), stroke: ink(), "stroke-width": 3 }),
+  el("rect", { x: x + 70, y: y + 42, width: 22, height: 20, rx: 4, fill: c("color.state.healthy"), stroke: ink(), "stroke-width": 3 }),
+  el("rect", { x: x + 42, y: y + 8, width: 20, height: 18, rx: 4, fill: c("color.state.transitional"), stroke: ink(), "stroke-width": 3 }),
 ];
 const wrenchProp = (x: number, y: number) => {
   const d = `M${x},${y} L${x + 50},${y - 50} M${x + 50},${y - 50}`;
@@ -148,7 +148,7 @@ const wrenchProp = (x: number, y: number) => {
 const magnifierProp = (x: number, y: number) => [
   el("path", { d: `M${x},${y} L${x + 24},${y - 24}`, stroke: ink(), "stroke-width": 16, "stroke-linecap": "round" }),
   el("circle", { cx: x + 44, cy: y - 44, r: 30, fill: c("cast.data.lens"), stroke: ink(), "stroke-width": 9 }),
-  el("circle", { cx: x + 44, cy: y - 44, r: 30, fill: "none", stroke: c("color.caller"), "stroke-width": 4 }),
+  el("circle", { cx: x + 44, cy: y - 44, r: 30, fill: "none", stroke: c("color.state.caller"), "stroke-width": 4 }),
   el("path", { d: `M${x + 30},${y - 56} Q${x + 36},${y - 66} ${x + 48},${y - 66}`, fill: "none", stroke: c("color.white"), "stroke-width": 5, "stroke-linecap": "round" }),
 ];
 
@@ -169,7 +169,7 @@ type Char = {
   prop?: () => SvgNode[];
 };
 
-const spark = (x: number, y: number) => el("path", { d: `M${x},${y - 14} L${x + 4},${y - 4} L${x + 14},${y} L${x + 4},${y + 4} L${x},${y + 14} L${x - 4},${y + 4} L${x - 14},${y} L${x - 4},${y - 4} Z`, fill: c("color.transitional"), ...O(), "stroke-width": 3 });
+const spark = (x: number, y: number) => el("path", { d: `M${x},${y - 14} L${x + 4},${y - 4} L${x + 14},${y} L${x + 4},${y + 4} L${x},${y + 14} L${x - 4},${y + 4} L${x - 14},${y} L${x - 4},${y - 4} Z`, fill: c("color.state.transitional"), ...O(), "stroke-width": 3 });
 
 const CAST = (): Record<MascotName, Char> => ({
   // DEV: modern all-in-one. Screen frame = body, code on the screen, face on the screen, </> on the chin, stand.
@@ -184,8 +184,8 @@ const CAST = (): Record<MascotName, Char> => ({
         el("path", { d: "M4,152 H216", stroke: ink(), "stroke-width": 4 }),
         el("path", { d: rr(18, 36, 184, 108, 10), fill: c("cast.dev.screen"), stroke: ink(), "stroke-width": 3.5 }),
         g({ "data-part": "screen-code", stroke: "none" },
-          el("rect", { x: 30, y: 48, width: 34, height: 7, rx: 3.5, fill: c("color.healthy") }), el("rect", { x: 36, y: 61, width: 22, height: 7, rx: 3.5, fill: c("cast.dev.fill") }),
-          el("rect", { x: 156, y: 48, width: 34, height: 7, rx: 3.5, fill: c("color.healthy") }), el("rect", { x: 162, y: 61, width: 22, height: 7, rx: 3.5, fill: c("cast.dev.fill") }))),
+          el("rect", { x: 30, y: 48, width: 34, height: 7, rx: 3.5, fill: c("color.state.healthy") }), el("rect", { x: 36, y: 61, width: 22, height: 7, rx: 3.5, fill: c("cast.dev.fill") }),
+          el("rect", { x: 156, y: 48, width: 34, height: 7, rx: 3.5, fill: c("color.state.healthy") }), el("rect", { x: 162, y: 61, width: 22, height: 7, rx: 3.5, fill: c("cast.dev.fill") }))),
       g({ "data-part": "mark" }, el("path", { d: "M98,163 L90,170 L98,177 M122,163 L130,170 L122,177 M114,160 L106,180", fill: "none", stroke: c("color.white"), "stroke-width": 4.5, "stroke-linecap": "round", "stroke-linejoin": "round" })),
     ],
   },
@@ -213,8 +213,8 @@ const CAST = (): Record<MascotName, Char> => ({
     faceAt: [110, 132], faceColour: ink(), mouthFill: c("cast.mouth"),
     parts: () => [
       g({ "data-part": "pencil", transform: "rotate(28 128 40)" },
-        el("path", { d: "M120,6 H136 V60 L128,74 L120,60 Z", fill: c("color.transitional"), ...O(), "stroke-width": 3.5 }),
-        el("path", { d: "M120,6 H136 V16 H120 Z", fill: c("color.backend"), ...O(), "stroke-width": 3.5 })),
+        el("path", { d: "M120,6 H136 V60 L128,74 L120,60 Z", fill: c("color.state.transitional"), ...O(), "stroke-width": 3.5 }),
+        el("path", { d: "M120,6 H136 V16 H120 Z", fill: c("color.state.backend"), ...O(), "stroke-width": 3.5 })),
       g({ "data-part": "body" },
         ...solid("M99,30 Q110,13 121,30 L198,158 Q210,184 177,193 H35 Q6,187 21,160 Z", c("cast.architect.fill")),
         el("path", { d: "M110,58 L130,94 H90 Z", fill: c("color.panel"), stroke: ink(), "stroke-width": 3.5, "stroke-linejoin": "round" }),
@@ -261,7 +261,7 @@ const CAST = (): Record<MascotName, Char> => ({
     faceAt: [105, 82], faceColour: ink(), mouthFill: c("cast.mouth"),
     parts: () => [
       g({ "data-part": "body" },
-        ...solid("M54,30 H156 Q186,30 186,60 V130 Q186,160 156,160 H96 L66,190 L72,160 H54 Q24,160 24,130 V60 Q24,30 54,30 Z", c("color.caller")),
+        ...solid("M54,30 H156 Q186,30 186,60 V130 Q186,160 156,160 H96 L66,190 L72,160 H54 Q24,160 24,130 V60 Q24,30 54,30 Z", c("color.state.caller")),
         shine("M44,62 Q56,46 78,46", c("cast.request.shine"))),
       g({ "data-part": "mark" }, el("rect", { x: 62, y: 134, width: 86, height: 12, rx: 6, fill: c("color.white"), stroke: ink(), "stroke-width": 3 })),
     ],
@@ -274,7 +274,7 @@ const CAST = (): Record<MascotName, Char> => ({
       g({ "data-part": "body" }, ...solid(rr(32, 88, 146, 106, 16), c("color.white"))),
       g({ "data-part": "mark" },
         el("path", { d: "M36,94 L105,140 L174,94", fill: "none", stroke: ink(), "stroke-width": 4, "stroke-linejoin": "round" }),
-        el("circle", { cx: 105, cy: 140, r: 9, fill: c("color.transitional"), stroke: ink(), "stroke-width": 3 })),
+        el("circle", { cx: 105, cy: 140, r: 9, fill: c("color.state.transitional"), stroke: ink(), "stroke-width": 3 })),
     ],
   },
 });
@@ -340,7 +340,7 @@ const zed = (x: number, y: number, s: number) => {
   // A Z of height s with its top-left at (x, y - s): ink casing, caller fill.
   const w = s * 0.72, d = `M${x},${y - s} H${x + w} L${x},${y} H${x + w}`;
   return [el("path", { d, fill: "none", stroke: ink(), "stroke-width": s * 0.34, "stroke-linecap": "round", "stroke-linejoin": "round" }),
-    el("path", { d, fill: "none", stroke: c("color.caller"), "stroke-width": s * 0.16, "stroke-linecap": "round", "stroke-linejoin": "round" })];
+    el("path", { d, fill: "none", stroke: c("color.state.caller"), "stroke-width": s * 0.16, "stroke-linecap": "round", "stroke-linejoin": "round" })];
 };
 
 export type EmoteParams = { kind: EmoteKind; x: number; y: number; scale?: number; burst?: boolean; surface?: SurfaceName };
@@ -350,11 +350,11 @@ const drawEmote = (p: EmoteParams): Drawn => {
   const parts: SvgNode[] = [];
   switch (kind) {
     case "idea": {
-      if (burst) parts.push(el("circle", { cx, cy: cy - 6, r: 62, fill: c("color.transitional"), opacity: 0.35 }), ...rays(cx, cy - 6, 50, 72, 7, -180, 0));
+      if (burst) parts.push(el("circle", { cx, cy: cy - 6, r: 62, fill: c("color.state.transitional"), opacity: 0.35 }), ...rays(cx, cy - 6, 50, 72, 7, -180, 0));
       const bulb = `M${cx - 30},${cy - 10} A34,34 0 1 1 ${cx + 30},${cy - 10} Q${cx + 22},${cy + 6} ${cx + 18},${cy + 22} H${cx - 18} Q${cx - 22},${cy + 6} ${cx - 30},${cy - 10} Z`;
       parts.push(
         hard(el("path", { d: bulb, fill: ink(), transform: "translate(6 6)" })),
-        el("path", { d: bulb, fill: c("color.transitional"), ...EO() }),
+        el("path", { d: bulb, fill: c("color.state.transitional"), ...EO() }),
         el("path", { d: `M${cx - 16},${cy - 22} Q${cx - 12},${cy - 32} ${cx - 2},${cy - 34}`, fill: "none", stroke: c("color.white"), "stroke-width": 6, "stroke-linecap": "round" }),
         el("path", { d: `M${cx - 8},${cy + 22} V${cy} L${cx},${cy + 8} L${cx + 8},${cy} V${cy + 22}`, fill: "none", stroke: ink(), "stroke-width": 4, "stroke-linejoin": "round" }),
         el("rect", { x: cx - 18, y: cy + 22, width: 36, height: 12, rx: 3, fill: c("cast.metal"), ...EO(), "stroke-width": 4 }),
@@ -369,7 +369,7 @@ const drawEmote = (p: EmoteParams): Drawn => {
     case "problem":
       if (burst) parts.push(...rays(cx, cy, 48, 70, 5));
       parts.push(hard(el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: ink(), transform: "translate(6 6)" })),
-        el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: c("color.failure"), ...EO() }),
+        el("path", { d: `M${cx},${cy - 44} L${cx + 46},${cy + 34} H${cx - 46} Z`, fill: c("color.state.failure"), ...EO() }),
         el("path", { d: `M${cx},${cy - 18} V${cy + 8}`, stroke: ink(), "stroke-width": 9, "stroke-linecap": "round" }),
         el("circle", { cx, cy: cy + 22, r: 5.5, fill: ink() }));
       break;
@@ -379,14 +379,14 @@ const drawEmote = (p: EmoteParams): Drawn => {
         el("path", { d: `M${cx + dx - 6 * k},${cy + dy - 2 * k} Q${cx + dx - 8 * k},${cy + dy + 6 * k} ${cx + dx - 2 * k},${cy + dy + 8 * k}`, fill: "none", stroke: c("color.white"), "stroke-width": 3, "stroke-linecap": "round" }));
       break;
     case "liked":
-      parts.push(el("path", { d: `M${cx},${cy + 30} C${cx - 50},${cy} ${cx - 34},${cy - 40} ${cx},${cy - 16} C${cx + 34},${cy - 40} ${cx + 50},${cy} ${cx},${cy + 30} Z`, fill: c("color.backend"), ...EO() }));
+      parts.push(el("path", { d: `M${cx},${cy + 30} C${cx - 50},${cy} ${cx - 34},${cy - 40} ${cx},${cy - 16} C${cx + 34},${cy - 40} ${cx + 50},${cy} ${cx},${cy + 30} Z`, fill: c("color.state.backend"), ...EO() }));
       break;
     case "worked":
       if (burst) parts.push(...rays(cx, cy, 48, 68, 5));
-      parts.push(...disc(cx, cy, 38, c("color.healthy")), el("path", { d: `M${cx - 16},${cy} L${cx - 4},${cy + 12} L${cx + 18},${cy - 12}`, fill: "none", stroke: ink(), "stroke-width": 8, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+      parts.push(...disc(cx, cy, 38, c("color.state.healthy")), el("path", { d: `M${cx - 16},${cy} L${cx - 4},${cy + 12} L${cx + 18},${cy - 12}`, fill: "none", stroke: ink(), "stroke-width": 8, "stroke-linecap": "round", "stroke-linejoin": "round" }));
       break;
     case "refused":
-      parts.push(...disc(cx, cy, 38, c("color.failure")), el("path", { d: `M${cx - 13},${cy - 13} L${cx + 13},${cy + 13} M${cx + 13},${cy - 13} L${cx - 13},${cy + 13}`, stroke: ink(), "stroke-width": 8, "stroke-linecap": "round" }));
+      parts.push(...disc(cx, cy, 38, c("color.state.failure")), el("path", { d: `M${cx - 13},${cy - 13} L${cx + 13},${cy + 13} M${cx + 13},${cy - 13} L${cx - 13},${cy + 13}`, stroke: ink(), "stroke-width": 8, "stroke-linecap": "round" }));
       break;
     case "waiting":
       parts.push(...zed(cx - 12, cy + 12, 26), ...zed(cx + 20, cy - 20, 20), ...zed(cx + 44, cy - 46, 14));

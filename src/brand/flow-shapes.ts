@@ -14,7 +14,7 @@ export const flowShape = (kind: "exchange" | "queue" | "container", bounds: Boun
     shadow: shadow.block, radius: radius.block,
     vertices: kind === "exchange" ? [[h * .26, 0], [w - h * .26, 0], [w, h/2], [w - h * .26, h], [h * .26, h], [0, h/2]] : [],
     rails: kind === "queue" ? [inset, w - inset] : [],
-    tab: kind === "container" ? { fill: color.transitional, radius: radius.pill, strokeWidth: outline.small, shadow: shadow.pill } : null,
+    tab: kind === "container" ? { fill: color.state.transitional, radius: radius.pill, strokeWidth: outline.small, shadow: shadow.pill } : null,
   };
 };
 /** What PositionedToken draws: nothing when the path gave no point, else the token style. */

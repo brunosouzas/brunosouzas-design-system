@@ -105,7 +105,7 @@ export const sheet = definePiece<SheetParams>(
     leadFill: col(),
     tick: col(),
   },
-  ({ x, y, width, height, rows, top = 46, step = 38, fill = "color.white", leadFill = "color.caller", tick = "illustration.accent" }) => {
+  ({ x, y, width, height, rows, top = 46, step = 38, fill = "color.white", leadFill = "color.state.caller", tick = "illustration.accent" }) => {
     const marks: SvgNode[] = [];
     const bars: SvgNode[] = [];
     const ticks: SvgNode[] = [];
@@ -119,14 +119,14 @@ export const sheet = definePiece<SheetParams>(
         if (checked) ticks.push(el("path", { d: `M${x + 27},${cy} L${x + 32},${cy + 6} L${x + 40},${cy - 6}`, stroke: colour(tick, "tick") }));
         barX = x + 56;
       } else if (row.lead === "question") {
-        marks.push(el("circle", { cx: x + 30, cy, r: 13, fill: tokens.color.transitional }));
+        marks.push(el("circle", { cx: x + 30, cy, r: 13, fill: tokens.color.state.transitional }));
         glyphs.push(el("text", { x: x + 30, y: cy + 7, "font-size": 19, "font-weight": tokens.font.weightHeavy }, "?"));
         barX = x + 52;
       }
       bars.push(el("rect", { x: barX, y: cy - 5, width: row.bar, height: 10, rx: 5 }));
       if (row.tail === "check") {
         const tx = x + width - 40;
-        marks.push(el("rect", { x: tx, y: cy - 11, width: 22, height: 22, rx: 5, fill: tokens.color.healthy }));
+        marks.push(el("rect", { x: tx, y: cy - 11, width: 22, height: 22, rx: 5, fill: tokens.color.state.healthy }));
         ticks.push(el("path", { d: `M${tx + 5},${cy} L${tx + 10},${cy + 6} L${tx + 18},${cy - 6}`, stroke: ink }));
       }
     });
@@ -142,7 +142,7 @@ export const sheet = definePiece<SheetParams>(
   },
 );
 
-const CODE_COLOURS = { healthy: tokens.color.healthy, caller: tokens.color.caller, white: tokens.color.white, backend: tokens.color.backend } as const;
+const CODE_COLOURS = { healthy: tokens.color.state.healthy, caller: tokens.color.state.caller, white: tokens.color.white, backend: tokens.color.state.backend } as const;
 export type CodeLine = { indent: number; w: number; color: keyof typeof CODE_COLOURS; tall?: boolean };
 export type CodePanelParams = { x: number; y: number; width: number; height: number; lines: CodeLine[]; top?: number; step?: number };
 /** Dark code panel with coloured lines; a tall line marks the one under review. */
@@ -188,7 +188,7 @@ export type SpeechBubbleParams = { x: number; y: number; width: number; height: 
 export const speechBubble = definePiece<SpeechBubbleParams>(
   "speechBubble",
   { x: pos(), y: pos(), width: size(true, 60), height: size(true, 50), fill: col() },
-  ({ x, y, width: w, height: h, fill = "color.caller" }) => {
+  ({ x, y, width: w, height: h, fill = "color.state.caller" }) => {
     const r = 12;
     const b = y + h;
     const d = `M${x},${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${b - r} Q${x + w},${b} ${x + w - r},${b} H${x + 44} L${x + 20},${b + 20} L${x + 24},${b} H${x + r} Q${x},${b} ${x},${b - r} Z`;
@@ -208,10 +208,10 @@ export const browserWindow = definePiece<BrowserWindowParams>(
     drawn([
       ...shadowed(el("rect", { x, y, width: w, height: h, rx: 12, fill: tokens.color.white })),
       el("path", { d: `M${x},${y + 30} H${x + w}`, fill: "none" }),
-      ...[tokens.color.backend, tokens.color.transitional, tokens.color.healthy].map((fill, i) =>
+      ...[tokens.color.state.backend, tokens.color.state.transitional, tokens.color.state.healthy].map((fill, i) =>
         el("circle", { cx: x + 18 + i * 16, cy: y + 15, r: 5, fill, "stroke-width": 2.5 }),
       ),
-      el("rect", { x: x + 20, y: y + 46, width: w - 40, height: 40, rx: 8, fill: tokens.color.caller, "stroke-width": tokens.outline.small }),
+      el("rect", { x: x + 20, y: y + 46, width: w - 40, height: 40, rx: 8, fill: tokens.color.state.caller, "stroke-width": tokens.outline.small }),
       el("rect", { x: x + 20, y: y + 100, width: r2(w * 0.6), height: 10, rx: 5, fill: tokens.illustration.textBar, stroke: "none" }),
       el("rect", { x: x + 20, y: y + 118, width: r2(w * 0.4), height: 10, rx: 5, fill: tokens.illustration.textBar, stroke: "none" }),
     ]),
@@ -232,7 +232,7 @@ export const folder = definePiece<FolderParams>(
       ...shadowed(el("path", { d: back, fill: tokens.illustration.transitionalShade })),
       paper(24, -8, -8),
       paper(66, -16, 6),
-      el("path", { d: front, fill: tokens.color.transitional }),
+      el("path", { d: front, fill: tokens.color.state.transitional }),
     ]);
   },
 );
@@ -326,7 +326,7 @@ const PIN_SIZE = 18;
 export const milestonePin = definePiece<MilestonePinParams>(
   "milestonePin",
   { x: pos(), y: pos(), text: label(), fill: col(), stem: size(), size: { kind: "number", min: 6, max: 48 } },
-  ({ x, y, text, fill = "color.healthy", stem = 44, size: r }) => {
+  ({ x, y, text, fill = "color.state.healthy", stem = 44, size: r }) => {
     // Without `size`, the 0.5.0 expressions exactly (no rounding), so every 0.5.0 call keeps its bytes.
     const k = (r ?? PIN_SIZE) / PIN_SIZE;
     const at = r === undefined ? (v: number) => v : r2;
@@ -364,7 +364,7 @@ export type NameTagParams = { hangX: number; hangY: number; cx: number; top: num
 export const nameTag = definePiece<NameTagParams>(
   "nameTag",
   { hangX: pos(), hangY: pos(), cx: pos(), top: pos(), rotate: { kind: "number" }, icon: { kind: "enum", required: true, values: EIP_ICON_NAMES }, fill: col() },
-  ({ hangX: sx, hangY: sy, cx, top, rotate = 0, icon, fill = "color.transitional" }) => {
+  ({ hangX: sx, hangY: sy, cx, top, rotate = 0, icon, fill = "color.state.transitional" }) => {
     const w = 96;
     const h = 92;
     const x = cx - w / 2;
@@ -387,7 +387,7 @@ export type CheckBadgeParams = { cx: number; cy: number; r?: number };
 /** Green round badge with a tick. */
 export const checkBadge = definePiece<CheckBadgeParams>("checkBadge", { cx: pos(), cy: pos(), r: size() }, ({ cx, cy, r = 16 }) =>
   drawn([
-    el("circle", { cx, cy, r, fill: tokens.color.healthy, "stroke-width": tokens.outline.small }),
+    el("circle", { cx, cy, r, fill: tokens.color.state.healthy, "stroke-width": tokens.outline.small }),
     el("path", { d: `M${r2(cx - r * 0.42)},${cy} L${r2(cx - r * 0.1)},${r2(cy + r * 0.34)} L${r2(cx + r * 0.45)},${r2(cy - r * 0.32)}`, fill: "none", "stroke-width": 3.5, "stroke-linecap": "round" }),
   ]),
 );
@@ -397,7 +397,7 @@ export type StampParams = { cx: number; cy: number; word: string; fill?: string;
 export const stamp = definePiece<StampParams>(
   "stamp",
   { cx: pos(), cy: pos(), word: label(), fill: col(), r: size(false, 12), rotate: { kind: "number" }, shape: { kind: "enum", values: ["round", "rect"] } },
-  ({ cx, cy, word, fill = "color.healthy", r = 40, rotate = -12, shape = "round" }) => {
+  ({ cx, cy, word, fill = "color.state.healthy", r = 40, rotate = -12, shape = "round" }) => {
     const turn = `rotate(${rotate} ${cx} ${cy})`;
     const face =
       shape === "round"
@@ -421,13 +421,13 @@ export const robot = definePiece<RobotParams>("robot", { cx: pos(), top: pos() }
   const x = cx - w / 2;
   return drawn([
     el("line", { x1: cx, y1: top, x2: cx, y2: top - 28 }),
-    el("circle", { cx, cy: top - 34, r: 10, fill: tokens.color.blocked }),
+    el("circle", { cx, cy: top - 34, r: 10, fill: tokens.color.state.blocked }),
     el("rect", { x: x - 16, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.illustration.healthyShade }),
     el("rect", { x: x + w - 4, y: top + 44, width: 20, height: 52, rx: 6, fill: tokens.illustration.healthyShade }),
-    ...shadowed(el("rect", { x, y: top, width: w, height: h, rx: 22, fill: tokens.color.healthy })),
+    ...shadowed(el("rect", { x, y: top, width: w, height: h, rx: 22, fill: tokens.color.state.healthy })),
     el("rect", { x: x + 22, y: top + 22, width: w - 44, height: 72, rx: 14, fill: ink }),
-    el("circle", { cx: cx - 23, cy: top + 58, r: 11, fill: tokens.color.healthy, stroke: "none" }),
-    el("circle", { cx: cx + 23, cy: top + 58, r: 11, fill: tokens.color.healthy, stroke: "none" }),
+    el("circle", { cx: cx - 23, cy: top + 58, r: 11, fill: tokens.color.state.healthy, stroke: "none" }),
+    el("circle", { cx: cx + 23, cy: top + 58, r: 11, fill: tokens.color.state.healthy, stroke: "none" }),
     g(
       { stroke: "none", fill: ink },
       el("rect", { x: x + 30, y: top + 108, width: 44, height: 9, rx: 4.5 }),
@@ -461,7 +461,7 @@ export type ServerStackParams = { x: number; y: number; width?: number; units?: 
 export const serverStack = definePiece<ServerStackParams>(
   "serverStack",
   { x: pos(), y: pos(), width: size(), units: count(1, 20), fill: col(), failing: count(0, 19) },
-  ({ x, y, width: w = 150, units = 3, fill = "color.backend", failing }) => {
+  ({ x, y, width: w = 150, units = 3, fill = "color.state.backend", failing }) => {
     const uh = 40;
     const gap = 10;
     return drawn(
@@ -470,7 +470,7 @@ export const serverStack = definePiece<ServerStackParams>(
         return [
           ...shadowed(el("rect", { x, y: uy, width: w, height: uh, rx: 8, fill: colour(fill, "fill") })),
           el("rect", { x: x + 16, y: uy + 15, width: r2(w * 0.5), height: 10, rx: 5, fill: tokens.color.white, stroke: "none" }),
-          el("circle", { cx: x + w - 24, cy: uy + 20, r: 6, fill: i === failing ? tokens.color.failure : tokens.color.white, "stroke-width": tokens.outline.small }),
+          el("circle", { cx: x + w - 24, cy: uy + 20, r: 6, fill: i === failing ? tokens.color.state.failure : tokens.color.white, "stroke-width": tokens.outline.small }),
         ];
       }).flat(),
     );
@@ -489,7 +489,7 @@ export type GearParams = { cx: number; cy: number; r?: number; teeth?: number; f
 export const gear = definePiece<GearParams>(
   "gear",
   { cx: pos(), cy: pos(), r: size(), teeth: count(4, 64), fill: col() },
-  ({ cx, cy, r = 84, teeth = 12, fill = "color.transitional" }) => {
+  ({ cx, cy, r = 84, teeth = 12, fill = "color.state.transitional" }) => {
     const root = r * 0.78;
     const points: string[] = [];
     const step = (2 * Math.PI) / teeth;
@@ -504,7 +504,7 @@ export const gear = definePiece<GearParams>(
 
 export type ParcelParams = { x: number; y: number; size?: number; fill?: string };
 /** Parcel (box) with a lid line and a tape strip. */
-export const parcel = definePiece<ParcelParams>("parcel", { x: pos(), y: pos(), size: size(), fill: col() }, ({ x, y, size: s = 96, fill = "color.blocked" }) =>
+export const parcel = definePiece<ParcelParams>("parcel", { x: pos(), y: pos(), size: size(), fill: col() }, ({ x, y, size: s = 96, fill = "color.state.blocked" }) =>
   drawn([
     ...shadowed(el("rect", { x, y, width: s, height: r2(s * 0.8), rx: 6, fill: colour(fill, "fill") })),
     el("path", { d: `M${x},${r2(y + s * 0.3)} H${x + s}`, fill: "none", "stroke-width": tokens.outline.small }),
@@ -517,7 +517,7 @@ export type StepsParams = { x: number; y: number; count?: number; width?: number
 export const steps = definePiece<StepsParams>(
   "steps",
   { x: pos(), y: pos(), count: count(1, 20), width: size(), rise: size(), fill: col() },
-  ({ x, y, count = 4, width: w = 145, rise = 40, fill = "color.caller" }) => {
+  ({ x, y, count = 4, width: w = 145, rise = 40, fill = "color.state.caller" }) => {
     const blocks = Array.from({ length: count }, (_, i) => el("rect", { x: x + i * w, y: y - rise * (i + 1), width: w, height: rise * (i + 1), rx: 10, fill: colour(fill, "fill") }));
     return drawn([...blocks.map((b) => ({ ...b, attrs: { ...b.attrs, fill: ink, transform: `translate(${tokens.shadow.block} ${tokens.shadow.block})` } })), ...blocks]);
   },
@@ -551,7 +551,7 @@ export const muleFlow = definePiece<MuleFlowParams>(
     tileWidth: size(false, 40),
     fill: col(),
   },
-  ({ x, y, width: w, height: h = 104, tiles, tileWidth = 86, fill = "color.caller" }) => {
+  ({ x, y, width: w, height: h = 104, tiles, tileWidth = 86, fill = "color.state.caller" }) => {
     const cy = y + h / 2;
     const links: string[] = [`M${x + 18},${cy} H${tiles[0].x - 6}`];
     const heads: SvgNode[] = [];

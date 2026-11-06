@@ -26,8 +26,8 @@ describe("EIP icons as data", () => {
 
   test("Icon colours", () => {
     const allowed = new Set<string>([
-      tokens.color.ink, tokens.color.white, tokens.color.healthy, tokens.color.transitional,
-      tokens.color.caller, tokens.color.backend, tokens.illustration.iconLine,
+      tokens.color.ink, tokens.color.white, tokens.color.state.healthy, tokens.color.state.transitional,
+      tokens.color.state.caller, tokens.color.state.backend, tokens.illustration.iconLine,
     ]);
     const found = new Set<string>();
     const visit = (node: SvgNode) => {

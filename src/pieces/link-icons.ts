@@ -37,7 +37,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "linkedin",
     title: "LinkedIn",
     description: "LinkedIn icon.",
-    face: "color.caller",
+    face: "color.state.caller",
     glyph: [
       el("rect", { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: INK, stroke: "none" }),
       el("circle", { cx: 14, cy: 13.8, r: 2.4, fill: INK, stroke: "none" }),
@@ -48,7 +48,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "email",
     title: "Email",
     description: "Email icon.",
-    face: "color.transitional",
+    face: "color.state.transitional",
     glyph: [
       el("rect", { x: 9, y: 13, width: 24, height: 17, rx: 3, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("path", { d: "M10,15 L21,23 L32,15", fill: "none", stroke: INK, "stroke-width": 2.5, "stroke-linejoin": "round" }),
@@ -58,7 +58,7 @@ export const LINK_ICONS: readonly LinkIcon[] = [
     name: "website",
     title: "Website",
     description: "Website icon: a globe.",
-    face: "color.healthy",
+    face: "color.state.healthy",
     glyph: [
       el("circle", { cx: 21, cy: 21, r: 10.5, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("ellipse", { cx: 21, cy: 21, rx: 4.6, ry: 10.5, fill: "none", stroke: INK, "stroke-width": 2 }),

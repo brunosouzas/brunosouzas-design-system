@@ -13,7 +13,7 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   sheet: { x: 0, y: 0, width: 100, height: 100, rows: [{ bar: 40 }] },
   blockArrow: { x: 0, y: 0 },
   arcArrow: { from: [0, 0], c1: [10, -10], c2: [20, -10], to: [30, 0] },
-  rail: { x: 0, y: 0, width: 200, nodes: ["color.healthy"] },
+  rail: { x: 0, y: 0, width: 200, nodes: ["color.state.healthy"] },
   checkBadge: { cx: 0, cy: 0 },
   priceTag: { x: 0, y: 0, text: "v1" },
   nameTag: { hangX: 0, hangY: 0, cx: 0, top: 40, icon: "splitter" },
@@ -34,9 +34,9 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   book: { x: 0, y: 0 },
   muleFlow: { x: 0, y: 0, width: 300, tiles: [{ x: 20, kind: "choice" }] },
   eipIcon: { name: "splitter", x: 0, y: 0 },
-  lineBadge: { x: 0, y: 0, fill: "color.healthy" },
+  lineBadge: { x: 0, y: 0, fill: "color.state.healthy" },
   stationMarker: { cx: 0, cy: 0 },
-  pipe: { d: "M0,0 L100,0", fill: "color.caller" },
+  pipe: { d: "M0,0 L100,0", fill: "color.state.caller" },
   countBadge: { cx: 0, cy: 0, text: "3" },
   nodeBlock: { x: 0, y: 0, width: 160, title: "a" },
   pillNode: { x: 0, y: 0, width: 160, title: "a" },
@@ -46,7 +46,7 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   renewalRing: { cx: 0, cy: 0, r: 18 },
   suggestedHalo: { cx: 0, cy: 0, r: 21 },
   licenceMark: { cx: 0, cy: 0 },
-  zone: { points: [[0, 0], [100, 0], [50, 80]], fill: "color.caller" },
+  zone: { points: [[0, 0], [100, 0], [50, 80]], fill: "color.state.caller" },
   uiIcon: { name: "sun", x: 0, y: 0 },
   linkIcon: { icon: "github", x: 0, y: 0 },
   diagramBox: { x: 0, y: 0, width: 120, text: ["a"] },
@@ -56,7 +56,7 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
   taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   lifeline: { x: 0, y1: 0, y2: 100 },
-  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.healthy" },
+  phaseBand: { x: 0, y: 0, width: 200, text: "a", fill: "color.state.healthy" },
   altFrame: { x: 0, y: 0, width: 200, height: 100, tag: "a" },
   edgeLabel: { x: 0, y: 0, lines: ["a"] },
   stateStart: { cx: 0, cy: 0 },
@@ -82,16 +82,16 @@ const METRO = new Set([
 const ink = (extra: Record<string, unknown>) => [{ ...extra, inkScale: 0.25 }, { ...extra, inkScale: 8 }];
 export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   lineBadge: [
-    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 3, width: 3, inkScale: 0.25 },
+    { x: 0, y: 0, text: "a", fill: "color.state.healthy", height: 3, width: 3, inkScale: 0.25 },
     { x: 0, y: 0, text: "a", fill: "#7B3FE4", height: 96, width: 10000, inkScale: 8, flat: true },
-    { x: 0, y: 0, text: "a", fill: "color.healthy", height: 10000, width: 10000, inkScale: 8 },
+    { x: 0, y: 0, text: "a", fill: "color.state.healthy", height: 10000, width: 10000, inkScale: 8 },
   ],
   stationMarker: [
     { cx: 0, cy: 0, r: 1.5, inkScale: 0.25 },
     { cx: 0, cy: 0, r: 10000, inkScale: 8, to: [10000, 10000], state: "deprecated", surface: "dark" },
   ],
   pipe: [
-    { d: "M0,0 L1,0", fill: "color.caller", width: 0.01, casing: 0 },
+    { d: "M0,0 L1,0", fill: "color.state.caller", width: 0.01, casing: 0 },
     { d: "M0,0 L10000,0", fill: "#7B3FE4", width: 100, casing: 50 },
   ],
   countBadge: [
@@ -124,13 +124,13 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   ],
   zone: [
     { points: [[0, 0]], fill: "#7B3FE4", title: "a", titleAt: [0, 0], surface: "dark" },
-    { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.caller" },
+    { points: Array.from({ length: 10000 }, (_, i) => [i, i % 7]), fill: "color.state.caller" },
   ],
   // Body diagram pieces (change body-diagram-pieces, task 3.2).
   diagramBox: [
     { x: 0, y: 0, width: 3, height: 3, text: ["a"], radius: 0, textSize: 6, inkScale: 0.25 },
     { x: 0, y: 0, width: 10000, height: 10000, text: ["a", "b", "c"], subtitle: "d", radius: 5000, textSize: 48, inkScale: 8, surface: "dark" },
-    { x: 0, y: 0, width: 96, height: 96, text: ["a"], shape: "pill", fill: "color.healthy", inkScale: 8 },
+    { x: 0, y: 0, width: 96, height: 96, text: ["a"], shape: "pill", fill: "color.state.healthy", inkScale: 8 },
   ],
   decisionNode: [
     { x: 0, y: 0, width: 3, height: 3, text: ["a"], inkScale: 0.25 },
@@ -154,8 +154,8 @@ export const METRO_BOUNDARY: Record<string, Record<string, unknown>[]> = {
   ],
   lifeline: [{ x: 0, y1: 0, y2: 0.01, width: 0.01 }, { x: 0, y1: -10000, y2: 10000, width: 12, state: "inactive", surface: "dark" }],
   phaseBand: [
-    { x: 0, y: 0, width: 3, height: 3, text: "a", fill: "color.healthy", textSize: 6, inkScale: 0.25 },
-    { x: 0, y: 0, width: 10000, height: 10000, text: "a", fill: "color.blocked", textSize: 48, inkScale: 8, surface: "dark" },
+    { x: 0, y: 0, width: 3, height: 3, text: "a", fill: "color.state.healthy", textSize: 6, inkScale: 0.25 },
+    { x: 0, y: 0, width: 10000, height: 10000, text: "a", fill: "color.state.blocked", textSize: 48, inkScale: 8, surface: "dark" },
   ],
   altFrame: [
     { x: 0, y: 0, width: 0.01, height: 0.02, tag: "a", tagWidth: 0.01, sections: [{ y: 0.01, tag: "b", conditionWidth: 0.01, condition: "c" }] },
@@ -272,7 +272,7 @@ describe("Piece parameters checked", () => {
   test("Too many repeated parts", () => {
     expect(() => P.steps({ x: 0, y: 0, count: 4294967296 })).toThrow(/^steps: count: expected a number at most 20/);
     expect(() => P.gear({ cx: 0, cy: 0, teeth: 65 })).toThrow(/^gear: teeth: expected a number at most 64/);
-    expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
+    expect(() => call("rail", { x: 0, y: 0, width: 200, nodes: Array(51).fill("color.state.healthy") })).toThrow(/^rail: nodes: expected at most 50 item\(s\)/);
     // Change body-diagram-pieces, task 3.2.
     expect(() => call("altFrame", { x: 0, y: 0, width: 200, height: 100, tag: "a", sections: Array.from({ length: 11 }, (_, i) => ({ y: 1 + i, tag: "b" })) })).toThrow(/^altFrame: sections: expected at most 10 item\(s\)/);
     expect(() => call("diagramBox", { x: 0, y: 0, width: 120, text: ["a", "b", "c", "d"] })).toThrow(/^diagramBox: text: expected at most 3 item\(s\)/);

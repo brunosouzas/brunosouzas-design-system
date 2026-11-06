@@ -42,8 +42,8 @@ describe("Surface tokens", () => {
   });
 
   test("Measured surfaces", () => {
-    expect(json.surface.light).toEqual({ background: "#EEF2FF", text: "#0A1033", muted: "#5B6694", grid: "#E0E7FB", panel: "#FFFFFF", shadow: "#0A1033", rim: "#EEF2FF", rimWidth: 0, zoneOpacity: 0.12, backdropWater: "#C9D8FF", backdropWaterEdge: "#B5C7F5", backdropPark: "#D4F2DF", backdropCredit: "#5A6385" });
-    expect(json.surface.dark).toEqual({ background: "#14215A", text: "#EEF2FF", muted: "#8F9BD0", grid: "#1C2D74", panel: "#1C2D74", shadow: "#4C5CB8", rim: "#EEF2FF", rimWidth: 1, zoneOpacity: 0.22, backdropWater: "#1E3175", backdropWaterEdge: "#2A3F8A", backdropPark: "#183F52", backdropCredit: "#9AA6D6" });
+    expect(json.surface.light).toEqual({ background: "#F6F3EC", text: "#121212", muted: "#5C5852", grid: "#EDE8DE", panel: "#FFFFFF", shadow: "#121212", rim: "#F6F3EC", rimWidth: 0, zoneOpacity: 0.12, backdropWater: "#C9D8FF", backdropWaterEdge: "#B5C7F5", backdropPark: "#D4F2DF", backdropCredit: "#5A6385" });
+    expect(json.surface.dark).toEqual({ background: "#121110", text: "#F1EEE8", muted: "#ADA79D", grid: "#3B3834", panel: "#1D1C1A", shadow: "#121110", rim: "#F1EEE8", rimWidth: 0, zoneOpacity: 0.22, backdropWater: "#1E3175", backdropWaterEdge: "#2A3F8A", backdropPark: "#183F52", backdropCredit: "#9AA6D6" });
   });
 
   test("Backdrop tokens in the CSS", () => {
@@ -72,11 +72,14 @@ describe("Map tokens", () => {
 
   test("Measured map values", () => {
     expect(tokens.map).toEqual({
-      outline: 3, shadow: 3.5, lineWidth: 12, casing: 6, badgeHeight: 20, badgeTextSize: 12, countHeight: 16, countTextSize: 11,
+      outline: 3, shadow: 0, lineWidth: 12, casing: 6, badgeHeight: 20, badgeTextSize: 12, countHeight: 16, countTextSize: 11,
       stopRadius: 12, interchangeExtra: 2, nodeHeight: 46, nodeRadius: 10, edgeWidth: 2.5, labelSize: 13,
       ringWidth: 3, haloWidth: 1.5, licenceSize: 10, zonePadding: 32, bendRadius: 32, zoneTitleTint: 0.6,
     });
     const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(json.map.bendRadius).toBe(32);
+    expect(json.map.shadow).toBe(0);
+    expect(css).toContain("--ds-map-shadow: 0px;");
     expect(css).toContain("--ds-map-line-width: 12px;");
     expect(css).toContain("--ds-map-halo-width: 1.5px;");
     expect(css).toContain("--ds-map-bend-radius: 32px;");
@@ -94,7 +97,7 @@ describe("Site palette tokens", () => {
   test("Measured site palette", () => {
     expect(json.site.light).toEqual({ primary: "#121212", body: "#FFFFFF", border: "#EAEAEA", light: "#F6F6F6", dark: "#040404", text: "#444444", textDark: "#040404", textLight: "#717171" });
     expect(json.site.dark).toEqual({ primary: "#FFFFFF", body: "#1C1C1C", border: "#3E3E3E", light: "#222222", dark: "#FFFFFF", text: "#B4AFB6", textDark: "#FFFFFF", textLight: "#B4AFB6" });
-    expect(json.site.font).toEqual({ primary: "Heebo, sans-serif", secondary: "Signika, sans-serif" });
+    expect(json.site.font).toEqual({ primary: "'Source Sans 3', sans-serif", secondary: "'Source Serif 4', serif" });
     expect(json.site.fontSize).toEqual({ base: 16, baseSmall: 12.8 });
     expect(json.site.heading).toEqual({ h1: 2.985984, h2: 2.48832, h3: 2.0736, h4: 1.728, h5: 1.44, h6: 1.2, h1Small: 2.6873856, h2Small: 2.239488, h3Small: 1.86624, h4Small: 1.5552, h5Small: 1.296, h6Small: 1.08 });
   });

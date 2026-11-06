@@ -27,7 +27,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Aggregator pattern: a component turning three messages into one. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "16", y: "8", width: "6", height: "6", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("rect", { x: "16", y: "16.5", width: "6", height: "6", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("rect", { x: "16", y: "25", width: "6", height: "6", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
@@ -42,11 +42,11 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Canonical Data Model pattern: two translators on both sides of one shared message format; the book has no icon for this pattern, so this is drawn from its sketch. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "4.5", y: "12.5", width: "14", height: "19", rx: "3", fill: C.ink }),
-      n("rect", { x: "2", y: "10", width: "14", height: "19", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "2", y: "10", width: "14", height: "19", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "5,13 13,26", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "5,26 13,13", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("rect", { x: "49.5", y: "12.5", width: "14", height: "19", rx: "3", fill: C.ink }),
-      n("rect", { x: "47", y: "10", width: "14", height: "19", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "47", y: "10", width: "14", height: "19", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "50,13 58,26", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "50,26 58,13", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "18.5,19.5 22.06,19.5", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -55,9 +55,9 @@ export const EIP_ICONS: readonly EipIcon[] = [
       n("polygon", { points: "46.00,19.50 41.80,21.81 41.80,17.19", fill: C.ink }),
       n("rect", { x: "28.5", y: "15.5", width: "11", height: "11", fill: C.ink }),
       n("rect", { x: "27", y: "14", width: "11", height: "11", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
-      n("rect", { x: "29.2", y: "14.75", width: "1.9", height: "9.5", fill: C.caller }),
-      n("rect", { x: "32.1", y: "14.75", width: "1.9", height: "9.5", fill: C.caller }),
-      n("rect", { x: "35", y: "14.75", width: "1.9", height: "9.5", fill: C.caller }),
+      n("rect", { x: "29.2", y: "14.75", width: "1.9", height: "9.5", fill: C.state.caller }),
+      n("rect", { x: "32.1", y: "14.75", width: "1.9", height: "9.5", fill: C.state.caller }),
+      n("rect", { x: "35", y: "14.75", width: "1.9", height: "9.5", fill: C.state.caller }),
       n("rect", { x: "27", y: "14", width: "11", height: "11", fill: "none", stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
     ],
   },
@@ -67,9 +67,9 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Channel Adapter pattern: an application with a wavy edge, an adapter plate, a two-way arrow and the end of a channel pipe. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("path", { d: "M4,4 H14 V35 H4 Q7.5,30 4,25 Q0.5,20 4,15 Q7.5,9.5 4,4 Z", fill: C.ink, transform: "translate(2 2)" }),
-      n("path", { d: "M4,4 H14 V35 H4 Q7.5,30 4,25 Q0.5,20 4,15 Q7.5,9.5 4,4 Z", fill: C.transitional, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
+      n("path", { d: "M4,4 H14 V35 H4 Q7.5,30 4,25 Q0.5,20 4,15 Q7.5,9.5 4,4 Z", fill: C.state.transitional, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
       n("polygon", { points: "16.00,6.00 26.00,11.50 26.00,31.50 16.00,37.00", fill: C.ink }),
-      n("polygon", { points: "14.00,4.00 24.00,9.50 24.00,29.50 14.00,35.00", fill: C.caller, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
+      n("polygon", { points: "14.00,4.00 24.00,9.50 24.00,29.50 14.00,35.00", fill: C.state.caller, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
       n("g", {  }, [
         n("path", { d: "M32,19.5 H39", fill: "none", stroke: C.ink, "stroke-width": "5.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),
         n("polygon", { points: "27.50,19.50 33.00,16.09 33.00,22.91", fill: C.ink, stroke: C.ink, "stroke-width": "3", "stroke-linejoin": "round" }),
@@ -91,7 +91,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Claim Check pattern: a component turning a large message into a small one, with a key. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "12", y: "9.5", width: "13", height: "13", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("polyline", { points: "28,16 36.5,16.0", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polygon", { points: "40.00,16.00 35.00,18.75 35.00,13.25", fill: C.ink }),
@@ -99,7 +99,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
       n("polyline", { points: "48.5,28 56,28", fill: "none", stroke: C.ink, "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "53,28 53,31", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "55.6,28 55.6,30.5", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
-      n("circle", { cx: "45.5", cy: "28", r: "3.4", fill: C.transitional, stroke: C.ink, "stroke-width": "1.6" }),
+      n("circle", { cx: "45.5", cy: "28", r: "3.4", fill: C.state.transitional, stroke: C.ink, "stroke-width": "1.6" }),
     ],
   },
   {
@@ -108,7 +108,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Competing Consumers pattern: a channel arrow entering a component that fans out to three consumers. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("g", { transform: "translate(1.8 1.8)" }, [
         n("path", { d: "M2,19 H22", fill: "none", stroke: C.ink, "stroke-width": "6.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),
         n("polygon", { points: "31.00,19.00 22.00,24.58 22.00,13.42", fill: C.ink, stroke: C.ink, "stroke-width": "3", "stroke-linejoin": "round" }),
@@ -138,7 +138,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Content-Based Router pattern: a component whose input switch connects to one of three outputs. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "6,20 17,20", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polygon", { points: "17.00,17.40 19.60,20.00 17.00,22.60 14.40,20.00", fill: C.ink }),
       n("polyline", { points: "17,20 39,11", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -156,7 +156,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Content Enricher pattern: a component turning a small message into a large one. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "14", y: "15.5", width: "7", height: "7", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("polyline", { points: "24,19 32.5,19.0", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polygon", { points: "36.00,19.00 31.00,21.75 31.00,16.25", fill: C.ink }),
@@ -169,7 +169,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Content Filter pattern: a component turning a large message into a small one. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "13", y: "12", width: "14", height: "14", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("polyline", { points: "30,19 38.5,19.0", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polygon", { points: "42.00,19.00 37.00,21.75 37.00,16.25", fill: C.ink }),
@@ -207,7 +207,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
       n("path", { d: "M9,4.5 H53 A2.9250000000000003,6.5 0 0 1 53,17.5 H9 A2.9250000000000003,6.5 0 0 1 9,4.5 Z", fill: I.iconLine, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
       n("ellipse", { cx: "53", cy: "11", rx: "2.9250000000000003", ry: "6.5", fill: C.white, stroke: C.ink, "stroke-width": "1.75" }),
       n("polygon", { points: "40.73,32.67 36.67,36.73 30.93,36.73 26.87,32.67 26.87,26.93 30.93,22.87 36.67,22.87 40.73,26.93", fill: C.ink }),
-      n("polygon", { points: "38.93,30.87 34.87,34.93 29.13,34.93 25.07,30.87 25.07,25.13 29.13,21.07 34.87,21.07 38.93,25.13", fill: C.backend, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
+      n("polygon", { points: "38.93,30.87 34.87,34.93 29.13,34.93 25.07,30.87 25.07,25.13 29.13,21.07 34.87,21.07 38.93,25.13", fill: C.state.backend, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
     ],
   },
   {
@@ -216,7 +216,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Event-Driven Consumer pattern: a channel arrow entering a component that passes the message on at once. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "20.5", y: "6.5", width: "40", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "18", y: "4", width: "40", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "18", y: "4", width: "40", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("g", { transform: "translate(1.8 1.8)" }, [
         n("path", { d: "M2,19 H27", fill: "none", stroke: C.ink, "stroke-width": "6.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),
         n("polygon", { points: "36.00,19.00 27.00,24.58 27.00,13.42", fill: C.ink, stroke: C.ink, "stroke-width": "3", "stroke-linejoin": "round" }),
@@ -262,7 +262,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Idempotent Receiver pattern: a channel arrow delivering a message into a component, with a badge showing the number 1. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "18.5", y: "11.5", width: "42", height: "27", rx: "3", fill: C.ink }),
-      n("rect", { x: "16", y: "9", width: "42", height: "27", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "16", y: "9", width: "42", height: "27", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("g", { transform: "translate(1.8 1.8)" }, [
         n("path", { d: "M3,23 H27", fill: "none", stroke: C.ink, "stroke-width": "6.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),
         n("polygon", { points: "36.00,23.00 27.00,28.58 27.00,17.42", fill: C.ink, stroke: C.ink, "stroke-width": "3", "stroke-linejoin": "round" }),
@@ -291,7 +291,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
       n("path", { d: "M9,4.5 H53 A2.9250000000000003,6.5 0 0 1 53,17.5 H9 A2.9250000000000003,6.5 0 0 1 9,4.5 Z", fill: I.iconLine, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
       n("ellipse", { cx: "53", cy: "11", rx: "2.9250000000000003", ry: "6.5", fill: C.white, stroke: C.ink, "stroke-width": "1.75" }),
       n("polygon", { points: "33.80,22.30 43.30,37.80 24.30,37.80", fill: C.ink }),
-      n("polygon", { points: "32.00,20.50 41.50,36.00 22.50,36.00", fill: C.transitional, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
+      n("polygon", { points: "32.00,20.50 41.50,36.00 22.50,36.00", fill: C.state.transitional, stroke: C.ink, "stroke-width": "1.75", "stroke-linejoin": "round" }),
       n("polyline", { points: "32,25.5 32,30.5", fill: "none", stroke: C.ink, "stroke-width": "2.2", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("circle", { cx: "32", cy: "33.2", r: "1.15", fill: C.ink }),
     ],
@@ -313,7 +313,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Message Filter pattern: a component with a funnel. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polygon", { points: "22.60,10.10 44.60,10.10 36.60,19.60 36.60,31.60 30.60,31.60 30.60,19.60", fill: C.ink }),
       n("polygon", { points: "21.00,8.50 43.00,8.50 35.00,18.00 35.00,30.00 29.00,30.00 29.00,18.00", fill: I.iconLine, stroke: C.ink, "stroke-width": "1.6", "stroke-linejoin": "round" }),
     ],
@@ -324,7 +324,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Message Translator pattern: a component with two blocks crossed by an X. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "11", y: "8", width: "17", height: "22", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("rect", { x: "36", y: "8", width: "17", height: "22", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("polyline", { points: "13.5,10.5 50.5,27.5", fill: "none", stroke: C.ink, "stroke-width": "2.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -356,7 +356,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Polling Consumer pattern: a channel arrow entering a component with a polling loop. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "20.5", y: "6.5", width: "40", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "18", y: "4", width: "40", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "18", y: "4", width: "40", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("g", { transform: "translate(1.8 1.8)" }, [
         n("path", { d: "M2,19 H22", fill: "none", stroke: C.ink, "stroke-width": "6.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),
         n("polygon", { points: "31.00,19.00 22.00,24.58 22.00,13.42", fill: C.ink, stroke: C.ink, "stroke-width": "3", "stroke-linejoin": "round" }),
@@ -380,7 +380,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Process Manager pattern: a component with a small decision tree: a start point, a decision diamond and three steps. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "32,11.5 32,13", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "32,21.4 32,23.5", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "17.5,23.5 46.5,23.5", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -460,7 +460,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Return Address pattern: an envelope with an address block and a stamp. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "7", y: "6.5", width: "54", height: "31", rx: "1.5", fill: C.ink }),
-      n("rect", { x: "4.5", y: "4", width: "54", height: "31", rx: "1.5", fill: C.transitional, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "4.5", y: "4", width: "54", height: "31", rx: "1.5", fill: C.state.transitional, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "10,10 29,10", fill: "none", stroke: C.ink, "stroke-width": "2.4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "10,14.5 29,14.5", fill: "none", stroke: C.ink, "stroke-width": "2.4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "10,19 29,19", fill: "none", stroke: C.ink, "stroke-width": "2.4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -476,7 +476,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Scatter-Gather pattern: a component that fans one input out to three branches and joins them into one output. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("polyline", { points: "6,19 14,19", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "50,19 58,19", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polyline", { points: "14,19 32,9.5 50,19", fill: "none", stroke: C.ink, "stroke-width": "1.6", "stroke-linecap": "round", "stroke-linejoin": "round" }),
@@ -495,7 +495,7 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Splitter pattern: a component turning one message into three. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
       n("rect", { x: "16", y: "15.5", width: "8", height: "8", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("polyline", { points: "26.5,19.5 35.5,19.5", fill: "none", stroke: C.ink, "stroke-width": "1.75", "stroke-linecap": "round", "stroke-linejoin": "round" }),
       n("polygon", { points: "39.00,19.50 34.00,22.25 34.00,16.75", fill: C.ink }),
@@ -510,8 +510,8 @@ export const EIP_ICONS: readonly EipIcon[] = [
     description: "Icon of the Transactional Client pattern: a channel arrow entering a component where the message sits inside a transaction boundary. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.",
     nodes: [
       n("rect", { x: "8.5", y: "6.5", width: "52", height: "30", rx: "3", fill: C.ink }),
-      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.healthy, stroke: C.ink, "stroke-width": "2" }),
-      n("ellipse", { cx: "37", cy: "19", rx: "17", ry: "11.5", fill: C.caller, stroke: C.ink, "stroke-width": "1.6" }),
+      n("rect", { x: "6", y: "4", width: "52", height: "30", rx: "3", fill: C.state.healthy, stroke: C.ink, "stroke-width": "2" }),
+      n("ellipse", { cx: "37", cy: "19", rx: "17", ry: "11.5", fill: C.state.caller, stroke: C.ink, "stroke-width": "1.6" }),
       n("rect", { x: "39", y: "13", width: "12", height: "12", fill: C.white, stroke: C.ink, "stroke-width": "1.5", "stroke-linejoin": "round" }),
       n("g", { transform: "translate(1.8 1.8)" }, [
         n("path", { d: "M2,19 H27", fill: "none", stroke: C.ink, "stroke-width": "6.6", "stroke-linecap": "butt", "stroke-linejoin": "round" }),

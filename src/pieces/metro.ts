@@ -193,7 +193,7 @@ const drawNode = (kind: NodeKind, params: NodeBlockParams) => {
         words(x + inset, middle - 3, title, { fill: titleFill, "font-size": M.labelSize, "font-weight": bold, "text-anchor": "start" }),
         words(x + inset, middle + 14, subtitle, { fill: focus ? ink : s.muted, "font-size": 11, "font-weight": 400, "text-anchor": "start" }),
       ];
-  return drawn(sticker(shape, focus ? tokens.color.caller : s.panel, params), text);
+  return drawn(sticker(shape, focus ? tokens.color.state.caller : s.panel, params), text);
 };
 
 /** A diagram box (a skill, a software item): rounded rect with a title and an optional subtitle. */
@@ -239,7 +239,7 @@ export const messageArrow = definePiece<MessageArrowParams>(
   },
   ({ from, to, curve = "bezier", controls, head = true, heads = "end", dashed, label: text, width = M.edgeWidth, kind = "message", surface = "light" }) => {
     const s = tokens.surface[surface];
-    const paint_ = kind === "failure" ? tokens.color.failure : kind === "failFast" ? tokens.color.failFast : s.text;
+    const paint_ = kind === "failure" ? tokens.color.state.failure : kind === "failFast" ? tokens.color.state.failFast : s.text;
     const length = 5 * width;
     const distance = Math.hypot(to[0] - from[0], to[1] - from[1]);
     const dx = to[0] - from[0];
@@ -333,7 +333,7 @@ export const ledgerMark = definePiece<LedgerMarkParams>(
 // ---------- map markers and zones (card 167, design §3 of stackledger-map-and-link-pieces) ----------
 
 export type RenewalRingParams = Ink & { cx: number; cy: number; r: number; width?: number };
-/** The renewal ring: bands like a bent pipe round a station (rim on dark, ink, then color.blocked), no shadow. */
+/** The renewal ring: bands like a bent pipe round a station (rim on dark, ink, then color.state.blocked), no shadow. */
 export const renewalRing = definePiece<RenewalRingParams>(
   "renewalRing",
   { cx: pos(), cy: pos(), r: size(true), width: { kind: "number", min: 0, exclusiveMin: true, max: 50 }, ...inkSchema },
@@ -342,7 +342,7 @@ export const renewalRing = definePiece<RenewalRingParams>(
     const { s, outline, rim } = inkOf(params);
     // Radius and band widths as given, like pipe's widths: a valid hairline must not round to zero.
     const band = (stroke: string, strokeWidth: number) => el("circle", { cx: r2(cx), cy: r2(cy), r, fill: "none", stroke, "stroke-width": strokeWidth });
-    return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(ink, width + outline), band(tokens.color.blocked, width)]);
+    return drawn([...(s.rimWidth > 0 ? [band(s.rim, width + outline + 2 * rim)] : []), band(ink, width + outline), band(tokens.color.state.blocked, width)]);
   },
   (params) => {
     const { outline, rim } = inkOf(params);
@@ -368,7 +368,7 @@ export const licenceMark = definePiece<LicenceMarkParams>(
   (params) => {
     const { cx, cy, state = "owned", size: side = M.licenceSize } = params;
     const shape: Shape = (dx, dy, attrs) => el("circle", { cx: r2(cx + dx), cy: r2(cy + dy), r: r2(side / 2), ...attrs });
-    return drawn(sticker(shape, state === "owned" ? tokens.color.healthy : white, params));
+    return drawn(sticker(shape, state === "owned" ? tokens.color.state.healthy : white, params));
   },
   (params) => {
     const need = 3 * inkOf(params).outline;

@@ -42,15 +42,15 @@ describe("Ink sticker on a surface", () => {
 
   test("Unknown surface or a parameter a piece does not take", () => {
     expect(() => countBadge({ cx: 0, cy: 0, text: "3", surface: "sepia" as "dark" })).toThrow(/^countBadge: surface: expected one of light, dark/);
-    expect(() => pipe({ d: "M0,0 L1,0", fill: "color.caller", surface: "dark" } as never)).toThrow(/^pipe: surface: unknown parameter/);
+    expect(() => pipe({ d: "M0,0 L1,0", fill: "color.state.caller", surface: "dark" } as never)).toThrow(/^pipe: surface: unknown parameter/);
     expect(() => ledgerMark({ x: 0, y: 0, inkScale: 2 } as never)).toThrow(/^ledgerMark: inkScale: unknown parameter/);
   });
 });
 
 describe("Room for the outline", () => {
   test("Badge too low for its ink", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", flat: true, inkScale: 8 })).toThrow(/^lineBadge: height: leaves no room for the outline/);
-    const { body } = lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", flat: true, inkScale: 8, height: 96, width: 120 });
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, inkScale: 8 })).toThrow(/^lineBadge: height: leaves no room for the outline/);
+    const { body } = lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", flat: true, inkScale: 8, height: 96, width: 120 });
     expect(body).toHaveLength(1);
     expect(body[0].attrs).toMatchObject({ x: -48, y: -36, width: 96, height: 72, "stroke-width": 24 });
   });
@@ -82,7 +82,7 @@ describe("Line colours from data", () => {
 describe("Piece parameters checked", () => {
   test("Pipe path with something else", () => {
     for (const d of ["", "L10,10", 'M0,0 L10,10" onload="x']) {
-      expect(() => pipe({ d, fill: "color.caller" }), d).toThrow(/^pipe: d:/);
+      expect(() => pipe({ d, fill: "color.state.caller" }), d).toThrow(/^pipe: d:/);
     }
   });
 });
@@ -119,7 +119,7 @@ describe("Metro pieces", () => {
   });
 
   test("Flat badge", () => {
-    const { body, text } = lineBadge({ x: 50, y: 20, text: "SH", fill: "color.healthy", flat: true });
+    const { body, text } = lineBadge({ x: 50, y: 20, text: "SH", fill: "color.state.healthy", flat: true });
     expect(body).toHaveLength(1);
     expect(body[0].attrs).toMatchObject({ y: 11.5, height: 17, rx: 8.5 });
     expect(text[0].children).toEqual(["SH"]);
@@ -127,16 +127,16 @@ describe("Metro pieces", () => {
   });
 
   test("Badge narrower than tall", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height \(20\)/);
-    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 })).toThrow(/^lineBadge: width:/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", width: 10 })).toThrow(/^lineBadge: width: must be at least the height \(20\)/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "SH", fill: "color.state.healthy", height: 96 })).toThrow(/^lineBadge: width:/);
   });
 
   test("Pipe widths out of range", () => {
     for (const extra of [{ width: 0 }, { width: 101 }, { casing: -1 }, { casing: 51 }]) {
-      expect(() => pipe({ d: "M0,0 L1,0", fill: "color.caller", ...extra }), JSON.stringify(extra)).toThrow(/^pipe: (width|casing):/);
+      expect(() => pipe({ d: "M0,0 L1,0", fill: "color.state.caller", ...extra }), JSON.stringify(extra)).toThrow(/^pipe: (width|casing):/);
     }
-    expect(pipe({ d: "M0,0 L1,0", fill: "color.caller", width: 0.001, casing: 0 }).body[0].attrs["stroke-width"]).toBe(0.001);
-    const { body } = pipe({ d: "M0,0 L1,0", fill: "color.caller", casing: 0 });
+    expect(pipe({ d: "M0,0 L1,0", fill: "color.state.caller", width: 0.001, casing: 0 }).body[0].attrs["stroke-width"]).toBe(0.001);
+    const { body } = pipe({ d: "M0,0 L1,0", fill: "color.state.caller", casing: 0 });
     expect(body).toHaveLength(1);
     expect(body[0].attrs.stroke).toBe("#8FB2FF");
   });
@@ -267,21 +267,21 @@ describe("Zone title", () => {
 
 describe("Badge without a letter", () => {
   test("Default badge without a letter", () => {
-    const { body, text } = lineBadge({ x: 50, y: 20, fill: "color.healthy" });
+    const { body, text } = lineBadge({ x: 50, y: 20, fill: "color.state.healthy" });
     expect(body.at(-1)!.attrs).toMatchObject({ x: 35, y: 10, width: 30, height: 20, rx: 10 });
     expect(text).toEqual([]);
   });
 
   test("Banner badge without a letter", () => {
-    const params = { x: 110, y: 300, fill: "color.healthy", height: 34, width: 54, surface: "dark", inkScale: 1.6 } as const;
+    const params = { x: 110, y: 300, fill: "color.state.healthy", height: 34, width: 54, surface: "dark", inkScale: 1.6 } as const;
     const bare = lineBadge(params);
     expect(bare.body).toEqual(lineBadge({ ...params, text: "B" }).body);
     expect(bare.text).toEqual([]);
   });
 
   test("Empty letter and narrow badge", () => {
-    expect(() => lineBadge({ x: 0, y: 0, text: "", fill: "color.healthy" })).toThrow(/^lineBadge: text:/);
-    expect(() => lineBadge({ x: 0, y: 0, fill: "color.healthy", height: 34 })).toThrow(/^lineBadge: width:/);
+    expect(() => lineBadge({ x: 0, y: 0, text: "", fill: "color.state.healthy" })).toThrow(/^lineBadge: text:/);
+    expect(() => lineBadge({ x: 0, y: 0, fill: "color.state.healthy", height: 34 })).toThrow(/^lineBadge: width:/);
   });
 });
 

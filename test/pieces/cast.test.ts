@@ -141,10 +141,10 @@ describe("Emote", () => {
 
   test("Problem in failure red", () => {
     const fills = (kind: EmoteParams["kind"]) => new Set(root(emote({ kind, x: 0, y: 0 }).body[0]).children.map((child) => (child as SvgNode).attrs.fill));
-    expect(fills("problem").has(tokens.color.failure)).toBe(true);
-    expect(fills("refused").has(tokens.color.failure)).toBe(true);
-    expect(fills("problem").has(tokens.color.backend)).toBe(false);
-    expect(fills("worked").has(tokens.color.healthy)).toBe(true);
+    expect(fills("problem").has(tokens.color.state.failure)).toBe(true);
+    expect(fills("refused").has(tokens.color.state.failure)).toBe(true);
+    expect(fills("problem").has(tokens.color.state.backend)).toBe(false);
+    expect(fills("worked").has(tokens.color.state.healthy)).toBe(true);
   });
 });
 

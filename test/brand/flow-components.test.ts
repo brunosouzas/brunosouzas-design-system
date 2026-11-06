@@ -8,13 +8,13 @@ test("Generic shapes match the diagram language",()=>{
   const exchange=flowShape("exchange",bounds,200,22),queue=flowShape("queue",bounds,200,26),container=flowShape("container",bounds,200,14);
   expect(exchange.vertices).toEqual([[36.4,0],[483.6,0],[520,70],[483.6,140],[36.4,140],[0,70]]);
   expect(queue.rails).toEqual([22,498]);
-  expect(container.tab).toEqual({fill:tokens.color.transitional,radius:tokens.radius.pill,strokeWidth:tokens.outline.small,shadow:tokens.shadow.pill});
+  expect(container.tab).toEqual({fill:tokens.color.state.transitional,radius:tokens.radius.pill,strokeWidth:tokens.outline.small,shadow:tokens.shadow.pill});
   for(const s of [exchange,queue,container]){
     expect(s.fill).toBe(tokens.color.white);expect(s.stroke).toBe(tokens.color.ink);expect(s.shadow).toBe(tokens.shadow.block);expect(s.strokeWidth).toBe(tokens.outline.block);expect(s.radius).toBe(tokens.radius.block);
     expect(JSON.stringify(s)).not.toMatch(/Anypoint|order-created/);
   }
   expect(positionedTokenStyle({x:1,y:2})).toEqual({point:{x:1,y:2},radius:17,fill:tokens.color.white,stroke:tokens.color.ink,strokeWidth:tokens.outline.small+1,shadow:tokens.shadow.small});
-  expect(positionedTokenStyle({x:1,y:2},tokens.color.failure,tokens.color.caller)).toMatchObject({fill:tokens.color.caller,stroke:tokens.color.failure});
+  expect(positionedTokenStyle({x:1,y:2},tokens.color.state.failure,tokens.color.state.caller)).toMatchObject({fill:tokens.color.state.caller,stroke:tokens.color.state.failure});
 });
 test("Shapes before appearance",()=>{
   for(const kind of ["exchange","queue","container"] as const){

@@ -102,7 +102,7 @@ describe("No current colour in a spec", () => {
 
 describe("Diagram output", () => {
   test("Diagram frame", () => {
-    const svg = svgOf(diagram({ pieces: [{ piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.healthy" }] }));
+    const svg = svgOf(diagram({ pieces: [{ piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.state.healthy" }] }));
     expect(rootOf(svg)).toContain('width="800" height="460" viewBox="0 0 560 322"');
     expect(svg).toContain('<rect width="560" height="322" rx="9.8"/>');
     expect(svg).toContain('<rect width="560" height="322" rx="9.8" fill="#EEF2FF"/>');
@@ -149,7 +149,7 @@ describe("Diagram outline and labels", () => {
   });
 
   test("Piece with its own stroke", () => {
-    const params = { piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.healthy" };
+    const params = { piece: "diagramBox", x: 70, y: 56, width: 130, text: ["CLOSED"], fill: "color.state.healthy" };
     const own = svgOf(diagram({ pieces: [params] }));
     expect(own).toContain('stroke="#0A1033" stroke-width="3" stroke-linejoin="round"/>');
     // The same piece in a cover's outlined group (width 4) keeps its own width 3.
@@ -197,7 +197,7 @@ describe("Icon output", () => {
   });
 
   test("UI icon box", () => {
-    const svg = svgOf(icon({ piece: "uiIcon", name: "sun", size: 48, colour: "color.blocked" }, { title: "Sun", description: "Light theme" }));
+    const svg = svgOf(icon({ piece: "uiIcon", name: "sun", size: 48, colour: "color.state.blocked" }, { title: "Sun", description: "Light theme" }));
     expect(rootOf(svg)).toContain('width="48" height="48" viewBox="0 0 48 48"');
   });
 
@@ -328,10 +328,10 @@ describe("Language choice", () => {
 });
 
 describe("Free-form object's place", () => {
-  const custom = { tag: "rect", attrs: { x: 0, y: 0, width: 10, height: 10, fill: "color.blocked" } };
+  const custom = { tag: "rect", attrs: { x: 0, y: 0, width: 10, height: 10, fill: "color.state.blocked" } };
   const pills = [
     { piece: "pill", x: 100, y: 100, text: "A", fill: "color.white" },
-    { piece: "pill", x: 300, y: 100, text: "B", fill: "color.healthy" },
+    { piece: "pill", x: 300, y: 100, text: "B", fill: "color.state.healthy" },
   ];
 
   test("Custom under a pill", () => {

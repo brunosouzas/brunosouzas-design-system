@@ -39,26 +39,26 @@ describe("Token source", () => {
     const source = sourceWith(
       set("illustration.accent", token("#1E6FEB", "color")),
       set("cover.width", token(800, "dimension")),
-      set("coverBackground.blush.fill", token("#F6CFE0", "color")),
-      set("coverBackground.blush.ring", token("#ECBAD0", "color")),
+      set("coverBackground.trackIntegration.fill", token("#F4E4D8", "color")),
+      set("coverBackground.trackIntegration.ring", token("#D7C9BE", "color")),
       set("surface.dark.shadow", token("#4C5CB8", "color")),
       set("map.lineWidth", token(12, "dimension")),
       set("site.light.primary", token("#121212", "color")),
       set("banner.radius", token(20, "dimension")),
       set("bodyDiagram.radius", token(14, "dimension")),
-      set("cast.dev.fill", token("#5B7CFA", "color")),
+      set("cast.eyes", token("#FFC98A", "color")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-blush-fill: #F6CFE0;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-cover-background-track-integration-fill: #F4E4D8;");
     expect(result.outputs["tokens.css"]).toContain("--ds-cover-width: 800px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-surface-dark-shadow: #4C5CB8;");
     expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-body-diagram-radius: 14px;");
-    expect(result.outputs["tokens.css"]).toContain("--ds-cast-dev-fill: #5B7CFA;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-cast-eyes: #FFC98A;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
-    expect(result.outputs["tokens.ts"]).toContain('"blush": {');
+    expect(result.outputs["tokens.ts"]).toContain('"trackIntegration": {');
   });
 });
 
@@ -70,16 +70,26 @@ describe("Required illustration tokens", () => {
   });
 
   test("Measured values", () => {
+    // The v2 values of ADR 0009, each from a brand role.
     expect(generatedJson.illustration).toEqual({
-      accent: "#1E6FEB",
-      codePanel: "#14215A",
-      healthyShade: "#2BB673",
-      iconLine: "#B9C3E0",
-      road: "#5B6478",
-      tape: "#FFE2C8",
-      textBar: "#C9D6F5",
-      transitionalShade: "#E8B830",
+      accent: "#E04E17",
+      codePanel: "#1D1C1A",
+      iconLine: "#D7D1C5",
+      road: "#5C5852",
+      tape: "#F4E4D8",
+      textBar: "#D7D1C5",
     });
+    expect(generatedJson.illustration.accent).toBe(generatedJson.brand.light.accent);
+    expect(generatedJson.illustration.codePanel).toBe(generatedJson.brand.dark.cardBg);
+    expect(generatedJson.illustration.road).toBe(generatedJson.brand.light.textMuted);
+    expect(generatedJson.illustration.tape).toBe(generatedJson.brand.light.trackIntegration);
+    expect(generatedJson.illustration.textBar).toBe(generatedJson.brand.light.border);
+    expect("healthyShade" in generatedJson.illustration || "transitionalShade" in generatedJson.illustration).toBe(false);
+  });
+
+  test("Shades no longer required", () => {
+    // The synthetic source holds exactly the required tokens: no shade among them.
+    expect(problemsOf(sourceWith(remove("illustration.healthyShade"), remove("illustration.transitionalShade")))).toEqual([]);
   });
 });
 
@@ -94,7 +104,7 @@ describe("Required cover tokens", () => {
     expect(tokens.cover).toEqual({
       height: 420,
       labelSize: 19,
-      labelWeight: 800,
+      labelWeight: 700,
       pillHeight: 36,
       ringRadius: 90,
       ringStep: 28,
@@ -107,8 +117,8 @@ describe("Required cover tokens", () => {
 
 describe("Cover background pairs", () => {
   test("Entry without a ring", () => {
-    expect(problemsOf(sourceWith(set("coverBackground.blush", { fill: token("#F6CFE0", "color") })))).toEqual([
-      "coverBackground.blush.ring: missing required token (type color)",
+    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", { fill: token("#F4E4D8", "color") })))).toEqual([
+      "coverBackground.trackIntegration.ring: missing required token (type color)",
     ]);
   });
 
@@ -119,8 +129,8 @@ describe("Cover background pairs", () => {
   });
 
   test("Token directly under the group", () => {
-    expect(problemsOf(sourceWith(set("coverBackground.blush", token("#F6CFE0", "color"))))).toEqual([
-      "coverBackground.blush: expected a group with fill and ring",
+    expect(problemsOf(sourceWith(set("coverBackground.trackIntegration", token("#F4E4D8", "color"))))).toEqual([
+      "coverBackground.trackIntegration: expected a group with fill and ring",
     ]);
   });
 
@@ -139,9 +149,10 @@ describe("Cover background pairs", () => {
 
 describe("Measured cover backgrounds", () => {
   test("Source matches the measured table", () => {
-    expect(Object.keys(measured)).toHaveLength(25);
+    expect(Object.keys(measured).sort()).toEqual(["neutral", "trackAi", "trackDelivery", "trackIntegration"]);
     expect(driftedPairs(repoSource())).toEqual([]);
-    expect(tokens.coverBackground.blush).toEqual({ fill: "#F6CFE0", ring: "#ECBAD0" });
+    expect(tokens.coverBackground.trackIntegration).toEqual({ fill: "#F4E4D8", ring: "#D7C9BE" });
+    expect(tokens.coverBackground.neutral).toEqual({ fill: "#F6F3EC", ring: "#D8D6D0" });
   });
 
   test("Neutral background equals the brand background", () => {
@@ -151,7 +162,14 @@ describe("Measured cover backgrounds", () => {
 
   test("A pair drifts", () => {
     const source = repoSource();
-    (source.coverBackground as Record<string, Record<string, { $value: string }>>).blush.ring.$value = "#ECBAD1";
+    (source.coverBackground as Record<string, Record<string, { $value: string }>>).trackIntegration.ring.$value = "#D7C9BF";
+    expect(driftedPairs(source)).toEqual(["trackIntegration"]);
+  });
+
+  test("A removed pair comes back", () => {
+    // blush is one of the 21 pairs measured before 0.6.0 and removed in 0.7.0.
+    const source = repoSource();
+    (source.coverBackground as Record<string, unknown>).blush = { fill: token("#F6CFE0", "color"), ring: token("#ECBAD0", "color") };
     expect(driftedPairs(source)).toEqual(["blush"]);
   });
 });
@@ -189,26 +207,22 @@ describe("Required body diagram tokens", () => {
 // Spec design-tokens, change cast-and-emotes (task 1.1).
 describe("Required cast tokens", () => {
   test("Cast token missing", () => {
-    expect(problemsOf(sourceWith(remove("cast.devops.fill")))).toEqual(["cast.devops.fill: missing required token (type color)"]);
+    expect(problemsOf(sourceWith(remove("cast.emotePop.damping")))).toEqual(["cast.emotePop.damping: missing required token (type number)"]);
   });
   test("Cast token with the wrong type", () => {
     expect(problemsOf(sourceWith(set("cast.emotePop.mass", token(0.7, "dimension"))))).toEqual(["cast.emotePop.mass: expected type number, found dimension"]);
   });
   test("Approved cast values", () => {
     expect(generatedJson.cast).toEqual({
-      ground: "#D3DBF5",
-      metal: "#C9D2E8",
-      mouth: "#B94A3E",
-      glow: "#7FD1FF",
-      dev: { fill: "#5B7CFA", chin: "#8FA6FF", screen: "#DCE6FF" },
-      agent: { neck: "#E3E8F5", shine: "#E6ECFF" },
-      architect: { fill: "#22B5A4", shine: "#9CF0E4" },
-      devops: { fill: "#D76AA5", shine: "#F3B8D6" },
-      data: { fill: "#8C6CF0", lid: "#C2B1FF", shine: "#B39CFF", lens: "#EAF1FF" },
-      request: { shine: "#D6E2FF" },
       emotePop: { damping: 9, stiffness: 170, mass: 0.7 },
       eyes: "#FFC98A",
     });
-    expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).toContain("--ds-cast-dev-fill: #5B7CFA;");
+    expect(readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8")).not.toContain("--ds-cast-dev-fill");
+  });
+  test("Seven-role colour no longer required", () => {
+    // The synthetic source holds exactly the required tokens: no seven-role colour among them.
+    const source = sourceWith();
+    expect(JSON.stringify(source)).not.toMatch(/"(ground|metal|mouth|glow|dev|agent|architect|devops|data|request)":/);
+    expect(problemsOf(source)).toEqual([]);
   });
 });

@@ -137,7 +137,7 @@ describe("Every spec problem at once", () => {
     const lines = problems({
       ...minimal(),
       pieces: [
-        { piece: "lineBadge", x: 0, y: 0, text: "SH", fill: "color.healthy", height: 96 },
+        { piece: "lineBadge", x: 0, y: 0, text: "SH", fill: "color.state.healthy", height: 96 },
         { piece: "nodeBlock", x: 0, y: 0, width: 80, title: "a" },
         { piece: "messageArrow", from: [0, 0], to: [20, 0] },
       ],
@@ -263,13 +263,13 @@ describe("One free-form object", () => {
   });
 
   test("Allowed object", () => {
-    const custom = { tag: "g", children: [{ tag: "path", attrs: { d: "M0,0 L10,10", fill: "color.blocked" } }, { tag: "text", attrs: { x: 5, y: 5 }, children: ["v1"] }] };
+    const custom = { tag: "g", children: [{ tag: "path", attrs: { d: "M0,0 L10,10", fill: "color.state.blocked" } }, { tag: "text", attrs: { x: 5, y: 5 }, children: ["v1"] }] };
     const result = buildCover(JSON.stringify({ ...minimal(), pieces: [{ piece: "checkBadge", cx: 1, cy: 1 }], custom }), "spec.json");
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.svg).toContain(`<path d="M0,0 L10,10" fill="${tokens.color.blocked}"/>`);
+    expect(result.svg).toContain(`<path d="M0,0 L10,10" fill="${tokens.color.state.blocked}"/>`);
     expect(result.svg).toContain('<text x="5" y="5" stroke="none">v1</text>');
-    expect(result.svg.indexOf("<g>")).toBeGreaterThan(result.svg.indexOf(`r="16" fill="${tokens.color.healthy}"`));
+    expect(result.svg.indexOf("<g>")).toBeGreaterThan(result.svg.indexOf(`r="16" fill="${tokens.color.state.healthy}"`));
   });
 });
 
@@ -477,7 +477,7 @@ describe("No current colour in a spec", () => {
     const ws = workspace();
     ws.write("spec.json", { ...minimal(), pieces: [{ piece: "pill", x: 100, y: 100, text: "ok", fill: "currentColor" }] });
     expect(ws.run("spec.json", "--out", "cover.svg")).toBe(1);
-    expect(ws.err).toEqual(['pieces[0].fill: expected a colour token path such as color.healthy, found "currentColor"', "cover: 1 problem(s) in spec.json; no file written"]);
+    expect(ws.err).toEqual(['pieces[0].fill: expected a colour token path such as color.state.healthy, found "currentColor"', "cover: 1 problem(s) in spec.json; no file written"]);
   });
 
   test("Token colour in a cover", () => {
