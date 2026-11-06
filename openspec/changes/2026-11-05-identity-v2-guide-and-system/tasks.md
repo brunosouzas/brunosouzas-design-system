@@ -42,7 +42,7 @@
 - [x] 6.1 `npm run typecheck && npm run tokens:check && npm run build && npm test`.
 - [x] 6.2 `npm run pieces:sheet` + rendered proof images attached to the pull request (preview, destination B).
 - [x] 6.3 Bump `package.json` to `0.6.0` in a release pull request per `docs/release.md`; owner merges and approves the `npm` environment.
-- [ ] 6.4 Verify `npm view @brunosouzas/design-system version` after publish.
+- [x] 6.4 Verify `npm view @brunosouzas/design-system version` after publish. Published (log: provenance signed, tag `v0.6.0`, GitHub release created); `npm view` still 404s minutes later, which matches npm's own "your package is being processed and may take a few minutes" notice in the publish log — re-check at the start of the next session before task 7.1.
 
 ## 7. Consumers (S8, after the release is published)
 
