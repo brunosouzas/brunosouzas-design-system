@@ -11,7 +11,7 @@
 // Rendering again overwrites (`--overwrite`, `-y`). --dry-run prints the eight
 // commands and touches nothing. What can go wrong: a failed render or encode
 // stops the run (exit 1) naming the composition; finished files stay. Remotion
-// needs the network on first use (headless browser) and on every render (Lato).
+// needs the network on first use (headless browser) and on every render (the Source fonts).
 import { existsSync, mkdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { compositionsOf, type CatalogueScene } from "../src/scenes/catalogue";

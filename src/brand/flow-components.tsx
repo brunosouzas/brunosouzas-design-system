@@ -1,5 +1,5 @@
 // Generic flow-shape wrappers; supplied bounds/content carry no broker semantics.
-// Run Studio or npm run stills. Pure descriptors are tested without loading Lato.
+// Run Studio or npm run stills. Pure descriptors are tested without loading the scene fonts.
 import React from "react";
 import { useCurrentFrame } from "remotion";
 import { tokens } from "../../tokens/generated/tokens";
@@ -32,7 +32,7 @@ export const Queue: React.FC<ShapeProps> = props => <Shape {...props} kind="queu
 export const TaggedContainer: React.FC<ShapeProps & { label?: string }> = ({label, children, ...props}) => <Shape {...props} kind="container">{children}{label ? <ContainerTab label={label}/> : null}</Shape>;
 export const ContainerTab: React.FC<{label:string}> = ({label}) => {
   const {color, outline, shadow, radius, font} = tokens;
-  return <div style={{position:"absolute", left:20, top:-28, background:color.state.transitional, border:`${outline.small}px solid ${color.ink}`, boxShadow:`${shadow.pill}px ${shadow.pill}px 0 ${color.ink}`, borderRadius:radius.pill, padding:"6px 24px", fontFamily:sans, fontSize:30, fontWeight:font.weightHeavy, whiteSpace:"nowrap"}}>{label}</div>;
+  return <div style={{position:"absolute", left:20, top:-28, background:color.white, border:`${outline.small}px solid ${color.ink}`, boxShadow:`${shadow.pill}px ${shadow.pill}px 0 ${color.ink}`, borderRadius:radius.pill, padding:"6px 24px", fontFamily:sans, fontSize:30, fontWeight:font.weightHeavy, whiteSpace:"nowrap"}}>{label}</div>;
 };
 export const PositionedToken: React.FC<{point:Point | null; stroke?:string; fill?:string; width:number; height:number}> = ({point, stroke, fill, width,height}) => {
   const s = positionedTokenDrawing(point, stroke, fill);

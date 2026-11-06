@@ -40,12 +40,12 @@ A call-result square SHALL show one of four kinds: `ok` (white fill, ink check m
 - **THEN** the ring is full, half full, and empty
 
 ### Requirement: Exchange queue and tagged container shapes
-Reusable exchange, queue and tagged-container shapes SHALL use generated tokens for colours, type, outlines, radii and motion, with no visible hard offset shadow (the `shadow` tokens are 0, ADR 0009). The exchange SHALL be a white elongated hexagon; the queue a white rounded rectangle with two inset end rails; the container white with a `color.state.transitional` pill tab. Contents and placement SHALL be supplied by the scene, not hard-coded broker names or topology.
+Reusable exchange, queue and tagged-container shapes SHALL use generated tokens for colours, type, outlines, radii and motion, with no visible hard offset shadow (the `shadow` tokens are 0, ADR 0009). The exchange SHALL be a white elongated hexagon; the queue a white rounded rectangle with two inset end rails; the container white with a `color.white` pill tab, as the `taggedContainer` piece. Contents and placement SHALL be supplied by the scene, not hard-coded broker names or topology.
 
 #### Scenario: Generic shapes match the diagram language
 - **GIVEN** shapes with scene-supplied text and bounds
 - **WHEN** their settled appearance is inspected
-- **THEN** they have ink outlines and a shadow offset of 0, the exchange's six vertices, queue's two end rails and container's tab; they contain no hard-coded Anypoint or order labels and use existing token values only
+- **THEN** they have ink outlines and a shadow offset of 0, the exchange's six vertices, queue's two end rails and container's white tab; they contain no hard-coded Anypoint or order labels and use existing token values only
 
 #### Scenario: Shapes before appearance
 - **GIVEN** each shape's pop-in frame

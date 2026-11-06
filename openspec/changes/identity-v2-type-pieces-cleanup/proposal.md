@@ -42,7 +42,7 @@ The 0.6.x release carries the identity v2 colour, cast and formats, but three pa
 
 ## Open questions
 
-- `taggedContainer`'s default tab: asked at G1 with a render; the agent recommends white (the tab marks a label, not a state). If the owner keeps yellow, the default stays `color.state.transitional` and the tab returns to the named list of "State colours that keep a meaning".
+- `taggedContainer`'s default tab: answered at G1, white (the tab marks a label, not a state); the Remotion container's tab follows it (motion-components, "Exchange queue and tagged container shapes").
 
 ## Documentation
 
