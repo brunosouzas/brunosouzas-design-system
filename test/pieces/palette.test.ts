@@ -175,12 +175,14 @@ describe("V2 palette of every piece", () => {
 
   // Change stackledger-product-layer (card 303), task 2.5.
   test("The product accent is caught", () => {
-    const accent = tokens.brand.light.stackledgerAccent;
-    expect(accent).toBe("#3B5BDB");
+    expect([tokens.brand.light.stackledgerAccent, tokens.brand.dark.stackledgerAccent]).toEqual(["#3B5BDB", "#7D8CFF"]);
     const pill = P.pill({ x: 0, y: 0, text: "a" });
-    const accentFill = (nodes: readonly (SvgNode | string)[]): (SvgNode | string)[] =>
-      nodes.map((node) => (typeof node === "string" ? node : { ...node, attrs: node.attrs.fill === undefined || node.attrs.fill === "none" ? node.attrs : { ...node.attrs, fill: accent }, children: accentFill(node.children) }));
-    expect(paletteProblems("pill", { body: accentFill(pill.body) as SvgNode[], text: pill.text })).toContain(`pill: ${accent}`);
+    // Both themes' accents are refused: the light one is the scenario, the dark one keeps the exclusion whole.
+    for (const accent of [tokens.brand.light.stackledgerAccent, tokens.brand.dark.stackledgerAccent]) {
+      const accentFill = (nodes: readonly (SvgNode | string)[]): (SvgNode | string)[] =>
+        nodes.map((node) => (typeof node === "string" ? node : { ...node, attrs: node.attrs.fill === undefined || node.attrs.fill === "none" ? node.attrs : { ...node.attrs, fill: accent }, children: accentFill(node.children) }));
+      expect(paletteProblems("pill", { body: accentFill(pill.body) as SvgNode[], text: pill.text })).toContain(`pill: ${accent}`);
+    }
   });
 
 });

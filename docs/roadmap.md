@@ -24,7 +24,8 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 10c | `backdrop-tokens` | stackledger's city backdrop (map-backgrounds, AB#134): `surface.*.backdropWater`, `backdropWaterEdge`, `backdropPark`, `backdropCredit`. The neutral dashed arrow asked in the same card already exists (`messageArrow` with `dashed: true`, 0.5.1) | AB#180 | delivered (0.5.3) |
 | 11 | Video on the site | Muted looping `<video>` that plays when visible, with a pause button and `prefers-reduced-motion`; first use, the circuit breaker | AB#142 | planned |
 | 12 | Designer skill for videos | The `designer` skill decides where a video belongs and writes its script | AB#158 | planned |
-| 13 | Site palette | The `site.*` colours become the brand roles (ADR 0006, amended), with `link` and `site.font.mono`; the site's category badges as `categoryIcon` on a track-tone disc, built by the `icon` format (`site-palette-and-category-badges`, 0.8.0). The site's own adoption is its change in brunosouzas.com | AB#302 | in review |
+| 13 | Site palette | The `site.*` colours become the brand roles (ADR 0006, amended), with `link` and `site.font.mono`; the site's category badges as `categoryIcon` on a track-tone disc, built by the `icon` format (`site-palette-and-category-badges`, 0.8.0). The site's own adoption is its change in brunosouzas.com | AB#302 | delivered (0.8.0) |
+| 13a | `stackledger-product-layer` | stackledger's accent as a brand role (`brand.<theme>.stackledgerAccent`), the city backdrop on the v2 neutrals, and the `ledgerMark` as a white page with one outline (0.8.1). stackledger's own adoption is its change in that repository | AB#303 | in review |
 | 14 | Animated site banner | Animated SVG/CSS banner built from the pieces | AB#143 | after the palette |
 | 15 | Published catalogue | The Remotion Studio deployed as a static site, so the catalogue can be browsed without a local install | — | later |
 
