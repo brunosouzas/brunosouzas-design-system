@@ -18,3 +18,52 @@
 #### Scenario: Unknown surface on the mark
 - **WHEN** `ledgerMark` gets `surface: "navy"`
 - **THEN** it throws a `RangeError` naming `surface` and listing `light, dark`
+
+### Requirement: Ink on the dark surface
+On the dark surface, every ink stroke on the dark background or on a dark face SHALL take `surface.dark.muted` instead of `color.ink`: sticker outlines, the `storeNode` lid, the `queueNode` rails, a flat `lineBadge`'s outline, the `renewalRing` ink band, emote outlines, rays and Z casings, the `linkIcon` face outline. Marks over a light or state fill (`?`, `!`, ticks, crosses, the bulb filament, link glyphs) or on a white face (`ledgerMark`'s stations, on its white page) stay `color.ink`.
+
+#### Scenario: Stickers and diagram strokes on dark
+- **WHEN** `stationMarker`, `storeNode`, `queueNode` and a flat `lineBadge` are drawn with `surface: "dark"`
+- **THEN** the marker's face, the store's face and lid, the queue's face and rails, and the badge's outline are stroked `#ADA79D`, and none of them holds a stroke `#121212`
+
+#### Scenario: Emote on dark
+- **WHEN** `problem` and `waiting` are drawn with `surface: "dark"`
+- **THEN** every outline, ray and Z casing is stroked `#ADA79D`, the `!` mark stays `#121212`, the group holds no `rim` group and no shadow copy, and it has as many children as the light call
+
+#### Scenario: Link icon on dark
+- **WHEN** `linkIcon({ icon: "github", x: 0, y: 0, surface: "dark" })` is called
+- **THEN** its face rect is filled `#FFFFFF` and stroked `#ADA79D`, and the glyph inside it keeps `#121212`
+
+#### Scenario: Stations on the white page
+- **WHEN** `ledgerMark({ x: 0, y: 0, surface: "dark" })` is called
+- **THEN** its page `rect` is filled `#FFFFFF` and stroked `#ADA79D`, and its two station circles are filled `#FFFFFF` and stroked `#121212`
+
+#### Scenario: Light surface unchanged
+- **WHEN** `stationMarker`, `storeNode`, `queueNode`, a flat `lineBadge`, `renewalRing`, `ledgerMark`, `linkIcon` and the emotes `problem` and `waiting` are each drawn with `surface: "light"` and without `surface`
+- **THEN** both trees of each piece are deep-equal, their ink strokes are `#121212`, and `#ADA79D` appears in neither
+
+### Requirement: Existing calls unchanged
+Every call valid in 0.2.0, with each top-level `color.<state>` value written `color.state.<state>`, SHALL stay valid and draw the tree pinned in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b). 0.7.0 regenerated the fixture from the v2 drawing with the same calls except that rewrite; 0.8.1 replaces only the trees of its three `ledgerMark` calls with the "Folha" mark the owner approved (card 303).
+
+#### Scenario: Goldens unchanged
+- **WHEN** the four golden fixtures are built
+- **THEN** each output equals its regenerated golden byte for byte
+
+#### Scenario: Frozen 0.2.0 calls
+- **WHEN** each call of `test/fixtures/pieces-0.2.0.json` is made again
+- **THEN** its tree is deep-equal to the pinned one, and each `ledgerMark` call with `surface: "light"` added is deep-equal to the same pinned tree
+
+#### Scenario: Same calls after the regeneration
+- **WHEN** the regenerated fixture is compared with the 0.6.1 one
+- **THEN** both list the same calls in the same order with the same parameters, except that each `color.<state>` value (`lineBadge.fill`, `ledgerMark.line`) is now `color.state.<state>`; only the trees differ
+
+#### Scenario: Only the mark trees change in 0.8.1
+- **WHEN** the 0.8.1 fixture is compared with the 0.8.0 one
+- **THEN** both list the same calls with the same parameters in the same order, the trees of the three `ledgerMark` calls differ, and every other tree is deep-equal
+
+### Requirement: New pieces carry their own stroke
+Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `zone`, `uiIcon`, `linkIcon`, the `ledgerMark` page, and the ten body diagram pieces) SHALL carry its own `stroke`, or sit in a group of the piece that sets one, so it draws the same inside the cover command's outlined group (`stroke` ink, width 4) as on its own.
+
+#### Scenario: Inside the outlined group
+- **WHEN** the test walks each new piece's body, drawn with its required parameters on light and dark, plus `zone` with one, two and three points, `altFrame` with a condition and one section, and `edgeLabel` with `backdrop: true`
+- **THEN** every `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon` and `path` has a `stroke` attribute or an ancestor `g` inside the piece's body that has one
