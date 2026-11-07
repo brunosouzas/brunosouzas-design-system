@@ -19,8 +19,8 @@
 
 ## 3. Docs, version and evidence
 
-- [ ] 3.1 ADR 0006 amendment "The stackledger accent and the v2 backdrop (card 303)": the role, its values and contrast, and the backdrop values with the credit rule. README: `ledgerMark` (white page, one outline), the backdrop line, and "Upgrading to 0.8.1" (its table as the proposal's Documentation says). Check: `grep -n 'muted band' README.md` returns nothing.
-- [ ] 3.2 `package.json` and lockfile at 0.8.1, with the Node of CI; only the version fields change in the lockfile.
+- [x] 3.1 ADR 0006 amendment "The stackledger accent and the v2 backdrop (card 303)": the role, its values and contrast, and the backdrop values with the credit rule. README: `ledgerMark` (white page, one outline), the backdrop line, and "Upgrading to 0.8.1" (its table as the proposal's Documentation says). Check: `grep -n 'muted band' README.md` returns nothing.
+- [x] 3.2 `package.json` and lockfile at 0.8.1, with the Node of CI; only the version fields change in the lockfile.
 - [ ] 3.3 Renders before and after, made by the parent through `<img>` in Chrome: the pieces catalogue in light and dark, `ledgerMark` at 96, 32 and 16 px, and a map with the London backdrop drawn by stackledger with the branch's tokens. Shown to the owner before the pull request is marked ready.
-- [ ] 3.4 Full checks: `npm run typecheck && npm run tokens:check && npm run build && npm test` (with the GIT_CONFIG signing override for the release tests); `openspec validate --all --strict`.
+- [x] 3.4 Full checks: `npm run typecheck && npm run tokens:check && npm run build && npm test` (with the GIT_CONFIG signing override for the release tests); `openspec validate --all --strict`.
 - [ ] 3.5 Archive the change in the same branch (`openspec archive stackledger-product-layer -y`), then `openspec validate --specs --strict` and `openspec validate --archived --no-interactive`.

@@ -1,7 +1,7 @@
 # ADR 0006: Three-layer tokens and the brand colour system
 
 - Status: accepted
-- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed), on 2026-11-06 by the owner's track families, and on 2026-11-06 by the site palette on the brand roles (see the last sections)
+- Amended by [ADR 0009](0009-one-piece-grammar.md) (outline, shadow and component values; the state duplicates removed), on 2026-11-06 by the owner's track families, on 2026-11-06 by the site palette on the brand roles, and on 2026-11-07 by the stackledger accent and the v2 backdrop (see the last sections)
 - Date: 2026-11-05
 - Supersedes: ADR 0003 (colour meaning)
 
@@ -100,3 +100,23 @@ After seeing the 0.7.0 renders, the owner found that the pale track tints of the
 
 `site.font.mono` (Source Code Pro) joins the site's fonts. The owner approved the mapping from renders of the site (AB#302, Q1). Text, muted text and links reach at least 5.19:1 on the page and the card backgrounds in both themes; the token test checks a 4.5:1 floor.
 
+## Amended, 2026-11-07: the stackledger accent and the v2 backdrop (card 303)
+
+stackledger, the first product with its own layer (brand strategy E7), needs one accent of its own, and its city backdrop still had the v1 blues. As the Consequences above plan, the accent is a new value at the semantic layer: one more role of `brand.<theme>`, `stackledgerAccent`, with no new group. "Semantic" is this ADR's layer name; E7's "not a semantic colour" means not a state colour with a meaning, which the accent is not. No piece draws it by default (the palette check refuses it); a spec names it where the product's line is meant, such as the stackledger banner.
+
+| Role | Light | Dark | On `site.<theme>.body` | On `site.<theme>.light` | For |
+|---|---|---|---|---|---|
+| `brand.<theme>.stackledgerAccent` | `#3B5BDB` | `#7D8CFF` | 5.11:1 / 6.35:1 | 5.67:1 / 5.73:1 | stackledger's lines, links and small text |
+
+The token test keeps it at 4.5:1 or more on the page and card backgrounds in both themes. Against the text colour it is 3.31:1 in light and 2.57:1 in dark, so stackledger keeps its link underline (colour alone does not mark a link). The CSS names are `--ds-brand-light-stackledger-accent` and `--ds-brand-dark-stackledger-accent`.
+
+The four backdrop colours of `surface.<theme>` move to the v2 neutrals (the owner chose them from renders, AB#303, Q6). They stay literals, like every surface value:
+
+| `surface.<theme>.` | Light, 0.8.0 → 0.8.1 | Dark, 0.8.0 → 0.8.1 |
+|---|---|---|
+| `backdropWater` | `#C9D8FF` → `#C7DAEA` | `#1E3175` → `#1C2733` |
+| `backdropWaterEdge` | `#B5C7F5` → `#A9C4DA` | `#2A3F8A` → `#2A3846` |
+| `backdropPark` | `#D4F2DF` → `#D6E4CF` | `#183F52` → `#1A241D` |
+| `backdropCredit` | `#5A6385` → `#5C5852` | `#9AA6D6` → `#ADA79D` |
+
+The credit is the muted text role: `surface.<theme>.backdropCredit` equals `brand.<theme>.textMuted`, checked by a test as the site colours are, so the OpenStreetMap credit keeps the 6.37:1 and 7.90:1 of muted text on the background.
