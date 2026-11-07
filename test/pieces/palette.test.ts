@@ -16,9 +16,12 @@ import { REQUIRED_ONLY } from "./required-only";
 const valuesOf = (tree: object): string[] =>
   Object.values(tree).flatMap((value) => (typeof value === "string" ? [value] : typeof value === "object" && value !== null ? valuesOf(value) : []));
 
-/** The v2 palette: brand.* and surface.* of both themes, the four neutrals, illustration.*, the cast's eyes. */
+/** brand.* of both themes but a product's accent, which a piece draws only where a spec names it (card 303). */
+const brandRoles = Object.values(tokens.brand).flatMap((theme) => Object.entries(theme).flatMap(([role, value]) => (role === "stackledgerAccent" ? [] : [value])));
+
+/** The v2 palette: brand.* (but stackledgerAccent) and surface.* of both themes, the four neutrals, illustration.*, the cast's eyes. */
 const ALLOWED = new Set<string>([
-  ...valuesOf(tokens.brand),
+  ...brandRoles,
   ...valuesOf(tokens.surface),
   tokens.color.white,
   tokens.color.ink,
@@ -168,6 +171,16 @@ describe("V2 palette of every piece", () => {
       nodes.map((node) => (typeof node === "string" ? node : { ...node, attrs: node.attrs.fill === undefined || node.attrs.fill === "none" ? node.attrs : { ...node.attrs, fill: rose }, children: roseFill(node.children) }));
     expect(paletteProblems("pill", { body: roseFill(pill.body) as SvgNode[], text: pill.text })).toContain(`pill: ${rose}`);
     for (const category of CATEGORY_ICON_NAMES) expect(paletteProblems(`categoryIcon:${category}`, P.categoryIcon({ category, x: 0, y: 0 }))).toEqual([]);
+  });
+
+  // Change stackledger-product-layer (card 303), task 2.5.
+  test("The product accent is caught", () => {
+    const accent = tokens.brand.light.stackledgerAccent;
+    expect(accent).toBe("#3B5BDB");
+    const pill = P.pill({ x: 0, y: 0, text: "a" });
+    const accentFill = (nodes: readonly (SvgNode | string)[]): (SvgNode | string)[] =>
+      nodes.map((node) => (typeof node === "string" ? node : { ...node, attrs: node.attrs.fill === undefined || node.attrs.fill === "none" ? node.attrs : { ...node.attrs, fill: accent }, children: accentFill(node.children) }));
+    expect(paletteProblems("pill", { body: accentFill(pill.body) as SvgNode[], text: pill.text })).toContain(`pill: ${accent}`);
   });
 
 });

@@ -7,7 +7,10 @@
 // 0.3.1 tree, scripts/freeze-pieces-0.5.0.ts on f91ba2e), and re-run once for
 // 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6) from the drawing the
 // owner approved, with the same calls (each top-level color.<state> written
-// color.state.<state>).
+// color.state.<state>). scripts/freeze-pieces.ts was re-run once more for 0.8.1
+// (card 303, change stackledger-product-layer, task 2.4): only the trees of the
+// three ledgerMark calls changed, to the "Folha" mark the owner approved from
+// renders; test/fixtures/pieces-0.8.0.json keeps the 0.8.0 fixture to prove it.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
@@ -42,6 +45,15 @@ describe("Existing calls unchanged", () => {
       expect(JSON.parse(JSON.stringify(call(piece, params))), `${piece} ${JSON.stringify(params)}`).toEqual(tree);
       if (piece === "ledgerMark") expect(JSON.parse(JSON.stringify(call(piece, { ...params, surface: "light" })))).toEqual(tree);
     }
+  });
+
+  // Change stackledger-product-layer (card 303), task 2.4.
+  test("Only the mark trees change in 0.8.1", () => {
+    const before = load<Frozen[]>("pieces-0.8.0");
+    expect(frozen.map(({ piece, params }) => ({ piece, params }))).toEqual(before.map(({ piece, params }) => ({ piece, params })));
+    const changed = frozen.flatMap(({ piece, tree }, index) => (JSON.stringify(tree) === JSON.stringify(before[index].tree) ? [] : [`${index} ${piece}`]));
+    expect(changed).toEqual(["52 ledgerMark", "53 ledgerMark", "54 ledgerMark"]);
+    expect(frozen.filter(({ piece }) => piece === "ledgerMark")).toHaveLength(3);
   });
 });
 
