@@ -2,7 +2,7 @@
 
 ## Where the accent lives
 
-ADR 0006 already answers it: "a future theme or sub-brand (a product's own accent, per the brand strategy's 'what a product gains') is a new value at the semantic layer, never a new flat list". So the accent is one more role of `brand.<theme>`, `stackledgerAccent`, with no new group and no change to `GROUPS` or `CLOSED_GROUPS`. It is not a state colour: no piece reads it by default; a spec names it where the product's line is meant (the stackledger banner). The ADR 0006 amendment records it.
+ADR 0006 already answers it: "a future theme or sub-brand (a product's own accent, per the brand strategy's 'what a product gains') is a new value at the semantic layer, never a new flat list". So the accent is one more role of `brand.<theme>`, `stackledgerAccent`, with no new group and no change to `GROUPS` or `CLOSED_GROUPS`. "Semantic" here is ADR 0006's layer name (the roles between primitives and components); the strategy's E7 "not a semantic colour" means not a state colour with a meaning (success, failure…). The accent is the first and not the second: no piece draws it by default (the palette check excludes it from the allowed values, scenario "The product accent is caught"); a spec names it where the product's line is meant (the stackledger banner). The ADR 0006 amendment records it.
 
 | Option | Path | Verdict |
 |---|---|---|
