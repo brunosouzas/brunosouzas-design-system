@@ -34,7 +34,7 @@ On the dark surface, every ink stroke on the dark background or on a dark face S
 - **WHEN** `linkIcon({ icon: "github", x: 0, y: 0, surface: "dark" })` is called
 - **THEN** its face rect is filled `#FFFFFF` and stroked `#ADA79D`, and the glyph inside it keeps `#121212`
 
-#### Scenario: Stations on the white page
+#### Scenario: Stations inside the ink square
 - **WHEN** `ledgerMark({ x: 0, y: 0, surface: "dark" })` is called
 - **THEN** its page `rect` is filled `#FFFFFF` and stroked `#ADA79D`, and its two station circles are filled `#FFFFFF` and stroked `#121212`
 
