@@ -2710,13 +2710,14 @@
             {
               "tag": "rect",
               "attrs": {
-                "x": 0,
-                "y": 0,
-                "width": 32,
-                "height": 32,
-                "rx": 7,
-                "fill": "#121212",
-                "stroke": "none"
+                "x": 0.625,
+                "y": 0.625,
+                "width": 30.75,
+                "height": 30.75,
+                "rx": 6.6,
+                "fill": "#FFFFFF",
+                "stroke": "#121212",
+                "stroke-width": 1.25
               },
               "children": []
             },
@@ -2780,13 +2781,14 @@
             {
               "tag": "rect",
               "attrs": {
-                "x": 0,
-                "y": 0,
-                "width": 32,
-                "height": 32,
-                "rx": 7,
-                "fill": "#121212",
-                "stroke": "none"
+                "x": 0.625,
+                "y": 0.625,
+                "width": 30.75,
+                "height": 30.75,
+                "rx": 6.6,
+                "fill": "#FFFFFF",
+                "stroke": "#121212",
+                "stroke-width": 1.25
               },
               "children": []
             },
@@ -2851,13 +2853,14 @@
             {
               "tag": "rect",
               "attrs": {
-                "x": 0,
-                "y": 0,
-                "width": 32,
-                "height": 32,
-                "rx": 7,
-                "fill": "#121212",
-                "stroke": "none"
+                "x": 0.625,
+                "y": 0.625,
+                "width": 30.75,
+                "height": 30.75,
+                "rx": 6.6,
+                "fill": "#FFFFFF",
+                "stroke": "#121212",
+                "stroke-width": 1.25
               },
               "children": []
             },

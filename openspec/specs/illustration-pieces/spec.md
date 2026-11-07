@@ -296,11 +296,11 @@ The smallest dimension of an outlined shape (`height` of a `lineBadge`, flat or 
 - **THEN** each call throws a `RangeError` naming `to`
 
 ### Requirement: Ledger mark
-`ledgerMark` SHALL draw the 32-unit mark of `metro-and-diagram-pieces` design §3, "The mark", in a group translated to (`x`, `y`) and scaled by `size` / 32: an ink square, the bent line in `line` and two white ink-outlined stations, no text. `size` is from 12 to 512. On the dark surface a 2-unit band in `surface.dark.muted` lines the square inside its 32 box, whatever `rimWidth` is, so the ink square never sits bare on the dark background.
+`ledgerMark` SHALL draw the 32-unit mark in a group translated to (`x`, `y`) and scaled by `size` / 32: a white page with one outline 1.25 wide, the bent line in `line` and two white ink-outlined stations, no text. `size` is from 12 to 512. The outline is `color.ink` on the light surface and `surface.dark.muted` on the dark one, so the page keeps one outline that reads on either background (ADR 0009).
 
 #### Scenario: Favicon size
 - **WHEN** `ledgerMark({ x: 0, y: 0 })` is called
-- **THEN** its group has transform `translate(0 0) scale(1)` and holds the `rect` 32 × 32 with radius 7 and fill `#121212`, the `path` `M7 23 L14 16 L25 16` with stroke `#E04E17` and width 4.5, and circles at (14, 16) r 4 and (25, 16) r 2.6
+- **THEN** its group has transform `translate(0 0) scale(1)` and holds, in order, the `rect` at (0.625, 0.625) 30.75 × 30.75 with radius 6.6, fill `#FFFFFF`, stroke `#121212` and stroke-width 1.25, the `path` `M7 23 L14 16 L25 16` with stroke `#E04E17` and width 4.5, and circles at (14, 16) r 4 and (25, 16) r 2.6
 
 #### Scenario: Scaled and too small
 - **WHEN** `ledgerMark` gets `size: 16`, and then `size: 8`
@@ -308,7 +308,7 @@ The smallest dimension of an outlined shape (`height` of a `lineBadge`, flat or 
 
 #### Scenario: Mark on a dark surface
 - **WHEN** `ledgerMark({ x: 0, y: 0, surface: "dark" })` is called
-- **THEN** its group holds first a `rect` 32 × 32 radius 7 filled `#ADA79D`, then the ink `rect` (2, 2) 28 × 28 radius 5, then the same path and circles as "Favicon size"
+- **THEN** its group holds the same children as "Favicon size" except that the `rect`'s stroke is `#ADA79D`, and it holds no other `rect`
 
 #### Scenario: Unknown surface on the mark
 - **WHEN** `ledgerMark` gets `surface: "navy"`
@@ -475,7 +475,7 @@ Every `uiIcon` and `linkIcon` tree, on both surfaces, SHALL use only the node co
 - **THEN** in the trees no tag is outside `SVG_TAGS`, no attribute is `href`, `xlink:href`, `style` or `on…`, and no attribute value or text holds `url(` or `://`; and each written string holds `://` exactly once, in the root's `xmlns`
 
 ### Requirement: New pieces carry their own stroke
-Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `zone`, `uiIcon`, `linkIcon`, the dark `ledgerMark` rim, and the ten body diagram pieces) SHALL carry its own `stroke`, or sit in a group of the piece that sets one, so it draws the same inside the cover command's outlined group (`stroke` ink, width 4) as on its own.
+Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `zone`, `uiIcon`, `linkIcon`, the `ledgerMark` page, and the ten body diagram pieces) SHALL carry its own `stroke`, or sit in a group of the piece that sets one, so it draws the same inside the cover command's outlined group (`stroke` ink, width 4) as on its own.
 
 #### Scenario: Inside the outlined group
 - **WHEN** the test walks each new piece's body, drawn with its required parameters on light and dark, plus `zone` with one, two and three points, `altFrame` with a condition and one section, and `edgeLabel` with `backdrop: true`
@@ -497,7 +497,7 @@ Every shape a new piece draws (`renewalRing`, `suggestedHalo`, `licenceMark`, `z
 - **THEN** the first throws a `RangeError` naming `text`; the second names `width`
 
 ### Requirement: Existing calls unchanged
-Every call valid in 0.2.0, with each top-level `color.<state>` value written `color.state.<state>`, SHALL stay valid and draw the tree pinned in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b). This change regenerates the fixture once from the v2 drawing the owner approved, with the same calls except that rewrite; the proof cover and banner goldens are regenerated with it.
+Every call valid in 0.2.0, with each top-level `color.<state>` value written `color.state.<state>`, SHALL stay valid and draw the tree pinned in `test/fixtures/pieces-0.2.0.json` (`stackledger-map-and-link-pieces` design §6b). 0.7.0 regenerated the fixture from the v2 drawing with the same calls except that rewrite, and the proof cover and banner goldens with it; 0.8.1 replaces only the trees of its three `ledgerMark` calls with the "Folha" mark the owner approved (card 303).
 
 #### Scenario: Goldens unchanged
 - **WHEN** the four golden fixtures are built
@@ -510,6 +510,10 @@ Every call valid in 0.2.0, with each top-level `color.<state>` value written `co
 #### Scenario: Same calls after the regeneration
 - **WHEN** the regenerated fixture is compared with the 0.6.1 one
 - **THEN** both list the same calls in the same order with the same parameters, except that each `color.<state>` value (`lineBadge.fill`, `ledgerMark.line`) is now `color.state.<state>`; only the trees differ
+
+#### Scenario: Only the mark trees change in 0.8.1
+- **WHEN** the 0.8.1 fixture is compared with the 0.8.0 one
+- **THEN** both list the same calls with the same parameters in the same order, the trees of the three `ledgerMark` calls differ, and every other tree is deep-equal
 
 ### Requirement: Current colour on UI icons
 `uiIcon` SHALL accept the exact keyword `currentColor` as `colour` and write it as is as the group's `fill` and `stroke`, with the same children as a token colour, so an icon inline in a page follows its element's text colour. No other spelling is accepted.
@@ -1107,7 +1111,7 @@ No piece SHALL draw a hard offset shadow (ADR 0009): each of the 26 cover pieces
 - **THEN** the first result is the ink copy with transform `translate(8 8) rotate(30)` then the shape; the second is the shape alone
 
 ### Requirement: Ink on the dark surface
-On the dark surface, every ink stroke on the dark background or on a dark face SHALL take `surface.dark.muted` instead of `color.ink`: sticker outlines, the `storeNode` lid, the `queueNode` rails, a flat `lineBadge`'s outline, the `renewalRing` ink band, emote outlines, rays and Z casings, the `linkIcon` face outline. Marks over a light or state fill (`?`, `!`, ticks, crosses, the bulb filament, link glyphs) or inside a piece's own ink face (`ledgerMark`'s stations) stay `color.ink`.
+On the dark surface, every ink stroke on the dark background or on a dark face SHALL take `surface.dark.muted` instead of `color.ink`: sticker outlines, the `storeNode` lid, the `queueNode` rails, a flat `lineBadge`'s outline, the `renewalRing` ink band, emote outlines, rays and Z casings, the `linkIcon` face outline. Marks over a light or state fill (`?`, `!`, ticks, crosses, the bulb filament, link glyphs) or on a white face (`ledgerMark`'s stations, on its white page) stay `color.ink`.
 
 #### Scenario: Stickers and diagram strokes on dark
 - **WHEN** `stationMarker`, `storeNode`, `queueNode` and a flat `lineBadge` are drawn with `surface: "dark"`
@@ -1123,7 +1127,7 @@ On the dark surface, every ink stroke on the dark background or on a dark face S
 
 #### Scenario: Stations inside the ink square
 - **WHEN** `ledgerMark({ x: 0, y: 0, surface: "dark" })` is called
-- **THEN** its two station circles are filled `#FFFFFF` and stroked `#121212`, inside its ink square
+- **THEN** its page `rect` is filled `#FFFFFF` and stroked `#ADA79D`, and its two station circles are filled `#FFFFFF` and stroked `#121212`
 
 #### Scenario: Light surface unchanged
 - **WHEN** `stationMarker`, `storeNode`, `queueNode`, a flat `lineBadge`, `renewalRing`, `ledgerMark`, `linkIcon` and the emotes `problem` and `waiting` are each drawn with `surface: "light"` and without `surface`
@@ -1251,7 +1255,7 @@ Every shape `emote` draws, on either surface, SHALL carry its own `stroke` or si
 - **THEN** it prints a line naming `--surface` and `blue`, then `usage: npm run pieces:sheet -- --out <file.svg> [--surface light|dark]`, exits 1, and `dark.svg` does not exist
 
 ### Requirement: V2 palette of every piece
-Each of the 62 pieces drawn with its defaults, on `light` and on `dark` when it takes `surface` and once as drawn otherwise, SHALL use as `fill` and `stroke` only `none` or the value (hex compared, not the path) of a `brand.*` or `surface.*` token, a default track ring (`coverBackground.track*.ring`), `color.white`, `color.ink`, `color.ring`, `color.panel`, an `illustration.*` token or `cast.eyes`; a `color.state.*` value only where "State colours that keep a meaning" names it.
+Each of the 62 pieces drawn with its defaults, on `light` and on `dark` when it takes `surface` and once otherwise, SHALL use as `fill` and `stroke` only `none` or the value (hex, not path) of a `brand.*` token but `stackledgerAccent`, a `surface.*` token, a default track ring (`coverBackground.track*.ring`), `color.white`, `color.ink`, `color.ring`, `color.panel`, an `illustration.*` token or `cast.eyes`; a `color.state.*` value only where "State colours that keep a meaning" names it.
 
 #### Scenario: Every piece in the v2 palette
 - **WHEN** the test walks every node of each piece's required-only call of the catalogue test (`REQUIRED_ONLY`), with every required colour parameter (`rail.nodes`, `lineBadge.fill`, `pipe.fill`, `zone.fill`, `phaseBand.fill`) set to `illustration.accent`, `emote` drawn once per kind, `categoryIcon` drawn once per category, plus a `sheet` with a `tail` check and a `serverStack` with `failing: 1`
@@ -1268,6 +1272,10 @@ Each of the 62 pieces drawn with its defaults, on `light` and on `dark` when it 
 #### Scenario: Only the default track rings
 - **WHEN** the palette check is given a `pill` tree filled `#E0ABC0` (`coverBackground.personalRose.ring`)
 - **THEN** it reports `pill` and `#E0ABC0`, while every `categoryIcon` call passes
+
+#### Scenario: The product accent is caught
+- **WHEN** the palette check is given a `pill` tree filled `#3B5BDB` (`brand.light.stackledgerAccent`)
+- **THEN** it reports `pill` and `#3B5BDB`: a product's accent is drawn only where a spec names it
 
 ### Requirement: State colours that keep a meaning
 A `color.state.*` value SHALL appear in the output of "V2 palette of every piece" only where it means a state: `checkBadge`'s disc and a `sheet` `tail` check (done), `stamp`'s face (approved), `serverStack`'s failing light, the emotes `problem`, `refused` (failure) and `worked` (done), `renewalRing`'s inner band (renewal due), an owned `licenceMark`, and `eipIcon` and `nameTag`'s icon ("Icon colours").

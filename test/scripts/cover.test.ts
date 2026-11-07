@@ -747,3 +747,12 @@ describe("Font embedding failure in the command", () => {
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
 });
+
+// Change stackledger-product-layer (card 303), task 1.5: design-tokens "Product accent in a spec".
+describe("Brand colour roles", () => {
+  test("Product accent in a spec", async () => {
+    const svg = await svgOf(banner({ pieces: [{ piece: "pipe", d: "M0,0 L100,0", fill: "brand.light.stackledgerAccent" }] }));
+    const pipePaths = [...svg.matchAll(/<path d="M0,0 L100,0"[^>]*>/g)].map((m) => m[0]);
+    expect(pipePaths.some((path) => path.includes('stroke="#3B5BDB"'))).toBe(true);
+  });
+});

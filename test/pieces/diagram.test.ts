@@ -96,8 +96,11 @@ describe("Ledger mark", () => {
     expect(text).toEqual([]);
     const [group] = body;
     expect(group.attrs.transform).toBe("translate(0 0) scale(1)");
-    const [rect, path, big, small] = group.children as typeof body;
-    expect(rect.attrs).toMatchObject({ width: 32, height: 32, rx: 7, fill: "#121212" });
+    const children = group.children as typeof body;
+    expect(children.map((node) => node.tag)).toEqual(["rect", "path", "circle", "circle"]);
+    const [rect, path, big, small] = children;
+    // Change stackledger-product-layer (card 303), task 2.1: the "Folha" page.
+    expect(rect.attrs).toEqual({ x: 0.625, y: 0.625, width: 30.75, height: 30.75, rx: 6.6, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 1.25 });
     expect(path.attrs).toMatchObject({ d: "M7 23 L14 16 L25 16", stroke: "#E04E17", "stroke-width": 4.5 });
     expect(big.attrs).toMatchObject({ cx: 14, cy: 16, r: 4 });
     expect(small.attrs).toMatchObject({ cx: 25, cy: 16, r: 2.6 });
@@ -118,10 +121,10 @@ describe("Ledger mark on a surface", () => {
   test("Mark on a dark surface", () => {
     const light = ledgerMark({ x: 0, y: 0 }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
     const dark = ledgerMark({ x: 0, y: 0, surface: "dark" }).body[0].children as unknown as { tag: string; attrs: Record<string, unknown> }[];
-    // A 2-unit band in surface.dark.muted, whatever rimWidth is (0 since ADR 0009), so the ink square never sits bare on dark.
-    expect(dark[0]).toEqual({ tag: "rect", attrs: { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: "#ADA79D", stroke: "none" }, children: [] });
-    expect(dark[1]).toEqual({ tag: "rect", attrs: { x: 2, y: 2, width: 28, height: 28, rx: 5, fill: "#121212", stroke: "none" }, children: [] });
-    expect(dark.slice(2)).toEqual(light.slice(1));
+    // Card 303: the same white page, outlined in surface.dark.muted; no band, no other rect.
+    expect(dark[0]).toEqual({ ...light[0], attrs: { ...light[0].attrs, stroke: "#ADA79D" } });
+    expect(dark.slice(1)).toEqual(light.slice(1));
+    expect(dark.filter((node) => node.tag === "rect")).toHaveLength(1);
   });
 
   test("Unknown surface on the mark", () => {
@@ -238,7 +241,10 @@ describe("Ink on the dark surface", () => {
     const stations = children.filter((node) => node.tag === "circle");
     expect(stations).toHaveLength(2);
     for (const station of stations) expect(station.attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#121212" });
-    expect(children[1].attrs).toMatchObject({ x: 2, y: 2, width: 28, height: 28, fill: "#121212" });
+    // Card 303: the page rect is white and outlined in surface.dark.muted.
+    const pages = children.filter((node) => node.tag === "rect");
+    expect(pages).toHaveLength(1);
+    expect(pages[0].attrs).toMatchObject({ fill: "#FFFFFF", stroke: "#ADA79D" });
   });
 
   test("Light surface unchanged", () => {

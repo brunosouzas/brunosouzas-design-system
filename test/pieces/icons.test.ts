@@ -223,7 +223,8 @@ describe("New pieces carry their own stroke", () => {
         ...LINK_ICON_NAMES.map((icon) => [`linkIcon ${icon}`, linkIcon({ icon, x: 0, y: 0, surface })] as [string, Drawn]),
       );
     }
-    drawings.push(["ledgerMark dark", ledgerMark({ x: 0, y: 0, surface: "dark" })]);
+    // The ledgerMark page carries its own stroke on both surfaces (change stackledger-product-layer, task 2.3).
+    for (const surface of surfaces) drawings.push([`ledgerMark ${surface}`, ledgerMark({ x: 0, y: 0, surface })]);
     // The ten body diagram pieces (change body-diagram-pieces, task 3.3).
     for (const surface of surfaces) {
       for (const [name, params] of Object.entries(BODY_DIAGRAM)) drawings.push([`${name} ${surface}`, (DIAGRAM_PIECES[name as keyof typeof DIAGRAM_PIECES] as unknown as (p: object) => Drawn)({ ...params, surface })]);

@@ -303,25 +303,31 @@ export const messageArrow = definePiece<MessageArrowParams>(
 // ---------- mark ----------
 
 export type LedgerMarkParams = { x: number; y: number; size?: number; line?: string; surface?: SurfaceName };
-/** stackledger's mark (favicon, header): an ink square with a bent line and two stations, 32 units scaled to `size`.
- * On the dark surface a 2-unit band in surface.dark.muted lines the square inside its 32 box, whatever rimWidth is,
- * so the ink square never sits bare on the dark background (ADR 0009). The stations inside the square stay ink. */
+/** stackledger's mark (favicon, header), the "Folha" of card 303: a white page with one outline, a bent line and
+ * two stations, 32 units scaled to `size`. The outline is ink on the light surface and surface.dark.muted on the dark
+ * one, so the page keeps one outline that reads on either background (ADR 0009); the stations sit on the white page
+ * and stay ink. */
 export const ledgerMark = definePiece<LedgerMarkParams>(
   "ledgerMark",
   { x: pos(), y: pos(), size: { kind: "number", min: 12, max: 512 }, line: col(), surface: surfaceParam },
   ({ x, y, size: side = 32, line = "illustration.accent", surface = "light" }) => {
-    const band = 2;
-    const square =
-      surface === "dark"
-        ? [
-            el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: tokens.surface.dark.muted, stroke: "none" }),
-            el("rect", { x: band, y: band, width: 32 - 2 * band, height: 32 - 2 * band, rx: 7 - band, fill: ink, stroke: "none" }),
-          ]
-        : [el("rect", { x: 0, y: 0, width: 32, height: 32, rx: 7, fill: ink, stroke: "none" })];
+    // The stroke is centred on the rect's edge: inset by half the outline, the page stays inside the 32 box.
+    const outline = 1.25;
+    const inset = outline / 2;
+    const page = el("rect", {
+      x: inset,
+      y: inset,
+      width: 32 - outline,
+      height: 32 - outline,
+      rx: 6.6,
+      fill: white,
+      stroke: surface === "dark" ? tokens.surface.dark.muted : ink,
+      "stroke-width": outline,
+    });
     return drawn([
       g(
         { transform: `translate(${r2(x)} ${r2(y)}) scale(${side / 32})` },
-        ...square,
+        page,
         el("path", { d: "M7 23 L14 16 L25 16", fill: "none", stroke: colour(line, "line"), "stroke-width": 4.5, "stroke-linecap": "round", "stroke-linejoin": "round" }),
         el("circle", { cx: 14, cy: 16, r: 4, fill: white, stroke: ink, "stroke-width": 2 }),
         el("circle", { cx: 25, cy: 16, r: 2.6, fill: white, stroke: ink, "stroke-width": 1.6 }),

@@ -11,8 +11,13 @@
 // Re-run once for 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6), on
 // the drawing the owner approved from the renders of group 8, with each
 // top-level color.<state> value written color.state.<state> (same calls
-// otherwise): the fixture now pins the 0.2.0 calls as 0.7.0 draws them. Do not
-// run it again on a later tree.
+// otherwise): the fixture now pins the 0.2.0 calls as 0.7.0 draws them.
+//
+// Re-run once for 0.8.1 (card 303): only the ledgerMark trees change, to the
+// "Folha" mark the owner approved from renders (change
+// stackledger-product-layer, task 2.4); test/pieces/frozen.test.ts proves it
+// against the 0.8.0 fixture, test/fixtures/pieces-0.8.0.json. Do not run it
+// again on a later tree.
 import { writeFileSync } from "node:fs";
 import { hexNode, ledgerMark, lineBadge, nodeBlock, pillNode } from "../src/pieces/metro.ts";
 

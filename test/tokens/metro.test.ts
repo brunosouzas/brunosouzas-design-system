@@ -1,7 +1,7 @@
 // Unit tests of the surface, map and site tokens (spec design-tokens, change
 // metro-and-diagram-pieces, tasks 1.1 and 1.2; change
 // stackledger-map-and-link-pieces, task 1.1; change bend-radius-and-current-colour,
-// task 1.1). Each test title is the spec
+// task 1.1; change stackledger-product-layer, tasks 1.1-1.4). Each test title is the spec
 // scenario it proves.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
@@ -42,14 +42,14 @@ describe("Surface tokens", () => {
   });
 
   test("Measured surfaces", () => {
-    expect(json.surface.light).toEqual({ background: "#F6F3EC", text: "#121212", muted: "#5C5852", grid: "#EDE8DE", panel: "#FFFFFF", shadow: "#121212", rim: "#F6F3EC", rimWidth: 0, zoneOpacity: 0.12, backdropWater: "#C9D8FF", backdropWaterEdge: "#B5C7F5", backdropPark: "#D4F2DF", backdropCredit: "#5A6385" });
-    expect(json.surface.dark).toEqual({ background: "#121110", text: "#F1EEE8", muted: "#ADA79D", grid: "#3B3834", panel: "#1D1C1A", shadow: "#121110", rim: "#F1EEE8", rimWidth: 0, zoneOpacity: 0.22, backdropWater: "#1E3175", backdropWaterEdge: "#2A3F8A", backdropPark: "#183F52", backdropCredit: "#9AA6D6" });
+    expect(json.surface.light).toEqual({ background: "#F6F3EC", text: "#121212", muted: "#5C5852", grid: "#EDE8DE", panel: "#FFFFFF", shadow: "#121212", rim: "#F6F3EC", rimWidth: 0, zoneOpacity: 0.12, backdropWater: "#C7DAEA", backdropWaterEdge: "#A9C4DA", backdropPark: "#D6E4CF", backdropCredit: "#5C5852" });
+    expect(json.surface.dark).toEqual({ background: "#121110", text: "#F1EEE8", muted: "#ADA79D", grid: "#3B3834", panel: "#1D1C1A", shadow: "#121110", rim: "#F1EEE8", rimWidth: 0, zoneOpacity: 0.22, backdropWater: "#1C2733", backdropWaterEdge: "#2A3846", backdropPark: "#1A241D", backdropCredit: "#ADA79D" });
   });
 
   test("Backdrop tokens in the CSS", () => {
     const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
-    expect(css).toContain("  --ds-surface-light-backdrop-water: #C9D8FF;\n");
-    expect(css).toContain("  --ds-surface-dark-backdrop-credit: #9AA6D6;\n");
+    expect(css).toContain("  --ds-surface-light-backdrop-water: #C7DAEA;\n");
+    expect(css).toContain("  --ds-surface-dark-backdrop-credit: #ADA79D;\n");
   });
 });
 
@@ -107,6 +107,16 @@ describe("Site palette tokens", () => {
   });
 });
 
+// Requirement "Brand colour roles" (change stackledger-product-layer, task 1.1),
+// beside the site CSS lines it sits next to in tokens.css.
+describe("Brand colour roles", () => {
+  test("Product accent in the CSS", () => {
+    const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(css).toContain("  --ds-brand-light-stackledger-accent: #3B5BDB;\n");
+    expect(css).toContain("  --ds-brand-dark-stackledger-accent: #7D8CFF;\n");
+  });
+});
+
 // The brand role each site colour stands for (design.md Decision 1, change site-palette-and-category-badges).
 const SITE_ROLES = { primary: "text", body: "bg", border: "border", light: "cardBg", dark: "text", text: "text", textDark: "text", textLight: "textMuted", link: "accentText" } as const;
 type SourceTree = Record<string, Record<string, Record<string, { $value?: unknown }>>>;
@@ -149,6 +159,32 @@ const siteContrastBelow = (source: SourceTree, floor: number): string[] =>
     ),
   );
 
+/**
+ * Every pair of stackledger's product accent on `site.<theme>.body` or
+ * `site.<theme>.light` under `floor`, compared unrounded, reported with two
+ * decimals (requirement "Product accent contrast", change
+ * stackledger-product-layer, task 1.2). A missing or non-hex value throws
+ * through `valueAt`, so no pair is skipped.
+ */
+const productAccentContrastBelow = (source: SourceTree, floor: number): string[] =>
+  ["light", "dark"].flatMap((theme) =>
+    ["body", "light"].flatMap((bg) => {
+      const ratio = contrast(valueAt(source, "brand", theme, "stackledgerAccent"), valueAt(source, "site", theme, bg));
+      return ratio < floor ? [`brand.${theme}.stackledgerAccent on site.${theme}.${bg} at ${ratio.toFixed(2)}`] : [];
+    }),
+  );
+
+/**
+ * Every backdrop credit that differs from the muted text role, as
+ * `<surface path> ≠ <brand path>` (requirement "Backdrop credit is the muted
+ * text role", change stackledger-product-layer, task 1.4): the credit keeps the
+ * contrast of `textMuted` on the background.
+ */
+const backdropCreditMismatches = (source: SourceTree): string[] =>
+  ["light", "dark"]
+    .filter((theme) => valueAt(source, "surface", theme, "backdropCredit") !== valueAt(source, "brand", theme, "textMuted"))
+    .map((theme) => `surface.${theme}.backdropCredit ≠ brand.${theme}.textMuted`);
+
 describe("Site colours are brand roles", () => {
   test("Every site colour matches its role", () => {
     expect(Object.keys(SITE_ROLES)).toHaveLength(9);
@@ -178,5 +214,41 @@ describe("Site palette contrast", () => {
     const source = repoSource();
     source.site.light.link = { $value: "#E04E17" };
     expect(siteContrastBelow(source, 4.5)).toEqual(["site.light.link on site.light.body at 3.59", "site.light.link on site.light.light at 3.98"]);
+  });
+});
+
+describe("Product accent contrast", () => {
+  test("Accent above the floor", () => {
+    expect(productAccentContrastBelow(repoSource(), 4.5)).toEqual([]);
+  });
+
+  test("An accent below the floor", () => {
+    const source = repoSource();
+    source.brand.light.stackledgerAccent = { $value: "#8FB2FF" };
+    expect(productAccentContrastBelow(source, 4.5)).toEqual(["brand.light.stackledgerAccent on site.light.body at 1.90", "brand.light.stackledgerAccent on site.light.light at 2.10"]);
+  });
+
+  test("A missing accent value", () => {
+    const source = repoSource();
+    delete (source.brand.dark as Record<string, unknown>).stackledgerAccent;
+    expect(() => productAccentContrastBelow(source, 4.5)).toThrow(/brand\.dark\.stackledgerAccent: expected a #RRGGBB colour/);
+  });
+});
+
+describe("Backdrop credit is the muted text role", () => {
+  test("Credit matches its role", () => {
+    expect(backdropCreditMismatches(repoSource())).toEqual([]);
+  });
+
+  test("A credit that drifts", () => {
+    const source = repoSource();
+    source.surface.dark.backdropCredit = { $value: "#9AA6D6" };
+    expect(backdropCreditMismatches(source)).toEqual(["surface.dark.backdropCredit ≠ brand.dark.textMuted"]);
+  });
+
+  test("A missing credit value", () => {
+    const source = repoSource();
+    delete (source.surface.light as Record<string, unknown>).backdropCredit;
+    expect(() => backdropCreditMismatches(source)).toThrow(/surface\.light\.backdropCredit: expected a #RRGGBB colour/);
   });
 });

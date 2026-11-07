@@ -16,6 +16,7 @@
   --ds-brand-dark-card-bg: #1D1C1A;
   --ds-brand-dark-failure: #FF6696;
   --ds-brand-dark-on-accent: #121110;
+  --ds-brand-dark-stackledger-accent: #7D8CFF;
   --ds-brand-dark-success: #5BBF86;
   --ds-brand-dark-text: #F1EEE8;
   --ds-brand-dark-text-muted: #ADA79D;
@@ -32,6 +33,7 @@
   --ds-brand-light-card-bg: #FFFFFF;
   --ds-brand-light-failure: #A1124B;
   --ds-brand-light-on-accent: #FFFFFF;
+  --ds-brand-light-stackledger-accent: #3B5BDB;
   --ds-brand-light-success: #2B7A4B;
   --ds-brand-light-text: #121212;
   --ds-brand-light-text-muted: #5C5852;
@@ -176,10 +178,10 @@
   --ds-site-light-text: #121212;
   --ds-site-light-text-dark: #121212;
   --ds-site-light-text-light: #5C5852;
-  --ds-surface-dark-backdrop-credit: #9AA6D6;
-  --ds-surface-dark-backdrop-park: #183F52;
-  --ds-surface-dark-backdrop-water: #1E3175;
-  --ds-surface-dark-backdrop-water-edge: #2A3F8A;
+  --ds-surface-dark-backdrop-credit: #ADA79D;
+  --ds-surface-dark-backdrop-park: #1A241D;
+  --ds-surface-dark-backdrop-water: #1C2733;
+  --ds-surface-dark-backdrop-water-edge: #2A3846;
   --ds-surface-dark-background: #121110;
   --ds-surface-dark-grid: #3B3834;
   --ds-surface-dark-muted: #ADA79D;
@@ -189,10 +191,10 @@
   --ds-surface-dark-shadow: #121110;
   --ds-surface-dark-text: #F1EEE8;
   --ds-surface-dark-zone-opacity: 0.22;
-  --ds-surface-light-backdrop-credit: #5A6385;
-  --ds-surface-light-backdrop-park: #D4F2DF;
-  --ds-surface-light-backdrop-water: #C9D8FF;
-  --ds-surface-light-backdrop-water-edge: #B5C7F5;
+  --ds-surface-light-backdrop-credit: #5C5852;
+  --ds-surface-light-backdrop-park: #D6E4CF;
+  --ds-surface-light-backdrop-water: #C7DAEA;
+  --ds-surface-light-backdrop-water-edge: #A9C4DA;
   --ds-surface-light-background: #F6F3EC;
   --ds-surface-light-grid: #EDE8DE;
   --ds-surface-light-muted: #5C5852;

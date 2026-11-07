@@ -118,6 +118,8 @@ const invalidSources: Record<string, Source | string> = {
   "Surface entry without its shadow": sourceWith(remove("surface.dark.shadow")),
   "Surface entry without its zone opacity": sourceWith(remove("surface.light.zoneOpacity")),
   "Surface entry without its backdrop water": sourceWith(remove("surface.dark.backdropWater")),
+  // Change stackledger-product-layer, task 1.1: "Product accent with the wrong type".
+  "Product accent with the wrong type": sourceWith(set("brand.light.stackledgerAccent", token(4, "dimension"))),
   "Extra surface": sourceWith(
     set("surface.sepia", {
       ...Object.fromEntries(["background", "text", "muted", "grid", "panel", "shadow", "rim", "backdropWater", "backdropWaterEdge", "backdropPark", "backdropCredit"].map((key) => [key, token("#FFFFFF", "color")])),

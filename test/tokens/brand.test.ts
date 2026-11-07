@@ -13,9 +13,9 @@ const problemsOf = (source: Source): string[] => {
   return result.ok ? [] : result.problems.map(formatProblem);
 };
 
-// A third brand theme with the sixteen tokens of a valid one.
+// A third brand theme with the seventeen tokens of a valid one.
 const SEPIA_BRAND: Source = Object.fromEntries(
-  ["bg", "cardBg", "text", "textMuted", "border", "borderStrong", "accent", "accentText", "onAccent", "success", "failure", "warning", "trackIntegration", "trackDelivery", "trackAi", "trackPersonal"].map((key) => [
+  ["bg", "cardBg", "text", "textMuted", "border", "borderStrong", "accent", "accentText", "onAccent", "success", "failure", "warning", "trackIntegration", "trackDelivery", "trackAi", "trackPersonal", "stackledgerAccent"].map((key) => [
     key,
     token("#FFFFFF", "color"),
   ]),
@@ -25,11 +25,17 @@ describe("Brand colour roles", () => {
   test("Missing brand role", () => {
     expect(problemsOf(sourceWith(remove("brand.light.accent")))).toEqual(["brand.light.accent: missing required token (type color)"]);
     expect(problemsOf(sourceWith(remove("brand.dark.trackPersonal")))).toEqual(["brand.dark.trackPersonal: missing required token (type color)"]);
+    expect(problemsOf(sourceWith(remove("brand.dark.stackledgerAccent")))).toEqual(["brand.dark.stackledgerAccent: missing required token (type color)"]);
+  });
+
+  // Change stackledger-product-layer, task 1.1; "writes no file" in files.test.ts.
+  test("Product accent with the wrong type", () => {
+    expect(problemsOf(sourceWith(set("brand.light.stackledgerAccent", token(4, "dimension"))))).toEqual(["brand.light.stackledgerAccent: expected type color, found dimension"]);
   });
 
   test("Extra brand theme", () => {
     const problems = problemsOf(sourceWith(set("brand.sepia", SEPIA_BRAND)));
-    expect(Object.keys(SEPIA_BRAND)).toHaveLength(16);
+    expect(Object.keys(SEPIA_BRAND)).toHaveLength(17);
     expect(problems).toEqual([expect.stringMatching(/^brand\.sepia: unexpected surface \(expected light and dark\)/)]);
   });
 
@@ -51,6 +57,7 @@ describe("Brand colour roles", () => {
       trackDelivery: "#B9DEC3",
       trackAi: "#C5CDF2",
       trackPersonal: "#F4DD8E",
+      stackledgerAccent: "#3B5BDB",
     });
   });
 
@@ -72,6 +79,7 @@ describe("Brand colour roles", () => {
       trackDelivery: "#18231D",
       trackAi: "#1B1F28",
       trackPersonal: "#29240F",
+      stackledgerAccent: "#7D8CFF",
     });
   });
 });
