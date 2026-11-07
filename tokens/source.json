@@ -444,22 +444,22 @@
         "$description": "Opacity of a map zone (stackledger 8db44fe themes.ts)."
       },
       "backdropWater": {
-        "$value": "#C9D8FF",
+        "$value": "#C7DAEA",
         "$type": "color",
         "$description": "Fill of rivers, docks and lakes behind a map (stackledger map-backgrounds, card 180)."
       },
       "backdropWaterEdge": {
-        "$value": "#B5C7F5",
+        "$value": "#A9C4DA",
         "$type": "color"
       },
       "backdropPark": {
-        "$value": "#D4F2DF",
+        "$value": "#D6E4CF",
         "$type": "color"
       },
       "backdropCredit": {
-        "$value": "#5A6385",
+        "$value": "#5C5852",
         "$type": "color",
-        "$description": "The OpenStreetMap credit over the backdrop."
+        "$description": "The OpenStreetMap credit over the backdrop: brand.light.textMuted, checked equal (v2 backdrop, card 303)."
       }
     },
     "dark": {
@@ -504,19 +504,19 @@
         "$type": "opacity"
       },
       "backdropWater": {
-        "$value": "#1E3175",
+        "$value": "#1C2733",
         "$type": "color"
       },
       "backdropWaterEdge": {
-        "$value": "#2A3F8A",
+        "$value": "#2A3846",
         "$type": "color"
       },
       "backdropPark": {
-        "$value": "#183F52",
+        "$value": "#1A241D",
         "$type": "color"
       },
       "backdropCredit": {
-        "$value": "#9AA6D6",
+        "$value": "#ADA79D",
         "$type": "color"
       }
     }
@@ -910,6 +910,11 @@
       "trackPersonal": {
         "$value": "#F4DD8E",
         "$type": "color"
+      },
+      "stackledgerAccent": {
+        "$value": "#3B5BDB",
+        "$type": "color",
+        "$description": "stackledger's product accent, drawn only where a spec names it; 4.5:1 or more on site.light.body and site.light.light (ADR 0006, amended for card 303)."
       }
     },
     "dark": {
@@ -975,6 +980,10 @@
       },
       "trackPersonal": {
         "$value": "#29240F",
+        "$type": "color"
+      },
+      "stackledgerAccent": {
+        "$value": "#7D8CFF",
         "$type": "color"
       }
     }

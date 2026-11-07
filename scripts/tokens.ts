@@ -198,6 +198,7 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "brand.light.trackDelivery": "color",
   "brand.light.trackAi": "color",
   "brand.light.trackPersonal": "color",
+  "brand.light.stackledgerAccent": "color",
   "brand.dark.bg": "color",
   "brand.dark.cardBg": "color",
   "brand.dark.text": "color",
@@ -214,6 +215,7 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   "brand.dark.trackDelivery": "color",
   "brand.dark.trackAi": "color",
   "brand.dark.trackPersonal": "color",
+  "brand.dark.stackledgerAccent": "color",
   // Diagram-state colours under their three-layer path (AB#268, ADR 0006): the
   // only path since 0.7.0, which removed the top-level duplicates.
   "color.state.healthy": "color",
