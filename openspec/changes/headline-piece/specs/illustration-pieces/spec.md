@@ -12,8 +12,8 @@
 - **THEN** the group has `font-size` 64, `letter-spacing` -0.64, `fill` `#F1EEE8` and `text-anchor` `middle`
 
 #### Scenario: Out-of-range parameters
-- **WHEN** `headline` gets `lines: []`, then five lines, then `size: 200`, then `size: 24.5`, then `anchor: "left"`, then `surface: "navy"`
-- **THEN** each call throws a `RangeError` naming `lines`, `lines`, `size`, `size`, `anchor` and `surface` in turn
+- **WHEN** `headline` gets `lines: []`, then five lines, then `lines: [""]`, then `size: 200`, then `size: 24.5`, then `anchor: "left"`, then `surface: "navy"`
+- **THEN** each call throws a `RangeError` naming `lines`, `lines`, `lines[0]`, `size`, `size`, `anchor` and `surface` in turn
 
 ## MODIFIED Requirements
 
