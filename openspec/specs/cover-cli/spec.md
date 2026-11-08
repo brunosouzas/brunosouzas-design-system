@@ -55,7 +55,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 62 piece names
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 63 piece names
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`
@@ -494,7 +494,7 @@ A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other 
 
 #### Scenario: Mascot refused
 - **WHEN** a cover spec has `{ "piece": "mascot", "who": "dev", "x": 0, "y": 0 }` and `{ "piece": "emote", "kind": "zzz", "x": 0, "y": 0 }`
-- **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 62 piece names) before `pieces[1].kind`, the command exits 1 and writes nothing
+- **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 63 piece names) before `pieces[1].kind`, the command exits 1 and writes nothing
 
 ### Requirement: Only track and neutral cover backgrounds
 `coverBackground` SHALL hold the track families of design-tokens "Measured cover backgrounds": the four defaults `trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal` (`fill` equal to `brand.light.track*`), their seven named tones and `neutral`, each usable as the `background` of a cover, banner, LinkedIn card or og spec. The 21 entries measured before 0.6.0 are removed: these twelve are the only backgrounds.
@@ -506,3 +506,22 @@ A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other 
 #### Scenario: Removed background refused
 - **WHEN** a cover spec has `background: "peach"`, or a banner spec `background: "navy"`
 - **THEN** the command prints `background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "peach"` (or `"navy"`), exits 1 and writes nothing
+
+### Requirement: Headline in a written image
+Every format that takes `pieces` but `icon` (cover, banner, linkedin-card, og, diagram) SHALL accept `headline` like any piece, checked against its parameters. Its group is written in the labels group, outside the outlined group, so its letters are never stroked, and the written SVG embeds the Source Serif 4 face its lines use ("Fonts embedded in every written image").
+
+#### Scenario: Title on the og image
+- **WHEN** an `og` spec with `background: "neutral"`, `signature: true` and one `headline` with `lines: ["Code that runs", "for the problem", "you have."]` and `size: 96` is built
+- **THEN** the written SVG is 1200×630, its `<style>` holds exactly one `@font-face`, `Source Serif 4` with `font-weight:100 900` and `font-style:normal`, and the `headline` group has no ancestor carrying a `stroke` attribute
+
+#### Scenario: Title on a diagram
+- **WHEN** a `diagram` spec holds one `headline` with `lines: ["States"]`
+- **THEN** the command writes the diagram, its `headline` group has no ancestor carrying a `stroke` attribute, and its `<style>` holds a `Source Serif 4` face at `100 900`
+
+#### Scenario: Headline from text tables
+- **WHEN** an `og` spec has `text` tables `en` and `pt`, each with `slogan` as an array of three lines, and one `headline` with `lines: "@slogan"`, built with `--lang pt`
+- **THEN** the `headline` group's three `text` nodes hold the `pt` lines in order, and the output's ids use `-pt`
+
+#### Scenario: Headline out of range in a spec
+- **WHEN** an `og` spec has a `headline` with `size: 200` and `lines: []`
+- **THEN** `pieces[0].lines` and `pieces[0].size` are reported, the command exits 1 and writes nothing
