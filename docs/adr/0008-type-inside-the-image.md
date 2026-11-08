@@ -3,6 +3,7 @@
 - Status: accepted
 - Date: 2026-11-06
 - Supersedes: ADR 0003's type line ("Type is Lato (bold and black weights)")
+- Amended: 2026-11-08, Source Serif 4 Bold for the headline piece (card 307; see the last section)
 
 ## Context
 
@@ -43,3 +44,7 @@ Option 2: every SVG the package writes (the cover command in every format, and `
 - The embedded output is for written files and `<img>`. An SVG inlined in an HTML page skips `embedFonts` and uses the page's fonts: its `<style>` would become document-wide, and its `@font-face` subsets would override the page's full Source faces.
 - `rsvg-convert` ignores embedded fonts: renders for review, and the kit's illustration check, use headless Chrome through `<img>`.
 - A future piece that draws serif or italic text adds its face file in its own change, with its hash pinned.
+
+## Amended, 2026-11-08: Source Serif 4 Bold for the headline piece (card 307)
+
+The first piece that draws serif text, `headline`, ships with its face, as the Consequences above foresaw: Adobe's Source Serif 4 4.005R Bold (`fonts/SourceSerif4-Bold.ttf`, unmodified, its SHA-256 pinned). Only Bold ships, the one weight the piece draws and the weight brunosouzas.com sets its titles in. Its `@font-face` declares `100 900`, so every weight a text names in that family takes it; italic still takes the upright face. Its first use is brunosouzas.com's default share image, the slogan in three serif lines on an `og` image, in English and Portuguese from one spec with text tables. A wordmark, a subtitle or an italic comes with the change that first draws it, each face then added with its hash.

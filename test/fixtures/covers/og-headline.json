@@ -1,0 +1,59 @@
+{
+  "id": "og-headline",
+  "title": "brunosouzas: Code that runs for the problem you have.",
+  "description": "The slogan \"Code that runs for the problem you have.\" in three serif lines on the cream page, the brunosouzas symbol on the right, the badges of the four categories under the slogan, and the signature in the bottom-right corner.",
+  "format": "og",
+  "background": "neutral",
+  "rings": {
+    "cx": 1010,
+    "cy": 150
+  },
+  "pieces": [
+    {
+      "piece": "symbol",
+      "x": 960,
+      "y": 120,
+      "scale": 2.6
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "integration",
+      "x": 140,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "delivery",
+      "x": 252,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "aiEngineering",
+      "x": 364,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "personalTools",
+      "x": 476,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "headline",
+      "x": 140,
+      "y": 190,
+      "size": 96,
+      "lines": [
+        "Code that runs",
+        "for the problem",
+        "you have."
+      ]
+    }
+  ],
+  "signature": true
+}

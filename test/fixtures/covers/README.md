@@ -25,3 +25,5 @@ Published sources of the `designer-formats` fixtures (brain vault commit `016a99
 | `circuit-breaker-states-pt.svg` | `50-writing/circuit-breaker-in-mulesoft/images/circuit-breaker-states-pt.svg` | `bb7f6efcd62878bbad1ae4e56fa9ac583441d8cda2d6c6c99cb46ff20d76a137` |
 | `circuit-breaker-states-en.svg` | `50-writing/circuit-breaker-in-mulesoft/images/circuit-breaker-states-en.svg` | `0d82f2a064f8b1b00241ee7d764ab6c7d407f662d0a687da9317bbd06e13b18e` |
 | `eip-splitter.svg` | `50-writing/integration-patterns-in-mulesoft/images/icons/eip-splitter.svg` | `678ef8f6fb1cbfaa88dabbf420cd5107b01a46fc2358dd5afe40ee4fd5f4301e` |
+
+`og-headline.json` (change `headline-piece`, AB#307) is brunosouzas.com's default share image in English, the concept the owner chose from renders: the slogan in three `headline` lines, the symbol, the four category badges and the signature, with golden `og-headline.svg`. Its words are the brand's published slogan (brand strategy E2, studio decision I13), approved by the owner for this image (AB#307 Q1), so it may be public (ADR 0004).
