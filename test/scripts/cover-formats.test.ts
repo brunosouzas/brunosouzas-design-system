@@ -466,7 +466,11 @@ describe("Headline in a written image", () => {
   });
 
   test("Title on a diagram", async () => {
-    const svg = await svgOf(diagram({ pieces: [{ piece: "headline", x: 40, y: 80, lines: ["States"] }] }));
+    const ws = workspace();
+    ws.write("spec.json", diagram({ pieces: [{ piece: "headline", x: 40, y: 80, lines: ["States"] }] }));
+    expect(await ws.run("spec.json", "--out", "d.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote d.svg"]);
+    const svg = readFileSync(join(ws.root, "d.svg"), "utf8");
     expect(headlineUnstroked(svg)).toBe(true);
     expect(faces(svg)).toContain("Source Serif 4 100 900 normal");
   });

@@ -32,13 +32,19 @@ describe("Headline", () => {
 
   test("Out-of-range parameters", () => {
     const base = { x: 0, y: 0, lines: ["a"] };
-    expect(() => headline({ ...base, lines: [] })).toThrow(/^headline: lines:/);
-    expect(() => headline({ ...base, lines: ["a", "b", "c", "d", "e"] })).toThrow(/^headline: lines:/);
-    expect(() => headline({ ...base, lines: [""] })).toThrow(/^headline: lines\[0\]:/);
-    expect(() => headline({ ...base, size: 200 })).toThrow(/^headline: size:/);
-    expect(() => headline({ ...base, size: 24.5 })).toThrow(/^headline: size:/);
-    expect(() => headline({ ...base, anchor: "left" as never })).toThrow(/^headline: anchor:/);
-    expect(() => headline({ ...base, surface: "navy" as never })).toThrow(/^headline: surface:/);
-    for (const bad of [{ ...base, lines: [] }, { ...base, size: 24.5 }]) expect(() => headline(bad)).toThrow(RangeError);
+    const cases: [Record<string, unknown>, RegExp][] = [
+      [{ lines: [] }, /^headline: lines:/],
+      [{ lines: ["a", "b", "c", "d", "e"] }, /^headline: lines:/],
+      [{ lines: [""] }, /^headline: lines\[0\]:/],
+      [{ size: 200 }, /^headline: size:/],
+      [{ size: 24.5 }, /^headline: size:/],
+      [{ anchor: "left" }, /^headline: anchor:/],
+      [{ surface: "navy" }, /^headline: surface:/],
+    ];
+    for (const [extra, message] of cases) {
+      const call = () => headline({ ...base, ...extra } as never);
+      expect(call, JSON.stringify(extra)).toThrow(RangeError);
+      expect(call, JSON.stringify(extra)).toThrow(message);
+    }
   });
 });

@@ -10,7 +10,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
 const ROOT = new URL("../..", import.meta.url).pathname;
 const FIXTURE = join(ROOT, "test/fixtures/covers/spec-driven-development.json");
-// The five Adobe files the pieces draw (spec illustration-pieces, "Fonts shipped with the package").
+// The six Adobe files the pieces draw (spec illustration-pieces, "Fonts shipped with the package").
 const FONT_FILES = ["SourceCodePro-Bold.ttf", "SourceCodePro-Regular.ttf", "SourceSans3-Black.ttf", "SourceSans3-Bold.ttf", "SourceSans3-Regular.ttf", "SourceSerif4-Bold.ttf"];
 let work = "";
 let files: string[] = [];

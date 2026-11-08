@@ -276,6 +276,10 @@ npx --yes --package @brunosouzas/design-system@<version> brunosouzas-cover desig
 - **Text tables.** `"text": { "pt": { "open": ["taxa de falha", "> limite"] }, "en": { ... } }` holds one table per language with the same keys; any string `"@open"` elsewhere in the spec (pieces, `title`, `description`, even `id`) is replaced by that key's value for the language passed with `--lang <code>`. Every language must define every key, and the ids in the output gain the language (`<id>-pt`). Without `text`, strings are drawn as written, so `"@home"` stays a label.
 - Like a cover, a diagram or icon is a standalone image: `uiIcon` `colour: "currentColor"` is refused in every format.
 
+### Titles
+
+`headline({ x, y, lines, size, anchor, surface })` writes a title of one to four `lines` in Source Serif 4 Bold (`font.serif`), the first baseline at (`x`, `y`), the next ones 1.1 × `size` lower; `size` is an integer from 24 to 160 (default 64), `anchor` is `start` (default), `middle` or `end`, and the colour is `brand.<surface>.text`. It draws only words (`text`), so a cover, banner, LinkedIn card, og or diagram spec writes it outside the outlined group, and the written image embeds the serif subset. With `text` tables, `"lines": "@slogan"` takes a line array per language. `test/fixtures/covers/og-headline.json` is brunosouzas.com's default share image.
+
 ### A new piece
 
 Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram piece) with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
@@ -285,7 +289,6 @@ Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram
 - `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`). `colour: "currentColor"` makes the icon follow its element's text colour (a button that inverts on hover, say); it only works when the SVG is inline in the page, since an `<img>` does not inherit the page's colour, and a cover spec refuses it.
 - `linkIcon({ icon, x, y, size, surface })` draws a link sticker in a 46-unit box, a white face with its outline and no frame (on dark the outline takes `surface.dark.muted`): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - `categoryIcon({ category, x, y, scale })` draws the site's category badge in a 42-unit box: a disc in the default tone of the category's track (`coverBackground.<track>.fill`, ringed in its `.ring`) with a glyph on it, the same on light and dark pages. `integration` (`trackIntegration`, the notation's `pointToPointChannel`), `delivery` (`trackDelivery`, `gateToProduction`), `aiEngineering` (`trackAi`, `contextWindow`), `personalTools` (`trackPersonal`, its own wrench and screwdriver); names in `CATEGORY_ICON_NAMES`. At `scale` 4 it is the 168-pixel badge the site shows.
-- `headline({ x, y, lines, size, anchor, surface })` writes a title of one to four `lines` in Source Serif 4 Bold (`font.serif`), the first baseline at (`x`, `y`), the next ones 1.1 × `size` lower; `size` is an integer from 24 to 160 (default 64), `anchor` is `start` (default), `middle` or `end`, and the colour is `brand.<surface>.text`. It draws only words (`text`), so a cover, banner, LinkedIn card, og or diagram spec writes it outside the outlined group, and the written image embeds the serif subset. With `text` tables, `"lines": "@slogan"` takes a line array per language. `test/fixtures/covers/og-headline.json` is brunosouzas.com's default share image.
 - None holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
 
 ```ts
@@ -303,7 +306,7 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 
 | Added | What |
 |---|---|
-| `headline` | a title in Source Serif 4 Bold, one to four lines (see UI and link icons, above); `PIECES` has 63 names, so a check of the exact list must add it |
+| `headline` | a title in Source Serif 4 Bold, one to four lines (see Titles, above); `PIECES` has 63 names, so a check of the exact list must add it |
 | `fonts/SourceSerif4-Bold.ttf` | Adobe's Source Serif 4 4.005R Bold, unmodified, its SHA-256 pinned; an image embeds only the glyphs it draws ([ADR 0008](docs/adr/0008-type-inside-the-image.md), amended) |
 
 ## Upgrading to 0.8.1
