@@ -439,3 +439,63 @@ describe("Code review round 2", () => {
     ]);
   });
 });
+
+// Change headline-piece (spec cover-cli, "Headline in a written image").
+describe("Headline in a written image", () => {
+  const HEADLINE = '<g data-piece="headline"';
+  /** True when no element enclosing the headline group carries a `stroke` attribute. */
+  const headlineUnstroked = (svg: string): boolean => {
+    const at = svg.indexOf(HEADLINE);
+    expect(at, "headline group").toBeGreaterThan(-1);
+    const open: string[] = [];
+    for (const m of svg.slice(0, at).matchAll(/<(\/?)([a-zA-Z]+)([^>]*?)(\/?)>/g)) {
+      if (m[1]) open.pop();
+      else if (!m[4]) open.push(m[3]);
+    }
+    return open.every((attrs) => !/\sstroke="/.test(attrs));
+  };
+  const faces = (svg: string) => [...svg.matchAll(/@font-face\{font-family:'([^']+)';font-weight:([\d ]+);font-style:(\w+)/g)].map((m) => `${m[1]} ${m[2]} ${m[3]}`);
+
+  test("Title on the og image", async () => {
+    const spec = JSON.parse(readFileSync(join(FIXTURES, "og-headline.json"), "utf8"));
+    const svg = await svgOf(spec);
+    expect(rootOf(svg)).toContain('width="1200" height="630" viewBox="0 0 1200 630"');
+    expect(faces(svg)).toEqual(["Source Serif 4 100 900 normal"]);
+    expect(headlineUnstroked(svg)).toBe(true);
+    expect(svg).toBe(readFileSync(join(FIXTURES, "og-headline.svg"), "utf8"));
+  });
+
+  test("Title on a diagram", async () => {
+    const ws = workspace();
+    ws.write("spec.json", diagram({ pieces: [{ piece: "headline", x: 40, y: 80, lines: ["States"] }] }));
+    expect(await ws.run("spec.json", "--out", "d.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote d.svg"]);
+    const svg = readFileSync(join(ws.root, "d.svg"), "utf8");
+    expect(headlineUnstroked(svg)).toBe(true);
+    expect(faces(svg)).toContain("Source Serif 4 100 900 normal");
+  });
+
+  test("Headline from text tables", async () => {
+    const spec = {
+      id: "og",
+      title: "Title",
+      description: "Description",
+      format: "og",
+      background: "neutral",
+      rings: { cx: 1010, cy: 150 },
+      text: tables({ slogan: ["Code that runs", "for the problem", "you have."] }, { slogan: ["Código que roda", "para o problema", "que você tem."] }),
+      pieces: [{ piece: "headline", x: 140, y: 190, size: 96, lines: "@slogan" }],
+    };
+    const svg = await svgOf(spec, "pt");
+    expect([...groupOf(svg, HEADLINE).matchAll(/<text [^>]*>([^<]*)<\/text>/g)].map((m) => m[1])).toEqual(["Código que roda", "para o problema", "que você tem."]);
+    expect(svg).toContain('id="og-pt-title"');
+  });
+
+  test("Headline out of range in a spec", async () => {
+    const ws = workspace();
+    ws.write("spec.json", { id: "og", title: "Title", description: "Description", format: "og", background: "neutral", rings: { cx: 600, cy: 315 }, pieces: [{ piece: "headline", x: 0, y: 0, size: 200, lines: [] }] });
+    expect(await ws.run("spec.json", "--out", "og.svg")).toBe(1);
+    expect(ws.err).toEqual(["pieces[0].lines: expected at least 1 item(s)", "pieces[0].size: expected a number at most 160, found 200", "cover: 2 problem(s) in spec.json; no file written"]);
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+});

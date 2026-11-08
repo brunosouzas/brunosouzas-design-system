@@ -10,8 +10,8 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
 const ROOT = new URL("../..", import.meta.url).pathname;
 const FIXTURE = join(ROOT, "test/fixtures/covers/spec-driven-development.json");
-// The five Adobe files the pieces draw (spec illustration-pieces, "Fonts shipped with the package").
-const FONT_FILES = ["SourceCodePro-Bold.ttf", "SourceCodePro-Regular.ttf", "SourceSans3-Black.ttf", "SourceSans3-Bold.ttf", "SourceSans3-Regular.ttf"];
+// The six Adobe files the pieces draw (spec illustration-pieces, "Fonts shipped with the package").
+const FONT_FILES = ["SourceCodePro-Bold.ttf", "SourceCodePro-Regular.ttf", "SourceSans3-Black.ttf", "SourceSans3-Bold.ttf", "SourceSans3-Regular.ttf", "SourceSerif4-Bold.ttf"];
 let work = "";
 let files: string[] = [];
 
@@ -94,7 +94,7 @@ describe("Installed package", () => {
     expect(result.svg).toMatch(/^<rect /);
     expect(result.ink).toBe("#121212");
     expect(result.same).toBe(true);
-    expect(result.pieces).toBe(62);
+    expect(result.pieces).toBe(63);
     expect(existsSync(join(consumer(), "node_modules/react"))).toBe(false);
   });
 

@@ -116,11 +116,11 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(62);
+    expect(P.PIECE_NAMES).toHaveLength(63);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
-      // edgeLabel without a backdrop draws words only (change body-diagram-pieces).
-      if (name === "edgeLabel") {
+      // edgeLabel without a backdrop (change body-diagram-pieces) and headline (change headline-piece) draw words only.
+      if (name === "edgeLabel" || name === "headline") {
         expect(drawn.body, name).toHaveLength(0);
         expect(drawn.text.length, name).toBeGreaterThan(0);
       } else expect(drawn.body.length, name).toBeGreaterThan(0);

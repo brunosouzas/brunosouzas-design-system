@@ -7,6 +7,8 @@ This package ships third-party font files, unmodified, in fonts/:
   SourceSans3-Black.ttf), from https://github.com/adobe-fonts/source-sans
 - Source Code Pro, release 2.042R (SourceCodePro-Regular.ttf,
   SourceCodePro-Bold.ttf), from https://github.com/adobe-fonts/source-code-pro
+- Source Serif 4, release 4.005R (SourceSerif4-Bold.ttf), from
+  https://github.com/adobe-fonts/source-serif
 
 Copyright Adobe, with Reserved Font Name 'Source'. Licensed under the SIL Open
 Font License, Version 1.1: fonts/OFL.txt. The cover command embeds a subset of

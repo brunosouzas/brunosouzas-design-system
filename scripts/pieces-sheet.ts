@@ -128,6 +128,7 @@ const samplesOf = (P: Library): Record<Library.PieceName, (x: number, y: number)
   symbol: (x, y) => merge(P.symbol({ x: x + 70, y: y + 60, scale: 2 }), P.symbol({ x: x + 170, y: y + 170, scale: 2, surface: "dark" })),
   brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as Library.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
   categoryIcon: (x, y) => P.categoryIcon({ category: "personalTools", x: x + 70, y: y + 70, scale: 2.4 }),
+  headline: (x, y) => P.headline({ x: x + 120, y: y + 130, lines: ["Title"], anchor: "middle" }),
 });
 
 /** The light sheet's samples. */

@@ -52,8 +52,10 @@ describe("Piece catalogue", () => {
     const svg = readFileSync(join(ws.root, "sheet.svg"), "utf8");
     const labels = [...svg.matchAll(/<text [^>]*font-family="([^"]*)" font-size="16"[^>]*>([a-zA-Z]+)<\/text>/g)];
     expect(labels.map((m) => m[2])).toEqual(PIECE_NAMES);
-    // Every cell draws its piece: its group holds more than the cell's own background.
-    for (const name of PIECE_NAMES) {
+    // Every cell draws its piece: its group holds more than the cell's own background. headline draws only
+    // words (change headline-piece), written with the other pieces' text, so its group is checked instead.
+    expect(svg.match(/<g data-piece="headline"[^>]*>\s*<text [^>]*>Title<\/text>/g)).toHaveLength(1);
+    for (const name of PIECE_NAMES.filter((piece) => piece !== "headline")) {
       const shapes = cellOf(svg, name).match(/<(rect|circle|path|polygon|polyline|line|ellipse)\b/g) ?? [];
       expect(shapes.length, name).toBeGreaterThan(1);
     }

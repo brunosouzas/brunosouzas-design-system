@@ -78,7 +78,7 @@ The package also installs the cover command as `brunosouzas-cover <spec.json> --
 
 ### Type in a written image
 
-An SVG shown through `<img>` cannot load web fonts, so a written image carries its own: `embedFonts(tree)` adds one `<style>` after the `<desc>` with a `@font-face` per Source face the tree's text uses, each a subset holding only the glyphs drawn ([ADR 0008](docs/adr/0008-type-inside-the-image.md)). The cover command and `npm run pieces:sheet` call it before they write; a tree without Source text is returned unchanged. It is async, reads only the faces it needs, and rejects naming the font file or `harfbuzzjs` when one fails to load. It lives in its own entry so the root entry stays importable in a browser. Its output is for written files and `<img>`: when you inline a piece's SVG in an HTML page, skip `embedFonts` and let the page's fonts apply, because an inline `<style>` with `@font-face` applies to the whole document and would replace the page's Source faces with a subset.
+An SVG shown through `<img>` cannot load web fonts, so a written image carries its own: `embedFonts(tree)` adds one `<style>` after the `<desc>` with a `@font-face` per Source face the tree's text uses (the package ships Source Sans 3 Regular, Bold and Black, Source Code Pro Regular and Bold, and, since 0.9.0, Source Serif 4 Bold for `headline`), each a subset holding only the glyphs drawn ([ADR 0008](docs/adr/0008-type-inside-the-image.md)). The cover command and `npm run pieces:sheet` call it before they write; a tree without Source text is returned unchanged. It is async, reads only the faces it needs, and rejects naming the font file or `harfbuzzjs` when one fails to load. It lives in its own entry so the root entry stays importable in a browser. Its output is for written files and `<img>`: when you inline a piece's SVG in an HTML page, skip `embedFonts` and let the page's fonts apply, because an inline `<style>` with `@font-face` applies to the whole document and would replace the page's Source faces with a subset.
 
 ```ts
 import { coverTree, toSvg } from "@brunosouzas/design-system";
@@ -144,7 +144,7 @@ The components take every colour and size from the tokens, and what is visible a
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
 - Every colour parameter is a token path (`"color.state.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 62 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
+- The 63 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`) and `headline` (below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
 
 ### Maps and diagrams
 
@@ -276,6 +276,10 @@ npx --yes --package @brunosouzas/design-system@<version> brunosouzas-cover desig
 - **Text tables.** `"text": { "pt": { "open": ["taxa de falha", "> limite"] }, "en": { ... } }` holds one table per language with the same keys; any string `"@open"` elsewhere in the spec (pieces, `title`, `description`, even `id`) is replaced by that key's value for the language passed with `--lang <code>`. Every language must define every key, and the ids in the output gain the language (`<id>-pt`). Without `text`, strings are drawn as written, so `"@home"` stays a label.
 - Like a cover, a diagram or icon is a standalone image: `uiIcon` `colour: "currentColor"` is refused in every format.
 
+### Titles
+
+`headline({ x, y, lines, size, anchor, surface })` writes a title of one to four `lines` in Source Serif 4 Bold (`font.serif`), the first baseline at (`x`, `y`), the next ones 1.1 × `size` lower; `size` is an integer from 24 to 160 (default 64), `anchor` is `start` (default), `middle` or `end`, and the colour is `brand.<surface>.text`. It draws only words (`text`), so a cover, banner, LinkedIn card, og or diagram spec writes it outside the outlined group, and the written image embeds the serif subset. With `text` tables, `"lines": "@slogan"` takes a line array per language. `test/fixtures/covers/og-headline.json` is brunosouzas.com's default share image.
+
 ### A new piece
 
 Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram piece) with `definePiece(name, schema, draw)`, take its colours and sizes from the tokens (a new colour goes to `tokens/source.json` first), register it in `PIECES`, and give it a sample in `scripts/pieces-sheet.ts`. The catalogue test then checks that it draws with only its required parameters and uses token colours only.
@@ -295,6 +299,15 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 ### EIP icons
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+
+## Upgrading to 0.9.0
+
+0.9.0 (card 307) adds a serif title. Nothing is removed or renamed, and every 0.8.1 spec builds byte-identical.
+
+| Added | What |
+|---|---|
+| `headline` | a title in Source Serif 4 Bold, one to four lines (see Titles, above); `PIECES` has 63 names, so a check of the exact list must add it |
+| `fonts/SourceSerif4-Bold.ttf` | Adobe's Source Serif 4 4.005R Bold, unmodified, its SHA-256 pinned; an image embeds only the glyphs it draws ([ADR 0008](docs/adr/0008-type-inside-the-image.md), amended) |
 
 ## Upgrading to 0.8.1
 

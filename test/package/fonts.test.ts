@@ -1,7 +1,8 @@
 // The shipped font files are Adobe's release files, unmodified (spec
 // illustration-pieces, "Fonts shipped with the package"; task 1.1 of
 // identity-v2-type-pieces-cleanup): every TTF in fonts/ hashes to its entry in
-// test/fixtures/fonts-sha256.json, and there are exactly five.
+// test/fixtures/fonts-sha256.json, and there are exactly six (Source Serif 4
+// Bold since 0.9.0, change headline-piece).
 import { createHash } from "node:crypto";
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -42,8 +43,9 @@ describe("Fonts shipped with the package", () => {
       "SourceSans3-Black.ttf",
       "SourceSans3-Bold.ttf",
       "SourceSans3-Regular.ttf",
+      "SourceSerif4-Bold.ttf",
     ]);
-    expect(Object.keys(pinned)).toHaveLength(5);
+    expect(Object.keys(pinned)).toHaveLength(6);
     expect(fontProblems(FONTS)).toEqual([]);
     expect(readFileSync(join(FONTS, "OFL.txt"), "utf8")).toContain("SIL Open Font License, Version 1.1");
   });

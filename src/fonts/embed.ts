@@ -27,7 +27,7 @@ import type { SvgNode } from "../pieces/node.ts";
 
 const PACKAGE_NAME = "@brunosouzas/design-system";
 
-// The shipped faces: the five unmodified Adobe files in fonts/. `upTo` is the
+// The shipped faces: the six unmodified Adobe files in fonts/. `upTo` is the
 // upper bound of the range its @font-face declares (`range`). A weight up to it
 // takes this face; a fraction between two ranges (549.5, 799.5) takes the next,
 // heavier face, which is what the browser's font matching picks for a weight
@@ -39,6 +39,8 @@ const FACES: readonly Face[] = [
   { family: "Source Sans 3", weight: 400, upTo: 549, range: "100 549", file: "SourceSans3-Regular.ttf" },
   { family: "Source Sans 3", weight: 700, upTo: 799, range: "550 799", file: "SourceSans3-Bold.ttf" },
   { family: "Source Sans 3", weight: 900, upTo: Infinity, range: "800 900", file: "SourceSans3-Black.ttf" },
+  // One serif face, the bold the `headline` piece draws (change headline-piece): every weight takes it.
+  { family: "Source Serif 4", weight: 700, upTo: Infinity, range: "100 900", file: "SourceSerif4-Bold.ttf" },
 ];
 // FACES is already in the order of the rules: family name by code point, then weight.
 
