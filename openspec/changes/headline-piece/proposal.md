@@ -13,9 +13,9 @@ The site's default share image (`og.image.png`) is still a pre-identity HTML scr
 
 ## Out of scope
 
-- A wordmark, a subtitle, italic, a serif Regular or Semibold, or a sans option in `headline`: concept C draws only the bold serif title. **Question for G1:** the owner's Q4 "ok" was to a generic piece for title, wordmark and subtitle with Serif Bold and Italic; this change proposes the title with Bold only and leaves the rest to the change that first needs it (the LinkedIn card), each face then added with its hash.
+- A wordmark, a subtitle, italic, a serif Regular or Semibold, or a sans option in `headline`: concept C draws only the bold serif title. **Owner, G1 Q7 ("ok"):** the owner's Q4 "ok" was to a generic piece for title, wordmark and subtitle with Serif Bold and Italic; the title with Bold only ships now; the rest comes with the change that first needs it (the LinkedIn card), each face then added with its hash.
 - A dark background for cover-frame formats, or a `surface` on the signature (owner chose cream, Q2).
-- Text tables for the og image: one English image for every page (owner, Q3).
+- Anything new for languages: the site builds its English and Portuguese og images from one spec with text tables, whose references already resolve to a `lines` array (cover-cli "Text references"); "Headline from text tables" proves it for this piece.
 - The site's change (spec, PNG, meta tags): its own change in `brunosouzas.com`, after this release.
 - Wrapping or measuring text: the spec author breaks the lines.
 

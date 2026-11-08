@@ -14,7 +14,7 @@
 ## 3. The command
 
 - [ ] 3.1 Fixture `test/fixtures/covers/og-headline.json`: concept C, i.e. the `background`, `rings`, `pieces` and `signature` of `approved/og-concept-c.art.json` plus the one `headline` of the scenario appended at (140, 190), with id `og-headline` and a real `title` and `description` (the same file the 4.2 render builds); its golden `og-headline.svg` written by the cover command once the owner has approved the renders (4.2); `test/fixtures/covers/README.md` gains an entry saying it is the site's default share image (strings approved by the owner, AB#307 Q1, ADR 0004). Test "Title on the og image" (integration, `test/scripts/cover-formats.test.ts`): size, exactly one `@font-face` `Source Serif 4` `100 900`, no stroked ancestor of the headline group, equal to the golden.
-- [ ] 3.2 Test "Title on a diagram" (integration, `test/scripts/cover-formats.test.ts`, an inline diagram spec). Test "Headline out of range in a spec" (integration, `test/scripts/cover-formats.test.ts`): both problems printed, exit 1, nothing written. "Goldens unchanged" and the frozen fixtures stay green: every existing golden is byte-identical.
+- [ ] 3.2 Tests "Title on a diagram" and "Headline from text tables" (integration, `test/scripts/cover-formats.test.ts`, inline specs). Test "Headline out of range in a spec" (integration, `test/scripts/cover-formats.test.ts`): both problems printed, exit 1, nothing written. "Goldens unchanged" and the frozen fixtures stay green: every existing golden is byte-identical.
 
 ## 4. Docs, version and evidence
 

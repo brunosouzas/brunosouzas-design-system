@@ -11,6 +11,10 @@ Every format that takes `pieces` but `icon` (cover, banner, linkedin-card, og, d
 - **WHEN** a `diagram` spec holds one `headline` with `lines: ["States"]`
 - **THEN** the command writes the diagram, its `headline` group has no ancestor carrying a `stroke` attribute, and its `<style>` holds a `Source Serif 4` face at `100 900`
 
+#### Scenario: Headline from text tables
+- **WHEN** an `og` spec has `text` tables `en` and `pt`, each with `slogan` as an array of three lines, and one `headline` with `lines: "@slogan"`, built with `--lang pt`
+- **THEN** the `headline` group's three `text` nodes hold the `pt` lines in order, and the output's ids use `-pt`
+
 #### Scenario: Headline out of range in a spec
 - **WHEN** an `og` spec has a `headline` with `size: 200` and `lines: []`
 - **THEN** `pieces[0].lines` and `pieces[0].size` are reported, the command exits 1 and writes nothing
