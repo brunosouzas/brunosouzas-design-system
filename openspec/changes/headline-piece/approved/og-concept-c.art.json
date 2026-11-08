@@ -1,0 +1,48 @@
+{
+  "id": "og-c-en",
+  "title": "Bruno Souza \u2014 Code that runs for the problem you have.",
+  "description": "PREVIEW for AB#307",
+  "format": "og",
+  "background": "neutral",
+  "rings": {
+    "cx": 1010,
+    "cy": 150
+  },
+  "pieces": [
+    {
+      "piece": "symbol",
+      "x": 960,
+      "y": 120,
+      "scale": 2.6
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "integration",
+      "x": 140,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "delivery",
+      "x": 252,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "aiEngineering",
+      "x": 364,
+      "y": 470,
+      "scale": 2
+    },
+    {
+      "piece": "categoryIcon",
+      "category": "personalTools",
+      "x": 476,
+      "y": 470,
+      "scale": 2
+    }
+  ],
+  "signature": true
+}
