@@ -1,11 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Headline in a written image
-A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept `headline` in `pieces` like any piece, checked against its parameters. Its group is written in the labels group, after the outlined group and outside it, so its letters are never stroked, and the written SVG embeds the Source Serif 4 face its lines use ("Fonts embedded in every written image").
+Every format that takes `pieces` but `icon` (cover, banner, linkedin-card, og, diagram) SHALL accept `headline` like any piece, checked against its parameters. Its group is written in the labels group, outside the outlined group, so its letters are never stroked, and the written SVG embeds the Source Serif 4 face its lines use ("Fonts embedded in every written image").
 
 #### Scenario: Title on the og image
 - **WHEN** an `og` spec with `background: "neutral"`, `signature: true` and one `headline` with `lines: ["Code that runs", "for the problem", "you have."]` and `size: 96` is built
 - **THEN** the written SVG is 1200×630, its `<style>` holds exactly one `@font-face`, `Source Serif 4` with `font-weight:100 900` and `font-style:normal`, and the `headline` group has no ancestor carrying a `stroke` attribute
+
+#### Scenario: Title on a diagram
+- **WHEN** a `diagram` spec holds one `headline` with `lines: ["States"]`
+- **THEN** the command writes the diagram, its `headline` group has no ancestor carrying a `stroke` attribute, and its `<style>` holds a `Source Serif 4` face at `100 900`
 
 #### Scenario: Headline out of range in a spec
 - **WHEN** an `og` spec has a `headline` with `size: 200` and `lines: []`

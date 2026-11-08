@@ -13,7 +13,7 @@ The site's default share image (`og.image.png`) is still a pre-identity HTML scr
 
 ## Out of scope
 
-- Italic, a serif Regular or Semibold, or a sans option in `headline`: concept C uses only the bold serif title (the owner's Q4 "ok" covered a generic piece; the chosen concept needs only this face, and ADR 0008 ships only faces a piece draws).
+- A wordmark, a subtitle, italic, a serif Regular or Semibold, or a sans option in `headline`: concept C draws only the bold serif title. **Question for G1:** the owner's Q4 "ok" was to a generic piece for title, wordmark and subtitle with Serif Bold and Italic; this change proposes the title with Bold only and leaves the rest to the change that first needs it (the LinkedIn card), each face then added with its hash.
 - A dark background for cover-frame formats, or a `surface` on the signature (owner chose cream, Q2).
 - Text tables for the og image: one English image for every page (owner, Q3).
 - The site's change (spec, PNG, meta tags): its own change in `brunosouzas.com`, after this release.

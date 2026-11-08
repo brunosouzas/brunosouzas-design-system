@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Headline
-`headline` SHALL draw its 1 to 4 `lines` (non-empty strings, drawn as written) in one `g` with `data-piece` `headline`, returned as its `text` with an empty `body`: `font.serif` at `font.weightBold`, `size` from 24 to 160 (default 64), `letter-spacing` −`size`/100, fill `brand.<surface>.text`, `text-anchor` from `anchor`. Line `i` (from 0) has its baseline at `y` + `i` × 1.1 × `size`, rounded to two decimals.
+`headline` SHALL draw its 1 to 4 `lines` (non-empty strings, drawn as written) in one `g` with `data-piece` `headline`, returned as its `text` with an empty `body`: `font.serif` at `font.weightBold`, integer `size` 24 to 160 (default 64), `letter-spacing` −`size`/100 in user units, fill `brand.<surface>.text` (`surface` default light), `text-anchor` = `anchor` (default start). Line `i` (from 0) sits at `x` as given and `y` + `i` × 1.1 × `size`, rounded to two decimals.
 
 #### Scenario: Three lines at 96
 - **WHEN** `headline({ x: 140, y: 190, lines: ["Code that runs", "for the problem", "you have."], size: 96 })` is called
@@ -12,8 +12,8 @@
 - **THEN** the group has `font-size` 64, `letter-spacing` -0.64, `fill` `#F1EEE8` and `text-anchor` `middle`
 
 #### Scenario: Out-of-range parameters
-- **WHEN** `headline` gets `lines: []`, then five lines, then `size: 200`, then `anchor: "left"`, then `surface: "navy"`
-- **THEN** each call throws a `RangeError` naming `lines`, `lines`, `size`, `anchor` and `surface` in turn
+- **WHEN** `headline` gets `lines: []`, then five lines, then `size: 200`, then `size: 24.5`, then `anchor: "left"`, then `surface: "navy"`
+- **THEN** each call throws a `RangeError` naming `lines`, `lines`, `size`, `size`, `anchor` and `surface` in turn
 
 ## MODIFIED Requirements
 
