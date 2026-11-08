@@ -179,8 +179,8 @@ describe("Face of a text", () => {
         text("d", { "font-family": "'Source Serif 4', serif", "font-weight": 400 }),
       ),
     );
-    expect(faces(result)).toEqual(["Source Code Pro 100 549", "Source Sans 3 100 549"]);
-    expect(rulesOf(result).map((rule) => rule.characters)).toEqual(["b", "a"]);
+    expect(faces(result)).toEqual(["Source Code Pro 100 549", "Source Sans 3 100 549", "Source Serif 4 100 900"]);
+    expect(rulesOf(result).map((rule) => rule.characters)).toEqual(["b", "a", "d"]);
   });
 
   test("First family outside Source", async () => {
@@ -248,6 +248,15 @@ describe("Face weights", () => {
     );
     expect(rulesOf(result).map((rule) => `${rule.family} ${rule.weight} ${sorted(rule.characters)}`)).toEqual(["Source Sans 3 100 549 abdef", "Source Sans 3 550 799 c"]);
   });
+
+  test("One serif face for every weight", async () => {
+    const embedFonts = await fresh();
+    const SERIF = tokens.font.serif;
+    const result = await embedFonts(
+      svg(text("a", { "font-family": SERIF, "font-weight": 400 }), text("b", { "font-family": SERIF, "font-weight": 700 }), text("c", { "font-family": SERIF, "font-weight": 900 })),
+    );
+    expect(rulesOf(result).map((rule) => `${rule.family} ${rule.weight} ${sorted(rule.characters)}`)).toEqual(["Source Serif 4 100 900 abc"]);
+  });
 });
 
 describe("Order of the faces", () => {
@@ -255,6 +264,7 @@ describe("Order of the faces", () => {
     const embedFonts = await fresh();
     const result = await embedFonts(
       svg(
+        text("e", { "font-family": tokens.font.serif, "font-weight": 700 }),
         text("a", { "font-weight": 900 }),
         text("b", { "font-family": MONO, "font-weight": 700 }),
         text("c", { "font-style": "italic", "font-weight": 400 }),
@@ -266,6 +276,7 @@ describe("Order of the faces", () => {
       "Source Code Pro 550 900 normal",
       "Source Sans 3 100 549 normal",
       "Source Sans 3 800 900 normal",
+      "Source Serif 4 100 900 normal",
     ]);
   });
 });
@@ -285,9 +296,9 @@ describe("Fonts loaded on first need", () => {
     const instantiate = vi.spyOn(WebAssembly, "instantiate").mockRejectedValue(new Error("no wasm (test)"));
     const embedFonts = await fresh();
     const textFree = el("svg", {}, el("rect", { width: 10, height: 10 }));
-    const serif = el("svg", {}, text("Title", { "font-family": tokens.font.serif }));
+    const georgia = el("svg", {}, text("Title", { "font-family": "Georgia, serif" }));
     expect(await embedFonts(textFree)).toEqual(textFree);
-    expect(await embedFonts(serif)).toEqual(serif);
+    expect(await embedFonts(georgia)).toEqual(georgia);
     expect(fontReads()).toEqual([]);
     expect(instantiate).not.toHaveBeenCalled();
   });
