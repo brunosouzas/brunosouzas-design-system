@@ -4,7 +4,7 @@ name: Release
 # release and its tag. How to release, the first-version bootstrap and the checks: docs/release.md.
 #
 # Two ways in (card 171):
-# - a push to main that changes the version in package.json (the version pull request was merged)
+# - a push to main that changes the version in package.json (the release pull request was merged)
 #   while the tag v<version> does not exist: the publish job reserves the tag on that commit, then publishes;
 # - a pushed tag v* (by hand, or to retry): as before. A tag pushed by the release app (its own tag,
 #   made by the publish job) stops in detect: the run that made it is already releasing.

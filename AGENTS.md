@@ -20,7 +20,7 @@ Layout: `tokens/source.json` (the only place token values are written) generates
 
 - Integration branch: `main`.
 - Releases to npm (`@brunosouzas/design-system`, org `brunosouzas`) only through `release.yml`: the merge of release-please's release pull request, which changes `version` in `package.json` (or a version tag pushed by the owner), then the owner-approved environment `npm`; see `docs/release.md`. Never set the version by hand in a change, and never publish from a local agent session.
-- Pull request titles are Conventional Commits (`feat:`, `fix:`, `feat!:` …; the `Title` check): the squash merge makes the title the commit release-please reads. `feat` and `fix` release; `docs`, `ci`, `chore`, `test`, `refactor` do not.
+- Pull request titles are Conventional Commits (`feat:`, `fix:`, `feat!:` …; the `Title` check): the squash merge makes the title the commit release-please reads. `feat`, `fix`, `perf` and `revert` release (or a `Release-As:` footer); `docs`, `ci`, `chore`, `test`, `refactor`, `build`, `style` do not.
 - The package ships `dist/`, `tokens/generated/` and `fonts/` (with `OFL.txt`).
 - The package's one runtime dependency is `harfbuzzjs`, pinned exactly: it subsets the `fonts/` faces embedded in every written SVG (ADR 0008). Another runtime dependency needs an ADR.
 - Board area: `site` (Azure Boards, project `brunosouzas`).

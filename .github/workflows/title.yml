@@ -1,7 +1,8 @@
 name: Title
 
 # The pull request title is a Conventional Commit: the squash merge makes it the commit release-please
-# reads (card 243). Required check: "pr-title / conventional-commit".
+# reads (card 243). The model ruleset on main requires the check
+# "pr-title / conventional-commit" and allows squash merges only.
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
