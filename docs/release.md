@@ -24,8 +24,10 @@ If a run fails part way (npm down after the tag was reserved, or the GitHub rele
 
 ## Releasing a version
 
-1. In a pull request, set the new version: `npm version 0.2.0 --no-git-tag-version` (it updates `package.json` and `package-lock.json`). The version may travel with the change it releases or in a pull request of its own; the diff shows the line `"version": "0.2.0"`, and that line is what releases.
-2. Merge it. The run of that merge in the Actions tab goes through `detect` and `check`, then the `publish` job waits for you: review it and approve. To not release it, reject the run; nothing is published and no tag is created.
+Since card 243 the version is never set by hand. Every pull request title is a [Conventional Commit](https://www.conventionalcommits.org/) (the `Title` check), and the squash merge makes it the commit on `main`. On every push to `main`, the `Release PR` workflow ([`.github/workflows/release-please.yml`](../.github/workflows/release-please.yml), the reusable release-please workflow of `brunosouzas/github-reusable-workflows`, run as the release app in the environment `release-please`) keeps one release pull request open, `chore(main): release <version>`: it bumps `version` in `package.json` and `package-lock.json` and adds the section of `CHANGELOG.md`. `feat` raises the minor version, `fix` and `perf` the patch; a breaking change (`feat!:`, or `BREAKING CHANGE:` in the body) raises the minor version while the package is below 1.0.0. `docs`, `ci`, `chore`, `test` and `refactor` release nothing. A line `Release-As: x.y.z` in a pull request's description (the squash merge's body) forces that version.
+
+1. When the release pull request holds what you want to release, merge it. Nobody edits it by hand: release-please rewrites it on every push.
+2. The run of that merge in the Actions tab of `Release` goes through `detect` and `check`, then the `publish` job waits for you: review it and approve. To not release it, reject the run; nothing is published and no tag is created (then push the tag by hand later to release that version: release-please opens no new release pull request until the tag exists).
 3. Check the result (see [Checking a release](#checking-a-release)): the version on npm with provenance, and the tag and GitHub release `v0.2.0`.
 
 **By hand, or to retry.** Tag the commit on `main` and push the tag:

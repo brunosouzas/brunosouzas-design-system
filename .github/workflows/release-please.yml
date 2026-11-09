@@ -1,0 +1,21 @@
+name: Release PR
+
+# Delivery model 2 (card 243): release-please keeps the release pull request (version in package.json
+# and package-lock.json, CHANGELOG.md) from the Conventional Commit titles that reach main. Merging it
+# changes the version, so release.yml publishes it after the owner's approval and makes the tag; that is
+# why release-please here never creates the tag (skip-github-release, and release-detect skips the
+# release app's own tag push, card 251). Runs as the release app brunosouzas-design-system-release in the
+# environment release-please (main only): RELEASE_APP_CLIENT_ID and RELEASE_APP_PRIVATE_KEY.
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  release-please:
+    uses: brunosouzas/github-reusable-workflows/.github/workflows/release-please.yml@v0.1.0
+    with:
+      skip-github-release: true
+    secrets:
+      RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}

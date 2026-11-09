@@ -1,0 +1,13 @@
+name: Title
+
+# The pull request title is a Conventional Commit: the squash merge makes it the commit release-please
+# reads (card 243). Required check: "pr-title / conventional-commit".
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions: {}
+
+jobs:
+  pr-title:
+    uses: brunosouzas/github-reusable-workflows/.github/workflows/pr-title.yml@v0.1.0
