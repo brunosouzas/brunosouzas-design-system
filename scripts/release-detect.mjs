@@ -5,13 +5,18 @@
  * to main release nothing. A push to main releases only when it changes the `version` in package.json
  * (the version pull request was merged) and the tag v<version> does not exist yet. So a later merge
  * (a README fix) never releases again, even while the version still waits for the owner's approval.
- * A pushed tag v* always goes on to the tag check, as before: that is how the owner releases by hand
- * or retries.
+ * A pushed tag v* goes on to the tag check, as before: that is how the owner releases by hand or
+ * retries. Except a tag pushed by the release app itself (the actor named by the environment variable
+ * RELEASE_APP_BOT, `<app slug>[bot]`): since card 251 the publish job creates the tag as that app, and a
+ * tag made with an app's token, unlike one made with GITHUB_TOKEN, starts the workflow again; that run
+ * would only ask the owner to approve a release the run that made the tag is already doing. So
+ * release-please (card 243) must not create the v* tag with this app (skip-github-release): its tag run
+ * would be skipped here and the merge run would find the tag and release nothing.
  *
  * Run from the repository root, after a checkout with the full history and the tags (fetch-depth: 0):
- *   node scripts/release-detect.mjs <ref-type> <ref-name> <before-sha> <after-sha> [<forced>]
+ *   node scripts/release-detect.mjs <ref-type> <ref-name> <before-sha> <after-sha> [<forced>] [<actor>]
  * (in the workflow: github.ref_type, github.ref_name, github.event.before, github.sha,
- * github.event.forced). A forced push to main never releases: only a merge, which moves main forward,
+ * github.event.forced, github.actor). A forced push to main never releases: only a merge, which moves main forward,
  * does; the owner can still push the tag by hand.
  * Prints `release=<true|false>` and `tag=<tag>` on stdout, one per line, for $GITHUB_OUTPUT, and one
  * line on stderr that says why. Exit 0 in both cases; exit 1 only when it cannot tell (an unreadable
@@ -46,11 +51,15 @@ function answer(release, tag, why) {
   process.exit(0);
 }
 
-const [refType, refName, before, after, forced] = process.argv.slice(2);
+const [refType, refName, before, after, forced, actor = ''] = process.argv.slice(2);
 if (!refType || !refName || before === undefined || !after) {
   fail('usage: release-detect.mjs <ref-type> <ref-name> <before-sha> <after-sha>');
 }
 
+const appBot = process.env.RELEASE_APP_BOT ?? '';
+if (refType === 'tag' && appBot !== '' && actor === appBot) {
+  answer(false, refName, `tag ${refName} pushed by ${actor}: the run that created it releases it`);
+}
 if (refType === 'tag') answer(true, refName, `tag ${refName} pushed: the tag check decides`);
 if (refType !== 'branch' || refName !== 'main') answer(false, '', `push to ${refType} ${refName}: nothing to release`);
 
