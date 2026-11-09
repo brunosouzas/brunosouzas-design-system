@@ -6,9 +6,9 @@ The public visual identity of the blog brunosouzas.com: one source of design tok
 
 Stack: TypeScript, Node.js, React, Remotion, vitest, GitHub Actions, OpenSpec, npm package
 Delivery: B package (npm `@brunosouzas/design-system`)
+Model: 2 release PR
 Integration branch: `main`
-Trivial: none
-Deliver and verify: a release pull request that bumps `version` in `package.json`; `release.yml` publishes after Bruno approves the `npm` environment (`docs/release.md`); verify with `npm view @brunosouzas/design-system version`
+Deliver and verify: a merge into `main` publishes nothing; release-please keeps the release pull request, Bruno merges it, and `release.yml` publishes after he approves the `npm` environment (`docs/release.md`); verify with `npm view @brunosouzas/design-system version`
 
 Layout: `tokens/source.json` (the only place token values are written) generates `tokens/generated/` (committed; never edit by hand); `src/brand/` holds the motion components and their frame logic (`motion.ts`); `src/scenes/<scene>/` holds each scene (`scene.ts` data without React, `layout.ts`, `Scene.tsx`); `scripts/` holds the token build and the stills and render commands; `test/` the vitest suites. Node.js 22.12 or later.
 
@@ -19,7 +19,8 @@ Layout: `tokens/source.json` (the only place token values are written) generates
 ## Rules for this repository
 
 - Integration branch: `main`.
-- Releases to npm (`@brunosouzas/design-system`, org `brunosouzas`) only through `release.yml`: the merge of a pull request that changes `version` in `package.json` (or a version tag pushed by the owner), then the owner-approved environment `npm`; see `docs/release.md`. Never publish from a local agent session.
+- Releases to npm (`@brunosouzas/design-system`, org `brunosouzas`) only through `release.yml`: the merge of release-please's release pull request, which changes `version` in `package.json` (or a version tag pushed by the owner), then the owner-approved environment `npm`; see `docs/release.md`. Never set the version by hand in a change, and never publish from a local agent session.
+- Pull request titles are Conventional Commits (`feat:`, `fix:`, `feat!:` …; the `Title` check): the squash merge makes the title the commit release-please reads. `feat`, `fix`, `perf` and `revert` release (or a `Release-As:` footer); `docs`, `ci`, `chore`, `test`, `refactor`, `build`, `style` do not.
 - The package ships `dist/`, `tokens/generated/` and `fonts/` (with `OFL.txt`).
 - The package's one runtime dependency is `harfbuzzjs`, pinned exactly: it subsets the `fonts/` faces embedded in every written SVG (ADR 0008). Another runtime dependency needs an ADR.
 - Board area: `site` (Azure Boards, project `brunosouzas`).
