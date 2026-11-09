@@ -16,7 +16,7 @@ The workflow runs on every push to `main` and on every pushed tag `v*`, in three
    - present with the same integrity and a provenance attestation: it skips publishing;
    - present with other bytes, or without provenance, or npm cannot answer: it stops with exit 1 and changes nothing.
 
-   From `main`, before asking npm, the script reserves the tag: it creates `v<version>` on the released commit through the GitHub API, which either creates it or answers that it exists. The owner may push the same tag by hand meanwhile; an existing tag must name the released commit, or the script stops and nothing is published. Then it creates the GitHub release on that tag (`--verify-tag`), or leaves an existing one. A tag created by the workflow does not start the workflow again (GitHub does not run workflows for events of its own token).
+   From `main`, before asking npm, the script reserves the tag: it creates `v<version>` on the released commit through the GitHub API, which either creates it or answers that it exists. The owner may push the same tag by hand meanwhile; an existing tag must name the released commit, or the script stops and nothing is published. Then it creates the GitHub release on that tag (`--verify-tag`), or leaves an existing one. The script acts on GitHub as the release app `brunosouzas-design-system-release` (see [The release app](#the-release-app)). A tag the app creates starts the workflow again, as any tag pushed by an app does; `detect` stops that run at once, because the run that made the tag is already releasing it.
 
 There is no SBOM: nothing ships but this package's own files.
 
@@ -46,7 +46,17 @@ Three controls, so neither a merge nor a pushed tag alone publishes:
 - **The environment `npm`.** Its required reviewer is the owner, so every publishing run waits for his approval.
 - **The trusted publisher on npm** (after the first version). npm accepts a publication only from the workflow `release.yml` of `brunosouzas/brunosouzas-design-system`, running in the environment `npm`.
 
-The owner also adds a tag ruleset, so a `v*` tag cannot be moved or deleted except by him.
+A tag ruleset stops a `v*` tag from being created, moved or deleted by anyone but its two bypasses, the release app and the owner.
+
+## The release app
+
+Since card 251 the `publish` job writes to GitHub (the tag and the GitHub release) as its own GitHub App, `brunosouzas-design-system-release`, not with the workflow's token. The pattern is the one of `brunosouzas-release` (card 199): the app has only the permissions the release uses (Contents read and write; Pull requests and Issues read and write for release-please, card 243; Metadata read), no webhook, and is installed on this repository alone. The job makes a token that lasts one hour, for this repository only and for Contents only, right before the step that uses it.
+
+- The App ID and the private key are in 1Password, vault `Automation`, item `GitHub App - brunosouzas-design-system-release` (one item per credential, the key as an attachment).
+- The environment `npm` holds the variable `RELEASE_APP_CLIENT_ID` (the app's Client ID, not a secret) and the secret `RELEASE_APP_PRIVATE_KEY` (the PEM). Only the `publish` job, after the owner's approval, can read them.
+- The tag ruleset `release tags` restricts creations, updates and deletions of `v*`, with two bypasses: the app (it creates the tag) and the repository admin (the owner, to tag by hand or retry). A bypass skips every rule of the ruleset, so the app could also move a tag; its token exists only in the approved `publish` job.
+- Why an app: only an installed app can be named in a ruleset's bypass list, so only with one can "restrict creations" stay on and a stray `v*` tag be refused even when a second person can write here. The cost is a long-lived key in the environment `npm`; it reaches one repository and Contents only, and is rotated from the 1Password item (its `usado em` field says where it is pasted).
+- Rotate the key: generate a new one on the app's page, attach it to the 1Password item, set the secret again (`op read "op://automation/GitHub App - brunosouzas-design-system-release/privatekey" | gh secret set RELEASE_APP_PRIVATE_KEY -R brunosouzas/brunosouzas-design-system -e npm`), then delete the old key on the app's page.
 
 ## Setting up the first version
 
@@ -78,8 +88,8 @@ Settings → Rules → Rulesets → New ruleset → New tag ruleset ([GitHub doc
 
 - Name: `release tags`; enforcement: Active.
 - Target tags: include by pattern `v*`.
-- Rules: restrict updates, restrict deletions. Not "restrict creations": the `publish` job creates the tag with the workflow's own token, and the ruleset would refuse it. If the bypass list offers the GitHub Actions app, it may keep "restrict creations" with that app allowed instead.
-- Bypass list: Repository admin (the owner), always allowed.
+- Rules: restrict creations, restrict updates, restrict deletions.
+- Bypass list: the release app `brunosouzas-design-system-release` and Repository admin (the owner), always allowed. Without the app the release is published on npm but the tag and the GitHub release fail; "Re-run failed jobs" after the fix finishes them.
 
 ### 4. Release 0.1.0
 
@@ -130,8 +140,8 @@ npm audit signatures
 Before the first version that should release on merge (card 171), the owner changes two settings once:
 
 1. Settings → Environments → `npm` → Deployment branches and tags: add the branch rule `main` (keep `v*`). Without it the `publish` job of a push to `main` cannot enter the environment.
-2. Settings → Rules → Rulesets → `release tags`: untick "Restrict creations" (or add the GitHub Actions app to the bypass list, if it is offered). Without it the release is published on npm but the tag and the GitHub release fail; "Re-run failed jobs" after the fix finishes them.
+2. Settings → Rules → Rulesets → `release tags`: since card 251 the release app is in the bypass list and creations stay restricted (see [The release app](#the-release-app)).
 
 The trusted publisher on npm does not change: it names the workflow file `release.yml` and the environment `npm`, not the trigger.
 
-**Why not an app in the bypass list.** The workflow's own token is not an installed app, so the ruleset cannot list it. A GitHub App of the owner's (installed here, its token made in `publish` with `actions/create-github-app-token`) could be listed and keep "Restrict creations", but it adds a long-lived private key to the environment `npm` (today the release holds no secret at all), and a tag pushed with an app token starts the workflow again (a second run asking for approval). With the owner as the only person with write access, the tag check and the approval already stop a stray `v*` tag. Revisit this when the repository has other writers.
+Before card 251 the tag was made with the workflow's own token, which a ruleset cannot list, so creations were left unrestricted; [The release app](#the-release-app) replaced that.

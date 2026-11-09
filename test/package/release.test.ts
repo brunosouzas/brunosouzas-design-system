@@ -121,6 +121,16 @@ describe("Release detection", { timeout: 30_000 }, () => {
     expect(detect(repo, "branch", "main").status).toBe(1);
   });
 
+  test("A tag pushed by a GitHub App releases nothing; one pushed by a person goes to the tag check (AB#251)", () => {
+    const { repo, bump } = history();
+    const zero = "0000000000000000000000000000000000000000";
+    const byApp = detect(repo, "tag", "v0.2.0", zero, bump, "false", "brunosouzas-design-system-release[bot]");
+    expect(byApp).toMatchObject({ status: 0, out: "release=false\ntag=v0.2.0\n" });
+    expect(byApp.why).toMatch(/run that created it/);
+    expect(detect(repo, "tag", "v0.2.0", zero, bump, "false", "brunosouzas").out).toBe("release=true\ntag=v0.2.0\n");
+    expect(detect(repo, "tag", "v0.2.0", zero, bump, "false", "").out).toBe("release=true\ntag=v0.2.0\n");
+  });
+
   test("A push of several commits that includes the version change releases it", () => {
     const { repo, first, readme } = history();
     expect(detect(repo, "branch", "main", first, readme).out).toBe("release=true\ntag=v0.2.0\n");

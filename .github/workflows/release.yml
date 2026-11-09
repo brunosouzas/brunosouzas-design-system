@@ -6,7 +6,8 @@ name: Release
 # Two ways in (card 171):
 # - a push to main that changes the version in package.json (the version pull request was merged)
 #   while the tag v<version> does not exist: the publish job reserves the tag on that commit, then publishes;
-# - a pushed tag v* (by hand, or to retry): as before.
+# - a pushed tag v* (by hand, or to retry): as before. A tag pushed by a GitHub App (the release app's
+#   own tag, made by the publish job) stops in detect: the run that made it is already releasing.
 # Every other push to main stops in detect, in seconds.
 #
 # Three jobs, so the publishing identity never exists while dependencies install or their scripts run:
@@ -16,7 +17,9 @@ name: Release
 #   npm pack of the built files; hands the tarball and its integrity on as an artifact.
 # - publish: in the environment npm, which needs the owner's approval. It installs and builds
 #   nothing; it runs scripts/release-publish.sh from the tagged commit on the downloaded files.
-#   A re-run finishes a partial release without publishing twice.
+#   A re-run finishes a partial release without publishing twice. It acts on GitHub as the release
+#   app brunosouzas-design-system-release (card 251): a one-hour token for this repository only, so
+#   the v* tag ruleset can let only that app create a tag.
 #
 # Actions are pinned by commit SHA, with the tag in a comment. No npm cache anywhere.
 
@@ -48,7 +51,8 @@ jobs:
           REF_NAME: ${{ github.ref_name }}
           BEFORE: ${{ github.event.before }}
           FORCED: ${{ github.event.forced }}
-        run: node scripts/release-detect.mjs "$REF_TYPE" "$REF_NAME" "$BEFORE" "$GITHUB_SHA" "$FORCED" >> "$GITHUB_OUTPUT"
+          ACTOR: ${{ github.actor }}
+        run: node scripts/release-detect.mjs "$REF_TYPE" "$REF_NAME" "$BEFORE" "$GITHUB_SHA" "$FORCED" "$ACTOR" >> "$GITHUB_OUTPUT"
 
   check:
     needs: detect
@@ -112,7 +116,8 @@ jobs:
       group: release-${{ needs.detect.outputs.tag }}-publish
       cancel-in-progress: false
     permissions:
-      contents: write
+      # GitHub writes (the tag, the release) go through the release app's token, not this one.
+      contents: read
       id-token: write
     steps:
       # Only to run scripts/release-publish.sh from the reviewed commit (the tagged one, or this push).
@@ -129,11 +134,21 @@ jobs:
         with:
           name: release
           path: ${{ runner.temp }}/release
+      # The release app (card 251): a token for this repository only, with contents write and
+      # nothing else, made after the checkout and the download so it exists only for the next step.
+      - name: Release app token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
       - name: Publish and create the release
         env:
           # Empty after the first version: npm then publishes through OIDC (trusted publishing).
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app.outputs.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ needs.detect.outputs.tag }}
           # From main the script creates the tag on this commit before npm; a pushed tag already exists.
