@@ -6,10 +6,12 @@
  * (the version pull request was merged) and the tag v<version> does not exist yet. So a later merge
  * (a README fix) never releases again, even while the version still waits for the owner's approval.
  * A pushed tag v* goes on to the tag check, as before: that is how the owner releases by hand or
- * retries. Except a tag pushed by a GitHub App (an actor ending in `[bot]`): since card 251 the publish
- * job creates the tag as the release app, and a tag made with an app's token, unlike one made with
- * GITHUB_TOKEN, starts the workflow again; that run would only ask the owner to approve a release the
- * run that made the tag is already doing.
+ * retries. Except a tag pushed by the release app itself (the actor named by the environment variable
+ * RELEASE_APP_BOT, `<app slug>[bot]`): since card 251 the publish job creates the tag as that app, and a
+ * tag made with an app's token, unlike one made with GITHUB_TOKEN, starts the workflow again; that run
+ * would only ask the owner to approve a release the run that made the tag is already doing. So
+ * release-please (card 243) must not create the v* tag with this app (skip-github-release): its tag run
+ * would be skipped here and the merge run would find the tag and release nothing.
  *
  * Run from the repository root, after a checkout with the full history and the tags (fetch-depth: 0):
  *   node scripts/release-detect.mjs <ref-type> <ref-name> <before-sha> <after-sha> [<forced>] [<actor>]
@@ -54,7 +56,8 @@ if (!refType || !refName || before === undefined || !after) {
   fail('usage: release-detect.mjs <ref-type> <ref-name> <before-sha> <after-sha>');
 }
 
-if (refType === 'tag' && actor.endsWith('[bot]')) {
+const appBot = process.env.RELEASE_APP_BOT ?? '';
+if (refType === 'tag' && appBot !== '' && actor === appBot) {
   answer(false, refName, `tag ${refName} pushed by ${actor}: the run that created it releases it`);
 }
 if (refType === 'tag') answer(true, refName, `tag ${refName} pushed: the tag check decides`);

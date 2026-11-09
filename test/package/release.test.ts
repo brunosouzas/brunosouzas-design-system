@@ -91,7 +91,11 @@ describe("Release detection", { timeout: 30_000 }, () => {
     return { repo, git, first, bump, readme };
   };
   const detect = (repo: string, ...args: string[]) => {
-    const result = spawnSync("node", [join(ROOT, "scripts/release-detect.mjs"), ...args], { cwd: repo, encoding: "utf8" });
+    const result = spawnSync("node", [join(ROOT, "scripts/release-detect.mjs"), ...args], {
+      cwd: repo,
+      encoding: "utf8",
+      env: { ...process.env, RELEASE_APP_BOT: "brunosouzas-design-system-release[bot]" },
+    });
     return { status: result.status, out: result.stdout, why: result.stderr };
   };
 
@@ -121,7 +125,7 @@ describe("Release detection", { timeout: 30_000 }, () => {
     expect(detect(repo, "branch", "main").status).toBe(1);
   });
 
-  test("A tag pushed by a GitHub App releases nothing; one pushed by a person goes to the tag check (AB#251)", () => {
+  test("A tag pushed by the release app releases nothing; by a person or another app it goes to the tag check (AB#251)", () => {
     const { repo, bump } = history();
     const zero = "0000000000000000000000000000000000000000";
     const byApp = detect(repo, "tag", "v0.2.0", zero, bump, "false", "brunosouzas-design-system-release[bot]");
@@ -129,6 +133,14 @@ describe("Release detection", { timeout: 30_000 }, () => {
     expect(byApp.why).toMatch(/run that created it/);
     expect(detect(repo, "tag", "v0.2.0", zero, bump, "false", "brunosouzas").out).toBe("release=true\ntag=v0.2.0\n");
     expect(detect(repo, "tag", "v0.2.0", zero, bump, "false", "").out).toBe("release=true\ntag=v0.2.0\n");
+    expect(detect(repo, "tag", "v0.2.0", zero, bump, "false", "other-app[bot]").out).toBe("release=true\ntag=v0.2.0\n");
+  });
+
+  test("The workflow hands detect the actor and the release app's bot name (AB#251)", () => {
+    const workflow = readFileSync(join(ROOT, ".github/workflows/release.yml"), "utf8");
+    expect(workflow).toMatch(/ACTOR: \$\{\{ github\.actor \}\}/);
+    expect(workflow).toMatch(/RELEASE_APP_BOT: brunosouzas-design-system-release\[bot\]/);
+    expect(workflow).toMatch(/release-detect\.mjs "\$REF_TYPE" "\$REF_NAME" "\$BEFORE" "\$GITHUB_SHA" "\$FORCED" "\$ACTOR"/);
   });
 
   test("A push of several commits that includes the version change releases it", () => {

@@ -88,8 +88,8 @@ Settings → Rules → Rulesets → New ruleset → New tag ruleset ([GitHub doc
 
 - Name: `release tags`; enforcement: Active.
 - Target tags: include by pattern `v*`.
-- Rules: restrict creations, restrict updates, restrict deletions.
-- Bypass list: the release app `brunosouzas-design-system-release` and Repository admin (the owner), always allowed. Without the app the release is published on npm but the tag and the GitHub release fail; "Re-run failed jobs" after the fix finishes them.
+- Rules: restrict creations, restrict updates, restrict deletions, block force pushes.
+- Bypass list: the release app `brunosouzas-design-system-release` and Repository admin (the owner), always allowed. Without the app, a release from `main` stops at the tag reservation, before npm, and nothing is published; fix the bypass, then "Re-run failed jobs". A tag pushed by hand already exists, so it is not affected.
 
 ### 4. Release 0.1.0
 

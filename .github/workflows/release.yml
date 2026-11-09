@@ -6,8 +6,8 @@ name: Release
 # Two ways in (card 171):
 # - a push to main that changes the version in package.json (the version pull request was merged)
 #   while the tag v<version> does not exist: the publish job reserves the tag on that commit, then publishes;
-# - a pushed tag v* (by hand, or to retry): as before. A tag pushed by a GitHub App (the release app's
-#   own tag, made by the publish job) stops in detect: the run that made it is already releasing.
+# - a pushed tag v* (by hand, or to retry): as before. A tag pushed by the release app (its own tag,
+#   made by the publish job) stops in detect: the run that made it is already releasing.
 # Every other push to main stops in detect, in seconds.
 #
 # Three jobs, so the publishing identity never exists while dependencies install or their scripts run:
@@ -52,6 +52,8 @@ jobs:
           BEFORE: ${{ github.event.before }}
           FORCED: ${{ github.event.forced }}
           ACTOR: ${{ github.actor }}
+          # The release app's own tag push (card 251) stops here: its run is already releasing.
+          RELEASE_APP_BOT: brunosouzas-design-system-release[bot]
         run: node scripts/release-detect.mjs "$REF_TYPE" "$REF_NAME" "$BEFORE" "$GITHUB_SHA" "$FORCED" "$ACTOR" >> "$GITHUB_OUTPUT"
 
   check:
