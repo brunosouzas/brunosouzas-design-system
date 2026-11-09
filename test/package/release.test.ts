@@ -71,7 +71,7 @@ describe("Release tag check", { timeout: 30_000 }, () => {
 });
 
 describe("Release detection", { timeout: 30_000 }, () => {
-  /** main with three commits: version 0.1.0, then 0.2.0 (the version pull request), then a README fix. */
+  /** main with three commits: version 0.1.0, then 0.2.0 (the release pull request), then a README fix. */
   const history = () => {
     const repo = temp("detect-");
     const git = (...args: string[]) => execFileSync("git", args, { cwd: repo, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();

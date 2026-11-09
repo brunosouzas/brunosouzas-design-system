@@ -3,7 +3,7 @@
  *
  * Why: .github/workflows/release.yml runs on every push to main and on every pushed tag v*. Most pushes
  * to main release nothing. A push to main releases only when it changes the `version` in package.json
- * (the version pull request was merged) and the tag v<version> does not exist yet. So a later merge
+ * (the release pull request was merged) and the tag v<version> does not exist yet. So a later merge
  * (a README fix) never releases again, even while the version still waits for the owner's approval.
  * A pushed tag v* goes on to the tag check, as before: that is how the owner releases by hand or
  * retries. Except a tag pushed by the release app itself (the actor named by the environment variable
