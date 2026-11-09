@@ -3,6 +3,7 @@
 - Status: superseded by [ADR 0007](0007-mira-and-the-pillar-cast.md) (the cast only; every other rule here is unchanged)
 - Date: 2026-10-24
 - Amends: ADR 0003 (the caption default), ADR 0004 (claims made by actions)
+- Amended: 2026-11-09, words on screen are English (card 316; see the last section)
 
 ## Context
 
@@ -35,3 +36,9 @@ Option 2.
 ## Superseded, 2026-11-05 (AB#268)
 
 [ADR 0007](0007-mira-and-the-pillar-cast.md) replaces this ADR's cast (Dev, AI agent, Architect, DevOps, Data, Requester, Message) with Mira and four pillar characters (Visor, Drone, Kiu, Sinal), reusing only the roles whose story the new cast tells without ambiguity. Every other rule here (neutral by default, caption optional, actions are claims, one gesture vocabulary, 16:9 only, storyboard before the spec) is unchanged and still governs every scene.
+
+## Amended, 2026-11-09: words on screen are English (card 316)
+
+A scene still carries its message with motion and no words. When a word is truly needed on screen (a label, a state name, a caption), it is written in English, the language of the brand's channels, in the one video both the Portuguese and the English pages show. This replaces two rules above: on-screen text is no longer limited to text identical in both articles, and the localised pair (PT and EN text tables) is no longer an exception a new scene may take, because two videos per scene is the cost this ADR set out to remove. The scenes that already have localised versions (circuit breaker, publish-subscribe) keep them.
+
+It applies to video the owner's rule for every image (card 307, recorded in the illustration skill's STY-8): spot words are English in one file; a phrase or a sequence the reader follows, as in a body diagram or the share image's slogan, is written in each language. A video takes the first case: its words, if any, are few, and the article beside it carries the sentences in the page's language.
