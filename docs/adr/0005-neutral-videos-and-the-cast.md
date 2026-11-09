@@ -1,8 +1,9 @@
 # ADR 0005: Neutral videos, told by a fixed cast
 
-- Status: superseded by [ADR 0007](0007-mira-and-the-pillar-cast.md) (the cast only; every other rule here is unchanged)
+- Status: superseded by [ADR 0007](0007-mira-and-the-pillar-cast.md) (the cast only; every other rule here is unchanged except as amended on 2026-11-09)
 - Date: 2026-10-24
 - Amends: ADR 0003 (the caption default), ADR 0004 (claims made by actions)
+- Amended: 2026-11-09, words on screen are English (card 316; see the last section)
 
 ## Context
 
@@ -26,7 +27,7 @@ Option 2.
 
 ## Consequences
 
-- One render and one review per scene instead of one per language; the catalogue keeps supporting localised scenes for the exception.
+- One render and one review per scene instead of one per language; the catalogue keeps supporting localised scenes for the exception (amended 2026-11-09: only the two existing localised scenes).
 - The scene catalogue still registers one composition per language. The first neutral scene (AB#144) changes that rule in its own change; until then the cast is shown by a composition outside the catalogue, the approved motion test.
 - A silent scene can be misread. A blind reading (someone narrates the stills without the article) is a useful check to show the owner, as evidence, never as approval; it is not a required step.
 - Videos still do not replace the static diagrams: the diagram carries the detail and the alt text.
@@ -35,3 +36,9 @@ Option 2.
 ## Superseded, 2026-11-05 (AB#268)
 
 [ADR 0007](0007-mira-and-the-pillar-cast.md) replaces this ADR's cast (Dev, AI agent, Architect, DevOps, Data, Requester, Message) with Mira and four pillar characters (Visor, Drone, Kiu, Sinal), reusing only the roles whose story the new cast tells without ambiguity. Every other rule here (neutral by default, caption optional, actions are claims, one gesture vocabulary, 16:9 only, storyboard before the spec) is unchanged and still governs every scene.
+
+## Amended, 2026-11-09: words on screen are English (card 316)
+
+A scene still carries its message with motion and no words. When a word is truly needed on screen (a label, a state name, a caption), it is written in English, the language of the brand's channels, in the one video both the Portuguese and the English pages show. This replaces two rules above (both in the Decision; the second is repeated in the first Consequence): on-screen text is no longer limited to text identical in both articles, and the localised pair (PT and EN text tables) is no longer an exception a new scene may take, because two videos per scene is the cost this ADR set out to remove. The scenes that already have localised versions (circuit breaker, publish-subscribe) keep them.
+
+It applies to video the owner's rule for every image (2026-11-09, card 316, after card 307 made the share image one file per language; recorded in the illustration skill's STY-8): spot words are English in one file; a phrase or a sequence the reader follows, as in a body diagram or the share image's slogan, is written in each language. A video takes the first case: its words, if any, are few, and the article beside it carries the sentences in the page's language.

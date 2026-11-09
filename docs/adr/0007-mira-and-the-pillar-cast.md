@@ -1,6 +1,7 @@
 # ADR 0007: Mira and the pillar cast
 
 - Status: accepted
+- Amended by [ADR 0005's amendment of 2026-11-09](0005-neutral-videos-and-the-cast.md) (words on screen are English)
 - Amended by [ADR 0009](0009-one-piece-grammar.md) (bank objects and the robot show the idle eyes; the emotes are kept and restyled)
 - Date: 2026-11-05
 - Supersedes: ADR 0005 (the cast; its neutral-video and storyboard-gate rules are unchanged, only the characters themselves are replaced)
@@ -42,7 +43,7 @@ Option 3.
 
 **Skin and identity.** All five characters share one skin (body white, outline/visor/eyes per ADR 0006's `cast.*` table in both themes); a character's identity is its shape and its one signature part, never a different palette. The parent-brand hood tip marks every parent-brand character except Sinal (I4); the symbol ("b" with the moon accent, I5) and Mira together are the signature lockup used on every piece.
 
-**Unchanged from ADR 0005:** neutral by default (one video for both languages, no on-screen words except identical pattern/state names); caption only when the motion cannot explain itself; one cast and one gesture/emote vocabulary; 16:9 only, 4:5 on demand; storyboard gate before any spec; a character's colour is its identity and never changes with state.
+**Unchanged from ADR 0005:** neutral by default (one video for both languages; since ADR 0005's amendment of 2026-11-09, a word on screen, when one is needed, is English); caption only when the motion cannot explain itself; one cast and one gesture/emote vocabulary; 16:9 only, 4:5 on demand; storyboard gate before any spec; a character's colour is its identity and never changes with state.
 
 ## Consequences
 
