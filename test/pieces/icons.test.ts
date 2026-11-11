@@ -140,10 +140,11 @@ describe("Link icons as data", () => {
       ["linkedin", "LinkedIn", "color.state.caller"],
       ["email", "Email", "color.state.transitional"],
       ["website", "Website", "color.state.healthy"],
+      ["stackledger", "stackledger", "color.white"],
     ]);
     const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(1);
     const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[0]).attrs.fill;
-    expect(["github", "linkedin", "email", "website"].map(faceFill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
+    expect(["github", "linkedin", "email", "website", "stackledger"].map(faceFill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
     const ink = "#121212";
     expect(glyph("linkedin")).toEqual([
       { tag: "rect", attrs: { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: ink, stroke: "none" }, children: [] },
@@ -176,8 +177,64 @@ describe("Link icons as data", () => {
   });
 
   test("Unknown icon", () => {
-    expect(() => linkIcon({ icon: "x", x: 0, y: 0 })).toThrow(/^linkIcon: icon: expected one of github, linkedin, email, website/);
+    expect(() => linkIcon({ icon: "x", x: 0, y: 0 })).toThrow(/^linkIcon: icon: expected one of github, linkedin, email, website, stackledger/);
     expect(() => linkIcon({ x: 0, y: 0 } as never)).toThrow(/^linkIcon: icon: missing required parameter/);
+  });
+
+  // Change presence-formats (AB#325), task 2.1: illustration-pieces "The stackledger link icon", "Link icons as data".
+  const stackledger = (surface?: "light" | "dark") => linkIcon({ icon: "stackledger", x: 0, y: 0, ...(surface ? { surface } : {}) }).body[0];
+
+  test("stackledger on light", () => {
+    const group = stackledger();
+    expect(group.attrs).toEqual({ transform: "translate(0 0) scale(1)", stroke: "none" });
+    expect(group.children).toEqual([
+      { tag: "rect", attrs: { x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 2.5 }, children: [] },
+      { tag: "path", attrs: { d: "M10.3 29.3 L18.6 21 L31.7 21", fill: "none", stroke: "#E04E17", "stroke-width": 5.3, "stroke-linecap": "round", "stroke-linejoin": "round" }, children: [] },
+      { tag: "circle", attrs: { cx: 18.6, cy: 21, r: 4.75, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 2.5 }, children: [] },
+      { tag: "circle", attrs: { cx: 31.7, cy: 21, r: 3.1, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 2 }, children: [] },
+    ]);
+    const data = LINK_ICONS.find((icon) => icon.name === "stackledger")!;
+    expect([data.title, data.description, data.face]).toEqual(["stackledger", "stackledger icon: the product's mark, a bent line through two stations.", "color.white"]);
+  });
+
+  test("stackledger on dark", () => {
+    const light = stackledger().children as SvgNode[];
+    const dark = stackledger("dark").children as SvgNode[];
+    expect(dark[0].attrs).toEqual({ ...light[0].attrs, stroke: "#ADA79D" });
+    expect(dark.slice(1)).toEqual(light.slice(1));
+    expect(dark[1].attrs.stroke).toBe("#E04E17");
+    expect([dark[2].attrs.stroke, dark[3].attrs.stroke]).toEqual(["#121212", "#121212"]);
+  });
+
+  test("Glyph inside the face", () => {
+    const boxes = (stackledger().children as SvgNode[]).slice(1).map((node) => {
+      const half = Number(node.attrs["stroke-width"]) / 2;
+      if (node.tag === "circle") {
+        const [cx, cy, r] = [node.attrs.cx, node.attrs.cy, node.attrs.r].map(Number);
+        return [cx - r - half, cy - r - half, cx + r + half, cy + r + half];
+      }
+      const points = String(node.attrs.d).match(/-?[\d.]+/g)!.map(Number);
+      const xs = points.filter((_, i) => i % 2 === 0);
+      const ys = points.filter((_, i) => i % 2 === 1);
+      return [Math.min(...xs) - half, Math.min(...ys) - half, Math.max(...xs) + half, Math.max(...ys) + half];
+    });
+    for (const box of boxes) for (const edge of box) expect(edge >= 2 && edge <= 40).toBe(true);
+    const span = [Math.min(...boxes.map((b) => b[0])), Math.min(...boxes.map((b) => b[1])), Math.max(...boxes.map((b) => b[2])), Math.max(...boxes.map((b) => b[3]))];
+    expect(span.map((n) => Math.round(n * 100) / 100)).toEqual([7.65, 15, 35.8, 31.95]);
+  });
+
+  test("Same size as the other link icons", () => {
+    const transform = (icon: string) => linkIcon({ icon, x: 10, y: 20, size: 28 }).body[0].attrs.transform;
+    expect(transform("stackledger")).toBe(transform("github"));
+    expect(transform("stackledger")).toBe(`translate(10 20) scale(${28 / 46})`);
+  });
+
+  test("Link icon list", () => {
+    expect(LINK_ICON_NAMES).toEqual(["github", "linkedin", "email", "website", "stackledger"]);
+    for (const icon of LINK_ICONS) {
+      expect(icon.title.trim()).not.toBe("");
+      expect(icon.description.trim()).not.toBe("");
+    }
   });
 });
 
@@ -188,7 +245,7 @@ describe("Icons hold no link, style or script", () => {
       for (const name of UI_ICON_NAMES) trees.push(uiIcon({ name, x: 0, y: 0, colour: surface === "light" ? "color.ink" : "surface.dark.text" }));
       for (const icon of LINK_ICON_NAMES) trees.push(linkIcon({ icon, x: 0, y: 0, surface }));
     }
-    expect(trees).toHaveLength(22);
+    expect(trees).toHaveLength(24);
     for (const tree of trees) {
       walk([...tree.body, ...tree.text], (node) => {
         if (typeof node === "string") {

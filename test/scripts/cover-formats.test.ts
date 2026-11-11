@@ -8,6 +8,8 @@ import { afterEach, describe, expect, test } from "vitest";
 import { buildCover, COVER_USAGE, runCover } from "../../scripts/cover";
 import { coverTree, validateCoverSpec, type CoverSpec } from "../../src/pieces/cover";
 import { EIP_ICONS } from "../../src/pieces/eip-icons";
+import type { SvgNode } from "../../src/pieces/node";
+import { tokens } from "../../tokens/generated/tokens";
 
 const FIXTURES = new URL("../fixtures/covers/", import.meta.url).pathname;
 const STATES = join(FIXTURES, "circuit-breaker-states.json");
@@ -220,6 +222,31 @@ describe("Icon output", () => {
 
   test("Icon off the origin", async () => {
     expect(await problems(icon({ piece: "eipIcon", name: "splitter", x: 4 }))).toEqual(["pieces[0].x: an icon is drawn at 0, 0"]);
+  });
+
+  // Change presence-formats (AB#325), task 2.3: illustration-pieces "The stackledger link icon".
+  test("stackledger in an icon spec", async () => {
+    const text = { title: "stackledger", description: "stackledger icon: the product's mark, a bent line through two stations." };
+    const svg = await svgOf(icon({ piece: "linkIcon", icon: "stackledger" }, text));
+    expect(rootOf(svg)).toContain('width="46" height="46" viewBox="0 0 46 46"');
+    expect(svg).toContain('<path d="M10.3 29.3 L18.6 21 L31.7 21"');
+    // The palette check on the drawn tree, on both surfaces: the v2 palette (ADR 0009), no state colour.
+    const palette = new Set<string>([
+      ...Object.values(tokens.brand).flatMap((theme) => Object.entries(theme).flatMap(([role, value]) => (role === "stackledgerAccent" ? [] : [value]))),
+      ...Object.values(tokens.surface).flatMap((theme) => Object.values(theme).map(String)),
+      tokens.color.white, tokens.color.ink, tokens.color.ring, tokens.color.panel,
+      ...Object.values(tokens.illustration),
+      "none",
+    ]);
+    const paints = (node: SvgNode | string): string[] =>
+      typeof node === "string" ? [] : [...["fill", "stroke"].flatMap((attr) => (node.attrs[attr] === undefined ? [] : [String(node.attrs[attr])])), ...node.children.flatMap(paints)];
+    for (const surface of ["light", "dark"] as const) {
+      const spec = icon({ piece: "linkIcon", icon: "stackledger", surface }, text);
+      expect(validateCoverSpec(spec)).toEqual([]);
+      const found = paints(coverTree(spec as CoverSpec));
+      expect(found.filter((value) => !palette.has(value))).toEqual([]);
+      expect(found).toContain(tokens.illustration.accent);
+    }
   });
 });
 

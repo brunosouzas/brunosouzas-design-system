@@ -8,9 +8,9 @@ At gate 1 the owner chose the simple version (q36 A); implementation starts afte
 
 ## 2. The stackledger link icon (`illustration-pieces`)
 
-- [ ] 2.1 Add `stackledger` to `LINK_ICONS` in `src/pieces/link-icons.ts` (design §8: glyph, the stated stroke widths, `illustration.accent` line, title, description, `face: "color.white"`) and update the file's header comment. Unit tests in `test/pieces/icons.test.ts`: "stackledger on light", "stackledger on dark", "Glyph inside the face", "Same size as the other link icons", "Link icon list"; update "Unknown icon" (the message at line 179 lists five names) and the face list at line 146 (five faces). "GitHub on light" and "Dark frame" stay green unchanged. Check: `npm test -- test/pieces/icons.test.ts`.
-- [ ] 2.2 "Every icon as a standalone file": the walk in `test/pieces/icons.test.ts` covers 24 trees (unit). "Link icon on dark" and "Light surface unchanged" (`test/pieces/diagram.test.ts`) and "Every piece in the v2 palette" (`test/pieces/palette.test.ts`) stay green unchanged. Check: `npm test -- test/pieces`.
-- [ ] 2.3 "stackledger in an icon spec": an integration test in the "Icon output" block of `test/scripts/cover-formats.test.ts` builds the icon spec and checks the 46 x 46 root; the palette check is run on the drawn tree on both surfaces.
+- [x] 2.1 Add `stackledger` to `LINK_ICONS` in `src/pieces/link-icons.ts` (design §8: glyph, the stated stroke widths, `illustration.accent` line, title, description, `face: "color.white"`) and update the file's header comment. Unit tests in `test/pieces/icons.test.ts`: "stackledger on light", "stackledger on dark", "Glyph inside the face", "Same size as the other link icons", "Link icon list"; update "Unknown icon" (the message at line 179 lists five names) and the face list at line 146 (five faces). "GitHub on light" and "Dark frame" stay green unchanged. Check: `npm test -- test/pieces/icons.test.ts`.
+- [x] 2.2 "Every icon as a standalone file": the walk in `test/pieces/icons.test.ts` covers 24 trees (unit). "Link icon on dark" and "Light surface unchanged" (`test/pieces/diagram.test.ts`) and "Every piece in the v2 palette" (`test/pieces/palette.test.ts`) stay green unchanged. Check: `npm test -- test/pieces`.
+- [x] 2.3 "stackledger in an icon spec": an integration test in the "Icon output" block of `test/scripts/cover-formats.test.ts` builds the icon spec and checks the 46 x 46 root; the palette check is run on the drawn tree on both surfaces.
 
 ## 3. The cover command (`cover-cli`)
 
