@@ -249,6 +249,43 @@ describe("Icon output", () => {
       expect(found).toContain(tokens.illustration.accent);
     }
   });
+
+  // Change brand-link-icon (AB#326), task 1.5: illustration-pieces "Each link icon stands alone".
+  test("Two link icons in one icon spec", async () => {
+    const ws = workspace();
+    ws.write("spec.json", { id: "i", title: "T", description: "D", format: "icon", pieces: [{ piece: "linkIcon", icon: "brunosouzas" }, { piece: "linkIcon", icon: "website" }] });
+    expect(await ws.run("spec.json", "--out", "i.svg")).toBe(1);
+    expect(ws.err[0]).toBe("pieces: an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon");
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+
+  // Change brand-link-icon (AB#326), task 1.4: illustration-pieces "The brunosouzas link icon".
+  test("brunosouzas in an icon spec", async () => {
+    const text = { title: "brunosouzas.com", description: "brunosouzas.com icon: the brand symbol, a b with a moon." };
+    for (const surface of ["light", "dark"] as const) {
+      const svg = await svgOf(icon({ piece: "linkIcon", icon: "brunosouzas", surface }, text));
+      expect(rootOf(svg)).toContain('width="46" height="46" viewBox="0 0 46 46"');
+      expect(svg).toContain('<g transform="translate(5.56 6.52) scale(0.875)">');
+      expect(svg).toContain(surface === "dark" ? 'stroke="#ADA79D"' : 'stroke="#121212"');
+    }
+    // The palette check on the drawn tree, on both surfaces: the v2 palette (ADR 0009), no state colour.
+    const palette = new Set<string>([
+      ...Object.values(tokens.brand).flatMap((theme) => Object.entries(theme).flatMap(([role, value]) => (role === "stackledgerAccent" ? [] : [value]))),
+      ...Object.values(tokens.surface).flatMap((theme) => Object.values(theme).map(String)),
+      tokens.color.white, tokens.color.ink, tokens.color.ring, tokens.color.panel,
+      ...Object.values(tokens.illustration),
+      "none",
+    ]);
+    const paints = (node: SvgNode | string): string[] =>
+      typeof node === "string" ? [] : [...["fill", "stroke"].flatMap((attr) => (node.attrs[attr] === undefined ? [] : [String(node.attrs[attr])])), ...node.children.flatMap(paints)];
+    for (const surface of ["light", "dark"] as const) {
+      const spec = icon({ piece: "linkIcon", icon: "brunosouzas", surface }, text);
+      expect(validateCoverSpec(spec)).toEqual([]);
+      const found = paints(coverTree(spec as CoverSpec));
+      expect(found.filter((value) => !palette.has(value))).toEqual([]);
+      expect(found).toContain(tokens.brand.light.accent);
+    }
+  });
 });
 
 describe("Icon keys", () => {

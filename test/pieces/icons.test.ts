@@ -7,6 +7,9 @@ import { describe, expect, test } from "vitest";
 import { LINK_ICONS, LINK_ICON_NAMES, linkIcon } from "../../src/pieces/link-icons";
 import { DIAGRAM_PIECES, altFrame, edgeLabel, stateStart } from "../../src/pieces/diagram";
 import { ledgerMark, licenceMark, renewalRing, suggestedHalo, zone } from "../../src/pieces/metro";
+import { symbol } from "../../src/pieces/symbol";
+import * as ROOT from "../../src/pieces/index";
+import { PIECES } from "../../src/pieces/library";
 
 // Required parameters of the ten body diagram pieces (as catalogue.test.ts REQUIRED_ONLY).
 const BODY_DIAGRAM: Record<keyof typeof DIAGRAM_PIECES, object> = {
@@ -141,10 +144,11 @@ describe("Link icons as data", () => {
       ["email", "Email", "color.state.transitional"],
       ["website", "Website", "color.state.healthy"],
       ["stackledger", "stackledger", "color.white"],
+      ["brunosouzas", "brunosouzas.com", "color.white"],
     ]);
     const glyph = (icon: string) => (linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[]).slice(1);
     const faceFill = (icon: string) => ((linkIcon({ icon, x: 0, y: 0 }).body[0].children as SvgNode[])[0]).attrs.fill;
-    expect(["github", "linkedin", "email", "website", "stackledger"].map(faceFill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
+    expect(["github", "linkedin", "email", "website", "stackledger", "brunosouzas"].map(faceFill)).toEqual(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
     const ink = "#121212";
     expect(glyph("linkedin")).toEqual([
       { tag: "rect", attrs: { x: 12, y: 18.5, width: 4, height: 11.5, rx: 1, fill: ink, stroke: "none" }, children: [] },
@@ -177,7 +181,7 @@ describe("Link icons as data", () => {
   });
 
   test("Unknown icon", () => {
-    expect(() => linkIcon({ icon: "x", x: 0, y: 0 })).toThrow(/^linkIcon: icon: expected one of github, linkedin, email, website, stackledger/);
+    expect(() => linkIcon({ icon: "x", x: 0, y: 0 })).toThrow(/^linkIcon: icon: expected one of github, linkedin, email, website, stackledger, brunosouzas, found "x"$/);
     expect(() => linkIcon({ x: 0, y: 0 } as never)).toThrow(/^linkIcon: icon: missing required parameter/);
   });
 
@@ -230,11 +234,69 @@ describe("Link icons as data", () => {
   });
 
   test("Link icon list", () => {
-    expect(LINK_ICON_NAMES).toEqual(["github", "linkedin", "email", "website", "stackledger"]);
+    expect(LINK_ICON_NAMES).toEqual(["github", "linkedin", "email", "website", "stackledger", "brunosouzas"]);
     for (const icon of LINK_ICONS) {
       expect(icon.title.trim()).not.toBe("");
       expect(icon.description.trim()).not.toBe("");
     }
+  });
+
+  // Change brand-link-icon (AB#326), task 1.2: illustration-pieces "The brunosouzas link icon", "Link icons as data".
+  const brand = (surface?: "light" | "dark") => linkIcon({ icon: "brunosouzas", x: 0, y: 0, ...(surface ? { surface } : {}) }).body[0];
+
+  test("brunosouzas on light", () => {
+    const group = brand();
+    expect(group.attrs).toEqual({ transform: "translate(0 0) scale(1)", stroke: "none" });
+    expect(group.children).toEqual([
+      { tag: "rect", attrs: { x: 2, y: 2, width: 38, height: 38, rx: 9, fill: "#FFFFFF", stroke: "#121212", "stroke-width": 2.5 }, children: [] },
+      { tag: "g", attrs: { transform: "translate(5.56 6.52) scale(0.875)" }, children: [
+        { tag: "rect", attrs: { x: 5, y: 3, width: 5.5, height: 26, rx: 2.75, fill: "#121212" }, children: [] },
+        { tag: "circle", attrs: { cx: 17.5, cy: 20.5, r: 7.3, fill: "none", stroke: "#121212", "stroke-width": 4.6 }, children: [] },
+        { tag: "circle", attrs: { cx: 27.5, cy: 9, r: 2.8, fill: "#E04E17" }, children: [] },
+      ] },
+    ]);
+    const data = LINK_ICONS.find((icon) => icon.name === "brunosouzas")!;
+    expect([data.title, data.description, data.face]).toEqual(["brunosouzas.com", "brunosouzas.com icon: the brand symbol, a b with a moon.", "color.white"]);
+  });
+
+  test("brunosouzas on dark", () => {
+    const light = brand().children as SvgNode[];
+    const dark = brand("dark").children as SvgNode[];
+    expect(dark[0].attrs).toEqual({ ...light[0].attrs, stroke: "#ADA79D" });
+    expect(dark.slice(1)).toEqual(light.slice(1));
+    const [haste, ring, moon] = dark[1].children as SvgNode[];
+    expect([haste.attrs.fill, ring.attrs.stroke, moon.attrs.fill]).toEqual(["#121212", "#121212", "#E04E17"]);
+  });
+
+  test("Same drawing as the symbol", () => {
+    const glyph = (brand().children as SvgNode[])[1];
+    const drawn = symbol({ x: 0, y: 0 }).body[0];
+    expect(glyph.children).toEqual(drawn.children);
+    expect(glyph.children).toHaveLength(3);
+  });
+
+  // Change brand-link-icon, task 1.5: illustration-pieces "Each link icon stands alone".
+  test("No combined link icons in the package", () => {
+    const names = Object.keys(ROOT).filter((name) => /link.?icon|icon.?row|links/i.test(name)).sort();
+    expect(names).toEqual(["LINK_ICONS", "LINK_ICON_NAMES", "LINK_ICON_SIZE", "linkIcon"]);
+    expect(names.filter((name) => name in PIECES)).toEqual(["linkIcon"]);
+  });
+
+  test("Glyph inside the face, brunosouzas", () => {
+    const glyph = (brand().children as SvgNode[])[1];
+    const [, tx, ty, k] = /^translate\(([\d.]+) ([\d.]+)\) scale\(([\d.]+)\)$/.exec(String(glyph.attrs.transform))!.map(Number);
+    const boxes = (glyph.children as SvgNode[]).map((node) => {
+      const half = node.attrs["stroke-width"] === undefined ? 0 : Number(node.attrs["stroke-width"]) / 2;
+      const [x0, y0, x1, y1] = node.tag === "circle"
+        ? [Number(node.attrs.cx) - Number(node.attrs.r), Number(node.attrs.cy) - Number(node.attrs.r), Number(node.attrs.cx) + Number(node.attrs.r), Number(node.attrs.cy) + Number(node.attrs.r)]
+        : [Number(node.attrs.x), Number(node.attrs.y), Number(node.attrs.x) + Number(node.attrs.width), Number(node.attrs.y) + Number(node.attrs.height)];
+      return [x0 - half, y0 - half, x1 + half, y1 + half].map((n, i) => (i % 2 === 0 ? tx : ty) + n * k);
+    });
+    for (const box of boxes) for (const edge of box) expect(edge >= 2 && edge <= 40).toBe(true);
+    const span = [Math.min(...boxes.map((b) => b[0])), Math.min(...boxes.map((b) => b[1])), Math.max(...boxes.map((b) => b[2])), Math.max(...boxes.map((b) => b[3]))];
+    expect(span.map((n) => Math.round(n * 10) / 10)).toEqual([9.9, 9.1, 32.1, 32.9]);
+    expect(Math.abs((span[0] + span[2]) / 2 - 21)).toBeLessThan(0.01);
+    expect(Math.abs((span[1] + span[3]) / 2 - 21)).toBeLessThan(0.01);
   });
 });
 
@@ -245,7 +307,7 @@ describe("Icons hold no link, style or script", () => {
       for (const name of UI_ICON_NAMES) trees.push(uiIcon({ name, x: 0, y: 0, colour: surface === "light" ? "color.ink" : "surface.dark.text" }));
       for (const icon of LINK_ICON_NAMES) trees.push(linkIcon({ icon, x: 0, y: 0, surface }));
     }
-    expect(trees).toHaveLength(24);
+    expect(trees).toHaveLength(26);
     for (const tree of trees) {
       walk([...tree.body, ...tree.text], (node) => {
         if (typeof node === "string") {

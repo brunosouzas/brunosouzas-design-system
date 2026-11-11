@@ -2,7 +2,7 @@
 // the ring read as a lowercase b, the moon sits on the accent of the ring.
 // Ported from `~/.hermes/cache/scratch/ab267/board4.py`'s `bmoon()`, the
 // approved source (reused unchanged by every later script, through `final.py`).
-import { drawn, el, g, type Drawn } from "./node.ts";
+import { drawn, el, g, type Drawn, type SvgNode } from "./node.ts";
 import { surfaceParam, type SurfaceName } from "./ink.ts";
 import { pos, num, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
@@ -12,15 +12,20 @@ export type SymbolParams = { x: number; y: number; surface?: SurfaceName; scale?
 
 const c = (path: string): string => colour(path);
 
+/** The symbol's three shapes in its 32×32 box: the haste and the ring in `text`, the moon in `moon`. One drawing,
+ * shared by `symbol` (favicon, avatar, signature) and the `brunosouzas` link icon (change brand-link-icon). */
+export const symbolShapes = (text: string, moon: string): SvgNode[] => [
+  el("rect", { x: 5, y: 3, width: 5.5, height: 26, rx: 2.75, fill: text }),
+  el("circle", { cx: 17.5, cy: 20.5, r: 7.3, fill: "none", stroke: text, "stroke-width": 4.6 }),
+  el("circle", { cx: 27.5, cy: 9, r: 2.8, fill: moon }),
+];
+
 const drawSymbol = (p: SymbolParams): Drawn => {
   const light = (p.surface ?? "light") === "light";
   const color = light ? c("brand.light.text") : c("brand.dark.text");
   const moon = light ? c("brand.light.accent") : c("brand.dark.accent");
   const scale = p.scale ?? 1; // size is in the 32×32 glyph box, scaled like any other piece
-  const body = g({ transform: `translate(${p.x} ${p.y}) scale(${scale})` },
-    el("rect", { x: 5, y: 3, width: 5.5, height: 26, rx: 2.75, fill: color }),
-    el("circle", { cx: 17.5, cy: 20.5, r: 7.3, fill: "none", stroke: color, "stroke-width": 4.6 }),
-    el("circle", { cx: 27.5, cy: 9, r: 2.8, fill: moon }));
+  const body = g({ transform: `translate(${p.x} ${p.y}) scale(${scale})` }, ...symbolShapes(color, moon));
   return drawn([body]);
 };
 
