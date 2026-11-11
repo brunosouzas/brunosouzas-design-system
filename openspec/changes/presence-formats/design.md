@@ -162,3 +162,16 @@ Release: the pull request is titled `feat: LinkedIn banner format and stackledge
 ## 11. Gate-1 decisions
 
 Taken (q36 A): no zone check, no box walker, no word size check, no `--png` on the command; measured zones exported and drawn by a repository script. Still open in the proposal: (1) screenshots kept out of the repository, (2) Android and narrow desktop left unmeasured, (3) `neutral` ground for the App icon, (4) no signature on the banner.
+
+## 12. Implementation notes
+
+Where the code's reality differed from a detail above, the code was followed; each difference and its reason:
+
+- **Fixture's browser window (§9).** `browserWindow` takes a `height` of at least 130, so the draft's 120 is refused. The fixture draws it at (620, 55), 180 x 130: the same box grown 10 units, centred where the draft had it, the first pipe still leaving its right edge at (800, 120). Every other coordinate is the draft's: on the render with `--zones` no piece enters a safe circle (Mira's box ends near x 393 and y 140, well clear of both).
+- **English table scenario.** `headline.lines` is an array, and a reference is replaced by its table value as written, so `lines: "@claim"` with `claim: "Integration"` (a string) is refused (`expected an array`). The scenario uses `lines: ["@claim"]`, a reference inside the array, as every other text-table test does; the spec's scenario says so.
+- **Baseline command (§7).** `npx -p @brunosouzas/design-system@0.9.1 brunosouzas-cover` run inside this repository resolves the local package of the same name and finds no `brunosouzas-cover`; run from a folder outside the repository it builds the baseline. `test/fixtures/covers/README.md` says so. The baseline equals what the branch head (0.9.1's code) writes, byte for byte.
+- **Browser arguments (§6).** Chrome on macOS (headless) loaded the embedded faces through `<img>` with the listed arguments, so no `--virtual-time-budget` was added; its screenshots matched `--window-size` exactly (1584 x 396, 500 x 500, 840 x 246).
+- **Overlay (§6).** The zone names sit above their safe circles, 40 units left (`desktop`) and right (`ios`) of the centre, so the two do not overlap; the overlay `svg` keeps HTML's default `overflow: hidden`, so the parts of the circles below the image are not drawn on the ground margin.
+- **Evidence grounds (§10).** Light page ground `surface.light.background` (#F6F3EC), dark `surface.dark.background` (#121110).
+- **PNG script details.** On success it prints `wrote <file.png> (<W>x<H>)`; a missing input or output folder is an argument problem printed with the usage. `LINKEDIN_BANNER_WIDTH` and `LINKEDIN_BANNER_HEIGHT` stay inside `src/pieces/cover.ts`, as `OG_WIDTH` does; the root entry adds the zones, the margin and the `LinkedinPhotoZone` type.
+
