@@ -1,6 +1,7 @@
 // Cover specs (spec cover-cli; design §6): validation of the JSON a cover is
 // written in, and the frames that draw it from the pieces: the 800x420 cover,
-// the banner, the body diagram and the icon (change designer-formats).
+// the banner, the body diagram and the icon (change designer-formats), and the
+// platform formats (favicon, LinkedIn card, og image, avatar, LinkedIn banner).
 //
 // Why here and not in scripts/: the validation and the frame are pure, so the
 // tests and a future site build can use them without the command line.
@@ -22,9 +23,10 @@ import { COLOUR_TOKENS, CURRENT_COLOUR, checkParams, isColourLiteral, MAX_SIZE, 
 export const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const TOP_LEVEL = ["id", "title", "description", "format", "background", "rings", "pieces", "custom", "customAt", "height", "text", "signature"] as const;
 /** Cover (800x420, the default), banner (1200x420, rounded corners), body diagram (560 laid out, 800 shown),
- * icon, favicon (the symbol, both themes), linkedin-card (1080x1080) or avatar (500x500, the symbol only):
- * spec cover-cli, "Banner output", "Diagram output", "Icon output", "New icon formats". */
-export const FORMATS = ["cover", "banner", "diagram", "icon", "favicon", "linkedin-card", "og", "avatar"] as const;
+ * icon, favicon (the symbol, both themes), linkedin-card (1080x1080), avatar (500x500, the symbol only) or
+ * linkedin-banner (1584x396, a profile background): spec cover-cli, "Banner output", "Diagram output",
+ * "Icon output", "New icon formats", "LinkedIn banner output". */
+export const FORMATS = ["cover", "banner", "diagram", "icon", "favicon", "linkedin-card", "og", "avatar", "linkedin-banner"] as const;
 export type CoverFormat = (typeof FORMATS)[number];
 /** Fixed frame sizes of the platform-shaped formats (not style, so not tokens — like EIP_ICON_WIDTH). */
 export const FAVICON_SIZE = 32;
@@ -32,6 +34,23 @@ export const AVATAR_SIZE = 500;
 export const LINKEDIN_CARD_SIZE = 1080;
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
+/** LinkedIn's recommended upload for a personal profile background (4:1). */
+export const LINKEDIN_BANNER_WIDTH = 1584;
+export const LINKEDIN_BANNER_HEIGHT = 396;
+
+/** Margin added to each profile photo radius for the safe area: the measuring error, the platform's rounding and small drift. */
+export const LINKEDIN_PHOTO_MARGIN = 16;
+export type LinkedinPhotoZone = { readonly name: string; readonly cx: number; readonly cy: number; readonly r: number; readonly safeRadius: number };
+const photoZone = (name: string, cx: number, cy: number, r: number): LinkedinPhotoZone => Object.freeze({ name, cx, cy, r, safeRadius: r + LINKEDIN_PHOTO_MARGIN });
+/**
+ * The circles LinkedIn's profile photo covers on a 1584x396 banner, in banner units, the photo's white ring included
+ * (spec cover-cli, "LinkedIn profile photo zones"). Measured by the owner on 2026-11-11 from screenshots of his own
+ * profile, about ±2 units: desktop web (the 792 px profile card, the banner at 0.5) and the iOS app (full width, about
+ * 0.28 on a 440-pt phone; the centre lies below the image's bottom edge). The Android app and desktop windows narrow
+ * enough to change the card's width were not measured. The command does not check a spec against them; the PNG
+ * script draws them over a render (`npm run png -- … --zones`).
+ */
+export const LINKEDIN_PHOTO_ZONES: readonly LinkedinPhotoZone[] = Object.freeze([photoZone("desktop", 207, 362, 160), photoZone("ios", 244, 409, 187)]);
 const CUSTOM_TAGS: readonly SvgTag[] = ["g", "rect", "circle", "ellipse", "line", "polyline", "polygon", "path", "text"];
 // Attributes a free-form object may use (design §6): geometry, paint, text and transform.
 const CUSTOM_ATTRS = new Set([
@@ -66,6 +85,7 @@ type Framed = SpecCommon & {
 /** A cover spec, by format (spec cover-cli, "Cover spec format" and each format's keys). */
 export type CoverSpec =
   | (Framed & { format?: "cover" | "banner" | "linkedin-card" | "og"; background: string; height?: never })
+  | (Omit<Framed, "signature"> & { format: "linkedin-banner"; background: string; height?: never; signature?: never })
   | (Framed & { format: "diagram"; /** Layout units. */ height: number; background?: never })
   | (SpecCommon & {
       format: "icon";
@@ -96,7 +116,8 @@ export type CoverSpec =
       pieces?: never[];
       title?: string;
       description?: string;
-      background?: never;
+      /** A `coverBackground` name: the square takes its fill (spec cover-cli, "Avatar ground"). */
+      background?: string;
       rings?: never;
       custom?: never;
       customAt?: never;
@@ -372,10 +393,15 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
     for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) if (spec[key] !== undefined) out.push({ path: key, message: NOT_FOR_ICONS });
     for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined) blocked.push(key);
   } else if (format === "favicon" || format === "avatar") {
-    for (const key of ["background", "rings", "custom", "customAt", "height", "signature"]) {
+    // An avatar takes an optional ground, a coverBackground name (spec cover-cli, "Avatar ground").
+    const refused = format === "avatar" ? ["rings", "custom", "customAt", "height", "signature"] : ["background", "rings", "custom", "customAt", "height", "signature"];
+    for (const key of refused) {
       if (spec[key] !== undefined) out.push({ path: key, message: `not used by the ${format} format` });
     }
-    for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined) blocked.push(key);
+    if (format === "avatar" && spec.background !== undefined && (typeof spec.background !== "string" || !backgroundNames().includes(spec.background))) {
+      out.push({ path: "background", message: `expected one of ${backgroundNames().join(", ")}, found ${describe(spec.background)}` });
+    }
+    for (const key of ["background", "rings", "custom"]) if (spec[key] !== undefined && refused.includes(key)) blocked.push(key);
   } else {
     if (format === "diagram") {
       if (spec.background !== undefined) out.push({ path: "background", message: "a diagram is drawn on color.panel; background is for covers and banners" });
@@ -387,7 +413,9 @@ const validateResolved = (spec: Record<string, unknown>): { problems: Problem[];
         out.push({ path: "background", message: `expected one of ${backgroundNames().join(", ")}, found ${describe(spec.background)}` });
       }
       if (spec.height !== undefined) out.push({ path: "height", message: "only a diagram takes a height" });
-      if (spec.signature !== undefined && typeof spec.signature !== "boolean") out.push({ path: "signature", message: "expected true or false" });
+      // The photo and the name sign a LinkedIn profile already; a 44-unit lockup would show about 12 pt on a phone.
+      if (format === "linkedin-banner" && spec.signature !== undefined) out.push({ path: "signature", message: "not used by the linkedin-banner format" });
+      else if (spec.signature !== undefined && typeof spec.signature !== "boolean") out.push({ path: "signature", message: "expected true or false" });
     }
     checkRings(spec, out);
     if (!isPlainObject(spec.rings) && spec.rings !== undefined) blocked.push("rings");
@@ -475,6 +503,11 @@ const finish = (out: Problem[]): Problem[] => {
 /** Every problem of a parsed spec, sorted by path; empty when the spec is valid. `lang` picks a text table. */
 export const validateCoverSpec = (spec: unknown, options: CoverOptions = {}): Problem[] => {
   if (!isPlainObject(spec)) return [{ path: "(root)", message: `a cover spec must be a JSON object, found ${Array.isArray(spec) ? "an array" : describe(spec)}` }];
+  // A LinkedIn banner's words are English (STY-8): another table is reported whatever --lang names, and stops the check.
+  if (spec.format === "linkedin-banner" && isPlainObject(spec.text)) {
+    const other = Object.keys(spec.text).filter((code) => code !== "en");
+    if (other.length > 0) return finish(other.map((code) => ({ path: `text.${code}`, message: "a LinkedIn banner's words are English" })));
+  }
   // Text problems stop the check: references cannot be resolved, so the rest would report false problems.
   const { table, problems: textProblems } = pickTable(spec, options.lang);
   if (textProblems.length > 0) return finish(textProblems);
@@ -502,9 +535,9 @@ const resolveCustom = (node: CustomNode): SvgNode => {
   return el(node.tag as SvgTag, attrs, ...(node.children ?? []).map((child) => (typeof child === "string" ? child : resolveCustom(child))));
 };
 
-/** Rings a banner draws: out to the frame's farthest corner (spec cover-cli, "Banner rings reach the corners"). */
-export const bannerRingCount = (cx: number, cy: number, radius: number = tokens.cover.ringRadius): number => {
-  const { width, height } = tokens.banner;
+/** Rings a banner draws: out to the frame's farthest corner (spec cover-cli, "Banner rings reach the corners").
+ * The frame defaults to the banner's (1200x420); a LinkedIn banner passes its 1584x396 ("Ring count takes a frame size"). */
+export const bannerRingCount = (cx: number, cy: number, radius: number = tokens.cover.ringRadius, width: number = tokens.banner.width, height: number = tokens.banner.height): number => {
   const far = Math.max(...[[0, 0], [width, 0], [0, height], [width, height]].map(([x, y]) => Math.hypot(x - cx, y - cy)));
   return Math.max(1, Math.ceil((far - radius) / tokens.cover.ringStep) + 1);
 };
@@ -624,7 +657,8 @@ const faviconTree = (spec: Extract<CoverSpec, { format: "favicon" }>): SvgNode =
   );
 };
 
-/** An avatar (spec cover-cli, "New icon formats"): the symbol only, filling the frame. */
+/** An avatar (spec cover-cli, "New icon formats", "Avatar ground"): the symbol only, filling the frame, on
+ * `brand.light.accentText` or on the `background` pair's fill. Without `background` the tree is 0.9.1's. */
 const avatarTree = (spec: Extract<CoverSpec, { format: "avatar" }>): SvgNode => {
   const size = AVATAR_SIZE;
   const scale = size / 32;
@@ -635,7 +669,7 @@ const avatarTree = (spec: Extract<CoverSpec, { format: "avatar" }>): SvgNode => 
     `0 0 ${size} ${size}`,
     el("title", { id: `${spec.id}-title` }, spec.title),
     el("desc", { id: `${spec.id}-desc` }, spec.description),
-    el("rect", { width: size, height: size, fill: tokens.brand.light.accentText }),
+    el("rect", { width: size, height: size, fill: spec.background === undefined ? tokens.brand.light.accentText : tokens.coverBackground[spec.background as keyof typeof tokens.coverBackground].fill }),
     g({ transform: `scale(${scale})` }, ...symbol({ x: 0, y: 0, surface: "light" }).body),
   );
 };
@@ -650,21 +684,29 @@ export const coverTree = (input: CoverSpec, options: CoverOptions = {}): SvgNode
   const banner = spec.format === "banner";
   const linkedinCard = spec.format === "linkedin-card";
   const og = spec.format === "og";
+  const linkedinBanner = spec.format === "linkedin-banner";
   const { width, height } = linkedinCard
     ? { width: LINKEDIN_CARD_SIZE, height: LINKEDIN_CARD_SIZE }
-    : og
+    : linkedinBanner
+      ? { width: LINKEDIN_BANNER_WIDTH, height: LINKEDIN_BANNER_HEIGHT }
+      : og
       ? { width: OG_WIDTH, height: OG_HEIGHT }
       : banner
         ? tokens.banner
         : tokens.cover;
-  // A banner's corners are rounded; a cover, a LinkedIn card and an og image keep the square frame, attribute for attribute.
+  // A banner's corners are rounded; a cover, a LinkedIn card, an og image and a LinkedIn banner keep the square frame, attribute for attribute.
   const corner: Record<string, number> = banner ? { rx: tokens.banner.radius } : {};
   const pair = tokens.coverBackground[spec.background as keyof typeof tokens.coverBackground];
   const drawnPieces = spec.pieces.map(draw);
   const ringPath = `coverBackground.${spec.background}.ring`;
-  const ringCount: { count?: number } = banner ? { count: bannerRingCount(spec.rings.cx, spec.rings.cy, spec.rings.radius) } : {};
+  // A banner and a LinkedIn banner draw their rings out to the farthest corner; a cover keeps the default count.
+  const ringCount: { count?: number } = banner
+    ? { count: bannerRingCount(spec.rings.cx, spec.rings.cy, spec.rings.radius) }
+    : linkedinBanner
+      ? { count: bannerRingCount(spec.rings.cx, spec.rings.cy, spec.rings.radius, width, height) }
+      : {};
   const frame = `url(#${spec.id}-frame)`;
-  const signature = spec.signature ? signatureGroup(width, height) : null;
+  const signature = spec.format !== "linkedin-banner" && spec.signature ? signatureGroup(width, height) : null;
   const outlined = g({ stroke: tokens.color.ink, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" }, ...bodies(spec, drawnPieces), signature);
   const labels = g(
     { "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" },

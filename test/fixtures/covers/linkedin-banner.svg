@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1584" height="396" viewBox="0 0 1584 396" role="img" aria-labelledby="linkedin-banner-title linkedin-banner-desc" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="linkedin-banner-title">Integration, delivery and AI between systems</title>
+  <desc id="linkedin-banner-desc">Illustration on a peach background with soft rings. Mira stands on the left above the profile photo's place; a white browser window sends an orange pipe into a Mule flow with a Choice and a For Each component, and the pipe runs on through two green checks into a white cloud on the right.</desc>
+  <defs>
+    <clipPath id="linkedin-banner-frame">
+      <rect width="1584" height="396"/>
+    </clipPath>
+  </defs>
+  <rect width="1584" height="396" fill="#F7C6A1"/>
+  <g clip-path="url(#linkedin-banner-frame)">
+    <g fill="none" stroke="#E3AB84" stroke-width="2">
+      <circle cx="1188" cy="198" r="60"/>
+      <circle cx="1188" cy="198" r="88"/>
+      <circle cx="1188" cy="198" r="116"/>
+      <circle cx="1188" cy="198" r="144"/>
+      <circle cx="1188" cy="198" r="172"/>
+      <circle cx="1188" cy="198" r="200"/>
+      <circle cx="1188" cy="198" r="228"/>
+      <circle cx="1188" cy="198" r="256"/>
+      <circle cx="1188" cy="198" r="284"/>
+      <circle cx="1188" cy="198" r="312"/>
+      <circle cx="1188" cy="198" r="340"/>
+      <circle cx="1188" cy="198" r="368"/>
+      <circle cx="1188" cy="198" r="396"/>
+      <circle cx="1188" cy="198" r="424"/>
+      <circle cx="1188" cy="198" r="452"/>
+      <circle cx="1188" cy="198" r="480"/>
+      <circle cx="1188" cy="198" r="508"/>
+      <circle cx="1188" cy="198" r="536"/>
+      <circle cx="1188" cy="198" r="564"/>
+      <circle cx="1188" cy="198" r="592"/>
+      <circle cx="1188" cy="198" r="620"/>
+      <circle cx="1188" cy="198" r="648"/>
+      <circle cx="1188" cy="198" r="676"/>
+      <circle cx="1188" cy="198" r="704"/>
+      <circle cx="1188" cy="198" r="732"/>
+      <circle cx="1188" cy="198" r="760"/>
+      <circle cx="1188" cy="198" r="788"/>
+      <circle cx="1188" cy="198" r="816"/>
+      <circle cx="1188" cy="198" r="844"/>
+      <circle cx="1188" cy="198" r="872"/>
+      <circle cx="1188" cy="198" r="900"/>
+      <circle cx="1188" cy="198" r="928"/>
+      <circle cx="1188" cy="198" r="956"/>
+      <circle cx="1188" cy="198" r="984"/>
+      <circle cx="1188" cy="198" r="1012"/>
+      <circle cx="1188" cy="198" r="1040"/>
+      <circle cx="1188" cy="198" r="1068"/>
+      <circle cx="1188" cy="198" r="1096"/>
+      <circle cx="1188" cy="198" r="1124"/>
+      <circle cx="1188" cy="198" r="1152"/>
+      <circle cx="1188" cy="198" r="1180"/>
+      <circle cx="1188" cy="198" r="1208"/>
+    </g>
+  </g>
+  <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+    <g data-piece="mira" transform="translate(470 140) scale(0.7)" stroke="none">
+      <g>
+        <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+        <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+        <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+        <g transform="translate(0,-90) rotate(-40)">
+          <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212"/>
+          <circle cx="-74" cy="0" r="8" fill="#121212"/>
+          <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17"/>
+        </g>
+        <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+        <g>
+          <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121212"/>
+          <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+          <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+        </g>
+        <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+      </g>
+    </g>
+    <path d="M800,120 C900,120 920,200 1000,200" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#121212" stroke-width="30"/>
+    <path d="M800,120 C900,120 920,200 1000,200" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#E04E17" stroke-width="22"/>
+    <path d="M1262,200 H1440" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#121212" stroke-width="30"/>
+    <path d="M1262,200 H1440" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#E04E17" stroke-width="22"/>
+    <rect x="620" y="55" width="180" height="130" rx="12" fill="#FFFFFF"/>
+    <path d="M620,85 H800" fill="none"/>
+    <circle cx="638" cy="70" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+    <circle cx="654" cy="70" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+    <circle cx="670" cy="70" r="5" fill="#FFFFFF" stroke-width="2.5"/>
+    <rect x="640" y="101" width="140" height="40" rx="8" fill="#F6F3EC" stroke-width="3"/>
+    <rect x="640" y="155" width="108" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
+    <rect x="640" y="173" width="72" height="10" rx="5" fill="#D7D1C5" stroke="none"/>
+    <rect x="1000" y="140" width="262" height="120" rx="22" fill="#F6F3EC"/>
+    <path d="M1018,200 H1022 M1114,200 H1142 M1234,200 H1246" stroke-linecap="round"/>
+    <path d="M1134,193 L1143,200 L1134,207 Z" fill="#121212" stroke-width="2"/>
+    <path d="M1238,193 L1247,200 L1238,207 Z" fill="#121212" stroke-width="2"/>
+    <rect x="1028" y="154" width="86" height="92" rx="14" fill="#FFFFFF"/>
+    <rect x="1148" y="154" width="86" height="92" rx="14" fill="#FFFFFF"/>
+    <path fill="none" stroke-linecap="round" d="M1044,200 H1054 M1068,186 L1082,200 L1068,214 L1054,200 Z M1082,200 L1098,186 M1082,200 L1098,214"/>
+    <path fill="none" stroke-linecap="round" d="M1209.2,189.5 A21,21 0 1 1 1176.2,185.2"/>
+    <path d="M1182.5,178.8 L1181.1,190.1 L1171.2,180.2 Z" fill="#121212" stroke-width="2"/>
+    <rect x="1183" y="192" width="16" height="16" fill="#FFFFFF" stroke-width="3"/>
+    <circle cx="1310" cy="200" r="24" fill="#3DDC84" stroke-width="3"/>
+    <path d="M1299.92,200 L1307.6,208.16 L1320.8,192.32" fill="none" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="1380" cy="200" r="24" fill="#3DDC84" stroke-width="3"/>
+    <path d="M1369.92,200 L1377.6,208.16 L1390.8,192.32" fill="none" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M1407,232 Q1383.6,232 1385.4,208.6 Q1389,187 1414.2,188.8 Q1423.2,152.8 1461,156.4 Q1493.4,158.2 1502.4,183.4 Q1547.4,178 1551,210.4 Q1552.8,232 1529.4,232 Z" fill="#FFFFFF"/>
+  </g>
+  <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+</svg>

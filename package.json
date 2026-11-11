@@ -64,6 +64,7 @@
     "render": "tsx scripts/render.ts",
     "cover": "tsx scripts/cover.ts",
     "pieces:sheet": "tsx scripts/pieces-sheet.ts",
+    "png": "tsx scripts/png.ts",
     "studio": "remotion studio src/index.ts",
     "test": "vitest run",
     "typecheck": "tsc -p .",

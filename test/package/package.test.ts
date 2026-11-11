@@ -62,6 +62,15 @@ describe("Package contents", () => {
     expect(files.filter((file) => file.startsWith("fonts/")).sort()).toEqual(["fonts/OFL.txt", ...FONT_FILES.map((name) => `fonts/${name}`)].sort());
   });
 
+  // Change presence-formats (AB#325), task 4.2: cover-cli "Not in the package".
+  test("Not in the package", () => {
+    expect(files.filter((file) => /(^|\/)png(\.d)?\.(ts|js)$/.test(file))).toEqual([]);
+    const installed = JSON.parse(readFileSync(join(work, "consumer/node_modules/@brunosouzas/design-system/package.json"), "utf8"));
+    expect(Object.keys(installed.bin)).toEqual(["brunosouzas-cover"]);
+    expect(Object.keys(installed.dependencies)).toEqual(["harfbuzzjs"]);
+    expect(existsSync(join(work, "consumer/node_modules/@brunosouzas/design-system/dist/scripts/png.js"))).toBe(false);
+  });
+
   test("One pinned dependency", () => {
     const manifest = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
     expect(Object.keys(manifest.dependencies)).toEqual(["harfbuzzjs"]);

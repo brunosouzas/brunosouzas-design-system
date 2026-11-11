@@ -1,0 +1,18 @@
+{
+  "id": "linkedin-banner",
+  "format": "linkedin-banner",
+  "title": "Integration, delivery and AI between systems",
+  "description": "Illustration on a peach background with soft rings. Mira stands on the left above the profile photo's place; a white browser window sends an orange pipe into a Mule flow with a Choice and a For Each component, and the pipe runs on through two green checks into a white cloud on the right.",
+  "background": "trackIntegration",
+  "rings": { "cx": 1188, "cy": 198, "radius": 60 },
+  "pieces": [
+    { "piece": "mira", "x": 470, "y": 140, "scale": 0.7 },
+    { "piece": "pipe", "d": "M800,120 C900,120 920,200 1000,200", "fill": "illustration.accent", "width": 22, "casing": 8 },
+    { "piece": "pipe", "d": "M1262,200 H1440", "fill": "illustration.accent", "width": 22, "casing": 8 },
+    { "piece": "browserWindow", "x": 620, "y": 55, "width": 180, "height": 130 },
+    { "piece": "muleFlow", "x": 1000, "y": 140, "width": 262, "height": 120, "tiles": [{ "x": 1028, "kind": "choice" }, { "x": 1148, "kind": "for-each" }], "tileWidth": 86 },
+    { "piece": "checkBadge", "cx": 1310, "cy": 200, "r": 24 },
+    { "piece": "checkBadge", "cx": 1380, "cy": 200, "r": 24 },
+    { "piece": "cloud", "cx": 1470, "cy": 205, "scale": 0.9 }
+  ]
+}

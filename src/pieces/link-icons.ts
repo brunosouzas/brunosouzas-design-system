@@ -1,7 +1,10 @@
 // Link icons as data (spec illustration-pieces, "Link icons as data"; design §6
 // of stackledger-map-and-link-pieces): the social stickers of brunosouzas.com
 // (public/images/home/social-*.svg at e29b3dd), with every colour replaced by
-// its token, plus a `website` globe in the same style. `linkIcon` draws the
+// its token, plus a `website` globe in the same style and `stackledger`, the
+// product's mark (`ledgerMark`'s bent line and two stations, mapped from its
+// 32-unit page onto the 38-unit face, change presence-formats design §8; the
+// face is the page, so the mark keeps one outline). `linkIcon` draws the
 // face white with its outline and no frame behind it (ADR 0009: no hard shadow,
 // colour only where it means something), then the glyph, at the site's measures
 // (46 box, face 38 at 2, radius 9, outline 2.5). On the dark surface the face's
@@ -72,6 +75,19 @@ export const LINK_ICONS: readonly LinkIcon[] = [
       el("circle", { cx: 21, cy: 21, r: 10.5, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("ellipse", { cx: 21, cy: 21, rx: 4.6, ry: 10.5, fill: "none", stroke: INK, "stroke-width": 2 }),
       el("path", { d: "M10.5 21H31.5M12.5 15.5H29.5M12.5 26.5H29.5", fill: "none", stroke: INK, "stroke-width": 2, "stroke-linecap": "round" }),
+    ],
+  },
+  {
+    name: "stackledger",
+    title: "stackledger",
+    description: "stackledger icon: the product's mark, a bent line through two stations.",
+    face: "color.white",
+    // ledgerMark's content at x 1.1875, then +2. The line's width is the mark's 4.5 scaled (5.34, rounded); the big
+    // station takes the family's outline (2.5) and the small one keeps the mark's ratio (1.6 / 2 x 2.5).
+    glyph: [
+      el("path", { d: "M10.3 29.3 L18.6 21 L31.7 21", fill: "none", stroke: tokens.illustration.accent, "stroke-width": 5.3, "stroke-linecap": "round", "stroke-linejoin": "round" }),
+      el("circle", { cx: 18.6, cy: 21, r: 4.75, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
+      el("circle", { cx: 31.7, cy: 21, r: 3.1, fill: C.white, stroke: INK, "stroke-width": 2 }),
     ],
   },
 ];

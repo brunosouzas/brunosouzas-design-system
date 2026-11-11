@@ -1,6 +1,7 @@
 // Integration tests of `npm run cover` (spec cover-cli; tasks 4.1 and 4.2),
 // run in temporary folders. Each test title is the spec scenario it proves.
 import { chmodSync, cpSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test, vi } from "vitest";
@@ -378,9 +379,10 @@ describe("Cover output", () => {
 });
 
 describe("Parity with the published proof covers", () => {
-  // Seven goldens: three proof covers, the banner, the icon, and the diagram in both languages (change designer-formats).
+  // Nine goldens: three proof covers, the banner, the icon, and the diagram in both languages (change designer-formats),
+  // the og image (change headline-piece) and the LinkedIn banner (change presence-formats, AB#325).
   test.each([
-    ...[...PROOF_COVERS, "home-banner", "eip-splitter"].map((name) => [name, name, undefined]),
+    ...[...PROOF_COVERS, "home-banner", "eip-splitter", "og-headline", "linkedin-banner"].map((name) => [name, name, undefined]),
     ["circuit-breaker-states-pt", "circuit-breaker-states", "pt"],
     ["circuit-breaker-states-en", "circuit-breaker-states", "en"],
   ] as [string, string, string | undefined][])("Golden output (%s)", async (golden, spec, lang) => {
@@ -397,6 +399,13 @@ describe("Parity with the published proof covers", () => {
     const at = golden.indexOf("<title");
     const drifted = `${golden.slice(0, at)}<Title${golden.slice(at + 6)}`;
     if (result.ok) expect(goldenDrift("ai-writes-code", result.svg, drifted)).toEqual([`ai-writes-code: differs from its golden at offset ${at + 1}`]);
+    // The LinkedIn banner's golden, one byte changed (change presence-formats).
+    const banner = await buildCover(readFileSync(join(FIXTURES, "linkedin-banner.json"), "utf8"), "linkedin-banner");
+    expect(banner.ok).toBe(true);
+    const bannerGolden = readFileSync(join(FIXTURES, "linkedin-banner.svg"), "utf8");
+    const ring = bannerGolden.indexOf('r="60"');
+    const bannerDrifted = `${bannerGolden.slice(0, ring)}r="61"${bannerGolden.slice(ring + 6)}`;
+    if (banner.ok) expect(goldenDrift("linkedin-banner", banner.svg, bannerDrifted)).toEqual([`linkedin-banner: differs from its golden at offset ${ring + 4}`]);
   });
 });
 
@@ -455,8 +464,8 @@ const ringRadii = (svg: string): number[] => {
 
 describe("Banner format", () => {
   test("Unknown format", async () => {
-    expect(await problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar"]);
-    expect(await problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar"]);
+    expect(await problems({ ...minimal(), format: "poster" })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar, linkedin-banner"]);
+    expect(await problems({ ...minimal(), format: 1 })).toEqual(["format: expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar, linkedin-banner"]);
     const ws = workspace();
     ws.write("spec.json", { ...minimal(), format: "poster" });
     expect(await ws.run("spec.json", "--out", "cover.svg")).toBe(1);
@@ -651,14 +660,39 @@ describe("New icon formats", () => {
     expect(svg).toContain('width="500" height="500" viewBox="0 0 500 500"');
   });
 
+  // Change presence-formats (AB#325), task 3.3: cover-cli "New icon formats" (modified), "Avatar ground".
   test("Avatar refuses a background and pieces", async () => {
-    expect(await problems({ ...avatar(), background: "trackIntegration" })).toEqual(["background: not used by the avatar format"]);
-    const ws = workspace();
-    ws.write("a.json", { ...avatar(), background: "trackIntegration" });
-    expect(await ws.run("a.json", "--out", "a.svg")).toBe(1);
-    expect(readdirSync(ws.root)).toEqual(["a.json"]);
-    expect(await problems({ ...avatar(), background: "trackAi" })).toEqual(["background: not used by the avatar format"]);
-    expect(await problems({ ...avatar(), pieces: [{ piece: "mira", x: 0, y: 0 }] })).toEqual(["pieces: not used by the avatar format"]);
+    const backgrounds = Object.keys(tokens.coverBackground).join(", ");
+    const cases: [Record<string, unknown>, string][] = [
+      [{ pieces: [{ piece: "mira", x: 0, y: 0 }] }, "pieces: not used by the avatar format"],
+      [{ rings: { cx: 0, cy: 0 } }, "rings: not used by the avatar format"],
+      [{ background: "pink" }, `background: expected one of ${backgrounds}, found "pink"`],
+    ];
+    for (const [extra, line] of cases) {
+      expect(await problems({ ...avatar(), ...extra })).toEqual([line]);
+      const ws = workspace();
+      ws.write("a.json", { ...avatar(), ...extra });
+      expect(await ws.run("a.json", "--out", "a.svg")).toBe(1);
+      expect(readdirSync(ws.root)).toEqual(["a.json"]);
+    }
+  });
+
+  test("Avatar on the neutral ground", async () => {
+    const plain = await svgOf(avatar());
+    const svg = await svgOf({ ...avatar(), background: "neutral" });
+    expect(svg).toContain('width="500" height="500" viewBox="0 0 500 500"');
+    expect(svg).toContain('<rect width="500" height="500" fill="#F6F3EC"/>');
+    expect(tokens.coverBackground.neutral.fill).toBe("#F6F3EC");
+    const symbolGroup = (text: string) => text.slice(text.indexOf('<g transform="scale(15.625)">'));
+    expect(symbolGroup(svg)).toBe(symbolGroup(plain));
+    expect(svg.replace('fill="#F6F3EC"', `fill="${tokens.brand.light.accentText}"`)).toBe(plain);
+  });
+
+  test("Default avatar unchanged", async () => {
+    const baseline = readFileSync(join(FIXTURES, "avatar-0.9.1.svg"));
+    expect(Buffer.from(await svgOf(avatar())).equals(baseline)).toBe(true);
+    const sha = createHash("sha256").update(baseline).digest("hex");
+    expect(readFileSync(join(FIXTURES, "README.md"), "utf8")).toContain(`SHA-256 \`${sha}\``);
   });
 });
 
