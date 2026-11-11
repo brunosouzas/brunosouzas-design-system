@@ -1,32 +1,5 @@
 ## MODIFIED Requirements
 
-### Requirement: Invocation problems
-The command SHALL exit 1 with the problem and the usage line, writing nothing, when: an option other than `--out`, `--lang` or `--png` is given; `--out` has no value, is missing or repeated, does not end in `.svg`, its folder does not exist or it names a folder; `--lang` has no value, is repeated or is not a language code; `--png` has the problems of "PNG option problems"; no spec path or more than one is given; or the spec cannot be read. Only the first is reported, in that order.
-
-#### Scenario: Missing out
-- **WHEN** the owner runs `npm run cover -- cover.json`
-- **THEN** it prints `--out <file.svg> is required` and the usage, exits 1, and writes nothing
-
-#### Scenario: Wrong extension and two specs
-- **WHEN** the owner runs `npm run cover -- a.json b.json --out cover.png`
-- **THEN** only the out-path problem is printed, because it comes first in the order, and the command exits 1
-
-#### Scenario: Missing folder
-- **WHEN** `--out` names `missing/cover.svg` and `missing/` does not exist
-- **THEN** it prints that the folder does not exist and exits 1
-
-#### Scenario: Out names a folder
-- **WHEN** `--out` names `covers.svg` and `covers.svg/` is a folder
-- **THEN** it prints that the output is a folder and exits 1
-
-#### Scenario: Language option problems
-- **WHEN** the owner runs the command with a valid `--out` and `--lang` with no value, then with `--lang pt --lang en`, then with `--lang PT`
-- **THEN** it prints `--lang needs a value: <code>`, then `--lang given more than once`, then `--lang expects a language code such as pt or en, found PT`, each with the usage, exits 1 and writes nothing
-
-#### Scenario: Unknown option with a PNG
-- **WHEN** the owner runs `npm run cover -- banner.json --out banner.svg --png banner.png --jpg banner.jpg`
-- **THEN** it prints `unknown option --jpg` and the usage, exits 1 and writes nothing
-
 ### Requirement: Cover spec format
 A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), optional `format` (`cover`, `banner`, `diagram`, `icon`, `favicon`, `linkedin-card`, `og`, `avatar`, `linkedin-banner`; default `cover`), and the keys its format allows: `background`, `rings` (`cx`, `cy`, optional `radius`), `pieces`, `custom`, `customAt`, `height`, `text`, `signature`. Each format's requirement says which it refuses or needs. Any other top-level key is an error.
 
@@ -70,7 +43,7 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 - **THEN** each run reports `signature` as "not used by the linkedin-banner format", exits 1 and writes nothing
 
 ### Requirement: New icon formats
-`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square ground, "Avatar ground"; `pieces`, `rings`, `custom`, `customAt`, `height` and `signature` are refused). PNG comes from `--png` for an avatar; a favicon or social-preview PNG set is the consuming site's build step.
+`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square ground, "Avatar ground"; `pieces`, `rings`, `custom`, `customAt`, `height` and `signature` are refused). This command writes SVG only; the repository's PNG script ("PNG from a written SVG") is a development tool, and a favicon or social-preview PNG set is the consuming site's build step.
 
 #### Scenario: Favicon is the symbol, both themes, no pieces
 - **WHEN** a spec with `format: "favicon"` is built
@@ -115,7 +88,7 @@ When `format` is `linkedin-banner`, the output SHALL be a 1584x396 `svg` (`viewB
 - **THEN** each run prints `wrote out/linkedin.svg` and exits 0, and the file is byte-identical after both
 
 ### Requirement: LinkedIn banner keys
-A `linkedin-banner` spec SHALL need `background` (a `coverBackground` name), `rings` and `pieces`, accept `custom`, `customAt` and `text` as a cover does, and refuse `height` with "only a diagram takes a height" and `signature` with "not used by the linkedin-banner format".
+A `linkedin-banner` spec SHALL need `background` (a `coverBackground` name), `rings` and `pieces`, and accept `custom` and `customAt` as a cover does. It SHALL accept `text` with one table, `en`, because the words in the image are English (STY-8); any other language is reported at `text.<lang>` as "a LinkedIn banner's words are English". It SHALL refuse `height` with "only a diagram takes a height" and `signature` with "not used by the linkedin-banner format".
 
 #### Scenario: Missing background
 - **WHEN** a `linkedin-banner` spec has no `background`
@@ -125,8 +98,16 @@ A `linkedin-banner` spec SHALL need `background` (a `coverBackground` name), `ri
 - **WHEN** a `linkedin-banner` spec has `height: 396`
 - **THEN** `height` is reported as "only a diagram takes a height" and nothing is written
 
+#### Scenario: English table
+- **WHEN** a `linkedin-banner` spec has `text.en.claim: "Integration"` and a `headline` with `lines: "@claim"`, built with `--lang en`
+- **THEN** the image is written with the headline `Integration` and ids `<id>-en`
+
+#### Scenario: Another language on a LinkedIn banner
+- **WHEN** a `linkedin-banner` spec has tables `en` and `pt` with the same keys
+- **THEN** `text.pt` is reported as "a LinkedIn banner's words are English", whatever `--lang` names, and nothing is written
+
 ### Requirement: LinkedIn banner rings reach the corners
-On a LinkedIn banner the rings SHALL be drawn with `count = max(1, ceil((d - radius) / cover.ringStep) + 1)`, where `d` is the distance from (`cx`, `cy`) to the farthest corner of the 1584x396 frame and `radius` is the spec's first radius or `cover.ringRadius`, stroked in the background's ring colour at `cover.ringWidth`. The banner's own count is unchanged.
+On a LinkedIn banner the rings SHALL be drawn with `count = max(1, ceil((d - radius) / cover.ringStep) + 1)`, where `d` is the distance from (`cx`, `cy`) to the farthest corner of the 1584x396 frame and `radius` is the spec's first radius or `cover.ringRadius`, stroked in the background's ring colour at `cover.ringWidth`.
 
 #### Scenario: Rings of the fixture
 - **WHEN** a LinkedIn banner spec has `rings` `cx` 1188, `cy` 198, `radius` 60
@@ -140,103 +121,66 @@ On a LinkedIn banner the rings SHALL be drawn with `count = max(1, ceil((d - rad
 - **WHEN** a LinkedIn banner spec has `rings` `cx` -10000, `cy` -10000 and no `radius`
 - **THEN** the image is written with 554 rings, radii 90 to 15574
 
-### Requirement: Profile photo zones
-A `linkedin-banner` spec SHALL keep every entry of `pieces`, and `custom`, out of two circles in banner units, where LinkedIn's profile photo covers the image: `desktop`, centre (205, 333), radius 174, and `phone`, centre (405, 396), radius 174. An entry whose drawn box (stroke included) comes closer than the radius to a centre is a problem at its path: `sits under the profile photo on desktop`, `on a phone`, or `on desktop and on a phone`.
+### Requirement: Ring count takes a frame size
+`bannerRingCount(cx, cy, radius, width, height)` SHALL take the frame size as two optional parameters after `radius`, defaulting to the banner's 1200x420, so every existing call keeps its result and nothing is removed from the public API.
 
-#### Scenario: Under both photos
-- **WHEN** a LinkedIn banner spec has `custom` a `rect` at (300, 300), 40 x 40, with no own stroke width
-- **THEN** the command prints `custom: sits under the profile photo on desktop and on a phone`, exits 1 and writes nothing
+#### Scenario: Banner ring count unchanged
+- **WHEN** `bannerRingCount(600, 225, 60)` and `bannerRingCount(1188, 198, 60, 1584, 396)` are called
+- **THEN** they return 22 and 42
 
-#### Scenario: Under one photo
-- **WHEN** `pieces[0]` is a `stationMarker` centred at (80, 270), then one centred at (500, 330), each in a LinkedIn banner spec
-- **THEN** the first run prints `pieces[0]: sits under the profile photo on desktop`, the second `pieces[0]: sits under the profile photo on a phone`, and neither writes anything
+### Requirement: LinkedIn profile photo zones
+The package SHALL export from its root entry `LINKEDIN_PHOTO_ZONES`, a frozen array of the circles LinkedIn's profile photo covers, in banner units, white ring included, as measured on the owner's screenshots of 2026-11-11 (about ±2 units), and `LINKEDIN_PHOTO_MARGIN`, 16. Each zone's `safeRadius` is its `r` plus the margin.
 
-#### Scenario: Just clear of the photo
-- **WHEN** a LinkedIn banner spec has `custom` a `rect` at (185, 101), 56 high and 40 wide, whose box ends at y 159, exactly 174 above the desktop centre
-- **THEN** the spec is valid and the image is written; with the rect at y 102 the command prints `custom: sits under the profile photo on desktop`
+#### Scenario: Zone values
+- **WHEN** `LINKEDIN_PHOTO_ZONES` and `LINKEDIN_PHOTO_MARGIN` are read from the package root
+- **THEN** the margin is 16 and the zones are exactly `{ name: "desktop", cx: 207, cy: 362, r: 160, safeRadius: 176 }` and `{ name: "ios", cx: 244, cy: 409, r: 187, safeRadius: 203 }`, in that order, and assigning to an entry throws in strict mode
 
-#### Scenario: Rings and background under the photo
-- **WHEN** a LinkedIn banner spec has `rings` centred at (205, 333) and no entry in either zone
-- **THEN** the spec is valid: the rings and the background are not checked
+### Requirement: Photo zones are not checked by the command
+The cover command SHALL NOT check pieces, `custom` or words against the photo zones or against a word size: keeping pieces out of the zones is the composer's job, checked by the owner on a render with the zones drawn ("Photo zones overlay").
 
-#### Scenario: A rotated object
-- **WHEN** a LinkedIn banner spec has `custom` a `g` with `transform` `rotate(45 290 100)` holding a `rect` at (240, 50), 100 x 100, then the same `rect` without the group
-- **THEN** the first run prints `custom: sits under the profile photo on desktop`, because the box is measured after the rotation; the second is valid and written
+#### Scenario: A piece in a zone is not refused
+- **WHEN** a valid LinkedIn banner spec has a `stationMarker` centred at (207, 362)
+- **THEN** the image is written and the command prints only `wrote <file.svg>`
 
-### Requirement: Drawn box of every piece
-The box used by "Profile photo zones" SHALL contain every shape and word an entry draws: each piece's default output and `custom`, under its `translate`, `scale` and `rotate` transforms, each shape widened by half its stroke width (own, inherited, or the outlined group's `outline.block`), and each word estimated at 0.6 em per character, 0.8 em above and 0.25 em below its baseline, placed by its anchor.
+### Requirement: PNG script outside the package
+The repository SHALL hold a development script, `scripts/png.ts`, run as `npm run png -- <file.svg> --out <file.png> [--width <px>] [--ground <#rrggbb>] [--zones]`. It is not compiled into the package, not a `bin`, and not part of the cover command.
 
-#### Scenario: Every piece has a box
-- **WHEN** the test computes the box of each of the 63 pieces' required-only calls and of every entry of the golden fixtures
-- **THEN** every box is finite and contains every point of every shape the entry draws, sampled along each path, line and outline
+#### Scenario: Not in the package
+- **WHEN** the package test packs the build
+- **THEN** no packed file is a `png` script and `bin` names only `brunosouzas-cover`
 
-#### Scenario: A transform the box cannot read
-- **WHEN** the box function is given a group with `transform="skewX(10)"`
-- **THEN** it throws an error naming the transform, and no piece's default output makes it throw
+### Requirement: PNG render
+The PNG script SHALL render the SVG through one `<img>` at the SVG's own size (or `--width`, the height in proportion), device scale 1, check that the result is a PNG of the page's size, and write it through a temporary file and a rename. Any problem SHALL exit 1 and leave the target as it was.
 
-### Requirement: Words that read on a phone
-Every word a `linkedin-banner` spec draws SHALL have an effective size of 44 units or more: its own `font-size` or its nearest ancestor's, else `cover.labelSize`, times the scale of its transforms. A smaller word is a problem at its entry's path: `words at <size> units show at about <size / 4, one decimal> px on a phone; a LinkedIn banner takes words of 44 units or more`.
-
-#### Scenario: A pill label
-- **WHEN** `pieces[0]` of a LinkedIn banner spec is a `pill` at (1000, 100) with `text: "APIs"`
-- **THEN** the command prints `pieces[0]: words at 19 units show at about 4.8 px on a phone; a LinkedIn banner takes words of 44 units or more`, exits 1 and writes nothing
-
-#### Scenario: Headline at the floor
-- **WHEN** a LinkedIn banner spec has a `headline` at (900, 120) with `lines: ["Integration"]` and `size: 44`, then with `size: 43`
-- **THEN** the first is written; the second prints `pieces[0]: words at 43 units show at about 10.8 px on a phone; a LinkedIn banner takes words of 44 units or more`
-
-#### Scenario: Free-form words
-- **WHEN** a LinkedIn banner spec has `custom` a `text` node at (900, 100) with `font-size` 30
-- **THEN** `custom` is reported with `words at 30 units show at about 7.5 px on a phone`, and nothing is written
-
-### Requirement: PNG export
-With `--png <file.png>`, the command SHALL, for a valid `linkedin-banner` or `avatar` spec, render the written SVG through one `<img>` in a local Google Chrome or Chromium at the format's size and device scale 1, check that the result is a PNG of that size, then write the SVG and the PNG with the "Safe write" rules and print `wrote <file.svg>` then `wrote <file.png>`. When the render or its check fails, neither target changes.
-
-#### Scenario: Banner and its PNG
-- **WHEN** the owner runs `npm run cover -- linkedin.json --out out/linkedin.svg --png out/linkedin.png` on a valid LinkedIn banner spec, with `BRUNOSOUZAS_CHROME` naming the test's stand-in browser
-- **THEN** it prints `wrote out/linkedin.svg` then `wrote out/linkedin.png`, exits 0, the PNG's header gives 1584 x 396, and the browser got `--headless`, `--window-size=1584,396`, `--force-device-scale-factor=1`, `--host-resolver-rules=MAP * ~NOTFOUND` and a local page holding one `<img src="image.svg" width="1584" height="396">`
-
-#### Scenario: Avatar PNG
-- **WHEN** the same command builds a valid avatar spec with `--png out/app.png`
-- **THEN** the PNG's header gives 500 x 500 and the browser got `--window-size=500,500`
-
-#### Scenario: PNG for another format
-- **WHEN** the owner passes `--png out/cover.png` with a valid cover spec
-- **THEN** it prints `--png is for the linkedin-banner and avatar formats, found cover`, exits 1 and writes neither file
+#### Scenario: PNG size read
+- **WHEN** the header reader gets a PNG of 1584 x 309 while the page is 1584 x 396
+- **THEN** the script reports `cannot render <file.png>: the browser wrote 1584x309, expected 1584x396` and writes nothing
 
 #### Scenario: Real PNG (local)
-- **WHEN** the owner builds the `linkedin-banner` fixture and an avatar with `--png` and his own Chrome
-- **THEN** each PNG has the format's size, its words and pieces match the SVG shown through `<img>` in Chrome, and no network request is made
+- **WHEN** the owner runs `npm run png` on the `linkedin-banner` golden and on an avatar on `neutral` with his own Chrome
+- **THEN** the PNGs are 1584 x 396 and 500 x 500, their words and pieces match the SVG shown through `<img>` in Chrome, and no network request is made
 
-### Requirement: PNG option problems
-`--png` SHALL be an invocation problem, after the `--lang` problems, when it has no value (`--png needs a value: <file.png>`), is repeated (`--png given more than once`), does not end in `.png` (`the PNG output must be a .png file, found <path>`), or its folder does not exist (`the PNG output folder does not exist: <folder>`) or it names a folder (`the PNG output is a folder: <path>`).
-
-#### Scenario: PNG option problems
-- **WHEN** the owner runs the command with a valid `--out` and `--png` with no value, then `--png a.png --png b.png`, then `--png banner.jpg`, then `--png missing/banner.png`
-- **THEN** it prints each message above with the usage, exits 1 and writes nothing
-
-### Requirement: Browser for the PNG
-The command SHALL use the browser named by `BRUNOSOUZAS_CHROME` when set, else the first found of Chrome and Chromium in their macOS application folders, then `google-chrome`, `google-chrome-stable`, `chromium`, `chromium-browser` on `PATH`; start it without a shell, with a fresh profile in a temporary folder that it removes; and stop it after 60 s. No browser found, or a browser that fails, is too slow or writes the wrong size, exits 1 and writes nothing.
-
-#### Scenario: No browser
-- **WHEN** `BRUNOSOUZAS_CHROME` names a file that does not exist
-- **THEN** the command prints `--png needs Google Chrome or Chromium: set BRUNOSOUZAS_CHROME to its executable`, exits 1 and writes neither file
-
-#### Scenario: Browser fails
-- **WHEN** the stand-in browser exits 1 after printing `boom` on its error output
-- **THEN** the command prints `cannot render out/linkedin.png: the browser exited with 1: boom`, exits 1, and existing `out/linkedin.svg` and `out/linkedin.png` keep their bytes
-
-#### Scenario: Wrong size from the browser
-- **WHEN** the stand-in browser writes a PNG of 1584 x 309
-- **THEN** the command prints `cannot render out/linkedin.png: the browser wrote 1584x309, expected 1584x396`, exits 1, writes neither file and leaves no temporary file in `out/`
-
-#### Scenario: Browser too slow
-- **WHEN** the browser has not exited when the time limit passes (60 s, shortened in the unit test)
-- **THEN** it is stopped, the command prints `cannot render <file.png>: the browser did not finish in 60 s` and writes neither file
+### Requirement: Browser for the PNG script
+The PNG script SHALL use `BRUNOSOUZAS_CHROME` when set, else the macOS Chrome and Chromium application paths, else `google-chrome` or `chromium` on `PATH`; start it without a shell, with a fresh profile in a temporary folder it removes, every host name resolving nowhere, and stop it after 60 s.
 
 #### Scenario: Lookup order
 - **WHEN** `BRUNOSOUZAS_CHROME` is unset and both the macOS Chrome path and `chromium` on `PATH` exist
 - **THEN** the macOS Chrome path is used
+
+#### Scenario: No browser
+- **WHEN** `BRUNOSOUZAS_CHROME` names a file that does not exist
+- **THEN** the script prints `npm run png needs Google Chrome or Chromium: set BRUNOSOUZAS_CHROME to its executable`, exits 1 and writes nothing
+
+### Requirement: Photo zones overlay
+With `--zones`, for a 1584x396 SVG only, the PNG script SHALL draw each zone's photo circle and safe circle from `LINKEDIN_PHOTO_ZONES` over the image, dashed, in the page and never in the image.
+
+#### Scenario: Page with zones
+- **WHEN** the page is built for a 1584x396 SVG with `--width 792` and `--zones`
+- **THEN** it holds one `<img src="image.svg" width="792" height="198">` and, over it, an `svg` with `viewBox="0 0 1584 396"` holding four dashed circles at the two zones' centres, of radii 160, 176, 187 and 203
+
+#### Scenario: Zones on another size
+- **WHEN** the script gets `--zones` with a 500x500 SVG
+- **THEN** it prints `--zones is for a 1584x396 LinkedIn banner, found 500x500` with the usage, exits 1 and writes nothing
 
 ### Requirement: Avatar ground
 An `avatar` spec SHALL accept an optional `background`, a `coverBackground` name; the square behind the symbol takes that pair's `fill`, and its ring colour is unused. Without `background` the square stays `brand.light.accentText` and the output is byte-identical to 0.9.1's.
@@ -247,4 +191,4 @@ An `avatar` spec SHALL accept an optional `background`, a `coverBackground` name
 
 #### Scenario: Default avatar unchanged
 - **WHEN** an avatar spec without `background` is built
-- **THEN** the output equals, byte for byte, the 0.9.1 output of the same spec kept as `test/fixtures/covers/avatar-0.9.1.svg`
+- **THEN** the output equals, byte for byte, `test/fixtures/covers/avatar-0.9.1.svg`, captured from the published 0.9.1 before any change, whose SHA-256 is recorded in `test/fixtures/covers/README.md`

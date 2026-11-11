@@ -29,19 +29,23 @@ Every `uiIcon` and `linkIcon` tree, on both surfaces, SHALL use only the node co
 ## ADDED Requirements
 
 ### Requirement: The stackledger link icon
-`linkIcon` with `icon: "stackledger"` SHALL draw, after the face, the mark's line `M10.3 29.3 L18.6 21 L31.7 21` (`illustration.accent`, width 5.3, round caps and joins, no fill), then two stations filled `color.white` and stroked `color.ink`: (18.6, 21) r 4.75 at 2.5 and (31.7, 21) r 3.1 at 2. Its title is `stackledger` and its description `stackledger icon: the product's mark, a bent line through two stations.`
+`linkIcon` with `icon: "stackledger"` SHALL draw, after the face, `ledgerMark`'s bent line in `illustration.accent` and its two stations, white with ink outlines, mapped from the mark's 32-unit page onto the 38-unit face (x 1.1875, then +2), every shape inside the face. Its title is `stackledger` and its description `stackledger icon: the product's mark, a bent line through two stations.`
 
 #### Scenario: stackledger on light
 - **WHEN** `linkIcon({ icon: "stackledger", x: 0, y: 0 })` is called
-- **THEN** its group holds, in order, the face rect (2, 2) 38 × 38 radius 9 fill `#FFFFFF` stroke `#121212` at 2.5, the path stroked `#E04E17` at 5.3, and the two circles filled `#FFFFFF` and stroked `#121212`, and nothing else
+- **THEN** its group holds, in order, the face rect (2, 2) 38 × 38 radius 9 fill `#FFFFFF` stroke `#121212` at 2.5, the path `M10.3 29.3 L18.6 21 L31.7 21` stroked `#E04E17` at 5.3 (the mark's 4.5 scaled, rounded) with round caps and joins and no fill, then the circles (18.6, 21) r 4.75 and (31.7, 21) r 3.1, filled `#FFFFFF` and stroked `#121212` at the family's 2.5 and 2, and nothing else
 
 #### Scenario: stackledger on dark
 - **WHEN** `linkIcon({ icon: "stackledger", x: 0, y: 0, surface: "dark" })` is called
 - **THEN** only the face rect's stroke differs from the light call, `#ADA79D`; the line stays `#E04E17` and the stations stay stroked `#121212`
 
+#### Scenario: Glyph inside the face
+- **WHEN** the test computes the box of each glyph shape of the stackledger icon, widened by half its stroke width (the line's round caps included)
+- **THEN** every box lies within 2 to 40 on both axes (the glyph spans x 7.65 to 35.8, y 15 to 31.95)
+
 #### Scenario: Same size as the other link icons
 - **WHEN** `linkIcon({ icon: "stackledger", x: 10, y: 20, size: 28 })` is called
-- **THEN** its group has the same transform as `linkIcon({ icon: "github", x: 10, y: 20, size: 28 })`, `translate(10 20) scale(28 / 46)`, and every shape's box (stroke included) lies inside the 46 box before scaling
+- **THEN** its group has the same transform as `linkIcon({ icon: "github", x: 10, y: 20, size: 28 })`, `translate(10 20) scale(28 / 46)`
 
 #### Scenario: stackledger in an icon spec
 - **WHEN** an icon spec holds `{ "piece": "linkIcon", "icon": "stackledger" }` with a title and a description
