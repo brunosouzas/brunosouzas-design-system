@@ -428,7 +428,7 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 - **THEN** each run reports `signature` as "not used by the linkedin-banner format", exits 1 and writes nothing
 
 ### Requirement: New icon formats
-`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square ground, "Avatar ground"; `pieces`, `rings`, `custom`, `customAt`, `height` and `signature` are refused). This command writes SVG only; the repository's PNG script ("PNG from a written SVG") is a development tool, and a favicon or social-preview PNG set is the consuming site's build step.
+`format` SHALL accept `favicon` (the symbol, both themes, no `pieces`), `linkedin-card` (1080×1080, cover frame conventions), `og` (1200×630, cover frame conventions, the site's generic social-preview image) and `avatar` (500×500, the symbol on a square ground, "Avatar ground"; `pieces`, `rings`, `custom`, `customAt`, `height` and `signature` are refused). This command writes SVG only (PNG: "PNG script outside the package").
 
 #### Scenario: Favicon is the symbol, both themes, no pieces
 - **WHEN** a spec with `format: "favicon"` is built
