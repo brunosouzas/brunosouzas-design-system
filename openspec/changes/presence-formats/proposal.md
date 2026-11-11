@@ -42,12 +42,14 @@ The owner chose the simple version (gate 1, q36 A): the package gives the format
 - A dark-surface LinkedIn banner: `coverBackground` has no dark pair; LinkedIn's dark mode only changes the page around the image.
 - Any change to `ledgerMark` or the other four link icons.
 
-## Open questions (gate 1)
+## Gate 1 (owner, 2026-11-11)
 
-1. **The screenshots.** The measurements come from the owner's screenshots of his own profile. Recommended: keep them out of the public repository (they show his profile page) and record only the numbers, in design §2 and the README.
-2. **Android and narrow desktop.** Not measured. Recommended: ship with the two measured zones; measure again only if a banner shows a covered piece on another surface.
-3. **The App icon's ground.** Recommended: `neutral` (the brand's cream page, `#F6F3EC`), clearly not Bruno's orange avatar.
-4. **The signature on the banner.** Recommended: refused (design §4); Mira can still be a piece.
+Approved ("G1 ok"), with the four questions answered as recommended:
+
+1. **The screenshots** stay out of the repository; only the numbers are recorded (design §2, README).
+2. **Android and narrow desktop** are not measured; measure again only if a banner shows a covered piece on another surface.
+3. **The App icon's ground** is `neutral` (`#F6F3EC`).
+4. **The signature** is refused on the banner (design §4); Mira can still be a piece.
 
 ## Implicit requirements
 
