@@ -4,7 +4,7 @@ At gate 1 the owner chose the simple version (q36 A); implementation starts afte
 
 ## 1. Baseline before any change
 
-- [ ] 1.1 Before touching any code, capture the 0.9.1 avatar: write the avatar spec of `test/scripts/cover.test.ts:629` (`id` `av`) to a scratch file and build it with the published 0.9.1, `npx -p @brunosouzas/design-system@0.9.1 brunosouzas-cover <spec> --out test/fixtures/covers/avatar-0.9.1.svg` (or, offline, `npm run cover` at commit `b925798`). Record its SHA-256 (`shasum -a 256`) and how it was made in `test/fixtures/covers/README.md`, and commit both alone. Check: the file's SHA-256 matches the README; `git log` shows the commit before any `src/` change.
+- [x] 1.1 Before touching any code, capture the 0.9.1 avatar: write the avatar spec of `test/scripts/cover.test.ts:629` (`id` `av`) to a scratch file and build it with the published 0.9.1, `npx -p @brunosouzas/design-system@0.9.1 brunosouzas-cover <spec> --out test/fixtures/covers/avatar-0.9.1.svg` (or, offline, `npm run cover` at commit `b925798`). Record its SHA-256 (`shasum -a 256`) and how it was made in `test/fixtures/covers/README.md`, and commit both alone. Check: the file's SHA-256 matches the README; `git log` shows the commit before any `src/` change.
 
 ## 2. The stackledger link icon (`illustration-pieces`)
 

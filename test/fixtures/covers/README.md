@@ -27,3 +27,11 @@ Published sources of the `designer-formats` fixtures (brain vault commit `016a99
 | `eip-splitter.svg` | `50-writing/integration-patterns-in-mulesoft/images/icons/eip-splitter.svg` | `678ef8f6fb1cbfaa88dabbf420cd5107b01a46fc2358dd5afe40ee4fd5f4301e` |
 
 `og-headline.json` (change `headline-piece`, AB#307) is brunosouzas.com's default share image in English, the concept the owner chose from renders: the slogan in three `headline` lines, the symbol, the four category badges and the signature, with golden `og-headline.svg`. Its words are the brand's published slogan (brand strategy E2, studio decision I13), approved by the owner for this image (AB#307 Q1), so it may be public (ADR 0004).
+
+`avatar-0.9.1.svg` (change `presence-formats`, AB#325, task 1.1) is the baseline of the default avatar, captured before the avatar took an optional `background`: the `av` avatar spec of `test/scripts/cover.test.ts` (`{ "id": "av", "title": "Symbol", "description": "The b-with-moon symbol, filling the frame.", "format": "avatar" }`) built by the published 0.9.1, from a folder outside this repository (inside it `npx` resolves the local package of the same name and finds no `brunosouzas-cover`):
+
+```
+npx -y -p @brunosouzas/design-system@0.9.1 brunosouzas-cover av.json --out test/fixtures/covers/avatar-0.9.1.svg
+```
+
+SHA-256 `e2526829b5cbf4c3f6ec9ac2c0e3dd7282b7f5d616c8d38a31df8af48dcb6f81`. The test "Default avatar unchanged" compares the command's output against it, byte for byte. It is not a golden of a fixture: it is never regenerated.
