@@ -80,7 +80,7 @@ LinkedIn takes PNG or JPG; GitHub takes PNG, JPG or GIF for an App's logo. Both 
 **Usage.** `npm run png -- <file.svg> --out <file.png> [--width <px>] [--ground <#rrggbb>] [--zones]`
 
 - The size is the SVG root's own `width` and `height`; `--width` shows it smaller (the height follows, rounded), for evidence images.
-- `--ground` puts the image on a page of that colour with a 24 px margin, to see it on a light or dark page.
+- `--ground` puts the image on a page of that colour with a 24 px margin on every side, to see it on a light or dark page: the page and the window are (W+48) x (H+48), the image and the `--zones` overlay sit at (24, 24), and the PNG is checked against that size.
 - `--zones` (a 1584x396 SVG only) draws, in an inline `<svg viewBox="0 0 1584 396">` laid over the `<img>`, each zone's photo circle (dashed ink) and safe circle (dashed `illustration.accent`), each named (`desktop`, `ios`). The overlay is in the page, never in the image.
 
 **Flow.** Find the browser: `BRUNOSOUZAS_CHROME` if set, else the first of `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`, `/Applications/Chromium.app/Contents/MacOS/Chromium`, then `google-chrome`, `chromium` on `PATH`. In a new temporary folder (`mkdtemp`) write `image.svg` (a copy) and `page.html` (`<body style="margin:0">`, one `<img src="image.svg" width="W" height="H" style="display:block">`, the overlay if asked). Start the browser with `execFile` (no shell), 60 s timeout:

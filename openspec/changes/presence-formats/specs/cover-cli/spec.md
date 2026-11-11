@@ -55,7 +55,7 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 - **WHEN** a spec with `format: "og"` is built
 - **THEN** the written SVG has `width="1200" height="630" viewBox="0 0 1200 630"`
 
-#### Scenario: Avatar refuses a background and pieces
+#### Scenario: Avatar refuses pieces, rings and an unknown ground
 - **WHEN** a spec with `format: "avatar"` has a non-empty `pieces`, then `rings` `{ "cx": 0, "cy": 0 }`, then `background: "pink"`
 - **THEN** the first two are reported as "not used by the avatar format", the third as `background: expected one of <the cover background names>, found "pink"`; each run exits 1 and writes nothing
 
@@ -67,7 +67,7 @@ The repository SHALL keep as spec fixtures, with their golden SVG output: the th
 - **THEN** each of the nine results equals its golden SVG byte for byte
 
 #### Scenario: Visual parity (local)
-- **WHEN** the owner renders each golden at its width (800, 1200 for the banner, 64 for the icon) in headless Chrome through an `<img>`, next to the 0.6.1 golden
+- **WHEN** the owner renders each golden at its width (800, 1200 for the banner and the og image, 1584 for the LinkedIn banner, 64 for the icon) in headless Chrome through an `<img>`, next to the 0.6.1 golden
 - **THEN** the text shows in Source, the layout, rings and words match the 0.6.1 golden, and the owner approves the pair; no PSNR against the published originals applies, because the v2 colours and type differ from them by design; `og-headline` and `linkedin-banner` have no 0.6.1 golden and are approved from their own renders
 
 #### Scenario: Golden drifts
@@ -133,7 +133,7 @@ The package SHALL export from its root entry `LINKEDIN_PHOTO_ZONES`, a frozen ar
 
 #### Scenario: Zone values
 - **WHEN** `LINKEDIN_PHOTO_ZONES` and `LINKEDIN_PHOTO_MARGIN` are read from the package root
-- **THEN** the margin is 16 and the zones are exactly `{ name: "desktop", cx: 207, cy: 362, r: 160, safeRadius: 176 }` and `{ name: "ios", cx: 244, cy: 409, r: 187, safeRadius: 203 }`, in that order, and assigning to an entry throws in strict mode
+- **THEN** the margin is 16 and the zones are exactly `{ name: "desktop", cx: 207, cy: 362, r: 160, safeRadius: 176 }` and `{ name: "ios", cx: 244, cy: 409, r: 187, safeRadius: 203 }`, in that order; the array and every entry are frozen, so in strict mode `LINKEDIN_PHOTO_ZONES[0].cx = 1` and `LINKEDIN_PHOTO_ZONES.push(x)` both throw
 
 ### Requirement: Photo zones are not checked by the command
 The cover command SHALL NOT check pieces, `custom` or words against the photo zones or against a word size: keeping pieces out of the zones is the composer's job, checked by the owner on a render with the zones drawn ("Photo zones overlay").
@@ -150,18 +150,26 @@ The repository SHALL hold a development script, `scripts/png.ts`, run as `npm ru
 - **THEN** no packed file is a `png` script and `bin` names only `brunosouzas-cover`
 
 ### Requirement: PNG render
-The PNG script SHALL render the SVG through one `<img>` at the SVG's own size (or `--width`, the height in proportion), device scale 1, check that the result is a PNG of the page's size, and write it through a temporary file and a rename. Any problem SHALL exit 1 and leave the target as it was.
+The PNG script SHALL render the SVG through one `<img>` at the SVG's own size (or `--width`, the height in proportion), device scale 1. The page is the image's size; with `--ground` it is the image plus a 24 px margin on every side ((W+48) x (H+48)) in that colour, the image and any `--zones` overlay offset by 24 on both axes. The window is the page's size. The script SHALL check that the result is a PNG of the page's size, and write it through a temporary file and a rename. Any problem SHALL exit 1 and leave the target as it was.
 
 #### Scenario: PNG size read
 - **WHEN** the header reader gets a PNG of 1584 x 309 while the page is 1584 x 396
 - **THEN** the script reports `cannot render <file.png>: the browser wrote 1584x309, expected 1584x396` and writes nothing
 
+#### Scenario: Page on a ground
+- **WHEN** the page is built for a 1584x396 SVG with `--width 792 --ground #1B1D24 --zones`
+- **THEN** the page and the window are 840 x 246, the body is `#1B1D24`, the `<img>` and the zones `svg` both sit at (24, 24), and the expected PNG size is 840 x 246
+
 #### Scenario: Real PNG (local)
 - **WHEN** the owner runs `npm run png` on the `linkedin-banner` golden and on an avatar on `neutral` with his own Chrome
-- **THEN** the PNGs are 1584 x 396 and 500 x 500, their words and pieces match the SVG shown through `<img>` in Chrome, and no network request is made
+- **THEN** the PNGs are 1584 x 396 and 500 x 500, and their words and pieces match the SVG shown through `<img>` in Chrome
 
 ### Requirement: Browser for the PNG script
-The PNG script SHALL use `BRUNOSOUZAS_CHROME` when set, else the macOS Chrome and Chromium application paths, else `google-chrome` or `chromium` on `PATH`; start it without a shell, with a fresh profile in a temporary folder it removes, every host name resolving nowhere, and stop it after 60 s.
+The PNG script SHALL use `BRUNOSOUZAS_CHROME` when set, else the macOS Chrome and Chromium application paths, else `google-chrome` or `chromium` on `PATH`; start it without a shell, with a fresh profile in a temporary folder it removes, `--host-resolver-rules="MAP * ~NOTFOUND"` so every host name resolves nowhere, and stop it after 60 s.
+
+#### Scenario: Browser arguments
+- **WHEN** the script builds the browser's argument list for a page
+- **THEN** it holds `--headless`, `--user-data-dir=<a temporary folder>`, `--force-device-scale-factor=1`, `--window-size=<page width>,<page height>` and `--host-resolver-rules=MAP * ~NOTFOUND`, and never `--no-sandbox`
 
 #### Scenario: Lookup order
 - **WHEN** `BRUNOSOUZAS_CHROME` is unset and both the macOS Chrome path and `chromium` on `PATH` exist
@@ -190,5 +198,5 @@ An `avatar` spec SHALL accept an optional `background`, a `coverBackground` name
 - **THEN** the written SVG is 500x500 and its square is filled `#F6F3EC`, with the same symbol group as without `background`
 
 #### Scenario: Default avatar unchanged
-- **WHEN** an avatar spec without `background` is built
+- **WHEN** the `av` avatar spec of `test/scripts/cover.test.ts` (no `background`) is built
 - **THEN** the output equals, byte for byte, `test/fixtures/covers/avatar-0.9.1.svg`, captured from the published 0.9.1 before any change, whose SHA-256 is recorded in `test/fixtures/covers/README.md`
