@@ -4,7 +4,10 @@
 // its token, plus a `website` globe in the same style and `stackledger`, the
 // product's mark (`ledgerMark`'s bent line and two stations, mapped from its
 // 32-unit page onto the 38-unit face, change presence-formats design §8; the
-// face is the page, so the mark keeps one outline). `linkIcon` draws the
+// face is the page, so the mark keeps one outline), and `brunosouzas`, the
+// brand symbol of the favicon and the avatar (`symbolShapes`, scaled to the
+// other glyphs' size and centred on the face, change brand-link-icon design §1;
+// the site's own icon, where `website` stays the generic one). `linkIcon` draws the
 // face white with its outline and no frame behind it (ADR 0009: no hard shadow,
 // colour only where it means something), then the glyph, at the site's measures
 // (46 box, face 38 at 2, radius 9, outline 2.5). On the dark surface the face's
@@ -21,6 +24,7 @@ import { drawn, el, g, r2, type SvgNode } from "./node.ts";
 import { pos, size } from "./params.ts";
 import { definePiece } from "./piece.ts";
 import { SURFACES, type SurfaceName } from "./metro.ts";
+import { symbolShapes } from "./symbol.ts";
 
 const C = tokens.color;
 const INK = C.ink;
@@ -89,6 +93,15 @@ export const LINK_ICONS: readonly LinkIcon[] = [
       el("circle", { cx: 18.6, cy: 21, r: 4.75, fill: C.white, stroke: INK, "stroke-width": 2.5 }),
       el("circle", { cx: 31.7, cy: 21, r: 3.1, fill: C.white, stroke: INK, "stroke-width": 2 }),
     ],
+  },
+  {
+    name: "brunosouzas",
+    title: "brunosouzas.com",
+    description: "brunosouzas.com icon: the brand symbol, a b with a moon.",
+    face: "color.white",
+    // The symbol's 32-unit box at 0.875, its content box (x 5 to 30.3, y 3 to 30.1) centred on the face's (21, 21).
+    // The face is white on both surfaces, so the glyph keeps the light symbol's colours on both.
+    glyph: [g({ transform: "translate(5.56 6.52) scale(0.875)" }, ...symbolShapes(tokens.brand.light.text, tokens.brand.light.accent))],
   },
 ];
 
