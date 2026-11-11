@@ -379,9 +379,10 @@ describe("Cover output", () => {
 });
 
 describe("Parity with the published proof covers", () => {
-  // Seven goldens: three proof covers, the banner, the icon, and the diagram in both languages (change designer-formats).
+  // Nine goldens: three proof covers, the banner, the icon, and the diagram in both languages (change designer-formats),
+  // the og image (change headline-piece) and the LinkedIn banner (change presence-formats, AB#325).
   test.each([
-    ...[...PROOF_COVERS, "home-banner", "eip-splitter"].map((name) => [name, name, undefined]),
+    ...[...PROOF_COVERS, "home-banner", "eip-splitter", "og-headline", "linkedin-banner"].map((name) => [name, name, undefined]),
     ["circuit-breaker-states-pt", "circuit-breaker-states", "pt"],
     ["circuit-breaker-states-en", "circuit-breaker-states", "en"],
   ] as [string, string, string | undefined][])("Golden output (%s)", async (golden, spec, lang) => {
@@ -398,6 +399,13 @@ describe("Parity with the published proof covers", () => {
     const at = golden.indexOf("<title");
     const drifted = `${golden.slice(0, at)}<Title${golden.slice(at + 6)}`;
     if (result.ok) expect(goldenDrift("ai-writes-code", result.svg, drifted)).toEqual([`ai-writes-code: differs from its golden at offset ${at + 1}`]);
+    // The LinkedIn banner's golden, one byte changed (change presence-formats).
+    const banner = await buildCover(readFileSync(join(FIXTURES, "linkedin-banner.json"), "utf8"), "linkedin-banner");
+    expect(banner.ok).toBe(true);
+    const bannerGolden = readFileSync(join(FIXTURES, "linkedin-banner.svg"), "utf8");
+    const ring = bannerGolden.indexOf('r="60"');
+    const bannerDrifted = `${bannerGolden.slice(0, ring)}r="61"${bannerGolden.slice(ring + 6)}`;
+    if (banner.ok) expect(goldenDrift("linkedin-banner", banner.svg, bannerDrifted)).toEqual([`linkedin-banner: differs from its golden at offset ${ring + 4}`]);
   });
 });
 
