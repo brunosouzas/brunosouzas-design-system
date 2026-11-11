@@ -55,7 +55,7 @@ A `cover`, `banner`, `linkedin-card` or `og` spec SHALL accept an optional boole
 - **WHEN** a spec with `format: "og"` is built
 - **THEN** the written SVG has `width="1200" height="630" viewBox="0 0 1200 630"`
 
-#### Scenario: Avatar refuses pieces, rings and an unknown ground
+#### Scenario: Avatar refuses a background and pieces
 - **WHEN** a spec with `format: "avatar"` has a non-empty `pieces`, then `rings` `{ "cx": 0, "cy": 0 }`, then `background: "pink"`
 - **THEN** the first two are reported as "not used by the avatar format", the third as `background: expected one of <the cover background names>, found "pink"`; each run exits 1 and writes nothing
 
@@ -150,7 +150,7 @@ The repository SHALL hold a development script, `scripts/png.ts`, run as `npm ru
 - **THEN** no packed file is a `png` script and `bin` names only `brunosouzas-cover`
 
 ### Requirement: PNG render
-The PNG script SHALL render the SVG through one `<img>` at the SVG's own size (or `--width`, the height in proportion), device scale 1. The page is the image's size; with `--ground` it is the image plus a 24 px margin on every side ((W+48) x (H+48)) in that colour, the image and any `--zones` overlay offset by 24 on both axes. The window is the page's size. The script SHALL check that the result is a PNG of the page's size, and write it through a temporary file and a rename. Any problem SHALL exit 1 and leave the target as it was.
+The PNG script SHALL render the SVG through one `<img>` at the SVG's own size (or `--width`, the height in proportion), device scale 1. The window is the page's size; `--ground` adds a 24 px margin of that colour on every side ("Page on a ground"). The script SHALL check that the result is a PNG of the page's size, and write it through a temporary file and a rename. Any problem SHALL exit 1 and leave the target as it was.
 
 #### Scenario: PNG size read
 - **WHEN** the header reader gets a PNG of 1584 x 309 while the page is 1584 x 396
