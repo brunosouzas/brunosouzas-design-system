@@ -99,7 +99,7 @@ A `linkedin-banner` spec SHALL need `background` (a `coverBackground` name), `ri
 - **THEN** `height` is reported as "only a diagram takes a height" and nothing is written
 
 #### Scenario: English table
-- **WHEN** a `linkedin-banner` spec has `text.en.claim: "Integration"` and a `headline` with `lines: "@claim"`, built with `--lang en`
+- **WHEN** a `linkedin-banner` spec has `text.en.claim: "Integration"` and a `headline` with `lines: ["@claim"]`, built with `--lang en`
 - **THEN** the image is written with the headline `Integration` and ids `<id>-en`
 
 #### Scenario: Another language on a LinkedIn banner

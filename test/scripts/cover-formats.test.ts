@@ -1,12 +1,13 @@
 // Integration tests of the cover command's diagram and icon formats, text tables,
 // --lang and customAt (spec cover-cli; change designer-formats, tasks 3.1-3.4).
 // Each test title is the spec scenario it proves.
-import { chmodSync, cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 import { buildCover, COVER_USAGE, runCover } from "../../scripts/cover";
-import { coverTree, validateCoverSpec, type CoverSpec } from "../../src/pieces/cover";
+import { bannerRingCount, coverTree, validateCoverSpec, type CoverSpec } from "../../src/pieces/cover";
+import { LINKEDIN_PHOTO_MARGIN, LINKEDIN_PHOTO_ZONES } from "../../src/pieces/index";
 import { EIP_ICONS } from "../../src/pieces/eip-icons";
 import type { SvgNode } from "../../src/pieces/node";
 import { tokens } from "../../tokens/generated/tokens";
@@ -524,5 +525,129 @@ describe("Headline in a written image", () => {
     expect(await ws.run("spec.json", "--out", "og.svg")).toBe(1);
     expect(ws.err).toEqual(["pieces[0].lines: expected at least 1 item(s)", "pieces[0].size: expected a number at most 160, found 200", "cover: 2 problem(s) in spec.json; no file written"]);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+});
+
+// Change presence-formats (AB#325), tasks 3.1 and 3.2: cover-cli "LinkedIn banner output", "LinkedIn banner keys",
+// "LinkedIn banner rings reach the corners", "Ring count takes a frame size", "Signature lockup",
+// "LinkedIn profile photo zones", "Photo zones are not checked by the command".
+const linkedin = (extra: Record<string, unknown> = {}) => ({
+  id: "li",
+  title: "Title",
+  description: "Description",
+  format: "linkedin-banner",
+  background: "trackIntegration",
+  rings: { cx: 1188, cy: 198, radius: 60 },
+  pieces: [] as unknown[],
+  ...extra,
+});
+const BACKGROUNDS = Object.keys(tokens.coverBackground).join(", ");
+const linkedinRadii = (svg: string) => ringRadii(svg, tokens.coverBackground.trackIntegration.ring, String(tokens.cover.ringWidth));
+/** Exits 1, prints the problem and writes nothing. */
+const refused = async (spec: unknown, lines: string[], ...lang: string[]) => {
+  const ws = workspace();
+  ws.write("li.json", spec);
+  expect(await ws.run("li.json", "--out", "li.svg", ...lang)).toBe(1);
+  expect(ws.err.slice(0, -1)).toEqual(lines);
+  expect(readdirSync(ws.root)).toEqual(["li.json"]);
+};
+
+describe("LinkedIn banner output", () => {
+  test("LinkedIn banner frame", async () => {
+    const svg = await svgOf(linkedin({ background: "trackDelivery", pieces: [{ piece: "headline", lines: ["Integration"], size: 64, x: 900, y: 120 }] }));
+    expect(rootOf(svg)).toContain('width="1584" height="396" viewBox="0 0 1584 396"');
+    expect(svg).toContain('<clipPath id="li-frame">\n      <rect width="1584" height="396"/>');
+    expect(svg).toContain('<rect width="1584" height="396" fill="#B9DEC3"/>');
+    expect(svg).not.toMatch(/<rect width="1584" height="396"[^>]* rx=/);
+    // Pieces and labels unclipped, as on a cover: one clipped group, the rings.
+    expect(svg.match(/<g clip-path=/g)).toHaveLength(1);
+    const labels = groupOf(svg, `<g font-size="${tokens.cover.labelSize}"`);
+    expect(labels).toContain('data-piece="headline"');
+    expect(labels).toContain(">Integration</text>");
+  });
+
+  test("Same command, same bytes", async () => {
+    const ws = workspace();
+    mkdirSync(join(ws.root, "out"));
+    ws.write("linkedin.json", linkedin({ pieces: [{ piece: "cloud", cx: 1470, cy: 205, scale: 0.9 }] }));
+    expect(await ws.run("linkedin.json", "--out", "out/linkedin.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote out/linkedin.svg"]);
+    const first = readFileSync(join(ws.root, "out/linkedin.svg"));
+    expect(await ws.run("linkedin.json", "--out", "out/linkedin.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote out/linkedin.svg"]);
+    expect(readFileSync(join(ws.root, "out/linkedin.svg")).equals(first)).toBe(true);
+  });
+});
+
+describe("LinkedIn banner keys", () => {
+  test("Missing background", async () => {
+    const { background: _, ...spec } = linkedin();
+    await refused(spec, [`background: expected one of ${BACKGROUNDS}, found nothing`]);
+  });
+
+  test("Height on a LinkedIn banner", async () => {
+    await refused(linkedin({ height: 396 }), ["height: only a diagram takes a height"]);
+  });
+
+  test("English table", async () => {
+    const svg = await svgOf(linkedin({ text: { en: { claim: "Integration" } }, pieces: [{ piece: "headline", x: 900, y: 120, lines: ["@claim"], size: 64 }] }), "en");
+    expect(svg).toContain(">Integration</text>");
+    expect(svg).toContain('<title id="li-en-title">');
+    expect(svg).toContain('<clipPath id="li-en-frame">');
+  });
+
+  test("Another language on a LinkedIn banner", async () => {
+    const spec = linkedin({ text: tables({ claim: "Integration" }, { claim: "Integração" }), pieces: [{ piece: "headline", x: 900, y: 120, lines: ["@claim"], size: 64 }] });
+    for (const lang of [[], ["--lang", "en"], ["--lang", "pt"]]) await refused(spec, ["text.pt: a LinkedIn banner's words are English"], ...lang);
+  });
+
+  test("Signature refused by a LinkedIn banner", async () => {
+    for (const signature of [true, false]) await refused(linkedin({ signature }), ["signature: not used by the linkedin-banner format"]);
+  });
+});
+
+describe("LinkedIn banner rings reach the corners", () => {
+  test("Rings of the fixture", async () => {
+    expect(linkedinRadii(await svgOf(linkedin()))).toEqual(Array.from({ length: 42 }, (_, i) => 60 + 28 * i));
+  });
+
+  test("First ring beyond every corner on a LinkedIn banner", async () => {
+    expect(linkedinRadii(await svgOf(linkedin({ rings: { cx: 1100, cy: 150, radius: 2000 } })))).toEqual([2000]);
+  });
+
+  test("Centre far outside a LinkedIn banner", async () => {
+    const radii = linkedinRadii(await svgOf(linkedin({ rings: { cx: -10000, cy: -10000 } })));
+    expect(radii).toHaveLength(554);
+    expect([radii[0], radii[553]]).toEqual([90, 15574]);
+  });
+
+  test("Banner ring count unchanged", () => {
+    expect(bannerRingCount(600, 225, 60)).toBe(22);
+    expect(bannerRingCount(1188, 198, 60, 1584, 396)).toBe(42);
+  });
+});
+
+describe("LinkedIn profile photo zones", () => {
+  test("Zone values", () => {
+    expect(LINKEDIN_PHOTO_MARGIN).toBe(16);
+    expect(LINKEDIN_PHOTO_ZONES).toEqual([
+      { name: "desktop", cx: 207, cy: 362, r: 160, safeRadius: 176 },
+      { name: "ios", cx: 244, cy: 409, r: 187, safeRadius: 203 },
+    ]);
+    expect(Object.isFrozen(LINKEDIN_PHOTO_ZONES)).toBe(true);
+    for (const zone of LINKEDIN_PHOTO_ZONES) expect(Object.isFrozen(zone)).toBe(true);
+    // Test modules run in strict mode: writing to a frozen object throws.
+    expect(() => {
+      (LINKEDIN_PHOTO_ZONES[0] as { cx: number }).cx = 1;
+    }).toThrow(TypeError);
+    expect(() => (LINKEDIN_PHOTO_ZONES as unknown as unknown[]).push({})).toThrow(TypeError);
+  });
+
+  test("A piece in a zone is not refused", async () => {
+    const ws = workspace();
+    ws.write("li.json", linkedin({ pieces: [{ piece: "stationMarker", cx: 207, cy: 362 }] }));
+    expect(await ws.run("li.json", "--out", "li.svg")).toBe(0);
+    expect(ws.out).toEqual(["wrote li.svg"]);
+    expect(ws.err).toEqual([]);
   });
 });
