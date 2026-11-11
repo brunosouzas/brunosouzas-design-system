@@ -105,12 +105,14 @@ npm run build                                     # compile the package into dis
 npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner, diagram or icon) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
 npm run pieces:sheet -- --out out/dark.svg --surface dark  # the same on the dark surface
+npm run png -- card.svg --out card.png            # a written SVG as PNG, through Chrome (repository only)
 npm run studio                                    # Remotion Studio, for frame-by-frame review
 ```
 
 - Change a token value in `tokens/source.json` and run `npm run tokens`; never edit `tokens/generated/` by hand. An invalid source prints every problem and writes nothing.
 - `stills` and `render` take one scene name and an optional `--dry-run`, which prints the commands without running them. A render writes a hardware-encoded master (about 28 MB for 33 s) and an x264 web copy (under 1 MB) made with the ffmpeg bundled with Remotion, and prints one line per composition with its time and sizes. The four circuit-breaker clips take about four to five minutes on an Apple M3.
 - Everything rendered goes to `out/`, which Git ignores.
+- `npm run png -- <file.svg> --out <file.png> [--width <px>] [--ground <#rrggbb>] [--zones]` shows a written SVG through one `<img>` in headless Chrome (the renderer that honours the embedded faces, [ADR 0008](docs/adr/0008-type-inside-the-image.md)) and saves the screenshot at the SVG's own size, device scale 1. `--width` shows it smaller (the height follows), `--ground` puts it on a page of that colour with a 24 px margin, `--zones` draws LinkedIn's profile photo zones over a LinkedIn banner (in the page, never in the image). It is a repository script, not part of the package or of `brunosouzas-cover`, and needs Google Chrome or Chromium: the macOS applications, `google-chrome` or `chromium` on `PATH`, or `BRUNOSOUZAS_CHROME` set to the executable. A browser that fails, takes over 60 s or writes the wrong size exits 1 and leaves the target as it was.
 
 ## How a scene is built
 
@@ -252,16 +254,40 @@ The banner is one image that scales down as a whole. Words in it become small on
 
 ### Signature lockup
 
-A cover, banner, LinkedIn card or og spec takes an optional `"signature": true`: Mira (scale 0.25) and the symbol, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges. Omit it and nothing is added. A diagram, favicon, avatar or icon spec refuses the key (an icon accepted it and drew nothing before 0.7.0).
+A cover, banner, LinkedIn card or og spec takes an optional `"signature": true`: Mira (scale 0.25) and the symbol, anchored to the frame's bottom-right corner by `cover.signatureMargin` from both edges. Omit it and nothing is added. A diagram, favicon, avatar, icon or `linkedin-banner` spec refuses the key (an icon accepted it and drew nothing before 0.7.0; on a LinkedIn banner the profile's own photo and name sign the page, and the lockup would show about 12 pt tall on a phone).
 
 ### Social and platform formats
 
-Four more formats hold the symbol or a reduced cover frame, fixed size, no `height`:
+Five more formats hold the symbol or a reduced cover frame, fixed size, no `height`:
 
 - `"format": "linkedin-card"` — 1080x1080, cover frame conventions (`background`, `rings`, `pieces`, `custom`, `signature`). The "new piece" announcement card.
 - `"format": "og"` — 1200x630, cover frame conventions. The site's generic social-preview image (not an article's own cover, which already serves as its og:image).
 - `"format": "favicon"` — 32x32, no `pieces`: the symbol drawn twice, a light-theme group and a dark-theme group switched by a `prefers-color-scheme` media query. This command writes the SVG only; a favicon PNG set (16/32/48/180/192/512) is the consuming site's own build step.
-- `"format": "avatar"` — 500x500, no `background`, no `pieces`: the symbol filling the frame on an accent-coloured ground. One static image (GitHub profile, etc.), not theme-switching.
+- `"format": "avatar"` — 500x500, no `pieces` or `rings`: the symbol filling the frame on an accent-coloured ground (`brand.light.accentText`), or, with an optional `"background"` naming a cover background, on that pair's fill. One static image (GitHub profile, a GitHub App's logo), not theme-switching. Without `background` the image is byte-identical to 0.9.1's. The release App's icon is `{ "id": "release-app", "format": "avatar", "background": "neutral", … }`, the symbol on the cream ground; `npm run png` makes its PNG.
+- `"format": "linkedin-banner"` — 1584x396, a LinkedIn profile background; see the next section.
+
+### LinkedIn banner
+
+A spec with `"format": "linkedin-banner"` builds the background of a LinkedIn personal profile: 1584x396 (`viewBox="0 0 1584 396"`, LinkedIn's recommended upload, 4:1), square corners (LinkedIn rounds its own card), with cover frame conventions: `background` (required), `rings`, `pieces`, `custom` and `customAt`; pieces and labels are not clipped, as on a cover. The rings go on to the farthest corner, as on a banner (42 rings for a centre at 1188, 198 with radius 60). `height` and `signature` are refused. `test/fixtures/covers/linkedin-banner.json` is the fixture, a banner with no words.
+
+**The profile photo covers part of it.** LinkedIn publishes the upload size, not the layout around it. The zones were measured by the owner on 2026-11-11 from screenshots of his own profile, converted to banner units, the photo's white ring included, about ±2 units. Each safe radius adds `LINKEDIN_PHOTO_MARGIN` (16) for the measuring error and small drift:
+
+| Zone | How the banner is shown | Photo centre | Photo radius | Safe radius | Safe area covers (x, y) |
+|---|---|---|---|---|---|
+| `desktop` | the 792 px profile card, the banner at 0.5 | (207, 362) | 160 | 176 | 31 to 383, 186 to 396 |
+| `ios` | full phone width, not cropped, about 0.28 on a 440-pt phone; the centre lies below the image's bottom edge | (244, 409) | 187 | 203 | 41 to 447, 206 to 396 |
+
+**Not measured:** the Android app, and desktop windows narrow enough to change the card's width. The numbers are exported, frozen, as `LINKEDIN_PHOTO_ZONES` (`{ name, cx, cy, r, safeRadius }`) and `LINKEDIN_PHOTO_MARGIN`. The command does not check a spec against them: keep every piece right of x 447 or above y 186, and check it on a render with the zones drawn:
+
+```sh
+npm run cover -- linkedin.json --out out/linkedin.svg
+npm run png -- out/linkedin.svg --out out/linkedin-zones.png --width 792 --zones   # review, zones drawn over it
+npm run png -- out/linkedin.svg --out out/linkedin.png                              # the 1584x396 upload
+```
+
+![The LinkedIn banner fixture at 792 wide with the photo zones drawn over it](docs/spikes/2026-11-11-presence-formats/linkedin-banner-light.png)
+
+**Words: few, large, in English.** On a phone the banner shows at about 0.28 scale: a cover label (19 units) at about 5 pt, a 44-unit `headline` at about 12 pt, a 64-unit one at about 18 pt (at 0.5 on desktop, a label is about 9.5 px). So words, if any, come from `headline` at 44 units or more, in English (STY-8), from an approved source (ADR 0004). A `text` table is accepted for `en` only: any other language is reported at `text.<lang>` as "a LinkedIn banner's words are English".
 
 ### Body diagrams and icons from a spec
 
@@ -287,7 +313,7 @@ Add it to `src/pieces/library.ts` (or `src/pieces/metro.ts` for a map or diagram
 ### UI and link icons
 
 - `uiIcon({ name, x, y, size, colour })` draws one of seven glyphs of the sites' chrome in a 24-unit box and one token colour: `sun`, `moon`, `zoomIn`, `zoomOut`, `reset`, `calendar`, `download` (data in `UI_ICONS`). `colour: "currentColor"` makes the icon follow its element's text colour (a button that inverts on hover, say); it only works when the SVG is inline in the page, since an `<img>` does not inherit the page's colour, and a cover spec refuses it.
-- `linkIcon({ icon, x, y, size, surface })` draws a link sticker in a 46-unit box, a white face with its outline and no frame (on dark the outline takes `surface.dark.muted`): `github`, `linkedin`, `email`, `website` (data in `LINK_ICONS`). The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- `linkIcon({ icon, x, y, size, surface })` draws a link sticker in a 46-unit box, a white face with its outline and no frame (on dark the outline takes `surface.dark.muted`): `github`, `linkedin`, `email`, `website` and `stackledger` (data in `LINK_ICONS`). `stackledger` is the product's mark on the white face: `ledgerMark`'s bent line in `illustration.accent` through its two white stations with ink outlines, the face being the page, so one outline. The GitHub mark is from [Font Awesome](https://fontawesome.com/), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - `categoryIcon({ category, x, y, scale })` draws the site's category badge in a 42-unit box: a disc in the default tone of the category's track (`coverBackground.<track>.fill`, ringed in its `.ring`) with a glyph on it, the same on light and dark pages. `integration` (`trackIntegration`, the notation's `pointToPointChannel`), `delivery` (`trackDelivery`, `gateToProduction`), `aiEngineering` (`trackAi`, `contextWindow`), `personalTools` (`trackPersonal`, its own wrench and screwdriver); names in `CATEGORY_ICON_NAMES`. At `scale` 4 it is the 168-pixel badge the site shows.
 - None holds a link, a style, a script or a URL, so a consumer can write one with `toSvg` inside its own `<svg xmlns=…>` and ship it as a static file.
 
@@ -299,6 +325,20 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 ### EIP icons
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+
+## Upgrading to 0.10.0
+
+0.10.0 (card 325, change `presence-formats`) adds a LinkedIn banner format and the stackledger link icon. Nothing is removed or renamed, and every 0.9.1 spec builds byte-identical.
+
+| Added | What |
+|---|---|
+| `"format": "linkedin-banner"` | a 1584x396 LinkedIn profile background (see LinkedIn banner, above); `FORMATS` has nine names, so a check of the exact list must add it |
+| `LINKEDIN_PHOTO_ZONES`, `LINKEDIN_PHOTO_MARGIN` | the profile photo's measured zones and the 16-unit margin of their safe areas, frozen, from the root entry |
+| avatar `background` | an optional cover background name for the avatar's ground; without it the avatar is unchanged |
+| `bannerRingCount(cx, cy, radius, width, height)` | the frame size as two optional parameters after `radius`, defaulting to the banner's 1200x420; every existing call keeps its result |
+| `stackledger` link icon | the product's mark as a link sticker; `LINK_ICON_NAMES` has five names (`github`, `linkedin`, `email`, `website`, `stackledger`) |
+
+`npm run png` is new too, but as a repository script: it is not in the package.
 
 ## Upgrading to 0.9.0
 
