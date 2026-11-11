@@ -6,8 +6,10 @@ Renders for the owner's gate of change `brand-link-icon` (design §2), made on 2
 |---|---|---|
 | `brunosouzas-icon-light.png` | 232 x 232 | the `brunosouzas` link icon from an icon spec at size 184, on `surface.light.background` `#F6F3EC` |
 | `brunosouzas-icon-dark.png` | 232 x 232 | the same with `surface: "dark"`, on `surface.dark.background` `#121110` |
-| `link-icons-light.png` | 512 x 184 | the six link icons side by side at size 64 (`github`, `linkedin`, `email`, `website`, `stackledger`, `brunosouzas`), on `#F6F3EC` |
-| `link-icons-dark.png` | 512 x 184 | the same with `surface: "dark"`, on `#121110` |
+| `evidence-row-light.png` | 512 x 184 | evidence only: the six separate link icons drawn side by side at size 64 (`github`, `linkedin`, `email`, `website`, `stackledger`, `brunosouzas`), on `#F6F3EC` |
+| `evidence-row-dark.png` | 512 x 184 | evidence only: the same with `surface: "dark"`, on `#121110` |
+
+**The row is not an asset.** Every link icon is its own piece call and its own file: `brunosouzas`, like `github`, `linkedin` or `stackledger`, is written alone by an icon spec holding one `linkIcon` (46 x 46; the command refuses an icon spec with two pieces). The package has no combined icon and no row (spec illustration-pieces "Each link icon stands alone"). The `evidence-row-*` images only show the owner, at the gate, how the separate icons sit next to each other where a consumer lays them out side by side; never ship or reuse them.
 
 At 24 px (renders kept out of the repository: the icon spec with `--width 24`, and the row at size 24) the b's haste and ring read and the moon shows as a separate orange dot, on both surfaces.
 
@@ -24,8 +26,8 @@ npm run png -- brunosouzas-icon-dark.svg --out $D/brunosouzas-icon-dark.png --gr
 
 PAD_Y=60 npx tsx row.ts light 64 link-icons-light.svg
 PAD_Y=60 npx tsx row.ts dark 64 link-icons-dark.svg
-npm run png -- link-icons-light.svg --out $D/link-icons-light.png
-npm run png -- link-icons-dark.svg --out $D/link-icons-dark.png
+npm run png -- link-icons-light.svg --out $D/evidence-row-light.png
+npm run png -- link-icons-dark.svg --out $D/evidence-row-dark.png
 
 # 24 px checks, not committed
 npm run png -- brunosouzas-icon.svg --out brand-icon-24-light.png --width 24 --ground '#F6F3EC'
@@ -41,7 +43,7 @@ The specs and the row script are kept out of the repository (only fixtures enter
 
 `brunosouzas-icon-dark.json` is the same with `"id": "brunosouzas-icon-dark"` and `"surface": "dark"` on the piece.
 
-`row.ts` (paths to `src/pieces/` adjusted to where it runs) draws every name of `LINK_ICON_NAMES` with `linkIcon` at `size`, a quarter of the size apart, on a ground rect of the surface's background with a 24-unit margin left and right and `PAD_Y` above and below:
+`row.ts`, an evidence script kept out of the repository (paths to `src/pieces/` adjusted to where it runs), draws every name of `LINK_ICON_NAMES` with `linkIcon` at `size`, a quarter of the size apart, on a ground rect of the surface's background with a 24-unit margin left and right and `PAD_Y` above and below:
 
 ```ts
 import { writeFileSync } from "node:fs";
