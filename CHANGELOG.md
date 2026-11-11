@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.10.0...v0.11.0) (2026-11-11)
+
+
+### Features
+
+* brunosouzas link icon, the brand symbol (AB[#326](https://github.com/brunosouzas/brunosouzas-design-system/issues/326)) ([#37](https://github.com/brunosouzas/brunosouzas-design-system/issues/37)) ([99f3732](https://github.com/brunosouzas/brunosouzas-design-system/commit/99f3732f2b652242b705369bdcb0dfeca7798c6d))
+
 ## [0.10.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.9.1...v0.10.0) (2026-11-11)
 
 
