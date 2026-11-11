@@ -8,6 +8,7 @@ The owner decided on 2026-11-11 that brunosouzas.com has its own link icon, the 
 
 - **`linkIcon` `brunosouzas`:** a sixth link icon, the brand symbol (the "b" with the moon that the favicon and the avatar draw, `symbol`) on the link family's white face, with the same box, face, outline and surfaces as the other five. The glyph is the symbol's own three shapes, scaled and centred on the face; its colours are the light symbol's (`brand.light.text`, `brand.light.accent`) on both surfaces, because the face is white on both. Title `brunosouzas.com`, description `brunosouzas.com icon: the brand symbol, a b with a moon.`
 - **One drawing:** the symbol's shapes are written once, in `src/pieces/symbol.ts`, and the link icon takes them from there, so the icon cannot drift from the favicon and the avatar. The symbol's own output does not change (the favicon and avatar goldens stay byte-identical).
+- **Each icon alone:** like `github`, `linkedin` and `stackledger`, `brunosouzas` is its own piece call and its own file, written alone by an icon spec. The package ships no combined icon and no row; the row of six in the evidence is a gate image only (owner, 2026-11-11).
 - `LINK_ICONS` keeps `website` (the generic globe) and appends `brunosouzas`: `LINK_ICON_NAMES` is `github`, `linkedin`, `email`, `website`, `stackledger`, `brunosouzas`.
 - **Release:** one minor from a `feat:` pull request title; release-please sets the version.
 
@@ -25,6 +26,7 @@ No token is added: the colours are existing brand roles. `cover-cli` does not ch
 - Removing or renaming `website`, or any change to the other five link icons and to `symbol`.
 - A dark-coloured glyph on the dark surface: the glyph sits on the white face, as every other glyph does.
 - A colour or size parameter on `linkIcon`.
+- A combined image or row of link icons as a piece, format, export or asset: consumers lay out the separate icons.
 
 ## Implicit requirements
 

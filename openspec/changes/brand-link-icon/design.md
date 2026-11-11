@@ -20,4 +20,4 @@ Title `brunosouzas.com`, description `brunosouzas.com icon: the brand symbol, a 
 
 ## 2. Evidence
 
-`npm run png` renders, in `docs/spikes/2026-11-11-brand-link-icon/` with a `README.md` of the commands: `brunosouzas-icon-light.png` and `brunosouzas-icon-dark.png` (the icon spec at size 184, on `surface.light.background` and with `surface: "dark"` on `surface.dark.background`), and `link-icons-light.png`, `link-icons-dark.png` (the six link icons side by side). The legibility at 24 px is checked on a render kept out of the repository.
+`npm run png` renders, in `docs/spikes/2026-11-11-brand-link-icon/` with a `README.md` of the commands: `brunosouzas-icon-light.png` and `brunosouzas-icon-dark.png` (the icon spec at size 184, on `surface.light.background` and with `surface: "dark"` on `surface.dark.background`), and `evidence-row-light.png`, `evidence-row-dark.png` (the six separate icons drawn side by side for the gate only: not an asset, and the package has no such row). The legibility at 24 px is checked on a render kept out of the repository.

@@ -8,6 +8,8 @@ import { LINK_ICONS, LINK_ICON_NAMES, linkIcon } from "../../src/pieces/link-ico
 import { DIAGRAM_PIECES, altFrame, edgeLabel, stateStart } from "../../src/pieces/diagram";
 import { ledgerMark, licenceMark, renewalRing, suggestedHalo, zone } from "../../src/pieces/metro";
 import { symbol } from "../../src/pieces/symbol";
+import * as ROOT from "../../src/pieces/index";
+import { PIECES } from "../../src/pieces/library";
 
 // Required parameters of the ten body diagram pieces (as catalogue.test.ts REQUIRED_ONLY).
 const BODY_DIAGRAM: Record<keyof typeof DIAGRAM_PIECES, object> = {
@@ -271,6 +273,13 @@ describe("Link icons as data", () => {
     const drawn = symbol({ x: 0, y: 0 }).body[0];
     expect(glyph.children).toEqual(drawn.children);
     expect(glyph.children).toHaveLength(3);
+  });
+
+  // Change brand-link-icon, task 1.5: illustration-pieces "Each link icon stands alone".
+  test("No combined link icons in the package", () => {
+    const names = Object.keys(ROOT).filter((name) => /link.?icon|icon.?row|links/i.test(name)).sort();
+    expect(names).toEqual(["LINK_ICONS", "LINK_ICON_NAMES", "LINK_ICON_SIZE", "linkIcon"]);
+    expect(names.filter((name) => name in PIECES)).toEqual(["linkIcon"]);
   });
 
   test("Glyph inside the face, brunosouzas", () => {

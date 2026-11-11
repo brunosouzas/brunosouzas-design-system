@@ -250,6 +250,15 @@ describe("Icon output", () => {
     }
   });
 
+  // Change brand-link-icon (AB#326), task 1.5: illustration-pieces "Each link icon stands alone".
+  test("Two link icons in one icon spec", async () => {
+    const ws = workspace();
+    ws.write("spec.json", { id: "i", title: "T", description: "D", format: "icon", pieces: [{ piece: "linkIcon", icon: "brunosouzas" }, { piece: "linkIcon", icon: "website" }] });
+    expect(await ws.run("spec.json", "--out", "i.svg")).toBe(1);
+    expect(ws.err[0]).toBe("pieces: an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon");
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+
   // Change brand-link-icon (AB#326), task 1.4: illustration-pieces "The brunosouzas link icon".
   test("brunosouzas in an icon spec", async () => {
     const text = { title: "brunosouzas.com", description: "brunosouzas.com icon: the brand symbol, a b with a moon." };

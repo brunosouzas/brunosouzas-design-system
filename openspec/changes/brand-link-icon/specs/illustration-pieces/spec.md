@@ -50,3 +50,14 @@ Every `uiIcon` and `linkIcon` tree, on both surfaces, SHALL use only the node co
 #### Scenario: brunosouzas in an icon spec
 - **WHEN** an icon spec holds `{ "piece": "linkIcon", "icon": "brunosouzas" }` with a title and a description, on light and with `surface: "dark"`
 - **THEN** the command writes a 46 x 46 SVG holding the icon, and the palette check passes the drawn tree on both surfaces
+
+### Requirement: Each link icon stands alone
+Each link icon, `brunosouzas` included, SHALL be its own piece call and its own file: one `linkIcon` call draws one icon, and an icon spec (`format: "icon"`) holding that one piece writes it alone, 46 x 46. The package SHALL have no piece, format or export that draws several link icons as one image; a consumer lays its icons out itself, and the row of icons in this change's evidence is a gate image only, not an asset.
+
+#### Scenario: Two link icons in one icon spec
+- **WHEN** an icon spec holds two pieces, `linkIcon` `brunosouzas` and `linkIcon` `website`
+- **THEN** `pieces` is reported as "an icon spec holds exactly one piece: eipIcon, uiIcon, linkIcon or categoryIcon", the command exits 1 and writes nothing
+
+#### Scenario: No combined link icons in the package
+- **WHEN** the package root's exports and the names of `PIECES` are read
+- **THEN** the only export whose name matches `/link.?icon|icon.?row|links/i` are `LINK_ICONS`, `LINK_ICON_NAMES`, `LINK_ICON_SIZE` and `linkIcon`, and the only piece among them is `linkIcon`
