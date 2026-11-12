@@ -105,5 +105,5 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - `README.md`: the scene row, the failure-rate bar, the scene's files.
   - `docs/roadmap.md`: the circuit-breaker row.
   - The ADR 0004 amendment for the take numbers, as the owner answers G1 question 2, with its row in `docs/adr/README.md`.
-- [ ] 6.3 Code review, by two independent clean-context reviewers per round (the owner's rule). Fix every right high and medium finding; run a second round only if the first had a high or medium.
+- [x] 6.3 Code review, by two independent clean-context reviewers per round (the owner's rule). Fix every right high and medium finding; run a second round only if the first had a high or medium.
 - [ ] 6.4 Run `openspec archive circuit-breaker-topology-scene -y`, then `openspec validate --all --strict`. Mark the pull request ready only at OUT1.

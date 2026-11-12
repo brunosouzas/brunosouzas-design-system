@@ -102,7 +102,7 @@ npm run stills -- publish-subscribe               # 24 phase/final PNGs (six per
 npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effects
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
 npm run stills -- circuit-breaker-topology        # 14 PNGs: the 13 phase ends and the last frame
-npm run render -- circuit-breaker-topology        # one master and one web copy (64 s)
+npm run render -- circuit-breaker-topology        # one master and one web copy (64 s), after the owner approves the stills
 npm run build                                     # compile the package into dist/ (the package test needs it)
 npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner, diagram or icon) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review

@@ -10,6 +10,8 @@
 // design and not against itself.
 import { describe, expect, test } from "vitest";
 import { drawn, frameAt, objectFrame, type TopologyState } from "../../src/scenes/circuit-breaker-topology/frame";
+import { SQUARE, slotX } from "../../src/scenes/circuit-breaker-topology/layout";
+import { stageAt } from "../../src/scenes/circuit-breaker-topology/stage";
 import { buildTimeline, timeline } from "../../src/scenes/circuit-breaker-topology/timeline";
 
 // ---------------------------------------------------------------- design §4, transcribed
@@ -369,6 +371,14 @@ describe("Topology business error not counted", () => {
     expect(at(1581).dropped?.fall).toBeGreaterThan(0);
     expect(at(1581).dropped?.opacity).toBeLessThan(1);
     for (let f = 1586; f < 1600; f++) expect(at(f).dropped, `frame ${f}`).toBeNull();
+    // Drawn at slot 5, beside the window, at the window's row (the dropped square is exempt from placement while it lives).
+    expect(stageAt(1567).components.dropped).toMatchObject({ x: slotX(5), y: SQUARE.y });
+  });
+
+  test("Missing or doubled pop rejected", () => {
+    const { ["checkout@4"]: _, ...without } = timeline.pops;
+    expect(() => frameAt(0, { ...timeline, pops: without })).toThrow('expected one "checkout@<frame>" key, found 0');
+    expect(() => frameAt(0, { ...timeline, pops: { ...timeline.pops, "checkout@5": 5 } })).toThrow('expected one "checkout@<frame>" key, found 2');
   });
 
   test("400 tags", () => {

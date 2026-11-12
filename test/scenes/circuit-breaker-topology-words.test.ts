@@ -10,6 +10,8 @@ import { describe, expect, test } from "vitest";
 import { tokens } from "../../tokens/generated/tokens";
 import type { SvgNode } from "../../src/pieces/node.ts";
 import { text } from "../../src/scenes/circuit-breaker-topology/scene.ts";
+import { drawn } from "../../src/scenes/circuit-breaker-topology/frame";
+import { PAYMENT_UNIT_HEIGHT } from "../../src/scenes/circuit-breaker-topology/layout";
 import { stageAt } from "../../src/scenes/circuit-breaker-topology/stage";
 import type { Route } from "../../src/scenes/circuit-breaker-topology/timeline";
 import { coloursOf, glyphsOf, textsOf, walk, type Frame } from "./topology-tree";
@@ -119,9 +121,10 @@ describe("Topology colour roles", () => {
   test("Red only on failing Payment units", () => {
     // A unit's body (serverStack, 40 high) is red exactly when frameAt says that unit is failing.
     for (const f of FRAMES) {
-      const red = walk(f.below).filter((w) => w.element === "payment" && w.node.tag === "rect" && Number(w.node.attrs.height) === 40 && w.node.attrs.fill === state.failure).length;
-      const units = walk(f.below).filter((w) => w.element === "payment" && w.node.tag === "rect" && Number(w.node.attrs.height) === 40).length;
-      expect(red, `frame ${f.frame}`).toBe(units === 0 ? 0 : f.state.failing.filter(Boolean).length);
+      const units = walk(f.below).filter((w) => w.element === "payment" && w.node.tag === "rect" && Number(w.node.attrs.height) === PAYMENT_UNIT_HEIGHT);
+      const red = units.filter((w) => w.node.attrs.fill === state.failure).length;
+      expect(units.length, `frame ${f.frame}`).toBe(drawn(f.state.payment) ? 3 : 0);
+      expect(red, `frame ${f.frame}`).toBe(units.length === 0 ? 0 : f.state.failing.filter(Boolean).length);
     }
     expect(FRAMES.some((f) => f.state.failing.some(Boolean)) && FRAMES.some((f) => f.state.payment !== null && !f.state.failing.some(Boolean))).toBe(true);
   });

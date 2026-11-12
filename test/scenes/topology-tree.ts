@@ -11,7 +11,7 @@ import { failureRateBarShapes } from "../../src/brand/rate-bar-shape";
 import type { Point } from "../../src/brand/motion";
 import type { SvgNode } from "../../src/pieces/node.ts";
 import { type Appear, type TopologyState } from "../../src/scenes/circuit-breaker-topology/frame";
-import { BAR, PAYMENT_LIGHTS, REWIND_MARK } from "../../src/scenes/circuit-breaker-topology/layout";
+import { BAR, PAYMENT_LIGHTS, PAYMENT_UNIT_HEIGHT, REWIND_MARK } from "../../src/scenes/circuit-breaker-topology/layout";
 import type { Components, Stage } from "../../src/scenes/circuit-breaker-topology/stage";
 import { timeline } from "../../src/scenes/circuit-breaker-topology/timeline";
 import { textBox, type Box, type FaceName } from "./text-measure";
@@ -91,7 +91,7 @@ export const blocksOf = (f: Frame): Block[] => {
   const blocks: Block[] = [];
   const add = (b: Block | null) => { if (b) blocks.push(b); };
   add(bodyOf(f.below, "checkout"));
-  const units = walk(f.below).filter((w) => w.element === "payment" && w.node.tag === "rect" && Number(w.node.attrs.height) === 40).map(shapeBox).filter((b) => b !== null);
+  const units = walk(f.below).filter((w) => w.element === "payment" && w.node.tag === "rect" && Number(w.node.attrs.height) === PAYMENT_UNIT_HEIGHT).map(shapeBox).filter((b) => b !== null);
   units.forEach((u, i) => blocks.push({ element: `payment unit ${i}`, ...u! }));
   add(bodyOf(f.below, "breaker"));
   for (const pill of ["checkout-label", "payment-label", "state-pill", "retry"]) add(bodyOf(f.above, pill));

@@ -218,7 +218,11 @@ const windowAt = (t: TopologyTimeline, f: number) => {
 
 // ---------------------------------------------------------------- the frame
 
-/** The whole stage at frame `f` (pure; `t` lets a test pass a changed timeline). */
+/**
+ * The whole stage at frame `f` (pure). `t` lets a test pass a changed
+ * timeline; travel and fade still come from the tokens. Throws when `t` has no
+ * or several pops or leaves of an element drawn once (`onlyAt`).
+ */
 export const frameAt = (f: number, t: TopologyTimeline = defaultTimeline): TopologyState => {
   const o = objectFrame(f, t);
   // From take 2's first frame (510) the take-1 objects stay those of object frame 59 and the counters and lights count take 2 (design §2.5).
