@@ -29,12 +29,12 @@ The package SHALL export `balao`, the requester and approver (ADR 0007, amended 
 - **THEN** every tree is identical, holds no face and no request line, keeps the body path of the front view and draws the hood tip's back (`M-28 -162 Q0 -170 28 -162 Q0 -154 -28 -162 Z`)
 
 ### Requirement: Balão parameters
-`balao` SHALL check `x`, `y` (required), `surface`, `scale` (0.25 to 4), `expression` and `view` as the cast pieces do, `facing` (`right`, `left`), `speaks` (boolean) and `holdsStamp` (an object with one field, `word`, a non-empty label), throwing a `RangeError` naming the first problem. After the schema: `holdsStamp` with `speaks: true` is refused, then `holdsStamp` with `view: "back"`, both naming `holdsStamp`.
+`balao` SHALL check `x`, `y` (required), `surface`, `scale` (0.25 to 4), `expression` and `view` as the cast pieces do, `facing` (`right`, `left`), `speaks` (boolean) and `holdsStamp` (an object with one field, `word`, a non-empty label), throwing a `RangeError` naming the first problem. After the schema, at most one relation problem, the first of: `holdsStamp` with `speaks: true`, then `holdsStamp` with `view: "back"`, both naming `holdsStamp`.
 
 #### Scenario: Speaking and stamping together
 - **GIVEN** `balao({ x: 0, y: 0, speaks: true, holdsStamp: { word: "GO" } })`, then the same with `view: "back"`
 - **WHEN** each is called
-- **THEN** both throw a `RangeError` with the message `balao: holdsStamp: Balão does one action at a time`
+- **THEN** both throw a `RangeError` with the message `balao: holdsStamp: Balão does one action at a time`, and `PIECES.balao.relations` returns exactly one problem for the second
 
 #### Scenario: Stamp from behind
 - **GIVEN** `balao({ x: 0, y: 0, view: "back", holdsStamp: { word: "GO" } })`
@@ -57,7 +57,7 @@ The package SHALL export `chaves`, the developer (ADR 0007, amended 2026-11-12):
 #### Scenario: Chaves types
 - **GIVEN** `chaves({ x: 0, y: 0, types: true })` on light and on dark
 - **WHEN** they are drawn
-- **THEN** the root group's first child deep-equals `keyboard({ x: 98, y: -74, width: 150, surface }).body[0]` for that surface, the second is the body group with its front hand at (120, −80), and the `text` is empty
+- **THEN** the root group's first child is a `g` whose only attribute is `data-held` `keyboard` and whose children deep-equal `keyboard({ x: 98, y: -74, width: 150, surface }).body` for that surface, the second is the body group with its front hand at (120, −80), and the `text` is empty
 
 #### Scenario: Chaves points
 - **GIVEN** `chaves({ x: 0, y: 0, points: true })`
@@ -65,9 +65,9 @@ The package SHALL export `chaves`, the developer (ADR 0007, amended 2026-11-12):
 - **THEN** the body group's last child is a `g` with `transform` `translate(104,-128) rotate(55)` holding the finger `rect` (−6, −30, 12 × 26, radius 6, stroke width 4.5) and the palm circle (0, 0, radius 15), and no hand circle sits at (100, −50)
 
 #### Scenario: Chaves hands a sheet over
-- **GIVEN** `chaves({ x: 0, y: 0, holdsSheet: { width: 130, height: 160, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } })`
+- **GIVEN** `chaves({ x: 0, y: 0, holdsSheet: { width: 150, height: 160, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } })`
 - **WHEN** it is drawn
-- **THEN** the root group's first child is a `g` with `data-held` `sheet`, as Visor draws its held sheet, whose children deep-equal `sheet({ x: 118, y: -200, width: 130, height: 160, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group, followed by `pill({ x: 183, y: -200, text: "proposal.md" }).body`; the body group's front hand is at (112, −92); the `text` group, with Visor's text attributes, holds `?` at (148, −136) and `proposal.md` at (183, −193)
+- **THEN** the root group's first child is a `g` with `data-held` `sheet`, as Visor draws its held sheet, whose children deep-equal `sheet({ x: 118, y: -200, width: 150, height: 160, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group, followed by `pill({ x: 193, y: -200, text: "proposal.md" }).body`; the body group's front hand is at (112, −92); the `text` group, with Visor's text attributes, holds `?` at (148, −136) and `proposal.md` at (193, −193)
 
 #### Scenario: Chaves from behind
 - **GIVEN** `chaves` with `view: "back"`, once for each `expression`, and once with `points: true`
@@ -80,7 +80,7 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 #### Scenario: Brace points and waist
 - **GIVEN** `chaves({ x: 0, y: 0 })`
 - **WHEN** the end points of its body path's segments are listed
-- **THEN** the points with the largest and smallest x are (90, −88) and (−90, −88), the end points (±44, −108) and (±44, −68) lie between them and the corners at x ±54, and the path is symmetric about x 0
+- **THEN** the points with the largest and smallest x are (90, −88) and (−90, −88); the waist end points (±44, −108) and (±44, −68) have |x| 44, less than the corners' 54 at (±54, −128) and (±54, −48), which is less than the points' 90; on y, −128 < −108 < −88 < −68 < −48; the curves into and out of (90, −88) have the control points (60, −96) and (60, −80); and the path is symmetric about x 0
 
 #### Scenario: Reads at 24 px (local)
 - **GIVEN** the model sheet's small-size row, rendered in Chrome through an `<img>` with Chaves about 24 px and 48 px tall on light and dark
@@ -88,12 +88,12 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** he accepts the silhouette as a brace, not a pillow; otherwise the path, its scenario and design §3 change together
 
 ### Requirement: Chaves parameters
-`chaves` SHALL check `x`, `y`, `surface`, `scale` (0.25 to 4), `expression` and `view` as the cast pieces do, `facing` (`right`, `left`), `types` and `points` (booleans) and `holdsSheet` (Visor's held-sheet object), throwing a `RangeError` naming the first problem. After the schema: two actions on name the second of `types`, `points`, `holdsSheet` that is on; then `types` or `holdsSheet` with `view: "back"` is refused, naming it.
+`chaves` SHALL check `x`, `y`, `surface`, `scale` (0.25 to 4), `expression` and `view` as the cast pieces do, `facing` (`right`, `left`), `types` and `points` (booleans) and `holdsSheet` (Visor's held-sheet object), throwing a `RangeError` naming the first problem. After the schema, at most one relation problem, the first of: two actions on (naming the second of `types`, `points`, `holdsSheet` that is on), then `types` or `holdsSheet` with `view: "back"` (naming it).
 
 #### Scenario: One action at a time
 - **GIVEN** `chaves` with `types: true, points: true`, then `points: true` and a valid `holdsSheet`, then all three
 - **WHEN** each is called
-- **THEN** they throw a `RangeError` with the messages `chaves: points: Chaves does one action at a time`, `chaves: holdsSheet: Chaves does one action at a time` and `chaves: points: Chaves does one action at a time`
+- **THEN** they throw a `RangeError` with the messages `chaves: points: Chaves does one action at a time`, `chaves: holdsSheet: Chaves does one action at a time` and `chaves: points: Chaves does one action at a time`, and `PIECES.chaves.relations` returns exactly one problem for the third, also with `view: "back"` added
 
 #### Scenario: Props from behind
 - **GIVEN** `chaves` with `view: "back"` and `types: true`, then with `view: "back"` and a valid `holdsSheet`
@@ -119,9 +119,9 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** for each piece both root groups have the same attributes, and the second's only child is a `g` whose only attribute is `transform` `scale(-1,1)` and whose children deep-equal the children of the first's only child
 
 #### Scenario: Props stay readable facing left
-- **GIVEN** `balao` with `holdsStamp: { word: "GO" }`, `chaves` with `types: true`, and `chaves` with the sheet of "Chaves hands a sheet over", each facing left
+- **GIVEN** `balao` with `holdsStamp: { word: "GO" }`, `chaves` with `types: true`, and `chaves` with the sheet of "Chaves hands a sheet over", each facing left, and `balao` with `facing: "up"`
 - **WHEN** they are drawn
-- **THEN** the held group is the root's first child with no `transform`, deep-equal to the facing-right group drawn at `stamp` `cx` −132, `keyboard` `x` −248, and `sheet` `x` −248 with the pill at x −183; the stamp's word is at (−132, −60), the `?` at (−218, −136) and `proposal.md` at (−183, −193)
+- **THEN** the held group is the root's first child with no `transform`, deep-equal to the facing-right group drawn at `stamp` `cx` −132, `keyboard` `x` −248, and `sheet` `x` −268 with the pill at x −193; the stamp's word is at (−132, −60), the `?` at (−238, −136) and `proposal.md` at (−193, −193); the last call throws a `RangeError` naming `facing`
 
 #### Scenario: Same outline both ways
 - **GIVEN** each piece with each `expression`, on light and on dark, facing right and facing left
@@ -129,12 +129,12 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** both lists are equal, and the only `transform` that differs is the body group's `scale(-1,1)`
 
 ### Requirement: Keyboard
-The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base (design §4): one `g` with `data-piece` `keyboard` holding a `rect` at (`x`, `y`), `width` × 16, radius 6, filled `color.white` and stroked at `outline.block` (ink on light, `surface.dark.muted` on dark), then floor((`width` − 44) / 21) + 1 key marks, 12 × 4, radius 2, filled `color.ink`, at (`x` + 16 + 21·i, `y` + 6). Its `text` is empty.
+The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base (design §4): one `g` with `data-piece` `keyboard` holding a `rect` at (`x`, `y`), `width` × 16, radius 6, filled `color.white`, stroked at `outline.block` (ink on light, `surface.dark.muted` on dark), then a `g` with `stroke` `none` holding floor((`width` − 44) / 21) + 1 keys, 12 × 4, radius 2, filled `color.ink`, at (`x` + 16 + 21·i, `y` + 6). No `text`.
 
 #### Scenario: Default keyboard
 - **GIVEN** `keyboard({ x: 0, y: 0 })`
 - **WHEN** it is drawn
-- **THEN** its body is one `g` with `data-piece` `keyboard` holding the slab `rect` (0, 0, 150 × 16, radius 6, `fill` `#FFFFFF`, `stroke` `#121212`, `stroke-width` 4, `stroke-linejoin` `round`) and six keys at x 16, 37, 58, 79, 100 and 121, y 6, each filled `#121212`; its `text` is empty
+- **THEN** its body is one `g` with `data-piece` `keyboard` holding the slab `rect` (0, 0, 150 × 16, radius 6, `fill` `#FFFFFF`, `stroke` `#121212`, `stroke-width` 4, `stroke-linejoin` `round`), then a `g` whose only attribute is `stroke` `none`, holding six keys at x 16, 37, 58, 79, 100 and 121, y 6, each filled `#121212`; its `text` is empty
 
 #### Scenario: Keyboard on the dark surface
 - **GIVEN** `keyboard({ x: 0, y: 0, surface: "dark" })`
@@ -149,7 +149,7 @@ The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base
 #### Scenario: Keyboard carries its own stroke
 - **GIVEN** the keyboard on light and dark
 - **WHEN** the test walks its body
-- **THEN** the slab has its own `stroke` and `stroke-width` and every key a `fill`, so it draws the same inside the cover command's outlined group as alone
+- **THEN** the slab has its own `stroke` and `stroke-width`, and every key has a `fill` and an ancestor `g` inside the piece with `stroke` `none`, so no shape takes the cover command's outline ("Supporting cast drawn" checks it in a cover)
 
 ### Requirement: Keyboard parameters
 `keyboard` SHALL check `x` and `y` (required, any finite number), `width` (80 to 300, default 150) and `surface` (`light` or `dark`, default `light`) with the shared schema, and throw a `RangeError` naming the first problem. It takes no colour and no text.
@@ -172,17 +172,22 @@ The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base
 - **WHEN** they are compared
 - **THEN** each second tree's root group carries `scale(0.25)` in its transform and is otherwise the same tree as the first
 
+#### Scenario: Posed about the ground point
+- **GIVEN** `pose(balao({ x: 100, y: 300 }).body[0], { x: 100, y: 300, tilt: 6, squash: 1.1, hop: 0 })`, and the same for `chaves`
+- **WHEN** the point (100, 300) is mapped through the pose group's transform
+- **THEN** it maps to (100, 300) within 0.001: the feet stay on the ground point, as for the five cast pieces
+
 #### Scenario: Schemas list the shared and own parameters
 - **GIVEN** `PIECES.balao.schema` and `PIECES.chaves.schema`
 - **WHEN** the test reads their keys
 - **THEN** both hold `x`, `y`, `surface`, `scale`, `expression`, `view` and `facing`; `balao` adds exactly `speaks` and `holdsStamp`, `chaves` exactly `types`, `points` and `holdsSheet`; neither has a colour parameter
 
 ### Requirement: Existing outputs unchanged by the supporting cast
-Adding the supporting cast SHALL change no existing output: every call pinned in `test/fixtures/` (`cast-0.11.0`, `pieces-0.2.0`, `pieces-0.5.0`, `pieces-0.8.0`, `emote-0.7.0`, `message-arrow-0.3.1`, `ui-icons-0.3.0`) draws its pinned tree and bytes, the cover goldens keep their bytes, and Visor's 0.12.0 scenarios hold unchanged. No fixture or golden is rewritten.
+Adding the supporting cast SHALL change no existing output: every file in `test/fixtures/` stays as it is, and every call and golden it pins (the cast of 0.11.0 included) draws its pinned tree and bytes; Visor's 0.12.0 scenarios and the scenes' ring radii hold unchanged. Moving `stamp` to its own module changes nothing it draws.
 
 #### Scenario: Frozen outputs after the change
 - **GIVEN** the branch with the three new pieces
-- **WHEN** `test/pieces/frozen.test.ts`, the cover goldens of `test/scripts/cover.test.ts` and the Visor tests of `test/pieces/brand-pieces.test.ts` run
+- **WHEN** `test/pieces/frozen.test.ts`, `test/brand/stage-rings.test.ts`, the cover goldens of `test/scripts/cover.test.ts` and the Visor tests of `test/pieces/brand-pieces.test.ts` run
 - **THEN** they pass, and `git diff origin/main --stat -- test/fixtures` lists no file
 
 ## MODIFIED Requirements

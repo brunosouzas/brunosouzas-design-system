@@ -4,14 +4,14 @@
 Every format that takes `pieces` but `icon` SHALL accept `balao`, `chaves` and `keyboard` like any piece: checked against their parameters and relations, with each problem at its JSON path. Their shapes go in the outlined group, their words (the stamp's word, a held sheet's `?` and label) in the labels group, never stroked.
 
 #### Scenario: Supporting cast drawn
-- **GIVEN** a valid cover spec whose `pieces` are `{ "piece": "balao", "x": 200, "y": 380, "holdsStamp": { "word": "GO" } }`, `{ "piece": "chaves", "x": 560, "y": 380, "facing": "left", "holdsSheet": { "width": 120, "height": 160, "rows": [{ "lead": "question", "bar": 40 }], "label": "proposal.md" } }` and `{ "piece": "keyboard", "x": 300, "y": 300 }`
+- **GIVEN** a valid cover spec whose `pieces` are `{ "piece": "balao", "x": 200, "y": 380, "holdsStamp": { "word": "GO" } }`, `{ "piece": "chaves", "x": 560, "y": 380, "facing": "left", "holdsSheet": { "width": 150, "height": 160, "rows": [{ "lead": "question", "bar": 40 }], "label": "proposal.md" } }` and `{ "piece": "keyboard", "x": 300, "y": 300 }`
 - **WHEN** the command builds it
-- **THEN** it writes the cover; the outlined group holds the `balao` group, whose first child is the `data-held` `stamp` group, the `chaves` group, whose first child is the `data-held` `sheet` group, and the `keyboard` group; the labels group holds `GO`, `?` and `proposal.md`, none with an ancestor carrying a `stroke` attribute
+- **THEN** it writes the cover; the outlined group holds the `balao` group, whose first child is the `data-held` `stamp` group, the `chaves` group, whose first child is the `data-held` `sheet` group, and the `keyboard` group, whose keys each have an ancestor inside the `keyboard` group with `stroke` `none`; the labels group holds `GO`, `?` and `proposal.md`, none with an ancestor carrying a `stroke` attribute
 
 #### Scenario: Supporting cast problems at their paths
-- **GIVEN** a cover spec whose `pieces` are a `balao` with `speaks: true` and `holdsStamp: { "word": "GO" }`, a `chaves` with `types: true` and `points: true`, and a `keyboard` with `width: 79`
+- **GIVEN** a cover spec whose `pieces` are a `balao` with `speaks: true`, `view: "back"` and `holdsStamp: { "word": "GO" }`, a `chaves` with `types: true`, `points: true` and a valid `holdsSheet`, and a `keyboard` with `width: 79`
 - **WHEN** the command runs
-- **THEN** it prints `pieces[0].holdsStamp` ("Balão does one action at a time"), `pieces[1].points` ("Chaves does one action at a time") and `pieces[2].width`, in that order, exits 1 and writes nothing
+- **THEN** it prints exactly three problems, `pieces[0].holdsStamp` ("Balão does one action at a time"), `pieces[1].points` ("Chaves does one action at a time") and `pieces[2].width`, in that order, exits 1 and writes nothing
 
 ## MODIFIED Requirements
 

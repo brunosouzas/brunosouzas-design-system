@@ -12,11 +12,15 @@ See `proposal.md` for the why. The drawings come from the approved concept C she
 
 `keyboard` lives in a new `src/pieces/keyboard.ts`, a prop module beside `paper.ts` (which holds `sheet` and `pill`). All three join `PIECES` last, in the order `balao`, `chaves`, `keyboard`, so every existing name keeps its place in `PIECE_NAMES` and in the cover command's messages.
 
+**Import cycle (observed).** Balão draws `stamp`, defined in `src/pieces/library.ts`, and `library.ts` must import `supporting-cast.ts` to list Balão in `PIECES`: an ES module cycle in which `PIECES` can be built before `balao` exists. 0.12.0 met the same cycle for Visor's sheet and moved `pill` and `sheet` unchanged to `paper.ts` (its header says so). So `stamp` (with `StampParams`) moves unchanged to `src/pieces/stamp.ts`; `library.ts` imports and re-exports it and keeps it at its place in `PIECES`; the `pieces-*` fixtures and the cover goldens prove it draws the same. `supporting-cast.ts` imports `stamp.ts`, `keyboard.ts`, `paper.ts` and `brand-cast.ts`, never `library.ts`.
+
+**Exported names (new).** From the root entry and `library.ts`: `balao`, `chaves`, `keyboard`; the types `BalaoParams`, `ChavesParams`, `KeyboardParams` and `HeldSheet` (the held-sheet object; `VisorHeldSheet` stays as its alias); `CAST_FACINGS` (`right`, `left`) and `CastFacing`, which `balao` and `chaves` use (`VISOR_FACINGS` and `VisorFacing` stay, same values).
+
 Shared with the cast, unchanged: the skin (`skin(surface)`: body `color.white`, outline `brand.light.text` / `brand.dark.textMuted`, visor `brand.light.text` / `brand.dark.bg`, eyes `cast.eyes`, accent `brand.<theme>.accent`; ADR 0006 and 0009), `outlined(s, width)`, the screen face `faceAt(x, y, w, h, s, expression)` (symmetric in all four expressions, so mirroring changes no meaning), the hood tip `peak(s, cx, top, w, dip)`, Mira's legs (two strokes of width 8 with round caps and two foot pills 20 × 7, radius 3.5, filled with the outline), Visor's hands (circles of radius 15, `outlined(s)`) and Visor's pointing hand (a finger `rect` −6, −30, 12 × 26, radius 6, `outlined(s, 4.5)`, and the palm circle, in one group with `translate` and `rotate`).
 
 The held sheet reuses Visor's: its schema (`width` 80 to 300, `height` 80 to 400, 1 to 8 rows, `top`, `step`, `label`) and its drawing (the `sheet` and `pill` pieces in one `data-held` `sheet` group with the skin's outline at `outline.block`, the marks group stroked `color.ink`, the words in the text group). Visor's private `heldSheet(held, s, facing)` becomes a shared function that takes the page's position; Visor calls it with its own position, so its trees do not change (proved by the 0.12.0 scenarios of "Visor holds a sheet" and by the frozen cast).
 
-Every piece's tree has Visor's shape: the root `g` with `data-piece` `<name>`, `transform` `translate(x y) scale(s)` and `stroke` `none`; its children are the held prop's group (if any), then the body group, which carries `transform` `scale(-1,1)` facing left and no attribute facing right; the words, if any, in one text `g` with the root's `transform`, `font-family` `font.sans`, `font-size` `cover.labelSize`, `font-weight` `cover.labelWeight`, `fill` `color.ink` and `text-anchor` `middle`. A held prop sits outside the mirrored group at the mirrored position, so its words and marks are never mirrored.
+Every piece's tree has Visor's shape: the root `g` with `data-piece` `<name>`, `transform` `translate(x y) scale(s)` and `stroke` `none`; its children are the held prop's group (if any: `data-held` `stamp`, `sheet` or `keyboard`, so a selector of `[data-piece]` counts one piece per character), then the body group, which carries `transform` `scale(-1,1)` facing left and no attribute facing right; the words, if any, in one text `g` with the root's `transform`, `font-family` `font.sans`, `font-size` `cover.labelSize`, `font-weight` `cover.labelWeight`, `fill` `color.ink` and `text-anchor` `middle`. A held prop sits outside the mirrored group at the mirrored position, so its words and marks are never mirrored.
 
 ## 2. Balão
 
@@ -27,7 +31,7 @@ Every piece's tree has Visor's shape: the root `g` with `data-piece` `<name>`, `
 | Face | `faceAt(-38, -146, 76, 40, s, expression)` |
 | Request line | `rect` (−30, −88), 60 × 9, radius 4.5; `illustration.textBar` at rest, the skin's accent with `speaks: true` |
 | Hood tip | `peak(s, 0, -162, 28, 24)` |
-| Hands | back (−86, −100), front (92, −132); with `holdsStamp`, front (132, −100), over the stamp's top edge |
+| Hands | back (−86, −100), front (92, −132); with `holdsStamp`, front (132, −100), over the stamp's top edge (new: the prototype pressed the stamp on a sheet at (166, −58); held without a sheet, it moves in beside the tail) |
 | Held stamp | `stamp({ cx: 132, cy: -70, r: 24, word })` (the piece's default fill `color.state.healthy` and rotation −12) in a `data-held` `stamp` group with the skin's outline at `outline.block`, round joins; facing left at `cx` −132 |
 | Back view | legs, body, the hood tip's back (`M-28 -162 Q0 -170 28 -162 Q0 -154 -28 -162 Z`, accent, outline 5, as Visor's back), the hands at rest; no face, no request line |
 
@@ -47,21 +51,21 @@ The chosen contour (new; confirmed on the 24 px row of the model sheet at gate 3
 
 | Part | Drawing (facing right) |
 |---|---|
-| Legs | path `M-16 -30 L-26 0 M16 -30 L26 0`, feet at x −36 and 16, y −6 |
+| Legs | path `M-16 -30 L-26 0 M16 -30 L26 0`, feet at x −36 and 16, y −6 (new: hips at −30, not the prototype's −34, to meet the new body's bottom at −26) |
 | Body | path `M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z`, `outlined(s)` |
-| Face | `faceAt(-34, -136, 68, 38, s, expression)` |
-| Cursor | `rect` (−9, −80), 18 × 8, radius 2, the skin's accent |
-| Hood tip | `peak(s, 0, -150, 28, 24)` |
+| Face | `faceAt(-34, -136, 68, 38, s, expression)` (new: 8 higher than the prototype's −128, as the body's top moved from −146 to −150) |
+| Cursor | `rect` (−9, −80), 18 × 8, radius 2, the skin's accent (new: 8 higher than −72, under the face and above the lower waist notch) |
+| Hood tip | `peak(s, 0, -150, 28, 24)` (new: on the new top edge, −150) |
 | Hands | back (−100, −50), front (100, −50); typing, front (120, −80), over the keyboard's top edge; holding a sheet, front (112, −92), over the page's edge; pointing, Visor's pointing hand at `translate(104,-128) rotate(55)`, reaching up and forward |
-| Keyboard | `keyboard({ x: 98, y: -74, width: 150, surface })`; facing left at x −248 |
-| Held sheet | page at x 118 and y −40 − `height` (its near edge under the front hand, its bottom 40 above the ground); label pill centred on the top edge; facing left at x −118 − `width` |
+| Keyboard | `keyboard({ x: 98, y: -74, width: 150, surface })` in a `g` with `data-held` `keyboard`; facing left at x −248 |
+| Held sheet | (new: the prototype's page edge was 112, under the hand's centre) page at x 118 and y −40 − `height` (its near edge under the front hand, its bottom 40 above the ground); label pill centred on the top edge; facing left at x −118 − `width` |
 | Back view | legs, body, the hood tip's back (`M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z`), the hands at rest or pointing; no face, no cursor |
 
 The held page's near edge at 118 puts the front hand (x 112, radius 15, outline 8, so 19 with its outline) 13 units over the page, and 2.5 units clear of a row's lead mark (which starts 15.5 inside the edge with its outline), as Visor's hand is at its edge of 98. The page's bottom at −40 keeps the hand's y (−92) inside the smallest page (−120 to −40).
 
 ## 4. The keyboard
 
-`keyboard({ x, y, width, surface })`: the top-left corner at (`x`, `y`), `width` 80 to 300 (default 150), 16 high. One `g` with `data-piece` `keyboard`: a `rect` with radius 6, filled `color.white`, stroked ink on light and `surface.dark.muted` on dark at `outline.block`, round joins (it carries its own stroke, so it draws the same alone and inside the cover command's outlined group); then `n = floor((width − 44) / 21) + 1` key marks, `rect` at (`x` + 16 + 21·i, `y` + 6), 12 × 4, radius 2, filled `color.ink` on both surfaces (marks over a white face stay ink, ADR 0009). At 150 that is six keys (the prototype's deck), at 80 two, at 300 thirteen. It takes no colour and no text. The screen above it, when wanted, is a `codePanel` the caller places (G1 question 2).
+`keyboard({ x, y, width, surface })`: the top-left corner at (`x`, `y`), `width` 80 to 300 (default 150), 16 high. One `g` with `data-piece` `keyboard`: a `rect` with radius 6, filled `color.white`, stroked ink on light and `surface.dark.muted` on dark at `outline.block`, round joins; then a `g` with `stroke` `none` holding `n = floor((width − 44) / 21) + 1` key marks, `rect` at (`x` + 16 + 21·i, `y` + 6), 12 × 4, radius 2, filled `color.ink` on both surfaces (marks over a white face stay ink, ADR 0009). The cover command wraps every body in an ink-stroked group (`src/pieces/cover.ts`, the outlined group), so a key with only a fill would take a 4-unit outline there; the `stroke: none` group keeps the keys as drawn alone, as `sheet` does for its bars. New against the prototype's deck: outline `outline.block` (4, the props' outline) instead of 5, and ink keys instead of the skin's outline colour, which on dark would put a muted mark on a white face. At 150 that is six keys (the prototype's deck), at 80 two, at 300 thirteen. It takes no colour and no text. The screen above it, when wanted, is a `codePanel` the caller places (G1 question 2).
 
 ## 5. Actions, defaults and relations
 
@@ -76,7 +80,7 @@ The held page's near edge at 118 puts the front hand (x 112, radius 15, outline 
 
 Every action is off by default, unlike Visor's `points` (default true) and Drone's `carries`: a frame where a supporting character does nothing is its call without actions, which keeps CAST-4's check ("every action parameter has the value it had in the frame before") simple. `false` and an absent parameter draw the same.
 
-One input, one outcome (REQ-5): the schema's problems come first, as for every piece; then the relations, in this order, the first one named:
+One input, one outcome (REQ-5): the schema's problems come first, as for every piece; then the relations, of which each piece returns at most one problem (the cover command prints every problem a piece's relations return, so returning one keeps a spec's report to one line per piece), the first that holds in this order:
 
 1. Two actions: `balao` names `holdsStamp` ("Balão does one action at a time"); `chaves` names the second of `types`, `points`, `holdsSheet` that is on ("Chaves does one action at a time").
 2. A prop from behind: `holdsStamp`, `types` or `holdsSheet` with `view: "back"` ("Balão holds a stamp only in the front view", "Chaves types only in the front view", "Chaves holds a sheet only in the front view").
@@ -106,9 +110,9 @@ The five cast pieces are pinned by `test/fixtures/cast-0.11.0.json` (138 calls, 
 
 ## 8. The model sheet in `docs/`
 
-The concept sheet is exploration and stays in the vault (art-direction DIV-2). The repository gets the model sheet the change makes true (SHEET-1), drawn by a script from `src/pieces/` only: `docs/spikes/<date>-supporting-characters/model-sheet.ts` writes `model-sheet.svg` (fonts embedded, `<title>` and `<desc>` in English, STY-8) and PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008), each under 200 KB: per character the front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale on light and dark (CAST-5); the row at 48 px and 24 px tall. The side view of SHEET-1 does not exist in this cast (front and back since the identity studio's round 7b).
+The concept sheet is exploration and stays in the vault (art-direction DIV-2). The repository gets the model sheet the change makes true (SHEET-1), drawn by a script from `src/pieces/` only: `docs/spikes/2026-11-12-supporting-characters/model-sheet.ts` writes `model-sheet.svg` (fonts embedded, `<title>` and `<desc>` in English, STY-8) and PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008), each under 200 KB: per character the front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale on light and dark (CAST-5); the row at 48 px and 24 px tall. The side view of SHEET-1 does not exist in this cast (front and back since the identity studio's round 7b).
 
-Emote spots (new, for the README and the sheet; facing left, mirror x): Balão (−104, −176), Chaves (−104, −160), on the back side, clear of the body, the hood tip and every held prop, the emote at `scale` 0.6 × the character's scale (about 48 units across at scale 1, beside a head about 100 wide). The owner confirms them on the sheet at gate 3.
+Emote spots (new, for the README and the sheet), where the approved sheet puts them: on the front side, above and beside the head (its "waiting + doubt" and "failed + problem" panels). In local units facing right, the emote's centre is (116, −200) for both, at `scale` equal to the character's: an emote is about 80 units across at scale 1 (radius 40, observed in `emote.ts`'s `doubt` and `worked`), beside a head about 124 (Balão) and 108 (Chaves) wide, "about the head's size" (CAST-3). It clears the body, the hood tip, the front hand at rest and the pointing hand, and Balão's held stamp. In a scene the centre is (`x` + 116·`scale`, `y` − 200·`scale`), with −116 facing left. A sheet Chaves holds that is taller than 120 reaches under the spot; a scene that shows an emote then moves it or the sheet, on its stills (CAST-3). The sheet drew its emotes smaller than the head; G1 question 6 asks which size wins. The five pillar characters get no documented spot in this change.
 
 ## Risks / trade-offs
 

@@ -18,9 +18,9 @@ The keyboard Chaves types at is not in the package (the prototype drew a "laptop
 - **`chaves`**, a new cast piece (ASCII id for Chaves): the same shared parameters and `facing`, and three actions: `types` (the `keyboard` piece under the front hand), `points` (the front hand points up and forward, Visor's pointing hand) and `holdsSheet` (hands a sheet over: Visor's held-sheet object, held out in the front hand). The hood tip on top; a reinforced brace silhouette with sharp points and a waist. One action at a time; no keyboard or sheet from behind.
 - **`keyboard`**, a new prop piece: the laptop's base, a white slab with key marks, carrying its own outline on both surfaces. Chaves draws it when typing; a cover can draw it alone, under a `codePanel` as the screen.
 - **Shared skin and grammar** (ADR 0006, ADR 0009): white bodies, the cast's outline, visor and eyes from `skin(surface)`, the one accent on the request line and the cursor; no colour parameter; state only on the screen face; state colours only where they mean a state (the stamp's face, a held sheet's tail check).
-- **Fit with the cast rules** (motion CAST-2 to CAST-5): every action defaults to off; the ground point and `scale` work as for the five cast pieces, so `pose` and the timing helpers of `src/brand/cast-motion.ts` apply unchanged; the README gives each character's emote spot beside the head.
+- **Fit with the cast rules** (motion CAST-2 to CAST-5): every action defaults to off; the ground point and `scale` work as for the five cast pieces, so `pose` and the timing helpers of `src/brand/cast-motion.ts` apply unchanged; the README gives Balão's and Chaves's emote spot beside the head (design §8).
 - **ADR 0007 amended**: the two supporting characters, with the role mapping requester/approver → Balão, developer → Chaves, the AI agent still Visor.
-- **README**: the cast becomes a table (character, piece, role, actions, hood tip, emote spot); "Illustration pieces and covers" counts 67 pieces; "Upgrading to 0.13.0".
+- **README**: the cast becomes a table (character, piece, role, actions, hood tip), with the two new characters' emote spots under it; "Illustration pieces and covers" counts 67 pieces; "Upgrading to 0.13.0".
 - **The model sheet in `docs/`** (art-direction SHEET-1), rendered from the built pieces: front and back, the four expressions, every action both ways, both surfaces, size against the cast on one ground line, and the 48 px and 24 px row.
 - **Backwards compatible.** Every existing call, spec and scene draws the same: the five cast pieces stay pinned by `test/fixtures/cast-0.11.0.json`, and every other fixture and golden stays byte-identical. Nothing is removed or renamed; `PIECE_NAMES` grows from 64 to 67, the three new names last.
 - **Release:** one minor, 0.13.0, from a `feat:` pull request title; release-please sets the version (Model 2).
@@ -45,7 +45,10 @@ None.
 - The screen of the laptop as part of `types` (G1 question 2): the screen is a `codePanel` the caller places.
 - A `holdsSheet` for Balão (the sheet's "answer" frame): the scene puts a sheet beside its front hand; a pointing hand for Balão (the sheet's "ask" frame); temperaments and walking `stride`.
 - An exported helper that places an emote beside any character's head (G1 question 6): the README gives the spot.
-- New emotes, expressions, tokens or colours; any change to the five cast pieces, to `stamp`, `sheet`, `pill` or `codePanel`.
+- New emotes, expressions, tokens or colours; any change to what the five cast pieces, `stamp`, `sheet`, `pill` or `codePanel` draw (`stamp` moves unchanged to its own module to break an import cycle, design §1).
+- A limit on the stamp's word: `stamp` draws it at size 27 whatever the radius, so at Balão's radius 24 a word of more than three letters overhangs the disc; fitting it is the caller's job, as the held sheet's label width is (the SDD scene uses `GO`).
+- A helper that checks "one character acts at a time" across a timeline (CAST-4; G1 question 9): each piece takes one action at a time, and every action is off by default; the check across characters stays with the scene's own spec and stills.
+- Emote spots for the five pillar characters: only Balão's and Chaves's are documented.
 - A role for the architect, or data that acts (still unresolved in ADR 0007).
 - The approved concept sheet itself in this repository: it is exploration (art-direction DIV-2) and stays in the vault; the repository gets a model sheet drawn from the built pieces.
 - The kit's skills (motion CAST-1 and CAST-6 list the cast; illustration pins the package version): a kit change after the release.
@@ -63,14 +66,15 @@ Each with the recommended answer; the spec is written as recommended.
 3. **Chaves's silhouette.** Sharp brace points 36 units outside the corners and a waist notch (recommended, design §3, confirmed on the 24 px row at gate 3), braces drawn as two ink strokes beside a rounded body, or curled brace ends?
 4. **Back views.** Not on the approved sheet. Each back view draws the same body with no face, no request line or cursor, and the hood tip's back (recommended: the cast's shared `view` parameter), or front-only pieces?
 5. **Speaking while stamping.** Refused, one action at a time (recommended: the sheet's approval frame shows the line unlit), or allowed?
-6. **Emotes beside the head.** Documented emote spots in the README (recommended), or a helper exported for all seven characters now?
+6. **Emotes beside the head.** Documented emote spots for the two new characters, on the front side as the approved sheet draws them, at the character's scale ("about the head's size", CAST-3; the sheet drew them smaller) (recommended), the sheet's smaller size, or a helper exported for all seven characters now?
 7. **The prop's name.** `keyboard` (recommended: what it draws), or `laptop` / `laptopBase`?
 8. **Changelog.** Three lines through `BEGIN_COMMIT_OVERRIDE` (recommended), or one line from the squash title?
+9. **One actor at a time.** The request names "one actor at a time helpers". Pieces that do one action at a time and default to none, with the check across characters left to each scene's spec and stills (recommended: no scene with the new cast exists yet, and CAST-4's check is a timeline check), or a pure helper in `src/brand/cast-motion.ts` that reports overlapping action spans of a scene's timeline (a `motion-components` requirement in this change)?
 
 ## Implicit requirements
 
-- **Errors and invalid input:** requirement. Each new parameter is checked by its piece's schema and throws a `RangeError` naming its path (`facing`, `holdsStamp.word`, `holdsSheet.rows`, `width`, …); two actions together and a prop seen from behind are refused with a fixed message and path, after the schema's problems; a cover spec reports each problem at its JSON path.
-- **Scenarios without a failure case:** "Supporting cast follows the cast rules" and "Existing outputs unchanged by the supporting cast" take no input of their own; their invalid inputs are the parameter requirements'.
+- **Errors and invalid input:** requirement. Each new parameter is checked by its piece's schema and throws a `RangeError` naming its path (`facing`, `holdsStamp.word`, `holdsSheet.rows`, `width`, …); two actions together and a prop seen from behind are refused with a fixed message and path, after the schema's problems, one relation problem per piece at most; a cover spec reports each problem at its JSON path.
+- **Scenarios without a failure case:** "Balão", "Chaves", "Chaves's silhouette", "Keyboard", "Supporting cast follows the cast rules" and "Existing outputs unchanged by the supporting cast" draw valid input only; their invalid inputs are in "Balão parameters", "Chaves parameters" and "Keyboard parameters". "Supporting characters face left or right" has its own (`facing: "up"`).
 - **Limits:** requirement. `scale` 0.25 to 4; a held sheet as Visor's (`width` 80 to 300, `height` 80 to 400, 1 to 8 rows); `keyboard.width` 80 to 300.
 - **Repetition and idempotency:** requirement. Pieces stay pure: the same parameters give deep-equal trees and the same `toSvg` bytes; existing outputs are pinned.
 - **Concurrency:** n/a. Pure functions.
@@ -93,9 +97,9 @@ END_COMMIT_OVERRIDE
 
 ## Documentation
 
-- `README.md`: "The cast and the emotes" as a table of the seven characters (Mira, Visor, Drone, Kiu, Sinal, Balão, Chaves) with piece, role, actions, hood tip and emote spot, plus the `keyboard` prop; "Illustration pieces and covers" (67 pieces); "Upgrading to 0.13.0" (added names; nothing removed or renamed; every 0.12.0 call unchanged).
+- `README.md`: "The cast and the emotes" as a table of the seven characters (Mira, Visor, Drone, Kiu, Sinal, Balão, Chaves) with piece, role, actions and hood tip, Balão's and Chaves's emote spots, the `keyboard` prop; "Illustration pieces and covers" (67 pieces); "Upgrading to 0.13.0" (added names; nothing removed or renamed; every 0.12.0 call unchanged).
 - `docs/adr/0007-mira-and-the-pillar-cast.md`: the amendment of 2026-11-12 (design §6), and its row in `docs/adr/README.md`.
 - `docs/roadmap.md`: row 13f `supporting-characters`, AB#337.
-- The model sheet in `docs/spikes/<date>-supporting-characters/` (SHEET-1), with its script and a README naming the commands.
+- The model sheet in `docs/spikes/2026-11-12-supporting-characters/` (SHEET-1), with its script and a README naming the commands.
 - Vault, after the merge: the project's `architecture.md`, `roadmap.md` and `changelog.md`.
 - No new ADR: ADR 0007 itself foresees the new roles; it is amended, not superseded.
