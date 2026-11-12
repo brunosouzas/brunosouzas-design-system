@@ -23,9 +23,9 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 
 ## 2. Scene data and timeline (scene-catalogue)
 
-- [ ] 2.1 `src/scenes/circuit-breaker-topology/scene.ts`: the entry (kind `takes`, neutral, `16x9`, 1920 frames, outro 1800, both sources, the `text.en` table of design §8.1).
-- [ ] 2.2 `src/scenes/circuit-breaker-topology/timeline.ts`: the `TopologyTimeline` of design §2.10, with the phases of §4.1 and every cue of §4.2. The calls, trips, counters, lights, tags, arrows and window come from the formulas of §4.2–§4.6, with no React. Every movement end is also in `cues`. Register the scene last in `src/scenes/index.ts`.
-- [ ] 2.3 Unit, `test/scenes/circuit-breaker-topology-catalogue.test.ts`, proving:
+- [x] 2.1 `src/scenes/circuit-breaker-topology/scene.ts`: the entry (kind `takes`, neutral, `16x9`, 1920 frames, outro 1800, both sources, the `text.en` table of design §8.1).
+- [x] 2.2 `src/scenes/circuit-breaker-topology/timeline.ts`: the `TopologyTimeline` of design §2.10, with the phases of §4.1 and every cue of §4.2. The calls, trips, counters, lights, tags, arrows and window come from the formulas of §4.2–§4.6, with no React. Every movement end is also in `cues`. Register the scene last in `src/scenes/index.ts`.
+- [x] 2.3 Unit, `test/scenes/circuit-breaker-topology-catalogue.test.ts`, proving:
   - "Registered entry"
   - "Word table"
   - "One composition, last"
@@ -33,13 +33,13 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Broken entry rejected"
   - "Takes checks pass"
   - "Circuit-breaker states untouched". This one runs `test/scenes/circuit-breaker.test.ts` unedited.
-- [ ] 2.4 Edit only the assertions that list every registered scene: `test/scenes/catalogue-flow.test.ts` ("Both kinds in the catalogue" checks the first two scenes; "Takes fixture beside the registered scenes" counts the registered compositions; add "Three scenes in the catalogue") and the two `available scenes:` lines of `test/scripts/cli.test.ts` (lines 140 and 150). These prove "Both kinds in the catalogue", "Takes fixture beside the registered scenes", "Three scenes in the catalogue" and "Shared checks still reject a broken flow" (MODIFIED requirement).
-- [ ] 2.5 Unit, `test/scenes/circuit-breaker-topology.test.ts`, "Timeline equals the beat table" and "Travel token changed". The test holds its own transcription of design §4: the phase table, the cue table, and the formulas re-implemented independently.
+- [x] 2.4 Edit only the assertions that list every registered scene: `test/scenes/catalogue-flow.test.ts` ("Both kinds in the catalogue" checks the first two scenes; "Takes fixture beside the registered scenes" counts the registered compositions; add "Three scenes in the catalogue") and the two `available scenes:` lines of `test/scripts/cli.test.ts` (lines 140 and 150). These prove "Both kinds in the catalogue", "Takes fixture beside the registered scenes", "Three scenes in the catalogue" and "Shared checks still reject a broken flow" (MODIFIED requirement).
+- [x] 2.5 Unit, `test/scenes/circuit-breaker-topology.test.ts`, "Timeline equals the beat table" and "Travel token changed". The test holds its own transcription of design §4: the phase table, the cue table, and the formulas re-implemented independently.
 
 ## 3. Frame logic (scene-catalogue)
 
-- [ ] 3.1 `src/scenes/circuit-breaker-topology/frame.ts`: `frameAt(f)` returns the whole stage state from `f` and the object frame `o(f)` (design §2.5): pops, swaps, leaves, fades, tokens on legs, counters, lights, tags, arrows, window, bar rate, clock. It is pure, with no React.
-- [ ] 3.2 Unit, `test/scenes/circuit-breaker-topology.test.ts`, one `describe` per requirement:
+- [x] 3.1 `src/scenes/circuit-breaker-topology/frame.ts`: `frameAt(f)` returns the whole stage state from `f` and the object frame `o(f)` (design §2.5): pops, swaps, leaves, fades, tokens on legs, counters, lights, tags, arrows, window, bar rate, clock. It is pure, with no React.
+- [x] 3.2 Unit, `test/scenes/circuit-breaker-topology.test.ts`, one `describe` per requirement:
   - **Beats and timing:** "Seeking in any order".
   - **Take 1:** "First request", "The service goes down", "Held down".
   - **Rewind:** "Object frame", "Same stage before each take", "Badge swap".
