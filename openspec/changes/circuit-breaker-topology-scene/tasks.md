@@ -9,10 +9,10 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 
 ## 1. Failure-rate bar (motion-components)
 
-- [ ] 1.1 Add `src/brand/rate-bar-shape.ts`, the pure geometry of design §2.4 with its `RangeError`s, and `src/brand/rate-bar.tsx`, which draws it. Edit neither `components.tsx` nor `motion.ts`.
-- [ ] 1.2 Add the optional `radius` to `positionedTokenStyle` and `PositionedToken` (`src/brand/flow-shapes.ts`, `src/brand/flow-components.tsx`; default 17, `RangeError` otherwise; design §2.7).
-- [ ] 1.3 Unit, `test/brand/token-radius.test.ts`, proving "Default unchanged" (plus `test/scenes/publish-subscribe.test.ts` unedited), "Smaller token" and "Bad radius".
-- [ ] 1.4 Unit, `test/brand/rate-bar.test.ts`, proving:
+- [x] 1.1 Add `src/brand/rate-bar-shape.ts`, the pure geometry of design §2.4 with its `RangeError`s, and `src/brand/rate-bar.tsx`, which draws it. Edit neither `components.tsx` nor `motion.ts`.
+- [x] 1.2 Add the optional `radius` to `positionedTokenStyle` and `PositionedToken` (`src/brand/flow-shapes.ts`, `src/brand/flow-components.tsx`; default 17, `RangeError` otherwise; design §2.7).
+- [x] 1.3 Unit, `test/brand/token-radius.test.ts`, proving "Default unchanged" (plus `test/scenes/publish-subscribe.test.ts` unedited), "Smaller token" and "Bad radius".
+- [x] 1.4 Unit, `test/brand/rate-bar.test.ts`, proving:
   - "Fill and tick"
   - "Narrow track"
   - "Small and empty rates"
