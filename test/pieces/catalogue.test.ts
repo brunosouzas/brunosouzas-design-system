@@ -116,7 +116,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(64);
+    expect(P.PIECE_NAMES).toHaveLength(67);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop (change body-diagram-pieces) and headline (change headline-piece) draw words only.
@@ -148,10 +148,29 @@ describe("Piece catalogue", () => {
   // Change sdd-scene-pieces (AB#333), task 4.2.
   test("Question token in the catalogue", async () => {
     const root: Record<string, unknown> = await import("../../src/pieces/index");
-    expect(root.PIECE_NAMES).toHaveLength(64);
-    expect((root.PIECE_NAMES as string[]).slice(-2)).toEqual(["headline", "questionToken"]);
+    expect(root.PIECE_NAMES).toHaveLength(67);
+    // The 64th of the 67 names, after headline (change supporting-characters, task 3.5).
+    expect((root.PIECE_NAMES as string[]).indexOf("questionToken")).toBe(63);
+    expect((root.PIECE_NAMES as string[])[62]).toBe("headline");
     expect((root.PIECES as Record<string, unknown>).questionToken).toBe(root.questionToken);
     expect(typeof root.questionToken).toBe("function");
+  });
+
+  // Change supporting-characters (AB#337), task 3.5: the three new names last, every 0.12.0 name at its index.
+  test("Supporting cast in the catalogue", async () => {
+    const root: Record<string, unknown> = await import("../../src/pieces/index");
+    const names = root.PIECE_NAMES as string[];
+    // PIECE_NAMES of 0.12.0 (655525d), written out so a reorder of the catalogue fails here.
+    const names012 = ["pill", "rings", "sheet", "blockArrow", "arcArrow", "rail", "checkBadge", "priceTag", "nameTag", "codePanel", "serverStack", "cloud", "stamp", "robot", "magnifier", "gear", "parcel", "road", "milestonePin", "browserWindow", "speechBubble", "steps", "folder", "book", "muleFlow", "eipIcon", "lineBadge", "stationMarker", "pipe", "countBadge", "nodeBlock", "pillNode", "hexNode", "messageArrow", "ledgerMark", "renewalRing", "suggestedHalo", "licenceMark", "zone", "uiIcon", "linkIcon", "diagramBox", "decisionNode", "storeNode", "queueNode", "exchangeNode", "taggedContainer", "lifeline", "phaseBand", "altFrame", "edgeLabel", "stateStart", "emote", "mira", "visor", "drone", "kiu", "sinal", "bankObject", "symbol", "brandNotationIcon", "categoryIcon", "headline", "questionToken"];
+    expect(names012).toHaveLength(64);
+    expect(names).toHaveLength(67);
+    expect(names.slice(0, 64)).toEqual(names012);
+    expect(names.slice(-5)).toEqual(["headline", "questionToken", "balao", "chaves", "keyboard"]);
+    const pieces = root.PIECES as Record<string, unknown>;
+    for (const name of ["balao", "chaves", "keyboard"]) {
+      expect(pieces[name], name).toBe(root[name]);
+      expect(typeof root[name], name).toBe("function");
+    }
   });
 });
 
@@ -252,6 +271,19 @@ describe("Words come from the caller", () => {
     const words: string[] = [];
     walk(P.questionToken({ cx: 0, cy: 0 }).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
     expect(words).toEqual(["?"]);
+  });
+
+  // Change supporting-characters (AB#337), task 3.5.
+  test("Balão's and Chaves's words", () => {
+    const wordsOf = (drawn: { text: readonly SvgNode[] }) => {
+      const words: string[] = [];
+      walk(drawn.text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
+      return words;
+    };
+    expect(wordsOf(P.balao({ x: 0, y: 0, holdsStamp: { word: "GO" } }))).toEqual(["GO"]);
+    expect(wordsOf(P.chaves({ x: 0, y: 0, holdsSheet: { width: 150, height: 160, rows: [{ lead: "question", bar: 40 }, { lead: "none", bar: 40 }], label: "proposal.md" } }))).toEqual(["?", "proposal.md"]);
+    expect(wordsOf(P.chaves({ x: 0, y: 0, types: true }))).toEqual([]);
+    expect(wordsOf(P.keyboard({ x: 0, y: 0 }))).toEqual([]);
   });
 
   test("No piece invents a word", () => {

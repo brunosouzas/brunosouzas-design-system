@@ -69,4 +69,7 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   categoryIcon: { category: "personalTools", x: 0, y: 0 },
   headline: { x: 0, y: 0, lines: ["Title"] },
   questionToken: { cx: 0, cy: 0 },
+  balao: { x: 0, y: 0 },
+  chaves: { x: 0, y: 0 },
+  keyboard: { x: 0, y: 0 },
 };

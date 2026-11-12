@@ -237,8 +237,8 @@ describe("Cover spec format", () => {
     const lines = await problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
     expect(lines[0]).toBe('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "pink"');
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken\)$/);
-    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(64);
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken, balao, chaves, keyboard\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(67);
   });
 
   test("Unsafe id", async () => {
@@ -583,8 +583,8 @@ describe("Emote on a cover", () => {
     });
     expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(1);
     expect(ws.err[0]).toMatch(/^pieces\[0\]\.piece: unknown piece "mascot"/);
-    expect(ws.err[0].split(", ")).toHaveLength(64);
-    expect(ws.err[0]).toMatch(/, headline, questionToken\)$/);
+    expect(ws.err[0].split(", ")).toHaveLength(67);
+    expect(ws.err[0]).toMatch(/, headline, questionToken, balao, chaves, keyboard\)$/);
     expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
@@ -844,6 +844,70 @@ describe("Question token and held sheet in a spec", () => {
       expect.stringMatching(/^pieces\[2\]\.scale: /),
     ]);
     expect(ws.err).toHaveLength(4);
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
+  });
+});
+
+// Spec cover-cli, change supporting-characters (AB#337), task 4.1: "Supporting cast in a spec".
+describe("Supporting cast in a spec", () => {
+  const attr = (node: NormalNode, name: string) => node.attrs.find(([key]) => key === name)?.[1];
+  /** Every element with its ancestors, depth first. */
+  const withAncestors = (node: NormalNode, ancestors: NormalNode[] = []): { node: NormalNode; ancestors: NormalNode[] }[] =>
+    node.children.flatMap((child) => (typeof child === "string" ? [] : [{ node: child, ancestors }, ...withAncestors(child, [...ancestors, child])]));
+  const textOf = (node: NormalNode): string => node.children.map((child) => (typeof child === "string" ? child : textOf(child))).join("");
+  const firstChild = (node: NormalNode) => node.children.find((child): child is NormalNode => typeof child !== "string")!;
+
+  test("Supporting cast drawn", async () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "balao", x: 200, y: 380, holdsStamp: { word: "GO" } },
+        { piece: "chaves", x: 560, y: 380, facing: "left", holdsSheet: { width: 150, height: 160, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } },
+        { piece: "keyboard", x: 300, y: 300 },
+      ],
+    });
+    expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(0);
+    const tree = normalForm(readFileSync(join(ws.root, "cast.svg"), "utf8"));
+    const all = withAncestors(tree);
+    const isOutlined = (node: NormalNode) => node.tag === "g" && attr(node, "stroke") === tokens.color.ink && attr(node, "stroke-width") === "4" && attr(node, "stroke-linejoin") === "round" && attr(node, "data-held") === undefined;
+    const outlined = all.find(({ node }) => isOutlined(node))!.node;
+    const inOutlined = withAncestors(outlined);
+    const group = (name: string) => inOutlined.find(({ node }) => attr(node, "data-piece") === name)!.node;
+    expect(attr(firstChild(group("balao")), "data-held")).toBe("stamp");
+    expect(attr(firstChild(group("chaves")), "data-held")).toBe("sheet");
+    // Every key of the keyboard has an ancestor inside the keyboard group with `stroke: none`, so none takes the outline.
+    const board = group("keyboard");
+    const keys = withAncestors(board).filter(({ node }) => node.tag === "rect" && attr(node, "width") === "12" && attr(node, "height") === "4");
+    expect(keys).toHaveLength(6);
+    for (const { ancestors } of keys) expect(ancestors.some((ancestor) => attr(ancestor, "stroke") === "none")).toBe(true);
+    const labels = all.find(({ node }) => node.tag === "g" && attr(node, "font-size") === String(tokens.cover.labelSize) && attr(node, "text-anchor") === "middle" && attr(node, "fill") === tokens.color.ink && attr(node, "stroke") === undefined)!;
+    const texts = withAncestors(labels.node, [...labels.ancestors, labels.node]).filter(({ node }) => node.tag === "text");
+    expect(texts.map(({ node }) => textOf(node)).sort()).toEqual(["?", "GO", "proposal.md"]);
+    for (const { node, ancestors } of texts) expect(ancestors.filter((ancestor) => attr(ancestor, "stroke") !== undefined), textOf(node)).toEqual([]);
+    // No word sits inside the outlined group.
+    expect(inOutlined.filter(({ node }) => node.tag === "text")).toEqual([]);
+  });
+
+  test("Supporting cast problems at their paths", async () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "balao", x: 200, y: 380, speaks: true, view: "back", holdsStamp: { word: "GO" } },
+        { piece: "chaves", x: 400, y: 380, types: true, points: true, holdsSheet: { width: 150, height: 160, rows: [{ bar: 40 }] } },
+        { piece: "keyboard", x: 300, y: 300, width: 79 },
+      ],
+    });
+    expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(1);
+    expect(ws.err.slice(0, 3)).toEqual([
+      "pieces[0].holdsStamp: Balão does one action at a time",
+      "pieces[1].points: Chaves does one action at a time",
+      expect.stringMatching(/^pieces\[2\]\.width: expected a number at least 80/),
+    ]);
+    // Three problems, then the command's closing line.
+    expect(ws.err).toHaveLength(4);
+    expect(ws.err[3]).not.toMatch(/^pieces/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
 });

@@ -183,17 +183,17 @@ The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base
 - **THEN** both hold `x`, `y`, `surface`, `scale`, `expression`, `view` and `facing`; `balao` adds exactly `speaks` and `holdsStamp`, `chaves` exactly `types`, `points` and `holdsSheet`; neither has a colour parameter
 
 ### Requirement: Emote spot beside the head
-For `balao` and `chaves` the emote spot SHALL be (116, −200) in local units facing right and (−116, −200) facing left, for an `emote` at the character's `scale` (CAST-3): a disc of radius 44 (the emote's 40 and its outline) there clears every shape the piece draws at rest, pointing, typing or holding the stamp, in both facings. A held sheet 114 or taller reaches it.
+For `balao` and `chaves` the emote spot SHALL be (116, −200) in local units facing right and (−116, −200) facing left, for an `emote` at the character's `scale` (CAST-3): a disc of radius 44 (the emote's 40 and its outline) there clears every shape the piece draws at rest, pointing, typing or holding the stamp, in both facings. A held sheet taller than 114, or than 96 with a label, reaches it.
 
 #### Scenario: Spot clear of the body and props
 - **GIVEN** `balao` at rest and holding a stamp, `chaves` at rest, pointing and typing, each facing right and left at `x` 0, `y` 0
-- **WHEN** the bounding box of every shape (with half its stroke width, the pointing hand's rotation applied) is compared with the disc of radius 44 at the spot
+- **WHEN** the bounding box of every shape (a path's per segment, from its end and control points; with half its stroke width, the pointing hand's rotation applied) is compared with the disc of radius 44 at the spot
 - **THEN** none of them overlaps the disc
 
 #### Scenario: A tall held sheet reaches the spot
-- **GIVEN** `chaves` holding the sheet of "Chaves hands a sheet over" (height 160), and the same with height 100
-- **WHEN** the page's box is compared with the disc
-- **THEN** the first overlaps it and the second does not; the README says a scene moves the emote or the sheet then
+- **GIVEN** `chaves` holding the sheet of "Chaves hands a sheet over" (height 160), the same without the label at heights 100, 114 and 115, and with the label at heights 96 and 100, each facing right and left
+- **WHEN** the page's and the label pill's boxes are compared with the disc
+- **THEN** the page at 160 and 115 overlaps it, nothing at 100 and 114 without a label nor at 96 with it does, and the pill at 100 does; the README says a scene moves the emote or the sheet then
 
 ### Requirement: Existing outputs unchanged by the supporting cast
 Adding the supporting cast SHALL change no existing output: every existing file in `test/fixtures/` stays as it is, and every call and golden it pins (the cast of 0.11.0 included) draws its pinned tree and bytes; Visor's 0.12.0 scenarios and the scenes' ring radii hold unchanged. `stamp`, moved to its own module, draws every call of a new fixture written from 0.12.0 before the move.
