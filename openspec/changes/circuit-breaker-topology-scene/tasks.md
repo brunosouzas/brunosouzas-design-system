@@ -55,11 +55,11 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 
 ## 4. Stage, layout and composition (scene-catalogue)
 
-- [ ] 4.1 `src/scenes/circuit-breaker-topology/layout.ts`: the values of design §6.1 and the routes of §4.3.
-- [ ] 4.2 `src/scenes/circuit-breaker-topology/stage.ts`: builds the two stage SVG trees from `frameAt(f)` with the pieces of design §3, each element in a `data-element` group. It also lists the component props (squares, bar, clock, tokens, drop path).
-- [ ] 4.3 `src/scenes/circuit-breaker-topology/Scene.tsx`: the layers of design §6.2 (stage units, the component box scaled × 2, `Rings` and `MotionPath` in composition pixels). Register `circuit-breaker-topology-16x9` in `src/Root.tsx`.
-- [ ] 4.4 Add a test helper, `test/scenes/text-measure.ts`. It measures a string's advance on the `fonts/` faces with harfbuzzjs's shaper (`harfbuzzjs/dist/harfbuzz.wasm`; harfbuzzjs is already a dependency) and returns its box per design §6.3.
-- [ ] 4.5 Unit, `test/scenes/circuit-breaker-topology-layout.test.ts`, proving:
+- [x] 4.1 `src/scenes/circuit-breaker-topology/layout.ts`: the values of design §6.1 and the routes of §4.3.
+- [x] 4.2 `src/scenes/circuit-breaker-topology/stage.ts`: builds the two stage SVG trees from `frameAt(f)` with the pieces of design §3, each element in a `data-element` group. It also lists the component props (squares, bar, clock, tokens, drop path).
+- [x] 4.3 `src/scenes/circuit-breaker-topology/Scene.tsx`: the layers of design §6.2 (stage units, the component box scaled × 2, `Rings` and `MotionPath` in composition pixels). Register `circuit-breaker-topology-16x9` in `src/Root.tsx`.
+- [x] 4.4 Add a test helper, `test/scenes/text-measure.ts`. It measures a string's advance on the `fonts/` faces with harfbuzzjs's shaper (`harfbuzzjs/dist/harfbuzz.wasm`; harfbuzzjs is already a dependency) and returns its box per design §6.3.
+- [x] 4.5 Unit, `test/scenes/circuit-breaker-topology-layout.test.ts`, proving:
   - "Layout equals the design"
   - "Layer order"
   - "Every settled string at its minimum"
@@ -70,7 +70,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Covered light rejected"
 
   If a design §6.1 value fails, change it in design.md and the spec in the same commit and list it for the owner.
-- [ ] 4.6 Unit, `test/scenes/circuit-breaker-topology-words.test.ts`, proving:
+- [x] 4.6 Unit, `test/scenes/circuit-breaker-topology-words.test.ts`, proving:
   - "Words over the whole composition"
   - "Words at their boundaries"
   - "Unlisted word rejected"
@@ -81,7 +81,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 
 ## 5. Stills, render and the commands (scene-rendering)
 
-- [ ] 5.1 Unit, `test/scripts/circuit-breaker-topology.test.ts`, with the existing injected runner, proving:
+- [x] 5.1 Unit, `test/scripts/circuit-breaker-topology.test.ts`, with the existing injected runner, proving:
   - "Topology key-frame stills"
   - "Topology stills dry run"
   - "Topology still failure"

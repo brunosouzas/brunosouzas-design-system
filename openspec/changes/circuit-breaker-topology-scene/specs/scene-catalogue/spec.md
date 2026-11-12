@@ -83,7 +83,7 @@ Every drawn text box (measured advance on the `fonts/` faces times effective siz
 #### Scenario: Exempt and checked frames
 - **GIVEN** frames 531, 560 and 1681
 - **WHEN** the placement test lists the elements it checks at each frame
-- **THEN** at 531 the breaker box and its text are not checked (drop-in) and Checkout, Payment and their labels are; at 560 Checkout, Payment, the breaker text and the state pill are checked and the window is not (it settles at 584); at 1681 the window is not checked (slide) and the tags and tokens are
+- **THEN** at 531 the breaker box and its text are not checked (drop-in) and Checkout, Payment and their labels are; at 560 Checkout, Payment and the breaker text are checked and the state pill and the window are not (they settle at 578 and 584); at 1681 the window (slide) and the two tags (swapped at 1654 and 1676, settling until 1684 and 1706) are not checked, and Checkout, Payment, the breaker, the state pill and the tokens are
 
 #### Scenario: Collision rejected
 - **GIVEN** a fixture moving the customer message to x 300
