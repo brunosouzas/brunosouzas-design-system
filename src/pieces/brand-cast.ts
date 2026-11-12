@@ -134,15 +134,17 @@ export const mira = definePiece<MiraParams>(
 export const VISOR_FACINGS = ["right", "left"] as const;
 export type VisorFacing = (typeof VISOR_FACINGS)[number];
 
-/** The sheet Visor holds: the `sheet` piece's page parameters, plus the file name pill. */
-export type VisorHeldSheet = { width: number; height: number; rows: SheetRow[]; top?: number; step?: number; label?: string };
+/** A held sheet (Visor's, and Chaves's since change supporting-characters): the `sheet` piece's page parameters, plus the file name pill. */
+export type HeldSheet = { width: number; height: number; rows: SheetRow[]; top?: number; step?: number; label?: string };
+/** The name of 0.12.0, kept as an alias of `HeldSheet`. */
+export type VisorHeldSheet = HeldSheet;
 
 export type VisorParams = {
   x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView;
   /** The small accent card in the left hand. */
   holds?: boolean;
   /** A sheet in the left hand instead of the card; refused with `holds: true` or `view: "back"`. */
-  holdsSheet?: VisorHeldSheet;
+  holdsSheet?: HeldSheet;
   points?: boolean;
   /** `right` (the default, the drawing of 0.11.0) or `left`, the mirror image; the held sheet and words stay unmirrored. */
   facing?: VisorFacing;
@@ -156,14 +158,14 @@ const HELD_SHEET_EDGE = 98;
 const HELD_SHEET_BOTTOM = -4;
 
 /**
- * The held sheet: the `sheet` and `pill` pieces' own drawings in one group that
- * gives them Visor's outline (cast pieces set `stroke: none` on their root), so
+ * A held sheet with its page's top-left corner at (x, y), in the holder's
+ * units: the `sheet` and `pill` pieces' own drawings in one group that gives
+ * them the cast's outline (cast pieces set `stroke: none` on their root), so
  * it draws the same in a cover and in a scene. The marks sit on the white page,
- * so they stay ink on the dark surface too (ADR 0009). Its words go to Visor's text.
+ * so they stay ink on the dark surface too (ADR 0009). Its words go to the
+ * holder's text. Shared by Visor and Chaves (change supporting-characters, design §1).
  */
-const heldSheet = (held: VisorHeldSheet, s: Skin, facing: VisorFacing): Drawn => {
-  const x = facing === "right" ? -HELD_SHEET_EDGE - held.width : HELD_SHEET_EDGE;
-  const y = HELD_SHEET_BOTTOM - held.height;
+export const holdSheet = (held: HeldSheet, s: Skin, x: number, y: number): Drawn => {
   const page = sheet({ x, y, width: held.width, height: held.height, rows: held.rows, top: held.top, step: held.step });
   const tag = held.label === undefined ? null : pill({ x: x + held.width / 2, y, text: held.label });
   // The sheet's marks group (the `g` at outline.small) gets its ink stroke here.
@@ -177,14 +179,18 @@ const heldSheet = (held: VisorHeldSheet, s: Skin, facing: VisorFacing): Drawn =>
   );
 };
 
+/** Visor's pointing hand, a finger pill above the palm, turned `angle` degrees about the palm at (x, y). Shared with Chaves (change supporting-characters, design §1). */
+export const pointingHand = (s: Skin, x: number, y: number, angle: number): SvgNode =>
+  g({ transform: `translate(${x},${y}) rotate(${angle})` }, el("rect", { x: -6, y: -30, width: 12, height: 26, rx: 6, ...outlined(s, 4.5) }), el("circle", { cx: 0, cy: 0, r: 15, ...outlined(s) }));
+
 const drawVisor = (p: VisorParams): Drawn => {
   const s = skin(p.surface ?? "light");
   const expression = p.expression ?? "idle", view = p.view ?? "front", back = view === "back";
   const hold = p.holds ?? false, point = p.points ?? true, facing = p.facing ?? "right";
-  const held = p.holdsSheet === undefined ? null : heldSheet(p.holdsSheet, s, facing);
-  const handR: SvgNode = point
-    ? g({ transform: "translate(88,-104) rotate(-35)" }, el("rect", { x: -6, y: -30, width: 12, height: 26, rx: 6, ...outlined(s, 4.5) }), el("circle", { cx: 0, cy: 0, r: 15, ...outlined(s) }))
-    : el("circle", { cx: 86, cy: -58, r: 15, ...outlined(s) });
+  const held = p.holdsSheet === undefined
+    ? null
+    : holdSheet(p.holdsSheet, s, facing === "right" ? -HELD_SHEET_EDGE - p.holdsSheet.width : HELD_SHEET_EDGE, HELD_SHEET_BOTTOM - p.holdsSheet.height);
+  const handR: SvgNode = point ? pointingHand(s, 88, -104, -35) : el("circle", { cx: 86, cy: -58, r: 15, ...outlined(s) });
   // With a held sheet the card hand stays where it is, without the card, over the sheet's edge.
   const handL: SvgNode[] = hold || held
     ? [...(held ? [] : [el("rect", { x: -106, y: -96, width: 28, height: 24, rx: 5, fill: s.accent })]), el("circle", { cx: -92, cy: -66, r: 15, ...outlined(s) })]
@@ -212,7 +218,8 @@ const drawVisor = (p: VisorParams): Drawn => {
   return drawn([g({ "data-piece": "visor", transform, stroke: "none" }, ...(held?.body ?? []), body)], text);
 };
 
-const visorHeldSheetSchema: Schema = {
+/** The held sheet's schema (Visor's and Chaves's `holdsSheet`). */
+export const heldSheetSchema: Schema = {
   width: { kind: "number", required: true, min: 80, max: 300 },
   height: { kind: "number", required: true, min: 80, max: 400 },
   rows: { kind: "array", required: true, minItems: 1, maxItems: 8, of: { kind: "object", fields: sheetRowSchema } },
@@ -227,7 +234,7 @@ export const visor = definePiece<VisorParams>(
     x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }),
     expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS },
     holds: { kind: "boolean" },
-    holdsSheet: { kind: "object", fields: visorHeldSheetSchema },
+    holdsSheet: { kind: "object", fields: heldSheetSchema },
     points: { kind: "boolean" },
     facing: { kind: "enum", values: VISOR_FACINGS },
   } satisfies Schema,
