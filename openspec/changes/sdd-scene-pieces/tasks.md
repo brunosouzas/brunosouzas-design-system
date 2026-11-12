@@ -38,9 +38,9 @@ Implementation starts after the owner's ok at gate 1. Test levels: **unit** (vit
 
 ## 7. Documentation and the owner's gate
 
-- [ ] 7.1 README: "The cast and the emotes" (`holdsSheet`, `facing`, `questionToken`), "Illustration pieces and covers" (64 pieces), "How a scene is built" (the `scene` tokens, in composition pixels and the same in every format, the path drawn with round caps, and `stageRingRadii`), "Upgrading to 0.12.0" (added names; nothing removed or renamed; every 0.11.0 call, spec and scene unchanged); `docs/roadmap.md` row 13e `sdd-scene-pieces`, AB#333. Check: `grep -n "holdsSheet\|questionToken\|scene.ringStep\|0.12.0" README.md` lists each section.
+- [x] 7.1 README: "The cast and the emotes" (`holdsSheet`, `facing`, `questionToken`), "Illustration pieces and covers" (64 pieces), "How a scene is built" (the `scene` tokens, in composition pixels and the same in every format, the path drawn with round caps, and `stageRingRadii`), "Upgrading to 0.12.0" (added names; nothing removed or renamed; every 0.11.0 call, spec and scene unchanged); `docs/roadmap.md` row 13e `sdd-scene-pieces`, AB#333. Check: `grep -n "holdsSheet\|questionToken\|scene.ringStep\|0.12.0" README.md` lists each section.
 - [ ] 7.2 Evidence in `docs/spikes/<date>-sdd-scene-pieces/` (PNG through Chrome and `<img>`, never `rsvg-convert`, ADR 0008), each under 200 KB, with a README naming the commands: Visor holding a short and a tall sheet facing right and left at scale 1.15 on light and dark, the smallest sheet (80 × 80) with the `proposal.md` label (its pill reaches the ear) and a 150-wide sheet with the same label; Visor facing left pointing, with and without the card; the token at scale 1, 1.5 and 2 beside a sheet's question row; a 960 × 540 stage with the rings and a dashed path from the tokens. Check: shown to the owner (G3 stills) before the pull request is marked ready.
-- [ ] 7.3 Full checks: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0; `openspec validate sdd-scene-pieces --strict` and `openspec validate --all --strict` pass.
+- [x] 7.3 Full checks: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0; `openspec validate sdd-scene-pieces --strict` and `openspec validate --all --strict` pass.
 
 ## Workflow follow-up
 
