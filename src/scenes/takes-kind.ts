@@ -52,7 +52,7 @@ export type TakesTimeline = {
   pops: Readonly<Record<string, number>>;
   /** Linear fades; `in` reaches 1 at its end, `out` reaches 0 at its end. */
   fades: Readonly<Record<string, { in: readonly [number, number]; out?: readonly [number, number] }>>;
-  /** Elements that leave over `EMOTE_LEAVE` frames from the given frame. */
+  /** Elements that leave over `LEAVE_FRAMES` frames from the given frame. */
   leaves: Readonly<Record<string, number>>;
   /** Any other frame something changes at (code lines, rows, checks, the hand-over, the badge swap). */
   cues: Readonly<Record<string, readonly number[]>>;
@@ -81,7 +81,7 @@ const checkOrder = (id: string, phases: readonly TakesPhase[]): string[] => {
   }
   if (stage !== "take2") {
     const last = phases.at(-1);
-    return [`${id}: the takes end at ${last ? `phase ${last.id}` : "no phase"}, before a rewind and a take-2 phase`];
+    return [`${id}: the takes end at ${last ? `phase ${last.id}` : "no phase"} without completing the order (take-1 phases, one rewind, then take-2 phases)`];
   }
   return [];
 };

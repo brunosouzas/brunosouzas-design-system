@@ -208,6 +208,22 @@ describe("SDD layout and layers", () => {
     }
   });
 
+  test("The error reaches the balloon; the answers start outside it", () => {
+    // "Arrow boundaries": at 250 the failure arrow's head is at the balloon's right edge (its outline included).
+    const arrow = walk(stageAt(250).pieces).find(({ node }) => node.attrs["data-element"] === "failureArrow")!;
+    const head = walk(arrow.node, arrow.m).find(({ node }) => node.tag === "polygon")!;
+    const tip = String(head.node.attrs.points).split(" ")[0].split(",").map(Number);
+    expect({ x: tip[0], y: tip[1] }).toEqual({ x: FAILURE_ARROW.to[0], y: FAILURE_ARROW.to[1] });
+    expect(tip[0]).toBe(BALLOON.x + BALLOON.width + 2);
+    expect(tip[1]).toBeGreaterThan(BALLOON.y);
+    expect(tip[1]).toBeLessThan(BALLOON.y + BALLOON.height);
+    // "First answer": at 512 the answer disc (radius 17 plus half its outline) clears the balloon and its tail tip.
+    const answer = frameAt(512).answers[0].point;
+    const balloon = pad({ x0: BALLOON.x, y0: BALLOON.y, x1: BALLOON.x + BALLOON.width, y1: BALLOON.y + BALLOON.height }, 2);
+    expect(discTouchesBox(answer, 19, balloon)).toBe(false);
+    expect(Math.hypot(answer.x - 70, answer.y - (BALLOON.y + BALLOON.height + 20))).toBeGreaterThan(19 + 2);
+  });
+
   test("Row marks clear each other", () => {
     for (let k = 1; k < 6; k++) {
       const gap = rowMarkAt(PAGE_REST, k + 1).y - rowMarkAt(PAGE_REST, k).y;
@@ -255,6 +271,19 @@ describe("SDD take 2, the hand-over", () => {
       return { stroke: group.attrs.stroke, width: group.attrs["stroke-width"], join: group.attrs["stroke-linejoin"] };
     };
     expect(strokeOf(480, "data-page")).toEqual(strokeOf(479, "data-held"));
+    // Every node under the two roots draws with the same paint, in the same order, and every path lands in the same place.
+    const paint = (f: number, attr: string) => {
+      const nodes = walk(stageAt(f).pieces);
+      const found = nodes.find(({ node }) => node.attrs[attr] !== undefined)!;
+      const root = attr === "data-held" ? found.node : (found.node.children[0] as SvgNode);
+      const m = attr === "data-held" ? found.m : multiply(found.m, parseTransform(undefined));
+      return walk(root, attr === "data-held" ? multiply(found.m, invert(parseTransform(root.attrs.transform))) : m).slice(1).map(({ node, m: here }) => {
+        const { x: _x, y: _y, width: _w, height: _h, cx: _cx, cy: _cy, d: _d, transform: _t, ...rest } = node.attrs;
+        return { tag: node.tag, ...rest, ...(node.tag === "path" ? { at: boxOf(shapePoints(node, here)) } : {}) };
+      });
+    };
+    const roundDeep = (v: unknown): unknown => JSON.parse(JSON.stringify(v, (_k, x) => (typeof x === "number" ? Math.round(x * 1e6) / 1e6 : x)));
+    expect(roundDeep(paint(480, "data-page"))).toEqual(roundDeep(paint(479, "data-held")));
     for (let f = 480; f < 780; f++) expect(find(stageAt(f).pieces, "data-held").length, `frame ${f}`).toBe(0);
     expect(frameAt(491).page!.at.x).toBeCloseTo(147.4, 9);
     expect(frameAt(491).page!.at.y).toBeCloseTo(177.7, 9);

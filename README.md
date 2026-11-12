@@ -43,7 +43,7 @@ The style started from the illustration covers of the [Spotify Engineering blog]
 
 ```text
 tokens/source.json ──► tokens/generated/tokens.css  ──► brunosouzas.com (site repository, planned)
-                   ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format and language
+                   ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format (and language, for a localised scene)
                    └─► tokens/generated/tokens.json ──► other scripts
 
 src/pieces (pure functions → SVG node tree) ──► toSvg   ──► covers (npm run cover), diagrams
@@ -128,7 +128,7 @@ Studio lists four compositions for each of the two localised scenes and one for 
 
 A scene lives in `src/scenes/<scene>/` with:
 
-- `scene.ts`: the scene data, with no React: id, formats, languages, the timeline in frames, the text table per language (every string taken from the article) and the source article URL per language.
+- `scene.ts`: the scene data, with no React: id, formats, languages, the timeline in frames, the text table per language (every string taken from the article; a neutral scene has one `en` table) and the source article URL per language.
 - `layout.ts`: one layout per format, in composition pixels; the 4:5 layout has its own arrow routes.
 - `Scene.tsx`: the composition, which arranges the components from `src/brand/`.
 
@@ -136,11 +136,11 @@ A scene lives in `src/scenes/<scene>/` with:
 
 **Neutral scenes.** A scene with `neutral: true` is one video for both pages ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md), amended 2026-11-09): one composition per format, `<scene>-<format>` with no language suffix (its `lang` is `en` and the scene ignores it), `languages: ["en"]`, its few words in one English table `text.en`, and both pages' sources `sources.pt` and `sources.en`. The catalogue rejects a neutral scene with a `pt` table, another language, a missing or non-`https` source, or an empty word.
 
-**The `takes` kind.** A comparison of two runs of the same stage (`kind: "takes"`, `src/scenes/takes-kind.ts`): take-1 phases, one rewind phase, take-2 phases. It is always neutral. Besides the common rules, the catalogue checks the take order; that every phase cites at least one line of the English article (`cites`, MOT-1); that acts of different characters never overlap (CAST-4); that every emote enters on its character's expression change, one at a time, and is gone (10 frames after `leaveAt`) before the next act (CAST-3); and that nothing moves from the outro on: every act, face, trip arrival, fade, leave and cue before it, and every pop-in at most `motion.fps` frames before it, so it is settled (SCN-4).
+**The `takes` kind.** A comparison of two runs of the same stage (`kind: "takes"`, `src/scenes/takes-kind.ts`): take-1 phases, one rewind phase, take-2 phases. It is always neutral. Besides the common rules, the catalogue checks the take order; that every phase cites at least one line of the English article (`cites`, MOT-1); that acts of different characters never overlap (CAST-4); that every emote enters on its character's expression change, one at a time, and is gone (10 frames after `leaveAt`) before the next act (CAST-3); and that nothing moves from the outro on: every act, face, trip arrival, fade, leave and cue before it, and every pop-in at least `motion.fps` frames before it, so it is settled (SCN-4).
 
 The first neutral scene, `sdd-without-with-spec` (16:9, 780 frames, 26 s, a 3 s final still), splits its folder further, because its frames are computed and drawn in separate steps:
 
-- `timeline.ts`: the beat table as data (`makeTimeline(travel)`; every trip ends `motion.travel` frames after it starts).
+- `timeline.ts`: the beat table as data (`makeTimeline(travel = motion.travel, fade = motion.fade)`; every trip ends `travel` frames after it starts and every fade lasts `fade` frames).
 - `takes.ts`: `frameAt(frame)`, the state of every element at a frame, and `objectFrame(frame)`, the frame take 1's objects are drawn from during the rewind; pure functions, so Studio and the renders can seek in any order.
 - `layout.ts`: every position and route in **stage units**: the gate-0 storyboard's 960 x 540 frame, drawn in an SVG with that `viewBox` over the 1920 x 1080 composition, so the pieces keep the outline weights the owner approved. The rings and dashed paths stay in composition pixels (stage x 2).
 - `stage.ts`: `stageAt(frame)`, the stage layers as piece trees (`pieces`, `tokens`, `emote`) inside the cover command's outlined and labels groups; the tests read words, pieces and positions from them.

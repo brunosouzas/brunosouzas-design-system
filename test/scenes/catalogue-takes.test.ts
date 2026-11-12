@@ -31,6 +31,8 @@ describe("Two-take scene kind", () => {
     const withSecond = [...t.phases.slice(0, 4), { ...t.phases[4], to: 504, events: t.phases[4].events.filter((e) => e.at <= 504) }, second, ...t.phases.slice(5)];
     expect(breaks(withSecond)).toEqual([`${ID}: phase rewind-again (rewind) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
     expect(breaks(t.phases.filter((p) => p.take !== 1))).toEqual([`${ID}: phase rewind (rewind) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
+    // No take 2 at all: the order ends early.
+    expect(joined({ phases: t.phases.filter((p) => p.take !== 2) })).toContain(`${ID}: the takes end at phase rewind without completing the order`);
   });
 
   test("Phase without an article line", () => {
@@ -133,6 +135,7 @@ describe("Two-take reading hold", () => {
     expect(joined({ emotes: [t.emotes[0], { ...t.emotes[1], leaveAt: 685 }] })).toContain(`${ID}: leave of emote worked (ends) at frame 695 is at or after the outro`);
     expect(joined({ leaves: { rewindMark: 680 } })).toContain(`${ID}: leave of rewindMark (ends) at frame 690 is at or after the outro`);
     expect(joined({ rewind: { ...t.rewind, to: 690 } })).toContain(`${ID}: end of the rewind at frame 690 is at or after the outro`);
+    expect(joined({ ringsFade: [0, 695] })).toContain(`${ID}: rings fade (ends) at frame 695 is at or after the outro`);
   });
 
   test("Pop-in too late to settle", () => {

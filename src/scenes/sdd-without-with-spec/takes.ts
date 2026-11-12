@@ -105,7 +105,8 @@ export const frameAt = (frame: number, t: TakesTimeline = sceneTimeline): SddSta
   const o = objectFrame(frame, t);
   const inTake2 = frame >= take2Start(t);
   const pops = t.pops;
-  const acts = t.acts.filter((act) => act.actor === "visor");
+  // Visor's four acts in frame order (design §4): it points, resets, holds the sheet, points again.
+  const acts = t.acts.filter((act) => act.actor === "visor").sort((a, b) => a.from - b.from);
   const [pointAct, resetAct, holdAct, implementAct] = acts;
   const handOver = t.trips.find((trip) => trip.id === "handover")!;
   const fright = t.faces.find((face) => face.expression === "failed")!;
@@ -118,7 +119,7 @@ export const frameAt = (frame: number, t: TakesTimeline = sceneTimeline): SddSta
   });
 
   const visorAppear = block(frame, pops.visor);
-  const expression = [...t.faces].filter((face) => face.actor === "visor" && face.at <= frame).at(-1)?.expression ?? "idle";
+  const expression = t.faces.filter((face) => face.actor === "visor" && face.at <= frame).sort((a, b) => a.at - b.at).at(-1)?.expression ?? "idle";
   const frightened = frame >= fright.at && frame < resetAct.from;
   const holding = frame >= holdAct.from && frame < handOver.from;
 
