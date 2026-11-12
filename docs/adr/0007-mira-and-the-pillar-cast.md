@@ -3,6 +3,7 @@
 - Status: accepted
 - Amended by [ADR 0005's amendment of 2026-11-09](0005-neutral-videos-and-the-cast.md) (words on screen are English)
 - Amended by [ADR 0009](0009-one-piece-grammar.md) (bank objects and the robot show the idle eyes; the emotes are kept and restyled)
+- Amended 2026-11-12 (AB#337): the supporting characters Balão and Chaves
 - Date: 2026-11-05
 - Supersedes: ADR 0005 (the cast; its neutral-video and storyboard-gate rules are unchanged, only the characters themselves are replaced)
 
@@ -57,3 +58,18 @@ Option 3.
 - **Idle eyes on the objects.** The bank objects (Correio, Lume, Carga, Anel, Módulo, Hub) and the `robot` piece show the cast's idle eyes (`cast.eyes`) on their screen or visor, where the identity studio's I10 had the screen off: an object with a face-like screen and no eyes read as dead next to Mira. They take no expression and no role; an object that needs one becomes a character with its own sheet, as before. Módulo also loses the two inner strokes between its legs.
 - **Emotes kept.** The consequence above that `EMOTE_KINDS` would keep only some entries does not hold: all eight emotes stay (`idea`, `doubt`, `problem`, `worked`, `refused`, `pressure`, `liked`, `waiting`), restyled in the v2 grammar of ADR 0009, because the new cast uses each of them. `emote` moved to its own module.
 - **Seven-role cast removed.** `mascot`, `MASCOTS`, `MASCOT_ACTIONS`, `MASCOT_FACES`, their `cast.*` colours and the cast motion test composition are removed in 0.7.0, as planned above.
+
+## Amended, 2026-11-12 (card 337): the supporting characters
+
+The first scene to need the human developer and the person who asks for a change (the SDD scene, AB#144) could not tell who talks to whom with the pillar cast and a loose speech balloon. As this ADR foresaw, the roles with no honest match are created when a scene needs them, each with its model sheet. The owner chose concept C, "the notation" (identity studio, 2026-11-12, q65 to q67): each human role is a glyph of its trade, on Mira's legs; no character is a human (brand strategy, E5).
+
+| Character | Piece | Role | Signature part |
+|---|---|---|---|
+| Balão | `balao` | the requester and approver: whoever asks for the change and approves it | a speech balloon whose tail points at the listener; the request line on its belly, lit in the accent while it speaks |
+| Chaves | `chaves` | the developer: the human on the team who works with Visor and runs the commands | a `{ }` body with sharp brace points and the cursor in the accent |
+
+Both are supporting characters, not pillar characters: they never lead a piece about a pillar. Both wear the parent-brand hood tip, as every parent-brand character except Sinal, and share the one skin.
+
+The per-role mapping changes in two rows: **Dev** → Chaves; **Requester/caller** → Balão when the requester acts (asks and approves; answering is a sheet beside it); `color.state.caller` stays the state colour of the caller on message and flow elements. **AI agent** stays Visor; **Architect** and **Data** as an actor stay unresolved.
+
+The seven-role pieces retired in 0.7.0 (Dev, Architect, Data, Requester as characters) stay retired: Balão and Chaves are new characters with their own sheet, not their return. The one shared skin now covers seven characters.

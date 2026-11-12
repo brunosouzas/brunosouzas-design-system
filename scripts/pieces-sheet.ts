@@ -136,6 +136,10 @@ const samplesOf = (P: Library): Record<Library.PieceName, (x: number, y: number)
     P.questionToken({ cx: x + 60, cy: y + 150, surface: "dark" }),
     P.questionToken({ cx: x + 150, cy: y + 150, scale: 2, surface: "dark" }),
   ),
+  // The supporting cast at rest on light and acting on dark (change supporting-characters, task 3.5).
+  balao: (x, y) => merge(P.balao({ x: x + 62, y: y + 200, scale: 0.5 }), P.balao({ x: x + 175, y: y + 200, scale: 0.5, surface: "dark", speaks: true })),
+  chaves: (x, y) => merge(P.chaves({ x: x + 66, y: y + 190, scale: 0.45 }), P.chaves({ x: x + 176, y: y + 190, scale: 0.45, surface: "dark", points: true })),
+  keyboard: (x, y) => P.keyboard({ x: x + 45, y: y + 100 }),
 });
 
 /** The light sheet's samples. */

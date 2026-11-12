@@ -1,0 +1,1863 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1580" height="3606" viewBox="0 0 1580 3606" role="img" aria-labelledby="model-sheet-title">
+  <title id="model-sheet-title">Balão and Chaves: model sheet</title>
+  <desc>The supporting characters of the brunosouzas.com cast, Balão (the requester and approver) and Chaves (the developer): front and back, expressions, actions, size against the cast, and at 48 and 24 px.</desc>
+  <style>@font-face{font-family:'Source Sans 3';font-weight:100 549;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:550 799;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:800 900;font-style:normal;src:url(data:font/ttf;base64,AAEAAAAPAIAAAwBwQkFTRVT/bgMAAAJMAAAARkdERUYAEgAGAAABIAAAABhHUE9TBlDt5QAAAvQAAACgR1NVQpMNggIAAAGcAAAANE9TLzJeMHmzAAAClAAAAGBjbWFwAFwA9wAAAggAAABEZ2FzcAAAABAAAAD8AAAACGdseWb04UvRAAADlAAAAS5oZWFkJZXTzwAAAdAAAAA2aGhlYQnHBXkAAAF4AAAAJGhtdHgJ2ADOAAABEAAAABBsb2NhAMgAXQAAAQQAAAAKbWF4cAAeAQAAAAE4AAAAIG5hbWVD0V0wAAAExAAAAdhwb3N0/9EAMgAAAVgAAAAgAAEAAf//AA8AAAAAADEAXQCXAAACwABMAoYALAK0ACwB3gAqAAEAAAAMAAAAAAAAAAEAAQADAAEAAQAEAAEAAAAEAJAADABsAAkAAQAAAAAAAAAAAAAAAAAEAAMAAwAAAAAAAP/OADIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAD6P66AAAImP1w/iIIbAABAAAAAAAAAAAAAAAAAAAABAABAAAACgAyADIABERGTFQAHmN5cmwAGmdyZWsAGmxhdG4AGgAAAAAABAAAAAD//wAAAAAAAQAAAAMNT6bTHjtfDzz1AAcD6AAAAADgSzl0AAAAAOBRSYr9cP66CGwD6AAAAAMAAgAAAAAAAAAAAAIAAAADAAAAFAADAAEAAAAUAAQAMAAAAAgACAACAAAAPwBHAE///wAAAD8ARwBP////xP+6/7MAAQAAAAAAAAAAAAEAAAAIAAAANAAEAARERkxUABpjeXJsABpncmVrABpsYXRuABoABgAAAAAAAQACAAwACAABAAAAAf9WAAJpZGVvcm9tbgAAAAMCNQOEAAUAAAKKAlgAAABLAooCWAAAAV4AMgEsAAACCwkDAwQDAgIEAAAAAQAAAAAAAAAAAAAAAEFEQk8AAAA/AE8D6P66AAAD6AFGIAABnwAAAAAB9AKUAAAAIAAFAAEAAAAKADAAPgAEREZMVAAaY3lybAAaZ3JlawAabGF0bgAaAAQAAAAA//8AAQAAAAFrZXJuAAgAAAABAAAAAQAEAAkACAACADAACgABAAIAAAAIAAIAEAAAAAAASAAWAAEAAgABAAEAAgABAAMAAQABAAEAAgAAAAgAAgAQAAAAAAAiABYAAQADAAEAAQABAAEAAQADAAIAAgABAAIAAAABACz/9AJQApYAIAAABSImJjU0PgIzMhYXByYmIyIGFRQWMzI2NzUjNTMRBgYBdFuVWDRadUFIaiJaGDUnQlhTVw4bCWD4InUMSZRvUn9YLTIkaBUVY1lbYwYGWoz+yiEvAAIALP/0AogClgAPABsAAAUiJiY1NDY2MzIWFhUUBgYnMjY1NCYjIgYVFBYBWlqITEyIWlqITEyIWjtDQzs6REQMUZhra5VOTpVra5hRlGhYWWFhWVhoAAACACr/9AG2AqoAGgAmAAA3Jj4DNTQmIyIGByc2NjMyFhYVFA4DFwMiJjU0NjMyFhUUBpgGFSYpHCEXGSUUXiVlPDdaNR0rKRoDTCs5OSssODj0Jz4yKiYTGxcYElYqNCNOPyQ2LSwyIf8APSssPDwsKz0AAAAAAAAHAFoAAwABBAkAAACMAPIAAwABBAkAAQAmAMwAAwABBAkAAgAOAL4AAwABBAkAAwBEAHoAAwABBAkABAAmAMwAAwABBAkABQBYACIAAwABBAkABgAiAAAAUwBvAHUAcgBjAGUAUwBhAG4AcwAzAC0AQgBsAGEAYwBrAFYAZQByAHMAaQBvAG4AIAAzAC4AMAA1ADIAOwBoAG8AdABjAG8AbgB2ACAAMQAuADEALgAwADsAbQBhAGsAZQBvAHQAZgBlAHgAZQAgADIALgA2AC4AMAAzAC4AMAA1ADIAOwBBAEQAQgBPADsAUwBvAHUAcgBjAGUAUwBhAG4AcwAzAC0AQgBsAGEAYwBrADsAQQBEAE8AQgBFAFIAZQBnAHUAbABhAHIAUwBvAHUAcgBjAGUAIABTAGEAbgBzACAAMwAgAEIAbABhAGMAawCpACAAMgAwADIAMwAgAEEAZABvAGIAZQAgACgAaAB0AHQAcAA6AC8ALwB3AHcAdwAuAGEAZABvAGIAZQAuAGMAbwBtAC8AKQAsACAAdwBpAHQAaAAgAFIAZQBzAGUAcgB2AGUAZAAgAEYAbwBuAHQAIABOAGEAbQBlACAgGABTAG8AdQByAGMAZSAZ) format('truetype')}</style>
+  <g>
+    <rect width="1580" height="3606" fill="#FFFFFF"/>
+    <text x="40" y="48" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#121212" text-anchor="start">Balão and Chaves: model sheet</text>
+    <text x="40" y="76" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#5C5852" text-anchor="start">Change supporting-characters (AB#337), drawn from the built pieces: balao, chaves and keyboard beside the pillar cast.</text>
+    <g transform="translate(20 96)">
+      <g>
+        <rect width="1444" height="1270" fill="#FFFFFF"/>
+        <text x="30" y="44" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#121212" text-anchor="start">Balão · the requester and approver</text>
+        <g>
+          <rect x="30" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(148 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="148" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">front · light</text>
+        </g>
+        <g>
+          <rect x="284" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(402 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <path d="M-28 -162 Q0 -170 28 -162 Q0 -154 -28 -162 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="402" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">back · light</text>
+        </g>
+        <g>
+          <rect x="538" y="70" width="236" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(656 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="656" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">front · dark</text>
+        </g>
+        <g>
+          <rect x="792" y="70" width="236" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(910 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <path d="M-28 -162 Q0 -170 28 -162 Q0 -154 -28 -162 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="910" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">back · dark</text>
+        </g>
+        <g>
+          <rect x="1046" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(1164 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#121212"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#121212"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#121212"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#121212" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1164" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">silhouette</text>
+        </g>
+        <g>
+          <rect x="30" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(148 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="148" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">idle</text>
+        </g>
+        <g>
+          <rect x="284" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(402 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <path d="M-23.560000000000002 -122.64 Q-15.200000000000001 -136.08 -6.840000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                  <path d="M6.840000000000002 -122.64 Q15.200000000000001 -136.08 23.560000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="402" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">done</text>
+        </g>
+        <g>
+          <rect x="538" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(656 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <circle cx="-15.200000000000001" cy="-126" r="3.762" fill="#FFC98A"/>
+                  <circle cx="0" cy="-126" r="3.762" fill="#FFC98A"/>
+                  <circle cx="15.200000000000001" cy="-126" r="3.762" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="656" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">waiting</text>
+        </g>
+        <g>
+          <rect x="792" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(910 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <path d="M-21.888 -132.688 L-8.512 -119.312 M-8.512 -132.688 L-21.888 -119.312" stroke="#FFC98A" stroke-width="5.015999999999999" stroke-linecap="round"/>
+                  <path d="M8.512 -132.688 L21.888 -119.312 M21.888 -132.688 L8.512 -119.312" stroke="#FFC98A" stroke-width="5.015999999999999" stroke-linecap="round"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="910" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">failed</text>
+        </g>
+        <g>
+          <rect x="1046" y="372" width="280" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(1156 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <circle cx="-15.200000000000001" cy="-126" r="3.762" fill="#FFC98A"/>
+                  <circle cx="0" cy="-126" r="3.762" fill="#FFC98A"/>
+                  <circle cx="15.200000000000001" cy="-126" r="3.762" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-emote="doubt" stroke="none" transform="translate(1254.6 426) scale(0.85) translate(-1254.6 -426)">
+              <circle cx="1254.6" cy="426" r="40" fill="#FFFFFF" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M1240.6,414 Q1240.6,398 1254.6,398 Q1270.6,398 1270.6,413 Q1270.6,424 1256.6,430 V436" fill="none" stroke="#121212" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="1256.6" cy="450" r="6" fill="#121212"/>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1186" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">waiting + emote 'doubt' at its spot</text>
+        </g>
+        <g>
+          <rect x="30" y="674" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(142 898) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#E04E17"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="148" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">speaks · facing right</text>
+        </g>
+        <g>
+          <rect x="284" y="674" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(408 898) scale(0.85)" stroke="none">
+              <g transform="scale(-1,1)">
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#E04E17"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="402" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">speaks · facing left</text>
+        </g>
+        <g>
+          <rect x="538" y="674" width="280" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(642 898) scale(0.85)" stroke="none">
+              <g data-held="stamp" stroke="#121212" stroke-width="4" stroke-linejoin="round">
+                <g transform="rotate(-12 132 -70)">
+                  <circle cx="132" cy="-70" r="24" fill="#3DDC84"/>
+                  <circle cx="132" cy="-70" r="14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5"/>
+                </g>
+              </g>
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="132" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(642 898) scale(0.85)" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+              <text x="132" y="-60" font-size="27" font-weight="900" transform="rotate(-12 132 -70)">GO</text>
+            </g>
+          </g>
+          <text x="678" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">holds the stamp GO · facing right</text>
+        </g>
+        <g>
+          <rect x="836" y="674" width="280" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(1012 898) scale(0.85)" stroke="none">
+              <g data-held="stamp" stroke="#121212" stroke-width="4" stroke-linejoin="round">
+                <g transform="rotate(-12 -132 -70)">
+                  <circle cx="-132" cy="-70" r="24" fill="#3DDC84"/>
+                  <circle cx="-132" cy="-70" r="14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5"/>
+                </g>
+              </g>
+              <g transform="scale(-1,1)">
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="132" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(1012 898) scale(0.85)" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+              <text x="-132" y="-60" font-size="27" font-weight="900" transform="rotate(-12 -132 -70)">GO</text>
+            </g>
+          </g>
+          <text x="976" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">holds the stamp GO · facing left</text>
+        </g>
+        <g>
+          <rect x="1134" y="674" width="280" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(1238 898) scale(0.85)" stroke="none">
+              <g data-held="stamp" stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+                <g transform="rotate(-12 132 -70)">
+                  <circle cx="132" cy="-70" r="24" fill="#3DDC84"/>
+                  <circle cx="132" cy="-70" r="14" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5"/>
+                </g>
+              </g>
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <path d="M-23.560000000000002 -122.64 Q-15.200000000000001 -136.08 -6.840000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                  <path d="M6.840000000000002 -122.64 Q15.200000000000001 -136.08 23.560000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="132" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(1238 898) scale(0.85)" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+              <text x="132" y="-60" font-size="27" font-weight="900" transform="rotate(-12 132 -70)">GO</text>
+            </g>
+          </g>
+          <text x="1274" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">holds the stamp GO · dark</text>
+        </g>
+        <g>
+          <rect x="30" y="976" width="330" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(140 1200) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g transform="translate(140 1200) scale(0.85)">
+              <rect x="112" y="-166" width="110" height="132" rx="14" fill="#FFFFFF"/>
+              <g stroke-width="3">
+                <circle cx="142" cy="-129" r="13" fill="#FFFFFF"/>
+                <rect x="182" y="-140" width="22" height="22" rx="5" fill="#3DDC84"/>
+                <circle cx="142" cy="-99" r="13" fill="#FFFFFF"/>
+                <rect x="182" y="-110" width="22" height="22" rx="5" fill="#3DDC84"/>
+                <circle cx="142" cy="-69" r="13" fill="#FFFFFF"/>
+                <rect x="182" y="-80" width="22" height="22" rx="5" fill="#3DDC84"/>
+              </g>
+              <g fill="none" stroke-width="3.5" stroke-linecap="round">
+                <path d="M187,-129 L192,-123 L200,-135" stroke="#121212"/>
+                <path d="M187,-99 L192,-93 L200,-105" stroke="#121212"/>
+                <path d="M187,-69 L192,-63 L200,-75" stroke="#121212"/>
+              </g>
+              <g stroke="none" fill="#D7D1C5">
+                <rect x="164" y="-134" width="30" height="10" rx="5"/>
+                <rect x="164" y="-104" width="22" height="10" rx="5"/>
+                <rect x="164" y="-74" width="34" height="10" rx="5"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(140 1200) scale(0.85)">
+              <text x="142" y="-122" font-size="19" font-weight="900">?</text>
+              <text x="142" y="-92" font-size="19" font-weight="900">?</text>
+              <text x="142" y="-62" font-size="19" font-weight="900">?</text>
+            </g>
+          </g>
+          <text x="195" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">answers: a sheet beside it (scene)</text>
+        </g>
+        <g>
+          <rect x="378" y="976" width="280" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(548 1200) scale(0.85)" stroke="none">
+              <g transform="scale(-1,1)">
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <path d="M-23.560000000000002 -122.64 Q-15.200000000000001 -136.08 -6.840000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                  <path d="M6.840000000000002 -122.64 Q15.200000000000001 -136.08 23.560000000000002 -122.64" fill="none" stroke="#FFC98A" stroke-width="5.851999999999999" stroke-linecap="round"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-emote="worked" stroke="none" transform="translate(449.4 1030) scale(0.85) translate(-449.4 -1030)">
+              <path d="M407.83,1006 L390.51,996" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M425.4,988.43 L415.4,971.11" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M449.4,982 L449.4,962" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M473.4,988.43 L483.4,971.11" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M490.97,1006 L508.29,996" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="449.4" cy="1030" r="38" fill="#3DDC84" stroke="#121212" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M433.4,1030 L445.4,1042 L467.4,1018" fill="none" stroke="#121212" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="518" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">done + emote 'worked' · facing left</text>
+        </g>
+        <g>
+          <rect x="676" y="976" width="236" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="balao" transform="translate(788 1200) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#FF7A45"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="794" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">speaks · dark</text>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(20 1390)">
+      <g>
+        <rect width="1384" height="1270" fill="#FFFFFF"/>
+        <text x="30" y="44" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#121212" text-anchor="start">Chaves · the developer</text>
+        <g>
+          <rect x="30" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(148 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="148" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">front · light</text>
+        </g>
+        <g>
+          <rect x="284" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(402 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <path d="M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="402" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">back · light</text>
+        </g>
+        <g>
+          <rect x="538" y="70" width="236" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(656 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="656" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">front · dark</text>
+        </g>
+        <g>
+          <rect x="792" y="70" width="236" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(910 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <path d="M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="910" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">back · dark</text>
+        </g>
+        <g>
+          <rect x="1046" y="70" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(1164 294) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#121212"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#121212"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#121212"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#121212" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#121212" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1164" y="342" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">silhouette</text>
+        </g>
+        <g>
+          <rect x="30" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(148 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="148" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">idle</text>
+        </g>
+        <g>
+          <rect x="284" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(402 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <path d="M-21.080000000000002 -109.80799999999999 Q-13.600000000000001 -122.576 -6.120000000000001 -109.80799999999999" fill="none" stroke="#FFC98A" stroke-width="5.236" stroke-linecap="round"/>
+                  <path d="M6.120000000000001 -109.80799999999999 Q13.600000000000001 -122.576 21.080000000000002 -109.80799999999999" fill="none" stroke="#FFC98A" stroke-width="5.236" stroke-linecap="round"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="402" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">done</text>
+        </g>
+        <g>
+          <rect x="538" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(656 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <circle cx="-13.600000000000001" cy="-113" r="3.366" fill="#FFC98A"/>
+                  <circle cx="0" cy="-113" r="3.366" fill="#FFC98A"/>
+                  <circle cx="13.600000000000001" cy="-113" r="3.366" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="656" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">waiting</text>
+        </g>
+        <g>
+          <rect x="792" y="372" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(910 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <path d="M-19.584000000000003 -118.984 L-7.6160000000000005 -107.016 M-7.6160000000000005 -118.984 L-19.584000000000003 -107.016" stroke="#FFC98A" stroke-width="4.488" stroke-linecap="round"/>
+                  <path d="M7.6160000000000005 -118.984 L19.584000000000003 -107.016 M19.584000000000003 -118.984 L7.6160000000000005 -107.016" stroke="#FFC98A" stroke-width="4.488" stroke-linecap="round"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="910" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">failed</text>
+        </g>
+        <g>
+          <rect x="1046" y="372" width="280" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(1156 596) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                  <path d="M-19.584000000000003 -118.984 L-7.6160000000000005 -107.016 M-7.6160000000000005 -118.984 L-19.584000000000003 -107.016" stroke="#FFC98A" stroke-width="4.488" stroke-linecap="round"/>
+                  <path d="M7.6160000000000005 -118.984 L19.584000000000003 -107.016 M19.584000000000003 -118.984 L7.6160000000000005 -107.016" stroke="#FFC98A" stroke-width="4.488" stroke-linecap="round"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-emote="problem" stroke="none" transform="translate(1254.6 426) scale(0.85) translate(-1254.6 -426)">
+              <path d="M1213.03,402 L1193.98,391" stroke="#ADA79D" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1230.6,384.43 L1219.6,365.38" stroke="#ADA79D" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1254.6,378 L1254.6,356" stroke="#ADA79D" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1278.6,384.43 L1289.6,365.38" stroke="#ADA79D" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1296.17,402 L1315.22,391" stroke="#ADA79D" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1254.6,382 L1300.6,460 H1208.6 Z" fill="#E04848" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M1254.6,408 V434" stroke="#121212" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="1254.6" cy="448" r="5.5" fill="#121212"/>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1186" y="644" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">failed + emote 'problem' at its spot</text>
+        </g>
+        <g>
+          <rect x="30" y="674" width="330" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g transform="translate(130 898) scale(0.85)">
+              <rect x="106" y="-148" width="132" height="62" rx="14" fill="#1D1C1A"/>
+              <g stroke="none">
+                <rect x="126" y="-128" width="84" height="10" rx="5" fill="#F1EEE8"/>
+                <rect x="126" y="-111" width="40" height="16" rx="8" fill="#FF7A45"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(130 898) scale(0.85)" stroke="none">
+              <g data-held="keyboard">
+                <rect x="98" y="-74" width="150" height="16" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4" stroke-linejoin="round"/>
+                <g stroke="none">
+                  <rect x="114" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="135" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="156" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="177" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="198" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="219" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                </g>
+              </g>
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="120" cy="-80" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="195" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">types at the keyboard · facing right</text>
+        </g>
+        <g>
+          <rect x="378" y="674" width="330" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g transform="translate(608 898) scale(0.85)">
+              <rect x="-238" y="-148" width="132" height="62" rx="14" fill="#1D1C1A"/>
+              <g stroke="none">
+                <rect x="-218" y="-128" width="84" height="10" rx="5" fill="#F1EEE8"/>
+                <rect x="-218" y="-111" width="40" height="16" rx="8" fill="#FF7A45"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(608 898) scale(0.85)" stroke="none">
+              <g data-held="keyboard">
+                <rect x="-248" y="-74" width="150" height="16" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4" stroke-linejoin="round"/>
+                <g stroke="none">
+                  <rect x="-232" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="-211" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="-190" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="-169" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="-148" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="-127" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                </g>
+              </g>
+              <g transform="scale(-1,1)">
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="120" cy="-80" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="543" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">types at the keyboard · facing left</text>
+        </g>
+        <g>
+          <rect x="726" y="674" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(834 898) scale(0.85)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(104,-128) rotate(55)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="844" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">points · facing right</text>
+        </g>
+        <g>
+          <rect x="980" y="674" width="236" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(1108 898) scale(0.85)" stroke="none">
+              <g transform="scale(-1,1)">
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(104,-128) rotate(55)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1098" y="946" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">points · facing left</text>
+        </g>
+        <g>
+          <rect x="30" y="976" width="330" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(130 1200) scale(0.85)" stroke="none">
+              <g data-held="sheet" stroke="#121212" stroke-width="4" stroke-linejoin="round">
+                <rect x="118" y="-144" width="150" height="104" rx="14" fill="#FFFFFF"/>
+                <g stroke-width="3" stroke="#121212">
+                  <circle cx="148" cy="-103" r="13" fill="#FFFFFF"/>
+                  <circle cx="148" cy="-69" r="13" fill="#FFFFFF"/>
+                </g>
+                <g fill="none" stroke-width="3.5" stroke-linecap="round"/>
+                <g stroke="none" fill="#D7D1C5">
+                  <rect x="170" y="-108" width="50" height="10" rx="5"/>
+                  <rect x="170" y="-74" width="36" height="10" rx="5"/>
+                </g>
+                <rect x="118" y="-162" width="150" height="36" rx="18" fill="#FFFFFF"/>
+              </g>
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="112" cy="-92" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(130 1200) scale(0.85)" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+              <text x="148" y="-96" font-size="19" font-weight="900">?</text>
+              <text x="148" y="-62" font-size="19" font-weight="900">?</text>
+              <text x="193" y="-137">proposal.md</text>
+            </g>
+          </g>
+          <text x="195" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">hands a sheet over · facing right</text>
+        </g>
+        <g>
+          <rect x="378" y="976" width="330" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(608 1200) scale(0.85)" stroke="none">
+              <g data-held="sheet" stroke="#121212" stroke-width="4" stroke-linejoin="round">
+                <rect x="-268" y="-144" width="150" height="104" rx="14" fill="#FFFFFF"/>
+                <g stroke-width="3" stroke="#121212">
+                  <circle cx="-238" cy="-103" r="13" fill="#FFFFFF"/>
+                  <circle cx="-238" cy="-69" r="13" fill="#FFFFFF"/>
+                </g>
+                <g fill="none" stroke-width="3.5" stroke-linecap="round"/>
+                <g stroke="none" fill="#D7D1C5">
+                  <rect x="-216" y="-108" width="50" height="10" rx="5"/>
+                  <rect x="-216" y="-74" width="36" height="10" rx="5"/>
+                </g>
+                <rect x="-268" y="-162" width="150" height="36" rx="18" fill="#FFFFFF"/>
+              </g>
+              <g transform="scale(-1,1)">
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="112" cy="-92" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+            <g transform="translate(608 1200) scale(0.85)" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+              <text x="-238" y="-96" font-size="19" font-weight="900">?</text>
+              <text x="-238" y="-62" font-size="19" font-weight="900">?</text>
+              <text x="-193" y="-137">proposal.md</text>
+            </g>
+          </g>
+          <text x="543" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">hands a sheet over · facing left</text>
+        </g>
+        <g>
+          <rect x="726" y="976" width="330" height="250" rx="14" fill="#121110"/>
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g transform="translate(826 1200) scale(0.85)">
+              <rect x="106" y="-148" width="132" height="62" rx="14" fill="#1D1C1A"/>
+              <g stroke="none">
+                <rect x="126" y="-128" width="84" height="10" rx="5" fill="#F1EEE8"/>
+                <rect x="126" y="-111" width="40" height="16" rx="8" fill="#FF7A45"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(826 1200) scale(0.85)" stroke="none">
+              <g data-held="keyboard">
+                <rect x="98" y="-74" width="150" height="16" rx="6" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4" stroke-linejoin="round"/>
+                <g stroke="none">
+                  <rect x="114" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="135" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="156" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="177" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="198" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                  <rect x="219" y="-68" width="12" height="4" rx="2" fill="#121212"/>
+                </g>
+              </g>
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                  <circle cx="-13.600000000000001" cy="-113" r="3.366" fill="#FFC98A"/>
+                  <circle cx="0" cy="-113" r="3.366" fill="#FFC98A"/>
+                  <circle cx="13.600000000000001" cy="-113" r="3.366" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="120" cy="-80" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="891" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">types · dark</text>
+        </g>
+        <g>
+          <rect x="1074" y="976" width="280" height="250" rx="14" fill="#F6F3EC"/>
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="chaves" transform="translate(1244 1200) scale(0.85)" stroke="none">
+              <g transform="scale(-1,1)">
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <path d="M-21.080000000000002 -109.80799999999999 Q-13.600000000000001 -122.576 -6.120000000000001 -109.80799999999999" fill="none" stroke="#FFC98A" stroke-width="5.236" stroke-linecap="round"/>
+                  <path d="M6.120000000000001 -109.80799999999999 Q13.600000000000001 -122.576 21.080000000000002 -109.80799999999999" fill="none" stroke="#FFC98A" stroke-width="5.236" stroke-linecap="round"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-emote="worked" stroke="none" transform="translate(1145.4 1030) scale(0.85) translate(-1145.4 -1030)">
+              <path d="M1103.83,1006 L1086.51,996" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1121.4,988.43 L1111.4,971.11" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1145.4,982 L1145.4,962" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1169.4,988.43 L1179.4,971.11" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <path d="M1186.97,1006 L1204.29,996" stroke="#121212" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="1145.4" cy="1030" r="38" fill="#3DDC84" stroke="#121212" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+              <path d="M1129.4,1030 L1141.4,1042 L1163.4,1018" fill="none" stroke="#121212" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#121212" text-anchor="middle"/>
+          <text x="1214" y="1248" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#5C5852" text-anchor="middle">done + emote 'worked' · facing left</text>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(20 2684)">
+      <g>
+        <rect width="1540" height="320" fill="#F6F3EC"/>
+        <path d="M24 264 H1516" stroke="#D7D1C5" stroke-width="2"/>
+        <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+          <g data-piece="mira" transform="translate(110 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <g transform="translate(0,-90) rotate(-40)">
+                <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212"/>
+                <circle cx="-74" cy="0" r="8" fill="#121212"/>
+                <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17"/>
+              </g>
+              <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121212"/>
+                <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+              </g>
+              <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="visor" transform="translate(320 262) scale(1)" stroke="none">
+            <g>
+              <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+              <rect x="52" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+              <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121212"/>
+                <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+              </g>
+              <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#121212"/>
+              <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g transform="translate(88,-104) rotate(-35)">
+                <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4.5" stroke-linejoin="round"/>
+                <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g data-piece="balao" transform="translate(570 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+              </g>
+              <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+              <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="chaves" transform="translate(830 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+              <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+              </g>
+              <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+              <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="drone" transform="translate(1060 222) scale(1)" stroke="none">
+            <g>
+              <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#121212" stroke-width="7" stroke-linecap="round"/>
+              <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+              <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+              <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121212"/>
+                <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+              </g>
+              <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M0 -46 V-36 M-10 -40 H10" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+              <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#E04E17"/>
+              <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+            </g>
+          </g>
+          <g data-piece="kiu" transform="translate(1220 262) scale(1)" stroke="none">
+            <g transform="translate(70,0)">
+              <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+              <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+              <circle cx="-118" cy="-25" r="6.75" fill="#E04E17"/>
+              <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+              <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+              <circle cx="-46" cy="-29" r="8.55" fill="#E04E17"/>
+              <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <g>
+                  <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121212"/>
+                  <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                </g>
+                <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g data-piece="sinal" transform="translate(1440 262) scale(1)" stroke="none">
+            <g>
+              <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#121212"/>
+              <rect x="-6" y="-70" width="12" height="62" fill="#121212"/>
+              <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121212"/>
+                <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+              </g>
+            </g>
+          </g>
+        </g>
+        <text x="110" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Mira</text>
+        <text x="320" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Visor</text>
+        <text x="570" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Balão (new)</text>
+        <text x="830" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Chaves (new)</text>
+        <text x="1060" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Drone</text>
+        <text x="1290" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Kiu</text>
+        <text x="1440" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#121212" text-anchor="middle">Sinal</text>
+      </g>
+    </g>
+    <g transform="translate(20 3028)">
+      <g>
+        <rect width="1540" height="320" fill="#121110"/>
+        <path d="M24 264 H1516" stroke="#3B3834" stroke-width="2"/>
+        <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+          <g data-piece="mira" transform="translate(110 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <g transform="translate(0,-90) rotate(-40)">
+                <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#ADA79D"/>
+                <circle cx="-74" cy="0" r="8" fill="#ADA79D"/>
+                <path d="M14 -7 L96 0 L14 7 Z" fill="#FF7A45"/>
+              </g>
+              <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121110"/>
+                <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+              </g>
+              <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="visor" transform="translate(320 262) scale(1)" stroke="none">
+            <g>
+              <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+              <rect x="52" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+              <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121110"/>
+                <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+              </g>
+              <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#ADA79D"/>
+              <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g transform="translate(88,-104) rotate(-35)">
+                <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5" stroke-linejoin="round"/>
+                <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g data-piece="balao" transform="translate(570 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+              </g>
+              <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+              <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="chaves" transform="translate(830 262) scale(1)" stroke="none">
+            <g>
+              <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+              <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+              <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+              </g>
+              <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+              <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <g data-piece="drone" transform="translate(1060 222) scale(1)" stroke="none">
+            <g>
+              <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#ADA79D" stroke-width="7" stroke-linecap="round"/>
+              <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+              <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+              <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121110"/>
+                <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+              </g>
+              <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M0 -46 V-36 M-10 -40 H10" stroke="#ADA79D" stroke-width="5" stroke-linecap="round"/>
+              <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#FF7A45"/>
+              <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+            </g>
+          </g>
+          <g data-piece="kiu" transform="translate(1220 262) scale(1)" stroke="none">
+            <g transform="translate(70,0)">
+              <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+              <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+              <circle cx="-118" cy="-25" r="6.75" fill="#FF7A45"/>
+              <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+              <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+              <circle cx="-46" cy="-29" r="8.55" fill="#FF7A45"/>
+              <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <g>
+                  <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121110"/>
+                  <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                </g>
+                <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+          </g>
+          <g data-piece="sinal" transform="translate(1440 262) scale(1)" stroke="none">
+            <g>
+              <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#ADA79D"/>
+              <rect x="-6" y="-70" width="12" height="62" fill="#ADA79D"/>
+              <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              <g>
+                <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121110"/>
+                <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+              </g>
+            </g>
+          </g>
+        </g>
+        <text x="110" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Mira</text>
+        <text x="320" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Visor</text>
+        <text x="570" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Balão (new)</text>
+        <text x="830" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Chaves (new)</text>
+        <text x="1060" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Drone</text>
+        <text x="1290" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Kiu</text>
+        <text x="1440" y="40" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1EEE8" text-anchor="middle">Sinal</text>
+      </g>
+    </g>
+    <g transform="translate(20 3372)">
+      <g>
+        <rect width="1540" height="210" fill="#FFFFFF"/>
+        <rect x="20" y="20" width="740" height="170" rx="14" fill="#F6F3EC"/>
+        <rect x="780" y="20" width="740" height="170" rx="14" fill="#121110"/>
+        <g transform="translate(60 92) scale(0.2823529411764706)">
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="mira" transform="translate(90 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <g transform="translate(0,-90) rotate(-40)">
+                  <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212"/>
+                  <circle cx="-74" cy="0" r="8" fill="#121212"/>
+                  <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17"/>
+                </g>
+                <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121212"/>
+                  <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                  <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                </g>
+                <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="visor" transform="translate(300 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+                <rect x="52" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+                <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121212"/>
+                  <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                  <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                </g>
+                <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#121212"/>
+                <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(88,-104) rotate(-35)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="balao" transform="translate(550 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(810 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="drone" transform="translate(1040 -40) scale(1)" stroke="none">
+              <g>
+                <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#121212" stroke-width="7" stroke-linecap="round"/>
+                <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+                <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+                <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121212"/>
+                  <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                  <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                </g>
+                <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M0 -46 V-36 M-10 -40 H10" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+                <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#E04E17"/>
+                <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+              </g>
+            </g>
+            <g data-piece="kiu" transform="translate(1200 0) scale(1)" stroke="none">
+              <g transform="translate(70,0)">
+                <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <circle cx="-118" cy="-25" r="6.75" fill="#E04E17"/>
+                <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <circle cx="-46" cy="-29" r="8.55" fill="#E04E17"/>
+                <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <g>
+                    <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121212"/>
+                    <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                    <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  </g>
+                  <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="sinal" transform="translate(1420 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#121212"/>
+                <rect x="-6" y="-70" width="12" height="62" fill="#121212"/>
+                <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121212"/>
+                  <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                  <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+        <g transform="translate(60 160) scale(0.1411764705882353)">
+          <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="mira" transform="translate(90 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <g transform="translate(0,-90) rotate(-40)">
+                  <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212"/>
+                  <circle cx="-74" cy="0" r="8" fill="#121212"/>
+                  <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17"/>
+                </g>
+                <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121212"/>
+                  <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                  <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                </g>
+                <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="visor" transform="translate(300 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+                <rect x="52" y="-114" width="14" height="32" rx="4" fill="#121212"/>
+                <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121212"/>
+                  <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                  <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                </g>
+                <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#121212"/>
+                <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(88,-104) rotate(-35)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#121212" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="balao" transform="translate(550 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121212"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(810 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#121212" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#121212"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121212"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#E04E17"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="drone" transform="translate(1040 -40) scale(1)" stroke="none">
+              <g>
+                <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#121212" stroke-width="7" stroke-linecap="round"/>
+                <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+                <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#121212"/>
+                <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121212"/>
+                  <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                  <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                </g>
+                <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M0 -46 V-36 M-10 -40 H10" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+                <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#E04E17"/>
+                <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+              </g>
+            </g>
+            <g data-piece="kiu" transform="translate(1200 0) scale(1)" stroke="none">
+              <g transform="translate(70,0)">
+                <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <circle cx="-118" cy="-25" r="6.75" fill="#E04E17"/>
+                <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#121212" stroke-width="4.5"/>
+                <circle cx="-46" cy="-29" r="8.55" fill="#E04E17"/>
+                <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <g>
+                    <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121212"/>
+                    <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                    <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  </g>
+                  <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="sinal" transform="translate(1420 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#121212"/>
+                <rect x="-6" y="-70" width="12" height="62" fill="#121212"/>
+                <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121212"/>
+                  <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                  <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+        <g transform="translate(820 92) scale(0.2823529411764706)">
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="mira" transform="translate(90 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <g transform="translate(0,-90) rotate(-40)">
+                  <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#ADA79D"/>
+                  <circle cx="-74" cy="0" r="8" fill="#ADA79D"/>
+                  <path d="M14 -7 L96 0 L14 7 Z" fill="#FF7A45"/>
+                </g>
+                <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121110"/>
+                  <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                  <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                </g>
+                <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="visor" transform="translate(300 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+                <rect x="52" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+                <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121110"/>
+                  <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                  <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                </g>
+                <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#ADA79D"/>
+                <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(88,-104) rotate(-35)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="balao" transform="translate(550 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(810 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="drone" transform="translate(1040 -40) scale(1)" stroke="none">
+              <g>
+                <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#ADA79D" stroke-width="7" stroke-linecap="round"/>
+                <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+                <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+                <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121110"/>
+                  <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                  <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                </g>
+                <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M0 -46 V-36 M-10 -40 H10" stroke="#ADA79D" stroke-width="5" stroke-linecap="round"/>
+                <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#FF7A45"/>
+                <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+              </g>
+            </g>
+            <g data-piece="kiu" transform="translate(1200 0) scale(1)" stroke="none">
+              <g transform="translate(70,0)">
+                <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <circle cx="-118" cy="-25" r="6.75" fill="#FF7A45"/>
+                <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <circle cx="-46" cy="-29" r="8.55" fill="#FF7A45"/>
+                <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <g>
+                    <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121110"/>
+                    <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                    <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  </g>
+                  <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="sinal" transform="translate(1420 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#ADA79D"/>
+                <rect x="-6" y="-70" width="12" height="62" fill="#ADA79D"/>
+                <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121110"/>
+                  <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                  <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+        <g transform="translate(820 160) scale(0.1411764705882353)">
+          <g stroke="#ADA79D" stroke-width="4" stroke-linejoin="round">
+            <g data-piece="mira" transform="translate(90 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <g transform="translate(0,-90) rotate(-40)">
+                  <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#ADA79D"/>
+                  <circle cx="-74" cy="0" r="8" fill="#ADA79D"/>
+                  <path d="M14 -7 L96 0 L14 7 Z" fill="#FF7A45"/>
+                </g>
+                <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121110"/>
+                  <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                  <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A"/>
+                </g>
+                <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="visor" transform="translate(300 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-66" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+                <rect x="52" y="-114" width="14" height="32" rx="4" fill="#ADA79D"/>
+                <rect x="-56" y="-142" width="112" height="88" rx="30" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-42" y="-128" width="84" height="52" rx="21.666666666666668" fill="#121110"/>
+                  <rect x="-21.42" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                  <rect x="12.18" y="-112.92" width="9.24" height="21.84" rx="4.62" fill="#FFC98A"/>
+                </g>
+                <path d="M-34 -144 Q0 -152 34 -144 Q14 -138 0 -120 Q-14 -138 -34 -144 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M-16 -52 H16 L10 -40 H-10 Z" fill="#ADA79D"/>
+                <circle cx="-86" cy="-58" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g transform="translate(88,-104) rotate(-35)">
+                  <rect x="-6" y="-30" width="12" height="26" rx="6" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5" stroke-linejoin="round"/>
+                  <circle cx="0" cy="0" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="balao" transform="translate(550 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-20 -62 L-28 0 M20 -62 L28 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-38" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="18" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-62 -132 Q-62 -162 -32 -162 H32 Q62 -162 62 -132 V-104 L94 -76 L56 -70 Q48 -60 32 -60 H-32 Q-62 -60 -62 -88 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-38" y="-146" width="76" height="40" rx="16.666666666666668" fill="#121110"/>
+                  <rect x="-19.380000000000003" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                  <rect x="11.020000000000001" y="-134.4" width="8.36" height="16.8" rx="4.18" fill="#FFC98A"/>
+                </g>
+                <rect x="-30" y="-88" width="60" height="9" rx="4.5" fill="#D7D1C5"/>
+                <path d="M-28 -159 Q0 -168 28 -159 Q11.200000000000001 -154 0 -138 Q-11.200000000000001 -154 -28 -159 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-86" cy="-100" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="92" cy="-132" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="chaves" transform="translate(810 0) scale(1)" stroke="none">
+              <g>
+                <path d="M-16 -30 L-26 0 M16 -30 L26 0" stroke="#ADA79D" stroke-width="8" stroke-linecap="round"/>
+                <rect x="-36" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <rect x="16" y="-6" width="20" height="7" rx="3.5" fill="#ADA79D"/>
+                <path d="M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-34" y="-132" width="68" height="38" rx="15.833333333333334" fill="#121110"/>
+                  <rect x="-17.340000000000003" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                  <rect x="9.860000000000001" y="-120.98" width="7.48" height="15.959999999999999" rx="3.74" fill="#FFC98A"/>
+                </g>
+                <rect x="-9" y="-76" width="18" height="8" rx="2" fill="#FF7A45"/>
+                <path d="M-28 -147 Q0 -156 28 -147 Q11.200000000000001 -142 0 -126 Q-11.200000000000001 -142 -28 -147 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="-100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <circle cx="100" cy="-50" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <g data-piece="drone" transform="translate(1040 -40) scale(1)" stroke="none">
+              <g>
+                <path d="M-22 -106 L-46 -126 M22 -106 L46 -126" stroke="#ADA79D" stroke-width="7" stroke-linecap="round"/>
+                <rect x="-74" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+                <rect x="20" y="-132" width="54" height="9" rx="4.5" fill="#ADA79D"/>
+                <circle cx="0" cy="-82" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-27" y="-98" width="54" height="30" rx="12.5" fill="#121110"/>
+                  <rect x="-13.770000000000001" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                  <rect x="7.83" y="-89.3" width="5.94" height="12.6" rx="2.97" fill="#FFC98A"/>
+                </g>
+                <path d="M-27.577164420000003 -109.57716442 A39 39 0 0 1 27.577164420000003 -109.57716442 Q10.920000000000002 -106.18 0 -96 Q-10.920000000000002 -106.18 -27.577164420000003 -109.57716442 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M0 -46 V-36 M-10 -40 H10" stroke="#ADA79D" stroke-width="5" stroke-linecap="round"/>
+                <rect x="-15" y="-36" width="30" height="26" rx="6" fill="#FF7A45"/>
+                <path d="M-15 -27 H15" stroke="#FFFFFF" stroke-width="3"/>
+              </g>
+            </g>
+            <g data-piece="kiu" transform="translate(1200 0) scale(1)" stroke="none">
+              <g transform="translate(70,0)">
+                <path d="M-153 -13 L-155 0 M-143 -13 L-141 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-148" cy="-23" r="13" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <path d="M-123 -13 L-125 0 M-113 -13 L-111 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-118" cy="-25" r="15" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <circle cx="-118" cy="-25" r="6.75" fill="#FF7A45"/>
+                <path d="M-89 -13 L-91 0 M-79 -13 L-77 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-84" cy="-27" r="17" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <path d="M-51 -13 L-53 0 M-41 -13 L-39 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="-46" cy="-29" r="19" fill="#FFFFFF" stroke="#ADA79D" stroke-width="4.5"/>
+                <circle cx="-46" cy="-29" r="8.55" fill="#FF7A45"/>
+                <path d="M-6 -10 L-8 0 M8 -10 L10 0" stroke="#ADA79D" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="0" cy="-40" r="31" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <g>
+                    <rect x="-21" y="-54" width="44" height="26" rx="10.833333333333334" fill="#121110"/>
+                    <rect x="-10.3" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                    <rect x="7.300000000000001" y="-46.46" width="5" height="10.92" rx="2.5" fill="#FFC98A"/>
+                  </g>
+                  <path d="M-24.041630520000002 -64.04163052 A34 34 0 0 1 24.041630520000002 -64.04163052 Q9.520000000000001 -61.08 0 -52 Q-9.520000000000001 -61.08 -24.041630520000002 -64.04163052 Z" fill="#FF7A45" stroke="#ADA79D" stroke-width="5" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </g>
+            <g data-piece="sinal" transform="translate(1420 0) scale(1)" stroke="none">
+              <g>
+                <rect x="-22" y="-12" width="44" height="12" rx="6" fill="#ADA79D"/>
+                <rect x="-6" y="-70" width="12" height="62" fill="#ADA79D"/>
+                <circle cx="0" cy="-100" r="36" fill="#FFFFFF" stroke="#ADA79D" stroke-width="8" stroke-linejoin="round"/>
+                <g>
+                  <rect x="-25" y="-116" width="50" height="32" rx="13.333333333333334" fill="#121110"/>
+                  <rect x="-12.75" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                  <rect x="7.25" y="-106.72" width="5.5" height="13.44" rx="2.75" fill="#FFC98A"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+        <text x="40" y="52" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#5C5852" text-anchor="start">48 px</text>
+        <text x="40" y="124" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#5C5852" text-anchor="start">24 px</text>
+        <text x="800" y="52" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ADA79D" text-anchor="start">48 px</text>
+        <text x="800" y="124" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ADA79D" text-anchor="start">24 px</text>
+      </g>
+    </g>
+  </g>
+</svg>
