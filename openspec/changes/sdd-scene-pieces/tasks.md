@@ -34,7 +34,7 @@ Implementation starts after the owner's ok at gate 1. Test levels: **unit** (vit
 
 ## 6. The cover command (`cover-cli`)
 
-- [ ] 6.1 Integration tests in `test/scripts/cover.test.ts`: "Token and held sheet drawn", "Problems at their paths"; "Unknown background and piece" (lines 239-240: the expected list ends `headline, questionToken`, length 64) and "Mascot refused" (lines 574-587: the count at line 585 becomes 64, the list ends with `questionToken`); "Unsafe id", "Invalid JSON", "Unknown format", "Ring count in a spec", "Emote drawn" and the cover goldens ("Golden output") stay green unchanged. Check: `npm test -- test/scripts/cover.test.ts`.
+- [x] 6.1 Integration tests in `test/scripts/cover.test.ts`: "Token and held sheet drawn", "Problems at their paths"; "Unknown background and piece" (lines 239-240: the expected list ends `headline, questionToken`, length 64) and "Mascot refused" (lines 574-587: the count at line 585 becomes 64, the list ends with `questionToken`); "Unsafe id", "Invalid JSON", "Unknown format", "Ring count in a spec", "Emote drawn" and the cover goldens ("Golden output") stay green unchanged. Check: `npm test -- test/scripts/cover.test.ts`.
 
 ## 7. Documentation and the owner's gate
 
