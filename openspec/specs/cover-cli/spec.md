@@ -55,7 +55,7 @@ A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (
 
 #### Scenario: Unknown background and piece
 - **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
-- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 64 piece names, the last `questionToken`
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 67 piece names, the last `keyboard`
 
 #### Scenario: Unsafe id
 - **WHEN** `id` is `../sdd` or `SDD`
@@ -498,7 +498,7 @@ A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other 
 
 #### Scenario: Mascot refused
 - **WHEN** a cover spec has `{ "piece": "mascot", "who": "dev", "x": 0, "y": 0 }` and `{ "piece": "emote", "kind": "zzz", "x": 0, "y": 0 }`
-- **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 64 piece names, the last `questionToken`) before `pieces[1].kind`, the command exits 1 and writes nothing
+- **THEN** both are reported, `pieces[0].piece` ("unknown piece \"mascot\"", listing the 67 piece names, the last `keyboard`) before `pieces[1].kind`, the command exits 1 and writes nothing
 
 ### Requirement: Only track and neutral cover backgrounds
 `coverBackground` SHALL hold the track families of design-tokens "Measured cover backgrounds": the four defaults `trackIntegration`, `trackDelivery`, `trackAi`, `trackPersonal` (`fill` equal to `brand.light.track*`), their seven named tones and `neutral`, each usable as the `background` of a cover, banner, LinkedIn card or og spec. The 21 entries measured before 0.6.0 are removed: these twelve are the only backgrounds.
@@ -667,3 +667,16 @@ Every format that takes `pieces` but `icon` SHALL accept `questionToken`, and a 
 - **GIVEN** a cover spec whose `pieces` are a `visor` with `holds: true` and a valid `holdsSheet`, a `visor` with `holdsSheet` `{ "width": 130, "height": 218, "rows": [] }`, and a `questionToken` with `scale: 0`
 - **WHEN** the command runs
 - **THEN** it prints `pieces[0].holdsSheet` ("Visor holds a card or a sheet, not both"), `pieces[1].holdsSheet.rows` and `pieces[2].scale`, in that order, exits 1 and writes nothing
+
+### Requirement: Supporting cast in a spec
+Every format that takes `pieces` but `icon` SHALL accept `balao`, `chaves` and `keyboard` like any piece: checked against their parameters and relations, with each problem at its JSON path. Their shapes go in the outlined group, their words (the stamp's word, a held sheet's `?` and label) in the labels group, never stroked.
+
+#### Scenario: Supporting cast drawn
+- **GIVEN** a valid cover spec whose `pieces` are `{ "piece": "balao", "x": 200, "y": 380, "holdsStamp": { "word": "GO" } }`, `{ "piece": "chaves", "x": 560, "y": 380, "facing": "left", "holdsSheet": { "width": 150, "height": 160, "rows": [{ "lead": "question", "bar": 40 }], "label": "proposal.md" } }` and `{ "piece": "keyboard", "x": 300, "y": 300 }`
+- **WHEN** the command builds it
+- **THEN** it writes the cover; the outlined group holds the `balao` group, whose first child is the `data-held` `stamp` group, the `chaves` group, whose first child is the `data-held` `sheet` group, and the `keyboard` group, whose keys each have an ancestor inside the `keyboard` group with `stroke` `none`; the labels group holds `GO`, `?` and `proposal.md`, none with an ancestor carrying a `stroke` attribute
+
+#### Scenario: Supporting cast problems at their paths
+- **GIVEN** a cover spec whose `pieces` are a `balao` with `speaks: true`, `view: "back"` and `holdsStamp: { "word": "GO" }`, a `chaves` with `types: true`, `points: true` and a valid `holdsSheet`, and a `keyboard` with `width: 79`
+- **WHEN** the command runs
+- **THEN** it prints exactly three problems, `pieces[0].holdsStamp` ("Balão does one action at a time"), `pieces[1].points` ("Chaves does one action at a time") and `pieces[2].width`, in that order, exits 1 and writes nothing

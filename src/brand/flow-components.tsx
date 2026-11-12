@@ -34,8 +34,9 @@ export const ContainerTab: React.FC<{label:string}> = ({label}) => {
   const {color, outline, shadow, radius, font} = tokens;
   return <div style={{position:"absolute", left:20, top:-28, background:color.white, border:`${outline.small}px solid ${color.ink}`, boxShadow:`${shadow.pill}px ${shadow.pill}px 0 ${color.ink}`, borderRadius:radius.pill, padding:"6px 24px", fontFamily:sans, fontSize:30, fontWeight:font.weightHeavy, whiteSpace:"nowrap"}}>{label}</div>;
 };
-export const PositionedToken: React.FC<{point:Point | null; stroke?:string; fill?:string; width:number; height:number}> = ({point, stroke, fill, width,height}) => {
-  const s = positionedTokenDrawing(point, stroke, fill);
+/** `radius` is optional (default 17, flow-shapes.ts); the topology scene draws its tokens at 10. */
+export const PositionedToken: React.FC<{point:Point | null; stroke?:string; fill?:string; radius?:number; width:number; height:number}> = ({point, stroke, fill, radius, width,height}) => {
+  const s = positionedTokenDrawing(point, stroke, fill, radius);
   if (s === null) return null;
   return <svg width={width} height={height} style={{position:"absolute", inset:0, overflow:"visible"}}>
     <circle cx={s.point.x+s.shadow} cy={s.point.y+s.shadow} r={s.radius} fill={tokens.color.ink}/>

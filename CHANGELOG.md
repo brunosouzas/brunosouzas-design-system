@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.13.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.12.0...v0.13.0) (2026-11-12)
+
+
+### Features
+
+* `balao`, the requester and approver: speaks, holds a stamp, faces left or right (AB[#337](https://github.com/brunosouzas/brunosouzas-design-system/issues/337)) ([24871d4](https://github.com/brunosouzas/brunosouzas-design-system/commit/24871d48a2a8cc8e4daf70a1300e2013aeea7d39))
+* `chaves`, the developer: types, points, hands a sheet over, faces left or right (AB[#337](https://github.com/brunosouzas/brunosouzas-design-system/issues/337)) ([24871d4](https://github.com/brunosouzas/brunosouzas-design-system/commit/24871d48a2a8cc8e4daf70a1300e2013aeea7d39))
+* `FailureRateBar` and an optional `PositionedToken` radius (AB[#334](https://github.com/brunosouzas/brunosouzas-design-system/issues/334)) ([69e87fe](https://github.com/brunosouzas/brunosouzas-design-system/commit/69e87fea7745807ba33f796f66b8f282d8c6177b))
+* `keyboard` prop piece, the laptop's base (AB[#337](https://github.com/brunosouzas/brunosouzas-design-system/issues/337)) ([24871d4](https://github.com/brunosouzas/brunosouzas-design-system/commit/24871d48a2a8cc8e4daf70a1300e2013aeea7d39))
+* circuit-breaker topology scene, retry alone against the breaker in two takes (AB[#334](https://github.com/brunosouzas/brunosouzas-design-system/issues/334)) ([69e87fe](https://github.com/brunosouzas/brunosouzas-design-system/commit/69e87fea7745807ba33f796f66b8f282d8c6177b))
+
 ## [0.12.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.11.0...v0.12.0) (2026-11-12)
 
 

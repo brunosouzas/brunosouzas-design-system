@@ -1,14 +1,14 @@
 // The `takes` kind (spec scene-catalogue, "Two-take scene kind", "Two-take cast
 // timing", "Two-take reading hold", and the takes cases of "Valid timeline";
-// change sdd-without-with-spec-scene, tasks 2.1 to 2.3). Every fixture is the
-// registered scene's timeline with one edit, so each test proves one rule.
+// change scene-takes-infrastructure, tasks 3.1 to 3.3). Every fixture is the
+// test-only scene `takes-fixture` (test/fixtures/takes-scene.ts) with one
+// edit, so each test proves one rule.
 import { describe, expect, test } from "vitest";
 import { checkTimeline, type TakesSceneData } from "../../src/scenes/catalogue";
 import type { TakesTimeline } from "../../src/scenes/takes-kind";
-import { sddWithoutWithSpec as scene } from "../../src/scenes/sdd-without-with-spec/scene.ts";
+import { TAKES_FIXTURE_ID as ID, takesFixture as scene } from "../fixtures/takes-scene";
 
-const ID = "sdd-without-with-spec";
-const t = scene.timeline;
+const t: TakesTimeline = scene.timeline;
 const withTimeline = (change: Partial<TakesTimeline>): TakesSceneData => ({ ...scene, timeline: { ...t, ...change } });
 const errors = (change: Partial<TakesTimeline>) => checkTimeline(withTimeline(change));
 const joined = (change: Partial<TakesTimeline>) => errors(change).join("\n");
@@ -17,7 +17,7 @@ const phases = (edit: (phase: TakesTimeline["phases"][number]) => TakesTimeline[
 describe("Two-take scene kind", () => {
   test("Valid takes", () => {
     expect(t.phases.map((p) => [p.id, p.take])).toEqual([
-      ["request", 1], ["guess", 1], ["error", 1], ["rewind", "rewind"], ["ask", 2], ["answer", 2], ["implement", 2],
+      ["t1-open", 1], ["t1-act", 1], ["t1-result", 1], ["rewind", "rewind"], ["t2-open", 2], ["t2-act", 2], ["t2-result", 2],
     ]);
     for (const phase of t.phases) expect(phase.cites.length, phase.id).toBeGreaterThan(0);
     expect(checkTimeline(scene)).toEqual([]);
@@ -25,19 +25,21 @@ describe("Two-take scene kind", () => {
 
   test("Takes out of order", () => {
     const breaks = (fixture: TakesTimeline["phases"]) => errors({ phases: fixture }).filter((line) => line.includes("breaks the take order"));
-    expect(breaks(phases((p) => (p.id === "ask" ? { ...p, take: 1 } : p)))).toEqual([`${ID}: phase ask (take 1) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
-    expect(breaks(phases((p) => (p.id === "error" ? { ...p, take: 2 } : p)))).toEqual([`${ID}: phase error (take 2) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
+    const ORDER = "(take-1 phases, one rewind, then take-2 phases)";
+    expect(breaks(phases((p) => (p.id === "t2-open" ? { ...p, take: 1 } : p)))).toEqual([`${ID}: phase t2-open (take 1) breaks the take order ${ORDER}`]);
+    expect(breaks(phases((p) => (p.id === "t1-result" ? { ...p, take: 2 } : p)))).toEqual([`${ID}: phase t1-result (take 2) breaks the take order ${ORDER}`]);
+    // A second rewind phase right after t2-open (t2-open shortened to make room).
     const second = { ...t.phases[3], id: "rewind-again", from: 505, to: 509, events: [] };
     const withSecond = [...t.phases.slice(0, 4), { ...t.phases[4], to: 504, events: t.phases[4].events.filter((e) => e.at <= 504) }, second, ...t.phases.slice(5)];
-    expect(breaks(withSecond)).toEqual([`${ID}: phase rewind-again (rewind) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
-    expect(breaks(t.phases.filter((p) => p.take !== 1))).toEqual([`${ID}: phase rewind (rewind) breaks the take order (take-1 phases, one rewind, then take-2 phases)`]);
+    expect(breaks(withSecond)).toEqual([`${ID}: phase rewind-again (rewind) breaks the take order ${ORDER}`]);
+    expect(breaks(t.phases.filter((p) => p.take !== 1))).toEqual([`${ID}: phase rewind (rewind) breaks the take order ${ORDER}`]);
     // No take 2 at all: the order ends early.
     expect(joined({ phases: t.phases.filter((p) => p.take !== 2) })).toContain(`${ID}: the takes end at phase rewind without completing the order`);
   });
 
   test("Phase without an article line", () => {
     for (const cites of [[], [0], [26.5]]) {
-      expect(joined({ phases: phases((p) => (p.id === "guess" ? { ...p, cites } : p)) })).toContain(`${ID}: phase guess cites no valid article line`);
+      expect(joined({ phases: phases((p) => (p.id === "t1-act" ? { ...p, cites } : p)) })).toContain(`${ID}: phase t1-act cites no valid article line`);
     }
   });
 
@@ -59,30 +61,36 @@ describe("Valid timeline, takes cases", () => {
     expect(joined({ outro: 691 })).toContain(`${ID}: outro at frame 691 is inside the reading hold (must be at most 690)`);
   });
 
+  test("Takes phase starting in the reading hold", () => {
+    expect(joined({ phases: phases((p) => (p.id === "t2-result" ? { ...p, from: 690, to: 700, events: [] } : p)) })).toContain(
+      `${ID}: start of phase t2-result at frame 690 is at or after the outro (frame 690)`,
+    );
+  });
+
   test("Phase beyond the composition", () => {
-    expect(joined({ phases: phases((p) => (p.id === "implement" ? { ...p, to: 780 } : p)) })).toContain(`${ID}: phase 7 (implement [600, 780]) is outside the composition`);
+    expect(joined({ phases: phases((p) => (p.id === "t2-result" ? { ...p, to: 780 } : p)) })).toContain(`${ID}: phase 7 (t2-result [600, 780]) is outside the composition`);
   });
 
   test("Overlapping phases", () => {
-    expect(joined({ phases: phases((p) => (p.id === "guess" ? { ...p, from: 89 } : p)) })).toContain("phase 2 (guess [89, 239]) overlaps phase 1 (request [24, 89])");
+    expect(joined({ phases: phases((p) => (p.id === "t1-act" ? { ...p, from: 89 } : p)) })).toContain(`${ID}: phase 2 (t1-act [89, 239]) overlaps phase 1 (t1-open [24, 89])`);
   });
 
   test("Event outside its phase", () => {
-    expect(joined({ phases: phases((p) => (p.id === "request" ? { ...p, events: [...p.events, { id: "late", at: 90 }] } : p)) })).toContain(
-      `${ID}: event at frame 90 is outside phase 1 (request [24, 89])`,
+    expect(joined({ phases: phases((p) => (p.id === "t1-open" ? { ...p, events: [...p.events, { id: "late", at: 90 }] } : p)) })).toContain(
+      `${ID}: event at frame 90 is outside phase 1 (t1-open [24, 89])`,
     );
   });
 
   test("Movement inside the reading hold", () => {
-    expect(joined({ phases: phases((p) => (p.id === "implement" ? { ...p, events: [...p.events, { id: "late", at: 690 }] } : p)) })).toContain(
-      `${ID}: event late of phase implement at frame 690 is at or after the outro (frame 690)`,
+    expect(joined({ phases: phases((p) => (p.id === "t2-result" ? { ...p, events: [...p.events, { id: "late", at: 690 }] } : p)) })).toContain(
+      `${ID}: event late of phase t2-result at frame 690 is at or after the outro (frame 690)`,
     );
     expect(joined({ pops: { ...t.pops, stamp: 690 } })).toContain(`${ID}: pop-in stamp at frame 690 is too late to settle by the outro`);
   });
 });
 
 describe("Two-take cast timing", () => {
-  test("The scene's own cues pass", () => {
+  test("The fixture's own cues pass", () => {
     expect(t.acts).toEqual([
       { actor: "visor", from: 90, to: 90 }, { actor: "visor", from: 344, to: 344 }, { actor: "visor", from: 390, to: 480 }, { actor: "visor", from: 600, to: 600 },
     ]);
@@ -119,7 +127,7 @@ describe("Two-take cast timing", () => {
 });
 
 describe("Two-take reading hold", () => {
-  test("The scene's own hold passes", () => {
+  test("The fixture's own hold passes", () => {
     expect(t.outro).toBe(690);
     expect(Math.max(...Object.values(t.pops), ...t.emotes.map((e) => e.at))).toBe(660);
     expect(Math.max(...Object.values(t.fades).flatMap((f) => [f.in[1], ...(f.out ? [f.out[1]] : [])]))).toBe(610);
@@ -129,9 +137,9 @@ describe("Two-take reading hold", () => {
   test("Cue at or after the outro", () => {
     expect(joined({ faces: [...t.faces, { actor: "visor", at: 690, expression: "idle" }] })).toContain(`${ID}: face idle of visor at frame 690 is at or after the outro`);
     expect(joined({ acts: [...t.acts, { actor: "visor", from: 700, to: 700 }] })).toContain(`${ID}: act of visor [700, 700] at frame 700 is at or after the outro`);
-    expect(joined({ trips: [...t.trips, { id: "late", route: "answer-0", from: 669, to: 691 }] })).toContain(`${ID}: arrival of trip late at frame 691 is at or after the outro`);
-    expect(joined({ fades: { ...t.fades, p3: { in: [685, 695] } } })).toContain(`${ID}: fade-in of p3 (ends) at frame 695 is at or after the outro`);
-    expect(joined({ cues: { ...t.cues, take2Lines: [...t.cues.take2Lines, 690] } })).toContain(`${ID}: cue take2Lines at frame 690 is at or after the outro`);
+    expect(joined({ trips: [...t.trips, { id: "late", route: "route-1", from: 669, to: 691 }] })).toContain(`${ID}: arrival of trip late at frame 691 is at or after the outro`);
+    expect(joined({ fades: { ...t.fades, pathB: { in: [685, 695] } } })).toContain(`${ID}: fade-in of pathB (ends) at frame 695 is at or after the outro`);
+    expect(joined({ cues: { ...t.cues, lines: [...t.cues.lines, 690] } })).toContain(`${ID}: cue lines at frame 690 is at or after the outro`);
     expect(joined({ emotes: [t.emotes[0], { ...t.emotes[1], leaveAt: 685 }] })).toContain(`${ID}: leave of emote worked (ends) at frame 695 is at or after the outro`);
     expect(joined({ leaves: { rewindMark: 680 } })).toContain(`${ID}: leave of rewindMark (ends) at frame 690 is at or after the outro`);
     expect(joined({ rewind: { ...t.rewind, to: 690 } })).toContain(`${ID}: end of the rewind at frame 690 is at or after the outro`);

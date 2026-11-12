@@ -1,5 +1,5 @@
 // The dashed motion path (spec motion-components, "Dashed motion path"; change
-// sdd-without-with-spec-scene, task 3.1): the opacity helper and the pure
+// scene-takes-infrastructure, task 4.1): the opacity helper and the pure
 // drawing data `MotionPath` renders, so no Remotion context is needed.
 import { readFileSync } from "node:fs";
 import { expect, test } from "vitest";

@@ -17,6 +17,7 @@ import { describe, expect, test } from "vitest";
 import { PIECES, type PieceName } from "../../src/pieces/library";
 import { g, type SvgNode } from "../../src/pieces/node";
 import { toSvg } from "../../src/pieces/render";
+import { stamp, type StampParams } from "../../src/pieces/stamp";
 
 type Frozen = { piece: PieceName; params: Record<string, unknown>; tree: unknown };
 type FrozenSvg = Frozen & { svg: string };
@@ -153,5 +154,28 @@ describe("Cast calls of 0.11.0 unchanged", () => {
     const pointing = frozenCast.filter(({ piece, params }) => piece === "visor" && params.points !== false).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
     expect(pointing).toHaveLength(34);
     expect(changedCalls(frozenCast, altered, castSvgOf)).toEqual(pointing);
+  });
+});
+
+// Change supporting-characters (AB#337), task 2.0: spec illustration-pieces, "Stamp calls of 0.12.0 unchanged".
+// The fixture was written by scripts/freeze-stamp.ts on the 0.12.0 code (655525d), before `stamp` moved
+// unchanged from library.ts to stamp.ts; its `svg` is the body then the text nodes through toSvg (`svgOf`).
+const frozenStamp = load<FrozenSvg[]>("stamp-0.12.0");
+const drawStamp: Draw = (_piece, params) => stamp(params as StampParams);
+
+describe("Stamp calls of 0.12.0 unchanged", () => {
+  test("Frozen stamp calls from the new module", () => {
+    expect(frozenStamp).toHaveLength(8);
+    expect(frozenStamp.every(({ piece }) => piece === "stamp")).toBe(true);
+    expect(PIECES.stamp).toBe(stamp);
+    expect(changedCalls(frozenStamp, drawStamp)).toEqual([]);
+  });
+
+  test("A changed stamp is caught", () => {
+    // The default rotation one degree more (-11 for -12): only the calls that set no rotate differ.
+    const altered: Draw = (_piece, params) => stamp({ rotate: -11, ...params } as StampParams);
+    const defaultRotate = frozenStamp.filter(({ params }) => params.rotate === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
+    expect(defaultRotate).toHaveLength(4);
+    expect(changedCalls(frozenStamp, altered)).toEqual(defaultRotate);
   });
 });

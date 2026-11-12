@@ -103,7 +103,7 @@ describe("Installed package", () => {
     expect(result.svg).toMatch(/^<rect /);
     expect(result.ink).toBe("#121212");
     expect(result.same).toBe(true);
-    expect(result.pieces).toBe(64);
+    expect(result.pieces).toBe(67);
     expect(existsSync(join(consumer(), "node_modules/react"))).toBe(false);
   });
 

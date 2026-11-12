@@ -1,7 +1,7 @@
 // Motion components of the visual language: rings background, ink block with
 // the shadow.* offset (0 since ADR 0009, so no visible shadow), pill label, self-drawing arrow, travelling token,
 // call-result square and countdown ring (ADR 0001, ADR 0003), and the dashed
-// motion path (change sdd-without-with-spec-scene).
+// motion path (change scene-takes-infrastructure).
 //
 // Every colour and every outline, shadow, radius, font and motion value comes
 // from the generated tokens; what is visible at a frame comes from motion.ts.
@@ -274,7 +274,7 @@ export const Countdown: React.FC<{ left: number; size: number }> = ({ left, size
 // A dashed motion path (the storyboard's guide line from one object to another),
 // in composition pixels, at the opacity the scene gives (motion.motionPathAt):
 // it reads no frame, so a scene can draw it at any frame of its own, such as a
-// rewind's object frame (change sdd-without-with-spec-scene, design §2.4).
+// rewind's object frame (change scene-takes-infrastructure).
 export const MotionPath: React.FC<{ d: string; opacity: number; width: number; height: number }> = ({ d, opacity, width, height }) => {
   const drawing = motionPathDrawing(d, opacity);
   if (drawing === null) return null;

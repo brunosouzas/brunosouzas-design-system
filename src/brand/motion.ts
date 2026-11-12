@@ -330,7 +330,7 @@ const checkRange = (name: string, range: readonly [number, number]) => {
 
 /**
  * Opacity of a dashed motion path at `frame` (spec motion-components, "Dashed
- * motion path"; change sdd-without-with-spec-scene, design §2.4): 0 before
+ * motion path"; change scene-takes-infrastructure): 0 before
  * `fadeIn`, rising linearly to 1 over it, then falling linearly to 0 over the
  * optional `fadeOut`, which must start at or after `fadeIn` ends. A scene feeds
  * it any frame (a rewind feeds its object frame), so the component reads none.

@@ -13,18 +13,18 @@ Each localised scene SHALL be registered as one composition per format and langu
 - **THEN** it holds `circuit-breaker-states-16x9-pt`, `circuit-breaker-states-16x9-en`, `circuit-breaker-states-4x5-pt` and `circuit-breaker-states-4x5-en`, with the sizes above and 30 frames per second, grouped under the folder `circuit-breaker-states`
 
 #### Scenario: Neutral composition
-- **GIVEN** the neutral scene `sdd-without-with-spec`, format `16x9` only
+- **GIVEN** the test fixture `takes-fixture`, a neutral scene of 780 frames, format `16x9` only
 - **WHEN** its compositions are enumerated
-- **THEN** exactly one is returned: id `sdd-without-with-spec-16x9`, folder `sdd-without-with-spec`, format `16x9`, language `en`, 1920x1080, 30 frames per second, 780 frames
+- **THEN** exactly one is returned: id `takes-fixture-16x9`, folder `takes-fixture`, format `16x9`, language `en`, 1920x1080, 30 frames per second, 780 frames
 
 #### Scenario: Duplicate composition id
 - **WHEN** two scenes would register the same composition id
 - **THEN** the catalogue test fails and names the id
 
 #### Scenario: Duplicate neutral composition id
-- **GIVEN** the scene `sdd-without-with-spec` registered twice
+- **GIVEN** the fixture `takes-fixture` listed twice
 - **WHEN** the catalogue is checked
-- **THEN** it fails naming `duplicate composition id sdd-without-with-spec-16x9`
+- **THEN** it fails naming `duplicate composition id takes-fixture-16x9`
 
 ### Requirement: Text table per language
 Each localised scene SHALL keep every on-screen string in one text table with a `pt` and an `en` entry holding the same keys at every level, and SHALL record the URL of its source article for each language. A list of strings counts as one key: it must be non-empty in both languages, and its length may differ between them (a label can wrap into more lines in Portuguese). Neutral scenes follow "Neutral scenes" instead.
@@ -49,7 +49,7 @@ Each localised scene SHALL keep every on-screen string in one text table with a 
 Each scene SHALL have ordered, non-overlapping inclusive phases within its duration and events inside their phases. The outro SHALL leave at least `motion.readingHold` frames. State-machine fires SHALL retain their source/next-target window rule. Phase starts, events, fires, arrow draws and pill pop-ins SHALL precede the outro. Flow trips and visible animation SHALL finish before the outro; flow and takes validation SHALL replace state-machine slot/fire rules only for scenes of that kind.
 
 #### Scenario: Phase beyond the composition
-- **GIVEN** a registered scene of any kind
+- **GIVEN** a scene of any kind (a registered scene, or the fixture `takes-fixture`)
 - **WHEN** a phase's `to` is equal to or greater than the duration
 - **THEN** the catalogue test fails and names the scene and the phase
 
@@ -64,17 +64,17 @@ Each scene SHALL have ordered, non-overlapping inclusive phases within its durat
 - **THEN** the catalogue test fails and names the scene and the outro frame
 
 #### Scenario: Overlapping phases
-- **GIVEN** a registered scene of any kind
+- **GIVEN** a scene of any kind (a registered scene, or the fixture `takes-fixture`)
 - **WHEN** a phase's `from` is equal to or before the previous phase's `to`
 - **THEN** the catalogue test fails and names the scene and both phases
 
 #### Scenario: Event outside its phase
-- **GIVEN** a registered scene of any kind
+- **GIVEN** a scene of any kind (a registered scene, or the fixture `takes-fixture`)
 - **WHEN** an event's frame is after its phase's end
 - **THEN** the catalogue test fails and names the scene, the phase and the frame
 
 #### Scenario: Movement inside the reading hold
-- **GIVEN** a registered scene of any kind
+- **GIVEN** a scene of any kind (a registered scene, or the fixture `takes-fixture`)
 - **WHEN** an event, a fire, an arrow draw or a pill pop-in happens at or after the outro frame
 - **THEN** the catalogue test fails and names the scene and the frame
 
@@ -84,14 +84,19 @@ Each scene SHALL have ordered, non-overlapping inclusive phases within its durat
 - **THEN** validation fails naming the scene, route and arrival frame, although the departure precedes the outro
 
 #### Scenario: Takes scene needs no slots or fires
-- **GIVEN** the `takes` scene `sdd-without-with-spec`, which has no `slots`, `transitions` or `fires`
+- **GIVEN** the fixture `takes-fixture`, kind `takes`, which has no `slots`, `transitions` or `fires`
 - **WHEN** its timeline is checked
 - **THEN** it passes, and no state-machine message (`never fires`, `outside its window`) is reported for it
 
 #### Scenario: Takes outro inside the reading hold
-- **GIVEN** the scene `sdd-without-with-spec` (780 frames) with its outro moved to 691
+- **GIVEN** the fixture `takes-fixture` (780 frames) with its outro moved to 691
 - **WHEN** its timeline is checked
 - **THEN** it fails naming the scene and outro frame 691 (at most 690)
+
+#### Scenario: Takes phase starting in the reading hold
+- **GIVEN** the fixture `takes-fixture` (outro 690) with its last phase `t2-result` moved to 690–700, with no events
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene, the start of phase `t2-result` and frame 690
 
 ### Requirement: Circuit-breaker state machine scene
 The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels and its three state sentences. The OPEN block carries the countdown. Its timing is the approved pilot's, listed frame by frame in the design.
@@ -121,17 +126,22 @@ The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HAL
 - **THEN** there is no caption before the first phase; between phases and in the outro the caption of the latest phase that started stays
 
 ### Requirement: State-machine and flow catalogue compatibility
-The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list the three scenes in registration order.
+The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list them in registration order.
 
 #### Scenario: Both kinds in the catalogue
-- **GIVEN** the circuit-breaker and pub-sub scenes, registered with a third scene after them
+- **GIVEN** the circuit-breaker and pub-sub scenes, registered with later scenes after them
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
 - **THEN** both pass and their eight compositions are returned unchanged, circuit-breaker first, pub-sub second; the existing circuit-breaker test suite and pinned timeline pass without edits
 
-#### Scenario: Three kinds in the catalogue
-- **GIVEN** the circuit-breaker, pub-sub and `sdd-without-with-spec` scenes
+#### Scenario: Takes fixture beside the registered scenes
+- **GIVEN** the registered scenes followed by the fixture `takes-fixture`
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
-- **THEN** all pass and nine unique compositions are returned, circuit-breaker's four first, pub-sub's four second, `sdd-without-with-spec-16x9` last; the circuit-breaker and pub-sub suites and pinned timelines pass, edited only where they list every registered scene
+- **THEN** all pass and the registered scenes' compositions are returned unchanged and in order, `takes-fixture-16x9` last, every id unique; the catalogue itself registers exactly `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology`, in that order
+
+#### Scenario: Three scenes in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub and `circuit-breaker-topology` scenes, registered in that order
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** all pass and nine unique compositions are returned in registration order, `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the three scenes in that order
 
 #### Scenario: Shared checks still reject a broken flow
 - **GIVEN** a pub-sub fixture with a duplicate composition id, a missing English text key or a non-HTTPS source
@@ -204,27 +214,27 @@ The scene SHALL use an independent layout and routes for each format, preserving
 A scene marked neutral SHALL declare the language `en` only (its words are English, ADR 0005 as amended), SHALL keep its on-screen strings in one `en` table with no empty string or list, and SHALL record `https://` source URLs for both `pt` and `en`, because its one video serves both pages. The catalogue SHALL reject any other combination, naming the scene and the problem.
 
 #### Scenario: Valid neutral scene
-- **GIVEN** `sdd-without-with-spec` with `languages` `["en"]`, `text.en` only and both sources
+- **GIVEN** the fixture `takes-fixture` with `languages` `["en"]`, `text.en` only and both sources
 - **WHEN** the catalogue is checked
 - **THEN** it reports no problem for the scene
 
 #### Scenario: Neutral scene with a Portuguese table
-- **GIVEN** the scene with a `text.pt` table added
+- **GIVEN** the fixture with a `text.pt` table added
 - **WHEN** the catalogue is checked
 - **THEN** it fails naming the scene and saying a neutral scene has no `pt` text table
 
 #### Scenario: Neutral scene in two languages
-- **GIVEN** the scene with `languages` `["pt", "en"]`, or `["pt"]`
+- **GIVEN** the fixture with `languages` `["pt", "en"]`, or `["pt"]`
 - **WHEN** the catalogue is checked
 - **THEN** each fails naming the scene and saying a neutral scene declares `en` only
 
 #### Scenario: Neutral scene missing a source
-- **GIVEN** the scene without `sources.pt`, or with `sources.pt` starting `http://`
+- **GIVEN** the fixture without `sources.pt`, or with `sources.pt` starting `http://`
 - **WHEN** the catalogue is checked
 - **THEN** each fails naming the scene and `pt` source
 
 #### Scenario: Neutral scene with an empty word
-- **GIVEN** the scene with `text.en.approval` set to `""`, or `text.en.takes` set to `[]`
+- **GIVEN** the fixture with `text.en.label` set to `""`, or `text.en.takes` set to `[]`
 - **WHEN** the catalogue is checked
 - **THEN** each fails naming the scene, `en` and the key path
 
@@ -232,19 +242,19 @@ A scene marked neutral SHALL declare the language `en` only (its words are Engli
 A scene of kind `takes` SHALL order its phases as one or more take-1 phases, exactly one rewind phase, then one or more take-2 phases, and every phase SHALL cite at least one line of its English source as a positive integer. The catalogue SHALL reject any other order or a phase without a valid line, naming the scene and the phase. A `takes` scene SHALL be neutral.
 
 #### Scenario: Valid takes
-- **GIVEN** `sdd-without-with-spec`, phases `request`, `guess`, `error` (take 1), `rewind`, `ask`, `answer`, `implement` (take 2), each citing lines
+- **GIVEN** the fixture `takes-fixture`, phases `t1-open`, `t1-act`, `t1-result` (take 1), `rewind`, `t2-open`, `t2-act`, `t2-result` (take 2), each citing lines
 - **WHEN** its timeline is checked
 - **THEN** no takes problem is reported
 
 #### Scenario: Takes out of order
-- **GIVEN** separate fixtures where `ask` is marked take 1, where `error` is marked take 2, where a second rewind phase follows `ask`, and where the three take-1 phases are removed
+- **GIVEN** separate fixtures where `t2-open` is marked take 1, where `t1-result` is marked take 2, where a second rewind phase follows `t2-open`, where the three take-1 phases are removed, and where the three take-2 phases are removed
 - **WHEN** each timeline is checked
-- **THEN** each fails naming the scene and the first phase that breaks the order (`ask`, `error`, the second rewind, `rewind`)
+- **THEN** each fails naming the scene and the first phase that breaks the order (`t2-open`, `t1-result`, the second rewind, `rewind`), or, for the last, saying the takes end at phase `rewind` without completing the order
 
 #### Scenario: Phase without an article line
-- **GIVEN** separate fixtures where `guess` cites `[]`, `[0]` or `[26.5]`
+- **GIVEN** separate fixtures where `t1-act` cites `[]`, `[0]` or `[26.5]`
 - **WHEN** each timeline is checked
-- **THEN** each fails naming the scene and phase `guess`
+- **THEN** each fails naming the scene and phase `t1-act`
 
 #### Scenario: Localised takes scene
 - **GIVEN** a `takes` fixture that is not neutral
@@ -254,8 +264,8 @@ A scene of kind `takes` SHALL order its phases as one or more take-1 phases, exa
 ### Requirement: Two-take cast timing
 In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges); every emote SHALL enter on a frame where its actor's expression changes; at most one emote SHALL be visible at a frame (from its entrance until 10 frames after its leave, or to the end); an emote SHALL be gone before any act that starts after it. Problems name the scene and the item.
 
-#### Scenario: The scene's own cues pass
-- **GIVEN** `sdd-without-with-spec` with Visor's acts 90–90, 344–344, 390–480 and 600–600, faces at 270, 344, 504, 600 and 660, emotes `problem` (270, leaving at 320) and `worked` (660, never leaving)
+#### Scenario: The fixture's own cues pass
+- **GIVEN** the fixture `takes-fixture` with Visor's acts 90–90, 344–344, 390–480 and 600–600, faces at 270, 344, 504, 600 and 660, emotes `problem` (270, leaving at 320) and `worked` (660, never leaving)
 - **WHEN** its timeline is checked
 - **THEN** no cast problem is reported
 
@@ -265,9 +275,9 @@ In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges
 - **THEN** it fails naming the scene and both acts
 
 #### Scenario: Emote off an expression change
-- **GIVEN** a fixture with the `problem` emote entering at 271 while the face changes at 270
-- **WHEN** its timeline is checked
-- **THEN** it fails naming the scene, emote `problem` and frame 271
+- **GIVEN** a fixture with the `problem` emote entering at 271 while the face changes at 270, and a fixture whose emote enters on a face entry that repeats the current expression
+- **WHEN** each timeline is checked
+- **THEN** each fails naming the scene, the emote and its frame
 
 #### Scenario: Two emotes on screen
 - **GIVEN** a fixture whose `problem` emote never leaves, plus the `worked` emote at 660
@@ -282,248 +292,361 @@ In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges
 ### Requirement: Two-take reading hold
 In a `takes` scene, nothing SHALL move from the outro on: acts, expression changes, emote entrances and leaves, trip arrivals, fade ends and the other cue frames SHALL be before the outro, and every pop-in, including an emote's, SHALL start at or before the outro minus `motion.fps`, so it is settled by the outro. Problems name the scene, the item and its frame.
 
-#### Scenario: The scene's own hold passes
-- **GIVEN** `sdd-without-with-spec`, outro 690, its last pop-in the `worked` emote at 660 and its last fade ending at 610
+#### Scenario: The fixture's own hold passes
+- **GIVEN** the fixture `takes-fixture`, outro 690, its last pop-in the `worked` emote at 660 and its last fade ending at 610
 - **WHEN** its timeline is checked
 - **THEN** no hold problem is reported
 
 #### Scenario: Cue at or after the outro
-- **GIVEN** separate fixtures with a face change at 690, an act starting at 700, a trip arriving at 691, a fade ending at 695 and a code-line cue at 690, outro 690
+- **GIVEN** separate fixtures with outro 690 and, each, one of: a face change at 690, an act starting at 700, a trip arriving at 691, a fade ending at 695, a cue at 690, an emote leave ending at 695, an element leave ending at 690, the rewind ending at 690, the rings fade ending at 695
 - **WHEN** each timeline is checked
 - **THEN** each fails naming the scene, the item and its frame
 
 #### Scenario: Pop-in too late to settle
-- **GIVEN** separate fixtures with the stamp's pop-in at 661 and the `worked` emote (with its face change) at 661
+- **GIVEN** separate fixtures with the `stamp` pop-in at 661 and the `worked` emote (with its face change) at 661
 - **WHEN** each timeline is checked
 - **THEN** each fails naming the scene, the item and frame 661 (at most 660); at 660 both pass
 
-### Requirement: SDD scene registration
-The catalogue SHALL register the scene `sdd-without-with-spec`, kind `takes`, neutral, format `16x9` only, 780 frames at 30 fps, outro 690, with sources `https://brunosouzas.com/blog/spec-driven-development-in-practice` (`en`) and `https://brunosouzas.com/pt/blog/spec-driven-development-in-practice` (`pt`), and the English word table `file` `proposal.md`, `approval` `GO`, `question` `?`, `takes` `["1", "2"]`.
+### Requirement: Topology scene registration
+The catalogue SHALL register `circuit-breaker-topology` after every scene registered before it: kind `takes`, neutral, format `16x9` only, 1920 frames at 30 fps, outro 1800, sources `https://brunosouzas.com/blog/circuit-breaker-in-mulesoft` (`en`) and `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft` (`pt`), and the `text.en` table of scenario "Word table". `src/Root.tsx` SHALL map its composition to the scene's component.
 
 #### Scenario: Registered entry
 - **GIVEN** the catalogue
-- **WHEN** `findScene("sdd-without-with-spec")` is read
-- **THEN** it returns the entry above, and `src/Root.tsx` maps the id to the scene's component
+- **WHEN** `findScene("circuit-breaker-topology")` is read
+- **THEN** it returns the entry above with `neutral` true, `languages` `["en"]`, `text.en` only, and both sources, and `src/Root.tsx` registers `circuit-breaker-topology-16x9` with the scene's component
+
+#### Scenario: Word table
+- **GIVEN** the registered entry
+- **WHEN** `text.en` is read
+- **THEN** it equals `checkout` "Checkout", `payment` "Payment", `retry` "retry ×3", `breaker` ["`circuit-breaker:`", "`execute`"], `states` {`closed` "CLOSED", `open` "OPEN", `halfOpen` "HALF_OPEN"}, `timeout` "`HTTP:TIMEOUT`", `open` "`CIRCUIT-BREAKER:OPEN`", `message` ["payment temporarily", "unavailable"], `ok` "`200`", `business` "`400`", `clock` "`resetTimeout 10s`", `requests` "requests", `calls` "backend calls", `takes` ["1", "2"]; backticks mark code and are not drawn
+
+#### Scenario: One composition, last
+- **GIVEN** every registered scene
+- **WHEN** the compositions are enumerated without React or font loading
+- **THEN** the last one is `circuit-breaker-topology-16x9` (1920x1080, 30 fps, 1920 frames, folder `circuit-breaker-topology`), every id is unique, and the compositions of the scenes before it are returned unchanged and in their order
 
 #### Scenario: No 4:5 and no second language
 - **GIVEN** the registered entry
-- **WHEN** its formats, languages and compositions are read
-- **THEN** formats are `["16x9"]`, languages `["en"]`, and no composition id ends in `-4x5`, `-pt` or `-en`
+- **WHEN** its formats and compositions are read
+- **THEN** formats are `["16x9"]` and no composition id of the scene ends in `-4x5`, `-pt` or `-en`
 
-### Requirement: SDD words on screen
-At every frame, the only strings the scene draws SHALL be `proposal.md`, `GO`, `?`, `1` and `2`, each from the scene's word table or a piece's own `?` glyph; across the composition all five SHALL appear. A word counts as drawn when its element is drawn (opacity above 0, scale above 0.001). The scene SHALL have no caption; emotes, the rewind mark and the code lines carry no words.
+#### Scenario: Broken entry rejected
+- **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 1831
+- **WHEN** the catalogue is checked
+- **THEN** each fails naming `circuit-breaker-topology` and the problem (Portuguese table, `pt` source, outro inside the reading hold)
+
+### Requirement: Existing scenes unchanged by the topology scene
+Adding the topology scene SHALL leave every scene registered before it unchanged: data, compositions, frame behaviour and tests, except the assertions that list every registered scene (in `test/scenes/catalogue-flow.test.ts` and `test/scripts/cli.test.ts`). In particular `circuit-breaker-states` SHALL keep its four compositions, its per-language text and its stills.
+
+#### Scenario: Circuit-breaker states untouched
+- **GIVEN** the branch after this change and `main` before it
+- **WHEN** `test/scenes/circuit-breaker.test.ts` and the pinned circuit-breaker timeline run
+- **THEN** they pass without edits, and `git diff` shows no change under `src/scenes/circuit-breaker-states/`
+
+#### Scenario: Stills byte-identical (local)
+- **GIVEN** the stills of every scene registered before the topology scene, rendered on the merge base and on the branch
+- **WHEN** their SHA-256 are compared
+- **THEN** every pair is equal
+
+### Requirement: Topology words on screen
+At every frame, every string the scene draws SHALL be a value of its `text.en` table (without backticks), a counter number (`0` to `60`), or a `CallSquare` glyph (✓, ✕). Across the composition every `text.en` value SHALL appear. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
 
 #### Scenario: Words over the whole composition
-- **GIVEN** the stage trees of frames 0 to 779
-- **WHEN** the content of every drawn text node is collected
-- **THEN** each content is one of the five strings, the union is all five, and every `?` drawn equals `text.en.question`
+- **GIVEN** the stage trees and component props of frames 0 to 1919
+- **WHEN** every drawn string is collected
+- **THEN** each one is in the allowed set above, and the union holds every `text.en` value
 
 #### Scenario: Words at their boundaries
-- **GIVEN** frames 18, 19, 377, 378, 379, 389, 390, 584 and 585
-- **WHEN** their drawn text is read
-- **THEN** 18 draws no word (the badge's pop starts at opacity 0); 19 to 377 draw `1`; 378 draws neither `1` nor `2`; 379 and later draw `2` and never `1`; `proposal.md` first appears at 390; `GO` first appears at 585
+- **GIVEN** frames 843, 844, 845, 949, 960, 1187, 1189 and 1919
+- **WHEN** their drawn strings are read
+- **THEN** `CIRCUIT-BREAKER:OPEN` and `payment temporarily` are not drawn at 843 or 844 and are drawn at 845 and 949; neither is drawn at 960; `200` is not drawn at 1187 and is drawn at 1189; frame 1919 draws `200` twice, `CLOSED`, `Checkout`, `Payment`, `circuit-breaker:`, `execute`, `2` and five ✓, and no `retry ×3`, `requests` or `resetTimeout 10s`
 
-### Requirement: SDD beats and timing
-The scene's timeline SHALL equal the beat table of the change's design §4, with the pop-in helpers of design §2.6: the seven phases with their takes, frame ranges and cited lines, every pop-in, trip, fade, code-line, row, check and hand-over frame, the acts, faces and emotes, the rewind's object frame and the outro. Trip and hand-over ends SHALL be their start plus `motion.travel`.
+#### Scenario: Unlisted word rejected
+- **GIVEN** a fixture whose stage draws the literal `fallback`, absent from `text.en`, in the `left` tag at frame 870
+- **WHEN** the words test runs
+- **THEN** it fails naming `fallback` and frame 870
+
+### Requirement: Topology text size
+Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 33 stage units (66 px in the composition; 11.7 px in the site's 341 px column on a 360 px phone); state names, the take number and the counter numbers at least 36; the ✓ and ✕ glyphs at least 30 (squares of 50 units).
+
+#### Scenario: Every settled string at its minimum
+- **GIVEN** every frame from 0 to 1919
+- **WHEN** each drawn string whose pop-in has settled is measured
+- **THEN** its effective size is at least 33; at least 36 for `CLOSED`, `OPEN`, `HALF_OPEN`, `1`, `2` and the counter numbers; at least 30 for ✓ and ✕
+
+#### Scenario: Too small rejected
+- **GIVEN** a fixture whose `requests` caption is drawn at 32, one whose state pill is drawn at 35, and one whose squares are 48 (glyph 29.8)
+- **WHEN** the size test runs
+- **THEN** each fails naming the string, its size and the first frame it is drawn
+
+### Requirement: Topology text placement
+Every drawn text box (measured advance on the `fonts/` faces times effective size) and badge SHALL lie inside the stage less 12 units, SHALL NOT intersect another text box or a token, and SHALL NOT intersect a block it does not label, per design §6.3: frames, units, breaker, pill bodies, squares, bar, clock ring, badges, rewind mark. No pill or text SHALL cover a Payment light. Moving and settling frames of design §6.3 item 7 are exempt.
+
+#### Scenario: Placement at every checked frame
+- **GIVEN** every frame from 0 to 1919 except the exempt frames of design §6.3 item 7
+- **WHEN** the drawn text boxes, badges, blocks, lights and tokens are computed
+- **THEN** each text box and badge lies within x 12–948 and y 12–528, and none intersects another text box, a token, a block it does not label, or a Payment light
+
+#### Scenario: Exempt and checked frames
+- **GIVEN** frames 531, 560 and 1681
+- **WHEN** the placement test lists the elements it checks at each frame
+- **THEN** at 531 the breaker box and its text are not checked (drop-in) and Checkout, Payment and their labels are; at 560 Checkout, Payment and the breaker text are checked and the state pill and the window are not (they settle at 578 and 584); at 1681 the window (slide) and the two tags (swapped at 1654 and 1676, settling until 1684 and 1706) are not checked, and Checkout, Payment, the breaker, the state pill and the tokens are
+
+#### Scenario: Collision rejected
+- **GIVEN** a fixture moving the customer message to x 300
+- **WHEN** the placement test runs
+- **THEN** it fails naming the customer message, the window, and the first frame where both are drawn and settled
+
+#### Scenario: Covered light rejected
+- **GIVEN** a fixture centring the `Payment` label at (846, 160)
+- **WHEN** the placement test runs
+- **THEN** it fails naming the `Payment` label and unit 0's light
+
+### Requirement: Topology colour roles
+`color.state.failure` SHALL appear only on Payment's failing units (body and light), the ✕ squares, the bar's fill and `failure` arrows; `color.state.failFast` only on `failFast` arrows; `color.state.blocked`, `healthy` and `transitional` only on the `OPEN`, `CLOSED` and `HALF_OPEN` pills; `color.state.caller` only on the `Checkout` label; `color.state.backend` nowhere. The `Payment` label SHALL be white.
+
+#### Scenario: Roles over the whole composition
+- **GIVEN** the stage trees and component props of frames 0 to 1919
+- **WHEN** every fill and stroke is mapped to its `data-element`
+- **THEN** each state colour appears only on the elements above, and the `Payment` label's fill is `color.white`
+
+#### Scenario: Red payment label rejected
+- **GIVEN** a fixture whose `Payment` label is filled `color.state.backend`
+- **WHEN** the colour test runs
+- **THEN** it fails naming the `Payment` label and `color.state.backend`
+
+### Requirement: Topology built from package pieces
+The scene SHALL draw only through the pieces `browserWindow`, `serverStack`, `diagramBox`, `messageArrow`, `edgeLabel`, `countBadge` and `uiIcon`, and the components `Rings`, `MotionPath`, `CallSquare`, `Countdown`, `FailureRateBar` and `PositionedToken`. Its files SHALL contain no colour literal and create no SVG shape of their own, and SHALL draw no cast piece or emote.
+
+#### Scenario: No shape of its own
+- **GIVEN** the files under `src/scenes/circuit-breaker-topology/`
+- **WHEN** a test reads them
+- **THEN** none calls `el(` with `path`, `rect`, `circle`, `ellipse`, `line`, `polygon` or `polyline`, none contains a JSX element of those tags, and none imports a cast piece or `emote`
+
+#### Scenario: No colour literal
+- **WHEN** the colour-literal test scans `src/scenes/` and `src/brand/`
+- **THEN** it reports nothing for the new files
+
+### Requirement: Topology beats and timing
+The scene's timeline SHALL equal the change's design §4: the thirteen phases with their takes, frames and cited lines; every pop-in, swap, leave, fade, trip, counter value, light, tag and window event; the rewind's object frames; the outro. Every leg SHALL end `motion.travel` frames after it starts. The timeline SHALL have no acts, faces or emotes.
 
 #### Scenario: Timeline equals the beat table
-- **GIVEN** the beat table transcribed in the test
-- **WHEN** it is compared with the scene's timeline and `motion.travel` is 22
-- **THEN** every value is equal, including phases `request` 24–89, `guess` 90–239, `error` 240–309, `rewind` 340–377, `ask` 390–509, `answer` 510–599, `implement` 600–689
+- **GIVEN** design §4 transcribed in the test and `motion.travel` 22
+- **WHEN** it is compared with the scene's timeline
+- **THEN** every value is equal, including phases `setup` 0–59, `retry` 60–389, `down` 390–449, `rewind` 450–509, `wrap` 510–569, `closed` 570–819, `open` 820–949, `half-open-fail` 950–1019, `open-again` 1020–1149, `half-open-ok` 1150–1219, `closed-noise` 1220–1489, `closed-business` 1490–1599 and `closed-healthy` 1600–1799
+
+#### Scenario: Takes checks pass
+- **GIVEN** the registered scene
+- **WHEN** `checkTimeline` and the `takes` checks run
+- **THEN** no problem is reported
 
 #### Scenario: Seeking in any order
-- **GIVEN** every frame from 0 to 779
+- **GIVEN** every frame from 0 to 1919
 - **WHEN** the state is evaluated forward, backward and in a shuffled order
-- **THEN** each frame gives the same state every time (no accumulated state)
+- **THEN** each frame gives the same state every time
 
 #### Scenario: Travel token changed
-- **GIVEN** the timeline built with a `motion.travel` of 20
+- **GIVEN** the timeline built with `motion.travel` 20
 - **WHEN** it is compared with the beat table
-- **THEN** the comparison fails naming the first trip whose arrival differs
+- **THEN** the comparison fails naming the first leg whose arrival differs
 
-### Requirement: SDD take 1, the questions sink into the code
-In take 1 the balloon SHALL hold six `?` from their pop-ins until each departs; each `?` SHALL travel its route into the code panel and, on its arrival frame, be gone while the code panel gains one line; two more lines follow; no sheet, answer or stamp is drawn in take 1.
+### Requirement: Topology take 1, retry only
+In take 1 Checkout SHALL call Payment directly with `retry ×3`: 20 requests 15 frames apart, each departing as a group of three attempts two frames apart; `requests` SHALL count departed requests and `backend calls` arrived attempts; Payment's units SHALL fail (red) at calls 20, 40 and 60; the reply line SHALL be a `failure` arrow tagged `HTTP:TIMEOUT`. No breaker is drawn.
 
-#### Scenario: Request before the agent acts
-- **GIVEN** frame 89
+#### Scenario: First request
+- **GIVEN** frames 59, 60, 62, 64, 75, 81 and 82
 - **WHEN** the state is read
-- **THEN** the balloon holds six `?`, the code panel has 0 lines, Visor is idle with `points` false and no sheet
+- **THEN** 59 has no token and counters `0` and `0`; 60 has one token at the start of `direct-req` and `requests` `1`; 62 and 64 add the second and third attempt; 75 has `requests` `2` and its first attempt departing; 81 has `backend calls` `0`; 82 has `backend calls` `1` and the reply arrow's fade starting
 
-#### Scenario: First question in flight and arriving
-- **GIVEN** frames 111, 112, 123, 134 and 171
-- **WHEN** `?` 5 (the rightmost slot) and `?` 0 are read
-- **THEN** at 111 `?` 5 is in slot 5; at 112 it is at the start of `guess-5`; at 123 halfway by length; at 134 it is gone and the code panel has 1 line; `?` 0 stays in slot 0 until 171 and departs at 172
+#### Scenario: The service goes down
+- **GIVEN** frames 173, 174, 276, 277, 370, 371 and 389
+- **WHEN** Payment's units and the counters are read
+- **THEN** 173 has no failing unit and `19` calls; 174 has unit 0 failing and `20` calls; 276 has one failing unit; 277 adds unit 1 and `40`; 370 has two failing units; 371 has three and `60` calls; 389 has `20` requests, `60` calls, three failing units and no token
 
-#### Scenario: Take 1 complete
-- **GIVEN** frames 209, 210 and 239
-- **WHEN** the state is read
-- **THEN** 209 shows 7 lines, 210 and 239 show 8, the balloon is empty and path P1 is fully transparent at 239
+#### Scenario: Held down
+- **GIVEN** frames 390 to 449
+- **WHEN** the state is compared with frame 390
+- **THEN** every frame is equal
 
-### Requirement: SDD take 1, the error comes back
-The failure arrow, the `messageArrow` piece of kind `failure` from the code panel to the balloon, SHALL fade in over 240 to 250. At 270 Visor's expression SHALL become `failed`, the `problem` emote SHALL pop in beside its head and its body SHALL squash and tilt (−5°); the emote SHALL leave from 320 and be gone at 330.
-
-#### Scenario: Arrow boundaries
-- **GIVEN** frames 239, 240, 245 and 250
-- **WHEN** the arrow state is read
-- **THEN** 239 and 240 draw nothing (opacity 0); 245 draws it at opacity 0.5; 250 at opacity 1, with its head at the balloon
-
-#### Scenario: Fright frames
-- **GIVEN** frames 269, 270, 271, 329 and 330
-- **WHEN** Visor and the emote are read
-- **THEN** 269 is `idle`, upright, with no emote; 270 is `failed`, tilt −5, with the emote's pop starting (not yet drawn); 271 draws the `problem` emote; 329 still draws it at an opacity above 0; 330 draws no emote and Visor is still `failed`
-
-### Requirement: SDD rewind
-From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL reset at once (`idle`, `points` false, upright) and from 344 to 377 the object layer (the `?`, code lines, path P1, the failure arrow) SHALL show take 1 backwards, its object frame going from 339 to 89. At 378 badge `1` SHALL be removed and badge `2` pop in, with the rewind mark still beside it; the mark SHALL leave from 400, gone at 410. From 390 no take-1 object is drawn.
+### Requirement: Topology rewind
+From 450 the rewind mark SHALL pop beside the take badge and the object layer SHALL play take 1 backwards with object frame `round(449 − (f − 450) × 390 / 49)` to 59 at 499, holding 59 to 509. At 500 the badge SHALL swap `1` to `2`. Rings, Checkout, Payment's boxes and labels SHALL not move.
 
 #### Scenario: Object frame
-- **GIVEN** frames 343, 344, 360, 377, 378 and 389
+- **GIVEN** frames 449, 450, 475, 499, 500 and 509
 - **WHEN** the object frame is read
-- **THEN** it is 343, 339, 218, 89, 89 and 89
+- **THEN** it is 449, 449, 250, 59, 59 and 59
 
-#### Scenario: Rewind ends on the request
-- **GIVEN** frame 377
+#### Scenario: Same stage before each take
+- **GIVEN** the states at 59 and at 509
+- **WHEN** they are compared, leaving out the take badge and the rewind mark
+- **THEN** they are equal: no token, counters `0` and `0`, white lights, `retry ×3`, the direct request arrow and no reply arrow or tag
+
+#### Scenario: Badge swap
+- **GIVEN** frames 499, 500 and 501
+- **WHEN** the badge is read
+- **THEN** 499 draws `1`, 500 draws no badge and 501 draws `2`, with the rewind mark drawn at all three
+
+### Requirement: Topology breaker wraps the call
+In `wrap`, `retry ×3` and the direct arrow SHALL leave, the breaker box SHALL travel down the drop path from 520 to 542, the two request arrows fade in, `CLOSED` SHALL pop at 548, the empty window and bar pop at 554, and Payment's unit 0 SHALL fail (red) at 560 and stay failing until 1188.
+
+#### Scenario: Drop-in frames
+- **GIVEN** frames 519, 531, 542, 548, 554 and 560
 - **WHEN** the state is read
-- **THEN** the objects equal those of frame 89, Visor is idle without pointing, the badge reads `1` and the rewind mark is drawn
+- **THEN** 519 draws no breaker box; 531 has its centre at (480, 95.5) on the drop path; 542 has it at (480, 251); 548 has the `CLOSED` pop starting; 554 the window's; 560 has unit 0 red and units 1 and 2 white
 
-#### Scenario: The fright is not replayed
-- **GIVEN** every frame from 344 to 389
-- **WHEN** Visor and the emote are read
-- **THEN** Visor is `idle`, upright, with `points` false, and no emote is drawn
+#### Scenario: Retry gone in take 2
+- **GIVEN** every frame from 520 to 1919
+- **WHEN** the drawn strings are read
+- **THEN** `retry ×3` is not drawn
 
-#### Scenario: Take-1 objects gone in take 2
-- **GIVEN** every frame from 390 to 779
-- **WHEN** the state is read
-- **THEN** the failure arrow and path P1 are not drawn, and the code panel's lines are take 2's (0 until 616)
+### Requirement: Topology CLOSED fills the window
+In `closed`, five calls SHALL reach Payment and come back `HTTP:TIMEOUT`; each result SHALL add a ✕ square to the window and move the bar linearly over `motion.fade` frames to its failure count over five; the circuit SHALL stay CLOSED while the rate is at or below the 0.8 threshold and switch to OPEN after it is above it.
 
-### Requirement: SDD same stage in both takes
-The state at frame 389, the last before take 2 acts, SHALL equal the state at frame 89, the last before take 1 acts, except the take badge (its text and its pop-in from 378) and the rewind mark: the same balloon and six `?`, the same empty code panel, Visor at the same place, scale, face and action, every other pop-in settled.
+#### Scenario: Results enter the window
+- **GIVEN** frames 641, 642, 652, 768 and 810
+- **WHEN** the window, bar and pill are read
+- **THEN** 641 has five empty slots and rate 0; 642 has square 0's pop starting; 652 has rate 0.2; 768 has four ✕ and the pill `CLOSED`; 810 has five ✕
 
-#### Scenario: Fair comparison
-- **GIVEN** the state at 89 and at 389
-- **WHEN** they are compared field by field, leaving out the take badge and the rewind mark
-- **THEN** they are equal, and at 389 the rewind mark is drawn beside badge `2`
+#### Scenario: At the threshold, still CLOSED
+- **GIVEN** frames 778 to 819
+- **WHEN** the pill and the bar are read
+- **THEN** from 778 to 809 the rate is exactly 0.8 and the pill is `CLOSED`; from 820 the pill is `OPEN`
 
-#### Scenario: Settled pop-ins
-- **GIVEN** each pop-in frame *a* of design §2.6
-- **WHEN** the element is read at *a* − 1, *a*, *a* + 1 and *a* + 30
-- **THEN** it is not drawn at *a* − 1 (except badge `2`, where frame 377 draws badge `1`) and at *a*, is drawn at *a* + 1, and is exactly opacity 1 and scale 1 at *a* + 30
+#### Scenario: Calls counted on arrival
+- **GIVEN** frames 619, 620 and 788
+- **WHEN** `backend calls` is read
+- **THEN** it reads `0`, `1` and `5`
 
-### Requirement: SDD take 2, the questions written down
-At 390 Visor SHALL hold the `proposal.md` page with one heading row. Each `?` SHALL travel its `ask` route and, on its arrival frame, be gone while the page gains that question row, without a tail check. At 480 Visor SHALL hand the page over: it leaves Visor's hand and travels, unchanged, to beside the balloon by 502. At 504 Visor's face SHALL become `waiting`, with no emote.
+### Requirement: Topology OPEN fails fast
+In `open` and `open-again`, no token SHALL travel `out-req` or `out-rep`, which are dashed at opacity 0.25. Each request SHALL come back on `in-rep` as a `failFast` arrow on the frame it reaches the breaker. `CIRCUIT-BREAKER:OPEN` and `payment temporarily unavailable` SHALL show on the customer side. `backend calls` SHALL stay `5`.
 
-#### Scenario: Sheet appears with its heading
-- **GIVEN** frames 389 and 390
-- **WHEN** Visor is read
-- **THEN** 389 holds nothing; 390 holds the page labelled `proposal.md` with exactly the heading row
+#### Scenario: Service left alone
+- **GIVEN** every frame from 820 to 949 and from 1020 to 1149
+- **WHEN** the tokens are read
+- **THEN** none is on `out-req` or `out-rep`, and `backend calls` reads `5` whenever it is drawn
 
-#### Scenario: Questions become rows
-- **GIVEN** frames 425, 426 and 476
-- **WHEN** the balloon and the page are read
-- **THEN** 425 has 3 `?` in the balloon (3, 4, 5), 3 in flight (0, 1, 2) and 1 row; 426 has 2 rows (heading and question 1) and 2 `?` in flight; 476 has an empty balloon, nothing in flight and 7 rows, every question row without a check
+#### Scenario: Fail-fast stream
+- **GIVEN** frames 822, 844, 906, 912 and 950
+- **WHEN** the tokens and counters are read
+- **THEN** 822 has request 6 departing and `requests` `6`; 844 has its reply departing on `in-rep`; 906 has `requests` `20`; 912 has the ghost `60`'s pop starting beside `5`; 950 has no token on `in-rep`
 
-#### Scenario: Seamless hand-over
-- **GIVEN** frames 479, 480, 491 and 502
-- **WHEN** the page is read
-- **THEN** 479 is Visor's held sheet and 480 the handed-over page, with equal page box, row marks, label pill and words; Visor holds nothing from 480; the page's top-left is (147.4, 177.7) at 491 and (100, 196) from 502
+#### Scenario: Cut line drawn
+- **GIVEN** frames 830, 960, 1030 and 1300
+- **WHEN** the `out-req`, `out-rep` and `in-rep` arrows are read
+- **THEN** at 830 and 1030 `out-req` and `out-rep` are dashed at opacity 0.25 and `in-rep` is solid at 1; at 960 all three are solid, `out-req` and `out-rep` at 1 and `in-rep` at 0.25; at 1300 all three are solid at 1
 
-#### Scenario: Visor waits
-- **GIVEN** frames 503 and 504
-- **WHEN** Visor and the emote are read
-- **THEN** 503 is `idle`; 504 is `waiting` and no emote is drawn
+#### Scenario: Customer message beside the error
+- **GIVEN** frame 870
+- **WHEN** the left side is read
+- **THEN** the `left` tag reads `CIRCUIT-BREAKER:OPEN` and the customer message reads `payment temporarily` / `unavailable`, under Checkout
 
-### Requirement: SDD take 2, answered and approved
-Six answer tokens filled `color.state.caller` SHALL leave from below the balloon's tail, never inside the balloon, one per question row; on its arrival on the row's `?` mark each SHALL be gone while its row gains its tail check. At 584 the `GO` stamp SHALL pop onto the handed-over page. Visor SHALL not act during the answers.
+### Requirement: Topology resetTimeout clock
+On each entry into OPEN (820 and 1020) the clock SHALL pop or refill full with the label `resetTimeout 10s` and empty linearly over 130 frames (empty at 949 and 1149). In HALF_OPEN the ring and its label SHALL stay at opacity 0.6, the ring empty. It SHALL leave at 1220.
 
-#### Scenario: First answer
-- **GIVEN** frames 511, 512 and 534
-- **WHEN** answer 0 and row 1 are read
-- **THEN** 511 has no answer token; 512 has it at (70, 180), the start of `answer-0`, outside the balloon; 534 has no token and row 1 has its check
+#### Scenario: Clock frames
+- **GIVEN** frames 820, 885, 949, 1000, 1020 and 1149
+- **WHEN** the clock's `left` and opacity are read
+- **THEN** `left` is 1, 64/129, 0, 0, 1 and 0, and the label reads `resetTimeout 10s`; opacity at 1000 is 0.6
 
-#### Scenario: All answered, then GO
-- **GIVEN** frames 574, 584 and 585
-- **WHEN** the page and the stamp are read
-- **THEN** 574 has six checked rows and no stamp; 584 has the stamp's pop starting (not yet drawn); 585 draws the `GO` stamp
+#### Scenario: Clock gone in CLOSED
+- **GIVEN** frames 1230 to 1919
+- **WHEN** the clock is read
+- **THEN** it is not drawn
 
-### Requirement: SDD take 2, implemented from the sheet
-At 600 Visor's face SHALL become `idle` and it SHALL point at the code; path P3 fades in over 600 to 610; the code panel gains its eight lines at 616 to 651, five frames apart; at 660 Visor's face SHALL become `done` and the `worked` emote SHALL pop in beside its head and stay.
+### Requirement: Topology HALF_OPEN test calls
+Each HALF_OPEN SHALL send exactly one test call from the breaker's right edge to Payment: at 966 it times out and the circuit SHALL be OPEN again at 1020; at 1166 it returns `200`, Payment's unit 0 SHALL recover (white) on its arrival at 1188, and the circuit SHALL be CLOSED at 1220. The customer side SHALL be dimmed and quiet.
 
-#### Scenario: Implementation frames
-- **GIVEN** frames 599, 600, 615, 616, 651 and 660
-- **WHEN** the state is read
-- **THEN** 599 is `waiting` without pointing and 0 lines; 600 is `idle` pointing; 615 has 0 lines; 616 has 1; 651 has 8; 660 is `done` with the `worked` emote's pop starting
+#### Scenario: One test call each
+- **GIVEN** every frame from 950 to 1019 and from 1150 to 1219
+- **WHEN** the tokens are read
+- **THEN** at most one token is drawn, only on `out-req` or `out-rep`, only during the test call's legs of design §4.2 (966–987 and 988–1009; 1166–1187 and 1188–1209), and no token is on `in-req` or `in-rep`
 
-### Requirement: SDD final still
-Every frame from the outro (690) to the last (779) SHALL be identical: no breathing, blinking, pop-in, fade or trip in progress. The scene SHALL hold at least `motion.readingHold` frames (3 s at 30 fps).
+#### Scenario: Test fails, OPEN again
+- **GIVEN** frames 988, 1019 and 1020
+- **WHEN** the tag and pill are read
+- **THEN** 988 pops `HTTP:TIMEOUT` on the right; 1019 is `HALF_OPEN`; 1020 swaps to `OPEN`
+
+#### Scenario: Test succeeds, CLOSED
+- **GIVEN** frames 1187, 1188, 1219 and 1220
+- **WHEN** the light, tag and pill are read
+- **THEN** 1187 has unit 0 red; 1188 has it white and the right tag's text `200` (its pop starting); 1219 is `HALF_OPEN`; 1220 swaps to `CLOSED`
+
+### Requirement: Topology CLOSED ignores noise
+At 1220 the window SHALL clear (the ✕ squares leave, the bar moves linearly to 0 over `motion.fade` frames). The next five calls SHALL give ✓, ✓, ✕ (`HTTP:TIMEOUT`), ✓, ✓, leaving the rate at 0.2 and the circuit CLOSED.
+
+#### Scenario: Window cleared
+- **GIVEN** frames 1219, 1230 and 1301
+- **WHEN** the window is read
+- **THEN** 1219 has five ✕ at opacity 0.3; 1230 and 1301 have five empty slots, rate 0 and opacity 1
+
+#### Scenario: One timeout is noise
+- **GIVEN** frames 1382, 1392 and 1489
+- **WHEN** the window, bar and pill are read
+- **THEN** 1382 has square 2's ✕ pop starting; 1392 has rate 0.2; 1489 has `✓ ✓ ✕ ✓ ✓`, rate 0.2 and `CLOSED`
+
+#### Scenario: Timeout shows on the lines
+- **GIVEN** frames 1360, 1399 and 1400
+- **WHEN** `out-rep` and the `right` tag are read
+- **THEN** 1360 is kind `failure` with the tag's text `HTTP:TIMEOUT` (its pop starting); 1399 is kind `failure` drawing `HTTP:TIMEOUT`; 1400 is kind `reply` with the tag's text `200` (its pop starting)
+
+### Requirement: Topology business error not counted
+The `400` of call c5 SHALL travel back as a `reply` arrow tagged `400` on both gaps; its result SHALL NOT enter the window: a dashed empty square pops beside the window at 1566, falls 40 units and is gone at 1586, while the window and bar stay unchanged.
+
+#### Scenario: 400 drops off
+- **GIVEN** frames 1565, 1567, 1581 and 1586 to 1599
+- **WHEN** the window, bar and dropped square are read
+- **THEN** the window is `✓ ✓ ✕ ✓ ✓` and the rate 0.2 at every one of them; the dropped square is drawn at 1567 at slot 5, lower and fading at 1581, and not drawn from 1586
+
+#### Scenario: 400 tags
+- **GIVEN** frames 1544 and 1566
+- **WHEN** the tags are read
+- **THEN** 1544 swaps the `right` tag to `400` and 1566 swaps the `left` tag to `400`
+
+### Requirement: Topology sliding window
+When a result arrives with the window full, the leftmost square SHALL move 60 units left and fade out over `motion.fade` frames, the others SHALL move one slot left over the same frames, and the new square pops in slot 4. Calls c6 to c8 SHALL slide the timeout out, ending with five ✓ and rate 0.
+
+#### Scenario: Slides
+- **GIVEN** frames 1686, 1726 and 1766
+- **WHEN** the window is read
+- **THEN** 1686 is `✓ ✕ ✓ ✓ ✓`; 1726 is `✕ ✓ ✓ ✓ ✓`; 1766 is five ✓ with rate 0
+
+#### Scenario: Mid-slide
+- **GIVEN** frame 1681
+- **WHEN** the squares are read
+- **THEN** the old leftmost square is 30 units left of slot 0 at opacity 0.5, the others are halfway between slots, and the new square's pop has started in slot 4
+
+### Requirement: Topology final still
+Every frame from the outro (1800) to the last (1919) SHALL be identical in scene state, and the last `motion.readingHold` frames identical as rendered PNGs: `CLOSED`, five ✓, an empty bar, `200` on both gaps, badge `2`, white lights, no token, counter or clock.
 
 #### Scenario: Final hold identical
-- **GIVEN** the stage trees and the composition-pixel layer states of frames 690 to 779
-- **WHEN** each is compared with frame 690
+- **GIVEN** the scene states of frames 1800 to 1919
+- **WHEN** each is compared with frame 1800
 - **THEN** all are deep-equal
 
 #### Scenario: Last movement before the hold
-- **GIVEN** frames 689 and 690
-- **WHEN** the `worked` emote's appearance is read
-- **THEN** 689 is still settling (scale not exactly 1) and 690 is exactly settled
+- **GIVEN** frames 1777, 1778 and 1800
+- **WHEN** the tokens are read
+- **THEN** 1777 draws c8's reply on `in-rep`, 1778 and 1800 draw no token
 
-### Requirement: SDD cast rules
-Visor SHALL be the scene's only character, drawn at scale 1.15 on the ground line y 440 (stage units), never recoloured, with opacity 1 from its settled pop-in; its expression SHALL change only at the five face frames and its action parameters (`points`, the held sheet) only inside its acts. Emotes sit beside the head, never over its posed screen face.
+#### Scenario: Final PNGs identical (local)
+- **GIVEN** the frames 1830 and 1919 rendered with `npx remotion still`
+- **WHEN** their bytes are compared
+- **THEN** they are equal
 
-#### Scenario: Expression changes only at face frames
-- **GIVEN** every pair of consecutive frames
-- **WHEN** Visor's expression differs between them
-- **THEN** the later frame is one of 270, 344, 504, 600, 660
-
-#### Scenario: Actions only inside acts
-- **GIVEN** every pair of consecutive frames
-- **WHEN** Visor's `points` or held sheet differs between them
-- **THEN** the later frame is inside one of Visor's acts (90–90, 344–344, 390–480, 600–600)
-
-#### Scenario: Emote beside the head
-- **GIVEN** every frame where an emote is drawn (271–329 and 661–779), including the pop's overshoot
-- **WHEN** the emote's box at its popped scale is compared with Visor's screen face box transformed by Visor's pose at that frame (tilt and squash about (480, 440)), and the `worked` emote's box with the resting page
-- **THEN** none intersects
-
-#### Scenario: One character, same skin
-- **GIVEN** the stage trees of every key frame
-- **WHEN** the cast pieces are listed
-- **THEN** only `visor` appears, once, with scale 1.15, y 440, `surface` light, and no fill overriding its body
-
-### Requirement: SDD built from package pieces
-The scene SHALL draw only through the package's pieces (`speechBubble`, `questionToken`, `codePanel`, `visor`, `sheet`, `pill`, `stamp`, `countBadge`, `uiIcon`, `messageArrow`, `emote`), `pose`, and the components `Rings`, `MotionPath` and `PositionedToken`. Its files SHALL contain no colour literal and SHALL create no SVG shape of their own.
-
-#### Scenario: No shape of its own
-- **GIVEN** the files under `src/scenes/sdd-without-with-spec/`
-- **WHEN** a test reads them
-- **THEN** none calls `el(` with `path`, `rect`, `circle`, `ellipse`, `line`, `polygon` or `polyline`, and none contains a JSX element of those tags
-
-#### Scenario: No colour literal
-- **WHEN** the colour-literal test scans `src/scenes/`
-- **THEN** it reports nothing for the new scene's files
-
-### Requirement: SDD layout and layers
-The scene SHALL use the stage layout of the change's design §6 in 960x540 stage units drawn at 1920x1080, with its layer order. No travelling `?` or answer SHALL touch Visor's screen face, the page's label pill or a `?` still waiting; the label SHALL clear the balloon; the stamp, the row marks and the checks SHALL not touch each other.
+### Requirement: Topology layout and layers
+The scene SHALL use the stage layout of the change's design §6.1 in 960x540 stage units drawn at 1920x1080, with the layer order of design §6.2: arrows under blocks, tokens over blocks, labels and tags over tokens.
 
 #### Scenario: Layout equals the design
-- **GIVEN** the design §6 tables transcribed in the test
+- **GIVEN** design §6.1 and §4.3 transcribed in the test
 - **WHEN** they are compared with the scene's layout data
-- **THEN** every position, size, scale and route is equal
+- **THEN** every position, size and route is equal
 
-#### Scenario: Tokens clear the face and the label
-- **GIVEN** each `guess`, `ask` and `answer` route sampled at 100 points by length, each token as a disc of its radius (15 for a `?`, 17 for an answer)
-- **WHEN** each disc is compared with Visor's upright screen face, with the label pill where the page is at that time (held for `ask`, at rest for `answer`), and, frame by frame, with every `?` still waiting in a slot
-- **THEN** none intersects any of them
-
-#### Scenario: Label and stamp clearances
-- **GIVEN** the held and the resting label pills, the balloon (bottom 126, tail tip (70, 146)) and the stamp (centre (189, 432.3), radius 32)
-- **WHEN** they are compared with the balloon and with the resting page's six row marks (radius 13 × 1.15 plus outline) and tail checks
-- **THEN** neither pill touches the balloon, and the stamp touches no row mark and no check
-
-#### Scenario: Row marks clear each other
-- **GIVEN** the page's six question rows and their tail checks, each mark and check with its outline
-- **WHEN** neighbouring rows are compared
-- **THEN** no two marks and no two checks touch
+#### Scenario: Layer order
+- **GIVEN** frames 870 and 1300
+- **WHEN** the drawn layers are listed bottom to top
+- **THEN** they follow design §6.2, and every token's `data-element` is above every block's and below every tag's
 
 #### Scenario: Stills reviewed (local)
-- **GIVEN** the eight stills of design §7 and frame 450
-- **WHEN** the owner and the implementer open each PNG
-- **THEN** each shows what §7 lists, with no overlap, clipping or unreadable word
+- **GIVEN** the stills and boundary frames of design §7 and their phone sheet viewed at 341 CSS px
+- **WHEN** the owner and the implementer open each one
+- **THEN** each shows what §4.2 lists at that frame, with no overlap or clipping; every word is readable, and the failing Payment units, red against ink arrows and dashed cut lines are told apart at 341 px

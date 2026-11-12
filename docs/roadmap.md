@@ -30,6 +30,8 @@ Planned changes, in order, as agreed on 2026-10-22 and revised on 2026-10-23 aft
 | 13c | `presence-formats` | A LinkedIn profile background, `linkedin-banner` (1584x396), with the profile photo's measured zones exported (`LINKEDIN_PHOTO_ZONES`) and drawn over a render by `npm run png -- … --zones`, a repository script that is not in the package; the avatar takes a cover background as its ground (the release App's icon); and the `stackledger` link icon (0.10.0) | AB#325 | in review |
 | 13d | `brand-link-icon` (0.11.0) | The `brunosouzas` link icon: the brand symbol (the favicon's and the avatar's b with the moon) on the link family's white face, light and dark, for every link to brunosouzas.com; `website` stays the generic globe. First consumer: stackledger's home links, its own change after the release | AB#326 | in review |
 | 13e | `sdd-scene-pieces` | What the SDD scene of AB#144 needs before its own spec (gate 0, concept A, 2026-11-12): Visor holds a sheet (`holdsSheet`, with a file name label) and faces left or right (`facing`); the `questionToken` piece, the open question as an object in the v2 grammar; the `scene.*` tokens for the stage rings and the dashed motion path, with `Rings` reading them (0.12.0). The scene itself is its own change after the release | AB#333 | in review |
+| 13f | `scene-takes-infrastructure` | What scenes after the pilots share, moved out of draft PR #41 (owner, 2026-11-12, q71 A): neutral scenes (one composition per format for both pages, one `en` word table, both sources), the `takes` scene kind and its checks (take order, cited lines, cast timing, reading hold), and `MotionPath`/`motionPathAt`. No scene is registered by it; the SDD scene (#41) and the circuit-breaker topology scene (AB#334) build on it | AB#144 | done (#45) |
+| 13g | `supporting-characters` | The supporting cast the SDD scene of AB#144 needs before its storyboard update (identity studio, 2026-11-12, concept C, "the notation"): `balao`, the requester and approver (`speaks`, `holdsStamp`), `chaves`, the developer (`types`, `points`, `holdsSheet`), both with `facing` and the hood tip, and the `keyboard` prop; ADR 0007 amended; a model sheet from the built pieces (0.13.0) | AB#337 | in review |
 | 14 | Animated site banner | Animated SVG/CSS banner built from the pieces | AB#143 | after the palette |
 | 15 | Published catalogue | The Remotion Studio deployed as a static site, so the catalogue can be browsed without a local install | — | later |
 
@@ -46,7 +48,7 @@ A video only where it shows a process unfolding; the other 19 pages keep their s
 | EIP Publish-Subscribe Channel | book (new) + Mule (existing scene) | AB#148 |
 | Write in Obsidian, publish on your own site | 1: the publishing flow, success and failure | AB#149 |
 | Deploying to CloudHub 2.0 | 1: release, production gate, verification | AB#150 |
-| Circuit breaker | existing scene, embedded by AB#142 | AB#142 |
+| Circuit breaker | `circuit-breaker-topology` (AB#334): retry alone against the breaker, one topology played twice; it replaces the state-machine scene on the page, embedded by AB#142. `circuit-breaker-states` stays in the package | AB#334, AB#142 |
 
 EIP series: every new pattern gets two neutral videos, the pattern as the book describes it and as Mule implements it. A page may publish with its static diagrams; the videos follow in their own cards.
 
@@ -78,7 +80,7 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - Sound and music: added per scene only when its context asks for it (a narrated presentation).
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
-- Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
+- Without a card for now: the Maven release (a git timeline). The retry vs circuit-breaker comparison is the `circuit-breaker-topology` scene (AB#334).
 - New `coverBackground` tones: none until a series needs a tone its track family lacks; a new tone joins its family (`<track><Tone>`) only from renders the owner approves (ADR 0006, amended 2026-11-06).
 - A dark-surface body diagram, a second layout width and text that wraps by itself (not asked by the designer, AB#173).
 - Drawing stackledger's round bends (AB#166): stackledger draws the arcs with `map.bendRadius`; the banner keeps its own `Q` curves.

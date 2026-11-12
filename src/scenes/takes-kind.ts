@@ -1,5 +1,6 @@
-// The `takes` scene kind (change sdd-without-with-spec-scene, design §2.2 and
-// §5): two runs of the same stage, take 1, one rewind, take 2. Its timeline
+// The `takes` scene kind (change scene-takes-infrastructure, first written in
+// sdd-without-with-spec-scene, PR #41): two runs of the same stage, take 1,
+// one rewind, take 2. Its timeline
 // type and the checks the catalogue runs on it, with no React, so the CLI
 // scripts and the tests import it under tsx.
 //
@@ -17,7 +18,11 @@ import type { CastExpression, EmoteKind } from "../pieces/index.ts";
 
 export type Actor = "mira" | "visor" | "drone" | "kiu" | "sinal";
 export type Take = 1 | 2 | "rewind";
-/** A reading device the article does not state, kept by the owner (MOT-1). */
+/**
+ * A reading device the article does not state, kept by the owner (MOT-1). The
+ * list is the one PR #41 wrote for the first takes scene; scenes built on it
+ * (#41, #44) use it as is, so it is kept verbatim (design §4).
+ */
 export type TakesDevice = "fright" | "rewind" | "takeNumbers" | "goStamp";
 
 export type TakesPhase = {
@@ -29,7 +34,7 @@ export type TakesPhase = {
   /** Line numbers of the English source article this phase animates (MOT-1). */
   cites: readonly number[];
   devices?: readonly TakesDevice[];
-  /** The cue frames inside the phase: pop-ins, departures, arrivals, lines, rows, checks, faces, acts, emote entrances. */
+  /** The cue frames inside the phase: pop-ins, departures, arrivals, faces, acts, emote entrances and any other change the scene makes. */
   events: readonly { id: string; at: number }[];
 };
 
@@ -54,7 +59,7 @@ export type TakesTimeline = {
   fades: Readonly<Record<string, { in: readonly [number, number]; out?: readonly [number, number] }>>;
   /** Elements that leave over `LEAVE_FRAMES` frames from the given frame. */
   leaves: Readonly<Record<string, number>>;
-  /** Any other frame something changes at (code lines, rows, checks, the hand-over, the badge swap). */
+  /** Any other frame something changes at, by name (an element appearing, a swap, a hand-over). */
   cues: Readonly<Record<string, readonly number[]>>;
 };
 
