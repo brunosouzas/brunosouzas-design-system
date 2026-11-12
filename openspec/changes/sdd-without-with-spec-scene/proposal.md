@@ -69,12 +69,13 @@ Each has a recommended answer; the spec is written as recommended. Details in de
 10. **The hand-over.** Visor writes the rows into the sheet it holds, then hands it over: at 480 the page leaves its hand and travels in 22 frames to beside the balloon, where the answers and the `GO` land, as on gate-0 frames 4 to 6 (recommended), or Visor keeps holding the sheet to the end (the answers and the stamp then land in the agent's hand)?
 11. **The error's look.** The gate-0 `messageArrow` of kind `failure` in the stage layer, fading in over 10 frames (recommended: the approved look and weight), or the self-drawing motion `Arrow` (draws from the code to the balloon, but solid and half the outline weight)?
 12. **`GO` and the reviewer's verdict.** In the article `GO` is the independent review's verdict (L124) and the owner's approval is separate (L148); the stamp joins them into the owner's `GO` (q49 B, marked DEVICE). Keep (recommended), or also say so in the page's text description when the site embeds the video?
+13. **ADR 0004.** Record the neutral scene's English word table as a dated amendment of ADR 0004 (recommended: the decision is ADR 0005's, already taken), or a new ADR?
 
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. The catalogue rejects a neutral scene with a `pt` text table, a language other than `en`, or a missing `pt` or `en` source; a `takes` scene whose takes are out of order, a phase without an article line, two actors acting at once, an emote not on an expression change, two emotes at once, an emote still visible at the next action, a cue at or after the outro, or a pop-in too late to settle by the outro. Each problem names the scene and the offending item. The stills and render commands keep their invocation errors unchanged.
 - **Limits:** requirement. 16:9 only; 780 frames; the outro at 690 leaves exactly `motion.readingHold` (90) frames; six questions; at most 8 rows on the held sheet (the piece's limit; this scene uses 7).
-- **Repetition and idempotency:** requirement. Every frame is a pure function of the frame number (no accumulated state), so stills and renders are reproducible and Studio can seek in any order; a second render overwrites the first, as today.
+- **Repetition and idempotency:** requirement ("Seeking in any order"). Every frame is a pure function of the frame number (no accumulated state), so stills and renders are reproducible and Studio can seek in any order; a second render overwrites the first, as today.
 - **Concurrency:** n/a. One render at a time; the frame functions are pure.
 - **Security:** n/a. No input from outside the repository, no new dependency, no network beyond the existing font load at render time.
 - **Logs and observability:** n/a beyond today: the stills and render commands print their paths and progress lines as they do for the other scenes.
@@ -83,6 +84,7 @@ Each has a recommended answer; the spec is written as recommended. Details in de
 
 - `README.md`, "How a scene is built": the catalogue table gains the scene; neutral registration (one composition per format, `text.en`, both sources); the `takes` kind and its checks; the `MotionPath` component.
 - `docs/roadmap.md`: the AB#144 row says scene 1 is implemented, owner media gate pending.
-- ADR: none. ADR 0005's consequence ("the first neutral scene (AB#144) changes that rule in its own change") is what this change does; it contradicts no ADR.
+- ADR 0004: a dated amendment (2026-11-12, AB#144). Its 2026-10-24 amendment says "a neutral scene has no per-language text table, because it shows no words"; since ADR 0005's amendment of 2026-11-09 a neutral scene may show a few English words, and this change keeps them in one `en` table. The amendment records that; no new ADR, because the decision is ADR 0005's (G1 question 13). ADR 0005's consequence ("the first neutral scene (AB#144) changes that rule in its own change") is what this change does.
+- `AGENTS.md` and the `openspec/config.yaml` context: the sentences that say a catalogue scene keeps its strings per language gain the neutral case.
 - Evidence for gate 1: the stills' contact sheet in `docs/spikes/2026-11-12-sdd-without-with-spec/` (small PNGs only).
 - After the merge, outside this repository: the brain vault's project notes (`architecture.md`, `roadmap.md`, `changelog.md`), and the motion skill's SCN-1 check ("until AB#144 the catalogue still registers a composition per language") in the kit.

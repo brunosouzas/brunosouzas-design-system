@@ -145,7 +145,7 @@ A scene of kind `takes` SHALL order its phases as one or more take-1 phases, exa
 - **THEN** no takes problem is reported
 
 #### Scenario: Takes out of order
-- **GIVEN** separate fixtures where `ask` is marked take 1, where `error` is marked take 2, where a second rewind phase follows `ask`, and where no phase is take 1
+- **GIVEN** separate fixtures where `ask` is marked take 1, where `error` is marked take 2, where a second rewind phase follows `ask`, and where the three take-1 phases are removed
 - **WHEN** each timeline is checked
 - **THEN** each fails naming the scene and the first phase that breaks the order (`ask`, `error`, the second rewind, `rewind`)
 
@@ -224,7 +224,7 @@ At every frame, the only strings the scene draws SHALL be `proposal.md`, `GO`, `
 #### Scenario: Words over the whole composition
 - **GIVEN** the stage trees of frames 0 to 779
 - **WHEN** the content of every drawn text node is collected
-- **THEN** each content is one of the five strings, and the union is all five
+- **THEN** each content is one of the five strings, the union is all five, and every `?` drawn equals `text.en.question`
 
 #### Scenario: Words at their boundaries
 - **GIVEN** frames 18, 19, 377, 378, 379, 389, 390, 584 and 585
@@ -238,6 +238,11 @@ The scene's timeline SHALL equal the beat table of the change's design §4, with
 - **GIVEN** the beat table transcribed in the test
 - **WHEN** it is compared with the scene's timeline and `motion.travel` is 22
 - **THEN** every value is equal, including phases `request` 24–89, `guess` 90–239, `error` 240–309, `rewind` 340–377, `ask` 390–509, `answer` 510–599, `implement` 600–689
+
+#### Scenario: Seeking in any order
+- **GIVEN** every frame from 0 to 779
+- **WHEN** the state is evaluated forward, backward and in a shuffled order
+- **THEN** each frame gives the same state every time (no accumulated state)
 
 #### Scenario: Travel token changed
 - **GIVEN** the timeline built with a `motion.travel` of 20
@@ -253,9 +258,9 @@ In take 1 the balloon SHALL hold six `?` from their pop-ins until each departs; 
 - **THEN** the balloon holds six `?`, the code panel has 0 lines, Visor is idle with `points` false and no sheet
 
 #### Scenario: First question in flight and arriving
-- **GIVEN** frames 111, 112, 123 and 134
-- **WHEN** `?` 0 is read
-- **THEN** at 111 it is in slot 0; at 112 it is at the start of `guess-0`; at 123 halfway by length; at 134 it is gone and the code panel has 1 line
+- **GIVEN** frames 111, 112, 123, 134 and 171
+- **WHEN** `?` 5 (the rightmost slot) and `?` 0 are read
+- **THEN** at 111 `?` 5 is in slot 5; at 112 it is at the start of `guess-5`; at 123 halfway by length; at 134 it is gone and the code panel has 1 line; `?` 0 stays in slot 0 until 171 and departs at 172
 
 #### Scenario: Take 1 complete
 - **GIVEN** frames 209, 210 and 239
@@ -276,7 +281,7 @@ The failure arrow, the `messageArrow` piece of kind `failure` from the code pane
 - **THEN** 269 is `idle`, upright, with no emote; 270 is `failed`, tilt −5, with the emote's pop starting (not yet drawn); 271 draws the `problem` emote; 329 still draws it at an opacity above 0; 330 draws no emote and Visor is still `failed`
 
 ### Requirement: SDD rewind
-From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL reset at once (`idle`, `points` false, upright) and from 344 to 377 the object layer (the `?`, code lines, path P1, the failure arrow) SHALL show take 1 backwards, its object frame going from 339 to 89. At 378 badge `1` SHALL be removed, badge `2` pop in and the rewind mark leave, gone at 388. From 390 no take-1 object is drawn.
+From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL reset at once (`idle`, `points` false, upright) and from 344 to 377 the object layer (the `?`, code lines, path P1, the failure arrow) SHALL show take 1 backwards, its object frame going from 339 to 89. At 378 badge `1` SHALL be removed and badge `2` pop in, with the rewind mark still beside it; the mark SHALL leave from 400, gone at 410. From 390 no take-1 object is drawn.
 
 #### Scenario: Object frame
 - **GIVEN** frames 343, 344, 360, 377, 378 and 389
@@ -299,12 +304,12 @@ From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL res
 - **THEN** the failure arrow and path P1 are not drawn, and the code panel's lines are take 2's (0 until 616)
 
 ### Requirement: SDD same stage in both takes
-The state at frame 389, the last before take 2 acts, SHALL equal the state at frame 89, the last before take 1 acts, except the take badge (its text and its pop-in from 378) and the rewind mark's leave: the same balloon and six `?`, the same empty code panel, Visor at the same place, scale, face and action, every other pop-in settled.
+The state at frame 389, the last before take 2 acts, SHALL equal the state at frame 89, the last before take 1 acts, except the take badge (its text and its pop-in from 378) and the rewind mark: the same balloon and six `?`, the same empty code panel, Visor at the same place, scale, face and action, every other pop-in settled.
 
 #### Scenario: Fair comparison
 - **GIVEN** the state at 89 and at 389
-- **WHEN** they are compared field by field, leaving out the take badge
-- **THEN** they are equal, and at 389 the rewind mark is not drawn
+- **WHEN** they are compared field by field, leaving out the take badge and the rewind mark
+- **THEN** they are equal, and at 389 the rewind mark is drawn beside badge `2`
 
 #### Scenario: Settled pop-ins
 - **GIVEN** each pop-in frame *a* of design §2.6
@@ -327,7 +332,7 @@ At 390 Visor SHALL hold the `proposal.md` page with one heading row. Each `?` SH
 #### Scenario: Seamless hand-over
 - **GIVEN** frames 479, 480, 491 and 502
 - **WHEN** the page is read
-- **THEN** 479 is Visor's held sheet and 480 the handed-over page, with equal page box, row marks, label pill and words; Visor holds nothing from 480; the page's top-left is (147.4, 186.9) at 491 and (100, 196) from 502
+- **THEN** 479 is Visor's held sheet and 480 the handed-over page, with equal page box, row marks, label pill and words; Visor holds nothing from 480; the page's top-left is (147.4, 177.7) at 491 and (100, 196) from 502
 
 #### Scenario: Visor waits
 - **GIVEN** frames 503 and 504
@@ -340,7 +345,7 @@ Six answer tokens filled `color.state.caller` SHALL leave from below the balloon
 #### Scenario: First answer
 - **GIVEN** frames 511, 512 and 534
 - **WHEN** answer 0 and row 1 are read
-- **THEN** 511 has no answer token; 512 has it at (70, 190), the start of `answer-0`, outside the balloon; 534 has no token and row 1 has its check
+- **THEN** 511 has no answer token; 512 has it at (70, 180), the start of `answer-0`, outside the balloon; 534 has no token and row 1 has its check
 
 #### Scenario: All answered, then GO
 - **GIVEN** frames 574, 584 and 585
@@ -382,9 +387,9 @@ Visor SHALL be the scene's only character, drawn at scale 1.15 on the ground lin
 - **THEN** the later frame is inside one of Visor's acts (90–90, 344–344, 390–480, 600–600)
 
 #### Scenario: Emote beside the head
-- **GIVEN** frames 300 and 700
-- **WHEN** the emote's box is compared with Visor's screen face box transformed by Visor's pose at that frame (tilt and squash about (480, 440))
-- **THEN** they do not intersect
+- **GIVEN** every frame where an emote is drawn (271–329 and 661–779), including the pop's overshoot
+- **WHEN** the emote's box at its popped scale is compared with Visor's screen face box transformed by Visor's pose at that frame (tilt and squash about (480, 440)), and the `worked` emote's box with the resting page
+- **THEN** none intersects
 
 #### Scenario: One character, same skin
 - **GIVEN** the stage trees of every key frame
@@ -404,7 +409,7 @@ The scene SHALL draw only through the package's pieces (`speechBubble`, `questio
 - **THEN** it reports nothing for the new scene's files
 
 ### Requirement: SDD layout and layers
-The scene SHALL use the stage layout of the change's design §6 in 960x540 stage units drawn at 1920x1080, with its layer order. No travelling `?` or answer SHALL touch Visor's screen face or the page's label pill; the label SHALL clear the balloon; the stamp SHALL clear every row mark.
+The scene SHALL use the stage layout of the change's design §6 in 960x540 stage units drawn at 1920x1080, with its layer order. No travelling `?` or answer SHALL touch Visor's screen face, the page's label pill or a `?` still waiting; the label SHALL clear the balloon; the stamp, the row marks and the checks SHALL not touch each other.
 
 #### Scenario: Layout equals the design
 - **GIVEN** the design §6 tables transcribed in the test
@@ -413,13 +418,18 @@ The scene SHALL use the stage layout of the change's design §6 in 960x540 stage
 
 #### Scenario: Tokens clear the face and the label
 - **GIVEN** each `guess`, `ask` and `answer` route sampled at 100 points by length, each token as a disc of its radius (15 for a `?`, 17 for an answer)
-- **WHEN** each disc is compared with Visor's upright screen face and with the label pill where the page is at that time (held for `ask`, at rest for `answer`)
-- **THEN** none intersects either
+- **WHEN** each disc is compared with Visor's upright screen face, with the label pill where the page is at that time (held for `ask`, at rest for `answer`), and, frame by frame, with every `?` still waiting in a slot
+- **THEN** none intersects any of them
 
 #### Scenario: Label and stamp clearances
-- **GIVEN** the held and the resting label pills, the balloon (bottom 150, tail tip (70, 170)) and the stamp (centre (186.25, 446), radius 28)
-- **WHEN** they are compared with the balloon and the resting page's six row marks (radius 13 × 1.15)
-- **THEN** neither pill touches the balloon and the stamp touches no row mark
+- **GIVEN** the held and the resting label pills, the balloon (bottom 136, tail tip (70, 156)) and the stamp (centre (189, 432.3), radius 32)
+- **WHEN** they are compared with the balloon and with the resting page's six row marks (radius 13 × 1.15 plus outline) and tail checks
+- **THEN** neither pill touches the balloon, and the stamp touches no row mark and no check
+
+#### Scenario: Row marks clear each other
+- **GIVEN** the page's six question rows and their tail checks, each mark and check with its outline
+- **WHEN** neighbouring rows are compared
+- **THEN** no two marks and no two checks touch
 
 #### Scenario: Stills reviewed (local)
 - **GIVEN** the eight stills of design §7 and frame 450
