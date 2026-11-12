@@ -15,7 +15,7 @@ import {
   QUESTION_BARS, REWIND_MARK, RINGS_CENTRE, ROUTES, STAMP, VISOR, rowMarkAt, slotAt,
 } from "../../src/scenes/sdd-without-with-spec/layout";
 import { text } from "../../src/scenes/sdd-without-with-spec/scene.ts";
-import { stageAt, visorParams } from "../../src/scenes/sdd-without-with-spec/stage";
+import { PIECE_ORDER, stageAt, visorParams } from "../../src/scenes/sdd-without-with-spec/stage";
 import { frameAt } from "../../src/scenes/sdd-without-with-spec/takes";
 import { timeline } from "../../src/scenes/sdd-without-with-spec/timeline";
 
@@ -136,31 +136,55 @@ describe("SDD layout and layers", () => {
       expect(ROUTES[`ask-${i}`]).toBe(`M ${x},94 C 40,96 120,${heldY[i]} 229.3,${heldY[i]}`);
       expect(ROUTES[`answer-${i}`]).toBe(`M 70,180 C 62,${Math.round((restY[i] - 40) * 1000) / 1000} 80,${restY[i]} 134.5,${restY[i]}`);
     });
-    // Layer order (SCN-6): the stage pieces, bottom to top.
-    const order = (f: number) => find(stageAt(f).pieces, "data-piece").map(({ node }) => node.attrs["data-piece"]);
-    expect(order(600)).toEqual(["visor"]);
-    expect(walk(stageAt(600).pieces).some(({ node }) => node.attrs["data-page"] === "proposal.md")).toBe(true);
+  });
+
+  test("Layer order", () => {
+    // Layer 3, bottom to top, at every frame: the drawn elements follow design §6's order.
+    expect(PIECE_ORDER).toEqual(["failureArrow", "balloon", "codePanel", "page", "visor", "stamp", "badge", "rewindMark"]);
+    const order = (f: number) => [...new Set(find(stageAt(f).pieces, "data-element").map(({ node }) => String(node.attrs["data-element"])))];
+    for (let f = 0; f < 780; f++) {
+      const indexes = order(f).map((name) => PIECE_ORDER.indexOf(name as (typeof PIECE_ORDER)[number]));
+      expect(indexes, `frame ${f}`).toEqual([...indexes].sort((a, b) => a - b));
+      expect(indexes, `frame ${f}`).not.toContain(-1);
+    }
+    expect(order(245)).toEqual(["failureArrow", "balloon", "codePanel", "visor", "badge"]);
+    expect(order(600)).toEqual(["balloon", "codePanel", "page", "visor", "stamp", "badge"]);
+    // The composition's layers (design §6): rings, paths, pieces, `?`, answers, emote.
+    const source = readFileSync(join(SCENE_DIR, "Scene.tsx"), "utf8");
+    const jsx = source.slice(source.indexOf("<AbsoluteFill"));
+    const positions = ["<Rings", "<MotionPath", "node={stage.pieces}", "node={stage.tokens}", "<PositionedToken", "node={stage.emote}"].map((mark) => jsx.indexOf(mark));
+    expect(positions.every((p) => p >= 0)).toBe(true);
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
   });
 
   const pillAt = (page: Point): Box => ({ x0: page.x, y0: page.y - (36 * CAST_SCALE) / 2, x1: page.x + PAGE.width * CAST_SCALE, y1: page.y + (36 * CAST_SCALE) / 2 });
+  /** Drawn outer radii: a `?` is the sheet mark (13) at the cast's scale plus half its outline; an answer is radius 17 plus half its 4-unit outline. */
+  const QUESTION_R = 13 * CAST_SCALE + (3 * CAST_SCALE) / 2;
+  const ANSWER_R = 17 + 2;
+  /** Distance from `p` to the label pill drawn as what it is, a stadium (rx = half its height), with half its outline. */
+  const pillGap = (p: Point, pill: Box) => {
+    const r = (pill.y1 - pill.y0) / 2, cy = (pill.y0 + pill.y1) / 2;
+    const x = Math.max(pill.x0 + r, Math.min(p.x, pill.x1 - r));
+    return Math.hypot(p.x - x, p.y - cy) - r - (4 * CAST_SCALE) / 2;
+  };
 
   test("Tokens clear the face and the label", () => {
     for (const [id, route] of Object.entries(ROUTES)) {
-      const radius = id.startsWith("answer") ? 17 : 15;
+      const radius = id.startsWith("answer") ? ANSWER_R : QUESTION_R;
       const pill = id.startsWith("ask") ? pillAt(PAGE_HELD) : id.startsWith("answer") ? pillAt(PAGE_REST) : null;
       for (let step = 0; step <= 100; step++) {
         const p = pointAlong(route, step / 100)!;
         expect(discTouchesBox(p, radius, face), `${id} at ${step}% touches the face`).toBe(false);
-        if (pill) expect(discTouchesBox(p, radius, pill), `${id} at ${step}% touches the label`).toBe(false);
+        if (pill) expect(pillGap(p, pill), `${id} at ${step}% touches the label`).toBeGreaterThan(radius);
       }
     }
-    // Frame by frame, no travelling token touches a `?` still waiting in a slot.
+    // Frame by frame, no travelling token touches a `?` still waiting in a slot (both with their outlines).
     for (let f = 0; f < 780; f++) {
       const s = frameAt(f);
       for (const q of [...s.questions, ...s.answers]) s.slots.forEach((slot, i) => {
         if (slot === null) return;
-        const r = q.id.startsWith("answer") ? 17 : 15;
-        expect(Math.hypot(q.point.x - slotAt(i).x, q.point.y - slotAt(i).y), `${q.id} over slot ${i} at ${f}`).toBeGreaterThan(r + 15);
+        const r = q.id.startsWith("answer") ? ANSWER_R : QUESTION_R;
+        expect(Math.hypot(q.point.x - slotAt(i).x, q.point.y - slotAt(i).y), `${q.id} over slot ${i} at ${f}`).toBeGreaterThan(r + QUESTION_R);
       });
     }
   });
@@ -223,6 +247,14 @@ describe("SDD take 2, the hand-over", () => {
     const norm = (w: { word: string; at: Point }[]) => w.filter((x) => x.word !== "2").map((x) => [x.word, Math.round(x.at.x * 1e6) / 1e6, Math.round(x.at.y * 1e6) / 1e6]);
     expect(norm(after.words)).toEqual(norm(before.words));
     expect(norm(after.words).map((w) => w[0])).toEqual(["?", "?", "?", "?", "?", "?", "proposal.md"]);
+    // The same outline: the held sheet's group and the page's stroke group carry the same stroke, width and join.
+    const strokeOf = (f: number, attr: string) => {
+      const nodes = walk(stageAt(f).pieces);
+      const root = nodes.find(({ node }) => node.attrs[attr] !== undefined)!.node;
+      const group = attr === "data-held" ? root : (root.children[0] as SvgNode);
+      return { stroke: group.attrs.stroke, width: group.attrs["stroke-width"], join: group.attrs["stroke-linejoin"] };
+    };
+    expect(strokeOf(480, "data-page")).toEqual(strokeOf(479, "data-held"));
     for (let f = 480; f < 780; f++) expect(find(stageAt(f).pieces, "data-held").length, `frame ${f}`).toBe(0);
     expect(frameAt(491).page!.at.x).toBeCloseTo(147.4, 9);
     expect(frameAt(491).page!.at.y).toBeCloseTo(177.7, 9);
@@ -249,6 +281,19 @@ describe("SDD cast rules", () => {
       if (s.emote.kind === "worked") expect(overlaps(emoteBox, restingPage), `worked over the page at ${f}`).toBe(false);
     }
     expect(checked).toBe(59 + 119);
+  });
+
+  test("The held sheet's rows", () => {
+    // "Sheet appears with its heading" and "Questions become rows", on what Visor draws.
+    const rows = (f: number) => visorParams(frameAt(f).visor!).holdsSheet?.rows;
+    expect(rows(389)).toBeUndefined();
+    expect(rows(390)).toEqual([{ lead: "none", bar: 90 }]);
+    expect(visorParams(frameAt(390).visor!).holdsSheet?.label).toBe("proposal.md");
+    expect(rows(476)).toHaveLength(7);
+    expect(rows(476)!.slice(1).every((row) => row.lead === "question" && row.tail === "none")).toBe(true);
+    const tree = (f: number) => walk(stageAt(f).pieces).filter(({ node }) => node.attrs["data-held"] === "sheet");
+    expect(tree(389)).toHaveLength(0);
+    expect(tree(390)).toHaveLength(1);
   });
 
   test("One character, same skin", () => {
@@ -285,7 +330,7 @@ describe("SDD words on screen", () => {
     expect(frameWords(378)).not.toContain("1");
     expect(frameWords(378)).not.toContain("2");
     for (let f = 379; f < 780; f++) { expect(frameWords(f), `frame ${f}`).toContain("2"); expect(frameWords(f), `frame ${f}`).not.toContain("1"); }
-    expect(frameWords(389)).not.toContain("proposal.md");
+    for (let f = 0; f < 390; f++) expect(frameWords(f), `frame ${f}`).not.toContain("proposal.md");
     expect(frameWords(390)).toContain("proposal.md");
     expect(frameWords(584)).not.toContain("GO");
     expect(frameWords(585)).toContain("GO");
@@ -295,9 +340,11 @@ describe("SDD words on screen", () => {
 
 describe("SDD final still", () => {
   test("Final hold identical", () => {
+    // The rings fade from the real frame (`Rings`); they are settled long before the outro.
+    expect(timeline.ringsFade[1]).toBeLessThan(timeline.outro);
     const layers = (f: number) => {
       const s = frameAt(f);
-      return { stage: stageAt(f), rings: s.rings, paths: s.paths, answers: s.answers };
+      return { stage: stageAt(f), paths: s.paths, answers: s.answers };
     };
     const last = layers(timeline.outro);
     for (let f = timeline.outro; f < timeline.duration; f++) expect(layers(f), `frame ${f}`).toEqual(last);

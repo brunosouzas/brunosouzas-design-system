@@ -120,6 +120,8 @@ describe("SDD beats and timing", () => {
 
   test("Travel token changed", () => {
     expect(firstDifference(makeTimeline(20))).toBe("trip guess-0: expected 172–194, found 172–192");
+    // The fades follow `motion.fade` the same way (design §2.4).
+    expect(firstDifference(makeTimeline(22, 12))).toMatch(/^fades: /);
   });
 
   test("Seeking in any order", () => {

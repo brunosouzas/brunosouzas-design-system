@@ -58,7 +58,7 @@ export type TakesTimeline = {
   cues: Readonly<Record<string, readonly number[]>>;
 };
 
-/** Frames `leave` (src/brand/cast-motion.ts) takes by default. */
+/** Frames an emote or another element takes to leave; scenes pass it to `leave` (src/brand/cast-motion.ts), so the check and the frames agree. */
 export const LEAVE_FRAMES = 10;
 
 const TAKE_LABEL = (take: Take): string => (take === "rewind" ? "rewind" : `take ${take}`);
@@ -97,8 +97,11 @@ const checkCast = (id: string, t: TakesTimeline): string[] => {
       problems.push(`${id}: act of ${a.actor} [${a.from}, ${a.to}] overlaps act of ${b.actor} [${b.from}, ${b.to}]`);
     }
   }));
+  /** The actor's expression before `frame`: its latest face entry, `idle` before any. */
+  const before = (actor: Actor, frame: number) => [...t.faces].filter((face) => face.actor === actor && face.at < frame).sort((a, b) => a.at - b.at).at(-1)?.expression ?? "idle";
   for (const emote of t.emotes) {
-    if (!t.faces.some((face) => face.actor === emote.actor && face.at === emote.at)) {
+    const change = t.faces.find((face) => face.actor === emote.actor && face.at === emote.at);
+    if (change === undefined || change.expression === before(emote.actor, emote.at)) {
       problems.push(`${id}: emote ${emote.kind} at frame ${emote.at} is not on an expression change of ${emote.actor}`);
     }
     // Gone before any act that starts after it enters.

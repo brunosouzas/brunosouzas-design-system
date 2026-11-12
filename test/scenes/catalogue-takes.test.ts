@@ -98,6 +98,12 @@ describe("Two-take cast timing", () => {
 
   test("Emote off an expression change", () => {
     expect(joined({ emotes: [{ ...t.emotes[0], at: 271 }, t.emotes[1]] })).toContain(`${ID}: emote problem at frame 271 is not on an expression change of visor`);
+    // A face entry that repeats the current expression is not a change.
+    const repeat: Partial<TakesTimeline> = {
+      faces: [...t.faces, { actor: "visor", at: 400, expression: "idle" }],
+      emotes: [...t.emotes, { actor: "visor", kind: "doubt", at: 400, leaveAt: 410 }],
+    };
+    expect(joined(repeat)).toContain(`${ID}: emote doubt at frame 400 is not on an expression change of visor`);
   });
 
   test("Two emotes on screen", () => {
@@ -124,6 +130,9 @@ describe("Two-take reading hold", () => {
     expect(joined({ trips: [...t.trips, { id: "late", route: "answer-0", from: 669, to: 691 }] })).toContain(`${ID}: arrival of trip late at frame 691 is at or after the outro`);
     expect(joined({ fades: { ...t.fades, p3: { in: [685, 695] } } })).toContain(`${ID}: fade-in of p3 (ends) at frame 695 is at or after the outro`);
     expect(joined({ cues: { ...t.cues, take2Lines: [...t.cues.take2Lines, 690] } })).toContain(`${ID}: cue take2Lines at frame 690 is at or after the outro`);
+    expect(joined({ emotes: [t.emotes[0], { ...t.emotes[1], leaveAt: 685 }] })).toContain(`${ID}: leave of emote worked (ends) at frame 695 is at or after the outro`);
+    expect(joined({ leaves: { rewindMark: 680 } })).toContain(`${ID}: leave of rewindMark (ends) at frame 690 is at or after the outro`);
+    expect(joined({ rewind: { ...t.rewind, to: 690 } })).toContain(`${ID}: end of the rewind at frame 690 is at or after the outro`);
   });
 
   test("Pop-in too late to settle", () => {

@@ -81,18 +81,29 @@ const posedVisor = (v: NonNullable<SddState["visor"]>): Drawn => {
   return { body: [pose(g({}, ...drawn.body), at)], text: drawn.text.length > 0 ? [pose(g({}, ...drawn.text), at)] : [] };
 };
 
+/** One stage element, named in a group so the tests can read the layer order (SCN-6). */
+const element = (name: string, drawn: Drawn): Drawn => ({
+  body: [g({ "data-element": name }, ...drawn.body)],
+  text: drawn.text.length > 0 ? [g({ "data-element": name }, ...drawn.text)] : [],
+});
+
 /** Layer 3: the stage pieces, bottom to top (design §6). */
+export const PIECE_ORDER = ["failureArrow", "balloon", "codePanel", "page", "visor", "stamp", "badge", "rewindMark"] as const;
 const piecesLayer = (s: SddState): SvgNode => {
-  const out: Drawn[] = [];
-  if (s.failureArrow > 0) out.push(faded(messageArrow(FAILURE_ARROW), s.failureArrow));
-  if (s.balloon) out.push(popped(speechBubble({ ...BALLOON, fill: "color.state.caller" }), s.balloon, ANCHORS.balloon));
-  if (s.codePanel) out.push(popped(codePanel({ ...CODE_PANEL, lines: codeLines(s.codePanel.lines) }), s.codePanel.appear, ANCHORS.codePanel));
-  if (s.page) out.push(handedOverPage(s.page));
-  if (s.visor) out.push(posedVisor(s.visor));
-  if (s.stamp) out.push(popped(stamp({ cx: STAMP.cx, cy: STAMP.cy, r: STAMP.r, word: text.en.approval }), s.stamp, ANCHORS.stamp));
-  if (s.badge) out.push(popped(countBadge({ cx: BADGE.cx, cy: BADGE.cy, textSize: BADGE.textSize, text: text.en.takes[s.badge.text === "1" ? 0 : 1] }), s.badge.appear, ANCHORS.badge));
-  if (s.rewindMark) out.push(popped(uiIcon({ name: "reset", ...REWIND_MARK }), s.rewindMark, ANCHORS.rewindMark));
-  return layer("pieces", out);
+  const drawn: Record<(typeof PIECE_ORDER)[number], Drawn | null> = {
+    failureArrow: s.failureArrow > 0 ? faded(messageArrow(FAILURE_ARROW), s.failureArrow) : null,
+    balloon: s.balloon ? popped(speechBubble({ ...BALLOON, fill: "color.state.caller" }), s.balloon, ANCHORS.balloon) : null,
+    codePanel: s.codePanel ? popped(codePanel({ ...CODE_PANEL, lines: codeLines(s.codePanel.lines) }), s.codePanel.appear, ANCHORS.codePanel) : null,
+    page: s.page ? handedOverPage(s.page) : null,
+    visor: s.visor ? posedVisor(s.visor) : null,
+    stamp: s.stamp ? popped(stamp({ cx: STAMP.cx, cy: STAMP.cy, r: STAMP.r, word: text.en.approval }), s.stamp, ANCHORS.stamp) : null,
+    badge: s.badge ? popped(countBadge({ cx: BADGE.cx, cy: BADGE.cy, textSize: BADGE.textSize, text: text.en.takes[s.badge.text === "1" ? 0 : 1] }), s.badge.appear, ANCHORS.badge) : null,
+    rewindMark: s.rewindMark ? popped(uiIcon({ name: "reset", ...REWIND_MARK }), s.rewindMark, ANCHORS.rewindMark) : null,
+  };
+  return layer("pieces", PIECE_ORDER.flatMap((name) => {
+    const piece = drawn[name];
+    return piece === null ? [] : [element(name, piece)];
+  }));
 };
 
 /** Layer 4: the `?` waiting in the balloon and in flight, at the cast's scale. */

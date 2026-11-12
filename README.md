@@ -132,7 +132,7 @@ A scene lives in `src/scenes/<scene>/` with:
 - `layout.ts`: one layout per format, in composition pixels; the 4:5 layout has its own arrow routes.
 - `Scene.tsx`: the composition, which arranges the components from `src/brand/`.
 
-`src/scenes/index.ts` lists the scenes and `src/Root.tsx` registers each one as a Studio folder with one composition per format and language (`<scene>-16x9-pt`, `-16x9-en`, `-4x5-pt`, `-4x5-en`). The tests check every registered scene: the same text keys in both languages, phases inside the composition and in order, events inside phases, and a reading hold of at least three seconds at the end.
+`src/scenes/index.ts` lists the scenes and `src/Root.tsx` registers each one as a Studio folder; a localised scene has one composition per format and language (`<scene>-16x9-pt`, `-16x9-en`, `-4x5-pt`, `-4x5-en`), a neutral scene one per format (below). The tests check every registered scene: for a localised scene the same text keys in both languages, and for every scene phases inside the composition and in order, events inside phases, and a reading hold of at least three seconds at the end.
 
 **Neutral scenes.** A scene with `neutral: true` is one video for both pages ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md), amended 2026-11-09): one composition per format, `<scene>-<format>` with no language suffix (its `lang` is `en` and the scene ignores it), `languages: ["en"]`, its few words in one English table `text.en`, and both pages' sources `sources.pt` and `sources.en`. The catalogue rejects a neutral scene with a `pt` table, another language, a missing or non-`https` source, or an empty word.
 

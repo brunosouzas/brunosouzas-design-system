@@ -19,7 +19,7 @@ import { tokens } from "../../../tokens/generated/tokens";
 import { emotePop, leave, squashAfter } from "../../brand/cast-motion";
 import { blockPopIn, fadeIn, motionPathAt, pillPopIn, pointAlong, type Appearance, type Point } from "../../brand/motion";
 import type { CastExpression, EmoteKind } from "../../pieces/index.ts";
-import type { TakesTimeline } from "../takes-kind";
+import { LEAVE_FRAMES, type TakesTimeline } from "../takes-kind";
 import { EMOTES, PAGE_HELD, PAGE_REST, ROUTES } from "./layout";
 import { QUESTIONS, timeline as sceneTimeline } from "./timeline";
 
@@ -47,7 +47,6 @@ export type Emote = { kind: EmoteKind; x: number; y: number; scale: number; opac
 export type SddState = {
   /** The frame take 1's objects are drawn from (design §2.5). */
   objectFrame: number;
-  rings: number;
   codePanel: { appear: Appearance; lines: number } | null;
   balloon: Appearance | null;
   /** The `?` waiting in slot i, or null once it left (or before it popped in). */
@@ -128,7 +127,7 @@ export const frameAt = (frame: number, t: TakesTimeline = sceneTimeline): SddSta
       if (frame < e.at) return null;
       const base = EMOTES[e.kind as keyof typeof EMOTES];
       const scale = base.scale * (frame >= e.at + SETTLE ? 1 : emotePop(frame, e.at));
-      const opacity = e.leaveAt === null ? 1 : leave(frame, e.leaveAt);
+      const opacity = e.leaveAt === null ? 1 : leave(frame, e.leaveAt, LEAVE_FRAMES);
       return opacity > 0 && scale > MIN_SCALE ? { kind: e.kind, x: base.x, y: base.y, scale, opacity } : null;
     })
     .find((e) => e !== null) ?? null;
@@ -136,7 +135,7 @@ export const frameAt = (frame: number, t: TakesTimeline = sceneTimeline): SddSta
   const rewindMark = (() => {
     const appear = pill(frame, pops.rewindMark);
     if (appear === null) return null;
-    const opacity = appear.opacity * leave(frame, t.leaves.rewindMark);
+    const opacity = appear.opacity * leave(frame, t.leaves.rewindMark, LEAVE_FRAMES);
     return opacity > 0 ? { opacity, scale: appear.scale } : null;
   })();
 
@@ -147,7 +146,6 @@ export const frameAt = (frame: number, t: TakesTimeline = sceneTimeline): SddSta
 
   return {
     objectFrame: o,
-    rings: fadeIn(frame, t.ringsFade),
     codePanel: codeAppear === null ? null : { appear: codeAppear, lines: inTake2 ? count(t.cues.take2Lines, frame) : count(t.cues.take1Lines, o) },
     balloon: block(frame, pops.balloon),
     slots,

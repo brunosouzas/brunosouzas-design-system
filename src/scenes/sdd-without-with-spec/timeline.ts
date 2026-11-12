@@ -4,7 +4,8 @@
 //
 // Every trip and the hand-over end `motion.travel` frames after they start, so
 // a change of that token moves the arrivals and fails the pinned beat-table
-// test instead of silently retiming the scene. `makeTimeline(travel)` exists for
+// test instead of silently retiming the scene; every fade lasts `motion.fade`
+// frames (design §2.4), the same way. `makeTimeline(travel, fade)` exists for
 // that test; the scene uses `timeline`.
 //
 // Retiming is a visual change: the owner approves it on stills (MOT-5).
@@ -19,7 +20,9 @@ export const CODE_LINES = 8;
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 const ev = (id: string, at: number) => ({ id, at });
 
-export const makeTimeline = (travel: number = tokens.motion.travel): TakesTimeline => {
+export const makeTimeline = (travel: number = tokens.motion.travel, fade: number = tokens.motion.fade): TakesTimeline => {
+  /** A fade of `motion.fade` frames from `from`. */
+  const span = (from: number): [number, number] => [from, from + fade];
   // Take 1: the rightmost `?` (slot 5) leaves first, 12 frames apart, so no token crosses one still waiting.
   const guessFrom = (i: number) => 112 + 12 * (QUESTIONS - 1 - i);
   // Take 2: slot 0 leaves first, 10 frames apart (its route leaves to the left).
@@ -84,10 +87,10 @@ export const makeTimeline = (travel: number = tokens.motion.travel): TakesTimeli
       rewindMark: 340, badge2: 378, stamp: 584,
     },
     fades: {
-      p1: { in: [90, 100], out: [220, 230] },
-      failureArrow: { in: [240, 250] },
-      p2: { in: [394, 404], out: [480, 490] },
-      p3: { in: [600, 610] },
+      p1: { in: span(90), out: span(220) },
+      failureArrow: { in: span(240) },
+      p2: { in: span(394), out: span(480) },
+      p3: { in: span(600) },
     },
     leaves: { rewindMark: 400 },
     cues: {
