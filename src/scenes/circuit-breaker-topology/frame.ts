@@ -26,6 +26,11 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 export type Appear = { opacity: number; scale: number };
 export type ArrowState = { kind: ArrowKind; dashed: boolean; opacity: number };
+/**
+ * A window square. `appear` describes its pop for the tests and the layout
+ * exemptions; `CallSquare` draws the pop itself from `appearAt` with its own
+ * spring, which settles a little after `appear` says (design Risks).
+ */
 export type SquareState = { id: string; kind: "ok" | "fail"; appearAt: number; x: number; opacity: number; appear: Appear };
 export type TokenState = { id: string; route: Route; point: Point };
 export type TopologyState = {
@@ -143,6 +148,17 @@ const tagAt = (t: TopologyTimeline, place: TagPlace, f: number, o: number) => {
   return appear === null ? null : { text: change.text, at: change.at, appear };
 };
 
+/**
+ * The frame of the one `<name>@<frame>` key of a pops or leaves table. Throws
+ * when there is none or more than one, so a timing change in timeline.ts fails
+ * loudly instead of drawing NaN.
+ */
+const onlyAt = (keys: Readonly<Record<string, number>>, name: string): number => {
+  const found = Object.entries(keys).filter(([k]) => k.startsWith(`${name}@`));
+  if (found.length !== 1) throw new Error(`circuit-breaker-topology timeline: expected one "${name}@<frame>" key, found ${found.length}`);
+  return found[0][1];
+};
+
 /** An element that pops and leaves more than once: its occurrences from `pops` and `leaves` keys `<name>@<frame>`. */
 const occurrenceAt = (t: TopologyTimeline, name: string, f: number, pop: (f: number, a: number) => Appear | null): Appear | null => {
   const at = (keys: Readonly<Record<string, number>>) => Object.entries(keys).filter(([k]) => k.startsWith(`${name}@`)).map(([, v]) => v).sort((a, b) => a - b);
@@ -228,9 +244,9 @@ export const frameAt = (f: number, t: TopologyTimeline = defaultTimeline): Topol
   const windowPop = occurrenceAt(t, "window", f, blockPop);
   const contents = windowAt(t, f);
 
-  const droppedAt = t.pops["dropped@1566"];
+  const droppedAt = onlyAt(t.pops, "dropped");
   const fallFrom = t.cues.dropped[0], fallTo = t.cues.dropped[1];
-  const droppedPop = droppedAt !== undefined && f < fallTo ? blockPop(f, droppedAt) : null;
+  const droppedPop = f < fallTo ? blockPop(f, droppedAt) : null;
   const fallen = interpolate(f, [fallFrom, fallTo], [0, 1], clamp);
 
   const run = latest(t.clock, f);
@@ -240,12 +256,12 @@ export const frameAt = (f: number, t: TopologyTimeline = defaultTimeline): Topol
   const breaker = f < drop.from ? null : along(DROP_PATH, interpolate(f, [drop.from, drop.to], [0, 1], clamp));
 
   return {
-    checkout: blockPop(f, t.pops["checkout@4"]),
-    payment: blockPop(f, t.pops["payment@8"]),
+    checkout: blockPop(f, onlyAt(t.pops, "checkout")),
+    payment: blockPop(f, onlyAt(t.pops, "payment")),
     failing,
     badge: badgeEntry && badgeAppear ? { take: badgeEntry.take, appear: badgeAppear } : null,
     rewindMark: occurrenceAt(t, "rewind-mark", f, pillPop),
-    retry: leaving(pillPop(o, t.pops["retry@20"]), f, t.leaves["retry@510"]),
+    retry: leaving(pillPop(o, onlyAt(t.pops, "retry")), f, onlyAt(t.leaves, "retry")),
     arrows: Object.fromEntries((Object.keys(t.arrows) as Route[]).map((route) => [route, arrowAt(t, route, f, o)])) as Record<Route, ArrowState | null>,
     dropPath: motionPathAt(f, t.fades["drop-path"].in, t.fades["drop-path"].out),
     breaker,

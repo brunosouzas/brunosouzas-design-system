@@ -7,6 +7,7 @@
 // checks what the frame draws. Test-only.
 import { tokens } from "../../tokens/generated/tokens";
 import { callAppearance } from "../../src/brand/motion";
+import { failureRateBarShapes } from "../../src/brand/rate-bar-shape";
 import type { Point } from "../../src/brand/motion";
 import type { SvgNode } from "../../src/pieces/node.ts";
 import { type Appear, type TopologyState } from "../../src/scenes/circuit-breaker-topology/frame";
@@ -169,8 +170,10 @@ export const coloursOf = (f: Frame): { element: string; colour: string }[] => {
   const w = f.components.window;
   if (w) {
     for (const q of w.squares) { const look = callAppearance(q.kind); out.push({ element: `square ${q.kind}`, colour: look.fill }, { element: `square ${q.kind}`, colour: look.glyphColor }); }
-    if (w.bar.rate > 0) out.push({ element: "bar", colour: tokens.color.state.failure });
-    out.push({ element: "bar", colour: tokens.color.white }, { element: "bar", colour: tokens.color.ink });
+    // The bar's colours as FailureRateBar draws them, read from its pure shapes.
+    const { track, fill, tick } = failureRateBarShapes(w.bar);
+    for (const rect of fill ? [track, fill] : [track]) out.push({ element: "bar", colour: rect.fill }, { element: "bar", colour: rect.stroke });
+    out.push({ element: "bar", colour: tick.stroke });
   }
   for (const _ of f.components.tokens) out.push({ element: "token", colour: tokens.color.white }, { element: "token", colour: tokens.color.ink });
   if (f.components.clock) out.push({ element: "clock", colour: tokens.color.white }, { element: "clock", colour: tokens.color.ink });

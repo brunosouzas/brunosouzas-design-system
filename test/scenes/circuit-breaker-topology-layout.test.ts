@@ -70,7 +70,14 @@ const placementProblems = (frames: readonly Frame[]): string[] => {
       if (b.x0 < MARGIN || b.y0 < MARGIN || b.x1 > STAGE.width - MARGIN || b.y1 > STAGE.height - MARGIN) problems.push(`frame ${f.frame}: ${what} leaves the stage less ${MARGIN} (${fmt(b.x0)}, ${fmt(b.y0)}, ${fmt(b.x1)}, ${fmt(b.y1)})`);
     };
     for (const t of texts) inside(`${t.element} "${t.text}"`, t.box);
-    for (const b of blocks.filter((b) => BADGES.has(b.element))) inside(`${b.element} badge`, b.box);
+    const badges = blocks.filter((b) => BADGES.has(b.element));
+    for (const b of badges) inside(`${b.element} badge`, b.box);
+    // A badge body keeps clear of tokens, of every other block (the rewind mark among them) and of Payment's lights (design §6.3 item 5).
+    for (const b of badges) {
+      for (const k of tokens) if (discTouchesBox(k.centre, k.r, b.box)) problems.push(`frame ${f.frame}: ${b.element} badge touches token ${k.id}`);
+      for (const other of blocks) if (other !== b && overlaps(b.box, other.box)) problems.push(`frame ${f.frame}: ${b.element} badge crosses ${other.element}`);
+      for (const light of LIGHTS) if (discTouchesBox(light.centre, light.r, b.box)) problems.push(`frame ${f.frame}: ${b.element} badge covers unit ${light.unit}'s light`);
+    }
     texts.forEach((a, i) => texts.slice(i + 1).forEach((b) => { if (overlaps(a.box, b.box)) problems.push(`frame ${f.frame}: ${a.element} "${a.text}" overlaps ${b.element} "${b.text}"`); }));
     for (const t of texts) for (const k of tokens) if (discTouchesBox(k.centre, k.r, t.box)) problems.push(`frame ${f.frame}: ${t.element} "${t.text}" touches token ${k.id}`);
     for (const t of texts) for (const b of blocks) if (!labels(t).includes(b.element) && overlaps(t.box, b.box)) problems.push(`frame ${f.frame}: ${t.element} "${t.text}" crosses ${b.element}`);
@@ -202,6 +209,15 @@ describe("Topology layout and layers", () => {
     const moved = editText(FRAMES, "message", () => true, { x: 300 });
     const problems = placementProblems(moved);
     expect(problems[0]).toMatch(/^frame 874: message "payment temporarily" crosses window /);
+  });
+
+  test("Badge collision rejected", () => {
+    // The take badge moved 14 units left of where design §6.1 puts it, onto the rewind mark (whose box is
+    // read from REWIND_MARK, as uiIcon draws paths the tree reader does not measure).
+    const moved = FRAMES.map((f) => ({ ...f, above: mapTree(f.above, (n) => (n.attrs["data-element"] === "badge" ? { ...n, attrs: { ...n.attrs, transform: `translate(-14 0)${n.attrs.transform ? ` ${n.attrs.transform}` : ""}` } } : n)) }));
+    const problems = placementProblems(moved);
+    expect(problems.some((p) => / badge badge crosses rewind-mark$/.test(p))).toBe(true);
+    expect(placementProblems(FRAMES).filter((p) => p.includes("rewind-mark"))).toEqual([]);
   });
 
   test("Covered light rejected", () => {

@@ -100,7 +100,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 
 ## 6. Checks, docs and review
 
-- [ ] 6.1 Run `npm run typecheck && npm run tokens:check && npm run build && npm test` and `openspec validate --all --strict`. All must pass.
+- [x] 6.1 Run `npm run typecheck && npm run tokens:check && npm run build && npm test` and `openspec validate --all --strict`. All must pass.
 - [x] 6.2 Update the docs (proposal "Documentation"):
   - `README.md`: the scene row, the failure-rate bar, the scene's files.
   - `docs/roadmap.md`: the circuit-breaker row.

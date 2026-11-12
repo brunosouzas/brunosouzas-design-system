@@ -23,9 +23,11 @@ import {
 } from "./layout";
 import { drawn as isDrawn, frameAt, type Appear, type TopologyState } from "./frame";
 import { text } from "./scene.ts";
-import type { Route, StateName, TagPlace, TagText } from "./timeline";
+import { timeline, type Route, type StateName, type TagPlace, type TagText } from "./timeline";
 
 const words = text.en;
+/** The ghost beside take 2's `backend calls`: take 1's last count, 60 (L29). */
+const GHOST_CALLS = timeline.counters.take1.calls.at(-1)!.value;
 const STATE_FILL: Record<StateName, string> = { closed: "color.state.healthy", open: "color.state.blocked", halfOpen: "color.state.transitional" };
 const TAG_WORDS: Record<TagText, string> = { timeout: words.timeout, open: words.open, ok: words.ok, business: words.business };
 
@@ -74,7 +76,7 @@ const paymentUnits = (failing: TopologyState["failing"]): Drawn =>
   merge(...PAYMENT.ys.map((y, i) => serverStack({ x: PAYMENT.x, y, width: PAYMENT.width, units: 1, ...(failing[i] ? { fill: "color.state.failure", failing: 0 } : {}) })));
 
 const tagOf = (place: TagPlace, t: NonNullable<TopologyState["tags"][TagPlace]>): Drawn =>
-  shown(edgeLabel({ x: TAGS.x[place], y: TAGS.y, lines: [TAG_WORDS[t.text]], backdrop: true, width: TAG_WIDTHS[t.text], textSize: TEXT_SIZE.word, anchor: "middle" }), t.appear, { x: TAGS.x[place], y: TAGS.y - 9 });
+  shown(edgeLabel({ x: TAGS.x[place], y: TAGS.y, lines: [TAG_WORDS[t.text]], backdrop: true, width: TAG_WIDTHS[t.text], textSize: TEXT_SIZE.word, anchor: "middle" }), t.appear, ANCHORS.tag(place));
 
 // ---------------------------------------------------------------- layers
 
@@ -119,7 +121,7 @@ const aboveOf = (s: TopologyState): SvgNode => {
       ? shown(merge(countBadge({ ...REQUESTS.badge, text: String(s.counters.requests), textSize: TEXT_SIZE.strong }), counterLabel(REQUESTS.label.x, words.requests, "start")), s.counters.appear, ANCHORS.requests)
       : null,
     ghost: s.counters !== null && isDrawn(s.counters.ghost)
-      ? shown(countBadge({ ...CALLS_COUNTER.ghost, text: "60", textSize: TEXT_SIZE.strong }), s.counters.ghost, ANCHORS.ghost, GHOST_OPACITY)
+      ? shown(countBadge({ ...CALLS_COUNTER.ghost, text: String(GHOST_CALLS), textSize: TEXT_SIZE.strong }), s.counters.ghost, ANCHORS.ghost, GHOST_OPACITY)
       : null,
     calls: s.counters !== null && isDrawn(s.counters.appear)
       ? shown(merge(countBadge({ ...CALLS_COUNTER.badge, text: String(s.counters.calls), textSize: TEXT_SIZE.strong }), counterLabel(CALLS_COUNTER.label.x, words.calls, "end")), s.counters.appear, ANCHORS.calls)

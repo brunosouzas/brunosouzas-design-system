@@ -58,11 +58,17 @@ export type TopologyTimeline = TakesTimeline & {
 /**
  * Builds the timeline from design §4's formulas. `travel` and `fade` default to
  * the tokens; a test passes another travel to prove the comparison with the
- * beat table catches it ("Travel token changed").
+ * beat table catches it ("Travel token changed"). Only the legs, counters,
+ * window and dropped-square fall follow `travel` and `fade`; the arrow, tag,
+ * light and state frames are design §4.2's beat-table frames written as they
+ * are, so another `travel` gives a timeline whose tags no longer meet its
+ * arrivals. That is what the test wants to see fail.
  */
 export const buildTimeline = (T: number = tokens.motion.travel, F: number = tokens.motion.fade): TopologyTimeline => {
   // ---------------------------------------------------------------- calls (design §4.2)
 
+  /** The `400` business error's square pops beside the window at its tag (design §4.6). */
+  const DROPPED_AT = 1566;
   const legs = (...entries: [Route, number][]) => entries.map(([route, from]) => ({ route, from }));
 
   /** Take 1: request k (1–20) leaves as a group of three attempts j (0–2), two frames apart. */
@@ -187,7 +193,7 @@ export const buildTimeline = (T: number = tokens.motion.travel, F: number = toke
     [key("rewind-mark", 450), 450], [key("badge-2", 500), 500], [key("window", 554), 554],
     ...STATES.map((s) => [key(`state-${s.state}`, s.at), s.at]),
     [key("clock", 820), 820], [key("ghost", 912), 912],
-    [key("message", 844), 844], [key("message", 1062), 1062], [key("dropped", 1566), 1566],
+    [key("message", 844), 844], [key("message", 1062), 1062], [key("dropped", DROPPED_AT), DROPPED_AT],
     ...allTagChanges.flatMap((change) => ("text" in change ? [[key(`tag-${change.place}`, change.at), change.at]] : [])),
     ...WINDOW.flatMap((event) => ("result" in event && event.result !== "drop" ? [[key("square", event.at), event.at]] : [])),
   ] as [string, number][]);
@@ -223,7 +229,8 @@ export const buildTimeline = (T: number = tokens.motion.travel, F: number = toke
     states: sorted(STATES.map((s) => s.at)),
     counters: sorted([...COUNTERS.take1.requests, ...COUNTERS.take1.calls, ...COUNTERS.take2.requests, ...COUNTERS.take2.calls].map((c) => c.at)),
     window: sorted(WINDOW.flatMap((event) => [event.at, event.at + F])),
-    dropped: [1576, 1586],
+    // The dropped square holds for one fade, then falls for one (design §4.6).
+    dropped: [DROPPED_AT + F, DROPPED_AT + 2 * F],
     clock: sorted(CLOCK.flatMap((run) => [run.at, run.emptyAt])),
     badge: sorted(BADGE.map((b) => b.at)),
     drop: [DROP.from, DROP.to],

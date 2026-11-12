@@ -20,6 +20,8 @@ export const TEXT_SIZE = { word: 33, strong: 36 } as const;
 export const CHECKOUT = { x: 24, y: 164, width: 180, height: 150 } as const;
 export const CHECKOUT_LABEL = { cx: 114, cy: 146, width: 170, height: 50 } as const;
 export const PAYMENT = { x: 756, ys: [164, 214, 264], width: 180 } as const;
+/** The height `serverStack` draws one unit at. */
+export const PAYMENT_UNIT_HEIGHT = 40;
 /** Where `serverStack` draws each unit's light (x + w − 24, y + 20), radius 6. */
 export const PAYMENT_LIGHTS: readonly Point[] = PAYMENT.ys.map((y) => ({ x: PAYMENT.x + PAYMENT.width - 24, y: y + 20 }));
 export const PAYMENT_LABEL = { cx: 846, cy: 146, width: 160, height: 50 } as const;
@@ -32,6 +34,8 @@ export const REWIND_MARK = { x: 826, y: 28, size: 48 } as const;
 export const CLOCK = { cx: 330, cy: 70, size: 56 } as const;
 export const CLOCK_LABEL = { x: 372, y: 82 } as const;
 export const TAGS = { y: 362, x: { direct: 480, left: 257, right: 703 } satisfies Record<TagPlace, number> } as const;
+/** How far above its baseline a tag's pop-in anchor sits (the middle of the words' x-height). */
+export const TAG_POP_LIFT = 9;
 /** Backdrop width of each tag text (design §6.1). */
 export const TAG_WIDTHS: Readonly<Record<TagText, number>> = { timeout: 262, open: 420, ok: 84, business: 84 };
 export const MESSAGE = { x: 24, y: 412 } as const;
@@ -61,9 +65,9 @@ export const DROP_PATH: readonly [Point, Point] = [{ x: 480, y: -60 }, { x: 480,
 /** Pop-in anchors (design §2.6) of the elements popped inside a scaled group: their centres. */
 export const ANCHORS = {
   checkout: { x: CHECKOUT.x + CHECKOUT.width / 2, y: CHECKOUT.y + CHECKOUT.height / 2 },
-  checkoutLabel: { x: CHECKOUT_LABEL.cx, y: CHECKOUT_LABEL.cy },
-  payment: { x: PAYMENT.x + PAYMENT.width / 2, y: 239 },
-  paymentLabel: { x: PAYMENT_LABEL.cx, y: PAYMENT_LABEL.cy },
+  payment: { x: PAYMENT.x + PAYMENT.width / 2, y: (PAYMENT.ys[0] + PAYMENT.ys[2] + PAYMENT_UNIT_HEIGHT) / 2 },
+  /** A tag pops about the middle of its words: 9 units above the baseline, about a third of the 33-unit text. */
+  tag: (place: TagPlace): Point => ({ x: TAGS.x[place], y: TAGS.y - TAG_POP_LIFT }),
   retry: { x: RETRY.cx, y: RETRY.cy },
   badge: { x: BADGE.cx, y: BADGE.cy },
   rewindMark: { x: REWIND_MARK.x + REWIND_MARK.size / 2, y: REWIND_MARK.y + REWIND_MARK.size / 2 },
