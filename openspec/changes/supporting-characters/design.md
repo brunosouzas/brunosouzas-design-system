@@ -7,7 +7,7 @@ See `proposal.md` for the why. The drawings come from the approved concept C she
 | Option | Fit | Risk to the pinned cast |
 |---|---|---|
 | A. Add Balão and Chaves to `brand-cast.ts` | one file for the cast | every edit sits next to the five pinned drawings |
-| B. A new module, `src/pieces/supporting-cast.ts` (chosen) | the supporting cast apart from the pillar cast, as ADR 0007 tells them apart | low: it imports `faceAt`, `peak`, `CAST_EXPRESSIONS`, `CAST_VIEWS` and the skin; the one edit in `brand-cast.ts` is the held sheet taking a position (below), pinned by §7 |
+| B. A new module, `src/pieces/supporting-cast.ts` (chosen) | the supporting cast apart from the pillar cast, as ADR 0007 tells them apart | low: it imports `faceAt`, `peak`, `CAST_EXPRESSIONS`, `CAST_VIEWS` and the skin; the two edits in `brand-cast.ts` extract the held sheet (taking a position) and Visor's pointing hand (`pointingHand(s, x, y, angle)`) as shared functions, Visor calling them with its own values, pinned by §7 |
 | C. A generic "glyph character" piece with a `glyph` parameter | one piece for both | two different bodies, actions and relations behind one schema; an enum of two |
 
 `keyboard` lives in a new `src/pieces/keyboard.ts`, a prop module beside `paper.ts` (which holds `sheet` and `pill`). All three join `PIECES` last, in the order `balao`, `chaves`, `keyboard`, so every existing name keeps its place in `PIECE_NAMES` and in the cover command's messages.
@@ -16,7 +16,7 @@ See `proposal.md` for the why. The drawings come from the approved concept C she
 
 **Exported names (new).** From the root entry and `library.ts`: `balao`, `chaves`, `keyboard`; the types `BalaoParams`, `ChavesParams`, `KeyboardParams` and `HeldSheet` (the held-sheet object; `VisorHeldSheet` stays as its alias); `CAST_FACINGS` (`right`, `left`) and `CastFacing`, which `balao` and `chaves` use (`VISOR_FACINGS` and `VisorFacing` stay, same values).
 
-Shared with the cast, unchanged: the skin (`skin(surface)`: body `color.white`, outline `brand.light.text` / `brand.dark.textMuted`, visor `brand.light.text` / `brand.dark.bg`, eyes `cast.eyes`, accent `brand.<theme>.accent`; ADR 0006 and 0009), `outlined(s, width)`, the screen face `faceAt(x, y, w, h, s, expression)` (symmetric in all four expressions, so mirroring changes no meaning), the hood tip `peak(s, cx, top, w, dip)`, Mira's legs (two strokes of width 8 with round caps and two foot pills 20 × 7, radius 3.5, filled with the outline), Visor's hands (circles of radius 15, `outlined(s)`) and Visor's pointing hand (a finger `rect` −6, −30, 12 × 26, radius 6, `outlined(s, 4.5)`, and the palm circle, in one group with `translate` and `rotate`).
+Shared with the cast, unchanged in what they draw: the skin (`skin(surface)`: body `color.white`, outline `brand.light.text` / `brand.dark.textMuted`, visor `brand.light.text` / `brand.dark.bg`, eyes `cast.eyes`, accent `brand.<theme>.accent`; ADR 0006 and 0009), `outlined(s, width)`, the screen face `faceAt(x, y, w, h, s, expression)` (symmetric in all four expressions, so mirroring changes no meaning), the hood tip `peak(s, cx, top, w, dip)`, Mira's legs (two strokes of width 8 with round caps and two foot pills 20 × 7, radius 3.5, filled with the outline), Visor's hands (circles of radius 15, `outlined(s)`) and Visor's pointing hand (a finger `rect` −6, −30, 12 × 26, radius 6, `outlined(s, 4.5)`, and the palm circle, in one group with `translate` and `rotate`).
 
 The held sheet reuses Visor's: its schema (`width` 80 to 300, `height` 80 to 400, 1 to 8 rows, `top`, `step`, `label`) and its drawing (the `sheet` and `pill` pieces in one `data-held` `sheet` group with the skin's outline at `outline.block`, the marks group stroked `color.ink`, the words in the text group). Visor's private `heldSheet(held, s, facing)` becomes a shared function that takes the page's position; Visor calls it with its own position, so its trees do not change (proved by the 0.12.0 scenarios of "Visor holds a sheet" and by the frozen cast).
 
@@ -53,13 +53,13 @@ The chosen contour (new; confirmed on the 24 px row of the model sheet at gate 3
 |---|---|
 | Legs | path `M-16 -30 L-26 0 M16 -30 L26 0`, feet at x −36 and 16, y −6 (new: hips at −30, not the prototype's −34, to meet the new body's bottom at −26) |
 | Body | path `M-30 -150 H30 Q54 -150 54 -128 Q54 -112 44 -108 Q60 -96 90 -88 Q60 -80 44 -68 Q54 -64 54 -48 Q54 -26 30 -26 H-30 Q-54 -26 -54 -48 Q-54 -64 -44 -68 Q-60 -80 -90 -88 Q-60 -96 -44 -108 Q-54 -112 -54 -128 Q-54 -150 -30 -150 Z`, `outlined(s)` |
-| Face | `faceAt(-34, -136, 68, 38, s, expression)` (new: 8 higher than the prototype's −128, as the body's top moved from −146 to −150) |
-| Cursor | `rect` (−9, −80), 18 × 8, radius 2, the skin's accent (new: 8 higher than −72, under the face and above the lower waist notch) |
+| Face | `faceAt(-34, -132, 68, 38, s, expression)` (new: 4 higher than the prototype's −128, as the body's top moved from −146 to −150; the hood tip dips 6 into the visor, as in the prototype) |
+| Cursor | `rect` (−9, −76), 18 × 8, radius 2, the skin's accent (new: 4 higher than −72, 18 under the face as in the prototype, ending at the lower waist notch's y −68) |
 | Hood tip | `peak(s, 0, -150, 28, 24)` (new: on the new top edge, −150) |
 | Hands | back (−100, −50), front (100, −50); typing, front (120, −80), over the keyboard's top edge; holding a sheet, front (112, −92), over the page's edge; pointing, Visor's pointing hand at `translate(104,-128) rotate(55)`, reaching up and forward |
-| Keyboard | `keyboard({ x: 98, y: -74, width: 150, surface })` in a `g` with `data-held` `keyboard`; facing left at x −248 |
+| Keyboard | the children of `keyboard({ x: 98, y: -74, width: 150, surface })`'s root group (its slab and its `stroke: none` key group, without the `data-piece` root) in a `g` with `data-held` `keyboard`; facing left at x −248 |
 | Held sheet | (new: the prototype's page edge was 112, under the hand's centre) page at x 118 and y −40 − `height` (its near edge under the front hand, its bottom 40 above the ground); label pill centred on the top edge; facing left at x −118 − `width` |
-| Back view | legs, body, the hood tip's back (`M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z`), the hands at rest or pointing; no face, no cursor |
+| Back view | legs, body, the hood tip's back (`M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z`, accent, outline 5, round joins, as Visor's back), the hands at rest or pointing; no face, no cursor |
 
 The held page's near edge at 118 puts the front hand (x 112, radius 15, outline 8, so 19 with its outline) 13 units over the page, and 2.5 units clear of a row's lead mark (which starts 15.5 inside the edge with its outline), as Visor's hand is at its edge of 98. The page's bottom at −40 keeps the hand's y (−92) inside the smallest page (−120 to −40).
 
@@ -85,6 +85,8 @@ One input, one outcome (REQ-5): the schema's problems come first, as for every p
 1. Two actions: `balao` names `holdsStamp` ("Balão does one action at a time"); `chaves` names the second of `types`, `points`, `holdsSheet` that is on ("Chaves does one action at a time").
 2. A prop from behind: `holdsStamp`, `types` or `holdsSheet` with `view: "back"` ("Balão holds a stamp only in the front view", "Chaves types only in the front view", "Chaves holds a sheet only in the front view").
 
+Balão "answers" (the sheet's answer frame) has no action of its own: a scene places a `sheet` beside the front hand, the prototype's page at (112, −166), 110 × 132.
+
 Rejected: drawing the second action anyway, or the prop's front from behind: both put two hands on one arm or a prop no sheet designed.
 
 ## 6. The amendment of ADR 0007
@@ -102,7 +104,9 @@ Appended to `docs/adr/0007-mira-and-the-pillar-cast.md`, with a status line "Ame
 >
 > Both are supporting characters, not pillar characters: they never lead a piece about a pillar. Both wear the parent-brand hood tip, as every parent-brand character except Sinal, and share the one skin.
 >
-> The per-role mapping changes in two rows: **Dev** → Chaves; **Requester/caller** → Balão when the requester acts (asks, answers, approves); `color.state.caller` stays the state colour of the caller on message and flow elements. **AI agent** stays Visor; **Architect** and **Data** as an actor stay unresolved.
+> The per-role mapping changes in two rows: **Dev** → Chaves; **Requester/caller** → Balão when the requester acts (asks and approves; answering is a sheet beside it); `color.state.caller` stays the state colour of the caller on message and flow elements. **AI agent** stays Visor; **Architect** and **Data** as an actor stay unresolved.
+>
+> The seven-role pieces retired in 0.7.0 (Dev, Architect, Data, Requester as characters) stay retired: Balão and Chaves are new characters with their own sheet, not their return. The one shared skin now covers seven characters.
 
 ## 7. Proving existing outputs unchanged
 
@@ -110,9 +114,13 @@ The five cast pieces are pinned by `test/fixtures/cast-0.11.0.json` (138 calls, 
 
 ## 8. The model sheet in `docs/`
 
-The concept sheet is exploration and stays in the vault (art-direction DIV-2). The repository gets the model sheet the change makes true (SHEET-1), drawn by a script from `src/pieces/` only: `docs/spikes/2026-11-12-supporting-characters/model-sheet.ts` writes `model-sheet.svg` (fonts embedded, `<title>` and `<desc>` in English, STY-8) and PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008), each under 200 KB: per character the front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale on light and dark (CAST-5); the row at 48 px and 24 px tall. The side view of SHEET-1 does not exist in this cast (front and back since the identity studio's round 7b).
+The concept sheet is exploration and stays in the vault (art-direction DIV-2). The repository gets the model sheet the change makes true (SHEET-1), drawn by a script from `src/pieces/` only: `docs/spikes/2026-11-12-supporting-characters/model-sheet.ts` writes `model-sheet.svg` (fonts embedded; STY-8, English: `<title>` "Balão and Chaves: model sheet" and `<desc>` "The supporting characters of the brunosouzas.com cast, Balão (the requester and approver) and Chaves (the developer): front and back, expressions, actions, size against the cast, and at 48 and 24 px.") and PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008), each under 200 KB: per character the front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale on light and dark (CAST-5); the row at 48 px and 24 px tall. The side view of SHEET-1 does not exist in this cast (front and back since the identity studio's round 7b).
 
-Emote spots (new, for the README and the sheet), where the approved sheet puts them: on the front side, above and beside the head (its "waiting + doubt" and "failed + problem" panels). In local units facing right, the emote's centre is (116, −200) for both, at `scale` equal to the character's: an emote is about 80 units across at scale 1 (radius 40, observed in `emote.ts`'s `doubt` and `worked`), beside a head about 124 (Balão) and 108 (Chaves) wide, "about the head's size" (CAST-3). It clears the body, the hood tip, the front hand at rest and the pointing hand, and Balão's held stamp. In a scene the centre is (`x` + 116·`scale`, `y` − 200·`scale`), with −116 facing left. A sheet Chaves holds that is taller than 120 reaches under the spot; a scene that shows an emote then moves it or the sheet, on its stills (CAST-3). The sheet drew its emotes smaller than the head; G1 question 6 asks which size wins. The five pillar characters get no documented spot in this change.
+Emote spots (new; spec "Emote spot beside the head", for the README and the sheet), where the approved sheet puts them: on the front side, above and beside the head (its "waiting + doubt" and "failed + problem" panels). In local units facing right, the emote's centre is (116, −200) for both, at `scale` equal to the character's: an emote is about 80 units across at scale 1 (radius 40, observed in `emote.ts`'s `doubt` and `worked`), beside a head about 124 (Balão) and 108 (Chaves) wide, "about the head's size" (CAST-3). It clears the body, the hood tip, the front hand at rest and the pointing hand, and Balão's held stamp. In a scene the centre is (`x` + 116·`scale`, `y` − 200·`scale`), with −116 facing left. A sheet Chaves holds 114 or taller (with its outline) reaches the spot; a scene that shows an emote then moves it or the sheet, on its stills (CAST-3). The sheet drew its emotes smaller than the head; G1 question 6 asks which size wins. The five pillar characters get no documented spot in this change.
+
+## 9. If gate 1 chooses the one-actor helper (question 9)
+
+Not in the spec as written. If the owner picks the helper, the change gains a `motion-components` delta before any code: a pure `actionOverlaps(spans)` in `src/brand/cast-motion.ts`, where a span is `{ actor, from, to }` in frames (inclusive), returning the pairs of spans of different actors whose frames overlap, in input order; touching spans (`to` + 1 = `from`) do not overlap; an empty list returns none; a non-finite or reversed span throws a `RangeError` naming its index. Its scenarios (overlap, touching, empty, bad span) and a task naming `test/brand/cast-motion.test.ts` would be added with it.
 
 ## Risks / trade-offs
 

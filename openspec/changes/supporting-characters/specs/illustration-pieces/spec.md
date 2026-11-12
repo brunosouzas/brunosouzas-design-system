@@ -1,12 +1,12 @@
 ## ADDED Requirements
 
 ### Requirement: Balão
-The package SHALL export `balao`, the requester and approver (ADR 0007, amended 2026-11-12): a speech balloon on Mira's legs, its tail low on the front side pointing out, the screen face, a request line on its belly and the hood tip, drawn as in design §2 with the shared skin. `speaks: true` fills the request line with the skin's accent instead of `illustration.textBar`. The back view draws no face and no request line.
+The package SHALL export `balao`, the requester and approver (ADR 0007, amended 2026-11-12): a speech balloon on Mira's legs, its tail low on the front side pointing out, the screen face, a request line on its belly and the hood tip, drawn as in `supporting-characters` design §2 with the shared skin. `speaks: true` fills the request line with the skin's accent instead of `illustration.textBar`. The back view draws no face and no request line.
 
 #### Scenario: Balão at rest
 - **GIVEN** `balao({ x: 100, y: 300 })`
 - **WHEN** it is drawn
-- **THEN** its `body` is one `g` with `data-piece` `balao`, `transform` `translate(100 300) scale(1)` and `stroke` `none`, whose only child is a `g` with no attribute holding, in order, the legs, the body path of design §2 filled `#FFFFFF` and stroked `#121212` at width 8, the face, the request line `rect` (−30, −88, 60 × 9, radius 4.5) filled `#D7D1C5`, the hood tip filled `#E04E17`, and two hand circles of radius 15 at (−86, −100) and (92, −132); its `text` is empty
+- **THEN** its `body` is one `g` with `data-piece` `balao`, `transform` `translate(100 300) scale(1)` and `stroke` `none`, whose only child is a `g` with no attribute holding, in order, the legs, the body path of `supporting-characters` design §2 filled `#FFFFFF` and stroked `#121212` at width 8, the face, the request line `rect` (−30, −88, 60 × 9, radius 4.5) filled `#D7D1C5`, the hood tip filled `#E04E17`, and two hand circles of radius 15 at (−86, −100) and (92, −132); its `text` is empty
 
 #### Scenario: The tail points at the listener
 - **GIVEN** `balao({ x: 0, y: 0 })`
@@ -47,17 +47,17 @@ The package SHALL export `balao`, the requester and approver (ADR 0007, amended 
 - **THEN** they throw naming `holdsStamp.word`, `holdsStamp.word`, `holdsStamp.fill` (unknown), `holdsStamp`, `scale`, `facing` (listing `right, left`), `colour` (unknown), and `holdsStamp.word` (the schema before the relation)
 
 ### Requirement: Chaves
-The package SHALL export `chaves`, the developer (ADR 0007, amended 2026-11-12): a `{ }` body on Mira's legs, the screen face, a cursor in the skin's accent under it and the hood tip, drawn as in design §3 with the shared skin. Its actions: `types` draws the `keyboard` under the front hand, `points` swaps the front hand for Visor's pointing hand, `holdsSheet` holds a sheet out in the front hand. The back view draws no face and no cursor.
+The package SHALL export `chaves`, the developer (ADR 0007, amended 2026-11-12): a `{ }` body on Mira's legs, the screen face, a cursor in the skin's accent under it and the hood tip, drawn as in `supporting-characters` design §3 with the shared skin. Its actions: `types` draws the `keyboard` under the front hand, `points` swaps the front hand for Visor's pointing hand, `holdsSheet` holds a sheet out in the front hand. The back view draws no face and no cursor.
 
 #### Scenario: Chaves at rest
 - **GIVEN** `chaves({ x: 100, y: 300 })`
 - **WHEN** it is drawn
-- **THEN** its `body` is one `g` with `data-piece` `chaves`, `transform` `translate(100 300) scale(1)` and `stroke` `none`, whose only child is a `g` with no attribute holding, in order, the legs, the body path of design §3 filled `#FFFFFF` and stroked `#121212` at width 8, the face, the cursor `rect` (−9, −80, 18 × 8, radius 2) filled `#E04E17`, the hood tip, and two hand circles of radius 15 at (−100, −50) and (100, −50); its `text` is empty
+- **THEN** its `body` is one `g` with `data-piece` `chaves`, `transform` `translate(100 300) scale(1)` and `stroke` `none`, whose only child is a `g` with no attribute holding, in order, the legs, the body path of `supporting-characters` design §3 filled `#FFFFFF` and stroked `#121212` at width 8, the face, the cursor `rect` (−9, −76, 18 × 8, radius 2) filled `#E04E17`, the hood tip, and two hand circles of radius 15 at (−100, −50) and (100, −50); its `text` is empty
 
 #### Scenario: Chaves types
 - **GIVEN** `chaves({ x: 0, y: 0, types: true })` on light and on dark
 - **WHEN** they are drawn
-- **THEN** the root group's first child is a `g` whose only attribute is `data-held` `keyboard` and whose children deep-equal `keyboard({ x: 98, y: -74, width: 150, surface }).body` for that surface, the second is the body group with its front hand at (120, −80), and the `text` is empty
+- **THEN** the root group's first child is a `g` whose only attribute is `data-held` `keyboard` and whose children deep-equal the children of `keyboard({ x: 98, y: -74, width: 150, surface }).body[0]` for that surface (no `data-piece` inside Chaves but its own), the second is the body group with its front hand at (120, −80), and the `text` is empty
 
 #### Scenario: Chaves points
 - **GIVEN** `chaves({ x: 0, y: 0, points: true })`
@@ -72,10 +72,10 @@ The package SHALL export `chaves`, the developer (ADR 0007, amended 2026-11-12):
 #### Scenario: Chaves from behind
 - **GIVEN** `chaves` with `view: "back"`, once for each `expression`, and once with `points: true`
 - **WHEN** they are drawn
-- **THEN** the four trees without `points` are identical and hold no face and no cursor, and draw the hood tip's back (`M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z`); the call with `points` holds the pointing hand as in "Chaves points"
+- **THEN** the four trees without `points` are identical and hold no face and no cursor, and draw the hood tip's back (`M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z`, filled `#E04E17`, stroked `#121212` at width 5, round joins); the call with `points` holds the pointing hand as in "Chaves points"
 
 ### Requirement: Chaves's silhouette
-Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of design §3, whose two brace points at mid height (y −88) reach x ±90, 36 units outside its corners (x ±54) and 46 units outside its waist (x ±44), each point a corner between two curves.
+Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of `supporting-characters` design §3, whose two brace points at mid height (y −88) reach x ±90, 36 units outside its corners (x ±54) and 46 units outside its waist (x ±44), each point a corner between two curves.
 
 #### Scenario: Brace points and waist
 - **GIVEN** `chaves({ x: 0, y: 0 })`
@@ -85,7 +85,7 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 #### Scenario: Reads at 24 px (local)
 - **GIVEN** the model sheet's small-size row, rendered in Chrome through an `<img>` with Chaves about 24 px and 48 px tall on light and dark
 - **WHEN** the owner looks at it at gate 3
-- **THEN** he accepts the silhouette as a brace, not a pillow; otherwise the path, its scenario and design §3 change together
+- **THEN** he accepts the silhouette as a brace, not a pillow; otherwise the path, its scenario and `supporting-characters` design §3 change together
 
 ### Requirement: Chaves parameters
 `chaves` SHALL check `x`, `y`, `surface`, `scale` (0.25 to 4), `expression` and `view` as the cast pieces do, `facing` (`right`, `left`), `types` and `points` (booleans) and `holdsSheet` (Visor's held-sheet object), throwing a `RangeError` naming the first problem. After the schema, at most one relation problem, the first of: two actions on (naming the second of `types`, `points`, `holdsSheet` that is on), then `types` or `holdsSheet` with `view: "back"` (naming it).
@@ -101,7 +101,7 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** they throw `chaves: types: Chaves types only in the front view` and `chaves: holdsSheet: Chaves holds a sheet only in the front view`
 
 #### Scenario: Bad held sheet and parameters
-- **GIVEN** `holdsSheet` with `width: 79`, with `rows: []`, with an extra `fill`, `types: "yes"`, `facing: "up"`, `scale: 0.2`, and `types: true` with `points: true` and `holdsSheet` with `width: 79`
+- **GIVEN** the valid held sheet of "Chaves hands a sheet over" with `width: 79`, the same with `rows: []`, the same with an extra `fill`, then `types: "yes"`, `facing: "up"`, `scale: 0.2`, and `types: true` with `points: true` and that sheet with `width: 79`
 - **WHEN** each is called
 - **THEN** they throw naming `holdsSheet.width`, `holdsSheet.rows`, `holdsSheet.fill` (unknown), `types`, `facing`, `scale`, and `holdsSheet.width` (the schema before the relations)
 
@@ -111,10 +111,10 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** the trees are deep-equal, and so are `balao({ x: 0, y: 0 })` and `balao({ x: 0, y: 0, speaks: false, facing: "right" })`
 
 ### Requirement: Supporting characters face left or right
-`balao` and `chaves` SHALL take `facing`, `right` (the default) or `left`. Facing left, the body group carries `transform` `scale(-1,1)` and the same children as facing right, so the tail and the front hand go left; a held stamp, keyboard or sheet sits outside it at the mirrored position (design §2, §3), and the `text` group carries the root's transform with no negative scale. No fill, stroke colour or stroke width changes.
+`balao` and `chaves` SHALL take `facing`, `right` (the default) or `left`. Facing left, the body group carries `transform` `scale(-1,1)` and the same children as facing right, so the tail and the front hand go left; a held stamp, keyboard or sheet sits outside it at the mirrored position (`supporting-characters` design §2, §3), and the `text` group carries the root's transform with no negative scale. No fill, stroke colour or stroke width changes.
 
 #### Scenario: Mirror of the default
-- **GIVEN** `balao({ x: 100, y: 300 })` and `balao({ x: 100, y: 300, facing: "left" })`, and the same two calls of `chaves`
+- **GIVEN** `balao({ x: 100, y: 300 })` and `balao({ x: 100, y: 300, facing: "left" })`, the same two calls with `view: "back"`, and the same four calls of `chaves`
 - **WHEN** they are drawn
 - **THEN** for each piece both root groups have the same attributes, and the second's only child is a `g` whose only attribute is `transform` `scale(-1,1)` and whose children deep-equal the children of the first's only child
 
@@ -129,7 +129,7 @@ Chaves's body SHALL read as a brace at 24 px tall: its contour is the path of de
 - **THEN** both lists are equal, and the only `transform` that differs is the body group's `scale(-1,1)`
 
 ### Requirement: Keyboard
-The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base (design §4): one `g` with `data-piece` `keyboard` holding a `rect` at (`x`, `y`), `width` × 16, radius 6, filled `color.white`, stroked at `outline.block` (ink on light, `surface.dark.muted` on dark), then a `g` with `stroke` `none` holding floor((`width` − 44) / 21) + 1 keys, 12 × 4, radius 2, filled `color.ink`, at (`x` + 16 + 21·i, `y` + 6). No `text`.
+The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base (`supporting-characters` design §4): one `g` with `data-piece` `keyboard` holding a `rect` at (`x`, `y`), `width` × 16, radius 6, filled `color.white`, stroked at `outline.block` (ink on light, `surface.dark.muted` on dark), then a `g` with `stroke` `none` holding floor((`width` − 44) / 21) + 1 keys, 12 × 4, radius 2, filled `color.ink`, at (`x` + 16 + 21·i, `y` + 6). No `text`.
 
 #### Scenario: Default keyboard
 - **GIVEN** `keyboard({ x: 0, y: 0 })`
@@ -172,23 +172,41 @@ The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base
 - **WHEN** they are compared
 - **THEN** each second tree's root group carries `scale(0.25)` in its transform and is otherwise the same tree as the first
 
-#### Scenario: Posed about the ground point
-- **GIVEN** `pose(balao({ x: 100, y: 300 }).body[0], { x: 100, y: 300, tilt: 6, squash: 1.1, hop: 0 })`, and the same for `chaves`
-- **WHEN** the point (100, 300) is mapped through the pose group's transform
-- **THEN** it maps to (100, 300) within 0.001: the feet stay on the ground point, as for the five cast pieces
+#### Scenario: Feet on the ground point
+- **GIVEN** `balao({ x: 0, y: 0 })` and `chaves({ x: 0, y: 0 })`
+- **WHEN** their legs path and foot pills are read
+- **THEN** the legs end at (±28, 0) for Balão and (±26, 0) for Chaves, the two foot pills are `rect`s 20 × 7 with `y` −6, symmetric about x 0, and no other shape reaches below y 1, so the anchor (`x`, `y`) is the centre of the ground line as for Mira; posed with `pose` about (`x`, `y`), the feet's centre stays there
 
 #### Scenario: Schemas list the shared and own parameters
 - **GIVEN** `PIECES.balao.schema` and `PIECES.chaves.schema`
 - **WHEN** the test reads their keys
 - **THEN** both hold `x`, `y`, `surface`, `scale`, `expression`, `view` and `facing`; `balao` adds exactly `speaks` and `holdsStamp`, `chaves` exactly `types`, `points` and `holdsSheet`; neither has a colour parameter
 
+### Requirement: Emote spot beside the head
+For `balao` and `chaves` the emote spot SHALL be (116, −200) in local units facing right and (−116, −200) facing left, for an `emote` at the character's `scale` (CAST-3): a disc of radius 44 (the emote's 40 and its outline) there clears every shape the piece draws at rest, pointing, typing or holding the stamp, in both facings. A held sheet 114 or taller reaches it.
+
+#### Scenario: Spot clear of the body and props
+- **GIVEN** `balao` at rest and holding a stamp, `chaves` at rest, pointing and typing, each facing right and left at `x` 0, `y` 0
+- **WHEN** the bounding box of every shape (with half its stroke width, the pointing hand's rotation applied) is compared with the disc of radius 44 at the spot
+- **THEN** none of them overlaps the disc
+
+#### Scenario: A tall held sheet reaches the spot
+- **GIVEN** `chaves` holding the sheet of "Chaves hands a sheet over" (height 160), and the same with height 100
+- **WHEN** the page's box is compared with the disc
+- **THEN** the first overlaps it and the second does not; the README says a scene moves the emote or the sheet then
+
 ### Requirement: Existing outputs unchanged by the supporting cast
-Adding the supporting cast SHALL change no existing output: every file in `test/fixtures/` stays as it is, and every call and golden it pins (the cast of 0.11.0 included) draws its pinned tree and bytes; Visor's 0.12.0 scenarios and the scenes' ring radii hold unchanged. Moving `stamp` to its own module changes nothing it draws.
+Adding the supporting cast SHALL change no existing output: every existing file in `test/fixtures/` stays as it is, and every call and golden it pins (the cast of 0.11.0 included) draws its pinned tree and bytes; Visor's 0.12.0 scenarios and the scenes' ring radii hold unchanged. `stamp`, moved to its own module, draws every call of a new fixture written from 0.12.0 before the move.
 
 #### Scenario: Frozen outputs after the change
 - **GIVEN** the branch with the three new pieces
 - **WHEN** `test/pieces/frozen.test.ts`, `test/brand/stage-rings.test.ts`, the cover goldens of `test/scripts/cover.test.ts` and the Visor tests of `test/pieces/brand-pieces.test.ts` run
-- **THEN** they pass, and `git diff origin/main --stat -- test/fixtures` lists no file
+- **THEN** they pass, and `git diff origin/main --stat -- test/fixtures` lists only the new `stamp-0.12.0.json`
+
+#### Scenario: Stamp calls of 0.12.0 unchanged
+- **GIVEN** `test/fixtures/stamp-0.12.0.json`, written from `655525d` before the move: `stamp` round and `rect`, at the default `r` and at 24, with the default and a set `rotate` (0) and `fill` (`illustration.accent`), word `GO` (8 calls)
+- **WHEN** each call is made with `stamp` from its new module
+- **THEN** its tree is deep-equal to the pinned tree and its `toSvg` bytes are equal
 
 ## MODIFIED Requirements
 
