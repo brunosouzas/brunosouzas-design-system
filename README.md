@@ -25,7 +25,7 @@ The visual identity of [brunosouzas.com](https://brunosouzas.com): design tokens
 
 ## Status
 
-Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). Mira, the four pillar characters, the bank objects and the emotes are pieces too ([ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)); new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). Since 0.7.0 every piece follows one grammar ([ADR 0009](docs/adr/0009-one-piece-grammar.md)) and every written SVG carries its Source faces ([ADR 0008](docs/adr/0008-type-inside-the-image.md)); see [Upgrading to 0.7.0](#upgrading-to-070). 0.8.0 maps the site palette onto the brand roles and adds the category badges; see [Upgrading to 0.8.0](#upgrading-to-080). 0.8.1 adds stackledger's accent, retunes the city backdrop to the v2 neutrals and redraws `ledgerMark` as a white page; see [Upgrading to 0.8.1](#upgrading-to-081).
+Early. The first change of the [roadmap](docs/roadmap.md) is implemented: the token source and its CSS, TypeScript and JSON exports, the motion components, and the circuit-breaker state machine as the first catalogue scene (16:9 and 4:5, Portuguese and English), with commands to render its stills and videos. The first variety scene, `publish-subscribe`, is implemented with independent message copies, Publish acceptance, two ACKs and a local invoice NACK. Its owner stills/video approval is pending; implementation is not visual approval. The illustration pieces (roadmap item 3), the metro and diagram pieces (item 6) stackledger's map markers, zones and icons (AB#167, 0.3.0) and the body diagram pieces (AB#141, 0.3.2) are implemented: the static drawing library that covers, banners, diagrams and scenes share, with a command that builds a blog cover from a JSON spec. The published covers are not ported to it yet (item 5). Mira, the four pillar characters, the two supporting characters (Balão and Chaves, 0.13.0), the bank objects and the emotes are pieces too ([ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)); new videos are language-neutral by default ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). Since 0.7.0 every piece follows one grammar ([ADR 0009](docs/adr/0009-one-piece-grammar.md)) and every written SVG carries its Source faces ([ADR 0008](docs/adr/0008-type-inside-the-image.md)); see [Upgrading to 0.7.0](#upgrading-to-070). 0.8.0 maps the site palette onto the brand roles and adds the category badges; see [Upgrading to 0.8.0](#upgrading-to-080). 0.8.1 adds stackledger's accent, retunes the city backdrop to the v2 neutrals and redraws `ledgerMark` as a white page; see [Upgrading to 0.8.1](#upgrading-to-081).
 
 ## What it is
 
@@ -34,7 +34,7 @@ The blog's articles explain how systems behave: a circuit breaker opening, a pip
 - **Design tokens, one source.** Colours with fixed meanings (green healthy, orange blocked, yellow transitional, red the failure path, under `color.state.*`), the brand palette, the Source type stacks (Source Sans 3, Source Code Pro, Source Serif 4), the thick ink outline, radii, and motion timings. Exported as CSS variables for the site, TypeScript for the animations and JSON for anything else (the SVG generators of the static diagrams).
 - **Motion components.** React components for [Remotion](https://www.remotion.dev): an ink block, a pill label, an arrow that draws itself, a token travelling along a transition, call-result squares, a countdown ring. Flow primitives in `src/brand/flow-components.tsx` add a white hexagonal `Exchange`, rail-ended `Queue`, white-tab `TaggedContainer` and persistent `PositionedToken` (stationary or path-positioned). Copy identities, splits and ACK/NACK rules belong to scenes, not to a generic message engine.
 - **Illustration pieces.** The objects the blog's covers and diagrams draw again and again (pill label, sheet, code panel, robot, server stack, gear, road, the 26 EIP icons and more), each a pure TypeScript function that returns an SVG node tree from the tokens. The same tree becomes an SVG file for a cover and React elements for a scene, and a scene animates a piece by recomputing its parameters every frame. See [Illustration pieces and covers](#illustration-pieces-and-covers).
-- **A cast and emotes.** Mira and four pillar characters (Visor, Drone, Kiu, Sinal), six bank objects for scenery, and eight reaction symbols with a fixed meaning, so a video can tell its story without words. See [The cast and the emotes](#the-cast-and-the-emotes).
+- **A cast and emotes.** Mira, four pillar characters (Visor, Drone, Kiu, Sinal) and two supporting characters for the human roles (Balão, the requester and approver; Chaves, the developer), six bank objects for scenery, and eight reaction symbols with a fixed meaning, so a video can tell its story without words. See [The cast and the emotes](#the-cast-and-the-emotes).
 - **A catalogue of scenes.** Each scene animates something a published article already says. The first two are in 16:9 (article) and 4:5 (LinkedIn), in Portuguese and English from one text table; new scenes are one language-neutral 16:9 video ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)). The first is the [circuit-breaker state machine](docs/spikes/2026-10-22-motion-pilot/README.md).
 
 The style started from the illustration covers of the [Spotify Engineering blog](https://engineering.atspotify.com/) and, since 0.7.0, follows the brand's own grammar: flat shapes, one rounded ink outline, no hard shadow, white bodies on a warm page, one orange accent, and colour only where it means something ([ADR 0009](docs/adr/0009-one-piece-grammar.md)).
@@ -157,7 +157,7 @@ The stage every scene shares is in the `scene.*` tokens (0.12.0), in composition
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
 - Every colour parameter is a token path (`"color.state.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 64 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`), `headline` and `questionToken` (below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
+- The 67 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`), `headline`, `questionToken`, `balao`, `chaves` and `keyboard` (below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
 
 ### Maps and diagrams
 
@@ -195,9 +195,17 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 
 The cast of [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md) shares one skin (white body, ink outline, a near-black visor with the amber idle eyes, `cast.eyes`); a character's identity is its shape, never a colour. Each takes `x`, `y` (the centre of its ground line), `scale`, `surface`, `expression` (`idle`, `done`, `waiting`, `failed`) and `view` (`front`, `back`):
 
-- `mira(…)`: the protagonist, an astrolabe with a screen face; `needleAngle` points the route, `carries` rides a message on the needle's tip.
-- `visor` (AI engineering; `holds`, `holdsSheet`, `points`, `facing`), `drone` (delivery; `carries`), `kiu` (wiki and series; `steps`), `sinal` (stackledger, without the parent-brand hood tip).
-- `bankObject({ name, x, y, scale, surface })`: six objects for scenery, `courier`, `lume`, `carga`, `anel`, `modulo`, `hub`, with the cast's idle eyes on their screen and no expression.
+| Character | Piece | Role (ADR 0007) | Actions | Hood tip |
+|---|---|---|---|---|
+| Mira | `mira` | the protagonist, an astrolabe with a screen face | `needleAngle` points the route, `carries` rides a message on the needle's tip, `stride` | yes |
+| Visor | `visor` | AI engineering: the AI agent | `holds`, `holdsSheet`, `points`, `facing` | yes |
+| Drone | `drone` | delivery: DevOps, shipping and running a system | `carries` | yes |
+| Kiu | `kiu` | wiki and series | `steps` | yes |
+| Sinal | `sinal` | stackledger | none | no (the product's own identity) |
+| Balão | `balao` | supporting: the requester and approver | `speaks`, `holdsStamp`, `facing` | yes |
+| Chaves | `chaves` | supporting: the developer, who works with Visor | `types`, `points`, `holdsSheet`, `facing` | yes |
+
+`bankObject({ name, x, y, scale, surface })` draws six objects for scenery, `courier`, `lume`, `carga`, `anel`, `modulo`, `hub`, with the cast's idle eyes on their screen and no expression.
 
 Visor's two actions of 0.12.0, for the SDD scene of AB#144:
 
@@ -211,6 +219,22 @@ import { questionToken, visor } from "@brunosouzas/design-system";
 const agent = visor({ x: 480, y: 440, scale: 1.15, facing: "left", holdsSheet: { width: 150, height: 204, rows: [{ lead: "question", bar: 44 }], label: "proposal.md" } });
 const question = questionToken({ cx: 300, cy: 120, scale: 1.5 });
 ```
+
+The supporting characters of 0.13.0 (card 337, the concept the owner chose in the identity studio of 2026-11-12) are glyphs of their trade on Mira's legs, for the human roles of a scene. Both take the shared parameters and `facing: "right" | "left"` (default `right`; facing left is the mirror image of the body only, and a held prop and its words are never mirrored), do one action at a time and do nothing unless an action is set ([model sheet](docs/spikes/2026-11-12-supporting-characters/README.md)):
+
+- `balao`, the requester and approver: a speech balloon whose tail points at the listener (the side it faces). `speaks: true` lights the request line on its belly in the accent. `holdsStamp: { word }` holds the `stamp` piece in the front hand with the caller's word (the SDD scene's `GO`); the stamp is 24 in radius and draws its word at 27 whatever its length, so keep the word to two or three letters. Refused with `speaks` or from behind. Balão answering is a `sheet` the scene places beside its front hand.
+- `chaves`, the developer: a `{ }` body with sharp brace points and a waist (it reads as a brace at 24 px), and the cursor in the accent. `types: true` puts the `keyboard` under the front hand; the screen above it is a `codePanel` the scene places. `points: true` swaps the front hand for Visor's pointing hand. `holdsSheet` hands a sheet over, as Visor's (`width` 80 to 300, `height` 80 to 400, 1 to 8 `rows`, `label`), held out in the front hand. `types` and `holdsSheet` are refused from behind.
+- `keyboard({ x, y, width, surface })`, the laptop's base: a white slab (`width` 80 to 300, default 150, 16 high, top-left corner at `x`, `y`) with ink key marks, outlined on both surfaces. It takes no colour and no text; a cover can draw it under a `codePanel`.
+
+```ts
+import { balao, chaves, codePanel } from "@brunosouzas/design-system";
+const requester = balao({ x: 300, y: 450, scale: 1.25, speaks: true });
+const developer = chaves({ x: 680, y: 450, scale: 1.25, facing: "left", types: true });
+// The developer's screen, above the keyboard (facing left: x -238 in Chaves's units at scale 1).
+const screen = codePanel({ x: 680 - 238 * 1.25, y: 450 - 178 * 1.25, width: 165, height: 115, lines: [{ indent: 0, w: 60, color: "white", tall: true }] });
+```
+
+**Emote spot.** An emote for Balão or Chaves sits beside the head on the front side, at the character's `scale` (about the head's size, motion CAST-3): its centre at (`x` + 116·`scale`, `y` − 200·`scale`) facing right and (`x` − 116·`scale`, `y` − 200·`scale`) facing left. There it clears the body, the hood tip, the hands, the pointing hand, the held stamp and the keyboard. A sheet Chaves holds taller than 114 (96 with a label) reaches the spot: then the scene moves the emote or the sheet, on its stills. The five pillar characters have no documented spot.
 
 `emote({ kind, x, y, scale, burst, surface })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
 
@@ -350,6 +374,19 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
 
+## Upgrading to 0.13.0
+
+0.13.0 (card 337, change `supporting-characters`) adds the supporting cast. Nothing is removed or renamed, and every 0.12.0 call, spec and scene draws the same: the five cast pieces stay pinned against their 0.11.0 drawings (`test/fixtures/cast-0.11.0.json`), `stamp` against its 0.12.0 drawings (`test/fixtures/stamp-0.12.0.json`), and every other fixture and golden is unchanged.
+
+| Added | What |
+|---|---|
+| `balao`, `chaves` | the supporting characters (see The cast and the emotes), with `BalaoParams`, `ChavesParams`, `CAST_FACINGS` and `CastFacing` from the root entry |
+| `keyboard` | the laptop's base, a prop piece, with `KeyboardParams` |
+| `HeldSheet` | the held-sheet object of Visor and Chaves; `VisorHeldSheet` stays as its alias, and `VISOR_FACINGS` and `VisorFacing` stay |
+| `PIECE_NAMES` | 67 names, ending with `headline`, `questionToken`, `balao`, `chaves`, `keyboard`: a check of the exact list or an exhaustive `switch` over `PieceName` must add them; every other name keeps its index |
+
+`stamp` moved from `src/pieces/library.ts` to `src/pieces/stamp.ts` unchanged; the root entry exports it as before.
+
 ## Upgrading to 0.12.0
 
 0.12.0 (card 333, change `sdd-scene-pieces`) adds what the SDD scene of AB#144 needs. Nothing is removed or renamed, and every 0.11.0 call, spec and scene draws the same: the five cast pieces are pinned against their 0.11.0 drawings (`test/fixtures/cast-0.11.0.json`) and the circuit-breaker and publish-subscribe stills are byte-identical.
@@ -434,7 +471,7 @@ Project-wide decisions are recorded as ADRs in [`docs/adr/`](docs/adr/README.md)
 - **Scenes illustrate an approved source.** Every string on screen comes from a published article, or from a post or page the owner approved, so a scene or piece never says more than the reviewed text. Catalogue scenes still come from published articles. [ADR 0004](docs/adr/0004-scenes-illustrate-published-articles.md)
 - **Neutral videos, told by a fixed cast.** One video for both languages, no words on screen, a caption only when the motion cannot explain itself, and every gesture tied to an article line. [ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md)
 - **Three token layers.** Primitive, semantic and component tokens, with the brand palette measured for AA contrast in both themes and the states under `color.state.*`. [ADR 0006](docs/adr/0006-three-layer-tokens-and-brand-colour.md)
-- **Mira and the pillar cast.** A protagonist and four pillar characters replace the engineering-role cast. [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)
+- **Mira and the pillar cast.** A protagonist and four pillar characters replace the engineering-role cast; since its amendment of 2026-11-12, two supporting characters, Balão and Chaves, tell the requester and the developer. [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md)
 - **Type inside the image.** Every written SVG embeds a subset of the Source faces its text uses, so readers see Source through `<img>`. [ADR 0008](docs/adr/0008-type-inside-the-image.md)
 - **One piece grammar.** No hard shadow, white bodies, one accent, colour only where it means something, ink muted on dark; a test checks every piece. [ADR 0009](docs/adr/0009-one-piece-grammar.md)
 

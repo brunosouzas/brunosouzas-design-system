@@ -29,20 +29,20 @@ Implementation starts after the owner's ok at gate 1. Test levels: **unit** (vit
 
 ## 5. Documentation
 
-- [ ] 5.1 README: "The cast and the emotes" becomes a table of the seven characters (character, piece, role per ADR 0007, actions, hood tip), then Balão's and Chaves's emote spots and their scene formula (design §8), the `keyboard` prop and an example of the two supporting characters; "Illustration pieces and covers" counts 67 pieces; "Upgrading to 0.13.0" (the added names and types of design §1; `stamp` moved module, same export; nothing removed or renamed; every 0.12.0 call, spec and scene unchanged; `PIECE_NAMES` ends with the three new names). Also "What it is" (`README.md:37`, "Mira and four pillar characters") and "Decisions" (the ADR 0007 line) name the supporting cast. Check: `grep -n "balao\|chaves\|keyboard\|0.13.0\|67 pieces\|Balão" README.md` lists each section, `grep -n "four pillar characters" README.md` shows no line that calls them the whole cast, and the table has seven character rows.
-- [ ] 5.2 `docs/adr/0007-mira-and-the-pillar-cast.md`: the status line and the amendment of design §6, word for word unless the owner changes it at gate 1; `docs/adr/README.md`: ADR 0007's row says it is amended on 2026-11-12 (the supporting characters). Check: `grep -n "2026-11-12" docs/adr/0007-mira-and-the-pillar-cast.md docs/adr/README.md`.
-- [ ] 5.3 `docs/roadmap.md`: row 13f `supporting-characters`, AB#337, after 13e. Check: `grep -n "13f" docs/roadmap.md`.
+- [x] 5.1 README: "The cast and the emotes" becomes a table of the seven characters (character, piece, role per ADR 0007, actions, hood tip), then Balão's and Chaves's emote spots and their scene formula (design §8), the `keyboard` prop and an example of the two supporting characters; "Illustration pieces and covers" counts 67 pieces; "Upgrading to 0.13.0" (the added names and types of design §1; `stamp` moved module, same export; nothing removed or renamed; every 0.12.0 call, spec and scene unchanged; `PIECE_NAMES` ends with the three new names). Also "What it is" (`README.md:37`, "Mira and four pillar characters") and "Decisions" (the ADR 0007 line) name the supporting cast. Check: `grep -n "balao\|chaves\|keyboard\|0.13.0\|67 pieces\|Balão" README.md` lists each section, `grep -n "four pillar characters" README.md` shows no line that calls them the whole cast, and the table has seven character rows.
+- [x] 5.2 `docs/adr/0007-mira-and-the-pillar-cast.md`: the status line and the amendment of design §6, word for word unless the owner changes it at gate 1; `docs/adr/README.md`: ADR 0007's row says it is amended on 2026-11-12 (the supporting characters). Check: `grep -n "2026-11-12" docs/adr/0007-mira-and-the-pillar-cast.md docs/adr/README.md`.
+- [x] 5.3 `docs/roadmap.md`: row 13f `supporting-characters`, AB#337, after 13e. Check: `grep -n "13f" docs/roadmap.md`.
 
 ## 6. The model sheet and the owner's gate (SHEET-1)
 
-- [ ] 6.1 `docs/spikes/2026-11-12-supporting-characters/model-sheet.ts` (design §8), from `src/pieces/` only: writes `model-sheet.svg` with fonts embedded (`embedFonts`) and an English `<title>` and `<desc>` (STY-8), and the PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008): per character front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale, light and dark (CAST-5); the row at 48 px and 24 px tall. A README in the folder names the commands. Check: `ls -l` shows every file under 200 KB, and `grep -o "<title>[^<]*</title>\|<desc>[^<]*</desc>" model-sheet.svg` prints exactly the title and description of design §8.
+- [x] 6.1 `docs/spikes/2026-11-12-supporting-characters/model-sheet.ts` (design §8), from `src/pieces/` only: writes `model-sheet.svg` with fonts embedded (`embedFonts`) and an English `<title>` and `<desc>` (STY-8), and the PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008): per character front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale, light and dark (CAST-5); the row at 48 px and 24 px tall. A README in the folder names the commands. Check: `ls -l` shows every file under 200 KB, and `grep -o "<title>[^<]*</title>\|<desc>[^<]*</desc>" model-sheet.svg` prints exactly the title and description of design §8.
 - [ ] 6.2 Local "Reads at 24 px (local)": the owner looks at the sheet (gate 3, stills before the pull request leaves draft). A change he asks for changes the path or position, its scenario and design §3 or §8 in the same commit.
 
 ## 7. Full checks
 
-- [ ] 7.1 `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
-- [ ] 7.2 `openspec validate supporting-characters --strict` and `openspec validate --all --strict` pass.
-- [ ] 7.3 `test/package/package.test.ts` (in `npm test` after `npm run build`) reports 67 pieces.
+- [x] 7.1 `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
+- [x] 7.2 `openspec validate supporting-characters --strict` and `openspec validate --all --strict` pass.
+- [x] 7.3 `test/package/package.test.ts` (in `npm test` after `npm run build`) reports 67 pieces.
 
 ## Workflow follow-up
 
