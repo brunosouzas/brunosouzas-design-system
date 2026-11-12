@@ -57,6 +57,12 @@ const STATE_PARTS: Record<string, readonly StatePart[]> = {
   // Visor's held sheet (change sdd-scene-pieces): root group, held group, the sheet's marks group, its second mark.
   "visor:sheet": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
   "visor:sheet:left": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
+  // The supporting cast (change supporting-characters, task 3.7): Balão's held stamp (root, held group, the stamp's
+  // turned group, its face), Chaves's held sheet (root, held group, the sheet's marks group, its second mark).
+  "balao:stamp": [{ part: "held stamp's face (approved)", at: "0/0/0/0", attr: "fill", values: [S.healthy] }],
+  "balao:stamp:left": [{ part: "held stamp's face (approved)", at: "0/0/0/0", attr: "fill", values: [S.healthy] }],
+  "chaves:sheet": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
+  "chaves:sheet:left": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
   "emote:problem": [{ part: "warning sign (failure)", at: "0/5", attr: "fill", values: [S.failure] }],
   "emote:refused": [{ part: "disc (failure)", at: "0/0", attr: "fill", values: [S.failure] }],
   "emote:worked": [{ part: "disc (done)", at: "0/5", attr: "fill", values: [S.healthy] }],
@@ -129,6 +135,21 @@ const STATE_CALLS: Partial<Record<P.PieceName, { label: string; params: Record<s
   visor: [
     { label: "visor:sheet", params: { holdsSheet: HELD_WITH_CHECK } },
     { label: "visor:sheet:left", params: { holdsSheet: HELD_WITH_CHECK, facing: "left" } },
+  ],
+  // Every action of the supporting cast, facing right and left (change supporting-characters, task 3.7).
+  balao: [
+    { label: "balao:speaks", params: { speaks: true } },
+    { label: "balao:speaks:left", params: { speaks: true, facing: "left" } },
+    { label: "balao:stamp", params: { holdsStamp: { word: "GO" } } },
+    { label: "balao:stamp:left", params: { holdsStamp: { word: "GO" }, facing: "left" } },
+  ],
+  chaves: [
+    { label: "chaves:types", params: { types: true } },
+    { label: "chaves:types:left", params: { types: true, facing: "left" } },
+    { label: "chaves:points", params: { points: true } },
+    { label: "chaves:points:left", params: { points: true, facing: "left" } },
+    { label: "chaves:sheet", params: { holdsSheet: HELD_WITH_CHECK } },
+    { label: "chaves:sheet:left", params: { holdsSheet: HELD_WITH_CHECK, facing: "left" } },
   ],
 };
 
@@ -212,6 +233,19 @@ describe("State colours that keep a meaning", () => {
     expect(answered).toHaveLength(1);
     expect(answered[0]).toMatchObject({ tag: "rect", attrs: { width: 22, height: 22, fill: "#3DDC84" } });
     expect(states(P.visor({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40 }] } }))).toEqual([]);
+  });
+
+  // Change supporting-characters (AB#337), task 3.7.
+  test("The supporting cast's state colours", () => {
+    const states = (drawn: Drawn) => nodesOf([...drawn.body, ...drawn.text]).filter((node) => STATE.has(String(node.attrs.fill)) || STATE.has(String(node.attrs.stroke)));
+    const stamped = states(P.balao({ x: 0, y: 0, holdsStamp: { word: "GO" } }));
+    expect(stamped).toHaveLength(1);
+    expect(stamped[0]).toMatchObject({ tag: "circle", attrs: { r: 24, fill: "#3DDC84" } });
+    expect(states(P.balao({ x: 0, y: 0 }))).toEqual([]);
+    const answered = states(P.chaves({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40, tail: "check" }] } }));
+    expect(answered).toHaveLength(1);
+    expect(answered[0]).toMatchObject({ tag: "rect", attrs: { width: 22, height: 22, fill: "#3DDC84" } });
+    expect(states(P.chaves({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40 }] } }))).toEqual([]);
   });
 
   test("Failing light only when failing", () => {

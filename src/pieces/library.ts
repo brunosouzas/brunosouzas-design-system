@@ -25,8 +25,11 @@ import { headline, type HeadlineParams } from "./headline.ts";
 import { questionToken, type QuestionTokenParams } from "./question-token.ts";
 import { codeLength, spans } from "./ink.ts";
 import { pill, sheet, type PillParams, type SheetParams, type SheetRow } from "./paper.ts";
-export { pill, sheet };
-export type { PillParams, SheetParams, SheetRow };
+import { stamp, type StampParams } from "./stamp.ts";
+import { keyboard, type KeyboardParams } from "./keyboard.ts";
+import { balao, chaves, type BalaoParams, type ChavesParams } from "./supporting-cast.ts";
+export { pill, sheet, stamp, keyboard, balao, chaves };
+export type { PillParams, SheetParams, SheetRow, StampParams, KeyboardParams, BalaoParams, ChavesParams };
 export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken };
 export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams, QuestionTokenParams };
 
@@ -311,27 +314,6 @@ export const checkBadge = definePiece<CheckBadgeParams>("checkBadge", { cx: pos(
   ]),
 );
 
-export type StampParams = { cx: number; cy: number; word: string; fill?: string; r?: number; rotate?: number; shape?: "round" | "rect" };
-/** Rubber stamp, round (dashed inner ring) or rectangular, tilted, with one word. */
-export const stamp = definePiece<StampParams>(
-  "stamp",
-  { cx: pos(), cy: pos(), word: label(), fill: col(), r: size(false, 12), rotate: { kind: "number" }, shape: { kind: "enum", values: ["round", "rect"] } },
-  ({ cx, cy, word, fill = "color.state.healthy", r = 40, rotate = -12, shape = "round" }) => {
-    const turn = `rotate(${rotate} ${cx} ${cy})`;
-    const face =
-      shape === "round"
-        ? [
-            el("circle", { cx, cy, r, fill: colour(fill, "fill") }),
-            el("circle", { cx, cy, r: r - 10, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small, "stroke-dasharray": "6 5" }),
-          ]
-        : [
-            el("rect", { x: cx - r * 1.6, y: cy - r * 0.7, width: r * 3.2, height: r * 1.4, rx: 8, fill: colour(fill, "fill") }),
-            el("rect", { x: cx - r * 1.6 + 8, y: cy - r * 0.7 + 8, width: r * 3.2 - 16, height: r * 1.4 - 16, rx: 4, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small }),
-          ];
-    return drawn([g({ transform: turn }, ...face)], [el("text", { x: cx, y: cy + 10, "font-size": 27, "font-weight": tokens.font.weightHeavy, transform: turn }, word)]);
-  },
-);
-
 export type RobotParams = { cx: number; top: number };
 /** Robot in the v2 grammar: white body and ears, a dark visor with the cast's idle eyes, one grille bar, the accent on the antenna tip. Scale it with pose. */
 export const robot = definePiece<RobotParams>("robot", { cx: pos(), top: pos() }, ({ cx, top }) => {
@@ -544,6 +526,9 @@ export const PIECES = {
   categoryIcon,
   headline,
   questionToken,
+  balao,
+  chaves,
+  keyboard,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];
