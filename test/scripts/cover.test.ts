@@ -236,8 +236,8 @@ describe("Cover spec format", () => {
     const lines = await problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
     expect(lines[0]).toBe('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "pink"');
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline\)$/);
-    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(63);
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(64);
   });
 
   test("Unsafe id", async () => {
@@ -582,7 +582,8 @@ describe("Emote on a cover", () => {
     });
     expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(1);
     expect(ws.err[0]).toMatch(/^pieces\[0\]\.piece: unknown piece "mascot"/);
-    expect(ws.err[0].split(", ")).toHaveLength(63);
+    expect(ws.err[0].split(", ")).toHaveLength(64);
+    expect(ws.err[0]).toMatch(/, headline, questionToken\)$/);
     expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });

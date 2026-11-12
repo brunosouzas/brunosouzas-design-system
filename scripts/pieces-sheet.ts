@@ -129,6 +129,13 @@ const samplesOf = (P: Library): Record<Library.PieceName, (x: number, y: number)
   brandNotationIcon: (x, y) => merge(...["message", "contentBasedRouter", "deadLetterChannel", "toolCall"].map((name, i) => P.brandNotationIcon({ name: name as Library.BrandNotationIconName, x: x + 20 + (i % 2) * 100, y: y + 60 + Math.floor(i / 2) * 60, scale: 1.4 }))),
   categoryIcon: (x, y) => P.categoryIcon({ category: "personalTools", x: x + 70, y: y + 70, scale: 2.4 }),
   headline: (x, y) => P.headline({ x: x + 120, y: y + 130, lines: ["Title"], anchor: "middle" }),
+  // The open question at scale 1 and 2, light and dark (change sdd-scene-pieces, task 4.2).
+  questionToken: (x, y) => merge(
+    P.questionToken({ cx: x + 60, cy: y + 70 }),
+    P.questionToken({ cx: x + 150, cy: y + 70, scale: 2 }),
+    P.questionToken({ cx: x + 60, cy: y + 150, surface: "dark" }),
+    P.questionToken({ cx: x + 150, cy: y + 150, scale: 2, surface: "dark" }),
+  ),
 });
 
 /** The light sheet's samples. */

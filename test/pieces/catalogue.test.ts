@@ -116,7 +116,7 @@ const TOKEN_COLOURS = new Set(COLOUR_TOKENS.values());
 describe("Piece catalogue", () => {
   test("Every piece draws with its defaults", () => {
     expect(P.PIECE_NAMES).toEqual(Object.keys(REQUIRED_ONLY));
-    expect(P.PIECE_NAMES).toHaveLength(63);
+    expect(P.PIECE_NAMES).toHaveLength(64);
     for (const name of P.PIECE_NAMES) {
       const drawn = call(name, REQUIRED_ONLY[name]);
       // edgeLabel without a backdrop (change body-diagram-pieces) and headline (change headline-piece) draw words only.
@@ -143,6 +143,15 @@ describe("Piece catalogue", () => {
     expect(typeof root.emote).toBe("function");
     expect(root.EMOTE_KINDS).toEqual(["idea", "doubt", "problem", "worked", "refused", "pressure", "liked", "waiting"]);
     expect(P.PIECE_NAMES).toContain("emote");
+  });
+
+  // Change sdd-scene-pieces (AB#333), task 4.2.
+  test("Question token in the catalogue", async () => {
+    const root: Record<string, unknown> = await import("../../src/pieces/index");
+    expect(root.PIECE_NAMES).toHaveLength(64);
+    expect((root.PIECE_NAMES as string[]).slice(-2)).toEqual(["headline", "questionToken"]);
+    expect((root.PIECES as Record<string, unknown>).questionToken).toBe(root.questionToken);
+    expect(typeof root.questionToken).toBe("function");
   });
 });
 
@@ -236,6 +245,13 @@ describe("Words come from the caller", () => {
 
   test("Empty label", () => {
     expect(() => P.pill({ x: 0, y: 0, text: "" })).toThrow(new RangeError("pill: text: expected a non-empty string"));
+  });
+
+  // Change sdd-scene-pieces (AB#333), task 4.2.
+  test("The token's only glyph", () => {
+    const words: string[] = [];
+    walk(P.questionToken({ cx: 0, cy: 0 }).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
+    expect(words).toEqual(["?"]);
   });
 
   test("No piece invents a word", () => {

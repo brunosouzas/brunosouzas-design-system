@@ -22,9 +22,10 @@ import { symbol, type SymbolParams } from "./symbol.ts";
 import { brandNotationIcon, type BrandNotationIconName, type BrandNotationIconParams } from "./brand-notation-icons.ts";
 import { categoryIcon, type CategoryIconParams } from "./category-icon.ts";
 import { headline, type HeadlineParams } from "./headline.ts";
+import { questionToken, type QuestionTokenParams } from "./question-token.ts";
 import { codeLength, spans } from "./ink.ts";
-export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline };
-export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams };
+export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken };
+export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams, QuestionTokenParams };
 
 export * from "./metro.ts";
 export * from "./diagram.ts";
@@ -626,6 +627,7 @@ export const PIECES = {
   brandNotationIcon,
   categoryIcon,
   headline,
+  questionToken,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];
