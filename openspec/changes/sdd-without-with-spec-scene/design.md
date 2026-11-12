@@ -76,7 +76,7 @@ The **object layer** (the `?` in the balloon and in flight, the code lines, the 
   | code panel (about its centre (795, 310)) | `blockPopIn` | 6 |
   | Visor (through `pose` scale and opacity, about (480, 440)) | `blockPopIn` | 12 |
   | take badge `1` (about (918, 42)) | `pillPopIn` | 18 |
-  | balloon (about its body's centre (190, 81)) | `blockPopIn` | 24 |
+  | balloon (about its body's centre (190, 71)) | `blockPopIn` | 24 |
   | slot `?` *i* (the token's `scale` 1.15 times the pop, opacity on its group) | `pillPopIn` | 30 + 4*i* |
   | rewind mark (about its centre (871, 43)) | `pillPopIn` | 340 |
   | take badge `2` (badge `1` is removed at 378; about (918, 42)) | `pillPopIn` | 378 |
@@ -162,7 +162,7 @@ Copied from the gate-0 prototype (`concept-a.ts`), except these deviations, each
 
 | Deviation from gate 0 | Reason |
 |---|---|
-| Balloon y 26 (was 56); slots, P1, P2 and the error arrow's end move up with it | the held page's label must clear the balloon |
+| Balloon y 16 (was 56); slots, P1, P2 and the error arrow's end move up with it | the held page's label must clear the balloon with its outline: at y 26 (the G1 value) the first stills showed the held pill's outline touching the balloon's bottom edge (gap 2.7 units before the outlines), so the implementation moved it 10 more (task 6.2) |
 | Visor holds the page while it writes, then hands it over (gate 0 drew it beside Visor, then beside the balloon) | 0.12.0's `holdsSheet` (AB#333); the hand-over keeps frames 5 and 6 |
 | Page height 240, top 24, step 31 (gate 0: 244, 34, 27), with a heading row (row 0) above the six questions | marks 31 apart against a 29-unit disc (radius 13 plus its outline) leave a visible gap, which gate 0's 27 did not; top 24 keeps the heading clear of the label and the page between the balloon and the ground; `holdsSheet` needs one row from the start |
 | Label pill 150 wide (was 140) | `holdsSheet` draws the label with `pill`'s default width |
@@ -178,8 +178,8 @@ Assumed, to be confirmed on the stills at gate 1: every position below reads at 
 | Element | Values |
 |---|---|
 | Rings | composition centre (960, 600), the gate-0 ring centre (480, 300) × 2 (the frame's centre is (960, 540)); `ringsFade` [0, 20] |
-| Balloon | `speechBubble` x 50, y 26, width 280, height 110, fill `color.state.caller` (bottom 136, tail tip at (70, 156)) |
-| Slots | slot *i* centre (86 + 42*i*, 104), *i* = 0 … 5; `questionToken` scale 1.15 |
+| Balloon | `speechBubble` x 50, y 16, width 280, height 110, fill `color.state.caller` (bottom 126, tail tip at (70, 146)) |
+| Slots | slot *i* centre (86 + 42*i*, 94), *i* = 0 … 5; `questionToken` scale 1.15 |
 | Code panel | `codePanel` x 690, y 200, width 210, height 220, top 34, step 22; lines, in order, all `white`: (indent, w) = (0, 90), (18, 120), (36, 80), (36, 110), (18, 70), (36, 100), (18, 60), (0, 40) |
 | Visor | `visor` x 480, y 440 (the ground line), scale 1.15, facing right |
 | The page | width 150, height 240, top 24, step 31, label `proposal.md`; row 0 `{ lead: "none", bar: 90 }`; rows 1–6 `{ lead: "question", bar: 44 / 34 / 50 / 40 / 46 / 30, tail: "none" → "check" }`. Rows are 31 apart against a mark of radius 13 plus its outline (a 29-unit disc) and a 22-unit check plus its outline (25), so neighbouring marks and checks leave a gap |
@@ -196,13 +196,13 @@ Routes and paths (stage units; the composition draws P1–P3 × 2):
 
 | Id | Path | Used by |
 |---|---|---|
-| `guess-i` | M (86 + 42*i*, 104) C 430,96 610,130 770,290 | `?` *i* in take 1 (ends inside the code panel) |
-| `ask-i` | M (86 + 42*i*, 104) C 40,96 120,*y*ₖ 229.3,*y*ₖ with *k* = *i* + 1 and the held *y*ₖ | `?` *i* in take 2 (ends on held row *k*'s mark; goes left of the label pill) |
+| `guess-i` | M (86 + 42*i*, 94) C 430,96 610,130 770,290 | `?` *i* in take 1 (ends inside the code panel) |
+| `ask-i` | M (86 + 42*i*, 94) C 40,96 120,*y*ₖ 229.3,*y*ₖ with *k* = *i* + 1 and the held *y*ₖ | `?` *i* in take 2 (ends on held row *k*'s mark; goes left of the label pill) |
 | `answer-i` | M 70,180 C 62,(*y*ₖ − 40) 80,*y*ₖ 134.5,*y*ₖ with the handed-over *y*ₖ | answer *i* (ends on row *k*'s `?` mark, left of the pill) |
-| P1 | M 332,92 C 430,96 610,130 770,290 | dashed path, take 1 |
-| P2 | M 94,158 C 120,176 150,186 194,196 | dashed path, take 2, balloon → held sheet |
+| P1 | M 332,82 C 430,96 610,130 770,290 | dashed path, take 1 |
+| P2 | M 94,148 C 120,176 150,186 194,196 | dashed path, take 2, balloon → held sheet |
 | P3 | M 272,330 C 380,470 600,470 690,380 | dashed path, take 2, handed-over sheet → code (passes under Visor) |
-| Failure arrow | `messageArrow` from (700, 206) to (332, 82), controls (620, 90), (420, 70), `kind: "failure"` | the error coming back |
+| Failure arrow | `messageArrow` from (700, 206) to (332, 72), controls (620, 90), (420, 70), `kind: "failure"` | the error coming back |
 
 The control points of `ask-i` and `answer-i` are a starting point: if "Tokens clear the face and the label" fails, the implementer moves only those control points until it passes and writes the new values here in the same commit. A `?` or an answer in flight is at its route's point by length at `(f − from) / 22`; at its arrival frame it is gone and the code line, row or check exists (the handoff is atomic, as pub-sub's).
 

@@ -422,7 +422,7 @@ The scene SHALL use the stage layout of the change's design §6 in 960x540 stage
 - **THEN** none intersects any of them
 
 #### Scenario: Label and stamp clearances
-- **GIVEN** the held and the resting label pills, the balloon (bottom 136, tail tip (70, 156)) and the stamp (centre (189, 432.3), radius 32)
+- **GIVEN** the held and the resting label pills, the balloon (bottom 126, tail tip (70, 146)) and the stamp (centre (189, 432.3), radius 32)
 - **WHEN** they are compared with the balloon and with the resting page's six row marks (radius 13 × 1.15 plus outline) and tail checks
 - **THEN** neither pill touches the balloon, and the stamp touches no row mark and no check
 

@@ -9,9 +9,18 @@ const broken = (edit: Partial<FlowTimeline>):FlowSceneData => ({...scene,timelin
 const errors = (edit:Partial<FlowTimeline>) => checkTimeline(broken(edit)).join("\n");
 test("Both kinds in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe"]);
-  const entries=scenes.flatMap(compositionsOf);
+  expect(scenes.map(s=>s.id).slice(0,2)).toEqual(["circuit-breaker-states","publish-subscribe"]);
+  const entries=scenes.slice(0,2).flatMap(compositionsOf);
   expect(entries).toHaveLength(8); expect(new Set(entries.map(e=>e.id)).size).toBe(8);
+});
+test("Three kinds in the catalogue",()=>{
+  expect(checkCatalogue(scenes)).toEqual([]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-without-with-spec"]);
+  const entries=scenes.flatMap(compositionsOf);
+  expect(entries).toHaveLength(9); expect(new Set(entries.map(e=>e.id)).size).toBe(9);
+  expect(entries.slice(0,4).every(e=>e.folder==="circuit-breaker-states")).toBe(true);
+  expect(entries.slice(4,8).every(e=>e.folder==="publish-subscribe")).toBe(true);
+  expect(entries[8].id).toBe("sdd-without-with-spec-16x9");
 });
 test("Shared checks still reject a broken flow",()=>{
   expect(checkCatalogue([scene,scene]).join("\n")).toContain("duplicate composition id publish-subscribe-16x9-pt");

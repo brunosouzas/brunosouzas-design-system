@@ -6,7 +6,8 @@ import type { CatalogueScene } from "./catalogue";
 import { circuitBreakerStates } from "./circuit-breaker-states/scene";
 
 import { publishSubscribe } from "./publish-subscribe/scene.ts";
+import { sddWithoutWithSpec } from "./sdd-without-with-spec/scene.ts";
 
-export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe];
+export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe, sddWithoutWithSpec];
 
 export const findScene = (id: string): CatalogueScene | undefined => scenes.find((scene) => scene.id === id);
