@@ -25,7 +25,7 @@ import { inkOf, surfaceParam, type SurfaceName } from "./ink.ts";
 import { pos, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 
-/** The radius of a sheet question row's disc (`sheet` in library.ts). */
+/** The radius of a sheet question row's disc (`sheet` in paper.ts). */
 const MARK_RADIUS = 13;
 /** The `?` of a sheet question row: its size, and its baseline below the disc's centre. */
 const GLYPH_SIZE = 19;

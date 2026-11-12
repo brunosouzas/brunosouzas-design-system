@@ -25,7 +25,12 @@ import {
   sinal,
   visor,
 } from "../../src/pieces/index.ts";
+import { renderToStaticMarkup } from "react-dom/server";
+import { g } from "../../src/pieces/node.ts";
+import { toReact } from "../../src/pieces/react.ts";
+import { toSvg } from "../../src/pieces/render.ts";
 import { skin } from "../../src/pieces/skin.ts";
+import { normalForm } from "./normal-form.ts";
 import type { SvgNode } from "../../src/pieces/node.ts";
 import { tokens } from "../../tokens/generated/tokens.ts";
 
@@ -249,6 +254,12 @@ describe("Visor holds a sheet", () => {
         ],
       },
     ]);
+    // The words carry their own font, so a scene (through toReact) draws the same as an SVG, both ways.
+    for (const facing of ["right", "left"] as const) {
+      const tree = visor({ x: 0, y: 0, holdsSheet: HELD, facing });
+      const root = g({}, ...tree.body, ...tree.text);
+      expect(normalForm(renderToStaticMarkup(toReact(root))), facing).toEqual(normalForm(toSvg(root)));
+    }
   });
 
   test("Held sheet on the dark surface", () => {
@@ -287,16 +298,23 @@ describe("Visor holds a sheet", () => {
   });
 
   test("The hand clears the row marks", () => {
-    // Design §2: the hand (radius 15, outline 4) overlaps the page's edge but no lead mark or tail check.
+    // Design §2: the hand (radius 15, outline 8) overlaps the page's edge but no lead mark or tail check.
     const rows = [{ lead: "question" as const, bar: 40, tail: "check" as const }];
     for (const facing of ["right", "left"] as const) {
       const tree = visor({ x: 0, y: 0, facing, holdsSheet: { width: 150, height: 120, rows } });
-      const marks = kids(heldGroupOf(tree)!).find((node) => node.tag === "g" && node.attrs["stroke-width"] === 3)!;
-      const handX = facing === "right" ? -92 : 92;
-      const reach = 15 + 2;
+      const [held, body] = kids(tree.body[0]);
+      const marks = kids(held).find((node) => node.tag === "g" && node.attrs["stroke-width"] === 3)!;
+      // The hand read from the tree: the body group's circle of radius 15 on the left, mirrored facing left.
+      const hand = kids(body).find((node) => node.tag === "circle" && node.attrs.r === 15 && Number(node.attrs.cx) < 0)!;
+      const handX = facing === "right" ? Number(hand.attrs.cx) : -Number(hand.attrs.cx);
+      const reach = Number(hand.attrs.r) + Number(hand.attrs["stroke-width"]) / 2;
+      // The hand overlaps the page's near edge.
+      const page = kids(held)[0];
+      const edge = facing === "right" ? Number(page.attrs.x) + Number(page.attrs.width) : Number(page.attrs.x);
+      expect(handX - reach < edge && edge < handX + reach, `${facing}: edge ${edge}, hand ${handX}`).toBe(true);
       for (const mark of kids(marks)) {
         const [from, to] = mark.tag === "circle" ? [Number(mark.attrs.cx) - 13 - 1.5, Number(mark.attrs.cx) + 13 + 1.5] : [Number(mark.attrs.x) - 1.5, Number(mark.attrs.x) + Number(mark.attrs.width) + 1.5];
-        expect(to < handX - reach - 4 || from > handX + reach + 4, `${facing} ${mark.tag} ${from}..${to}`).toBe(true);
+        expect(to < handX - reach || from > handX + reach, `${facing} ${mark.tag} ${from}..${to}`).toBe(true);
       }
     }
   });

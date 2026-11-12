@@ -36,7 +36,7 @@
 #### Scenario: The hand clears the row marks
 - **GIVEN** `holdsSheet` `{ width: 150, height: 120, rows: [{ lead: "question", bar: 40, tail: "check" }] }`, facing right and facing left
 - **WHEN** Visor is drawn
-- **THEN** the left hand (radius 15, outline 4, at x −92 or 92) overlaps the page's edge, and no lead mark or tail check of the held sheet, with its outline, reaches under it
+- **THEN** the left hand (radius 15, outline 8, at x −92 or 92) overlaps the page's edge, and no lead mark or tail check of the held sheet, with its outline, reaches under it
 
 #### Scenario: Sheet without words
 - **GIVEN** `visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 120, rows: [{ bar: 40 }, { lead: "checked", bar: 30 }] } })`
