@@ -34,6 +34,7 @@ export const GROUPS = [
   "banner",
   "bodyDiagram",
   "cast",
+  "scene",
 ] as const;
 export const TYPES = ["color", "dimension", "frames", "number", "opacity", "fontFamily", "fontWeight"] as const;
 export type TokenType = (typeof TYPES)[number];
@@ -233,6 +234,16 @@ export const REQUIRED: Readonly<Record<string, TokenType>> = {
   // Signature lockup (AB#268): fixed margin from a cover/banner/icon frame's
   // bottom-right corner.
   "cover.signatureMargin": "dimension",
+  // The stage of a video scene, in composition pixels (change sdd-scene-pieces,
+  // AB#333): the rings every scene draws and the dashed motion path.
+  "scene.ringRadius": "dimension",
+  "scene.ringStep": "dimension",
+  "scene.ringWidth": "dimension",
+  "scene.ringReach": "number",
+  "scene.pathDash": "dimension",
+  "scene.pathGap": "dimension",
+  "scene.pathWidth": "dimension",
+  "scene.pathColor": "color",
 };
 
 // `surface`, `brand`, `map` and `site` are closed: they hold exactly their

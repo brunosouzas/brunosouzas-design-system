@@ -252,3 +252,42 @@ describe("Backdrop credit is the muted text role", () => {
     expect(() => backdropCreditMismatches(source)).toThrow(/surface\.light\.backdropCredit: expected a #RRGGBB colour/);
   });
 });
+
+/** The colour at a two-level path (`scene.pathColor`); throws naming the path when it is missing or not #RRGGBB. */
+const colourAt = (source: SourceTree, group: string, name: string): string => {
+  const value = (source[group] as Record<string, { $value?: unknown }> | undefined)?.[name]?.$value;
+  if (typeof value !== "string" || !/^#[0-9A-Fa-f]{6}$/.test(value)) throw new Error(`${group}.${name}: expected a #RRGGBB colour, found ${JSON.stringify(value)}`);
+  return value.toUpperCase();
+};
+
+/**
+ * The scene's path colour when it differs from the muted text role, as
+ * `scene.pathColor ≠ brand.light.textMuted` (requirement "Scene path colour is
+ * the muted text role", change sdd-scene-pieces, task 2.2). Tokens have no
+ * aliases, so this check keeps the two equal; a missing or non-hex value throws.
+ */
+const pathColourMismatches = (source: SourceTree): string[] =>
+  colourAt(source, "scene", "pathColor") !== valueAt(source, "brand", "light", "textMuted") ? ["scene.pathColor ≠ brand.light.textMuted"] : [];
+
+describe("Scene path colour is the muted text role", () => {
+  test("Path colour matches its role", () => {
+    const source = repoSource();
+    expect(pathColourMismatches(source)).toEqual([]);
+    expect((source.scene as Record<string, { $description?: string }>).pathColor.$description).toContain("brand.light.textMuted");
+  });
+
+  test("A path colour that drifts", () => {
+    const source = repoSource();
+    (source.scene as Record<string, { $value?: unknown }>).pathColor = { $value: "#121212" };
+    expect(pathColourMismatches(source)).toEqual(["scene.pathColor ≠ brand.light.textMuted"]);
+  });
+
+  test("A missing or malformed path colour", () => {
+    const missing = repoSource();
+    delete (missing.scene as Record<string, unknown>).pathColor;
+    expect(() => pathColourMismatches(missing)).toThrow(/scene\.pathColor: expected a #RRGGBB colour/);
+    const grey = repoSource();
+    grey.brand.light.textMuted = { $value: "grey" };
+    expect(() => pathColourMismatches(grey)).toThrow(/brand\.light\.textMuted: expected a #RRGGBB colour/);
+  });
+});
