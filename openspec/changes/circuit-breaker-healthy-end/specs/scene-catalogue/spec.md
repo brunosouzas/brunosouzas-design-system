@@ -1,7 +1,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: Circuit-breaker state machine scene
-The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels, its three state sentences and the HTTP codes of its calls. The OPEN block carries the countdown. Its timing is listed frame by frame in the design of change `circuit-breaker-healthy-end`.
+The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with its diagram labels, its three state sentences and its calls' HTTP codes. The OPEN block carries the countdown. Its timing is listed frame by frame in the design of change `circuit-breaker-healthy-end`.
 
 #### Scenario: Timing equals the approved pilot
 - **WHEN** the scene's timeline is compared with the pilot timeline table in the design
