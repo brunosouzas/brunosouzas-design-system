@@ -65,6 +65,7 @@ Each with the recommended answer; the spec is written as recommended.
 ## Implicit requirements
 
 - **Errors and invalid input:** requirement. Each new parameter is checked by the piece's schema and throws a `RangeError` naming its path (`facing`, `holdsSheet.width`, `holdsSheet.rows`, `scale`, …); `holds: true` or `view: "back"` with `holdsSheet` is refused naming `holdsSheet`; `stageRingRadii` refuses a non-positive or non-finite size; the token build refuses a missing or mistyped `scene.*` token; a cover spec reports each problem at its JSON path.
+- **Scenarios without a failure case:** "Stage rings from the scene tokens", "Mirrored Visor keeps its outline and words" and "Question token" take no input of their own; their invalid inputs are the sibling requirements' ("Stage ring radii", "Visor faces left or right", "Question token parameters").
 - **Limits:** requirement. Held sheet `width` 80 to 300 and `height` 80 to 400 (Visor units), 1 to 8 rows; token `scale` above 0 and at most 10; at most 1000 stage rings per call (the cover `rings` piece's limit).
 - **Repetition and idempotency:** requirement. Pieces stay pure: the same parameters give deep-equal trees and the same `toSvg` bytes; the 0.11.0 cast outputs and the existing scenes' rings are pinned.
 - **Concurrency:** n/a. Pure functions and a one-shot token build.
