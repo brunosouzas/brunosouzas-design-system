@@ -1,0 +1,48 @@
+# Tasks: supporting-characters
+
+Implementation starts after the owner's ok at gate 1. Test levels: **unit** (vitest, pure functions and source reads), **integration** (vitest, the cover command in temporary folders), **local** (a real render and the owner's eyes; not in CI). Existing tests stay green unless a task names the change. Each scenario is named with the test that proves it; scenarios of a MODIFIED requirement that this change does not touch are listed as staying green.
+
+## 1. Baseline
+
+- [ ] 1.1 Before any `src/` change, on this branch: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0, and `git diff origin/main --stat -- test/fixtures` is empty. Record both in the pull request (S1). No fixture is written or rewritten in this change (design §7).
+
+## 2. The keyboard (`illustration-pieces`)
+
+- [ ] 2.1 `src/pieces/keyboard.ts` (design §4): `keyboard` with its schema, exported from `src/pieces/library.ts` (in `PIECES` after `chaves`, task 3.5) and the package root; `REQUIRED_ONLY.keyboard = { x: 0, y: 0 }` in `test/pieces/required-only.ts`. Unit tests in `test/pieces/keyboard.test.ts`, describe "Keyboard": "Default keyboard", "Keyboard on the dark surface", "Key count follows the width", "Keyboard carries its own stroke"; describe "Keyboard parameters": "Width bounds and unknown parameters". Check: `npm test -- test/pieces/keyboard.test.ts`.
+
+## 3. Balão and Chaves (`illustration-pieces`)
+
+- [ ] 3.1 Shared held sheet (design §1): Visor's held-sheet drawing and schema become shared functions that take the page's position, Visor calling them with its own (edge 98, bottom −4). Check: `npm test -- test/pieces/brand-pieces.test.ts test/pieces/frozen.test.ts` passes unchanged before going on (every Visor scenario of 0.12.0 and "Frozen cast calls").
+- [ ] 3.2 `src/pieces/supporting-cast.ts`, `balao` (design §2, §5): schema, relations, the body, the request line, the held stamp group, the text group, the back view, `facing`. Unit tests in `test/pieces/supporting-cast.test.ts`, describe "Balão": "Balão at rest", "The tail points at the listener", "Balão speaks", "Balão holds the stamp", "Balão from behind"; describe "Balão parameters": "Speaking and stamping together", "Stamp from behind", "Bad stamp and parameters". Check: `npm test -- test/pieces/supporting-cast.test.ts`.
+- [ ] 3.3 `chaves` in the same module (design §3, §5): schema, relations, the reinforced body, the cursor, `types` (through `keyboard`), `points`, `holdsSheet` (through the shared held sheet), the back view, `facing`. Unit tests in `test/pieces/supporting-cast.test.ts`, describe "Chaves": "Chaves at rest", "Chaves types", "Chaves points", "Chaves hands a sheet over", "Chaves from behind"; describe "Chaves's silhouette": "Brace points and waist" (parses the end points of the body path's `M`, `H`, `L`, `Q` segments); describe "Chaves parameters": "One action at a time", "Props from behind", "Bad held sheet and parameters", "Actions off by default". "Reads at 24 px (local)" is task 6.2. Check: `npm test -- test/pieces/supporting-cast.test.ts`.
+- [ ] 3.4 Unit tests in `test/pieces/supporting-cast.test.ts`, describe "Supporting characters face left or right": "Mirror of the default", "Props stay readable facing left", "Same outline both ways"; describe "Supporting cast follows the cast rules": "Shared skin in every expression", "Scale about the ground point", "Schemas list the shared and own parameters". Check: `npm test -- test/pieces/supporting-cast.test.ts`.
+- [ ] 3.5 Catalogue: `balao`, `chaves`, `keyboard` last in `PIECES`; `REQUIRED_ONLY.balao` and `REQUIRED_ONLY.chaves` `{ x: 0, y: 0 }`. `test/pieces/catalogue.test.ts`: "Every piece draws with its defaults" expects 67 (line 119, and line 151 for the root's `PIECE_NAMES`), "Question token in the catalogue" reads `questionToken` at index 63 of 67, new "Supporting cast in the catalogue" (the first 64 names compared with a list written from 0.12.0's `PIECE_NAMES` in the test), "Balão's and Chaves's words" (with "Stamp word", "Empty label", "The token's only glyph" and "Visor's words" green unchanged); `scripts/pieces-sheet.ts` gets samples for the three pieces (Balão and Chaves at rest and acting, light and dark; the keyboard at 150), so "Catalogue sheet" (`test/scripts/pieces-sheet.test.ts`) passes with the new labels; "Seven-role cast gone" stays green. `test/package/package.test.ts` "Pieces and tokens import without React" expects 67 (line 106; in task 7.3, after `npm run build`). Check: `npm run typecheck && npm test -- test/pieces/catalogue.test.ts test/scripts/pieces-sheet.test.ts`.
+- [ ] 3.6 Unit test in `test/pieces/brand-pieces.test.ts`: "Visor's schema lists its actions" reads only `mira`, `drone`, `kiu`, `sinal` for the absence of `holdsSheet` and `facing`; "Mira state faces", "Every expression, both themes", "Back view has no face", "Scale resizes without changing the drawing" and "Unknown expression rejected" stay green unchanged; "Pure and token-only" is proved by "Real sources are clean" (`test/brand/no-colour-literals.test.ts`, unit), which scans `src/pieces/` and so the two new modules. Check: `npm test -- test/pieces/brand-pieces.test.ts test/brand/no-colour-literals.test.ts`.
+- [ ] 3.7 Palette: `test/pieces/palette.test.ts` "Every piece in the v2 palette" adds the calls its scenario lists (Balão speaking and holding a stamp, Chaves typing, pointing and holding a sheet with a `question` row and a `tail` check, both surfaces, both facings); new test "The supporting cast's state colours"; "Dark card on a piece without a surface", "A decorative state colour is caught", "Only the default track rings", "The product accent is caught", "State colours where they mean a state", "Failing light only when failing" and "A held sheet's check" stay green. Check: `npm test -- test/pieces/palette.test.ts`.
+- [ ] 3.8 "Frozen outputs after the change": `npm test -- test/pieces/frozen.test.ts test/scripts/cover.test.ts test/pieces/brand-pieces.test.ts` passes and `git diff origin/main --stat -- test/fixtures` prints nothing (unit and integration).
+
+## 4. The cover command (`cover-cli`)
+
+- [ ] 4.1 Integration tests in `test/scripts/cover.test.ts`: "Supporting cast drawn", "Supporting cast problems at their paths"; "Unknown background and piece" (lines 239-241: the list ends `questionToken, balao, chaves, keyboard`, length 67) and "Mascot refused" (line 585: 67, the list ends with `keyboard`); "Unsafe id", "Invalid JSON", "Unknown format", "Ring count in a spec", "Emote drawn" and the cover goldens stay green unchanged. Check: `npm test -- test/scripts/cover.test.ts`.
+
+## 5. Documentation
+
+- [ ] 5.1 README: "The cast and the emotes" becomes a table of the seven characters (character, piece, role per ADR 0007, actions, hood tip, emote spot of design §8) followed by the `keyboard` prop and an example of the two supporting characters; "Illustration pieces and covers" counts 67 pieces; "Upgrading to 0.13.0" (added names and types; nothing removed or renamed; every 0.12.0 call, spec and scene unchanged; `PIECE_NAMES` ends with the three new names). Check: `grep -n "balao\|chaves\|keyboard\|0.13.0\|67 pieces" README.md` lists each section, and the table has seven character rows.
+- [ ] 5.2 `docs/adr/0007-mira-and-the-pillar-cast.md`: the status line and the amendment of design §6, word for word unless the owner changes it at gate 1; `docs/adr/README.md`: ADR 0007's row says it is amended on 2026-11-12 (the supporting characters). Check: `grep -n "2026-11-12" docs/adr/0007-mira-and-the-pillar-cast.md docs/adr/README.md`.
+- [ ] 5.3 `docs/roadmap.md`: row 13f `supporting-characters`, AB#337, after 13e. Check: `grep -n "13f" docs/roadmap.md`.
+
+## 6. The model sheet and the owner's gate (SHEET-1)
+
+- [ ] 6.1 `docs/spikes/<date>-supporting-characters/model-sheet.ts` (design §8), from `src/pieces/` only: writes `model-sheet.svg` with fonts embedded (`embedFonts`) and an English `<title>` and `<desc>` (STY-8), and the PNG panels through Chrome and `<img>` (never `rsvg-convert`, ADR 0008): per character front and back on light and dark, the silhouette, the four expressions, every action facing right and left, an emote at its spot; the seven characters on one ground line at one scale, light and dark (CAST-5); the row at 48 px and 24 px tall. A README in the folder names the commands. Check: `ls -l` shows every file under 200 KB, and `grep -o "<title>[^<]*</title>\|<desc>[^<]*</desc>" model-sheet.svg` prints English text.
+- [ ] 6.2 Local "Reads at 24 px (local)": the owner looks at the sheet (gate 3, stills before the pull request leaves draft). A change he asks for changes the path or position, its scenario and design §3 or §8 in the same commit.
+
+## 7. Full checks
+
+- [ ] 7.1 `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0.
+- [ ] 7.2 `openspec validate supporting-characters --strict` and `openspec validate --all --strict` pass.
+- [ ] 7.3 `test/package/package.test.ts` (in `npm test` after `npm run build`) reports 67 pieces.
+
+## Workflow follow-up
+
+- After the code review: `openspec archive supporting-characters -y`, then `openspec validate --all --strict`, in the same branch.
+- The pull request title stays `feat: supporting characters Balão (requester) and Chaves (developer) (AB#337)`, with the `BEGIN_COMMIT_OVERRIDE` block of the proposal if the owner chooses it at gate 1; release-please proposes 0.13.0. After the owner merges the release and approves `npm`: `npm view @brunosouzas/design-system version` prints `0.13.0`; then the vault's project notes, and the kit change for the motion skill's CAST-1 and CAST-6 and the illustration skill's pin.
