@@ -1,6 +1,7 @@
 // Motion components of the visual language: rings background, ink block with
 // the shadow.* offset (0 since ADR 0009, so no visible shadow), pill label, self-drawing arrow, travelling token,
-// call-result square and countdown ring (ADR 0001, ADR 0003).
+// call-result square and countdown ring (ADR 0001, ADR 0003), and the dashed
+// motion path (change sdd-without-with-spec-scene).
 //
 // Every colour and every outline, shadow, radius, font and motion value comes
 // from the generated tokens; what is visible at a frame comes from motion.ts.
@@ -16,6 +17,7 @@ import {
   arrowDash,
   callAppearance,
   fadeIn,
+  motionPathDrawing,
   pillPopIn,
   popSpring,
   squarePopScale,
@@ -264,6 +266,28 @@ export const Countdown: React.FC<{ left: number; size: number }> = ({ left, size
         strokeWidth={COUNTDOWN_INNER_STROKE}
         strokeDasharray={`${2 * Math.PI * inner * left} ${c}`}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
+      />
+    </svg>
+  );
+};
+
+// A dashed motion path (the storyboard's guide line from one object to another),
+// in composition pixels, at the opacity the scene gives (motion.motionPathAt):
+// it reads no frame, so a scene can draw it at any frame of its own, such as a
+// rewind's object frame (change sdd-without-with-spec-scene, design §2.4).
+export const MotionPath: React.FC<{ d: string; opacity: number; width: number; height: number }> = ({ d, opacity, width, height }) => {
+  const drawing = motionPathDrawing(d, opacity);
+  if (drawing === null) return null;
+  return (
+    <svg width={width} height={height} style={{ position: "absolute", inset: 0, overflow: "visible" }}>
+      <path
+        d={drawing.d}
+        opacity={drawing.opacity}
+        fill={drawing.fill}
+        stroke={drawing.stroke}
+        strokeWidth={drawing.strokeWidth}
+        strokeDasharray={drawing.strokeDasharray}
+        strokeLinecap={drawing.strokeLinecap}
       />
     </svg>
   );
