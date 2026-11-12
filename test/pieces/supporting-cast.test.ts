@@ -51,12 +51,22 @@ const CHAVES_TIP_BACK = "M-28 -150 Q0 -158 28 -150 Q0 -142 -28 -150 Z";
 const SHEET: HeldSheet = { width: 150, height: 160, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" };
 
 type Segment = { from: [number, number]; controls: [number, number][]; to: [number, number] };
-/** The segments of an absolute path of M, L, H, V, Q and Z commands (the only ones these bodies use). */
+/**
+ * The segments of an absolute path of M, L, H, V, Q, C, A and Z commands; any
+ * other command (or a number where a command should be) throws, so no shape is
+ * silently left out. An arc of a circle (rx = ry, no rotation, the only arcs the
+ * pieces and emotes draw) keeps the corners of its full circle's box as its
+ * control points, a bound of the arc.
+ */
 const segmentsOf = (d: string): Segment[] => {
-  const tokensOf = d.match(/[MLHVQZ]|-?\d+(?:\.\d+)?/g)!;
+  const tokensOf = d.replace(/,/g, " ").match(/[A-Za-z]|-?\d*\.?\d+/g)!;
   const out: Segment[] = [];
   let at: [number, number] = [0, 0], start: [number, number] = [0, 0], i = 0;
-  const num = () => Number(tokensOf[i++]);
+  const num = () => {
+    const token = tokensOf[i++];
+    if (token === undefined || /[A-Za-z]/.test(token)) throw new Error(`segmentsOf: missing number in "${d}"`);
+    return Number(token);
+  };
   while (i < tokensOf.length) {
     const command = tokensOf[i++];
     if (command === "M") { at = [num(), num()]; start = at; continue; }
@@ -65,7 +75,20 @@ const segmentsOf = (d: string): Segment[] => {
     else if (command === "H") to = [num(), at[1]];
     else if (command === "V") to = [at[0], num()];
     else if (command === "Q") { controls = [[num(), num()]]; to = [num(), num()]; }
-    else to = start;
+    else if (command === "C") { controls = [[num(), num()], [num(), num()]]; to = [num(), num()]; }
+    else if (command === "A") {
+      const [rx, ry, rotation, large, sweep] = [num(), num(), num(), num(), num()];
+      to = [num(), num()];
+      if (rx !== ry || rotation !== 0) throw new Error(`segmentsOf: only circular arcs, in "${d}"`);
+      // The centre from the end points (SVG 1.1, F.6.5, for a circle), the radius grown if the chord is longer.
+      const hx = (at[0] - to[0]) / 2, hy = (at[1] - to[1]) / 2;
+      const r = Math.max(rx, Math.hypot(hx, hy));
+      const k = (large === sweep ? -1 : 1) * Math.sqrt(Math.max(0, (r * r - hx * hx - hy * hy) / (hx * hx + hy * hy)));
+      const [cx, cy] = [k * hy + (at[0] + to[0]) / 2, -k * hx + (at[1] + to[1]) / 2];
+      controls = [[cx - r, cy - r], [cx + r, cy - r], [cx - r, cy + r], [cx + r, cy + r]];
+    }
+    else if (command === "Z") to = start;
+    else throw new Error(`segmentsOf: unknown command "${command}" in "${d}"`);
     out.push({ from: at, controls, to });
     at = to;
   }
@@ -503,6 +526,9 @@ const boxesOf = (nodes: readonly SvgNode[], m = IDENTITY, stroke = "none", width
   });
 /** The distance from a point to a box (0 inside it). */
 const distance = ([x, y]: [number, number], box: Box) => Math.hypot(Math.max(box.x0 - x, 0, x - box.x1), Math.max(box.y0 - y, 0, y - box.y1));
+/** The README's screen for Chaves typing, a codePanel above the keyboard, in the cover command's 4-unit outline. */
+const readmeScreen = (facing: CastFacing) =>
+  boxesOf(codePanel({ x: facing === "left" ? -238 : 106, y: -148, width: 132, height: 62, lines: [] }).body, IDENTITY, "ink", tokens.outline.block);
 /** Whether two boxes share a point. */
 const meets = (a: Box, b: Box) => a.x0 <= b.x1 && b.x0 <= a.x1 && a.y0 <= b.y1 && b.y0 <= a.y1;
 /** The emote's disc: radius 40 and its outline (design §8). */
@@ -524,18 +550,17 @@ describe("Emote spot beside the head", () => {
       for (const [label, drawn] of calls) {
         expect(drawn.body[0].attrs.transform).toBe("translate(0 0) scale(1)");
         expect(overlapping(drawn, facing), `${label} facing ${facing}`).toEqual([]);
-        // Every emote drawn at the spot, its burst included (some reach past the disc), touches none of the piece's shapes.
-        const piece = boxesOf(kids(drawn.body[0]));
+        // Every emote drawn at the spot, its burst included (some reach past the disc), touches none of the piece's shapes,
+        // nor, for Chaves typing, the README's screen.
+        const piece = [...boxesOf(kids(drawn.body[0])), ...(label === "chaves typing" ? readmeScreen(facing) : [])];
         for (const kind of EMOTE_KINDS) {
           const [x, y] = spotOf(facing);
           const touching = boxesOf(emote({ kind, x, y }).body).filter((box) => piece.some((other) => meets(box, other)));
           expect(touching, `${kind} at the spot of ${label} facing ${facing}`).toEqual([]);
         }
       }
-      // The README's screen for Chaves typing, a codePanel above the keyboard (in the cover command's 4-unit outline), clears it too.
-      const screen = codePanel({ x: facing === "left" ? -238 : 106, y: -148, width: 132, height: 62, lines: [] });
-      const screenBoxes = boxesOf(screen.body, IDENTITY, "ink", tokens.outline.block);
-      expect(screenBoxes.filter((box) => distance(spotOf(facing), box) < SPOT_RADIUS), `screen facing ${facing}`).toEqual([]);
+      // The README's screen for Chaves typing clears the disc too.
+      expect(readmeScreen(facing).filter((box) => distance(spotOf(facing), box) < SPOT_RADIUS), `screen facing ${facing}`).toEqual([]);
     }
   });
 
@@ -547,6 +572,22 @@ describe("Emote spot beside the head", () => {
     (front.attrs as Record<string, number>).cx = 116;
     (front.attrs as Record<string, number>).cy = -160;
     expect(overlapping(moved, "right")).toHaveLength(1);
+  });
+
+  test("The test sees an emote's whole shape", () => {
+    // The heart is cubic curves and the bulb's top an arc: their boxes reach their drawn extents, not a point.
+    const [x, y] = spotOf("right");
+    const heart = boxesOf(emote({ kind: "liked", x, y }).body);
+    expect(Math.min(...heart.map((box) => box.x0))).toBeLessThanOrEqual(x - 50);
+    expect(Math.max(...heart.map((box) => box.x1))).toBeGreaterThanOrEqual(x + 50);
+    expect(Math.min(...heart.map((box) => box.y0))).toBeLessThanOrEqual(y - 40);
+    const bulb = boxesOf(emote({ kind: "idea", x, y, burst: false }).body);
+    expect(Math.min(...bulb.map((box) => box.y0))).toBeLessThanOrEqual(y - 60);
+    // A heart moved onto Balão's front hand (100, -50) is caught.
+    const piece = boxesOf(kids(balao({ x: 0, y: 0 }).body[0]));
+    expect(boxesOf(emote({ kind: "liked", x: 100, y: -40 }).body).filter((box) => piece.some((other) => meets(box, other))).length).toBeGreaterThan(0);
+    // A command the parser does not read fails the test instead of passing silently.
+    expect(() => segmentsOf("M0 0 S10 10 20 0")).toThrow(/unknown command/);
   });
 
   test("A tall held sheet reaches the spot", () => {

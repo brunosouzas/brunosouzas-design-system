@@ -9,7 +9,7 @@ The model sheet of the supporting cast, Balão (`balao`, the requester and appro
 | `chaves.png` | 1384 x 1270 | Chaves at scale 0.85: the same views, silhouette and expressions, `failed` with the `problem` emote at its spot (dark), `types` under a `codePanel` the sheet places as the screen, `points` and `holdsSheet` facing right and left, `types` on dark, `done` with the `worked` emote facing left |
 | `cast-row-light.png` | 1540 x 320 | Mira, Visor, Balão, Chaves, Drone, Kiu and Sinal at scale 1 on one ground line (motion CAST-5; Drone flies 40 above it) |
 | `cast-row-dark.png` | 1540 x 320 | the same on the dark surface |
-| `small-sizes.png` | 1540 x 210 | the same row shown with Balão 48 and 24 px tall, light and dark: the size at which the concept's Chaves read as a pillow |
+| `small-sizes.png` | 1540 x 210 | the same row shown with Balão 48 and 24 px tall, light and dark (Chaves, a little shorter, about 44 and 22 px): the size at which the concept's Chaves read as a pillow |
 
 The emote sits at the spot the README documents, (`x` ± 116·`scale`, `y` − 200·`scale`), at the character's scale (design §8). The typing tiles draw the README's screen, 132 × 62 at (106, −148) facing right and (−238, −148) facing left in Chaves's units, which clears that spot.
 

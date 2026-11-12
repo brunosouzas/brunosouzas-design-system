@@ -183,12 +183,12 @@ The package SHALL export `keyboard({ x, y, width, surface })`, the laptop's base
 - **THEN** both hold `x`, `y`, `surface`, `scale`, `expression`, `view` and `facing`; `balao` adds exactly `speaks` and `holdsStamp`, `chaves` exactly `types`, `points` and `holdsSheet`; neither has a colour parameter
 
 ### Requirement: Emote spot beside the head
-For `balao` and `chaves` the emote spot SHALL be (116, −200) in local units facing right and (−116, −200) facing left, for an `emote` at the character's `scale` (CAST-3): a disc of radius 44 there clears every shape the piece draws at rest, pointing, typing or holding the stamp, in both facings, and so do every `emote` drawn there and the README's screen for Chaves typing. A held sheet taller than 114 reaches it, or taller than 96 with a label whose pill is at least as wide as the page.
+For `balao` and `chaves` the emote spot SHALL be (116, −200) in local units facing right and (−116, −200) facing left, for an `emote` at the character's `scale` (CAST-3): a disc of radius 44 there clears every shape the piece draws at rest, pointing, typing or holding the stamp, both facings, and the README's typing screen; no `emote` there touches them. A held sheet taller than 114 reaches it, or taller than 96 with a label whose pill is at least as wide as the page.
 
 #### Scenario: Spot clear of the body and props
 - **GIVEN** `balao` at rest and holding a stamp, `chaves` at rest, pointing and typing, each facing right and left at `x` 0, `y` 0, each of the eight `emote` kinds at the spot at scale 1, and the README's screen for Chaves typing (a `codePanel` 132 × 62 at (106, −148), mirrored facing left) in the cover command's 4-unit outline
-- **WHEN** the bounding box of every shape (a path's per segment, from its end and control points; with half its stroke width, the pointing hand's rotation applied) is compared with the disc of radius 44 at the spot, and each emote shape's box with each of the piece's
-- **THEN** none of the piece's shapes nor the screen overlaps the disc, and no emote shape's box meets a piece shape's box
+- **WHEN** the bounding box of every shape (a path's per segment, from its end and control points; with half its stroke width, the pointing hand's rotation applied) is compared with the disc of radius 44 at the spot, and each emote shape's box with each of the piece's and the screen's (a cubic's box from its two control points, an arc's from its circle)
+- **THEN** none of the piece's shapes nor the screen overlaps the disc, and no emote shape's box meets a box of the piece's shapes or, for Chaves typing, of the screen
 
 #### Scenario: A tall held sheet reaches the spot
 - **GIVEN** `chaves` holding the sheet of "Chaves hands a sheet over" (height 160, width 150, label `proposal.md`, whose pill is as wide as the page), the same without the label at heights 100, 114 and 115, and with the label at heights 96 and 100, each facing right and left

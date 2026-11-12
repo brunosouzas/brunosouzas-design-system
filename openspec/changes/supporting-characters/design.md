@@ -110,7 +110,7 @@ Appended to `docs/adr/0007-mira-and-the-pillar-cast.md`, with a status line "Ame
 
 ## 7. Proving existing outputs unchanged
 
-The five cast pieces are pinned by `test/fixtures/cast-0.11.0.json` (138 calls, "Cast calls of 0.11.0 unchanged"); Visor's 0.12.0 additions by the exact trees of "Visor holds a sheet", "Held sheet parameters", "Visor faces left or right" and "Mirrored Visor keeps its outline and words"; every other piece by `pieces-0.2.0`, `pieces-0.5.0`, `pieces-0.8.0`, `emote-0.7.0`, `message-arrow-0.3.1`, `ui-icons-0.3.0` and the cover goldens. They stay green and byte-identical with no fixture rewritten. No new fixture: the new pieces' scenarios pin their trees.
+The five cast pieces are pinned by `test/fixtures/cast-0.11.0.json` (138 calls, "Cast calls of 0.11.0 unchanged"); Visor's 0.12.0 additions by the exact trees of "Visor holds a sheet", "Held sheet parameters", "Visor faces left or right" and "Mirrored Visor keeps its outline and words"; every other piece by `pieces-0.2.0`, `pieces-0.5.0`, `pieces-0.8.0`, `emote-0.7.0`, `message-arrow-0.3.1`, `ui-icons-0.3.0` and the cover goldens. They stay green and byte-identical with no fixture rewritten. The one new fixture is `test/fixtures/stamp-0.12.0.json` (task 2.0), written from 0.12.0 before `stamp` moves; the new pieces' own scenarios pin their trees.
 
 ## 8. The model sheet in `docs/`
 
