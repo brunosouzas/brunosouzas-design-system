@@ -47,7 +47,7 @@ A video only where it shows a process unfolding; the other 19 pages keep their s
 | EIP Publish-Subscribe Channel | book (new) + Mule (existing scene) | AB#148 |
 | Write in Obsidian, publish on your own site | 1: the publishing flow, success and failure | AB#149 |
 | Deploying to CloudHub 2.0 | 1: release, production gate, verification | AB#150 |
-| Circuit breaker | existing scene, embedded by AB#142 | AB#142 |
+| Circuit breaker | `circuit-breaker-topology` (AB#334): retry alone against the breaker, one topology played twice; it replaces the state-machine scene on the page, embedded by AB#142. `circuit-breaker-states` stays in the package | AB#334, AB#142 |
 
 EIP series: every new pattern gets two neutral videos, the pattern as the book describes it and as Mule implements it. A page may publish with its static diagrams; the videos follow in their own cards.
 
@@ -79,7 +79,7 @@ EIP series: every new pattern gets two neutral videos, the pattern as the book d
 - Sound and music: added per scene only when its context asks for it (a narrated presentation).
 - A site banner as video: a header animation is better as light CSS or SVG generated from the same tokens, because a video in the page header weighs on loading.
 - The Remotion Player on the site: it autoplays and loops, but ships React, Remotion and the font to the page; an MP4 in `<video>` does the same with less weight.
-- Without a card for now: the Maven release (a git timeline) and the retry vs circuit-breaker race.
+- Without a card for now: the Maven release (a git timeline). The retry vs circuit-breaker comparison is the `circuit-breaker-topology` scene (AB#334).
 - New `coverBackground` tones: none until a series needs a tone its track family lacks; a new tone joins its family (`<track><Tone>`) only from renders the owner approves (ADR 0006, amended 2026-11-06).
 - A dark-surface body diagram, a second layout width and text that wraps by itself (not asked by the designer, AB#173).
 - Drawing stackledger's round bends (AB#166): stackledger draws the arcs with `map.bendRadius`; the banner keeps its own `Q` curves.

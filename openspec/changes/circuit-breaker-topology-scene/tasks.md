@@ -87,9 +87,9 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Topology still failure"
   - "Topology render dry run"
   - "Topology render failure"
-- [ ] 5.2 Local: `npm run stills -- circuit-breaker-topology` (14 PNGs), plus `npx remotion still` at the boundary frames of design §7. Open every PNG and check overlaps, clipping and contrast (MOT-5).
+- [x] 5.2 Local: `npm run stills -- circuit-breaker-topology` (14 PNGs), plus `npx remotion still` at the boundary frames of design §7. Open every PNG and check overlaps, clipping and contrast (MOT-5).
 - [ ] 5.3 Local: write the stills sheet and the phone sheet viewed at 341 CSS px (design §7, method recorded) to `docs/spikes/2026-11-12-circuit-breaker-topology/`. This proves "Stills reviewed (local)" with the owner at the media gate.
-- [ ] 5.4 Local: "Stills byte-identical (local)". Render the stills of every earlier scene on the merge base and on the branch, and compare their SHA-256.
+- [x] 5.4 Local: "Stills byte-identical (local)". Render the stills of every earlier scene on the merge base and on the branch, and compare their SHA-256.
 - [ ] 5.5 Local, after the owner's ok on the stills:
   - `npm run render -- circuit-breaker-topology`;
   - read the web copy with `npx remotion ffmpeg -hide_banner -i …`;
@@ -101,7 +101,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 ## 6. Checks, docs and review
 
 - [ ] 6.1 Run `npm run typecheck && npm run tokens:check && npm run build && npm test` and `openspec validate --all --strict`. All must pass.
-- [ ] 6.2 Update the docs (proposal "Documentation"):
+- [x] 6.2 Update the docs (proposal "Documentation"):
   - `README.md`: the scene row, the failure-rate bar, the scene's files.
   - `docs/roadmap.md`: the circuit-breaker row.
   - The ADR 0004 amendment for the take numbers, as the owner answers G1 question 2, with its row in `docs/adr/README.md`.
