@@ -6,12 +6,12 @@
 #### Scenario: Sheet in the left hand
 - **GIVEN** `visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 218, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } })`
 - **WHEN** it is drawn
-- **THEN** the root group holds two children: first a `g` with `data-held` `sheet`, `stroke` `#121212`, `stroke-width` 4 and `stroke-linejoin` `round`, whose children deep-equal `sheet({ x: -214, y: -222, width: 130, height: 218, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group (the `g` with `stroke-width` 3), followed by `pill({ x: -149, y: -222, text: "proposal.md" }).body`; then the body group, with no transform, whose children deep-equal those of `visor({ x: 0, y: 0, holds: true })`'s body group without the card (the rect filled `#E04E17`, 28 wide and 24 high), so the left hand is the circle at (−92, −66), radius 15
+- **THEN** the root group holds two children: first a `g` with `data-held` `sheet`, `stroke` `#121212`, `stroke-width` 4 and `stroke-linejoin` `round`, whose children deep-equal `sheet({ x: -228, y: -222, width: 130, height: 218, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group (the `g` with `stroke-width` 3), followed by `pill({ x: -163, y: -222, text: "proposal.md" }).body`; then the body group, with no transform, whose children deep-equal those of `visor({ x: 0, y: 0, holds: true })`'s body group without the card (the rect filled `#E04E17`, 28 wide and 24 high), so the left hand is the circle at (−92, −66), radius 15
 
 #### Scenario: The sheet's words are Visor's text
 - **GIVEN** the call of "Sheet in the left hand"
 - **WHEN** its `text` is read
-- **THEN** it holds one `g` with `transform` `translate(0 0) scale(1)`, `font-family` `font.sans`, `font-size` 19, `font-weight` 700, `fill` `#121212` and `text-anchor` `middle`, holding the `?` text node at (−184, −158) with `font-size` 19 and `font-weight` 900, then a text node at (−149, −215) holding `proposal.md`
+- **THEN** it holds one `g` with `transform` `translate(0 0) scale(1)`, `font-family` `font.sans`, `font-size` 19, `font-weight` 700, `fill` `#121212` and `text-anchor` `middle`, holding the `?` text node at (−198, −158) with `font-size` 19 and `font-weight` 900, then a text node at (−163, −215) holding `proposal.md`
 
 #### Scenario: Held sheet on the dark surface
 - **GIVEN** the call of "Sheet in the left hand" with `surface: "dark"`
@@ -32,6 +32,11 @@
 - **GIVEN** `visor({ x: 0, y: 0 })` and `visor({ x: 0, y: 0, holds: true })`
 - **WHEN** they are drawn
 - **THEN** both `text` arrays are empty and neither body holds a `data-held` group
+
+#### Scenario: The hand clears the row marks
+- **GIVEN** `holdsSheet` `{ width: 150, height: 120, rows: [{ lead: "question", bar: 40, tail: "check" }] }`, facing right and facing left
+- **WHEN** Visor is drawn
+- **THEN** the left hand (radius 15, outline 4, at x −92 or 92) overlaps the page's edge, and no lead mark or tail check of the held sheet, with its outline, reaches under it
 
 #### Scenario: Sheet without words
 - **GIVEN** `visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 120, rows: [{ bar: 40 }, { lead: "checked", bar: 30 }] } })`
@@ -100,7 +105,7 @@
 - **THEN** it throws a `RangeError` naming `facing` and listing `right, left`
 
 ### Requirement: Mirrored Visor keeps its outline and words
-Facing left SHALL change no fill, stroke colour or stroke width (ADR 0009): the only negative scale in Visor's tree is the body group's `scale(-1,1)`. A held sheet and every word stay unmirrored: facing left, the held group sits outside the mirrored group with the page's left edge at local x 84, and the `text` group carries the root's transform with no negative scale.
+Facing left SHALL change no fill, stroke colour or stroke width (ADR 0009): the only negative scale in Visor's tree is the body group's `scale(-1,1)`. A held sheet and every word stay unmirrored: facing left, the held group sits outside the mirrored group with the page's left edge at local x 98, and the `text` group carries the root's transform with no negative scale.
 
 #### Scenario: Same outline both ways
 - **GIVEN** `visor` with each `expression`, on `light` and on `dark`, with `holds: true`, once facing right and once facing left
@@ -110,12 +115,12 @@ Facing left SHALL change no fill, stroke colour or stroke width (ADR 0009): the 
 #### Scenario: Sheet on the right, unmirrored
 - **GIVEN** the call of "Sheet in the left hand" with `facing: "left"`
 - **WHEN** it is drawn
-- **THEN** the held group is the root's first child and has no `transform`; its children deep-equal `sheet({ x: 84, y: -222, width: 130, height: 218, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group, followed by `pill({ x: 149, y: -222, text: "proposal.md" }).body`; the second child is the body group with `transform` `scale(-1,1)`
+- **THEN** the held group is the root's first child and has no `transform`; its children deep-equal `sheet({ x: 98, y: -222, width: 130, height: 218, rows: [{ lead: "question", bar: 40 }] }).body` with `stroke` `#121212` added to its marks group, followed by `pill({ x: 163, y: -222, text: "proposal.md" }).body`; the second child is the body group with `transform` `scale(-1,1)`
 
 #### Scenario: Words read the same
 - **GIVEN** the calls of "Sheet in the left hand" facing right and facing left
 - **WHEN** their `text` trees are compared
-- **THEN** they hold the same strings with the same attributes except `x`: each `x` facing left is its value facing right plus 298 (168 plus the sheet's width), so the `?` is at 114 and `proposal.md` at 149, and no `transform` in either `text` holds a negative number
+- **THEN** they hold the same strings with the same attributes except `x`: each `x` facing left is its value facing right plus 326 (196 plus the sheet's width), so the `?` is at 128 and `proposal.md` at 163, and no `transform` in either `text` holds a negative number
 
 ### Requirement: Cast calls of 0.11.0 unchanged
 The five cast pieces SHALL draw, for every call in `test/fixtures/cast-0.11.0.json`, the tree and `toSvg` bytes it pins. The fixture is written once from 0.11.0, before any change to `brand-cast.ts`: at x 100, y 300, every `surface`, `view` and `expression` of `mira`, `drone`, `kiu` and `sinal` (64 calls), the same for `visor` over `holds` and `points` (64), and each piece at `scale` 0.25 and 4 (10): 138 calls.

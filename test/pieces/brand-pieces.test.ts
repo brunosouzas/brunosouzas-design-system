@@ -228,7 +228,7 @@ describe("Visor holds a sheet", () => {
     const [held, body] = kids(tree.body[0]);
     expect(kids(tree.body[0])).toHaveLength(2);
     expect(held.attrs).toEqual({ "data-held": "sheet", stroke: "#121212", "stroke-width": 4, "stroke-linejoin": "round" });
-    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: -214, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: -149, y: -222, text: "proposal.md" }).body]));
+    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: -228, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: -163, y: -222, text: "proposal.md" }).body]));
     expect(body.attrs).toEqual({});
     const withCard = kids(visor({ x: 0, y: 0, holds: true }).body[0])[0];
     const isCard = (node: Node | string) => typeof node !== "string" && node.tag === "rect" && node.attrs.fill === "#E04E17" && node.attrs.width === 28 && node.attrs.height === 24;
@@ -244,8 +244,8 @@ describe("Visor holds a sheet", () => {
         tag: "g",
         attrs: { transform: "translate(0 0) scale(1)", "font-family": tokens.font.sans, "font-size": 19, "font-weight": 700, fill: "#121212", "text-anchor": "middle" },
         children: [
-          { tag: "text", attrs: { x: -184, y: -158, "font-size": 19, "font-weight": 900 }, children: ["?"] },
-          { tag: "text", attrs: { x: -149, y: -215 }, children: ["proposal.md"] },
+          { tag: "text", attrs: { x: -198, y: -158, "font-size": 19, "font-weight": 900 }, children: ["?"] },
+          { tag: "text", attrs: { x: -163, y: -215 }, children: ["proposal.md"] },
         ],
       },
     ]);
@@ -283,6 +283,21 @@ describe("Visor holds a sheet", () => {
     for (const tree of [visor({ x: 0, y: 0 }), visor({ x: 0, y: 0, holds: true })]) {
       expect(tree.text).toEqual([]);
       expect(heldGroupOf(tree)).toBeUndefined();
+    }
+  });
+
+  test("The hand clears the row marks", () => {
+    // Design §2: the hand (radius 15, outline 4) overlaps the page's edge but no lead mark or tail check.
+    const rows = [{ lead: "question" as const, bar: 40, tail: "check" as const }];
+    for (const facing of ["right", "left"] as const) {
+      const tree = visor({ x: 0, y: 0, facing, holdsSheet: { width: 150, height: 120, rows } });
+      const marks = kids(heldGroupOf(tree)!).find((node) => node.tag === "g" && node.attrs["stroke-width"] === 3)!;
+      const handX = facing === "right" ? -92 : 92;
+      const reach = 15 + 2;
+      for (const mark of kids(marks)) {
+        const [from, to] = mark.tag === "circle" ? [Number(mark.attrs.cx) - 13 - 1.5, Number(mark.attrs.cx) + 13 + 1.5] : [Number(mark.attrs.x) - 1.5, Number(mark.attrs.x) + Number(mark.attrs.width) + 1.5];
+        expect(to < handX - reach - 4 || from > handX + reach + 4, `${facing} ${mark.tag} ${from}..${to}`).toBe(true);
+      }
     }
   });
 
@@ -410,7 +425,7 @@ describe("Mirrored Visor keeps its outline and words", () => {
     const [held, body] = kids(tree.body[0]);
     expect(held.attrs["data-held"]).toBe("sheet");
     expect(held.attrs.transform).toBeUndefined();
-    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: 84, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: 149, y: -222, text: "proposal.md" }).body]));
+    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: 98, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: 163, y: -222, text: "proposal.md" }).body]));
     expect(body.attrs.transform).toBe("scale(-1,1)");
   });
 
@@ -426,9 +441,9 @@ describe("Mirrored Visor keeps its outline and words", () => {
       const { x, ...rest } = node.attrs;
       const { x: twinX, ...twinRest } = twin.attrs;
       expect(rest).toEqual(twinRest);
-      expect(x).toBe(Number(twinX) + 298);
+      expect(x).toBe(Number(twinX) + 326);
     });
-    expect(words(left).map((node) => node.attrs.x)).toEqual([114, 149]);
+    expect(words(left).map((node) => node.attrs.x)).toEqual([128, 163]);
     for (const node of nodesOf([...left, ...right])) expect(String(node.attrs.transform ?? "")).not.toMatch(/-\d/);
   });
 });

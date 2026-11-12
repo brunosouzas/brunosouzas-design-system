@@ -148,9 +148,11 @@ export type VisorParams = {
   facing?: VisorFacing;
 };
 
-// Where the held sheet sits, in Visor's units (design §2): its edge against the
-// left hand (x -84 facing right, 84 facing left), its bottom 4 above the ground line.
-const HELD_SHEET_EDGE = 84;
+// Where the held sheet sits, in Visor's units (design §2): its edge under the
+// left hand (x -98 facing right, 98 facing left), so the hand (x -92, radius 15)
+// lies 11 units over the page, clear of a row's lead mark and of a tail check;
+// its bottom 4 above the ground line.
+const HELD_SHEET_EDGE = 98;
 const HELD_SHEET_BOTTOM = -4;
 
 /**
