@@ -25,8 +25,9 @@ import { headline, type HeadlineParams } from "./headline.ts";
 import { questionToken, type QuestionTokenParams } from "./question-token.ts";
 import { codeLength, spans } from "./ink.ts";
 import { pill, sheet, type PillParams, type SheetParams, type SheetRow } from "./paper.ts";
-export { pill, sheet };
-export type { PillParams, SheetParams, SheetRow };
+import { stamp, type StampParams } from "./stamp.ts";
+export { pill, sheet, stamp };
+export type { PillParams, SheetParams, SheetRow, StampParams };
 export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken };
 export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams, QuestionTokenParams };
 
@@ -309,27 +310,6 @@ export const checkBadge = definePiece<CheckBadgeParams>("checkBadge", { cx: pos(
     el("circle", { cx, cy, r, fill: tokens.color.state.healthy, "stroke-width": tokens.outline.small }),
     el("path", { d: `M${r2(cx - r * 0.42)},${cy} L${r2(cx - r * 0.1)},${r2(cy + r * 0.34)} L${r2(cx + r * 0.45)},${r2(cy - r * 0.32)}`, fill: "none", "stroke-width": 3.5, "stroke-linecap": "round" }),
   ]),
-);
-
-export type StampParams = { cx: number; cy: number; word: string; fill?: string; r?: number; rotate?: number; shape?: "round" | "rect" };
-/** Rubber stamp, round (dashed inner ring) or rectangular, tilted, with one word. */
-export const stamp = definePiece<StampParams>(
-  "stamp",
-  { cx: pos(), cy: pos(), word: label(), fill: col(), r: size(false, 12), rotate: { kind: "number" }, shape: { kind: "enum", values: ["round", "rect"] } },
-  ({ cx, cy, word, fill = "color.state.healthy", r = 40, rotate = -12, shape = "round" }) => {
-    const turn = `rotate(${rotate} ${cx} ${cy})`;
-    const face =
-      shape === "round"
-        ? [
-            el("circle", { cx, cy, r, fill: colour(fill, "fill") }),
-            el("circle", { cx, cy, r: r - 10, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small, "stroke-dasharray": "6 5" }),
-          ]
-        : [
-            el("rect", { x: cx - r * 1.6, y: cy - r * 0.7, width: r * 3.2, height: r * 1.4, rx: 8, fill: colour(fill, "fill") }),
-            el("rect", { x: cx - r * 1.6 + 8, y: cy - r * 0.7 + 8, width: r * 3.2 - 16, height: r * 1.4 - 16, rx: 4, fill: "none", stroke: tokens.color.white, "stroke-width": tokens.outline.small }),
-          ];
-    return drawn([g({ transform: turn }, ...face)], [el("text", { x: cx, y: cy + 10, "font-size": 27, "font-weight": tokens.font.weightHeavy, transform: turn }, word)]);
-  },
 );
 
 export type RobotParams = { cx: number; top: number };
