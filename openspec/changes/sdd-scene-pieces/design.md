@@ -10,7 +10,7 @@ The schema of a piece (`src/pieces/params.ts`) has no union kind: a parameter is
 |---|---|---|---|
 | A. Widen `holds` to `boolean \| object` | reads as "holds" | every `holds: true` still valid | a new `oneOf` schema kind, its error messages and its JSON-path reporting in the cover command, for one parameter |
 | B. `holds` as an enum `none \| card \| sheet`, plus a `sheet` object | one switch | **breaks** every `holds: true` / `false` call and spec | a migration for nothing gained |
-| C. A sibling object `holdsSheet` (chosen) | reads as "holds a sheet" | additive; without it Visor draws as in 0.11.0 | one relation: `holds: true` with `holdsSheet` is refused (REQ-5), so one input has one outcome |
+| C. A sibling object `holdsSheet` (chosen) | reads as "holds a sheet" | additive; without it Visor draws as in 0.11.0 | two relations: `holds: true` with `holdsSheet` is refused, and so is `view: "back"` (a sheet's back is not designed; G1 question 8), so one input has one outcome (REQ-5); the schema's problems come first, as for every piece |
 
 `holdsSheet` takes the `sheet` piece's page parameters except position and colours (`width`, `height`, `rows`, `top`, `step`) plus `label`: the caller already knows that shape, and no colour parameter keeps the held sheet in the cast's palette (ADR 0009). Ranges: `width` 80 (the `sheet` minimum) to 300, `height` 80 to 400, 1 to 8 rows (the prototype used 6; 8 still fits a 400 page at the default step).
 
@@ -25,7 +25,7 @@ Visor's local units (scale 1; the ground line is y 0; the body spans x −66 to 
 | Left hand | circle (−92, −66), r 15, outlined, drawn after the sheet, over its right edge | mirrored with the body: (92, −66), over the page's left edge |
 | Card | not drawn | not drawn |
 
-The bottom at −4 keeps the page off the ground line; the hand at −66 lies inside any page at least 80 high (−84 to −4). Assumed, to be confirmed on the stills at the owner's gate: these positions read as "holding" at the scene's scale (1.15 in the prototype).
+The label pill takes `pill`'s default width (150 for `proposal.md`), so on a page narrower than its label it hangs over both edges, and on the smallest page (80 × 80) its end reaches behind Visor's left ear (the held group is drawn first); both are accepted and shown in the evidence, and the scene uses a page at least as wide as its label. The bottom at −4 keeps the page off the ground line; the hand at −66 lies inside any page at least 80 high (−84 to −4). Assumed, to be confirmed on the stills at the owner's gate: these positions read as "holding" at the scene's scale (1.15 in the prototype).
 
 The page, rows and pill are the `sheet` and `pill` pieces' own drawings, called with those positions, inside one group (`data-held` `sheet`) that sets Visor's outline (`stroke` the skin's outline, `stroke-width` `outline.block`, round joins). Cast pieces set `stroke: none` on their root and outline each shape themselves, while `sheet` and `pill` rely on the cover command's outlined group; the held group gives them that stroke inside Visor, so the held sheet draws the same in a cover and in a scene. On the dark surface the page and the pill sit on the dark background (outline `surface.dark.muted`, as Visor's own body), but the marks sit on the white page, so the sheet's marks group gets `stroke` `color.ink` (ADR 0009's dark ink rule). On light both are `#121212`.
 
@@ -69,7 +69,7 @@ The repository renders no React component in its tests ("wrapper rendering is ch
 2. A source test: `components.tsx` keeps no ring constant and its `Rings` calls the helper and reads `scene.ringWidth` (unit).
 3. The stills of both scenes, before and after, equal by SHA-256 on one machine (local; rendering needs the network).
 
-The helper refuses a step of 0 (an endless loop) and more than `MAX_RINGS` (1000) radii, the cover `rings` piece's limit.
+The helper refuses a step of 0 (an endless loop) and more than 1000 radii, the cover `rings` piece's limit, held in a local constant: `src/brand/` imports nothing from `src/pieces/` today, and the frame logic should not pull the pieces library in for one number.
 
 ## Risks / trade-offs
 
@@ -79,4 +79,4 @@ The helper refuses a step of 0 (an endless loop) and more than `MAX_RINGS` (1000
 
 ## Migration
 
-None. Every 0.11.0 call, spec and scene draws the same; consumers adopt the new parameters when they need them. Roll back: a patch release reverting the change; nothing persisted depends on it.
+None. Every 0.11.0 call, spec and scene draws the same; consumers adopt the new parameters when they need them (DES-3). The public surface grows only: `PieceName` and `PIECE_NAMES` gain `questionToken` (a consumer that switches exhaustively over `PieceName` gets a compile error and adds the case; neither consumer does: brunosouzas.com imports only the tokens, stackledger reads named pieces), the `tokens` type and `tokens.css` gain `scene` (new names only), and the illustration skill's pinned covers keep their bytes (the cover goldens are unchanged). Roll back: a patch release reverting the change; nothing persisted depends on it.

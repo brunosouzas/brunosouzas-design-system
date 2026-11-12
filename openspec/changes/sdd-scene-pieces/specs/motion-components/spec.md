@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Stage ring radii
-`src/brand/motion.ts` SHALL export `stageRingRadii(width, height, values = tokens.scene)`: the radii from `values.ringRadius` in steps of `values.ringStep` while below max(`width`, `height`) × `values.ringReach`, ascending; none when the first radius is not below it. `width`, `height` and the three values are positive finite numbers, and a call gives at most 1000 radii (`MAX_RINGS`); anything else throws a `RangeError` naming the parameter (`values.ringStep` for too many radii).
+`src/brand/motion.ts` SHALL export `stageRingRadii(width, height, values = tokens.scene)` (`values`: `ringRadius`, `ringStep`, `ringReach`): the radii from `ringRadius` in steps of `ringStep` while below max(`width`, `height`) × `ringReach`, ascending, none when the first is not. All five inputs are positive finite numbers and a call gives at most 1000 radii; else a `RangeError` names the first problem in that order (`values.ringStep` for too many).
 
 #### Scenario: 16:9 stage
 - **GIVEN** the repository's tokens
@@ -27,6 +27,11 @@
 - **GIVEN** `stageRingRadii` with `width` 0, −1, `NaN` or `Infinity`, then `height` 0, then `values` with `ringStep` 0, `ringRadius` −1 or `ringReach` `NaN`
 - **WHEN** each is called
 - **THEN** each throws a `RangeError` naming `width`, `height`, `values.ringStep`, `values.ringRadius` or `values.ringReach`
+
+#### Scenario: First problem named
+- **GIVEN** `stageRingRadii(0, 0, { ringRadius: 10, ringStep: 0, ringReach: 1 })`
+- **WHEN** it is called
+- **THEN** it throws a `RangeError` naming `width`
 
 #### Scenario: Ring limit
 - **GIVEN** `values` `{ ringRadius: 1, ringStep: 1, ringReach: 1 }`

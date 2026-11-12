@@ -9,11 +9,35 @@ Every format that takes `pieces` but `icon` SHALL accept `questionToken`, and a 
 - **THEN** it writes the cover; the outlined group holds the `visor` group, whose first child is the `data-held` `sheet` group, and the `questionToken` body group; the labels group holds two `?` text nodes and one holding `proposal.md`, none with an ancestor carrying a `stroke` attribute
 
 #### Scenario: Problems at their paths
-- **GIVEN** a cover spec whose `pieces` are a `visor` with `holds: true` and a valid `holdsSheet`, a `visor` with `holdsSheet.rows` empty, and a `questionToken` with `scale: 0`
+- **GIVEN** a cover spec whose `pieces` are a `visor` with `holds: true` and a valid `holdsSheet`, a `visor` with `holdsSheet` `{ "width": 130, "height": 218, "rows": [] }`, and a `questionToken` with `scale: 0`
 - **WHEN** the command runs
 - **THEN** it prints `pieces[0].holdsSheet` ("Visor holds a card or a sheet, not both"), `pieces[1].holdsSheet.rows` and `pieces[2].scale`, in that order, exits 1 and writes nothing
 
 ## MODIFIED Requirements
+
+### Requirement: Cover spec format
+A spec SHALL be a JSON object with `id` (safe slug), `title` and `description` (non-empty strings), optional `format` (`cover`, `banner`, `diagram`, `icon`, `favicon`, `linkedin-card`, `og`, `avatar`, `linkedin-banner`; default `cover`), and the keys its format allows: `background`, `rings` (`cx`, `cy`, optional `radius`), `pieces`, `custom`, `customAt`, `height`, `text`, `signature`. Each format's requirement says which it refuses or needs. Any other top-level key is an error.
+
+#### Scenario: Unknown background and piece
+- **WHEN** a spec has `background: "pink"` and a piece `{ "piece": "rocket" }`
+- **THEN** both are reported, `background` before `pieces[0].piece`, the second listing the 64 piece names, the last `questionToken`
+
+#### Scenario: Unsafe id
+- **WHEN** `id` is `../sdd` or `SDD`
+- **THEN** `id` is reported as not a safe slug
+
+#### Scenario: Invalid JSON
+- **WHEN** the spec has a trailing comma
+- **THEN** the command prints the parser's line and column, exits 1 and writes nothing
+
+#### Scenario: Unknown format
+- **WHEN** a spec has `format: "poster"`, or `format: 1`
+- **THEN** exactly one problem is printed for `format`: "expected one of cover, banner, diagram, icon, favicon, linkedin-card, og, avatar, linkedin-banner", the command exits 1 and writes nothing
+
+#### Scenario: Ring count in a spec
+- **WHEN** a cover, banner or diagram spec has `rings.count: 30`
+- **THEN** `rings.count` is reported as "unknown parameter: the ring count comes from the format"
+
 
 ### Requirement: Emote on a cover
 A cover, banner or diagram spec SHALL accept `emote` in `pieces` like any other piece, checked with the same schema and relations, with problems reported at their JSON path. `mascot` is no longer a piece: an entry naming it is an unknown piece.

@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Visor holds a sheet
-`visor` SHALL take `holdsSheet`, an object, to hold a sheet in its left hand instead of the card: the page and rows as `sheet` draws them, with the marks on the page in ink, and an optional `label` pill as `pill` draws it, in one group with `data-held` `sheet` that carries Visor's outline (`stroke` the skin's outline, `stroke-width` `outline.block`, round joins), drawn before the body. The card is not drawn; the left hand is drawn over the sheet's edge (design §2).
+`visor` SHALL take `holdsSheet`, an object, to hold a sheet in its left hand instead of the card: the page and rows as `sheet` draws them, with the marks on the page in ink, and an optional `label` pill as `pill` draws it, in one group with `data-held` `sheet` (`stroke` the skin's outline, `stroke-width` `outline.block`, round joins), drawn before the body. The card is not drawn; the hand is over the sheet's edge (design §2). Its words (`?`, label), if any, are Visor's `text`.
 
 #### Scenario: Sheet in the left hand
 - **GIVEN** `visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 218, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } })`
@@ -33,13 +33,28 @@
 - **WHEN** they are drawn
 - **THEN** both `text` arrays are empty and neither body holds a `data-held` group
 
+#### Scenario: Sheet without words
+- **GIVEN** `visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 120, rows: [{ bar: 40 }, { lead: "checked", bar: 30 }] } })`
+- **WHEN** it is drawn
+- **THEN** it draws the held group and its `text` is empty, with no empty text group
+
 ### Requirement: Held sheet parameters
-`holdsSheet` SHALL take `width` (80 to 300) and `height` (80 to 400), both required; `rows`, required, 1 to 8 rows of the `sheet` row shape (`lead`, `bar`, `tail`); `top` and `step`, sizes as in `sheet` (defaults 46 and 38); and `label`, a non-empty string. Any other field is unknown. `holds: true` with `holdsSheet` is refused: Visor holds a card or a sheet, not both. Each problem throws a `RangeError` naming its path.
+`holdsSheet` SHALL take `width` (80 to 300) and `height` (80 to 400), both required; `rows`, required, 1 to 8 rows of the `sheet` row shape (`lead`, `bar`, `tail`); `top` and `step`, sizes as in `sheet` (defaults 46 and 38); and `label`, a non-empty string. Any other field is unknown. With `holdsSheet`, `holds: true` and `view: "back"` are refused (a card or a sheet, not both; the sheet only in front). A `RangeError` names the first problem, the schema's before these.
 
 #### Scenario: Card and sheet together
 - **GIVEN** `visor({ x: 0, y: 0, holds: true, holdsSheet: { width: 130, height: 218, rows: [{ bar: 40 }] } })`
 - **WHEN** it is called
 - **THEN** it throws a `RangeError` with the message `visor: holdsSheet: Visor holds a card or a sheet, not both`
+
+#### Scenario: Sheet seen from behind
+- **GIVEN** a valid `holdsSheet` with `view: "back"`, then with `view: "back"` and `holds: true`
+- **WHEN** Visor is called
+- **THEN** the first throws a `RangeError` with the message `visor: holdsSheet: Visor holds a sheet only in the front view`; the second names the card first, `visor: holdsSheet: Visor holds a card or a sheet, not both`
+
+#### Scenario: Schema before relation
+- **GIVEN** `holds: true` with `holdsSheet: { width: 79, height: 218, rows: [{ bar: 40 }] }`
+- **WHEN** Visor is called
+- **THEN** it throws naming `holdsSheet.width`
 
 #### Scenario: Sheet with holds false
 - **GIVEN** the same `holdsSheet` with `holds: false`
@@ -111,9 +126,9 @@ The five cast pieces SHALL draw, for every call in `test/fixtures/cast-0.11.0.js
 - **THEN** its tree is deep-equal to the pinned tree and `toSvg(g({}, ...body, ...text))` equals the pinned string
 
 #### Scenario: A changed cast drawing is caught
-- **GIVEN** Visor's pointing hand moved by one unit
-- **WHEN** the frozen test runs
-- **THEN** it fails and names the `visor` calls with `points` true or unset whose tree differs
+- **GIVEN** a `visor` wrapped so its pointing hand is moved by one unit
+- **WHEN** the frozen comparison runs over the fixture with it
+- **THEN** it reports exactly the 34 `visor` calls whose `points` is not `false` (32 with `points: true` and the two scale calls), and no other call
 
 ### Requirement: Question token
 The package SHALL export `questionToken({ cx, cy, scale, surface })`, the open question as an object (ADR 0009), the mark of a `sheet` question row: a `color.white` circle of radius 13 outlined at `outline.small` (ink on light, `surface.dark.muted` on dark) and a `?` at (`cx`, `cy` + 7), `font.sans` 19 at `font.weightHeavy`, `color.ink`, centred. Body and text each sit in a `g` with `data-piece` `questionToken`, transformed `translate(cx cy) scale(s) translate(-cx -cy)` when `scale` is not 1.
