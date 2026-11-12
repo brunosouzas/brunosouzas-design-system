@@ -34,7 +34,7 @@ export type TakesPhase = {
   /** Line numbers of the English source article this phase animates (MOT-1). */
   cites: readonly number[];
   devices?: readonly TakesDevice[];
-  /** The cue frames inside the phase: pop-ins, departures, arrivals, lines, rows, checks, faces, acts, emote entrances. */
+  /** The cue frames inside the phase: pop-ins, departures, arrivals, faces, acts, emote entrances and any other change the scene makes. */
   events: readonly { id: string; at: number }[];
 };
 
@@ -59,7 +59,7 @@ export type TakesTimeline = {
   fades: Readonly<Record<string, { in: readonly [number, number]; out?: readonly [number, number] }>>;
   /** Elements that leave over `LEAVE_FRAMES` frames from the given frame. */
   leaves: Readonly<Record<string, number>>;
-  /** Any other frame something changes at (code lines, rows, checks, the hand-over, the badge swap). */
+  /** Any other frame something changes at, by name (an element appearing, a swap, a hand-over). */
   cues: Readonly<Record<string, readonly number[]>>;
 };
 

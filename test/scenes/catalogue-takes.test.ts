@@ -72,7 +72,7 @@ describe("Valid timeline, takes cases", () => {
   });
 
   test("Overlapping phases", () => {
-    expect(joined({ phases: phases((p) => (p.id === "t1-act" ? { ...p, from: 89 } : p)) })).toContain("phase 2 (t1-act [89, 239]) overlaps phase 1 (t1-open [24, 89])");
+    expect(joined({ phases: phases((p) => (p.id === "t1-act" ? { ...p, from: 89 } : p)) })).toContain(`${ID}: phase 2 (t1-act [89, 239]) overlaps phase 1 (t1-open [24, 89])`);
   });
 
   test("Event outside its phase", () => {

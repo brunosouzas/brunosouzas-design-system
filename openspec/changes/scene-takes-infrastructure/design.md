@@ -18,6 +18,7 @@ Observed sources:
   - `src/scenes/takes-kind.ts` holds `TakesTimeline`, `TakesPhase`, `Actor`, `Take`, `TakesDevice`, `LEAVE_FRAMES` and `checkTakes`.
   - `catalogue.ts` adds `TakesSceneData` to `CatalogueScene`, and `checkTimeline` dispatches `kind: "takes"` to `checkTakes` after the common phase rules, as it does for `flow`. The state-machine branch is untouched.
   - The review fixes of #41 are included: an emote on a face entry that repeats the current expression is not a change, the "takes end early" message, and the `LEAVE_FRAMES` comment.
+  - Scenario cases added beyond #41's spec, all for checks #41's code already runs (its tests covered most of them): "Takes out of order" with the take-2 phases removed; "Emote off an expression change" with a repeated expression; four more items in "Cue at or after the outro" (an emote leave, an element leave, the rewind end, the rings fade); and the new scenario "Takes phase starting in the reading hold". #41's rebase and #44's task 0.2 meet them as text that is already on `main`.
 - **`MotionPath`** (#41 §2.4):
   - `motionPathAt(frame, fadeIn, fadeOut?)` and `motionPathDrawing(d, opacity)` live in `src/brand/motion.ts`.
   - The `MotionPath` component in `src/brand/components.tsx` reads no frame.

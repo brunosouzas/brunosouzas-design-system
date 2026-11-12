@@ -4,7 +4,7 @@
 
 Draft PR #41 (AB#144, change `sdd-without-with-spec-scene`) built two things together: the first SDD scene and the catalogue infrastructure that scene needed. The infrastructure is neutral scenes (one composition for both pages), the `takes` scene kind and its validation, and the dashed `MotionPath`. The scene is waiting for new supporting characters (AB#337) and will be redone. Other scenes need the infrastructure now: AB#334, the circuit-breaker topology scene, is also a neutral `takes` scene that draws a `MotionPath`.
 
-On 2026-11-12 the owner decided (q71 A) to move the infrastructure out of #41 into its own pull request from `main`, without the SDD scene. This change carries exactly the requirements and scenarios #41's change wrote for that infrastructure, adapted so that none refers to a scene.
+On 2026-11-12 the owner decided (q71 A) to move the infrastructure out of #41 into its own pull request from `main`, without the SDD scene. This change carries the requirements and scenarios #41's change wrote for that infrastructure, adapted so that none refers to a scene. It adds a few scenario cases for checks #41's code already runs but its spec did not state (design §1).
 
 ## What Changes
 
@@ -17,7 +17,7 @@ On 2026-11-12 the owner decided (q71 A) to move the infrastructure out of #41 in
 - **`MotionPath` and `motionPathAt`** (`src/brand/`). A dashed motion path drawn from the `scene.path*` tokens (0.12.0) at an opacity the scene gives. A pure helper computes that opacity from a frame, a fade-in range and an optional fade-out range.
 - **Documentation:** a dated amendment of ADR 0004 for the neutral scene's English table, the matching sentences of `AGENTS.md` and the `openspec/config.yaml` context, and the README's "How a scene is built".
 - **No scene is added.** The catalogue still registers `circuit-breaker-states` and `publish-subscribe`, and both keep their data, compositions, tests and stills byte for byte. The `takes` and neutral rules are proved on a test-only fixture scene (design §2).
-- **No release by itself.** The pull request title is `feat:`, so the next release-please release carries it (Model 2). Nothing in it is shipped in the npm package (design, Migration).
+- **Release.** The pull request title is `feat:` (the owner's), so release-please proposes a minor release that lists these features, although nothing in them is shipped in the npm package (design, Migration). Whether that release is wanted is a question for the owner in the pull request.
 
 ## Capabilities
 
