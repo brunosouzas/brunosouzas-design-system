@@ -7,8 +7,10 @@ context: |
   colours, typography, outline, hard offset shadow, radius, motion timings)
   is exported to CSS variables, TypeScript and JSON. React components built
   on those tokens make animated explainers with Remotion, and a catalogue of
-  scenes renders each one per format (16:9 article, 4:5 LinkedIn) and per
-  language (Portuguese, English) from one text table.
+  scenes renders each one per format (16:9 article, 4:5 LinkedIn) and, for a
+  localised scene, per language (Portuguese, English) from one text table; a
+  neutral scene is one video per format for both pages, its few English words
+  in one `en` table (ADR 0004 and ADR 0005, amended).
 
   Every on-screen string of a scene or piece comes from an approved source: a
   published article of the blog, or a post or page the owner approved for

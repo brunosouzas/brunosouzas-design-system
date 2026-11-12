@@ -43,7 +43,7 @@ The style started from the illustration covers of the [Spotify Engineering blog]
 
 ```text
 tokens/source.json ──► tokens/generated/tokens.css  ──► brunosouzas.com (site repository, planned)
-                   ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format and language
+                   ├─► tokens/generated/tokens.ts   ──► src/brand (motion components) ──► src/scenes ──► MP4 per format (and language, for a localised scene)
                    └─► tokens/generated/tokens.json ──► other scripts
 
 src/pieces (pure functions → SVG node tree) ──► toSvg   ──► covers (npm run cover), diagrams
@@ -127,13 +127,17 @@ Studio lists four compositions per scene in catalogue order. Pub-sub runs for 10
 
 A scene lives in `src/scenes/<scene>/` with:
 
-- `scene.ts`: the scene data, with no React: id, formats, languages, the timeline in frames, the text table per language (every string taken from the article) and the source article URL per language.
+- `scene.ts`: the scene data, with no React: id, formats, languages, the timeline in frames, the text table per language (every string taken from the article; a neutral scene has one `en` table) and the source article URL per language.
 - `layout.ts`: one layout per format, in composition pixels; the 4:5 layout has its own arrow routes.
 - `Scene.tsx`: the composition, which arranges the components from `src/brand/`.
 
-`src/scenes/index.ts` lists the scenes and `src/Root.tsx` registers each one as a Studio folder with one composition per format and language (`<scene>-16x9-pt`, `-16x9-en`, `-4x5-pt`, `-4x5-en`). The tests check every registered scene: the same text keys in both languages, phases inside the composition and in order, events inside phases, and a reading hold of at least three seconds at the end.
+`src/scenes/index.ts` lists the scenes and `src/Root.tsx` registers each one as a Studio folder; a localised scene has one composition per format and language (`<scene>-16x9-pt`, `-16x9-en`, `-4x5-pt`, `-4x5-en`), a neutral scene one per format (below). The tests check every registered scene: for a localised scene the same text keys in both languages, and for every scene phases inside the composition and in order, events inside phases, and a reading hold of at least three seconds at the end.
 
-`SceneContract<TTimeline>` supplies common metadata and phase ranges (`from`, `to`, events with `at`), duration and outro. `SceneData` remains the legacy state-machine alias with `Timeline`: states, slots, call results and transition fires retain their window checks. `CatalogueScene` also accepts `FlowSceneData` with `kind: "flow"`; it needs no active states or slots. The flow validator rejects unknown endpoints, invalid frames/ranges, trips crossing the outro, and impossible copy ownership/handoffs. There is no plug-in or graph-interpreter API.
+**Neutral scenes.** A scene with `neutral: true` is one video for both pages ([ADR 0005](docs/adr/0005-neutral-videos-and-the-cast.md), amended 2026-11-09): one composition per format, `<scene>-<format>` with no language suffix (its `lang` is `en` and the scene ignores it), `languages: ["en"]`, its few words in one English table `text.en`, and both pages' sources `sources.pt` and `sources.en`. The catalogue rejects a neutral scene with a `pt` table, another language, a missing or non-`https` source, or an empty word. No registered scene is neutral yet; `test/fixtures/takes-scene.ts` is a test-only one.
+
+**The `takes` kind.** A comparison of two runs of the same stage (`kind: "takes"`, `src/scenes/takes-kind.ts`): take-1 phases, one rewind phase, take-2 phases. It is always neutral. Besides the common rules, the catalogue checks the take order; that every phase cites at least one line of the English article (`cites`, MOT-1); that acts of different characters never overlap (CAST-4); that every emote enters on its character's expression change, one at a time, and is gone (10 frames after `leaveAt`) before the next act (CAST-3); and that nothing moves from the outro on: every act, face, trip arrival, fade, leave and cue before it, and every pop-in at least `motion.fps` frames before it, so it is settled (SCN-4).
+
+`SceneContract<TTimeline>` supplies common metadata and phase ranges (`from`, `to`, events with `at`), duration and outro. `SceneData` remains the legacy state-machine alias with `Timeline`: states, slots, call results and transition fires retain their window checks. `CatalogueScene` also accepts `FlowSceneData` with `kind: "flow"`; it needs no active states or slots. It accepts `TakesSceneData` with `kind: "takes"` too (above). The flow validator rejects unknown endpoints, invalid frames/ranges, trips crossing the outro, and impossible copy ownership/handoffs. There is no plug-in or graph-interpreter API.
 
 Pub-sub separates `text.ts`, `timeline.ts` and pure `flow.ts` from its data entry. Half-open ownership intervals transfer each token atomically at split/arrival/ACK/NACK boundaries. Caption windows use phase ids internally, never as visible labels; captions and labels are frozen against source fixtures. Both media scripts consume only common phase ends and duration, without React or fonts.
 
@@ -148,7 +152,9 @@ The stage every scene shares is in the `scene.*` tokens (0.12.0), in composition
 | `scene.pathDash`, `scene.pathGap`, `scene.pathWidth` | 4, 18, 6 | the dashed motion path a travelling object follows, drawn with round caps, so each dash reads as a dot |
 | `scene.pathColor` | `#5C5852` | the path's colour on the light stage, equal to `brand.light.textMuted` (a test keeps the two equal) |
 
-`stageRingRadii(width, height, values = tokens.scene)` in `src/brand/motion.ts` gives the ring radii for a frame (65 for 1920 x 1080, 45 for 1080 x 1350), and the `Rings` component draws them; it refuses a size that is not a positive finite number and more than 1000 rings. No component draws the dashed path yet: the first scene that needs it draws it from the tokens.
+`stageRingRadii(width, height, values = tokens.scene)` in `src/brand/motion.ts` gives the ring radii for a frame (65 for 1920 x 1080, 45 for 1080 x 1350), and the `Rings` component draws them; it refuses a size that is not a positive finite number and more than 1000 rings.
+
+`MotionPath` (`src/brand/components.tsx`) draws the dashed motion path: a scene-supplied SVG path `d`, in composition pixels, with no fill, stroked `scene.pathColor` at `scene.pathWidth`, dashed `scene.pathDash` / `scene.pathGap` with round caps, at the `opacity` the scene gives. It reads no frame of its own, so a scene can draw it at any frame (a rewind feeds its object frame). `motionPathAt(frame, fadeIn, fadeOut?)` in `src/brand/motion.ts` gives that opacity: 0 before `fadeIn`, rising linearly to 1 over it, falling linearly to 0 over the optional `fadeOut`; at opacity 0 nothing is drawn. It throws a `RangeError` naming `frame`, `fadeIn` or `fadeOut` when one is not finite or not in order.
 
 ## Illustration pieces and covers
 
