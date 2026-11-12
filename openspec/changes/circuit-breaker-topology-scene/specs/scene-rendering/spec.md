@@ -11,7 +11,7 @@
 #### Scenario: Topology stills dry run
 - **GIVEN** existing files in `out/`
 - **WHEN** `npm run stills -- circuit-breaker-topology --dry-run` runs
-- **THEN** it prints 14 still commands for `circuit-breaker-topology-16x9` in frame order, exits 0, and `out/` is unchanged; the circuit-breaker dry run still prints 28 commands, pub-sub's 24 and `sdd-without-with-spec`'s 8
+- **THEN** it prints 14 still commands for `circuit-breaker-topology-16x9` in frame order, exits 0, and `out/` is unchanged; the circuit-breaker dry run still prints 28 commands and pub-sub's 24
 
 #### Scenario: Topology still failure
 - **GIVEN** a runner that fails the still at frame 819

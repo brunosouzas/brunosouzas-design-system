@@ -347,22 +347,22 @@ The scene SHALL use the stage layout of the change's design §6.1 in 960x540 sta
 ## MODIFIED Requirements
 
 ### Requirement: State-machine and flow catalogue compatibility
-The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list every registered scene in registration order.
+The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list them in registration order.
 
 #### Scenario: Both kinds in the catalogue
 - **GIVEN** the circuit-breaker and pub-sub scenes, registered with later scenes after them
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
 - **THEN** both pass and their eight compositions are returned unchanged, circuit-breaker first, pub-sub second; the existing circuit-breaker test suite and pinned timeline pass without edits
 
-#### Scenario: Three kinds in the catalogue
-- **GIVEN** the circuit-breaker, pub-sub and `sdd-without-with-spec` scenes, registered in that order with later scenes after them
+#### Scenario: Takes fixture beside the registered scenes
+- **GIVEN** the registered scenes followed by the fixture `takes-fixture`
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
-- **THEN** all pass and their nine compositions are returned unchanged, circuit-breaker's four first, pub-sub's four second, `sdd-without-with-spec-16x9` ninth; the circuit-breaker and pub-sub suites and pinned timelines pass, edited only where they list every registered scene
+- **THEN** all pass and the registered scenes' compositions are returned unchanged and in order, `takes-fixture-16x9` last, every id unique; the catalogue itself registers exactly `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology`, in that order
 
-#### Scenario: Four scenes in the catalogue
-- **GIVEN** the circuit-breaker, pub-sub, `sdd-without-with-spec` and `circuit-breaker-topology` scenes
+#### Scenario: Three scenes in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub and `circuit-breaker-topology` scenes, registered in that order
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
-- **THEN** all pass and ten unique compositions are returned in registration order, `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the four scenes in that order
+- **THEN** all pass and nine unique compositions are returned in registration order, `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the three scenes in that order
 
 #### Scenario: Shared checks still reject a broken flow
 - **GIVEN** a pub-sub fixture with a duplicate composition id, a missing English text key or a non-HTTPS source

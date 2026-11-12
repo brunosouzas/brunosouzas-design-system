@@ -47,6 +47,8 @@ One checkout and one payment service, played twice. **Take 1:** checkout retries
 
 ### 2.1 How this change relates to PR #41 (G1 question 1)
 
+**At implementation (2026-11-12):** the owner moved the neutral scenes, the `takes` kind and `MotionPath` out of #41 into PR #45 (`scene-takes-infrastructure`, q71 A), merged first. Option C below holds with #45 in #41's place: this branch merges `origin/feature/ab144-scene-takes-infrastructure` (stacked, merged, not rebased), and `main` once #45 merges. #45 already generalised "State-machine and flow catalogue compatibility" to "every registered scene in registration order" and registers no scene of its own, so the MODIFIED block keeps #45's requirement text and only updates its scenarios: "Takes fixture beside the registered scenes" (the catalogue registers three scenes) and a new "Three scenes in the catalogue". The SDD scene (#41) is not on `main`; the rest of this section is the text G1 approved, kept as the record.
+
 PR #41 (AB#144, draft, implemented and waiting for the owner's media gate) adds what a two-take scene needs: neutral scenes (`neutral`, one composition `<scene>-<format>`, one `en` table, both sources), the `takes` kind (`src/scenes/takes-kind.ts`: take order, a cited line per phase, cast timing, the reading hold) and `MotionPath`/`motionPathAt`. `main` has none of them.
 
 | Option | Result |
