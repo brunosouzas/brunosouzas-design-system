@@ -26,8 +26,9 @@ import { questionToken, type QuestionTokenParams } from "./question-token.ts";
 import { codeLength, spans } from "./ink.ts";
 import { pill, sheet, type PillParams, type SheetParams, type SheetRow } from "./paper.ts";
 import { stamp, type StampParams } from "./stamp.ts";
-export { pill, sheet, stamp };
-export type { PillParams, SheetParams, SheetRow, StampParams };
+import { keyboard, type KeyboardParams } from "./keyboard.ts";
+export { pill, sheet, stamp, keyboard };
+export type { PillParams, SheetParams, SheetRow, StampParams, KeyboardParams };
 export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken };
 export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams, QuestionTokenParams };
 
