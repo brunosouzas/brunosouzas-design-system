@@ -13,7 +13,7 @@ Focus SHALL give each state block an opacity factor and a scale factor, multipli
 
 #### Scenario: Intro and outro
 - **WHEN** the frame is before the first phase's start, or at or after the outro frame
-- **THEN** in the intro every opacity and scale factor is 1; in the outro every factor equals the one a copy of the timeline with its outro moved to its last frame gives at the same frame, so the state in focus keeps opacity 1 and `motion.focusScale` once its spring has settled, and the others keep `motion.dimOpacity` and scale 1
+- **THEN** in the intro every opacity and scale factor is 1; in the outro every factor equals the one a copy of the timeline with its outro moved past its last frame (to its duration) gives at the same frame, so the state in focus keeps opacity 1 and `motion.focusScale` once its spring has settled, and the others keep `motion.dimOpacity` and scale 1
 
 #### Scenario: Pop-in during the intro
 - **WHEN** the circuit-breaker scene is at frame 10
@@ -22,7 +22,7 @@ Focus SHALL give each state block an opacity factor and a scale factor, multipli
 ## ADDED Requirements
 
 ### Requirement: Latest call of a state block
-The frame logic SHALL give, for a state at a frame, the latest call shown in its block (its kind and the frame it happened), or none: the last non-empty slot of the block's contents at that frame. A code tag's own appearance is the pill pop-in (`motion.pop` spring, from 70 % scale) from that call's frame; its effective appearance is its block's appearance times its own, and its own never includes the block's.
+The frame logic SHALL give, for a state at a frame, the latest call shown in its block (its kind and the frame it happened), or none: the last non-empty slot of the block's contents at that frame. A code tag's own appearance is a pure function of the frame and its call's frame: the pill pop-in (`motion.pop` spring, from 70 % scale and opacity 0); its effective appearance is its block's appearance times its own, and its own never includes the block's.
 
 #### Scenario: Latest call follows the slots
 - **GIVEN** the circuit-breaker timeline
@@ -35,9 +35,9 @@ The frame logic SHALL give, for a state at a frame, the latest call shown in its
 - **THEN** there is none at both frames
 
 #### Scenario: Tag's own pop-in is the pill pop-in
-- **GIVEN** a call at frame F
-- **WHEN** the tag's own appearance is read at F − 1, F + 5 and F + 44
-- **THEN** it is not visible at F − 1, equals the pill pop-in at 5 frames at F + 5, and is within 0.00001 of opacity 1 and scale 1 at F + 44, whatever its block's focus
+- **GIVEN** the tag pop-in function for a call at frame F (whatever call the block showed before)
+- **WHEN** it is read at F − 1, F, F + 5 and F + 44
+- **THEN** it is not visible at F − 1, visible at opacity 0 and scale 0.7 at F (the previous code is replaced on that frame), equals the pill pop-in at 5 frames at F + 5, and is within 0.00001 of opacity 1 and scale 1 at F + 44, whatever its block's focus
 
 #### Scenario: Effective tag appearance multiplies once
 - **GIVEN** a call at frame F in a block whose appearance at F + 5 is opacity A and scale S

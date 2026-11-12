@@ -51,16 +51,18 @@ The final CLOSED phase starts at 820 as before. The outro sits 240 frames (8.0 s
 
 The tag is drawn inside its block's element, so it inherits the block's pop-in, focus and dimming (at the end OPEN's `503` and HALF_OPEN's `200` are dimmed with their blocks). Its own style therefore carries only the pill pop-in from the latest call's frame; the product "block × pop-in" is its effective appearance, computed for the tests and never written into its style (otherwise a dimmed tag would show at 0.42² ≈ 0.18). It is absolutely positioned, out of the block's centred flex column, so the state name, the squares and the countdown keep their 0.12.0 positions. It belongs to the block layer of SCN-6 (arrows, blocks, tokens, pills, caption): a travelling token or a transition pill passes over it, never under.
 
-Look: a pill (`radius.pill`, `outline.small` in ink, `shadow.small`), fill and text colour from `callAppearance(kind)` (`ok`: `color.white` with `color.ink`; `fail`: `color.state.failure` with `color.white`; `blocked`: `color.ink` with `color.white`), text `font.mono` at `font.weightBold`, size `layout.size.pill` (30 in both formats), padding as the transition `Pill` (0.35 and 0.8 of the size). About 102 × 56 px.
+Look: one pure function, `codeTagLook(kind)` in `src/brand/motion.ts`, returns it: a pill (`radius.pill`, `outline.small` in ink, `shadow.pill`; both shadows are 0 under ADR 0009), fill and text colour from `callAppearance(kind)` (`ok`: `color.white` with `color.ink`; `fail`: `color.state.failure` with `color.white`; `blocked`: `color.ink` with `color.white`), text `font.mono` (the loaded `mono` of `src/brand/fonts.ts`) at `font.weightBold`. A `CodeTag` component in `src/brand/components.tsx` draws it at `layout.size.pill` (30 in both formats), sharing the transition `Pill`'s padding (0.35 and 0.8 of the size) and line height (1.18) through the same component constants, so the scene file holds no size ratio (MOT-6). About 108 × 62 px with its border. Each new call replaces the code on its frame and the tag pops in again from opacity 0 and 70 % scale, as a pill does; for a few frames the tag is faint, then settles.
 
-Place: a new layout value per format, `codes: Record<StateId, number>`, the distance from the block's outer left edge to the tag's centre; the centre sits on the middle of the block's top border. Inside the block's element (whose padding box starts inside the border) that is `left = codes[state] - outline.block`, `top = -outline.block / 2`, translated by half the tag's size, before the block's scale. Composition centres at scale 1:
+Masked comparison rectangles (stills plan 4): one per tag, centred on the tag's centre when its block is at `motion.focusScale`, 132 × 86 px (108 × 62 at 1.06 plus 8 px on each side), which covers its boxes at scale 1 and at focus. If the measured tag box on a still is larger, the rectangle grows to that box plus 8 px and the design records it.
+
+Place: a new layout value per format, `codes: Record<StateId, number>`, the distance from the block's outer left edge to the tag's centre; the centre sits on the middle of the block's top border (block y + `outline.block` / 2, so 2 px below the y in the table). Inside the block's element (whose padding box starts inside the border) that is `left = codes[state] - outline.block`, `top = -outline.block / 2`, translated by half the tag's size, before the block's scale. Composition centres at scale 1:
 
 | Format | CLOSED | OPEN | HALF_OPEN |
 |---|---|---|---|
 | 16:9 (`codes` 80, 80, 80) | (270, 150) | (1330, 150) | (770, 610) |
-| 4:5 (`codes` 80, 80, 180) | (180, 250) | (660, 250) | (470, 790) |
+| 4:5 (`codes` 80, 330, 180) | (180, 250) | (910, 250) | (470, 790) |
 
-Clearances estimated from the layout numbers and the focus scale 1.06 about each block's centre (text widths estimated from size, to be confirmed on the stills): 16:9, the toOpen pill spans about x 760 to 1160 around y 160 and the toOpen arrow enters OPEN at (1232, 255), both clear of the OPEN tag (x 1279 to 1381); the HALF_OPEN to OPEN arrow leaves at (1080, 598), 260 px right of the HALF_OPEN tag. 4:5: the toOpen arrow leaves CLOSED at x 305 and enters OPEN at x 785, more than 70 px from the nearest tag; the toOpen pill ends near y 200, about 15 px above the OPEN tag when OPEN is in focus; the HALF_OPEN tag moved to 470 because at 370 it came within 9 px of the PT three-line HALF_OPEN to CLOSED pill (about x 4 to 336, y 614 to 746) in frames 780 to 819, when HALF_OPEN is in focus; at 470 it spans about x 414 to 518 in focus, 78 px from that pill and 120 px from the HALF_OPEN to OPEN arrow (x 640). The state names are centred and start about 40 px below the top border; the tag reaches 28 px into the block, so it sits about 12 px above them. If a still shows an overlap, one `codes` value is tuned before Bruno's review and this table is updated.
+Clearances estimated from the layout numbers and the focus scale 1.06 about each block's centre (text widths estimated from size, to be confirmed on the stills): 16:9, the toOpen pill spans about x 760 to 1160 around y 160 and the toOpen arrow enters OPEN at (1232, 255), both clear of the OPEN tag (x 1279 to 1381); the HALF_OPEN to OPEN arrow leaves at (1080, 598), 260 px right of the HALF_OPEN tag. 4:5: the toOpen arrow leaves CLOSED at x 305 and enters OPEN at x 785, more than 70 px from the nearest tag; the toOpen pill (three lines, about 127 px tall around y 140) ends near y 204 and spans about x 330 to 760, so the OPEN tag moved from 660 to 910 (at 660 it came within 8 px of that pill when OPEN is in focus); at 910 it spans about x 850 to 970 in focus, 90 px from the pill and clear of the toOpen arrow head (x 785) and the OPEN name (about x 718 to 852, 40 px lower); the HALF_OPEN tag moved to 470 because at 370 it came within 9 px of the PT three-line HALF_OPEN to CLOSED pill (about x 4 to 336, y 614 to 746) in frames 780 to 819, when HALF_OPEN is in focus; at 470 it spans about x 414 to 518 in focus, 78 px from that pill and 120 px from the HALF_OPEN to OPEN arrow (x 640). The state names are centred and start about 40 px below the top border; the tag reaches 28 px into the block, so it sits about 12 px above them. If a still shows an overlap, one `codes` value is tuned before Bruno's review and this table is updated.
 
 ## Timeline, frame by frame
 
@@ -85,12 +87,12 @@ Clearances estimated from the layout numbers and the focus scale 1.06 about each
 | Pill pop-in (draw plus 8) | 205, 370, 505, 780 | same |
 | Slots | CLOSED 8, OPEN 4, HALF_OPEN 3 | same |
 | `arrowLead`, `pillDelay` | 18, 8 | same |
-| Code tags | none | **from 56: each block's latest call; hidden at a phase start until its first call (CLOSED 820 to 833, OPEN 545 to 559, HALF_OPEN 665 to 679)** |
+| Code tags | none | **from 56: each block's latest call; hidden at a phase start until its first call (OPEN 245 to 261, HALF_OPEN 410 to 423, OPEN 545 to 559, HALF_OPEN 665 to 679, CLOSED 820 to 833)** |
 | Focus at the end | CLOSED lit to 909; all lit from 910 | **CLOSED lit, OPEN and HALF_OPEN at `motion.dimOpacity`, to 1149** |
 | Final still | 910 to 999, all three lit (910 to 922 still settling) | **1060 to 1149: CLOSED lit with `200`; OPEN `503` and HALF_OPEN `200` dimmed; identical** |
 | Final caption | CLOSED + article L42 | same |
 
-What stays identical: frames 0 to 55 (pixels, pinned by stills); the frame logic of every 0.12.0 element at frames 0 to 819 (pinned by a unit test). From frame 56 every frame shows code tags and differs from 0.12.0.
+What stays identical: frame 55 (pixels, pinned by stills); the frame values of every 0.12.0 element at frames 0 to 819 (a fixture generated by the 0.12.0 code); the layout values; and, outside the tags' areas, the pixels of the phase stills 200 to 775 (local, masked). From frame 56 every frame shows code tags and differs from 0.12.0 inside those areas.
 
 ## Beats and article lines (MOT-1)
 
@@ -99,14 +101,14 @@ Article: `writing/circuit-breaker-in-mulesoft/circuit-breaker-in-mulesoft.{en,pt
 | Frames | Beat | Article line |
 |---|---|---|
 | 0 to 55 | Intro and CLOSED takes the focus, unchanged | L40-46 |
-| 56 to 200 | Calls pass through: two `200`, then failures come back `502` (five in all) until the threshold | L42; L75 ("200 OK comes back"); L87-88 ("the first 5 calls are real 502s"); L105 ("502 (real backend failure)"); L46 diagram label |
+| 56 to 200 | Calls pass through: `200`, `200`, `502`, `200`, then `502` four times (three `200`, five `502`) until the threshold | L42; L75 ("200 OK comes back"); L87-88 ("the first 5 calls are real 502s"); L105 ("502 (real backend failure)"); L46 diagram label |
 | 215 to 365 | OPEN: calls are blocked at once, each `503`; the countdown runs | L43 ("without touching the backend"); L88 ("the 6th is already 503, without the backend being called"); L106-107 ("503 circuit_open"); L46 (resetTimeout) |
 | 380 to 500 | HALF_OPEN: a test call `200`, then a test call fails `502`, back to OPEN | L44; L46 ("any failure during the test"); L105 |
 | 545 to 620 | OPEN again: `503` | L43, L88 |
 | 630 to 775 | HALF_OPEN: three test calls `200` | L44; L95 ("back to CLOSED once a test call succeeds") |
 | 790 to 812 | The token of HALF_OPEN to CLOSED travels; "enough successful test calls" | L44, L46 (diagram label); L95 |
 | 820 to 850 | CLOSED takes the focus; OPEN and HALF_OPEN dim (with their last codes); the CLOSED caption fades in; the CLOSED tag is hidden until the first call | L42 (caption, verbatim) |
-| 834 to 1016 | Eight calls pass through, each comes back `200`, filling the window | L42 "calls pass through normally; the circuit watches the outcomes"; L66 "sliding window of the last N calls"; L75; L84 "Closed circuit — calls pass through normally" |
+| 834 to 1016 | Eight calls pass through, each comes back `200`; the eight CLOSED slots, the calls the circuit watches, fill once (they do not slide) | L42 "calls pass through normally; the circuit watches the outcomes"; L66 (the outcomes counted over the last N calls); L75; L84 "Closed circuit — calls pass through normally" |
 | 1060 to 1149 | Final still: only CLOSED lit with `200`; OPEN `503` and HALF_OPEN `200` still on screen, dimmed | L42-43 (in CLOSED the circuit keeps watching and can open again: the states stay), q53 A |
 
 Marked choices approved by Bruno on 2026-11-12 (MOT-1): `200` on `ok` calls ("pass through normally"; also L75); the dimming of OPEN and HALF_OPEN at the end (q53 A). Derived from his "real failures 502", not approved separately: `502` on a failed HALF_OPEN test call too (a test call reaches the backend, L44; L105). Choices for G1: see Questions for G1. Out of scope as outcomes the article only implies: the circuit opening again after the healthy end; a backend receiving the calls.
@@ -125,11 +127,12 @@ The text table gains `codes: { ok: "200", fail: "502", blocked: "503" }` in both
 Each with the recommendation; none blocks the spec's structure, each changes values only.
 
 1. **Backend.** Bruno's request says "ok calls reaching the backend"; the scene draws no backend (neither does the article's states diagram, L46). Recommendation: no backend element; the calls stay the squares, `200` says the call went through, and `503` plus the OPEN caption ("without touching the backend") say it did not. Alternative: a backend piece and call tokens, a new layout in both formats (its own change).
-2. **"About 8 s of ok calls".** This change measures 8.0 s from the CLOSED phase start (820) to the outro (1060); the eight calls themselves span 834 to 1016 (6.1 s), then 1.5 s settles before the 3 s still. Recommendation: keep. Alternative: calls every 30 frames from 834 to 1044, outro 1088, duration 1178 (calls span 7 s, 39.3 s total).
+2. **"About 8 s of ok calls".** Bruno asked for about 8 s of `ok` calls. This change's calls span 834 to 1016, 6.1 s; the 8.0 s is the CLOSED stretch from the phase start (820) to the outro (1060), and the 3 s still follows. Options: (a) as specified, every 26 frames, duration 1150 (38.3 s); (b) every 30 frames, 834 to 1044 (7.0 s), outro 1088, duration 1178 (39.3 s); (c) every 34 frames, 834 to 1072 (7.9 s), outro 1116, duration 1206 (40.2 s). Each keeps 44 frames between the last call and the outro. Recommendation: (c) if "8 s of calls" is meant literally, otherwise (a); the spec changes only the numbers.
 3. **One tag per block** with the latest call's code (decision 4) rather than a code on every square. Recommendation: keep (readable at page size).
 4. **The dimmed tags on the final still** (OPEN `503`, HALF_OPEN `200`). A reader might read the dimmed `503` as "still blocking". Recommendation: keep them (they are the last thing each state did, dimmed like their blocks; the lit CLOSED with `200` and its caption carry the present). Alternative: hide the tags of dimmed blocks from 820.
 5. **Rhythm** of the healthy calls: 26 frames, the OPEN phases' rhythm (decision 2). Recommendation: keep.
 6. **Release type** `feat:` (minor) instead of the `fix:` the request suggested, because the codes add a visible element, a text key and layout values. Recommendation: `feat:`.
+7. **`502` on a failed HALF_OPEN test call.** Derived from "real failures 502": a test call reaches the backend (L44) and fails for real (L105). Recommendation: keep `502`.
 
 ## Stills plan
 
@@ -146,7 +149,7 @@ Each with the recommendation; none blocks the spec's structure, each changes val
 
 - [Stills differ across machines or browser versions] → the SHA-256 and masked proofs are local and same-machine; the CI proofs are the 0.12.0 frame-hash fixture over frames 0 to 819 (generated by the 0.12.0 code, so a change in `motion.ts` that alters an existing element fails it) and the frame-state comparison over 1060 to 1149.
 - [A final still hash differs because a spring has not settled] → move the last healthy call earlier (keep at least 44 frames before the outro) and update the timeline table.
-- [A tag collides with a state name, arrow or token in one format] → positions come from one layout value per format; checked on the stills of step 4 before Bruno's review.
+- [A tag collides with a state name, arrow or token in one format] → positions come from one layout value per format; checked on the stills of steps 4 and 5 before Bruno's review.
 - [The shared focus rule changes for future state-machine scenes] → intended: a final still that shows the last state, as during the run; a scene that needs every block lit at the end asks for it in its own change.
 - [38 s is longer than the 33 s the site and post were planned with] → SCN-5: length follows what the scene must show; the 4:5 cut keeps the same timeline.
 - [The approved pilot look changes from frame 56] → Bruno asked for the codes; the before-and-after sheet shows the difference at G1 and at the stills review.
