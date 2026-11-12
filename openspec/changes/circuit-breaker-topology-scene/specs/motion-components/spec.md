@@ -24,14 +24,32 @@ A `FailureRateBar` component SHALL draw, from `rate`, `threshold`, `width` and `
 - **THEN** it reports nothing, and every colour and outline comes from `color.*` and `outline.*`
 
 ### Requirement: Failure-rate bar input
-The failure-rate bar SHALL throw a `RangeError` naming the prop for a `rate` outside [0, 1] or not finite, a `threshold` outside the open interval (0, 1), and a `width` or `height` that is not finite or not above 0.
+The failure-rate bar SHALL throw a `RangeError` naming the prop for a `rate` outside [0, 1] or not finite, a `threshold` outside the open interval (0, 1) or not finite, and a `width` or `height` that is not finite or not above 0.
 
 #### Scenario: Bad props
-- **GIVEN** separate calls with `rate` −0.1, `rate` 1.01, `rate` NaN, `threshold` 0, `threshold` 1, `width` 0 and `height` Infinity
+- **GIVEN** separate calls with `rate` −0.1, `rate` 1.01, `rate` NaN, `threshold` 0, `threshold` 1, `threshold` NaN, `width` 0, `width` NaN and `height` Infinity
 - **WHEN** the shapes are computed
-- **THEN** each throws a `RangeError` naming `rate`, `rate`, `rate`, `threshold`, `threshold`, `width` and `height`
+- **THEN** each throws a `RangeError` naming `rate`, `rate`, `rate`, `threshold`, `threshold`, `threshold`, `width`, `width` and `height`
 
 #### Scenario: Boundary props accepted
 - **GIVEN** `rate` 0 and `rate` 1 with `threshold` 0.5
 - **WHEN** the shapes are computed
 - **THEN** neither throws
+
+### Requirement: Token radius
+`PositionedToken` and its style helper SHALL accept an optional `radius`, a finite number above 0, defaulting to 17; the drawn token's radius SHALL equal it. Every existing caller that passes no `radius` SHALL draw exactly as before. A `radius` that is not finite or not above 0 SHALL throw a `RangeError` naming `radius`.
+
+#### Scenario: Default unchanged
+- **GIVEN** a token style computed without `radius`
+- **WHEN** it is read
+- **THEN** its radius is 17 and every other field equals today's, and the publish-subscribe tests pass without edits
+
+#### Scenario: Smaller token
+- **GIVEN** `radius` 10
+- **WHEN** the style is computed
+- **THEN** its radius is 10, with the same fill, stroke and stroke width as the default
+
+#### Scenario: Bad radius
+- **GIVEN** `radius` 0, −1 or NaN
+- **WHEN** the style is computed
+- **THEN** each throws a `RangeError` naming `radius`

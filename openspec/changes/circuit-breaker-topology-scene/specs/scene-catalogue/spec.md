@@ -1,12 +1,17 @@
 ## ADDED Requirements
 
 ### Requirement: Topology scene registration
-The catalogue SHALL register `circuit-breaker-topology` after every scene registered before it: kind `takes`, neutral, format `16x9` only, 1920 frames at 30 fps, outro 1800, sources `https://brunosouzas.com/blog/circuit-breaker-in-mulesoft` (`en`) and `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft` (`pt`), and the English word table of the change's design §8.1. `src/Root.tsx` SHALL map its composition to the scene's component.
+The catalogue SHALL register `circuit-breaker-topology` after every scene registered before it: kind `takes`, neutral, format `16x9` only, 1920 frames at 30 fps, outro 1800, sources `https://brunosouzas.com/blog/circuit-breaker-in-mulesoft` (`en`) and `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft` (`pt`), and the `text.en` table of scenario "Word table". `src/Root.tsx` SHALL map its composition to the scene's component.
 
 #### Scenario: Registered entry
 - **GIVEN** the catalogue
 - **WHEN** `findScene("circuit-breaker-topology")` is read
-- **THEN** it returns the entry above with `neutral` true, `languages` `["en"]`, `text.en` only, and both sources
+- **THEN** it returns the entry above with `neutral` true, `languages` `["en"]`, `text.en` only, and both sources, and `src/Root.tsx` registers `circuit-breaker-topology-16x9` with the scene's component
+
+#### Scenario: Word table
+- **GIVEN** the registered entry
+- **WHEN** `text.en` is read
+- **THEN** it equals `checkout` "Checkout", `payment` "Payment", `retry` "retry ×3", `breaker` ["`circuit-breaker:`", "`execute`"], `states` {`closed` "CLOSED", `open` "OPEN", `halfOpen` "HALF_OPEN"}, `timeout` "`HTTP:TIMEOUT`", `open` "`CIRCUIT-BREAKER:OPEN`", `message` ["payment temporarily", "unavailable"], `ok` "`200`", `business` "`400`", `clock` "`resetTimeout 10s`", `requests` "requests", `calls` "backend calls", `takes` ["1", "2"]; backticks mark code and are not drawn
 
 #### Scenario: One composition, last
 - **GIVEN** every registered scene
@@ -24,7 +29,7 @@ The catalogue SHALL register `circuit-breaker-topology` after every scene regist
 - **THEN** each fails naming `circuit-breaker-topology` and the problem (Portuguese table, `pt` source, outro inside the reading hold)
 
 ### Requirement: Existing scenes unchanged by the topology scene
-Adding the topology scene SHALL leave every scene registered before it unchanged: data, compositions, frame behaviour and tests, except the assertion that lists every registered scene. In particular `circuit-breaker-states` SHALL keep its four compositions, its per-language text and its stills.
+Adding the topology scene SHALL leave every scene registered before it unchanged: data, compositions, frame behaviour and tests, except the assertions that list every registered scene (in `test/scenes/catalogue-flow.test.ts` and `test/scripts/cli.test.ts`). In particular `circuit-breaker-states` SHALL keep its four compositions, its per-language text and its stills.
 
 #### Scenario: Circuit-breaker states untouched
 - **GIVEN** the branch after this change and `main` before it
@@ -37,7 +42,7 @@ Adding the topology scene SHALL leave every scene registered before it unchanged
 - **THEN** every pair is equal
 
 ### Requirement: Topology words on screen
-At every frame, every string the scene draws SHALL be a value of its `text.en` table, a counter number (`0` to `60`), the take number `1` or `2`, or a `CallSquare` glyph (✓, ✕). Across the composition every `text.en` value SHALL appear. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
+At every frame, every string the scene draws SHALL be a value of its `text.en` table (without backticks), a counter number (`0` to `60`), or a `CallSquare` glyph (✓, ✕). Across the composition every `text.en` value SHALL appear. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
 
 #### Scenario: Words over the whole composition
 - **GIVEN** the stage trees and component props of frames 0 to 1919
@@ -55,30 +60,40 @@ At every frame, every string the scene draws SHALL be a value of its `text.en` t
 - **THEN** it fails naming `fallback` and frame 870
 
 ### Requirement: Topology text size
-Every string the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 30 stage units (60 px in the composition, 11.25 px when the video is 360 px wide); state names, the take number and the counter numbers at least 36. The window's squares SHALL be 50 units, so their glyph is 31.
+Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 33 stage units (66 px in the composition; 11.3 px in the site's 328 px column on a 360 px phone); state names, the take number and the counter numbers at least 36; the ✓ and ✕ glyphs at least 30 (squares of 50 units).
 
 #### Scenario: Every settled string at its minimum
 - **GIVEN** every frame from 0 to 1919
 - **WHEN** each drawn string whose pop-in has settled is measured
-- **THEN** its effective size is at least 30, and at least 36 for `CLOSED`, `OPEN`, `HALF_OPEN`, `1`, `2` and the counter numbers
+- **THEN** its effective size is at least 33; at least 36 for `CLOSED`, `OPEN`, `HALF_OPEN`, `1`, `2` and the counter numbers; at least 30 for ✓ and ✕
 
 #### Scenario: Too small rejected
-- **GIVEN** a fixture whose `requests` caption is drawn at 29, and one whose state pill is drawn at 34
+- **GIVEN** a fixture whose `requests` caption is drawn at 32, one whose state pill is drawn at 35, and one whose squares are 48 (glyph 29.8)
 - **WHEN** the size test runs
 - **THEN** each fails naming the string, its size and the first frame it is drawn
 
 ### Requirement: Topology text placement
-Every drawn text box, its advance width measured on the package's `fonts/` faces times its effective size, SHALL lie inside the stage less a 12-unit margin, SHALL NOT intersect another drawn text box, and SHALL NOT intersect a block it does not label (Checkout, Payment, breaker, window, bar, clock ring) or a token on its leg.
+Every drawn text box (measured advance on the `fonts/` faces times effective size) and badge SHALL lie inside the stage less 12 units, SHALL NOT intersect another text box or a token, and SHALL NOT intersect a block it does not label, per design §6.3: frames, units, breaker, pill bodies, squares, bar, clock ring, badges. No pill or text SHALL cover a Payment light. Moving and settling frames of design §6.3 item 7 are exempt.
 
-#### Scenario: Placement at every frame
-- **GIVEN** every frame from 0 to 1919
-- **WHEN** the drawn text boxes are computed from the measured advances
-- **THEN** each lies within x 12–948 and y 12–528, and none intersects another text box, a block it does not label or a token
+#### Scenario: Placement at every checked frame
+- **GIVEN** every frame from 0 to 1919 except the exempt frames of design §6.3 item 7
+- **WHEN** the drawn text boxes, badges, blocks, lights and tokens are computed
+- **THEN** each text box and badge lies within x 12–948 and y 12–528, and none intersects another text box, a token, a block it does not label, or a Payment light
+
+#### Scenario: Exempt and checked frames
+- **GIVEN** frames 531 (drop-in) and 1681 (a slide), and frames 560 and 1700
+- **WHEN** the placement test lists the frames it checks
+- **THEN** 531 and 1681 are not checked for the moving element, and 560 and 1700 are checked
 
 #### Scenario: Collision rejected
 - **GIVEN** a fixture moving the customer message to x 300
 - **WHEN** the placement test runs
-- **THEN** it fails naming the customer message, the window, and the first frame where both are drawn
+- **THEN** it fails naming the customer message, the window, and the first frame where both are drawn and settled
+
+#### Scenario: Covered light rejected
+- **GIVEN** a fixture centring the `Payment` label at (846, 160)
+- **WHEN** the placement test runs
+- **THEN** it fails naming the `Payment` label and unit 0's light
 
 ### Requirement: Topology colour roles
 `color.state.failure` SHALL appear only on Payment's failing lights, the ✕ squares, the bar's fill and `failure` arrows; `color.state.failFast` only on `failFast` arrows; `color.state.blocked`, `healthy` and `transitional` only on the `OPEN`, `CLOSED` and `HALF_OPEN` pills; `color.state.caller` only on the `Checkout` label; `color.state.backend` nowhere. The `Payment` label SHALL be white.
@@ -170,7 +185,7 @@ In `wrap`, `retry ×3` and the direct arrow SHALL leave, the breaker box SHALL t
 #### Scenario: Drop-in frames
 - **GIVEN** frames 519, 531, 542, 548, 554 and 560
 - **WHEN** the state is read
-- **THEN** 519 draws no breaker box; 531 has its centre at (480, 93) on the drop path; 542 has it at (480, 246); 548 has the `CLOSED` pop starting; 554 the window's; 560 has unit 0 red and units 1 and 2 white
+- **THEN** 519 draws no breaker box; 531 has its centre at (480, 95.5) on the drop path; 542 has it at (480, 251); 548 has the `CLOSED` pop starting; 554 the window's; 560 has unit 0 red and units 1 and 2 white
 
 #### Scenario: Retry gone in take 2
 - **GIVEN** every frame from 520 to 1919
@@ -208,6 +223,11 @@ In `open` and `open-again`, no token SHALL travel `out-req` or `out-rep`, which 
 - **WHEN** the tokens and counters are read
 - **THEN** 822 has request 6 departing and `requests` `6`; 844 has its reply departing on `in-rep`; 906 has `requests` `20`; 912 has the ghost `60`'s pop starting beside `5`; 950 has no token on `in-rep`
 
+#### Scenario: Cut line drawn
+- **GIVEN** frames 830, 960, 1030 and 1300
+- **WHEN** the `out-req`, `out-rep` and `in-rep` arrows are read
+- **THEN** at 830 and 1030 `out-req` and `out-rep` are dashed at opacity 0.25 and `in-rep` is solid at 1; at 960 all three are solid, `out-req` and `out-rep` at 1 and `in-rep` at 0.25; at 1300 all three are solid at 1
+
 #### Scenario: Customer message beside the error
 - **GIVEN** frame 870
 - **WHEN** the left side is read
@@ -242,7 +262,7 @@ Each HALF_OPEN SHALL send exactly one test call from the breaker's right edge to
 #### Scenario: Test succeeds, CLOSED
 - **GIVEN** frames 1187, 1188, 1219 and 1220
 - **WHEN** the light, tag and pill are read
-- **THEN** 1187 has unit 0 red; 1188 has it white and `200` popping on the right; 1219 is `HALF_OPEN`; 1220 swaps to `CLOSED`
+- **THEN** 1187 has unit 0 red; 1188 has it white and the right tag's text `200` (its pop starting); 1219 is `HALF_OPEN`; 1220 swaps to `CLOSED`
 
 ### Requirement: Topology CLOSED ignores noise
 At 1220 the window SHALL clear (the ✕ squares leave, the bar eases to 0). The next five calls SHALL give ✓, ✓, ✕ (`HTTP:TIMEOUT`), ✓, ✓, leaving the rate at 0.2 and the circuit CLOSED.
@@ -260,7 +280,7 @@ At 1220 the window SHALL clear (the ✕ squares leave, the bar eases to 0). The 
 #### Scenario: Timeout shows on the lines
 - **GIVEN** frames 1360, 1399 and 1400
 - **WHEN** `out-rep` and the `right` tag are read
-- **THEN** 1360 and 1399 are kind `failure` with `HTTP:TIMEOUT`; 1400 is kind `reply` with `200`
+- **THEN** 1360 is kind `failure` with the tag's text `HTTP:TIMEOUT` (its pop starting); 1399 is kind `failure` drawing `HTTP:TIMEOUT`; 1400 is kind `reply` with the tag's text `200` (its pop starting)
 
 ### Requirement: Topology business error not counted
 The `400` of call c5 SHALL travel back as a `reply` arrow tagged `400` on both gaps; its result SHALL NOT enter the window: a dashed empty square pops beside the window at 1566, falls 40 units and is gone at 1586, while the window and bar stay unchanged.
@@ -320,6 +340,31 @@ The scene SHALL use the stage layout of the change's design §6.1 in 960x540 sta
 - **THEN** they follow design §6.2, and every token's `data-element` is above every block's and below every tag's
 
 #### Scenario: Stills reviewed (local)
-- **GIVEN** the stills and boundary frames of design §7 and their 360 px wide sheet
+- **GIVEN** the stills and boundary frames of design §7 and their 328 px wide phone sheet
 - **WHEN** the owner and the implementer open each PNG
-- **THEN** each shows what §4.2 lists at that frame, with no overlap, clipping or word unreadable at 360 px
+- **THEN** each shows what §4.2 lists at that frame, with no overlap, clipping or word unreadable at 328 px
+
+## MODIFIED Requirements
+
+### Requirement: State-machine and flow catalogue compatibility
+The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list every registered scene in registration order.
+
+#### Scenario: Both kinds in the catalogue
+- **GIVEN** the circuit-breaker and pub-sub scenes, registered with later scenes after them
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** both pass and their eight compositions are returned unchanged, circuit-breaker first, pub-sub second; the existing circuit-breaker test suite and pinned timeline pass without edits
+
+#### Scenario: Three kinds in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub and `sdd-without-with-spec` scenes, registered in that order with later scenes after them
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** all pass and their nine compositions are returned unchanged, circuit-breaker's four first, pub-sub's four second, `sdd-without-with-spec-16x9` ninth; the circuit-breaker and pub-sub suites and pinned timelines pass, edited only where they list every registered scene
+
+#### Scenario: Four scenes in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub, `sdd-without-with-spec` and `circuit-breaker-topology` scenes
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** all pass and ten unique compositions are returned in registration order, `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the four scenes in that order
+
+#### Scenario: Shared checks still reject a broken flow
+- **GIVEN** a pub-sub fixture with a duplicate composition id, a missing English text key or a non-HTTPS source
+- **WHEN** catalogue validation runs on each fixture
+- **THEN** each is rejected by the corresponding existing shared rule with the scene and offending entry named

@@ -6,7 +6,7 @@ The article "Circuit Breaker in MuleSoft: When Retry Makes Things Worse" argues 
 
 Gate 0 (MOT-3): on **2026-11-12** the owner picked **concept A, "one topology, two takes"** with all recommendations (q68 A, q69 A, q70 A). Evidence: brain vault `10-personal/projects/brunosouzas-design-system/evidence/2026-11-12-circuit-breaker-gate-0/` (`index.md`, `concept-A-two-takes.png`); prototype `~/.hermes/cache/scratch/ab334-cb-scene/` (`lib.ts`, `concept-a.ts`). The pick came with corrections:
 
-- **Much larger text.** On the sheet, labels were about 5–6 px on a phone. This change sets a minimum size so they read at 360 px wide, and shortens words where needed.
+- **Much larger text.** On the sheet, labels were about 5–6 px on a phone. This change sets a minimum size so they read on a 360 px phone, where the site's column shows the video 328 px wide, and shortens words where needed.
 - **A neutral `Payment` label.** Red stays on failing elements only (ADR 0006 colour meaning).
 - **A compressed `resetTimeout` clock** of about 4 s, labelled `resetTimeout 10s` (q69 A).
 - **The customer's message in OPEN.** The customer side shows `payment temporarily unavailable` (L71) beside `CIRCUIT-BREAKER:OPEN` (q70 A).
@@ -22,10 +22,11 @@ Gate 0 (MOT-3): on **2026-11-12** the owner picked **concept A, "one topology, t
     - **OPEN:** 15 requests fail fast with `CIRCUIT-BREAKER:OPEN` and `payment temporarily unavailable`, and the service gets no traffic. The counter shows 5 backend calls against a ghost 60. A `resetTimeout 10s` clock runs.
     - **HALF_OPEN:** one test call times out, so the circuit is OPEN again. A later test call returns `200`, so the circuit is CLOSED.
     - **CLOSED again:** one timeout is noise (20%, under the tick), and a `400` (business error) does not count. The window slides back to five successes, and the healthy end holds still.
-- **The failure-rate bar, a new shared component.** It draws a track, a fill for the failure rate and a threshold tick, in a new file in `src/brand/`.
+- **The failure-rate bar, a new shared component.** It draws a track, a fill for the failure rate and a threshold tick, in new files in `src/brand/`.
+- **`PositionedToken` gains an optional `radius`.** It defaults to today's 17, so `publish-subscribe` is unchanged; this scene draws its tokens at 10.
 - **The catalogue, stills and render commands accept the new scene,** with the shared rules unchanged. Every existing scene (`circuit-breaker-states`, `publish-subscribe`, and `sdd-without-with-spec` once PR #41 is merged) keeps its data, compositions and stills byte for byte.
 
-**This change depends on PR #41 (AB#144, `sdd-without-with-spec-scene`).** That PR adds neutral scenes, the `takes` scene kind and `MotionPath`. It is implemented and waits for the owner's media gate; it is not on `main`. This change reuses those three things and does not redefine them. Implementation starts after #41 is merged, on a branch rebased onto that `main`. Its spec deltas only ADD requirements, under names that #41 does not use, so the two archives merge cleanly. See design §2.1 and G1 question 1.
+**This change depends on PR #41 (AB#144, `sdd-without-with-spec-scene`).** That PR adds neutral scenes, the `takes` scene kind and `MotionPath`. It is implemented and waits for the owner's media gate; it is not on `main`. This change reuses those three things and does not redefine them. Implementation starts after #41 is merged, on a branch rebased onto that `main`. Its spec deltas ADD requirements under names #41 does not use. They modify only #41's "State-machine and flow catalogue compatibility", whose "three scenes" a fourth scene makes false, so the two archives merge cleanly in that order. See design §2.1 and G1 question 1.
 
 ## Capabilities
 
@@ -35,9 +36,9 @@ none
 
 ### Modified Capabilities
 
-- `scene-catalogue`: the topology scene's registration, words, text size and placement, colour roles, beats and timing (take 1, rewind, the breaker's states, the window, the final still), layout and layers. Every requirement is ADDED.
+- `scene-catalogue`: the topology scene's registration, words, text size and placement, colour roles, beats and timing (take 1, rewind, the breaker's states, the window, the final still), layout and layers (ADDED). "State-machine and flow catalogue compatibility" is MODIFIED (as #41 leaves it) so that it lists every registered scene, not three.
 - `scene-rendering`: stills and the master and web copies for the topology scene (ADDED).
-- `motion-components`: the failure-rate bar (ADDED).
+- `motion-components`: the failure-rate bar and an optional token radius on `PositionedToken` (ADDED).
 
 ## Out of scope
 
@@ -51,13 +52,13 @@ none
   - the replicas and the CloudHub 2.0 race (L97–L127);
   - the latency figures (~1929 ms against ~139 ms, +5.6 ms);
   - the Choice mapping of `CIRCUIT-BREAKER:OPEN` to an HTTP status, and the 503 of the demo app.
-- **Changes to the `takes` kind, neutral scenes or `MotionPath`** (PR #41). This change only uses them. The `TakesDevice` union is not extended; the reading choices are listed in design §5.
-- **A new piece in `src/pieces/`, or a change to an existing piece or token.**
+- **Changes to the `takes` kind, neutral scenes or `MotionPath`** (PR #41). This change only uses them. The `TakesDevice` union is not extended; the reading choices are listed in design §5. The scene's own timeline type extends `TakesTimeline` (design §2.10).
+- **A new piece in `src/pieces/`, or a change to an existing piece or token.** The one shared-component change is the optional token radius.
 
 ## Implicit requirements
 
 - **Errors and invalid input:** the catalogue rejects a broken entry through the shared rules and #41's `takes` checks. The failure-rate bar rejects a rate outside [0, 1], a threshold outside (0, 1) and non-finite sizes with a `RangeError` ("Failure-rate bar"). The stills and render commands keep their existing failure policy ("Topology stills through existing commands", "Topology master and web copy").
-- **Limits:** text at least 30 stage units (60 px in the composition), and 36 for state names, the take number and the counter numbers ("Topology text size"). Every text box stays inside the frame and clear of the others ("Topology text placement"). The final hold is at least `motion.readingHold` frames.
+- **Limits:** text at least 33 stage units (66 px in the composition, 11.3 px in the site's 328 px column), and 36 for state names, the take number and the counter numbers ("Topology text size"). Every text box stays inside the frame and clear of the others ("Topology text placement"). The final hold is at least `motion.readingHold` frames.
 - **Repetition and idempotency:** every frame is a pure function of its frame number, with no accumulated state ("Topology beats and timing", seeking in any order). Renders are reproducible.
 - **Concurrency:** n/a. A video renders frames independently; the scene runs no concurrent process.
 - **Security:** n/a. No input from users, no network beyond the existing font load at render time, and no secret.

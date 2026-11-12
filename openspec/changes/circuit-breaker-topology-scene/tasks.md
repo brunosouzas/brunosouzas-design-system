@@ -5,12 +5,14 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 ## 0. Before implementing
 
 - [ ] 0.1 Confirm PR #41 (`sdd-without-with-spec-scene`) is merged into `main`, then rebase this branch onto `origin/main` (`git rebase origin/main`). If #41 is not merged, stop and tell the owner (design §2.1). Re-run `openspec validate --all --strict`: the archived #41 specs and this change's deltas must both pass.
-- [ ] 0.2 Check that the interfaces this change uses still exist on `main`: `takes` kind and `checkTakes` (`src/scenes/takes-kind.ts`), `neutral` scenes in `catalogue.ts`, `MotionPath` and `motionPathAt`. A difference becomes a question in the pull request, not a silent change.
+- [ ] 0.2 Check that the interfaces this change uses still exist on `main`: `takes` kind and `checkTakes` (`src/scenes/takes-kind.ts`), `neutral` scenes in `catalogue.ts`, `MotionPath` and `motionPathAt`. Compare this change's MODIFIED "State-machine and flow catalogue compatibility" with the merged text of `openspec/specs/scene-catalogue/spec.md`; it must differ only in "every registered scene" and the added scenario. A difference becomes a question in the pull request, not a silent change.
 
 ## 1. Failure-rate bar (motion-components)
 
 - [ ] 1.1 Add `src/brand/rate-bar-shape.ts`, the pure geometry of design §2.4 with its `RangeError`s, and `src/brand/rate-bar.tsx`, which draws it. Edit neither `components.tsx` nor `motion.ts`.
-- [ ] 1.2 Unit, `test/brand/rate-bar.test.ts`, proving:
+- [ ] 1.2 Add the optional `radius` to `positionedTokenStyle` and `PositionedToken` (`src/brand/flow-shapes.ts`, `src/brand/flow-components.tsx`; default 17, `RangeError` otherwise; design §2.7).
+- [ ] 1.3 Unit, `test/brand/token-radius.test.ts`, proving "Default unchanged" (plus `test/scenes/publish-subscribe.test.ts` unedited), "Smaller token" and "Bad radius".
+- [ ] 1.4 Unit, `test/brand/rate-bar.test.ts`, proving:
   - "Fill and tick"
   - "Small and empty rates"
   - "Full rate"
@@ -21,15 +23,17 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 ## 2. Scene data and timeline (scene-catalogue)
 
 - [ ] 2.1 `src/scenes/circuit-breaker-topology/scene.ts`: the entry (kind `takes`, neutral, `16x9`, 1920 frames, outro 1800, both sources, the `text.en` table of design §8.1).
-- [ ] 2.2 `src/scenes/circuit-breaker-topology/timeline.ts`: the phases of design §4.1 and every cue of §4.2. The trips, counters, lights, tags, arrows and window come from the formulas of §4.2–§4.6, with no React. Register the scene last in `src/scenes/index.ts`.
+- [ ] 2.2 `src/scenes/circuit-breaker-topology/timeline.ts`: the `TopologyTimeline` of design §2.10, with the phases of §4.1 and every cue of §4.2. The calls, trips, counters, lights, tags, arrows and window come from the formulas of §4.2–§4.6, with no React. Every movement end is also in `cues`. Register the scene last in `src/scenes/index.ts`.
 - [ ] 2.3 Unit, `test/scenes/circuit-breaker-topology-catalogue.test.ts`, proving:
   - "Registered entry"
+  - "Word table"
   - "One composition, last"
   - "No 4:5 and no second language"
   - "Broken entry rejected"
   - "Takes checks pass"
-  - "Circuit-breaker states untouched". This last one runs `test/scenes/circuit-breaker.test.ts` unedited; the only edited assertion is the one in `test/scenes/catalogue-flow.test.ts` that lists every registered scene.
-- [ ] 2.4 Unit, `test/scenes/circuit-breaker-topology.test.ts`, "Timeline equals the beat table" and "Travel token changed". The test holds its own transcription of design §4: the phase table, the cue table, and the formulas re-implemented independently.
+  - "Circuit-breaker states untouched". This one runs `test/scenes/circuit-breaker.test.ts` unedited.
+- [ ] 2.4 Edit only the assertions that list every registered scene: `test/scenes/catalogue-flow.test.ts` ("Three kinds in the catalogue" keeps its nine; add "Four scenes in the catalogue") and the two `available scenes:` lines of `test/scripts/cli.test.ts` (lines 140 and 150 on #41's branch). These prove "Both kinds in the catalogue", "Three kinds in the catalogue", "Four scenes in the catalogue" and "Shared checks still reject a broken flow" (MODIFIED requirement).
+- [ ] 2.5 Unit, `test/scenes/circuit-breaker-topology.test.ts`, "Timeline equals the beat table" and "Travel token changed". The test holds its own transcription of design §4: the phase table, the cue table, and the formulas re-implemented independently.
 
 ## 3. Frame logic (scene-catalogue)
 
@@ -40,7 +44,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - **Rewind:** "Object frame", "Same stage before each take", "Badge swap".
   - **Breaker wraps the call:** "Drop-in frames", "Retry gone in take 2".
   - **CLOSED fills the window:** "Results enter the window", "At the threshold, still CLOSED", "Calls counted on arrival".
-  - **OPEN fails fast:** "Service left alone", "Fail-fast stream", "Customer message beside the error".
+  - **OPEN fails fast:** "Service left alone", "Fail-fast stream", "Cut line drawn", "Customer message beside the error".
   - **Clock:** "Clock frames", "Clock gone in CLOSED".
   - **HALF_OPEN:** "One test call each", "Test fails, OPEN again", "Test succeeds, CLOSED".
   - **Noise:** "Window cleared", "One timeout is noise", "Timeout shows on the lines".
@@ -59,8 +63,10 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Layer order"
   - "Every settled string at its minimum"
   - "Too small rejected"
-  - "Placement at every frame"
+  - "Placement at every checked frame"
+  - "Exempt and checked frames"
   - "Collision rejected"
+  - "Covered light rejected"
 
   If a design §6.1 value fails, change it in design.md and the spec in the same commit and list it for the owner.
 - [ ] 4.6 Unit, `test/scenes/circuit-breaker-topology-words.test.ts`, proving:
@@ -81,7 +87,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Topology render dry run"
   - "Topology render failure"
 - [ ] 5.2 Local: `npm run stills -- circuit-breaker-topology` (14 PNGs), plus `npx remotion still` at the boundary frames of design §7. Open every PNG and check overlaps, clipping and contrast (MOT-5).
-- [ ] 5.3 Local: write the stills sheet and the 360 px wide phone sheet to `docs/spikes/2026-11-12-circuit-breaker-topology/`. This proves "Stills reviewed (local)" with the owner at the media gate.
+- [ ] 5.3 Local: write the stills sheet and the 328 px wide phone sheet (design §7) to `docs/spikes/2026-11-12-circuit-breaker-topology/`. This proves "Stills reviewed (local)" with the owner at the media gate.
 - [ ] 5.4 Local: "Stills byte-identical (local)". Render the stills of every earlier scene on the merge base and on the branch, and compare their SHA-256.
 - [ ] 5.5 Local, after the owner's ok on the stills:
   - `npm run render -- circuit-breaker-topology`;
