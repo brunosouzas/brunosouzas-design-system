@@ -13,10 +13,12 @@ import { CircuitBreakerStatesScene, type SceneProps } from "./scenes/circuit-bre
 import { circuitBreakerStates } from "./scenes/circuit-breaker-states/scene.ts";
 
 import { PublishSubscribeScene } from "./scenes/publish-subscribe/Scene.tsx";
+import { CircuitBreakerTopologyScene } from "./scenes/circuit-breaker-topology/Scene.tsx";
 
 const components: Record<string, React.FC<SceneProps>> = {
   "publish-subscribe": PublishSubscribeScene,
   [circuitBreakerStates.id]: CircuitBreakerStatesScene,
+  "circuit-breaker-topology": CircuitBreakerTopologyScene,
 };
 
 const componentOf = (sceneId: string): React.FC<SceneProps> => {

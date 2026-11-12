@@ -10,9 +10,11 @@ const broken = (edit: Partial<FlowTimeline>):FlowSceneData => ({...scene,timelin
 const errors = (edit:Partial<FlowTimeline>) => checkTimeline(broken(edit)).join("\n");
 test("Both kinds in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe"]);
-  const entries=scenes.flatMap(compositionsOf);
+  // Lists every registered scene (change circuit-breaker-topology-scene): the first two are the pilots, later scenes follow.
+  expect(scenes.slice(0,2).map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe"]);
+  const entries=scenes.slice(0,2).flatMap(compositionsOf);
   expect(entries).toHaveLength(8); expect(new Set(entries.map(e=>e.id)).size).toBe(8);
+  expect(scenes.flatMap(compositionsOf).slice(0,8)).toEqual(entries);
 });
 test("Shared checks still reject a broken flow",()=>{
   expect(checkCatalogue([scene,scene]).join("\n")).toContain("duplicate composition id publish-subscribe-16x9-pt");
@@ -47,10 +49,24 @@ test("Takes fixture beside the registered scenes",()=>{
   const all=[...scenes,takesFixture];
   expect(checkCatalogue(all)).toEqual([]);
   const entries=all.flatMap(compositionsOf);
-  expect(entries).toHaveLength(9); expect(new Set(entries.map(e=>e.id)).size).toBe(9);
-  expect(entries.slice(0,8)).toEqual(before);
+  // Lists every registered scene (change circuit-breaker-topology-scene): the registered compositions, then the fixture's.
+  expect(entries).toHaveLength(before.length+1); expect(new Set(entries.map(e=>e.id)).size).toBe(before.length+1);
+  expect(entries.slice(0,before.length)).toEqual(before);
   expect(entries.slice(0,4).every(e=>e.folder==="circuit-breaker-states")).toBe(true);
   expect(entries.slice(4,8).every(e=>e.folder==="publish-subscribe")).toBe(true);
-  expect(entries[8].id).toBe("takes-fixture-16x9");
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe"]);
+  expect(entries.at(-1)!.id).toBe("takes-fixture-16x9");
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","circuit-breaker-topology"]);
+});
+
+// Every registered scene (spec scene-catalogue, "State-machine and flow catalogue
+// compatibility", scenario "Three scenes in the catalogue"; change
+// circuit-breaker-topology-scene, task 2.4). The commands' `available scenes:`
+// line is checked in test/scripts/cli.test.ts.
+test("Three scenes in the catalogue",()=>{
+  expect(checkCatalogue(scenes)).toEqual([]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","circuit-breaker-topology"]);
+  const entries=scenes.flatMap(compositionsOf);
+  expect(entries).toHaveLength(9); expect(new Set(entries.map(e=>e.id)).size).toBe(9);
+  expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"circuit-breaker-topology"]);
+  expect(entries[8].id).toBe("circuit-breaker-topology-16x9");
 });

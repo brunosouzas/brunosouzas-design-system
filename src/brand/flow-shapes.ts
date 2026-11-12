@@ -17,10 +17,22 @@ export const flowShape = (kind: "exchange" | "queue" | "container", bounds: Boun
     tab: kind === "container" ? { fill: color.white, radius: radius.pill, strokeWidth: outline.small, shadow: shadow.pill } : null,
   };
 };
-/** What PositionedToken draws: nothing when the path gave no point, else the token style. */
-export const positionedTokenDrawing = (point: Point | null, stroke?: string, fill?: string) =>
-  point === null ? null : positionedTokenStyle(point, stroke, fill);
+/** The travelling token's radius when the caller gives none (publish-subscribe draws it). */
+export const DEFAULT_TOKEN_RADIUS = 17;
 
-export const positionedTokenStyle = (point: Point, stroke: string = tokens.color.ink, fill: string = tokens.color.white) => ({
-  point, radius: 17, fill, stroke, strokeWidth: tokens.outline.small + 1, shadow: tokens.shadow.small,
-});
+/** What PositionedToken draws: nothing when the path gave no point, else the token style. */
+export const positionedTokenDrawing = (point: Point | null, stroke?: string, fill?: string, radius?: number) =>
+  point === null ? null : positionedTokenStyle(point, stroke, fill, radius);
+
+/**
+ * The token's style. `radius` is optional (spec motion-components, "Token
+ * radius"; change circuit-breaker-topology-scene, design §2.7): without it the
+ * token is drawn as before; a radius that is not a finite number above 0
+ * throws a RangeError naming `radius`.
+ */
+export const positionedTokenStyle = (point: Point, stroke: string = tokens.color.ink, fill: string = tokens.color.white, radius: number = DEFAULT_TOKEN_RADIUS) => {
+  if (typeof radius !== "number" || !Number.isFinite(radius) || radius <= 0) {
+    throw new RangeError(`positionedTokenStyle: radius must be a finite number above 0, found ${String(radius)}`);
+  }
+  return { point, radius, fill, stroke, strokeWidth: tokens.outline.small + 1, shadow: tokens.shadow.small };
+};
