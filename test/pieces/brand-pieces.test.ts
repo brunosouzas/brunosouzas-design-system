@@ -4,6 +4,7 @@
 // pieces shipped in 0.6.0 with only smoke entries in the catalogue test; the
 // review of the archive (card 268) asked for one test per scenario. Each test
 // title is the scenario it proves.
+import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
   BANK_OBJECT_NAMES,
@@ -18,6 +19,9 @@ import {
   eipIcon,
   kiu,
   mira,
+  PIECES,
+  pill,
+  sheet,
   sinal,
   visor,
 } from "../../src/pieces/index.ts";
@@ -198,5 +202,252 @@ describe("Cast skin (spec design-tokens)", () => {
     expect(skin("light")).toMatchObject({ body: tokens.color.white, outline: tokens.brand.light.text, visor: tokens.brand.light.text });
     expect(skin("dark")).toMatchObject({ body: tokens.color.white, outline: tokens.brand.dark.textMuted, visor: tokens.brand.dark.bg });
     expect(Object.keys(tokens.cast)).not.toContain("mira");
+  });
+});
+
+// ---------------------------------------------------------------- change sdd-scene-pieces (AB#333), tasks 5.1 and 5.2
+
+type Node = SvgNode;
+const plain = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const kids = (node: Node): Node[] => node.children.filter((child): child is Node => typeof child !== "string");
+/** Every node of a tree, depth first. */
+const nodesOf = (nodes: readonly Node[]): Node[] => nodes.flatMap((node) => [node, ...nodesOf(kids(node))]);
+/** Every string of a tree, depth first. */
+const stringsOf = (nodes: readonly (Node | string)[]): string[] => nodes.flatMap((node) => (typeof node === "string" ? [node] : stringsOf(node.children)));
+const visorAny = visor as unknown as (params: Record<string, unknown>) => Tree;
+const HELD = { width: 130, height: 218, rows: [{ lead: "question" as const, bar: 40 }], label: "proposal.md" };
+const ROWS = [{ lead: "question" as const, bar: 40 }];
+/** The sheet's body with the ink stroke Visor adds to its marks group (the `g` at stroke-width 3). */
+const inked = (body: readonly Node[]): Node[] => body.map((node) => (node.tag === "g" && node.attrs["stroke-width"] === 3 ? { ...node, attrs: { ...node.attrs, stroke: "#121212" } } : node));
+const heldGroupOf = (tree: Tree): Node | undefined => nodesOf(tree.body).find((node) => node.attrs["data-held"] === "sheet");
+
+describe("Visor holds a sheet", () => {
+  test("Sheet in the left hand", () => {
+    const tree = visor({ x: 0, y: 0, holdsSheet: HELD });
+    expect(tree.body).toHaveLength(1);
+    const [held, body] = kids(tree.body[0]);
+    expect(kids(tree.body[0])).toHaveLength(2);
+    expect(held.attrs).toEqual({ "data-held": "sheet", stroke: "#121212", "stroke-width": 4, "stroke-linejoin": "round" });
+    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: -214, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: -149, y: -222, text: "proposal.md" }).body]));
+    expect(body.attrs).toEqual({});
+    const withCard = kids(visor({ x: 0, y: 0, holds: true }).body[0])[0];
+    const isCard = (node: Node | string) => typeof node !== "string" && node.tag === "rect" && node.attrs.fill === "#E04E17" && node.attrs.width === 28 && node.attrs.height === 24;
+    expect(withCard.children.filter(isCard)).toHaveLength(1);
+    expect(plain(body.children)).toEqual(plain(withCard.children.filter((node) => !isCard(node))));
+    expect(kids(body).some((node) => node.tag === "circle" && node.attrs.cx === -92 && node.attrs.cy === -66 && node.attrs.r === 15)).toBe(true);
+  });
+
+  test("The sheet's words are Visor's text", () => {
+    const { text } = visor({ x: 0, y: 0, holdsSheet: HELD });
+    expect(plain(text)).toEqual([
+      {
+        tag: "g",
+        attrs: { transform: "translate(0 0) scale(1)", "font-family": tokens.font.sans, "font-size": 19, "font-weight": 700, fill: "#121212", "text-anchor": "middle" },
+        children: [
+          { tag: "text", attrs: { x: -184, y: -158, "font-size": 19, "font-weight": 900 }, children: ["?"] },
+          { tag: "text", attrs: { x: -149, y: -215 }, children: ["proposal.md"] },
+        ],
+      },
+    ]);
+  });
+
+  test("Held sheet on the dark surface", () => {
+    const tree = visor({ x: 0, y: 0, holdsSheet: HELD, surface: "dark" });
+    const held = heldGroupOf(tree)!;
+    expect(held.attrs.stroke).toBe("#ADA79D");
+    const marks = kids(held).find((node) => node.tag === "g" && node.attrs["stroke-width"] === 3)!;
+    expect(marks.attrs.stroke).toBe("#121212");
+    expect(kids(held)[0]).toMatchObject({ tag: "rect", attrs: { fill: "#FFFFFF", width: 130, height: 218 } });
+    expect(tree.text[0].attrs.fill).toBe("#121212");
+  });
+
+  test("Held sheet scales with Visor", () => {
+    const one = visor({ x: 0, y: 0, holdsSheet: HELD });
+    const tree = visor({ x: 480, y: 440, scale: 1.15, holdsSheet: HELD });
+    expect(tree.body[0].attrs.transform).toBe("translate(480 440) scale(1.15)");
+    expect(tree.text[0].attrs.transform).toBe("translate(480 440) scale(1.15)");
+    expect(plain(heldGroupOf(tree)!.children)).toEqual(plain(heldGroupOf(one)!.children));
+  });
+
+  test("Answered sheet", () => {
+    const held = heldGroupOf(visor({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40, tail: "check" }] } }))!;
+    const nodes = nodesOf([held]);
+    const box = nodes.filter((node) => node.tag === "rect" && node.attrs.fill === "#3DDC84");
+    expect(box).toHaveLength(1);
+    expect(box[0].attrs).toMatchObject({ width: 22, height: 22 });
+    const tick = nodes.filter((node) => node.tag === "path" && node.attrs.stroke === "#121212");
+    expect(tick).toHaveLength(1);
+  });
+
+  test("No sheet, no text", () => {
+    for (const tree of [visor({ x: 0, y: 0 }), visor({ x: 0, y: 0, holds: true })]) {
+      expect(tree.text).toEqual([]);
+      expect(heldGroupOf(tree)).toBeUndefined();
+    }
+  });
+
+  test("Sheet without words", () => {
+    const tree = visor({ x: 0, y: 0, holdsSheet: { width: 130, height: 120, rows: [{ bar: 40 }, { lead: "checked", bar: 30 }] } });
+    expect(heldGroupOf(tree)).toBeDefined();
+    expect(tree.text).toEqual([]);
+  });
+});
+
+describe("Held sheet parameters", () => {
+  const CARD_AND_SHEET = new RangeError("visor: holdsSheet: Visor holds a card or a sheet, not both");
+
+  test("Card and sheet together", () => {
+    expect(() => visor({ x: 0, y: 0, holds: true, holdsSheet: { width: 130, height: 218, rows: [{ bar: 40 }] } })).toThrow(CARD_AND_SHEET);
+  });
+
+  test("Sheet seen from behind", () => {
+    expect(() => visor({ x: 0, y: 0, view: "back", holdsSheet: HELD })).toThrow(new RangeError("visor: holdsSheet: Visor holds a sheet only in the front view"));
+    expect(() => visor({ x: 0, y: 0, view: "back", holds: true, holdsSheet: HELD })).toThrow(CARD_AND_SHEET);
+  });
+
+  test("Schema before relation", () => {
+    expect(() => visor({ x: 0, y: 0, holds: true, holdsSheet: { width: 79, height: 218, rows: [{ bar: 40 }] } })).toThrow(/^visor: holdsSheet\.width: /);
+  });
+
+  test("Sheet with holds false", () => {
+    const held = { width: 130, height: 218, rows: [{ bar: 40 }] };
+    expect(plain(visor({ x: 0, y: 0, holds: false, holdsSheet: held }))).toEqual(plain(visor({ x: 0, y: 0, holdsSheet: held })));
+    expect(heldGroupOf(visor({ x: 0, y: 0, holds: false, holdsSheet: held }))).toBeDefined();
+  });
+
+  test("Sizes out of range", () => {
+    const rows = [{ bar: 40 }];
+    for (const [size, name] of [[{ width: 79, height: 218 }, "width"], [{ width: 301, height: 218 }, "width"], [{ width: 130, height: 79 }, "height"], [{ width: 130, height: 401 }, "height"]] as const) {
+      expect(() => visor({ x: 0, y: 0, holdsSheet: { ...size, rows } }), JSON.stringify(size)).toThrow(RangeError);
+      expect(() => visor({ x: 0, y: 0, holdsSheet: { ...size, rows } }), JSON.stringify(size)).toThrow(new RegExp(`^visor: holdsSheet\\.${name}: `));
+    }
+    expect(heldGroupOf(visor({ x: 0, y: 0, holdsSheet: { width: 80, height: 80, rows } }))).toBeDefined();
+    expect(heldGroupOf(visor({ x: 0, y: 0, holdsSheet: { width: 300, height: 400, rows } }))).toBeDefined();
+  });
+
+  test("Rows out of range", () => {
+    const page = { width: 130, height: 218 };
+    for (const held of [page, { ...page, rows: [] }, { ...page, rows: Array.from({ length: 9 }, () => ({ bar: 40 })) }]) {
+      expect(() => visorAny({ x: 0, y: 0, holdsSheet: held }), JSON.stringify(held)).toThrow(/^visor: holdsSheet\.rows: /);
+    }
+    expect(() => visorAny({ x: 0, y: 0, holdsSheet: { ...page, rows: [{ lead: "star", bar: 40 }] } })).toThrow(/^visor: holdsSheet\.rows\[0\]\.lead: /);
+    expect(heldGroupOf(visor({ x: 0, y: 0, holdsSheet: { ...page, height: 400, rows: Array.from({ length: 8 }, () => ({ bar: 40 })) } }))).toBeDefined();
+  });
+
+  test("Unknown field and empty label", () => {
+    expect(() => visorAny({ x: 0, y: 0, holdsSheet: { ...HELD, fill: "color.white" } })).toThrow(/^visor: holdsSheet\.fill: unknown parameter/);
+    expect(() => visorAny({ x: 0, y: 0, holdsSheet: { ...HELD, label: "" } })).toThrow(/^visor: holdsSheet\.label: /);
+    expect(() => visorAny({ x: 0, y: 0, holdsSheet: true })).toThrow(/^visor: holdsSheet: expected an object/);
+  });
+});
+
+describe("Visor faces left or right", () => {
+  test("Mirror of the default", () => {
+    const right = visor({ x: 100, y: 300 });
+    const left = visor({ x: 100, y: 300, facing: "left" });
+    const rootAttrs = { "data-piece": "visor", transform: "translate(100 300) scale(1)", stroke: "none" };
+    expect(right.body[0].attrs).toEqual(rootAttrs);
+    expect(left.body[0].attrs).toEqual(rootAttrs);
+    expect(kids(right.body[0])).toHaveLength(1);
+    expect(kids(left.body[0])).toHaveLength(1);
+    const mirrored = kids(left.body[0])[0];
+    expect(mirrored.tag).toBe("g");
+    expect(mirrored.attrs).toEqual({ transform: "scale(-1,1)" });
+    expect(plain(mirrored.children)).toEqual(plain(kids(right.body[0])[0].children));
+  });
+
+  test("Facing right is the default", () => {
+    const fixture = JSON.parse(readFileSync(new URL("../fixtures/cast-0.11.0.json", import.meta.url), "utf8")) as { piece: string; params: Record<string, unknown> }[];
+    const calls = fixture.filter(({ piece }) => piece === "visor");
+    expect(calls).toHaveLength(66);
+    for (const { params } of calls) expect(plain(visorAny({ ...params, facing: "right" })), JSON.stringify(params)).toEqual(plain(visorAny(params)));
+  });
+
+  test("Back view and card mirrored", () => {
+    const params = { x: 0, y: 0, view: "back" as const, holds: true, points: false };
+    const left = visor({ ...params, facing: "left" });
+    const right = visor({ ...params, facing: "right" });
+    const body = kids(left.body[0])[0];
+    expect(body.attrs.transform).toBe("scale(-1,1)");
+    expect(plain(body.children)).toEqual(plain(kids(right.body[0])[0].children));
+    // No face: the screen and its amber eyes are absent.
+    expect(colours(left.body).has(tokens.cast.eyes)).toBe(false);
+    expect(colours(visor({ x: 0, y: 0, facing: "left" }).body).has(tokens.cast.eyes)).toBe(true);
+  });
+
+  test("Unknown facing", () => {
+    expect(() => visorAny({ x: 0, y: 0, facing: "up" })).toThrow(RangeError);
+    expect(() => visorAny({ x: 0, y: 0, facing: "up" })).toThrow(/^visor: facing: expected one of right, left, found "up"/);
+  });
+});
+
+/** (tag, fill, stroke, stroke-width) of every shape, depth first. */
+const shapesOf = (tree: Tree): string[] =>
+  nodesOf(tree.body).filter((node) => node.tag !== "g").map((node) => [node.tag, node.attrs.fill, node.attrs.stroke, node.attrs["stroke-width"]].join(" "));
+/** Every node's transform, by its path in the tree, where the two trees differ (same structure assumed). */
+const transformDiffs = (a: readonly Node[], b: readonly Node[], path = "body"): string[] =>
+  a.flatMap((node, i) => {
+    const other = b[i];
+    const here = `${path}/${i}:${node.tag}`;
+    const own = node.attrs.transform === other.attrs.transform ? [] : [`${here} ${node.attrs.transform} | ${other.attrs.transform}`];
+    return [...own, ...transformDiffs(kids(node), kids(other), here)];
+  });
+
+describe("Mirrored Visor keeps its outline and words", () => {
+  test("Same outline both ways", () => {
+    for (const expression of CAST_EXPRESSIONS) {
+      for (const surface of ["light", "dark"] as const) {
+        const right = visor({ x: 0, y: 0, expression, surface, holds: true });
+        const left = visor({ x: 0, y: 0, expression, surface, holds: true, facing: "left" });
+        expect(shapesOf(left), `${expression} ${surface}`).toEqual(shapesOf(right));
+        expect(transformDiffs(right.body, left.body), `${expression} ${surface}`).toEqual(["body/0:g/0:g undefined | scale(-1,1)"]);
+      }
+    }
+  });
+
+  test("Sheet on the right, unmirrored", () => {
+    const tree = visor({ x: 0, y: 0, holdsSheet: HELD, facing: "left" });
+    const [held, body] = kids(tree.body[0]);
+    expect(held.attrs["data-held"]).toBe("sheet");
+    expect(held.attrs.transform).toBeUndefined();
+    expect(plain(held.children)).toEqual(plain([...inked(sheet({ x: 84, y: -222, width: 130, height: 218, rows: ROWS }).body), ...pill({ x: 149, y: -222, text: "proposal.md" }).body]));
+    expect(body.attrs.transform).toBe("scale(-1,1)");
+  });
+
+  test("Words read the same", () => {
+    const right = visor({ x: 0, y: 0, holdsSheet: HELD }).text;
+    const left = visor({ x: 0, y: 0, holdsSheet: HELD, facing: "left" }).text;
+    expect(stringsOf(left)).toEqual(stringsOf(right));
+    expect(left[0].attrs).toEqual(right[0].attrs);
+    const words = (text: readonly Node[]) => kids(text[0]);
+    expect(words(left)).toHaveLength(2);
+    words(left).forEach((node, i) => {
+      const twin = words(right)[i];
+      const { x, ...rest } = node.attrs;
+      const { x: twinX, ...twinRest } = twin.attrs;
+      expect(rest).toEqual(twinRest);
+      expect(x).toBe(Number(twinX) + 298);
+    });
+    expect(words(left).map((node) => node.attrs.x)).toEqual([114, 149]);
+    for (const node of nodesOf([...left, ...right])) expect(String(node.attrs.transform ?? "")).not.toMatch(/-\d/);
+  });
+});
+
+describe("Visor's actions and words", () => {
+  test("Visor's schema lists its actions", () => {
+    const schema = PIECES.visor.schema;
+    expect(schema.holds).toEqual({ kind: "boolean" });
+    expect(schema.holdsSheet.kind).toBe("object");
+    expect(schema.points).toEqual({ kind: "boolean" });
+    expect(schema.facing).toEqual({ kind: "enum", values: ["right", "left"] });
+    for (const name of ["mira", "drone", "kiu", "sinal"] as const) {
+      expect(Object.keys(PIECES[name].schema), name).not.toContain("holdsSheet");
+      expect(Object.keys(PIECES[name].schema), name).not.toContain("facing");
+    }
+  });
+
+  test("Visor's words", () => {
+    const { text } = visor({ x: 0, y: 0, holdsSheet: { width: 150, height: 218, rows: [{ lead: "question", bar: 40 }, { lead: "checkbox", bar: 40 }, { lead: "none", bar: 40 }], label: "proposal.md" } });
+    expect(stringsOf(text)).toEqual(["?", "proposal.md"]);
   });
 });

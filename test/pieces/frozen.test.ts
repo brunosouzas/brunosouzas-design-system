@@ -15,7 +15,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { PIECES, type PieceName } from "../../src/pieces/library";
-import type { SvgNode } from "../../src/pieces/node";
+import { g, type SvgNode } from "../../src/pieces/node";
 import { toSvg } from "../../src/pieces/render";
 
 type Frozen = { piece: PieceName; params: Record<string, unknown>; tree: unknown };
@@ -26,12 +26,12 @@ const load = <T>(name: string) => JSON.parse(readFileSync(new URL(`../fixtures/$
 const call: Draw = (piece, params) => (PIECES[piece] as unknown as (p: Record<string, unknown>) => Written)(params);
 /** Body nodes then text nodes, each through toSvg, joined with no separator. */
 const svgOf = (drawn: Written) => [...drawn.body, ...(drawn.text ?? [])].map((node) => toSvg(node)).join("");
-/** The calls whose tree or SVG bytes, drawn by `draw`, differ from the pinned ones. */
-const changedCalls = (frozen: readonly FrozenSvg[], draw: Draw = call): string[] =>
+/** The calls whose tree or SVG bytes, drawn by `draw` and written by `render`, differ from the pinned ones. */
+const changedCalls = (frozen: readonly FrozenSvg[], draw: Draw = call, render: (drawn: Written) => string = svgOf): string[] =>
   frozen
     .filter(({ piece, params, tree, svg }) => {
       const drawn = draw(piece, params);
-      return JSON.stringify(JSON.parse(JSON.stringify(drawn))) !== JSON.stringify(tree) || svgOf(drawn) !== svg;
+      return JSON.stringify(JSON.parse(JSON.stringify(drawn))) !== JSON.stringify(tree) || render(drawn) !== svg;
     })
     .map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
 const sha = (text: string) => createHash("sha256").update(text).digest("hex");
@@ -122,5 +122,36 @@ describe("Piece calls of 0.5.0 unchanged", () => {
     const defaultStem = frozen050.filter(({ piece, params }) => piece === "milestonePin" && params.stem === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
     expect(defaultStem).toHaveLength(2);
     expect(changedCalls(frozen050, altered)).toEqual(defaultStem);
+  });
+});
+
+// Change sdd-scene-pieces (AB#333), task 5.3: spec illustration-pieces, "Cast calls of 0.11.0 unchanged".
+// The fixture was written by scripts/freeze-cast.ts on the 0.11.0 code (d162a39), before Visor gained
+// `holdsSheet` and `facing`; its `svg` is toSvg(g({}, ...body, ...text)).
+const frozenCast = load<FrozenSvg[]>("cast-0.11.0");
+const castSvgOf = (drawn: Written) => toSvg(g({}, ...drawn.body, ...(drawn.text ?? [])));
+
+describe("Cast calls of 0.11.0 unchanged", () => {
+  test("Frozen cast calls", () => {
+    expect(frozenCast).toHaveLength(138);
+    const perPiece = Object.fromEntries(["mira", "visor", "drone", "kiu", "sinal"].map((name) => [name, frozenCast.filter(({ piece }) => piece === name).length]));
+    expect(perPiece).toEqual({ mira: 18, visor: 66, drone: 18, kiu: 18, sinal: 18 });
+    expect(changedCalls(frozenCast, call, castSvgOf)).toEqual([]);
+  });
+
+  test("A changed cast drawing is caught", () => {
+    // Visor's pointing hand moved by one unit along x, wherever it sits in the tree.
+    const HAND = "translate(88,-104) rotate(-35)";
+    const moveHand = (node: SvgNode): SvgNode =>
+      node.tag === "g" && node.attrs.transform === HAND
+        ? { ...node, attrs: { ...node.attrs, transform: "translate(89,-104) rotate(-35)" } }
+        : { ...node, children: node.children.map((child) => (typeof child === "string" ? child : moveHand(child))) };
+    const altered: Draw = (piece, params) => {
+      const drawn = call(piece, params);
+      return piece === "visor" ? { ...drawn, body: drawn.body.map(moveHand) } : drawn;
+    };
+    const pointing = frozenCast.filter(({ piece, params }) => piece === "visor" && params.points !== false).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
+    expect(pointing).toHaveLength(34);
+    expect(changedCalls(frozenCast, altered, castSvgOf)).toEqual(pointing);
   });
 });
