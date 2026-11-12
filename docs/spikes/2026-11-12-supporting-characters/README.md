@@ -11,7 +11,9 @@ The model sheet of the supporting cast, Balão (`balao`, the requester and appro
 | `cast-row-dark.png` | 1540 x 320 | the same on the dark surface |
 | `small-sizes.png` | 1540 x 210 | the same row shown with Balão 48 and 24 px tall, light and dark: the size at which the concept's Chaves read as a pillow |
 
-The emote sits at the spot the README documents, (`x` ± 116·`scale`, `y` − 200·`scale`), at the character's scale (design §8).
+The emote sits at the spot the README documents, (`x` ± 116·`scale`, `y` − 200·`scale`), at the character's scale (design §8). The typing tiles draw the README's screen, 132 × 62 at (106, −148) facing right and (−238, −148) facing left in Chaves's units, which clears that spot.
+
+`model-sheet.ts` is a one-off evidence script, like the other spikes' scripts: it sits outside `tsconfig.json`'s `include`, so CI does not typecheck it; rerun it (below) when the pieces change.
 
 ## Commands
 

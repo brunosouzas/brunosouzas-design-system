@@ -145,9 +145,9 @@ const balaoPanel = characterPanel("balao", "Balão · the requester and approver
 ]);
 
 const screen = (x: number, gy: number, facing: Facing): Drawn => {
-  // The laptop's screen is a codePanel the scene places above the keyboard (design §4); one accent line is the command.
+  // The laptop's screen is a codePanel the scene places above the keyboard (design §4), low enough to clear the emote spot (design §8); one accent line is the command.
   const panelX = facing === "right" ? 106 : -238;
-  const panel = L.codePanel({ x: panelX, y: -178, width: 132, height: 92, top: 26, step: 20, lines: [{ indent: 0, w: 60, color: "white" }, { indent: 0, w: 84, color: "white" }, { indent: 0, w: 40, color: "white", tall: true }] });
+  const panel = L.codePanel({ x: panelX, y: -148, width: 132, height: 62, top: 20, step: 20, lines: [{ indent: 0, w: 84, color: "white" }, { indent: 0, w: 40, color: "white", tall: true }] });
   return { body: [g({ transform: `translate(${x} ${gy}) scale(${S})` }, ...panel.body)], text: [] };
 };
 const SHEET = { width: 150, height: 104, top: 30, step: 34, rows: [{ lead: "question" as const, bar: 50 }, { lead: "question" as const, bar: 36 }], label: "proposal.md" };

@@ -9,9 +9,12 @@ import { describe, expect, test } from "vitest";
 import {
   CAST_EXPRESSIONS,
   CAST_FACINGS,
+  EMOTE_KINDS,
   PIECES,
   balao,
   chaves,
+  codePanel,
+  emote,
   keyboard,
   pill,
   pose,
@@ -261,10 +264,14 @@ describe("Chaves's silhouette", () => {
     expect(points.find(([x]) => x === Math.max(...xs))).toEqual([90, -88]);
     expect(points.find(([x]) => x === Math.min(...xs))).toEqual([-90, -88]);
     for (const point of [[44, -108], [44, -68], [-44, -108], [-44, -68], [54, -128], [54, -48], [-54, -128], [-54, -48]] as [number, number][]) expect(has(points, point), String(point)).toBe(true);
-    // |x| of the waist < |x| of the corners < |x| of the points; on y, -128 < -108 < -88 < -68 < -48.
-    expect(44).toBeLessThan(54);
-    expect(54).toBeLessThan(90);
-    expect([-128, -108, -88, -68, -48]).toEqual([-128, -108, -88, -68, -48].slice().sort((a, b) => a - b));
+    // From the drawn points on the right side: |x| of the waist < |x| of the corners < |x| of the point,
+    // and down the side the corner, the waist, the point, the waist and the corner follow each other.
+    const right = points.filter(([x, y]) => x > 0 && y > -150 && y < -26);
+    const xAt = (y: number) => right.find(([, py]) => py === y)![0];
+    expect(xAt(-108)).toBeLessThan(xAt(-128));
+    expect(xAt(-68)).toBeLessThan(xAt(-48));
+    expect(xAt(-128)).toBeLessThan(xAt(-88));
+    expect(right.map(([, y]) => y)).toEqual([-128, -108, -88, -68, -48]);
     // The curves into and out of the point (90, -88) are quadratics with the control points (60, -96) and (60, -80).
     const into = segments.find((segment) => segment.to[0] === 90 && segment.to[1] === -88)!;
     const outOf = segments.find((segment) => segment.from[0] === 90 && segment.from[1] === -88)!;
@@ -496,6 +503,8 @@ const boxesOf = (nodes: readonly SvgNode[], m = IDENTITY, stroke = "none", width
   });
 /** The distance from a point to a box (0 inside it). */
 const distance = ([x, y]: [number, number], box: Box) => Math.hypot(Math.max(box.x0 - x, 0, x - box.x1), Math.max(box.y0 - y, 0, y - box.y1));
+/** Whether two boxes share a point. */
+const meets = (a: Box, b: Box) => a.x0 <= b.x1 && b.x0 <= a.x1 && a.y0 <= b.y1 && b.y0 <= a.y1;
 /** The emote's disc: radius 40 and its outline (design §8). */
 const SPOT_RADIUS = 44;
 const spotOf = (facing: CastFacing): [number, number] => [facing === "left" ? -116 : 116, -200];
@@ -515,7 +524,18 @@ describe("Emote spot beside the head", () => {
       for (const [label, drawn] of calls) {
         expect(drawn.body[0].attrs.transform).toBe("translate(0 0) scale(1)");
         expect(overlapping(drawn, facing), `${label} facing ${facing}`).toEqual([]);
+        // Every emote drawn at the spot, its burst included (some reach past the disc), touches none of the piece's shapes.
+        const piece = boxesOf(kids(drawn.body[0]));
+        for (const kind of EMOTE_KINDS) {
+          const [x, y] = spotOf(facing);
+          const touching = boxesOf(emote({ kind, x, y }).body).filter((box) => piece.some((other) => meets(box, other)));
+          expect(touching, `${kind} at the spot of ${label} facing ${facing}`).toEqual([]);
+        }
       }
+      // The README's screen for Chaves typing, a codePanel above the keyboard (in the cover command's 4-unit outline), clears it too.
+      const screen = codePanel({ x: facing === "left" ? -238 : 106, y: -148, width: 132, height: 62, lines: [] });
+      const screenBoxes = boxesOf(screen.body, IDENTITY, "ink", tokens.outline.block);
+      expect(screenBoxes.filter((box) => distance(spotOf(facing), box) < SPOT_RADIUS), `screen facing ${facing}`).toEqual([]);
     }
   });
 

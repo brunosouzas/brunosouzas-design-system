@@ -222,19 +222,21 @@ const question = questionToken({ cx: 300, cy: 120, scale: 1.5 });
 
 The supporting characters of 0.13.0 (card 337, the concept the owner chose in the identity studio of 2026-11-12) are glyphs of their trade on Mira's legs, for the human roles of a scene. Both take the shared parameters and `facing: "right" | "left"` (default `right`; facing left is the mirror image of the body only, and a held prop and its words are never mirrored), do one action at a time and do nothing unless an action is set ([model sheet](docs/spikes/2026-11-12-supporting-characters/README.md)):
 
-- `balao`, the requester and approver: a speech balloon whose tail points at the listener (the side it faces). `speaks: true` lights the request line on its belly in the accent. `holdsStamp: { word }` holds the `stamp` piece in the front hand with the caller's word (the SDD scene's `GO`); the stamp is 24 in radius and draws its word at 27 whatever its length, so keep the word to two or three letters. Refused with `speaks` or from behind. Balão answering is a `sheet` the scene places beside its front hand.
+- `balao`, the requester and approver: a speech balloon whose tail points at the listener (the side it faces). `speaks: true` lights the request line on its belly in the accent. `holdsStamp: { word }` holds the `stamp` piece in the front hand with the caller's word (the SDD scene's `GO`); the held stamp is always the approval green (`color.state.healthy`), so its word says yes (`GO`, `OK`), never a refusal; the stamp is 24 in radius and draws its word at 27 whatever its length, so keep the word to two or three letters. Refused with `speaks` or from behind. Balão answering is a `sheet` the scene places beside its front hand.
 - `chaves`, the developer: a `{ }` body with sharp brace points and a waist (it reads as a brace at 24 px), and the cursor in the accent. `types: true` puts the `keyboard` under the front hand; the screen above it is a `codePanel` the scene places. `points: true` swaps the front hand for Visor's pointing hand. `holdsSheet` hands a sheet over, as Visor's (`width` 80 to 300, `height` 80 to 400, 1 to 8 `rows`, `label`), held out in the front hand. `types` and `holdsSheet` are refused from behind.
 - `keyboard({ x, y, width, surface })`, the laptop's base: a white slab (`width` 80 to 300, default 150, 16 high, top-left corner at `x`, `y`) with ink key marks, outlined on both surfaces. It takes no colour and no text; a cover can draw it under a `codePanel`.
 
 ```ts
 import { balao, chaves, codePanel } from "@brunosouzas/design-system";
+// A cover (a still). In a scene one character acts at a time (motion CAST-4): Balão speaks, then Chaves types.
 const requester = balao({ x: 300, y: 450, scale: 1.25, speaks: true });
+// The developer's screen above the keyboard, drawn before Chaves so the typing hand stays in front: in Chaves's
+// units at scale 1 a panel 132 x 62 at (-238, -148) facing left ((106, -148) facing right), low enough to clear the emote spot.
+const screen = codePanel({ x: 680 - 238 * 1.25, y: 450 - 148 * 1.25, width: 165, height: 77.5, top: 25, step: 25, lines: [{ indent: 0, w: 105, color: "white" }, { indent: 0, w: 50, color: "white", tall: true }] });
 const developer = chaves({ x: 680, y: 450, scale: 1.25, facing: "left", types: true });
-// The developer's screen, above the keyboard (facing left: x -238 in Chaves's units at scale 1).
-const screen = codePanel({ x: 680 - 238 * 1.25, y: 450 - 178 * 1.25, width: 165, height: 115, lines: [{ indent: 0, w: 60, color: "white", tall: true }] });
 ```
 
-**Emote spot.** An emote for Balão or Chaves sits beside the head on the front side, at the character's `scale` (about the head's size, motion CAST-3): its centre at (`x` + 116·`scale`, `y` − 200·`scale`) facing right and (`x` − 116·`scale`, `y` − 200·`scale`) facing left. There it clears the body, the hood tip, the hands, the pointing hand, the held stamp and the keyboard. A sheet Chaves holds taller than 114 (96 with a label) reaches the spot: then the scene moves the emote or the sheet, on its stills. The five pillar characters have no documented spot.
+**Emote spot.** An emote for Balão or Chaves sits beside the head on the front side, at the character's `scale` (about the head's size, motion CAST-3): its centre at (`x` + 116·`scale`, `y` − 200·`scale`) facing right and (`x` − 116·`scale`, `y` − 200·`scale`) facing left. There every emote, its burst included, clears the body, the hood tip, the hands, the pointing hand, the held stamp, the keyboard and the screen of the example above (a taller screen, like a panel reaching y −178, covers the spot). A sheet Chaves holds taller than 114 reaches the spot, and so does one taller than 96 whose label pill is at least as wide as the page (a narrower pill reaches it only higher: check the stills): then the scene moves the emote or the sheet, on its stills. The five pillar characters have no documented spot.
 
 `emote({ kind, x, y, scale, burst, surface })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
 
