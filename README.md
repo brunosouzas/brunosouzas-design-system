@@ -139,6 +139,17 @@ Pub-sub separates `text.ts`, `timeline.ts` and pure `flow.ts` from its data entr
 
 The components take every colour and size from the tokens, and what is visible at a frame (arrow progress, travelling tokens, focus and dimming, captions, countdown, call results) comes from pure functions in `src/brand/motion.ts`, which the tests check without rendering.
 
+The stage every scene shares is in the `scene.*` tokens (0.12.0), in composition pixels (the 16:9 composition is 1920 x 1080) and the same in every format:
+
+| Token | Value | What |
+|---|---|---|
+| `scene.ringRadius`, `scene.ringStep`, `scene.ringWidth` | 100, 34, 2.5 | the stage rings: first radius, gap, stroke width |
+| `scene.ringReach` | 1.2 | the rings reach the frame's larger side times this ratio |
+| `scene.pathDash`, `scene.pathGap`, `scene.pathWidth` | 4, 18, 6 | the dashed motion path a travelling object follows, drawn with round caps, so each dash reads as a dot |
+| `scene.pathColor` | `#5C5852` | the path's colour on the light stage, equal to `brand.light.textMuted` (a test keeps the two equal) |
+
+`stageRingRadii(width, height, values = tokens.scene)` in `src/brand/motion.ts` gives the ring radii for a frame (65 for 1920 x 1080, 45 for 1080 x 1350), and the `Rings` component draws them; it refuses a size that is not a positive finite number and more than 1000 rings. No component draws the dashed path yet: the first scene that needs it draws it from the tokens.
+
 ## Illustration pieces and covers
 
 `src/pieces/` holds the drawing library. A piece is a function from plain parameters to `{ body, text }`: `body` holds the shapes, drawn inside the outlined group, and `text` the words and glyphs, drawn after every shape so the outline never strokes a letter. Pieces read only the generated tokens and never a file, so a Remotion scene can import them.
@@ -146,7 +157,7 @@ The components take every colour and size from the tokens, and what is visible a
 - `toSvg(node)` writes a tree as SVG text; `toReact(node)` turns the same tree into React elements. Both describe the same elements, attributes and text, which the tests check.
 - `pose(node, { x, y, tilt, squash, hop, scale, shake, opacity })` animates any piece around its base point; a scene recomputes the numbers every frame.
 - Every colour parameter is a token path (`"color.state.healthy"`, `"illustration.accent"`), never a hex value, except the three data fills of the map pieces below. Each piece checks its parameters before drawing and names the first wrong one. Positions and points take any finite number, because a map has no edge; sizes stay within 10000. A drawing that would hold a non-finite number throws `<piece>: the drawing overflows`.
-- The 63 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`) and `headline` (below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
+- The 64 pieces, with their anchors, parameters and defaults, are listed in [design §4](openspec/changes/archive/2026-10-23-illustration-pieces/design.md) (the 26 cover pieces), in [design §3](openspec/changes/archive/2026-10-23-metro-and-diagram-pieces/design.md) of `metro-and-diagram-pieces` (the nine map and diagram pieces) and in [design §3, §5 and §6](openspec/changes/archive/2026-10-23-stackledger-map-and-link-pieces/design.md) of `stackledger-map-and-link-pieces` (the six markers, zones and icons) and in [design §3 to §5](openspec/changes/archive/2026-10-23-body-diagram-pieces/design.md) of `body-diagram-pieces` (the ten body diagram pieces), plus `stateStart` ([design §4](openspec/changes/archive/2026-10-24-designer-formats/design.md) of `designer-formats`), `headline` and `questionToken` (below); the rules are in [`openspec/specs/illustration-pieces/`](openspec/specs/illustration-pieces/spec.md). `npm run pieces:sheet -- --out <file.svg>` draws them all, and `--surface dark` draws every piece that takes `surface` on the dark surface.
 
 ### Maps and diagrams
 
@@ -185,8 +196,21 @@ Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagr
 The cast of [ADR 0007](docs/adr/0007-mira-and-the-pillar-cast.md) shares one skin (white body, ink outline, a near-black visor with the amber idle eyes, `cast.eyes`); a character's identity is its shape, never a colour. Each takes `x`, `y` (the centre of its ground line), `scale`, `surface`, `expression` (`idle`, `done`, `waiting`, `failed`) and `view` (`front`, `back`):
 
 - `mira(…)`: the protagonist, an astrolabe with a screen face; `needleAngle` points the route, `carries` rides a message on the needle's tip.
-- `visor` (AI engineering; `holds`, `points`), `drone` (delivery; `carries`), `kiu` (wiki and series; `steps`), `sinal` (stackledger, without the parent-brand hood tip).
+- `visor` (AI engineering; `holds`, `holdsSheet`, `points`, `facing`), `drone` (delivery; `carries`), `kiu` (wiki and series; `steps`), `sinal` (stackledger, without the parent-brand hood tip).
 - `bankObject({ name, x, y, scale, surface })`: six objects for scenery, `courier`, `lume`, `carga`, `anel`, `modulo`, `hub`, with the cast's idle eyes on their screen and no expression.
+
+Visor's two actions of 0.12.0, for the SDD scene of AB#144:
+
+- `holdsSheet: { width, height, rows, top, step, label }` puts a sheet in Visor's left hand instead of the card: the `sheet` piece's page (`width` 80 to 300, `height` 80 to 400, 1 to 8 `rows` with `lead`, `bar`, `tail`) and, with `label`, a `pill` on its top edge (a file name such as `proposal.md`). The hand sits over the page's edge; the page's `?` and the label are Visor's `text`, with their own font, so they read the same in a scene. With `holds: true` or `view: "back"` it is refused. The label takes `pill`'s width (150 for `proposal.md`), so give the page at least that width.
+- `facing: "right" | "left"` (default `right`, the drawing of 0.11.0): facing left is the mirror image, so `points` reaches left and the hand holds on the right. Only the body is mirrored: the outline keeps its colour and width, and a held sheet and its words are never mirrored.
+
+`questionToken({ cx, cy, scale, surface })` is the open question as an object: the white disc and `?` of a sheet's question row (radius 13, outline `outline.small`, ink on light and `surface.dark.muted` on dark), sized with `scale` (above 0, at most 10). It takes no colour and no text. `countBadge` stays the map's number sticker.
+
+```ts
+import { questionToken, visor } from "@brunosouzas/design-system";
+const agent = visor({ x: 480, y: 440, scale: 1.15, facing: "left", holdsSheet: { width: 150, height: 204, rows: [{ lead: "question", bar: 44 }], label: "proposal.md" } });
+const question = questionToken({ cx: 300, cy: 120, scale: 1.5 });
+```
 
 `emote({ kind, x, y, scale, burst, surface })` draws a reaction beside a head, never over the face. Each kind keeps one meaning in every video, like the colours:
 
@@ -325,6 +349,18 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 ### EIP icons
 
 `src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+
+## Upgrading to 0.12.0
+
+0.12.0 (card 333, change `sdd-scene-pieces`) adds what the SDD scene of AB#144 needs. Nothing is removed or renamed, and every 0.11.0 call, spec and scene draws the same: the five cast pieces are pinned against their 0.11.0 drawings (`test/fixtures/cast-0.11.0.json`) and the circuit-breaker and publish-subscribe stills are byte-identical.
+
+| Added | What |
+|---|---|
+| `visor` `holdsSheet`, `facing` | Visor holds a sheet and faces left or right (see The cast and the emotes); `VISOR_FACINGS`, `VisorFacing` and `VisorHeldSheet` from the root entry |
+| `questionToken` | the open question as an object; `PIECE_NAMES` has 64 names, ending with `headline`, `questionToken`, so a check of the exact list or an exhaustive `switch` over `PieceName` must add it |
+| `scene.*` tokens | the stage rings and the dashed motion path (see How a scene is built), the seventeenth token group: `tokens.scene` and `--ds-scene-*` in `tokens.css` |
+
+`pill` and `sheet` moved from `src/pieces/library.ts` to `src/pieces/paper.ts` unchanged; the root entry exports them as before.
 
 ## Upgrading to 0.10.0
 

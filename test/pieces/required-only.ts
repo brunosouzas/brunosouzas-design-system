@@ -68,4 +68,5 @@ export const REQUIRED_ONLY: Record<P.PieceName, Record<string, unknown>> = {
   brandNotationIcon: { name: "message", x: 0, y: 0 },
   categoryIcon: { category: "personalTools", x: 0, y: 0 },
   headline: { x: 0, y: 0, lines: ["Title"] },
+  questionToken: { cx: 0, cy: 0 },
 };

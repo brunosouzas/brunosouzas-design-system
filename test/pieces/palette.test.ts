@@ -54,6 +54,9 @@ const STATE_PARTS: Record<string, readonly StatePart[]> = {
   "sheet:tail": [{ part: "tail check (done)", at: "1/1", attr: "fill", values: [S.healthy] }],
   stamp: [{ part: "face (approved)", at: "0/0", attr: "fill", values: [S.healthy] }],
   "serverStack:failing": [{ part: "failing unit's light", at: "5", attr: "fill", values: [S.failure] }],
+  // Visor's held sheet (change sdd-scene-pieces): root group, held group, the sheet's marks group, its second mark.
+  "visor:sheet": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
+  "visor:sheet:left": [{ part: "held sheet's tail check (done)", at: "0/0/1/1", attr: "fill", values: [S.healthy] }],
   "emote:problem": [{ part: "warning sign (failure)", at: "0/5", attr: "fill", values: [S.failure] }],
   "emote:refused": [{ part: "disc (failure)", at: "0/0", attr: "fill", values: [S.failure] }],
   "emote:worked": [{ part: "disc (done)", at: "0/5", attr: "fill", values: [S.healthy] }],
@@ -115,11 +118,18 @@ const COLOURED: Partial<Record<P.PieceName, Record<string, unknown>>> = {
 const draw = (name: P.PieceName, params: Record<string, unknown>): Drawn => (P.PIECES[name] as unknown as (p: Record<string, unknown>) => Drawn)(params);
 const takesSurface = (name: P.PieceName) => Object.hasOwn((P.PIECES[name] as unknown as { schema: object }).schema, "surface");
 
+const HELD_WITH_CHECK = { width: 150, height: 160, rows: [{ lead: "question", bar: 40, tail: "check" }], label: "proposal.md" };
+
 // The calls that draw the state parts the required-only calls leave out.
 const STATE_CALLS: Partial<Record<P.PieceName, { label: string; params: Record<string, unknown> }[]>> = {
   // A question row with a tail check (its tail rect is the second mark, 1/1), then a checked row without one.
   sheet: [{ label: "sheet:tail", params: { rows: [{ lead: "question", bar: 40, tail: "check" }, { lead: "checked", bar: 40 }] } }],
   serverStack: [{ label: "serverStack:failing", params: { units: 3, failing: 1 } }],
+  // Visor holding a sheet with a question row and a tail check, facing right and left (change sdd-scene-pieces, task 5.4).
+  visor: [
+    { label: "visor:sheet", params: { holdsSheet: HELD_WITH_CHECK } },
+    { label: "visor:sheet:left", params: { holdsSheet: HELD_WITH_CHECK, facing: "left" } },
+  ],
 };
 
 /** Each piece's required-only call (and its STATE_CALLS), on both surfaces when it takes one, and every emote kind. */
@@ -193,6 +203,15 @@ describe("State colours that keep a meaning", () => {
     expect(nodesOf(P.stamp({ cx: 0, cy: 0, word: "GO" }).body).find((node) => node.tag === "circle")!.attrs.fill).toBe("#3DDC84");
     expect(P.licenceMark({ cx: 0, cy: 0 }).body[0].attrs.fill).toBe("#3DDC84");
     expect(P.renewalRing({ cx: 0, cy: 0, r: 18 }).body.at(-1)!.attrs.stroke).toBe("#FF8A3D");
+  });
+
+  // Change sdd-scene-pieces (AB#333), task 5.4.
+  test("A held sheet's check", () => {
+    const states = (drawn: Drawn) => nodesOf(drawn.body).filter((node) => STATE.has(String(node.attrs.fill)) || STATE.has(String(node.attrs.stroke)));
+    const answered = states(P.visor({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40, tail: "check" }] } }));
+    expect(answered).toHaveLength(1);
+    expect(answered[0]).toMatchObject({ tag: "rect", attrs: { width: 22, height: 22, fill: "#3DDC84" } });
+    expect(states(P.visor({ x: 0, y: 0, holdsSheet: { width: 150, height: 120, rows: [{ lead: "question", bar: 40 }] } }))).toEqual([]);
   });
 
   test("Failing light only when failing", () => {

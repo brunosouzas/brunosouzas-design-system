@@ -140,6 +140,14 @@
   --ds-radius-block: 18px;
   --ds-radius-pill: 22px;
   --ds-radius-small: 6px;
+  --ds-scene-path-color: #5C5852;
+  --ds-scene-path-dash: 4px;
+  --ds-scene-path-gap: 18px;
+  --ds-scene-path-width: 6px;
+  --ds-scene-ring-radius: 100px;
+  --ds-scene-ring-reach: 1.2;
+  --ds-scene-ring-step: 34px;
+  --ds-scene-ring-width: 2.5px;
   --ds-shadow-block: 0px;
   --ds-shadow-pill: 0px;
   --ds-shadow-small: 0px;

@@ -987,5 +987,47 @@
         "$type": "color"
       }
     }
+  },
+  "scene": {
+    "ringRadius": {
+      "$value": 100,
+      "$type": "dimension",
+      "$description": "First stage ring radius of a video scene, in composition pixels (the 16:9 composition is 1920 x 1080), the same in every format; the value the circuit-breaker and publish-subscribe scenes draw."
+    },
+    "ringStep": {
+      "$value": 34,
+      "$type": "dimension",
+      "$description": "Gap between two stage rings, in composition pixels."
+    },
+    "ringWidth": {
+      "$value": 2.5,
+      "$type": "dimension",
+      "$description": "Stroke width of the stage rings, in composition pixels."
+    },
+    "ringReach": {
+      "$value": 1.2,
+      "$type": "number",
+      "$description": "The stage rings reach the frame's larger side times this ratio (20 % to spare)."
+    },
+    "pathDash": {
+      "$value": 4,
+      "$type": "dimension",
+      "$description": "Dash length of the dashed motion path, in composition pixels; the path is drawn with round caps, so each dash reads as a dot (gate 0 of AB#144)."
+    },
+    "pathGap": {
+      "$value": 18,
+      "$type": "dimension",
+      "$description": "Gap between two dashes of the motion path, in composition pixels."
+    },
+    "pathWidth": {
+      "$value": 6,
+      "$type": "dimension",
+      "$description": "Stroke width of the dashed motion path, in composition pixels."
+    },
+    "pathColor": {
+      "$value": "#5C5852",
+      "$type": "color",
+      "$description": "Colour of the dashed motion path on the light stage: equal to brand.light.textMuted (tokens have no aliases; a test keeps the two equal)."
+    }
   }
 }

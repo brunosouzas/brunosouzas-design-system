@@ -19,20 +19,17 @@ import {
   pillPopIn,
   popSpring,
   squarePopScale,
+  stageRingRadii,
   tokenPositions,
   type Appearance,
   type CallAppearance,
   type SlotKind,
 } from "./motion";
 
-const { color, font, outline, radius, shadow } = tokens;
+const { color, font, outline, radius, scene, shadow } = tokens;
 
-// Component constants (design §8).
-const RING_FIRST_RADIUS = 100;
-const RING_STEP = 34;
-const RING_STROKE = 2.5;
-/** Rings cover the frame's larger side with 20 % to spare. */
-const RING_REACH = 1.2;
+// Component constants (design §8). The stage rings read the `scene.*` tokens
+// (change sdd-scene-pieces): their radii come from `stageRingRadii`.
 const BLOCK_GAP = 18;
 const TRAVELLING_TOKEN_RADIUS = 17;
 const COUNTDOWN_INNER_STROKE = 10;
@@ -51,12 +48,11 @@ export const Rings: React.FC<{
 }> = ({ width, height, cx, cy, fade }) => {
   const frame = useCurrentFrame();
   const opacity = fadeIn(frame, fade);
-  const radii: number[] = [];
-  for (let r = RING_FIRST_RADIUS; r < Math.max(width, height) * RING_REACH; r += RING_STEP) radii.push(r);
+  const radii = stageRingRadii(width, height);
   return (
     <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
       <rect width={width} height={height} fill={color.panel} />
-      <g fill="none" stroke={color.ring} strokeWidth={RING_STROKE} opacity={opacity}>
+      <g fill="none" stroke={color.ring} strokeWidth={scene.ringWidth} opacity={opacity}>
         {radii.map((r) => (
           <circle key={r} cx={cx} cy={cy} r={r} />
         ))}

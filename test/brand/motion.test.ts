@@ -12,6 +12,7 @@ import {
   callAppearance,
   countdownLeft,
   focusFactors,
+  stageRingRadii,
   tokenPositions,
 } from "../../src/brand/motion";
 import { timeline, type StateId } from "../../src/scenes/circuit-breaker-states/scene";
@@ -149,5 +150,61 @@ describe("Call results and countdown", () => {
     expect(blockContents(phase.from, "open", timeline).countdown).toBe(1);
     expect(blockContents(middle, "open", timeline).countdown).toBeCloseTo(0.5, 10);
     expect(blockContents(phase.to, "open", timeline).countdown).toBe(0);
+  });
+});
+
+// Change sdd-scene-pieces (AB#333), task 3.1: spec motion-components, "Stage ring radii".
+describe("Stage ring radii", () => {
+  /** 100, 134, … in steps of 34: `count` radii. */
+  const expected = (count: number) => Array.from({ length: count }, (_, i) => 100 + i * 34);
+
+  test("16:9 stage", () => {
+    const radii = stageRingRadii(1920, 1080);
+    expect(radii).toHaveLength(65);
+    expect(radii).toEqual(expected(65));
+    expect(radii[64]).toBe(2276);
+  });
+
+  test("4:5 stage", () => {
+    const radii = stageRingRadii(1080, 1350);
+    expect(radii).toHaveLength(45);
+    expect(radii).toEqual(expected(45));
+    expect(radii[44]).toBe(1596);
+  });
+
+  test("Given values", () => {
+    expect(stageRingRadii(20, 10, { ringRadius: 10, ringStep: 5, ringReach: 1 })).toEqual([10, 15]);
+    expect(stageRingRadii(20, 10, { ringRadius: 20, ringStep: 5, ringReach: 1 })).toEqual([]);
+  });
+
+  test("Frame smaller than the first ring", () => {
+    expect(stageRingRadii(50, 50)).toEqual([]);
+  });
+
+  test("Bad sizes and values", () => {
+    for (const width of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => stageRingRadii(width, 1080)).toThrow(RangeError);
+      expect(() => stageRingRadii(width, 1080)).toThrow(/^stageRingRadii: width: /);
+    }
+    expect(() => stageRingRadii(1920, 0)).toThrow(/^stageRingRadii: height: /);
+    const values = { ringRadius: 100, ringStep: 34, ringReach: 1.2 };
+    expect(() => stageRingRadii(1920, 1080, { ...values, ringStep: 0 })).toThrow(/^stageRingRadii: values\.ringStep: /);
+    expect(() => stageRingRadii(1920, 1080, { ...values, ringRadius: -1 })).toThrow(/^stageRingRadii: values\.ringRadius: /);
+    expect(() => stageRingRadii(1920, 1080, { ...values, ringReach: Number.NaN })).toThrow(/^stageRingRadii: values\.ringReach: /);
+    expect(() => stageRingRadii(1920, 1080, { ...values, ringReach: Number.NaN })).toThrow(RangeError);
+  });
+
+  test("First problem named", () => {
+    expect(() => stageRingRadii(0, 0, { ringRadius: 10, ringStep: 0, ringReach: 1 })).toThrow(/^stageRingRadii: width: /);
+  });
+
+  test("Ring limit", () => {
+    const values = { ringRadius: 1, ringStep: 1, ringReach: 1 };
+    const radii = stageRingRadii(1001, 10, values);
+    expect(radii).toHaveLength(1000);
+    expect(radii[0]).toBe(1);
+    expect(radii[999]).toBe(1000);
+    expect(() => stageRingRadii(1002, 10, values)).toThrow(RangeError);
+    expect(() => stageRingRadii(1002, 10, values)).toThrow(/^stageRingRadii: values\.ringStep: /);
   });
 });

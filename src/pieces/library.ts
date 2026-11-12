@@ -22,9 +22,13 @@ import { symbol, type SymbolParams } from "./symbol.ts";
 import { brandNotationIcon, type BrandNotationIconName, type BrandNotationIconParams } from "./brand-notation-icons.ts";
 import { categoryIcon, type CategoryIconParams } from "./category-icon.ts";
 import { headline, type HeadlineParams } from "./headline.ts";
+import { questionToken, type QuestionTokenParams } from "./question-token.ts";
 import { codeLength, spans } from "./ink.ts";
-export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline };
-export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams };
+import { pill, sheet, type PillParams, type SheetParams, type SheetRow } from "./paper.ts";
+export { pill, sheet };
+export type { PillParams, SheetParams, SheetRow };
+export { emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken };
+export type { MiraParams, VisorParams, DroneParams, KiuParams, SinalParams, BankObjectName, BankObjectParams, SymbolParams, BrandNotationIconName, BrandNotationIconParams, CategoryIconParams, HeadlineParams, QuestionTokenParams };
 
 export * from "./metro.ts";
 export * from "./diagram.ts";
@@ -35,22 +39,7 @@ const ink = tokens.color.ink;
 const mono = tokens.font.mono;
 type Point = [number, number];
 
-// ---------- labels ----------
-
-export type PillParams = { x: number; y: number; text: string; fill?: string; width?: number };
-/** Pill label centred on (x, y), usually overlapping the top edge of what it names. Backticks mark code (card 190). */
-export const pill = definePiece<PillParams>(
-  "pill",
-  { x: pos(), y: pos(), text: label(), fill: col(), width: size() },
-  ({ x, y, text, fill = "color.white", width }) => {
-    const h = tokens.cover.pillHeight;
-    const w = width ?? Math.max(68, Math.round(codeLength(text) * 10.5 + 34));
-    return drawn(
-      [el("rect", { x: x - w / 2, y: y - h / 2, width: w, height: h, rx: h / 2, fill: colour(fill, "fill") })],
-      [el("text", { x, y: y + 7 }, ...spans(text))],
-    );
-  },
-);
+// ---------- labels and paper: pill and sheet live in paper.ts ----------
 
 // ---------- background ----------
 
@@ -69,78 +58,6 @@ export const rings = definePiece<RingsParams>(
         ...Array.from({ length: rings }, (_, i) => el("circle", { cx, cy, r: radius + i * tokens.cover.ringStep })),
       ),
     ]),
-);
-
-// ---------- paper ----------
-
-export type SheetRow = { lead?: "none" | "checkbox" | "checked" | "question"; bar: number; tail?: "none" | "check" };
-export type SheetParams = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rows: SheetRow[];
-  top?: number;
-  step?: number;
-  fill?: string;
-  leadFill?: string;
-  tick?: string;
-};
-const rowSchema: Schema = {
-  lead: { kind: "enum", values: ["none", "checkbox", "checked", "question"] },
-  bar: size(true),
-  tail: { kind: "enum", values: ["none", "check"] },
-};
-/** A sheet of paper with rows of text bars, an optional lead mark and an optional tick at the end. */
-export const sheet = definePiece<SheetParams>(
-  "sheet",
-  {
-    x: pos(),
-    y: pos(),
-    width: size(true, 80),
-    height: size(true),
-    rows: { kind: "array", required: true, of: { kind: "object", fields: rowSchema } },
-    top: size(),
-    step: size(),
-    fill: col(),
-    leadFill: col(),
-    tick: col(),
-  },
-  ({ x, y, width, height, rows, top = 46, step = 38, fill = "color.white", leadFill = "color.ink", tick = "color.white" }) => {
-    const marks: SvgNode[] = [];
-    const bars: SvgNode[] = [];
-    const ticks: SvgNode[] = [];
-    const glyphs: SvgNode[] = [];
-    rows.forEach((row, i) => {
-      const cy = y + top + i * step + 11;
-      let barX = x + 22;
-      if (row.lead === "checkbox" || row.lead === "checked") {
-        const checked = row.lead === "checked";
-        marks.push(el("rect", { x: x + 22, y: cy - 11, width: 22, height: 22, rx: 5, fill: checked ? colour(leadFill, "leadFill") : tokens.color.white }));
-        if (checked) ticks.push(el("path", { d: `M${x + 27},${cy} L${x + 32},${cy + 6} L${x + 40},${cy - 6}`, stroke: colour(tick, "tick") }));
-        barX = x + 56;
-      } else if (row.lead === "question") {
-        marks.push(el("circle", { cx: x + 30, cy, r: 13, fill: tokens.color.white }));
-        glyphs.push(el("text", { x: x + 30, y: cy + 7, "font-size": 19, "font-weight": tokens.font.weightHeavy }, "?"));
-        barX = x + 52;
-      }
-      bars.push(el("rect", { x: barX, y: cy - 5, width: row.bar, height: 10, rx: 5 }));
-      if (row.tail === "check") {
-        const tx = x + width - 40;
-        marks.push(el("rect", { x: tx, y: cy - 11, width: 22, height: 22, rx: 5, fill: tokens.color.state.healthy }));
-        ticks.push(el("path", { d: `M${tx + 5},${cy} L${tx + 10},${cy + 6} L${tx + 18},${cy - 6}`, stroke: ink }));
-      }
-    });
-    return drawn(
-      [
-        ...shadowed(el("rect", { x, y, width, height, rx: 14, fill: colour(fill, "fill") })),
-        g({ "stroke-width": tokens.outline.small }, ...marks),
-        g({ fill: "none", "stroke-width": 3.5, "stroke-linecap": "round" }, ...ticks),
-        g({ stroke: "none", fill: tokens.illustration.textBar }, ...bars),
-      ],
-      glyphs,
-    );
-  },
 );
 
 // The line kinds of 0.6.x specs, kept so they stay valid (ADR 0009): on the dark card every line is
@@ -626,6 +543,7 @@ export const PIECES = {
   brandNotationIcon,
   categoryIcon,
   headline,
+  questionToken,
 } as const;
 export type PieceName = keyof typeof PIECES;
 export const PIECE_NAMES = Object.keys(PIECES) as PieceName[];

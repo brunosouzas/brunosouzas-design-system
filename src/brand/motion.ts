@@ -274,3 +274,47 @@ export const blockContents = <S extends string>(frame: number, state: S, timelin
     phaseFrom: phase ? phase.from : null,
   };
 };
+
+// ---------------------------------------------------------------- stage rings
+
+/** Most stage rings one call gives: the cover `rings` piece's limit, held here so the frame logic imports nothing from src/pieces/. */
+const MAX_STAGE_RINGS = 1000;
+
+/** The ring tokens `stageRingRadii` reads, widened to numbers (the generated tokens are literal types). */
+export type StageRingValues = { readonly [K in keyof Pick<typeof tokens.scene, "ringRadius" | "ringStep" | "ringReach">]: number };
+
+/**
+ * The radii of the stage rings behind a scene (spec motion-components, "Stage
+ * ring radii"; change sdd-scene-pieces, design §6): from `ringRadius` in steps of
+ * `ringStep` while below the frame's larger side times `ringReach`, ascending.
+ * Pure, so the existing scenes' rings are pinned in a unit test; `values` lets a
+ * test try other values without rebuilding the tokens.
+ *
+ * Throws a RangeError naming the first input that is not a positive finite
+ * number (width, height, then values.ringRadius, ringStep, ringReach), and
+ * `values.ringStep` when the frame would need more than 1000 rings.
+ */
+export const stageRingRadii = (width: number, height: number, values: StageRingValues = tokens.scene): number[] => {
+  const inputs: [string, number][] = [
+    ["width", width],
+    ["height", height],
+    ["values.ringRadius", values.ringRadius],
+    ["values.ringStep", values.ringStep],
+    ["values.ringReach", values.ringReach],
+  ];
+  for (const [name, value] of inputs) {
+    if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) {
+      throw new RangeError(`stageRingRadii: ${name}: expected a positive finite number, found ${String(value)}`);
+    }
+  }
+  const reach = Math.max(width, height) * values.ringReach;
+  const radii: number[] = [];
+  // The loop of 0.11.0's `Rings`, unchanged, so the existing scenes draw the same radii.
+  for (let r = values.ringRadius; r < reach; r += values.ringStep) {
+    if (radii.length === MAX_STAGE_RINGS) {
+      throw new RangeError(`stageRingRadii: values.ringStep: gives more than ${MAX_STAGE_RINGS} rings for a ${width} x ${height} frame`);
+    }
+    radii.push(r);
+  }
+  return radii;
+};

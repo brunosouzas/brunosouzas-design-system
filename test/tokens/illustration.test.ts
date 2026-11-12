@@ -47,7 +47,7 @@ const orphanTones = (names: string[]): string[] => {
 describe("Token source", () => {
   test("Source with an unknown group", () => {
     expect(problemsOf(sourceWith(set("colour", { ink: token("#0A1033", "color") })))).toEqual([
-      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, brand, map, site, banner, bodyDiagram, cast\)/),
+      expect.stringMatching(/^colour: unknown group \(expected one of .*illustration, cover, coverBackground, surface, brand, map, site, banner, bodyDiagram, cast, scene\)/),
     ]);
   });
 
@@ -63,6 +63,7 @@ describe("Token source", () => {
       set("banner.radius", token(20, "dimension")),
       set("bodyDiagram.radius", token(14, "dimension")),
       set("cast.eyes", token("#FFC98A", "color")),
+      set("scene.ringStep", token(34, "dimension")),
     );
     const result = buildFromText(JSON.stringify(source));
     expect(result.ok).toBe(true);
@@ -73,6 +74,7 @@ describe("Token source", () => {
     expect(result.outputs["tokens.css"]).toContain("--ds-banner-radius: 20px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-body-diagram-radius: 14px;");
     expect(result.outputs["tokens.css"]).toContain("--ds-cast-eyes: #FFC98A;");
+    expect(result.outputs["tokens.css"]).toContain("--ds-scene-ring-step: 34px;");
     expect(JSON.parse(result.outputs["tokens.json"]).illustration.accent).toBe("#1E6FEB");
     expect(result.outputs["tokens.ts"]).toContain('"trackIntegration": {');
   });
@@ -271,5 +273,32 @@ describe("Required cast tokens", () => {
     const source = sourceWith();
     expect(JSON.stringify(source)).not.toMatch(/"(ground|metal|mouth|glow|dev|agent|architect|devops|data|request)":/);
     expect(problemsOf(source)).toEqual([]);
+  });
+});
+
+// Change sdd-scene-pieces (AB#333), design-tokens "Required scene tokens" (task 2.1).
+describe("Required scene tokens", () => {
+  test("Scene token missing", () => {
+    const result = buildFromText(JSON.stringify(sourceWith(remove("scene.pathGap"))));
+    expect(result.ok).toBe(false);
+    expect(problemsOf(sourceWith(remove("scene.pathGap")))).toEqual(["scene.pathGap: missing required token (type dimension)"]);
+  });
+  test("Scene token with the wrong type", () => {
+    expect(problemsOf(sourceWith(set("scene.ringReach", token(1.2, "dimension"))))).toEqual(["scene.ringReach: expected type number, found dimension"]);
+    expect(problemsOf(sourceWith(set("scene.pathColor", token(4, "dimension"))))).toEqual(["scene.pathColor: expected type color, found dimension"]);
+  });
+  test("Scene values", () => {
+    expect(tokens.scene).toEqual({ ringRadius: 100, ringStep: 34, ringWidth: 2.5, ringReach: 1.2, pathDash: 4, pathGap: 18, pathWidth: 6, pathColor: "#5C5852" });
+    const css = readFileSync(new URL("../../tokens/generated/tokens.css", import.meta.url), "utf8");
+    expect(css).toContain("--ds-scene-ring-width: 2.5px;");
+    expect(css).toContain("--ds-scene-ring-reach: 1.2;");
+    expect(css).toContain("--ds-scene-path-color: #5C5852;");
+    const scene = repoSource().scene as Record<string, { $description?: string }>;
+    expect(scene.pathDash.$description).toMatch(/round caps/);
+  });
+  test("A ring reach of zero", () => {
+    const result = buildFromText(JSON.stringify(sourceWith(set("scene.ringReach", token(0, "number")))));
+    expect(result.ok).toBe(false);
+    expect(problemsOf(sourceWith(set("scene.ringReach", token(0, "number"))))).toEqual([expect.stringMatching(/^scene\.ringReach: expected a finite number greater than zero, found 0/)]);
   });
 });

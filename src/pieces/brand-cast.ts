@@ -3,9 +3,11 @@
 // (`~/.hermes/cache/scratch/ab267/sheet7.py`, functions `mira`/`peak`/`legs`/`needle`;
 // `casting3.py`'s `face`). Front and back view only (round 7b dropped the
 // side view and the middle leg).
+import { tokens } from "../../tokens/generated/tokens.ts";
 import { drawn, el, g, type Drawn, type SvgNode } from "./node.ts";
-import { surfaceParam, type SurfaceName } from "./ink.ts";
-import { pos, num, type Schema } from "./params.ts";
+import { limits, surfaceParam, type SurfaceName } from "./ink.ts";
+import { pill, sheet, sheetRowSchema, type SheetRow } from "./paper.ts";
+import { label, pos, num, size, type Schema } from "./params.ts";
 import { definePiece } from "./piece.ts";
 import { outlined, skin, type Skin } from "./skin.ts";
 
@@ -126,17 +128,66 @@ export const mira = definePiece<MiraParams>(
 
 // ---------------------------------------------------------------- Visor (AI pillar)
 // Ported from final.py's `visor()`: an agent at work, the hands do, the face shows the state.
-export type VisorParams = { x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView; holds?: boolean; points?: boolean };
+// `holdsSheet` and `facing` (change sdd-scene-pieces, design §1 to §3): Visor holds
+// a sheet in its left hand instead of the card, and faces left as the mirror image.
+
+export const VISOR_FACINGS = ["right", "left"] as const;
+export type VisorFacing = (typeof VISOR_FACINGS)[number];
+
+/** The sheet Visor holds: the `sheet` piece's page parameters, plus the file name pill. */
+export type VisorHeldSheet = { width: number; height: number; rows: SheetRow[]; top?: number; step?: number; label?: string };
+
+export type VisorParams = {
+  x: number; y: number; surface?: SurfaceName; scale?: number; expression?: CastExpression; view?: CastView;
+  /** The small accent card in the left hand. */
+  holds?: boolean;
+  /** A sheet in the left hand instead of the card; refused with `holds: true` or `view: "back"`. */
+  holdsSheet?: VisorHeldSheet;
+  points?: boolean;
+  /** `right` (the default, the drawing of 0.11.0) or `left`, the mirror image; the held sheet and words stay unmirrored. */
+  facing?: VisorFacing;
+};
+
+// Where the held sheet sits, in Visor's units (design §2): its edge under the
+// left hand (x -98 facing right, 98 facing left), so the hand (x -92, radius 15,
+// outline 8) lies 13 units over the page, clear of a row's lead mark and of a tail check;
+// its bottom 4 above the ground line.
+const HELD_SHEET_EDGE = 98;
+const HELD_SHEET_BOTTOM = -4;
+
+/**
+ * The held sheet: the `sheet` and `pill` pieces' own drawings in one group that
+ * gives them Visor's outline (cast pieces set `stroke: none` on their root), so
+ * it draws the same in a cover and in a scene. The marks sit on the white page,
+ * so they stay ink on the dark surface too (ADR 0009). Its words go to Visor's text.
+ */
+const heldSheet = (held: VisorHeldSheet, s: Skin, facing: VisorFacing): Drawn => {
+  const x = facing === "right" ? -HELD_SHEET_EDGE - held.width : HELD_SHEET_EDGE;
+  const y = HELD_SHEET_BOTTOM - held.height;
+  const page = sheet({ x, y, width: held.width, height: held.height, rows: held.rows, top: held.top, step: held.step });
+  const tag = held.label === undefined ? null : pill({ x: x + held.width / 2, y, text: held.label });
+  // The sheet's marks group (the `g` at outline.small) gets its ink stroke here.
+  const body = page.body.map((node) =>
+    node.tag === "g" && node.attrs["stroke-width"] === tokens.outline.small && node.attrs.stroke === undefined
+      ? { ...node, attrs: { ...node.attrs, stroke: tokens.color.ink } }
+      : node);
+  return drawn(
+    [g({ "data-held": "sheet", stroke: s.outline, "stroke-width": tokens.outline.block, "stroke-linejoin": "round" }, ...body, ...(tag?.body ?? []))],
+    [...page.text, ...(tag?.text ?? [])],
+  );
+};
 
 const drawVisor = (p: VisorParams): Drawn => {
   const s = skin(p.surface ?? "light");
   const expression = p.expression ?? "idle", view = p.view ?? "front", back = view === "back";
-  const hold = p.holds ?? false, point = p.points ?? true;
+  const hold = p.holds ?? false, point = p.points ?? true, facing = p.facing ?? "right";
+  const held = p.holdsSheet === undefined ? null : heldSheet(p.holdsSheet, s, facing);
   const handR: SvgNode = point
     ? g({ transform: "translate(88,-104) rotate(-35)" }, el("rect", { x: -6, y: -30, width: 12, height: 26, rx: 6, ...outlined(s, 4.5) }), el("circle", { cx: 0, cy: 0, r: 15, ...outlined(s) }))
     : el("circle", { cx: 86, cy: -58, r: 15, ...outlined(s) });
-  const handL: SvgNode[] = hold
-    ? [el("rect", { x: -106, y: -96, width: 28, height: 24, rx: 5, fill: s.accent }), el("circle", { cx: -92, cy: -66, r: 15, ...outlined(s) })]
+  // With a held sheet the card hand stays where it is, without the card, over the sheet's edge.
+  const handL: SvgNode[] = hold || held
+    ? [...(held ? [] : [el("rect", { x: -106, y: -96, width: 28, height: 24, rx: 5, fill: s.accent })]), el("circle", { cx: -92, cy: -66, r: 15, ...outlined(s) })]
     : [el("circle", { cx: -86, cy: -58, r: 15, ...outlined(s) })];
   const faceG = back ? null : faceAt(-42, -128, 84, 52, s, expression);
   const pk = back
@@ -145,20 +196,47 @@ const drawVisor = (p: VisorParams): Drawn => {
   const vent = back
     ? el("path", { d: "M-24 -110 H24 M-24 -96 H24 M-24 -82 H24", stroke: s.outline, "stroke-width": 4, "stroke-linecap": "round" })
     : null;
-  const body = g({},
+  // Facing left mirrors the body only: a uniform -1 scale keeps every stroke width and colour (ADR 0009).
+  const body = g(facing === "left" ? { transform: "scale(-1,1)" } : {},
     el("rect", { x: -66, y: -114, width: 14, height: 32, rx: 4, fill: s.outline }),
     el("rect", { x: 52, y: -114, width: 14, height: 32, rx: 4, fill: s.outline }),
     el("rect", { x: -56, y: -142, width: 112, height: 88, rx: 30, ...outlined(s) }),
     faceG, vent, pk,
     el("path", { d: "M-16 -52 H16 L10 -40 H-10 Z", fill: s.outline }),
     ...handL, handR);
-  return drawn([g({ "data-piece": "visor", transform: `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`, stroke: "none" }, body)]);
+  const transform = `translate(${p.x} ${p.y}) scale(${p.scale ?? 1})`;
+  // The words carry their own font, so they read the same in a scene, where no labels group exists.
+  const text = held && held.text.length > 0
+    ? [g({ transform, "font-family": tokens.font.sans, "font-size": tokens.cover.labelSize, "font-weight": tokens.cover.labelWeight, fill: tokens.color.ink, "text-anchor": "middle" }, ...held.text)]
+    : [];
+  return drawn([g({ "data-piece": "visor", transform, stroke: "none" }, ...(held?.body ?? []), body)], text);
+};
+
+const visorHeldSheetSchema: Schema = {
+  width: { kind: "number", required: true, min: 80, max: 300 },
+  height: { kind: "number", required: true, min: 80, max: 400 },
+  rows: { kind: "array", required: true, minItems: 1, maxItems: 8, of: { kind: "object", fields: sheetRowSchema } },
+  top: size(),
+  step: size(),
+  label: label(false),
 };
 
 export const visor = definePiece<VisorParams>(
   "visor",
-  { x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }), expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS }, holds: { kind: "boolean" }, points: { kind: "boolean" } } satisfies Schema,
+  {
+    x: pos(), y: pos(), surface: surfaceParam, scale: num({ min: 0.25, max: 4 }),
+    expression: { kind: "enum", values: CAST_EXPRESSIONS }, view: { kind: "enum", values: CAST_VIEWS },
+    holds: { kind: "boolean" },
+    holdsSheet: { kind: "object", fields: visorHeldSheetSchema },
+    points: { kind: "boolean" },
+    facing: { kind: "enum", values: VISOR_FACINGS },
+  } satisfies Schema,
   drawVisor,
+  // A card or a sheet, not both; the sheet only in front (its back is not designed). The card is named first.
+  (p) => p.holdsSheet === undefined ? [] : limits(
+    p.holds === true && { path: "holdsSheet", message: "Visor holds a card or a sheet, not both" },
+    p.holds !== true && p.view === "back" && { path: "holdsSheet", message: "Visor holds a sheet only in the front view" },
+  ),
 );
 
 // ---------------------------------------------------------------- Drone (delivery pillar)

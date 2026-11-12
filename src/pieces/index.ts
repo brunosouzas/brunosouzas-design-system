@@ -13,8 +13,9 @@ export { EIP_ICONS, EIP_ICON_NAMES, EIP_ICON_HEIGHT, EIP_ICON_WIDTH, type EipIco
 export { FORMATS, LANGUAGE, LINKEDIN_PHOTO_MARGIN, LINKEDIN_PHOTO_ZONES, SAFE_ID, backgroundNames, bannerRingCount, comparePaths, coverTree, diagramRings, validateCoverSpec, type CoverFormat, type CoverOptions, type CoverPiece, type CoverRings, type CoverSpec, type CustomNode, type LinkedinPhotoZone } from "./cover.ts";
 export { tokens, type Tokens } from "../../tokens/generated/tokens.ts";
 export { EMOTE_KINDS, type EmoteKind, type EmoteParams } from "./emote.ts";
-export { CAST_EXPRESSIONS, CAST_VIEWS, type CastExpression, type CastView, type MiraParams, type VisorParams, type DroneParams, type KiuParams, type SinalParams } from "./brand-cast.ts";
+export { CAST_EXPRESSIONS, CAST_VIEWS, VISOR_FACINGS, type CastExpression, type CastView, type MiraParams, type VisorParams, type VisorFacing, type VisorHeldSheet, type DroneParams, type KiuParams, type SinalParams } from "./brand-cast.ts";
 export { BANK_OBJECT_NAMES, type BankObjectName, type BankObjectParams } from "./bank-objects.ts";
 export { type SymbolParams } from "./symbol.ts";
 export { BRAND_NOTATION_ICON_NAMES, type BrandNotationIconName, type BrandNotationIconParams } from "./brand-notation-icons.ts";
 export { CATEGORY_ICON_NAMES, type CategoryIconName, type CategoryIconParams } from "./category-icon.ts";
+export { type QuestionTokenParams } from "./question-token.ts";

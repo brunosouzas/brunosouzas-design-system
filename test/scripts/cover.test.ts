@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { buildCover, COVER_USAGE, runCover } from "../../scripts/cover";
 import { codePoints } from "../pieces/cmap";
+import { normalForm, type NormalNode } from "../pieces/normal-form";
 import { comparePaths } from "../../src/pieces/cover";
 import { tokens } from "../../tokens/generated/tokens";
 
@@ -236,8 +237,8 @@ describe("Cover spec format", () => {
     const lines = await problems({ ...minimal(), background: "pink", pieces: [{ piece: "rocket" }] });
     expect(lines).toHaveLength(2);
     expect(lines[0]).toBe('background: expected one of aiLilac, aiSky, deliveryMint, deliveryOlive, integrationClay, integrationSand, neutral, personalRose, trackAi, trackDelivery, trackIntegration, trackPersonal, found "pink"');
-    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline\)$/);
-    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(63);
+    expect(lines[1]).toMatch(/^pieces\[0\]\.piece: unknown piece "rocket" \(expected one of pill, rings, sheet, .*, eipIcon, lineBadge, .*, ledgerMark, renewalRing, suggestedHalo, licenceMark, zone, uiIcon, linkIcon, diagramBox, decisionNode, storeNode, queueNode, exchangeNode, taggedContainer, lifeline, phaseBand, altFrame, edgeLabel, stateStart, emote, mira, visor, drone, kiu, sinal, bankObject, symbol, brandNotationIcon, categoryIcon, headline, questionToken\)$/);
+    expect(lines[1].split("expected one of ")[1].replace(/\)$/, "").split(", ")).toHaveLength(64);
   });
 
   test("Unsafe id", async () => {
@@ -582,7 +583,8 @@ describe("Emote on a cover", () => {
     });
     expect(await ws.run("spec.json", "--out", "cast.svg")).toBe(1);
     expect(ws.err[0]).toMatch(/^pieces\[0\]\.piece: unknown piece "mascot"/);
-    expect(ws.err[0].split(", ")).toHaveLength(63);
+    expect(ws.err[0].split(", ")).toHaveLength(64);
+    expect(ws.err[0]).toMatch(/, headline, questionToken\)$/);
     expect(ws.err[1]).toMatch(/^pieces\[1\]\.kind: expected one of idea, doubt, problem, worked, refused, pressure, liked, waiting, found "zzz"$/);
     expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
@@ -788,5 +790,60 @@ describe("Brand colour roles", () => {
     const svg = await svgOf(banner({ pieces: [{ piece: "pipe", d: "M0,0 L100,0", fill: "brand.light.stackledgerAccent" }] }));
     const pipePaths = [...svg.matchAll(/<path d="M0,0 L100,0"[^>]*>/g)].map((m) => m[0]);
     expect(pipePaths.some((path) => path.includes('stroke="#3B5BDB"'))).toBe(true);
+  });
+});
+
+// Spec cover-cli, change sdd-scene-pieces (AB#333), task 6.1: "Question token and held sheet in a spec".
+describe("Question token and held sheet in a spec", () => {
+  const attr = (node: NormalNode, name: string) => node.attrs.find(([key]) => key === name)?.[1];
+  /** Every element with its ancestors, depth first. */
+  const withAncestors = (node: NormalNode, ancestors: NormalNode[] = []): { node: NormalNode; ancestors: NormalNode[] }[] =>
+    node.children.flatMap((child) => (typeof child === "string" ? [] : [{ node: child, ancestors }, ...withAncestors(child, [...ancestors, child])]));
+  const textOf = (node: NormalNode): string => node.children.map((child) => (typeof child === "string" ? child : textOf(child))).join("");
+
+  test("Token and held sheet drawn", async () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "visor", x: 520, y: 380, facing: "left", holdsSheet: { width: 120, height: 160, rows: [{ lead: "question", bar: 40 }], label: "proposal.md" } },
+        { piece: "questionToken", cx: 200, cy: 120, scale: 1.5 },
+      ],
+    });
+    expect(await ws.run("spec.json", "--out", "sdd.svg")).toBe(0);
+    const tree = normalForm(readFileSync(join(ws.root, "sdd.svg"), "utf8"));
+    const all = withAncestors(tree);
+    const isOutlined = (node: NormalNode) => node.tag === "g" && attr(node, "stroke") === tokens.color.ink && attr(node, "stroke-width") === "4" && attr(node, "stroke-linejoin") === "round" && attr(node, "data-held") === undefined;
+    const outlined = all.find(({ node }) => isOutlined(node))!.node;
+    const inOutlined = withAncestors(outlined).map(({ node }) => node);
+    const visorGroup = inOutlined.find((node) => attr(node, "data-piece") === "visor")!;
+    expect(visorGroup).toBeDefined();
+    const first = visorGroup.children.find((child): child is NormalNode => typeof child !== "string")!;
+    expect(attr(first, "data-held")).toBe("sheet");
+    expect(inOutlined.some((node) => attr(node, "data-piece") === "questionToken" && node.children.some((child) => typeof child !== "string" && child.tag === "circle"))).toBe(true);
+    const labels = all.find(({ node }) => node.tag === "g" && attr(node, "font-size") === String(tokens.cover.labelSize) && attr(node, "text-anchor") === "middle" && attr(node, "fill") === tokens.color.ink && attr(node, "stroke") === undefined)!;
+    const texts = withAncestors(labels.node, [...labels.ancestors, labels.node]).filter(({ node }) => node.tag === "text");
+    expect(texts.map(({ node }) => textOf(node)).sort()).toEqual(["?", "?", "proposal.md"]);
+    for (const { node, ancestors } of texts) expect(ancestors.filter((ancestor) => attr(ancestor, "stroke") !== undefined), textOf(node)).toEqual([]);
+  });
+
+  test("Problems at their paths", async () => {
+    const ws = workspace();
+    ws.write("spec.json", {
+      ...minimal(),
+      pieces: [
+        { piece: "visor", x: 200, y: 380, holds: true, holdsSheet: { width: 130, height: 218, rows: [{ bar: 40 }] } },
+        { piece: "visor", x: 400, y: 380, holdsSheet: { width: 130, height: 218, rows: [] } },
+        { piece: "questionToken", cx: 200, cy: 120, scale: 0 },
+      ],
+    });
+    expect(await ws.run("spec.json", "--out", "sdd.svg")).toBe(1);
+    expect(ws.err.slice(0, 3)).toEqual([
+      "pieces[0].holdsSheet: Visor holds a card or a sheet, not both",
+      expect.stringMatching(/^pieces\[1\]\.holdsSheet\.rows: /),
+      expect.stringMatching(/^pieces\[2\]\.scale: /),
+    ]);
+    expect(ws.err).toHaveLength(4);
+    expect(readdirSync(ws.root)).toEqual(["spec.json"]);
   });
 });
