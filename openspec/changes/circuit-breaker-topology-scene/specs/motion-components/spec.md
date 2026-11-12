@@ -1,17 +1,22 @@
 ## ADDED Requirements
 
 ### Requirement: Failure-rate bar
-A `FailureRateBar` component SHALL draw, from `rate`, `threshold`, `width` and `height` and reading no frame: a white track with an `outline.small` ink outline and round ends; a `color.state.failure` fill from the left, `rate × width` wide but at least `height` when `rate` is above 0, nothing at 0; and an ink threshold tick at `threshold × width`, reaching `0.5 × height` beyond the track on both sides, drawn over the fill.
+A `FailureRateBar` component SHALL draw, from `rate`, `threshold`, `width` and `height` and reading no frame: a white track with an `outline.small` ink outline and round ends; a `color.state.failure` fill from the left, `min(width, max(height, rate × width))` wide with round ends when `rate` is above 0, nothing at 0; and an ink threshold tick at `threshold × width`, reaching `0.5 × height` beyond the track on both sides, drawn over the fill.
 
 #### Scenario: Fill and tick
 - **GIVEN** `rate` 0.2, `threshold` 0.8, `width` 290 and `height` 16
 - **WHEN** its shapes are computed
-- **THEN** the track is 290x16 with radius 8, the fill is 58 wide in `color.state.failure`, and the tick is at x 232 from y −8 to 24
+- **THEN** the track is 290x16 with radius 8, the fill is 58 wide with radius 8 in `color.state.failure`, and the tick is at x 232 from y −8 to 24
 
 #### Scenario: Small and empty rates
 - **GIVEN** `rate` 0.01 and then `rate` 0, with `width` 290 and `height` 16
 - **WHEN** the shapes are computed
 - **THEN** the first fill is 16 wide (not 2.9), and the second has no fill shape
+
+#### Scenario: Narrow track
+- **GIVEN** `rate` 0.5, `threshold` 0.8, `width` 10 and `height` 16
+- **WHEN** the shapes are computed
+- **THEN** the fill is 10 wide, as wide as the track and never wider, with radius 8
 
 #### Scenario: Full rate
 - **GIVEN** `rate` 1 and `threshold` 0.8

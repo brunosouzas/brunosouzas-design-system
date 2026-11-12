@@ -6,7 +6,7 @@ The article "Circuit Breaker in MuleSoft: When Retry Makes Things Worse" argues 
 
 Gate 0 (MOT-3): on **2026-11-12** the owner picked **concept A, "one topology, two takes"** with all recommendations (q68 A, q69 A, q70 A). Evidence: brain vault `10-personal/projects/brunosouzas-design-system/evidence/2026-11-12-circuit-breaker-gate-0/` (`index.md`, `concept-A-two-takes.png`); prototype `~/.hermes/cache/scratch/ab334-cb-scene/` (`lib.ts`, `concept-a.ts`). The pick came with corrections:
 
-- **Much larger text.** On the sheet, labels were about 5–6 px on a phone. This change sets a minimum size so they read on a 360 px phone, where the site's column shows the video 328 px wide, and shortens words where needed.
+- **Much larger text.** On the sheet, labels were about 5–6 px on a phone. This change sets a minimum size so they read on a 360 px phone, where the site's column shows the video about 341 px wide (measured), and shortens words where needed.
 - **A neutral `Payment` label.** Red stays on failing elements only (ADR 0006 colour meaning).
 - **A compressed `resetTimeout` clock** of about 4 s, labelled `resetTimeout 10s` (q69 A).
 - **The customer's message in OPEN.** The customer side shows `payment temporarily unavailable` (L71) beside `CIRCUIT-BREAKER:OPEN` (q70 A).
@@ -15,7 +15,7 @@ Gate 0 (MOT-3): on **2026-11-12** the owner picked **concept A, "one topology, t
 ## What Changes
 
 - **A new catalogue scene, `circuit-breaker-topology`.** It is a two-take scene (kind `takes`), neutral, with one 16:9 composition `circuit-breaker-topology-16x9`. It runs 1920 frames (64 s) at 30 fps, then holds a 120-frame final still. It has no character, no caption and no sound.
-  - **Take 1, retry only.** Checkout calls the payment service directly with `retry ×3`. 20 requests make 60 backend calls, and the service's three lights go red one by one.
+  - **Take 1, retry only.** Checkout calls the payment service directly with `retry ×3`. 20 requests make 60 backend calls, and the service's three units fail (red) one by one.
   - **The rewind.** A rewind mark, take 1 played backwards, then badge `2`.
   - **Take 2, the breaker wraps the call.** `circuit-breaker:execute` drops onto the line.
     - **CLOSED:** five timeouts fill a sliding window of 5 and push the failure-rate bar past the 80% tick. At 4 of 5 (80%) the circuit stays CLOSED.
@@ -58,7 +58,7 @@ none
 ## Implicit requirements
 
 - **Errors and invalid input:** the catalogue rejects a broken entry through the shared rules and #41's `takes` checks. The failure-rate bar rejects a rate outside [0, 1], a threshold outside (0, 1) and non-finite sizes with a `RangeError` ("Failure-rate bar"). The stills and render commands keep their existing failure policy ("Topology stills through existing commands", "Topology master and web copy").
-- **Limits:** text at least 33 stage units (66 px in the composition, 11.3 px in the site's 328 px column), and 36 for state names, the take number and the counter numbers ("Topology text size"). Every text box stays inside the frame and clear of the others ("Topology text placement"). The final hold is at least `motion.readingHold` frames.
+- **Limits:** text at least 33 stage units (66 px in the composition, 11.7 px in the site's 341 px column), and 36 for state names, the take number and the counter numbers ("Topology text size"). Every text box stays inside the frame and clear of the others ("Topology text placement"). The final hold is at least `motion.readingHold` frames.
 - **Repetition and idempotency:** every frame is a pure function of its frame number, with no accumulated state ("Topology beats and timing", seeking in any order). Renders are reproducible.
 - **Concurrency:** n/a. A video renders frames independently; the scene runs no concurrent process.
 - **Security:** n/a. No input from users, no network beyond the existing font load at render time, and no secret.

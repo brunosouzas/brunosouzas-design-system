@@ -20,7 +20,7 @@ Observed sources:
 - **The English article** `brunosouzas-content/writing/circuit-breaker-in-mulesoft/circuit-breaker-in-mulesoft.en.md` at commit `728d6f4` (2026-11-05). Line numbers `Lnn` below are that file's.
 - **The code** at `655525d` (0.12.0).
 - **PR #41's branch** `feature/ab144-sdd-without-with-spec-scene` at `852bcd0`: `src/scenes/takes-kind.ts`, its archived change `2026-11-12-sdd-without-with-spec-scene`, `MotionPath` and `motionPathAt`, and `test/scripts/cli.test.ts`.
-- **The site's article column:** `brunosouzas.com/src/styles/components.css:11`, `.container` with `px-4` (16 px each side) at `e0cab59`. A 360 px wide phone shows the video at most **328 px** wide.
+- **The site's article column:** measured in a browser on the live article page (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, 360 × 740 viewport, 2026-11-12). `.content` and every body image are **340.8 px** wide at x 9.6. A video embedded like the body images is therefore about **341 px** wide on a 360 px phone. The `.container` rule (`brunosouzas.com/src/styles/components.css:11`, `px-4`) is one of the gutters.
 - **Text widths:** measured with harfbuzzjs 1.6.4 on `fonts/SourceSans3-Bold.ttf` and `fonts/SourceCodePro-Bold.ttf`, the faces `diagramBox`, `edgeLabel` and `countBadge` draw (§6.1).
 
 ## 1. The story: what the viewer must understand
@@ -30,15 +30,15 @@ One checkout and one payment service, played twice. **Take 1:** checkout retries
 | State | What is on stage | Changes into the next state when |
 |---|---|---|
 | S0 set-up | rings, Checkout with `retry ×3`, Payment (three white lights), one direct arrow, take badge `1`, counters `0` `requests` and `0` `backend calls` | the first request leaves |
-| S1 retry storm | tokens in threes along the direct line; the counters climb to 20 and 60; a red `HTTP:TIMEOUT` reply line; the lights go red at calls 20, 40 and 60 | the 60th call arrives |
-| S2 down | everything still: 20, 60, three red lights | the rewind mark appears |
+| S1 retry storm | tokens in threes along the direct line; the counters climb to 20 and 60; a red `HTTP:TIMEOUT` reply line; Payment's units fail (red) at calls 20, 40 and 60 | the 60th call arrives |
+| S2 down | everything still: 20, 60, three red units | the rewind mark appears |
 | S3 rewind | take 1 plays backwards to S0; then badge `2` | the breaker drops onto the line |
-| S4 wrapped | `circuit-breaker:execute` between them, pill `CLOSED`, empty window of 5 and its bar with the 80% tick, one red light (the service is slow) | the first request leaves |
+| S4 wrapped | `circuit-breaker:execute` between them, pill `CLOSED`, empty window of 5 and its bar with the 80% tick, one failing (red) unit (the service is slow) | the first request leaves |
 | S5 CLOSED, failing | five calls reach Payment and come back `HTTP:TIMEOUT`; each adds a red square, the bar grows 20% at a time | the fifth square takes the bar past the tick |
 | S6 OPEN | pill `OPEN`; the line to Payment dimmed and dashed; the clock `resetTimeout 10s` runs; 15 requests bounce back at once with `CIRCUIT-BREAKER:OPEN` and `payment temporarily unavailable`; `20` requests, `5` backend calls beside a ghost `60` | the clock runs out |
 | S7 HALF_OPEN, fails | pill `HALF_OPEN`; the counters leave; one test call times out | the reply reaches the breaker |
 | S8 OPEN again | pill `OPEN`; the clock runs again; three requests fail fast | the clock runs out |
-| S9 HALF_OPEN, recovers | one test call; Payment's red light clears; `200` comes back | the reply reaches the breaker |
+| S9 HALF_OPEN, recovers | one test call; Payment's failing unit recovers; `200` comes back | the reply reaches the breaker |
 | S10 CLOSED, noise | the window clears; normal traffic; one timeout leaves the bar at 20%, under the tick | the fifth result |
 | S11 CLOSED, business error | a `400` comes back; its square drops off; window and bar unchanged | the `400` reaches Checkout |
 | S12 CLOSED, healthy | three more successes slide the timeout out of the window: five ✓, bar empty | the final still is held |
@@ -62,7 +62,7 @@ How C avoids conflicts:
   - This change's MODIFIED block is #41's text, generalised to "every registered scene in registration order", with a fourth-scene scenario added. It is written against #41's version, so it applies only after #41 is archived on `main`, which task 0.1 requires.
   - At the rebase, task 0.2 compares it with the merged text, so a late #41 edit is not overwritten.
 - **Assertions that list every scene,** the allowed edits (scene-workflow: "the one allowed edit is an assertion that lists every registered scene"):
-  - `test/scenes/catalogue-flow.test.ts`, "Three kinds in the catalogue", becomes four scenes and ten compositions;
+  - `test/scenes/catalogue-flow.test.ts`: "Three kinds in the catalogue" keeps checking the first three scenes and their nine compositions (its assertion on exactly three ids becomes "the first three"), and a new test, "Four scenes in the catalogue", checks the full list of four scenes and ten compositions;
   - `test/scripts/cli.test.ts`, whose two `available scenes:` lines on #41's branch (lines 140 and 150) gain `circuit-breaker-topology`.
 - **No edit to #41's files** `takes-kind.ts`, `components.tsx` (`MotionPath`) or `motion.ts`. The failure-rate bar lives in new files (§2.4).
 - **Edits to shared files are one line each,** after the rebase: `src/scenes/index.ts`, `src/Root.tsx`, the README scene table, the roadmap row and the ADR 0004 amendment.
@@ -71,13 +71,13 @@ If #41 changes before it merges (its G3 may ask for changes), the rebase picks t
 
 ### 2.2 The text-size rule (owner's correction at gate 0; G1 question 10)
 
-On the sheet, labels were 15 stage units (30 px in the composition). The site's article column leaves the video **328 px** wide on a 360 px phone (observed above), that is 328 / 1920 = 0.171 of the composition, or **0.342 px per stage unit**. Those labels read at 5.1 px. The rule:
+On the sheet, labels were 15 stage units (30 px in the composition). The site's article column shows the video about **341 px** wide on a 360 px phone (measured above), that is 341 / 1920 = 0.178 of the composition, or **0.355 px per stage unit**. Those labels read at 5.3 px. The rule:
 
-| What | Minimum (stage units) | Composition | At 328 px | At 360 px |
+| What | Minimum (stage units) | Composition | At 341 px | At 360 px |
 |---|---|---|---|---|
-| every word, code and caption | **33** | 66 px | **11.3 px** | 12.4 px |
-| state names, the take number, the counter numbers | **36** | 72 px | **12.3 px** | 13.5 px |
-| the ✓ and ✕ glyphs in the window (symbols, not words) | **30** (squares of 50: 0.62 × 50 = 31) | 62 px | 10.6 px | 11.6 px |
+| every word, code and caption | **33** | 66 px | **11.7 px** | 12.4 px |
+| state names, the take number, the counter numbers | **36** | 72 px | **12.8 px** | 13.5 px |
+| the ✓ and ✕ glyphs in the window (symbols, not words) | **30** (squares of 50: 0.62 × 50 = 31) | 62 px | 11.0 px | 11.6 px |
 
 - **"Effective" size** is the piece's `font-size` times every scale applied to it once its pop-in has settled. Opacity does not count: dimmed text (the clock at 0.6) is checked on the phone sheet (§7).
 - **Words were cut where the frame cannot hold them** at that size (widths measured, §6.1):
@@ -90,12 +90,12 @@ On the sheet, labels were 15 stage units (30 px in the composition). The site's 
 |---|---|
 | Keep the sheet's sizes and rely on the article text | the owner rejected it at gate 0 |
 | Scale the whole stage up and crop | the topology no longer fits; the comparison needs both ends on screen |
-| 30 for words (11.25 px only at a full 360 px width; 10.25 px in the real column) | below 11 px where readers actually see it |
-| **33 for words, 36 for states, take and counters, measured, with words cut to fit (chosen)** | at least 11.3 px in the real column; a test proves it (§6.3) |
+| 30 for words (11.25 px only at a full 360 px width; 10.7 px in the real column) | below 11 px where readers actually see it |
+| **33 for words, 36 for states, take and counters, measured, with words cut to fit (chosen)** | at least 11.7 px in the real column; a test proves it (§6.3) |
 
 Rejected minimum: 36 for every word. `CIRCUIT-BREAKER:OPEN` would be 432 units wide and the customer message 338, which do not fit beside the window.
 
-If the site's video embed (AB#142) ends up narrower than 328 px, these sizes read smaller in proportion. The phone sheet is rendered at 328 px so the owner judges what readers will see.
+If the site's video embed (AB#142) ends up narrower than 341 px, these sizes read smaller in proportion. The phone sheet is viewed at 341 CSS px so the owner judges what readers will see (§7).
 
 ### 2.3 Stage units
 
@@ -120,7 +120,7 @@ The bar with its threshold tick is the one shape the scene needs that neither th
 **Drawing:**
 
 - **Track:** white, outline `outline.small`, ends rounded to `height / 2`.
-- **Fill:** from the left, `rate × width` wide but never narrower than `height` when `rate > 0`. Its colour is `color.state.failure` with the same outline. Nothing is drawn at `rate = 0`.
+- **Fill:** from the left, `min(width, max(height, rate × width))` wide when `rate > 0`, ends rounded to `height / 2` like the track. Its colour is `color.state.failure` with the same outline. Nothing is drawn at `rate = 0`.
 - **Tick:** an ink line at `threshold × width`, from `0.5 × height` above the track to `0.5 × height` below it, stroke `outline.small + 0.5`, round caps. The tick sits above the fill.
 
 **Invalid input:** a `rate` outside [0, 1] or not finite, a `threshold` outside (0, 1) or not finite, or a `width` or `height` that is not finite or not above 0 throws a `RangeError` naming the prop.
@@ -156,7 +156,7 @@ Each request or reply is one `PositionedToken`: white fill, ink outline, radius 
 - **`PositionedToken` gains an optional `radius`.** Today its radius is fixed at 17 (`src/brand/flow-shapes.ts`, `positionedTokenStyle`); in the × 2 component box that would be 17 stage units. Tokens 34 wide leaving 6 frames (26.7 units) apart on a 98-unit leg would overlap.
   - The change is an optional prop on `positionedTokenStyle` and `PositionedToken`, defaulting to 17, so `publish-subscribe` is unchanged ("Token radius").
   - Neither #41 nor AB#337 edits `flow-shapes.ts` or `flow-components.tsx` (checked on #41's file list).
-  - Rejected: drawing tokens in composition pixels at 17 px. That is 8.5 stage units, 2.9 px of radius on a phone.
+  - Rejected: drawing tokens in composition pixels at 17 px. That is 8.5 stage units, 3.0 px of radius on a phone.
 - **Spacing:** two tokens on one route keep their centres at least 2 × 10 + `outline.small + 1` = 24 units apart. The closest pair is the fail-fast stream, at 26.7.
 
 - **A leg** is a straight route travelled in `motion.travel` (22) frames, linear by length. A token is drawn from its leg's start frame up to the frame before its arrival.
@@ -176,7 +176,7 @@ There are three tag places: `direct` (take 1), `left` (Checkout ↔ breaker) and
 
 | Colour token | Only on |
 |---|---|
-| `color.state.failure` (red) | Payment's failing lights, the ✕ squares, the bar's fill, and arrows of kind `failure` |
+| `color.state.failure` (red) | Payment's failing units (body and light), the ✕ squares, the bar's fill, and arrows of kind `failure` |
 | `color.state.failFast` | arrows of kind `failFast` |
 | `color.state.blocked` (orange) | the `OPEN` pill |
 | `color.state.healthy` | the `CLOSED` pill |
@@ -213,10 +213,10 @@ There is no character, no emote and no caption.
 | On stage | Drawn with |
 |---|---|
 | Checkout | `browserWindow` and a `diagramBox` (`shape: "pill"`) label |
-| Payment | three `serverStack` (`units: 1`, `failing: 0` when red) and a `diagramBox` pill label |
+| Payment | three `serverStack` (`units: 1`; a failing unit has `fill: "color.state.failure"` and `failing: 0`) and a `diagramBox` pill label |
 | breaker | `diagramBox` (box) with two code lines |
 | state pill, `retry ×3` | `diagramBox` (`shape: "pill"`) |
-| arrows | `messageArrow` (`curve: "straight"`, `width: 3`; kinds `message`, `reply`, `failure`, `failFast`; `dashed: true` when cut) |
+| arrows | `messageArrow` (`curve: "straight"`, `width` `outline.arrow` (4); kinds `message`, `reply`, `failure`, `failFast`; `dashed` explicit, true only when cut) |
 | tags, clock label, captions, customer message | `edgeLabel` |
 | take badge, counters | `countBadge` |
 | rewind mark | `uiIcon` `reset` |
@@ -239,7 +239,7 @@ Takes follow #41's `takes` kind.
 
 | # | Phase id | Take | Frames | Cites (English lines) | Devices |
 |---|---|---|---|---|---|
-| 1 | `setup` | 1 | 0–59 | 23 | takeNumbers |
+| 1 | `setup` | 1 | 0–59 | 23, 27, 29 | takeNumbers |
 | 2 | `retry` | 1 | 60–389 | 23, 25, 27, 29 | — |
 | 3 | `down` | 1 | 390–449 | 23, 29 | — |
 | 4 | `rewind` | rewind | 450–509 | 27 | rewind, takeNumbers |
@@ -247,7 +247,7 @@ Takes follow #41's `takes` kind.
 | 6 | `closed` | 2 | 570–819 | 30, 42, 43, 46, 66, 150 | — |
 | 7 | `open` | 2 | 820–949 | 30, 43, 71, 73, 77 | — |
 | 8 | `half-open-fail` | 2 | 950–1019 | 44, 46, 77, 95 | — |
-| 9 | `open-again` | 2 | 1020–1149 | 43, 46, 77 | — |
+| 9 | `open-again` | 2 | 1020–1149 | 43, 46, 71, 77 | — |
 | 10 | `half-open-ok` | 2 | 1150–1219 | 44, 46, 75, 81, 95 | — |
 | 11 | `closed-noise` | 2 | 1220–1489 | 42, 66, 75, 150 | — |
 | 12 | `closed-business` | 2 | 1490–1599 | 68, 92, 153 | — |
@@ -267,12 +267,12 @@ Every phase's `events` are the cue frames of §4.2 that fall inside it. The time
 | 20 | `retry ×3` | pops (pill) | L23, L29 |
 | 24 | counters `0` `requests`, `0` `backend calls` | pop (pill) | L27, L29 |
 | 60 + 15(k − 1), k = 1…20 | `requests` counter | reads k | L27 |
-| 60 + 5(n − 1), n = 1…60 | attempt n | departs on `direct-req` (attempts 3k−2, 3k−1, 3k belong to request k) | L23, L29 |
-| 82 + 5(n − 1) | attempt n | arrives; `backend calls` reads n | L29 |
+| 60 + 15(k − 1) + 2j, k = 1…20, j = 0…2 | attempt j of request k (call n = 3(k − 1) + j + 1) | departs on `direct-req`; a request's three attempts travel as a group of three, about 49 units apart, with 11 frames between groups (the sheet's ○○○) | L23, L29 |
+| 82 + 15(k − 1) + 2j | call n | arrives; `backend calls` reads n | L29 |
 | 82–92 | arrow `direct-rep` (failure) | fades in | L27 |
 | 82 | tag `direct` `HTTP:TIMEOUT` | pops | L27 |
-| 177 / 277 / 377 | Payment unit 0 / 1 / 2 | light turns red (calls 20, 40, 60) | L23 |
-| 390–449 | everything | still: `20`, `60`, three red lights | L23, L29 |
+| 174 / 277 / 371 | Payment unit 0 / 1 / 2 | fails (calls 20, 40, 60): body and light `color.state.failure` | L23 |
+| 390–449 | everything | still: `20`, `60`, three failing units | L23, L29 |
 | 450 | rewind mark | pops (pill) beside the badge | device |
 | 450–499 | object layer | plays from object frame 449 back to 59 (§2.5) | device |
 | 500 | badge | swap `1` → `2` | device |
@@ -284,7 +284,7 @@ Every phase's `events` are the cue frames of §4.2 that fall inside it. The time
 | 542–552 | arrows `in-req`, `out-req` (message) | fade in | L30 |
 | 548 | pill `CLOSED` | pops | L42 |
 | 554 | window (five empty slots) and bar (rate 0, tick 0.8) | pop (block) | L66, L150 |
-| 560 | Payment unit 0 | light turns red (slow, not down) | L23, choice |
+| 560 | Payment unit 0 | fails (slow, not down) | L23, choice |
 | d = 576 + 42i, i = 0…4 | call i | departs `in-req`; `requests` reads i + 1 | L30 |
 | d + 22 | call i | `out-req` | L30 |
 | d + 44 | call i | arrives; `backend calls` reads i + 1; `out-rep` (failure) departs | L30, L27 |
@@ -320,7 +320,7 @@ Every phase's `events` are the cue frames of §4.2 that fall inside it. The time
 | 1150 | tag `left`, customer message | leave (gone 1160) | choice |
 | 1150–1160 | same dimming as 950–960 | | L44 |
 | 1166–1188 | test call 2 | `out-req` | L44, L95 |
-| 1188 | Payment unit 0 | light clears (white) | L81; choice |
+| 1188 | Payment unit 0 | recovers (white body, white light) | L81; choice |
 | 1188 | arrow `out-rep` | kind → reply; tag `right` `200` pops | L75 |
 | 1188–1210 | test call 2 | `out-rep` (reply) | L75 |
 | 1220 | pill | swap `HALF_OPEN` → `CLOSED` | L95 |
@@ -409,12 +409,14 @@ Made in this design, for G1:
 - the clock runs 130 frames (4.3 s; question 4);
 - `retry ×3` leaves in take 2 (question 5);
 - the window clears on CLOSED (question 6);
-- one red light means "slow" in take 2 (question 7);
+- one failing unit means "slow" in take 2 (question 7);
 - the test call starts at the breaker, and the counters leave at the first HALF_OPEN (question 8);
 - the word cuts (question 3);
 - the dimming of the window (0.3) and the clock (0.6) in HALF_OPEN, as on the sheet;
 - the lights turning red at calls 20, 40 and 60 (the article says only that the service "stops responding altogether", L23);
-- a request's three attempts leaving 5 frames apart (the article's retries are sequential; the scene compresses them);
+- a request's three attempts travelling as a group, 2 frames apart (the article's retries are sequential; the scene compresses them and keeps the sheet's groups of three);
+- reply arrows solid while their line is open, dashed only when cut (on the sheet every reply arrow is dashed; question 14);
+- a failing Payment unit drawn red as a whole, not only its light (question 13);
 - the rate counted over the window's five slots before it is full (§4.6);
 - the tag and customer message leaving at each HALF_OPEN.
 
@@ -436,7 +438,7 @@ Text widths are measured (harfbuzzjs, Bold faces): `Checkout` 137.4, `Payment` 1
 | state pill | `diagramBox` pill, textSize 36, state fill (§2.9) | centred (480, 184), h 54; w 180 (`CLOSED`, `OPEN`), 240 (`HALF_OPEN`) |
 | `retry ×3` | `diagramBox` pill, fill `color.white`, textSize 33 | centred (114, 314), w 150, h 50 |
 | take badge | `countBadge` textSize 36 | cx 912, cy 52 |
-| rewind mark | `uiIcon` `reset`, size 48 | x 836, y 28 |
+| rewind mark | `uiIcon` `reset`, size 48 | x 826, y 28 (12 units clear of the badge) |
 | clock ring | `Countdown` size 56 | centre (330, 70) |
 | clock label | `edgeLabel` textSize 33, anchor start, ``["`resetTimeout 10s`"]`` | x 372, y 82 |
 | tags | `edgeLabel` backdrop, textSize 33, anchor middle, code in backticks; backdrop `width` 262 (`HTTP:TIMEOUT`), 420 (`CIRCUIT-BREAKER:OPEN`), 84 (`200`, `400`) | y 362; x 480 (`direct`), 257 (`left`), 703 (`right`) |
@@ -445,7 +447,7 @@ Text widths are measured (harfbuzzjs, Bold faces): `Checkout` 137.4, `Payment` 1
 | bar | `FailureRateBar` w 290, h 16, threshold 0.8 | x 360, y 442 (tick at x 592, y 434–466) |
 | `requests` | `countBadge` textSize 36 at (60, 500); `edgeLabel` textSize 33, anchor start | label at x 106, y 512 |
 | `backend calls` | `countBadge` textSize 36 at (700, 500); ghost `60` at (622, 500), opacity 0.4; `edgeLabel` textSize 33, anchor end | label at x 936, y 512 |
-| arrows | `messageArrow` straight, width 3, `dashed` explicit (§4.5) | §4.3 |
+| arrows | `messageArrow` straight, width `outline.arrow` (4), `dashed` explicit (§4.5) | §4.3 |
 | tokens | `PositionedToken` radius 10 | on their legs |
 
 The window sits right-aligned under the breaker (x 360–650, against the box's 310–650), so the customer message (x 24–334) clears it by 26 units.
@@ -473,7 +475,7 @@ The test measures text with harfbuzzjs's shaper on the package's `fonts/` faces.
    - A `countBadge`'s box is its body.
 3. **Inside the frame.** Every text box and badge lies inside x 12–948 and y 12–528.
 4. **No text overlaps.** No two text boxes intersect, and no text box intersects a token.
-5. **No text over a block it does not label.** The blocks are Checkout's window, Payment's units, the breaker box, every pill body, the window squares, the bar with its tick, the clock ring and the badges. What labels what:
+5. **No text over a block it does not label.** The blocks are Checkout's window, Payment's units, the breaker box, every pill body, the window squares, the bar with its tick, the clock ring, the badges and the rewind mark; the rewind mark and the take badge also must not touch each other. What labels what:
 
    | Text | Labels |
    |---|---|
@@ -502,12 +504,12 @@ If a value of §6.1 fails 1–6, the implementer changes the value here and in t
 
 | Frame | What it checks |
 |---|---|
-| 177 | first red light |
+| 174 | first failing unit |
 | 768 | 4 of 5 ✕ at the tick, still CLOSED |
 | 870 | the fail-fast stream, `CIRCUIT-BREAKER:OPEN`, customer message, clock half |
 | 930 | `20`, `5` and the ghost `60` |
 | 1000 | the HALF_OPEN test timing out |
-| 1200 | `200`, white lights |
+| 1200 | `200`, Payment recovered |
 | 1390 | the noise ✕ under the tick |
 | 1580 | the dropped `400` square |
 | 1830 | inside the final hold |
@@ -515,9 +517,9 @@ If a value of §6.1 fails 1–6, the implementer changes the value here and in t
 Every PNG is opened and checked for overlaps, clipping and contrast. Two contact sheets go into `docs/spikes/2026-11-12-circuit-breaker-topology/`:
 
 - **the stills sheet** at frame width 640;
-- **a phone sheet:** the 14 stills plus frames 1000 (HALF_OPEN, dimmed clock and window) and 870, scaled to **328 px wide**, the video's width in the site's column on a 360 px phone. They are checked by eye so every word is readable (the owner's correction).
+- **a phone sheet:** the 14 stills plus frames 174, 870 and 1000 (HALF_OPEN, dimmed clock and window), at **341 CSS px wide**, the video's width in the site's column on a 360 px phone. Each frame is exported at 341 × 3 = 1023 px wide (device pixel ratio 3) and viewed either on a real 360 px phone or in a browser page that shows it at 341 CSS px. The method used is recorded. Every word must be readable, and the failing Payment units, the red against ink arrows and the dashed cut lines must be told apart (the owner's correction).
 
-After the render, a third sheet is taken from `out/web/circuit-breaker-topology-16x9.mp4` at the same 14 frames. The owner's ok on the stills comes before the render, as #41 requires for its scene.
+After the render, a third sheet is taken from `out/web/circuit-breaker-topology-16x9.mp4` at the same 14 frames, and a fourth is the same frames from the web MP4 at 341 CSS px, because compressed thin text is what readers see. The owner's ok on the stills comes before the render, as #41 requires for its scene.
 
 ## 8. Article lines (English, `728d6f4`)
 
@@ -567,12 +569,12 @@ All in `text.en` except the counter digits, which are computed, and the square g
 ## Risks / trade-offs
 
 - **#41 may change at its G3.** The rebase takes the change, and anything that breaks an interface named in §2.1 goes to this pull request's Questions.
-- **Text at 30 units makes the stage dense.** §6.3 proves no overlap at every frame, and the phone sheet is the owner's check.
+- **Text at 33 and 36 units makes the stage dense.** §6.3 proves no overlap at every frame, and the phone sheet is the owner's check.
 - **`CallSquare`'s spring is not clamped.** It is still above 1 by about 8e-7 at +44 frames. The last square pops at 1756, 74 frames before the SCN-4 frames 1830–1919, where it is below 1e-9: pixel-identical. The scene state is deep-equal from 1800.
 - **156 trips in one timeline.** They are generated by the formulas of §4.2 in `timeline.ts`. The test compares them with an independent transcription of the same formulas and spot-checks frames.
 - **A merge conflict with AB#337** (supporting characters, in parallel): in `README.md`, `docs/roadmap.md` and `docs/adr/README.md` (if AB#337 amends ADR 0007 and this change amends ADR 0004, both add an index row). These are small text conflicts, resolved at whichever rebase comes second. This scene uses no cast piece.
 - **✕ and ✓ are not in the Source faces.** `CallSquare` draws them in the composition's sans family. Source Sans 3 lacks them (harfbuzz returns `.notdef`), so the browser falls back to a system font. This is the existing `circuit-breaker-states` behaviour, and the render is reproducible on the same machine. A glyph piece is out of scope; the stills show the result.
-- **The video's width on the page** is observed from the site's CSS (328 px at a 360 px viewport), not measured in a browser, and AB#142 may embed it differently.
+- **The video's width on the page** was measured on the live page as the body images' width (340.8 px at a 360 px viewport). AB#142 may embed the video differently; the phone sheet then follows the real width.
 
 ## Migration
 
@@ -588,9 +590,11 @@ Each has a recommended answer. The same list is in the pull request.
 4. **Clock length:** 130 frames (4.3 s) instead of 4 s, so the 15 fail-fast tokens keep 26.7 units between centres. Recommended: accept.
 5. **`retry ×3` leaves in take 2,** as on the approved sheet. Recommended: keep.
 6. **The window clears on HALF_OPEN → CLOSED.** Otherwise the old five ✕ would make the next timeout trip at once. Recommended: clear.
-7. **One red light means "slow"** in take 2, and it clears with the `200`. Recommended: keep.
+7. **One failing unit means "slow"** in take 2, and it recovers with the `200`. Recommended: keep.
 8. **The test call starts at the breaker,** and the counters leave at the first HALF_OPEN. Recommended: accept.
 9. **Length:** 64 s rather than about 70 s. Recommended: accept.
-10. **Text sizes** (§2.2): 33 / 36 stage units, at least 11.3 px in the site's 328 px column. Recommended: accept, and judge the 328 px phone sheet at the media gate.
+10. **Text sizes** (§2.2): 33 / 36 stage units, at least 11.7 px in the site's 341 px column (measured). Recommended: accept, and judge the 341 px phone sheet at the media gate.
 11. **The customer message sits under Checkout,** with the window right-aligned under the breaker. Recommended: accept.
 12. **`FailureRateBar` in new `src/brand/` files,** and an optional `radius` on `PositionedToken` (default 17, pub-sub unchanged). Recommended: accept.
+13. **A failing Payment unit is red as a whole** (`serverStack` `fill: color.state.failure`), not only its 6-unit light, which is about 2 px of radius on a phone. It is still a state colour on the failing element (ADR 0006). Recommended: accept. The alternative is lights only, checked on the phone sheet.
+14. **Reply arrows are solid while their line is open** and dashed only when the breaker cuts it; on the sheet every reply arrow is dashed. Recommended: accept, so dashing means one thing.

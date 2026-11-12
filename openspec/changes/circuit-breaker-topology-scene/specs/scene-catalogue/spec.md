@@ -60,7 +60,7 @@ At every frame, every string the scene draws SHALL be a value of its `text.en` t
 - **THEN** it fails naming `fallback` and frame 870
 
 ### Requirement: Topology text size
-Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 33 stage units (66 px in the composition; 11.3 px in the site's 328 px column on a 360 px phone); state names, the take number and the counter numbers at least 36; the ✓ and ✕ glyphs at least 30 (squares of 50 units).
+Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 33 stage units (66 px in the composition; 11.7 px in the site's 341 px column on a 360 px phone); state names, the take number and the counter numbers at least 36; the ✓ and ✕ glyphs at least 30 (squares of 50 units).
 
 #### Scenario: Every settled string at its minimum
 - **GIVEN** every frame from 0 to 1919
@@ -73,7 +73,7 @@ Every word the scene draws SHALL have an effective font size, its `font-size` ti
 - **THEN** each fails naming the string, its size and the first frame it is drawn
 
 ### Requirement: Topology text placement
-Every drawn text box (measured advance on the `fonts/` faces times effective size) and badge SHALL lie inside the stage less 12 units, SHALL NOT intersect another text box or a token, and SHALL NOT intersect a block it does not label, per design §6.3: frames, units, breaker, pill bodies, squares, bar, clock ring, badges. No pill or text SHALL cover a Payment light. Moving and settling frames of design §6.3 item 7 are exempt.
+Every drawn text box (measured advance on the `fonts/` faces times effective size) and badge SHALL lie inside the stage less 12 units, SHALL NOT intersect another text box or a token, and SHALL NOT intersect a block it does not label, per design §6.3: frames, units, breaker, pill bodies, squares, bar, clock ring, badges, rewind mark. No pill or text SHALL cover a Payment light. Moving and settling frames of design §6.3 item 7 are exempt.
 
 #### Scenario: Placement at every checked frame
 - **GIVEN** every frame from 0 to 1919 except the exempt frames of design §6.3 item 7
@@ -81,9 +81,9 @@ Every drawn text box (measured advance on the `fonts/` faces times effective siz
 - **THEN** each text box and badge lies within x 12–948 and y 12–528, and none intersects another text box, a token, a block it does not label, or a Payment light
 
 #### Scenario: Exempt and checked frames
-- **GIVEN** frames 531 (drop-in) and 1681 (a slide), and frames 560 and 1700
-- **WHEN** the placement test lists the frames it checks
-- **THEN** 531 and 1681 are not checked for the moving element, and 560 and 1700 are checked
+- **GIVEN** frames 531, 560 and 1681
+- **WHEN** the placement test lists the elements it checks at each frame
+- **THEN** at 531 the breaker box and its text are not checked (drop-in) and Checkout, Payment and their labels are; at 560 Checkout, Payment, the breaker text and the state pill are checked and the window is not (it settles at 584); at 1681 the window is not checked (slide) and the tags and tokens are
 
 #### Scenario: Collision rejected
 - **GIVEN** a fixture moving the customer message to x 300
@@ -96,7 +96,7 @@ Every drawn text box (measured advance on the `fonts/` faces times effective siz
 - **THEN** it fails naming the `Payment` label and unit 0's light
 
 ### Requirement: Topology colour roles
-`color.state.failure` SHALL appear only on Payment's failing lights, the ✕ squares, the bar's fill and `failure` arrows; `color.state.failFast` only on `failFast` arrows; `color.state.blocked`, `healthy` and `transitional` only on the `OPEN`, `CLOSED` and `HALF_OPEN` pills; `color.state.caller` only on the `Checkout` label; `color.state.backend` nowhere. The `Payment` label SHALL be white.
+`color.state.failure` SHALL appear only on Payment's failing units (body and light), the ✕ squares, the bar's fill and `failure` arrows; `color.state.failFast` only on `failFast` arrows; `color.state.blocked`, `healthy` and `transitional` only on the `OPEN`, `CLOSED` and `HALF_OPEN` pills; `color.state.caller` only on the `Checkout` label; `color.state.backend` nowhere. The `Payment` label SHALL be white.
 
 #### Scenario: Roles over the whole composition
 - **GIVEN** the stage trees and component props of frames 0 to 1919
@@ -144,17 +144,17 @@ The scene's timeline SHALL equal the change's design §4: the thirteen phases wi
 - **THEN** the comparison fails naming the first leg whose arrival differs
 
 ### Requirement: Topology take 1, retry only
-In take 1 Checkout SHALL call Payment directly with `retry ×3`: 20 requests, each departing as three attempts five frames apart; `requests` SHALL count departed requests and `backend calls` arrived attempts; Payment's lights SHALL turn red at calls 20, 40 and 60; the reply line SHALL be a `failure` arrow tagged `HTTP:TIMEOUT`. No breaker is drawn.
+In take 1 Checkout SHALL call Payment directly with `retry ×3`: 20 requests 15 frames apart, each departing as a group of three attempts two frames apart; `requests` SHALL count departed requests and `backend calls` arrived attempts; Payment's units SHALL fail (red) at calls 20, 40 and 60; the reply line SHALL be a `failure` arrow tagged `HTTP:TIMEOUT`. No breaker is drawn.
 
 #### Scenario: First request
-- **GIVEN** frames 59, 60, 81 and 82
+- **GIVEN** frames 59, 60, 62, 64, 75, 81 and 82
 - **WHEN** the state is read
-- **THEN** 59 has no token and counters `0` and `0`; 60 has one token at the start of `direct-req` and `requests` `1`; 81 has `backend calls` `0`; 82 has `backend calls` `1` and the reply arrow's fade starting
+- **THEN** 59 has no token and counters `0` and `0`; 60 has one token at the start of `direct-req` and `requests` `1`; 62 and 64 add the second and third attempt; 75 has `requests` `2` and its first attempt departing; 81 has `backend calls` `0`; 82 has `backend calls` `1` and the reply arrow's fade starting
 
 #### Scenario: The service goes down
-- **GIVEN** frames 176, 177, 376, 377 and 389
-- **WHEN** the lights and counters are read
-- **THEN** 176 has no red light; 177 has unit 0 red and `20` calls; 376 has two red lights; 377 has three and `60` calls; 389 has `20` requests, `60` calls, three red lights and no token
+- **GIVEN** frames 173, 174, 276, 277, 370, 371 and 389
+- **WHEN** Payment's units and the counters are read
+- **THEN** 173 has no failing unit and `19` calls; 174 has unit 0 failing and `20` calls; 276 has one failing unit; 277 adds unit 1 and `40`; 370 has two failing units; 371 has three and `60` calls; 389 has `20` requests, `60` calls, three failing units and no token
 
 #### Scenario: Held down
 - **GIVEN** frames 390 to 449
@@ -180,7 +180,7 @@ From 450 the rewind mark SHALL pop beside the take badge and the object layer SH
 - **THEN** 499 draws `1`, 500 draws no badge and 501 draws `2`, with the rewind mark drawn at all three
 
 ### Requirement: Topology breaker wraps the call
-In `wrap`, `retry ×3` and the direct arrow SHALL leave, the breaker box SHALL travel down the drop path from 520 to 542, the two request arrows fade in, `CLOSED` SHALL pop at 548, the empty window and bar pop at 554, and Payment's unit 0 light SHALL turn red at 560 and stay red until 1188.
+In `wrap`, `retry ×3` and the direct arrow SHALL leave, the breaker box SHALL travel down the drop path from 520 to 542, the two request arrows fade in, `CLOSED` SHALL pop at 548, the empty window and bar pop at 554, and Payment's unit 0 SHALL fail (red) at 560 and stay failing until 1188.
 
 #### Scenario: Drop-in frames
 - **GIVEN** frames 519, 531, 542, 548, 554 and 560
@@ -193,7 +193,7 @@ In `wrap`, `retry ×3` and the direct arrow SHALL leave, the breaker box SHALL t
 - **THEN** `retry ×3` is not drawn
 
 ### Requirement: Topology CLOSED fills the window
-In `closed`, five calls SHALL reach Payment and come back `HTTP:TIMEOUT`; each result SHALL add a ✕ square to the window and ease the bar to its failure count over five; the circuit SHALL stay CLOSED while the rate is at or below the 0.8 threshold and switch to OPEN after it is above it.
+In `closed`, five calls SHALL reach Payment and come back `HTTP:TIMEOUT`; each result SHALL add a ✕ square to the window and move the bar linearly over `motion.fade` frames to its failure count over five; the circuit SHALL stay CLOSED while the rate is at or below the 0.8 threshold and switch to OPEN after it is above it.
 
 #### Scenario: Results enter the window
 - **GIVEN** frames 641, 642, 652, 768 and 810
@@ -234,7 +234,7 @@ In `open` and `open-again`, no token SHALL travel `out-req` or `out-rep`, which 
 - **THEN** the `left` tag reads `CIRCUIT-BREAKER:OPEN` and the customer message reads `payment temporarily` / `unavailable`, under Checkout
 
 ### Requirement: Topology resetTimeout clock
-On each entry into OPEN (820 and 1020) the clock SHALL pop or refill full with the label `resetTimeout 10s` and empty linearly over 130 frames (empty at 949 and 1149). In HALF_OPEN it SHALL stay empty at opacity 0.6. It SHALL leave at 1220.
+On each entry into OPEN (820 and 1020) the clock SHALL pop or refill full with the label `resetTimeout 10s` and empty linearly over 130 frames (empty at 949 and 1149). In HALF_OPEN the ring and its label SHALL stay at opacity 0.6, the ring empty. It SHALL leave at 1220.
 
 #### Scenario: Clock frames
 - **GIVEN** frames 820, 885, 949, 1000, 1020 and 1149
@@ -247,7 +247,7 @@ On each entry into OPEN (820 and 1020) the clock SHALL pop or refill full with t
 - **THEN** it is not drawn
 
 ### Requirement: Topology HALF_OPEN test calls
-Each HALF_OPEN SHALL send exactly one test call from the breaker's right edge to Payment: at 966 it times out and the circuit SHALL be OPEN again at 1020; at 1166 it returns `200`, Payment's red light SHALL clear on its arrival at 1188, and the circuit SHALL be CLOSED at 1220. The customer side SHALL be dimmed and quiet.
+Each HALF_OPEN SHALL send exactly one test call from the breaker's right edge to Payment: at 966 it times out and the circuit SHALL be OPEN again at 1020; at 1166 it returns `200`, Payment's unit 0 SHALL recover (white) on its arrival at 1188, and the circuit SHALL be CLOSED at 1220. The customer side SHALL be dimmed and quiet.
 
 #### Scenario: One test call each
 - **GIVEN** every frame from 950 to 1019 and from 1150 to 1219
@@ -265,7 +265,7 @@ Each HALF_OPEN SHALL send exactly one test call from the breaker's right edge to
 - **THEN** 1187 has unit 0 red; 1188 has it white and the right tag's text `200` (its pop starting); 1219 is `HALF_OPEN`; 1220 swaps to `CLOSED`
 
 ### Requirement: Topology CLOSED ignores noise
-At 1220 the window SHALL clear (the ✕ squares leave, the bar eases to 0). The next five calls SHALL give ✓, ✓, ✕ (`HTTP:TIMEOUT`), ✓, ✓, leaving the rate at 0.2 and the circuit CLOSED.
+At 1220 the window SHALL clear (the ✕ squares leave, the bar moves linearly to 0 over `motion.fade` frames). The next five calls SHALL give ✓, ✓, ✕ (`HTTP:TIMEOUT`), ✓, ✓, leaving the rate at 0.2 and the circuit CLOSED.
 
 #### Scenario: Window cleared
 - **GIVEN** frames 1219, 1230 and 1301
@@ -340,9 +340,9 @@ The scene SHALL use the stage layout of the change's design §6.1 in 960x540 sta
 - **THEN** they follow design §6.2, and every token's `data-element` is above every block's and below every tag's
 
 #### Scenario: Stills reviewed (local)
-- **GIVEN** the stills and boundary frames of design §7 and their 328 px wide phone sheet
-- **WHEN** the owner and the implementer open each PNG
-- **THEN** each shows what §4.2 lists at that frame, with no overlap, clipping or word unreadable at 328 px
+- **GIVEN** the stills and boundary frames of design §7 and their phone sheet viewed at 341 CSS px
+- **WHEN** the owner and the implementer open each one
+- **THEN** each shows what §4.2 lists at that frame, with no overlap or clipping; every word is readable, and the failing Payment units, red against ink arrows and dashed cut lines are told apart at 341 px
 
 ## MODIFIED Requirements
 

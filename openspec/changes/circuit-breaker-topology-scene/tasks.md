@@ -5,7 +5,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 ## 0. Before implementing
 
 - [ ] 0.1 Confirm PR #41 (`sdd-without-with-spec-scene`) is merged into `main`, then rebase this branch onto `origin/main` (`git rebase origin/main`). If #41 is not merged, stop and tell the owner (design §2.1). Re-run `openspec validate --all --strict`: the archived #41 specs and this change's deltas must both pass.
-- [ ] 0.2 Check that the interfaces this change uses still exist on `main`: `takes` kind and `checkTakes` (`src/scenes/takes-kind.ts`), `neutral` scenes in `catalogue.ts`, `MotionPath` and `motionPathAt`. Compare this change's MODIFIED "State-machine and flow catalogue compatibility" with the merged text of `openspec/specs/scene-catalogue/spec.md`; it must differ only in "every registered scene" and the added scenario. A difference becomes a question in the pull request, not a silent change.
+- [ ] 0.2 Check that the interfaces this change uses still exist on `main`: `takes` kind and `checkTakes` (`src/scenes/takes-kind.ts`), `neutral` scenes in `catalogue.ts`, `MotionPath` and `motionPathAt`. Compare this change's MODIFIED "State-machine and flow catalogue compatibility" with the merged text of `openspec/specs/scene-catalogue/spec.md`. The expected differences are exactly these: "the three scenes" becomes "every registered scene"; in "Both kinds", "a third scene after them" becomes "later scenes after them"; in "Three kinds", the GIVEN adds "registered in that order with later scenes after them" and the THEN reads "their nine compositions are returned unchanged … ninth" instead of "nine unique compositions … last"; and the new scenario "Four scenes in the catalogue". A difference becomes a question in the pull request, not a silent change.
 
 ## 1. Failure-rate bar (motion-components)
 
@@ -14,6 +14,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [ ] 1.3 Unit, `test/brand/token-radius.test.ts`, proving "Default unchanged" (plus `test/scenes/publish-subscribe.test.ts` unedited), "Smaller token" and "Bad radius".
 - [ ] 1.4 Unit, `test/brand/rate-bar.test.ts`, proving:
   - "Fill and tick"
+  - "Narrow track"
   - "Small and empty rates"
   - "Full rate"
   - "Drawn from the tokens" (with `test/brand/no-colour-literals.test.ts` scanning the new files)
@@ -87,12 +88,12 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
   - "Topology render dry run"
   - "Topology render failure"
 - [ ] 5.2 Local: `npm run stills -- circuit-breaker-topology` (14 PNGs), plus `npx remotion still` at the boundary frames of design §7. Open every PNG and check overlaps, clipping and contrast (MOT-5).
-- [ ] 5.3 Local: write the stills sheet and the 328 px wide phone sheet (design §7) to `docs/spikes/2026-11-12-circuit-breaker-topology/`. This proves "Stills reviewed (local)" with the owner at the media gate.
+- [ ] 5.3 Local: write the stills sheet and the phone sheet viewed at 341 CSS px (design §7, method recorded) to `docs/spikes/2026-11-12-circuit-breaker-topology/`. This proves "Stills reviewed (local)" with the owner at the media gate.
 - [ ] 5.4 Local: "Stills byte-identical (local)". Render the stills of every earlier scene on the merge base and on the branch, and compare their SHA-256.
 - [ ] 5.5 Local, after the owner's ok on the stills:
   - `npm run render -- circuit-breaker-topology`;
   - read the web copy with `npx remotion ffmpeg -hide_banner -i …`;
-  - make a contact sheet from the web MP4 at the 14 still frames;
+  - make a contact sheet from the web MP4 at the 14 still frames, plus the same frames viewed at 341 CSS px;
   - prove "Final PNGs identical (local)" by rendering frames 1830 and 1919 and comparing their bytes.
 
   This proves "Topology video verified from output (local)".
