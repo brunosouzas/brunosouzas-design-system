@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.12.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.11.0...v0.12.0) (2026-11-12)
+
+
+### Features
+
+* `questionToken` piece, the open question in the v2 grammar (AB[#333](https://github.com/brunosouzas/brunosouzas-design-system/issues/333)) ([8f19470](https://github.com/brunosouzas/brunosouzas-design-system/commit/8f19470fedb63deb6c91f6812071d3cb423bd3b0))
+* `scene.*` tokens for the stage rings and the dashed motion path; `Rings` reads them (AB[#333](https://github.com/brunosouzas/brunosouzas-design-system/issues/333)) ([8f19470](https://github.com/brunosouzas/brunosouzas-design-system/commit/8f19470fedb63deb6c91f6812071d3cb423bd3b0))
+* visor holds a sheet (`holdsSheet`) and faces left or right (`facing`) (AB[#333](https://github.com/brunosouzas/brunosouzas-design-system/issues/333)) ([8f19470](https://github.com/brunosouzas/brunosouzas-design-system/commit/8f19470fedb63deb6c91f6812071d3cb423bd3b0))
+
 ## [0.11.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.10.0...v0.11.0) (2026-11-11)
 
 
