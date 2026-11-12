@@ -160,15 +160,15 @@ A scene of kind `takes` SHALL order its phases as one or more take-1 phases, exa
 - **THEN** it fails naming the scene and saying a `takes` scene is neutral
 
 ### Requirement: Two-take cast timing
-In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges); every emote SHALL enter on a frame where its actor's expression changes; at most one emote SHALL be visible at a frame (from its entrance until 10 frames after its leave, or to the end); an emote SHALL be gone before any act that starts after it; acts, expression changes, emote entrances and trip arrivals SHALL precede the outro. Problems name the scene and the item.
+In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges); every emote SHALL enter on a frame where its actor's expression changes; at most one emote SHALL be visible at a frame (from its entrance until 10 frames after its leave, or to the end); an emote SHALL be gone before any act that starts after it. Problems name the scene and the item.
 
 #### Scenario: The scene's own cues pass
-- **GIVEN** `sdd-without-with-spec` with Visor's acts 90–90, 344–344, 390–476 and 590–590, faces at 270, 344, 488, 590 and 660, emotes `problem` (270, leaving at 320) and `worked` (660, never leaving)
+- **GIVEN** `sdd-without-with-spec` with Visor's acts 90–90, 344–344, 390–480 and 600–600, faces at 270, 344, 504, 600 and 660, emotes `problem` (270, leaving at 320) and `worked` (660, never leaving)
 - **WHEN** its timeline is checked
 - **THEN** no cast problem is reported
 
 #### Scenario: Two actors at once
-- **GIVEN** a fixture adding a second actor's act 470–480 while Visor's act 390–476 runs
+- **GIVEN** a fixture adding a `mira` act 470–490 while Visor's act 390–480 runs
 - **WHEN** its timeline is checked
 - **THEN** it fails naming the scene and both acts
 
@@ -187,10 +187,23 @@ In a `takes` scene, acts of different actors SHALL NOT overlap (inclusive ranges
 - **WHEN** its timeline is checked
 - **THEN** it fails naming the scene, emote `problem` and the act at 344; with the leave at 334 (gone at 344) it passes
 
+### Requirement: Two-take reading hold
+In a `takes` scene, nothing SHALL move from the outro on: acts, expression changes, emote entrances and leaves, trip arrivals, fade ends and the other cue frames SHALL be before the outro, and every pop-in, including an emote's, SHALL start at or before the outro minus `motion.fps`, so it is settled by the outro. Problems name the scene, the item and its frame.
+
+#### Scenario: The scene's own hold passes
+- **GIVEN** `sdd-without-with-spec`, outro 690, its last pop-in the `worked` emote at 660 and its last fade ending at 610
+- **WHEN** its timeline is checked
+- **THEN** no hold problem is reported
+
 #### Scenario: Cue at or after the outro
-- **GIVEN** separate fixtures with a face change at 690, an emote entering at 690, an act starting at 700 and a trip arriving at 691, outro 690
+- **GIVEN** separate fixtures with a face change at 690, an act starting at 700, a trip arriving at 691, a fade ending at 695 and a code-line cue at 690, outro 690
 - **WHEN** each timeline is checked
-- **THEN** each fails naming the scene, the cue and its frame
+- **THEN** each fails naming the scene, the item and its frame
+
+#### Scenario: Pop-in too late to settle
+- **GIVEN** separate fixtures with the stamp's pop-in at 661 and the `worked` emote (with its face change) at 661
+- **WHEN** each timeline is checked
+- **THEN** each fails naming the scene, the item and frame 661 (at most 660); at 660 both pass
 
 ### Requirement: SDD scene registration
 The catalogue SHALL register the scene `sdd-without-with-spec`, kind `takes`, neutral, format `16x9` only, 780 frames at 30 fps, outro 690, with sources `https://brunosouzas.com/blog/spec-driven-development-in-practice` (`en`) and `https://brunosouzas.com/pt/blog/spec-driven-development-in-practice` (`pt`), and the English word table `file` `proposal.md`, `approval` `GO`, `question` `?`, `takes` `["1", "2"]`.
@@ -206,25 +219,25 @@ The catalogue SHALL register the scene `sdd-without-with-spec`, kind `takes`, ne
 - **THEN** formats are `["16x9"]`, languages `["en"]`, and no composition id ends in `-4x5`, `-pt` or `-en`
 
 ### Requirement: SDD words on screen
-At every frame, the only strings the scene draws SHALL be `proposal.md`, `GO`, `?`, `1` and `2`, each from the scene's word table or a piece's own `?` glyph; across the composition all five SHALL appear. The scene SHALL have no caption. Emotes, the rewind mark and the code lines carry no words.
+At every frame, the only strings the scene draws SHALL be `proposal.md`, `GO`, `?`, `1` and `2`, each from the scene's word table or a piece's own `?` glyph; across the composition all five SHALL appear. A word counts as drawn when its element is drawn (opacity above 0, scale above 0.001). The scene SHALL have no caption; emotes, the rewind mark and the code lines carry no words.
 
 #### Scenario: Words over the whole composition
 - **GIVEN** the stage trees of frames 0 to 779
-- **WHEN** every text node's content is collected
+- **WHEN** the content of every drawn text node is collected
 - **THEN** each content is one of the five strings, and the union is all five
 
 #### Scenario: Words at their boundaries
-- **GIVEN** frames 17, 18, 377, 378, 389, 390, 575 and 576
-- **WHEN** their text is read
-- **THEN** 17 draws no word; 18 to 377 draw `1`; 378 and later draw `2` and never `1`; `proposal.md` first appears at 390; `GO` first appears at 576
+- **GIVEN** frames 18, 19, 377, 378, 379, 389, 390, 584 and 585
+- **WHEN** their drawn text is read
+- **THEN** 18 draws no word (the badge's pop starts at opacity 0); 19 to 377 draw `1`; 378 draws neither `1` nor `2`; 379 and later draw `2` and never `1`; `proposal.md` first appears at 390; `GO` first appears at 585
 
 ### Requirement: SDD beats and timing
-The scene's timeline SHALL equal the beat table of the change's design §4: the seven phases with their takes, frame ranges and cited lines, every pop-in, trip, path fade, code-line and row frame, the acts, faces and emotes, the object frame of the rewind and the outro. Arrival frames SHALL be departure plus `motion.travel`.
+The scene's timeline SHALL equal the beat table of the change's design §4, with the pop-in helpers of design §2.6: the seven phases with their takes, frame ranges and cited lines, every pop-in, trip, fade, code-line, row, check and hand-over frame, the acts, faces and emotes, the rewind's object frame and the outro. Trip and hand-over ends SHALL be their start plus `motion.travel`.
 
 #### Scenario: Timeline equals the beat table
 - **GIVEN** the beat table transcribed in the test
 - **WHEN** it is compared with the scene's timeline and `motion.travel` is 22
-- **THEN** every value is equal, including phases `request` 24–89, `guess` 90–239, `error` 240–309, `rewind` 340–377, `ask` 390–489, `answer` 490–589, `implement` 590–689
+- **THEN** every value is equal, including phases `request` 24–89, `guess` 90–239, `error` 240–309, `rewind` 340–377, `ask` 390–509, `answer` 510–599, `implement` 600–689
 
 #### Scenario: Travel token changed
 - **GIVEN** the timeline built with a `motion.travel` of 20
@@ -250,20 +263,20 @@ In take 1 the balloon SHALL hold six `?` from their pop-ins until each departs; 
 - **THEN** 209 shows 7 lines, 210 and 239 show 8, the balloon is empty and path P1 is fully transparent at 239
 
 ### Requirement: SDD take 1, the error comes back
-The failure arrow SHALL draw from the code panel to the balloon from frame 240 over `motion.drawArrow` frames, in `color.state.failure`. At 270 Visor's expression SHALL become `failed`, the `problem` emote SHALL pop in beside its head and its body SHALL squash and tilt (−5°); the emote SHALL leave from 320 and be gone at 330.
+The failure arrow, the `messageArrow` piece of kind `failure` from the code panel to the balloon, SHALL fade in over 240 to 250. At 270 Visor's expression SHALL become `failed`, the `problem` emote SHALL pop in beside its head and its body SHALL squash and tilt (−5°); the emote SHALL leave from 320 and be gone at 330.
 
 #### Scenario: Arrow boundaries
-- **GIVEN** frames 239, 250 and 260
+- **GIVEN** frames 239, 240, 245 and 250
 - **WHEN** the arrow state is read
-- **THEN** 239 draws nothing; 250 draws half the path without a head; 260 draws the whole path with its head
+- **THEN** 239 and 240 draw nothing (opacity 0); 245 draws it at opacity 0.5; 250 at opacity 1, with its head at the balloon
 
 #### Scenario: Fright frames
-- **GIVEN** frames 269, 270, 329 and 330
+- **GIVEN** frames 269, 270, 271, 329 and 330
 - **WHEN** Visor and the emote are read
-- **THEN** 269 is `idle`, upright, with no emote; 270 is `failed`, tilt −5, with the `problem` emote entering; 329 still shows the emote at an opacity above 0; 330 shows no emote and Visor still `failed`
+- **THEN** 269 is `idle`, upright, with no emote; 270 is `failed`, tilt −5, with the emote's pop starting (not yet drawn); 271 draws the `problem` emote; 329 still draws it at an opacity above 0; 330 draws no emote and Visor is still `failed`
 
 ### Requirement: SDD rewind
-From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL reset at once (`idle`, `points` false, upright) and from 344 to 377 the object layer (the `?`, code lines, path P1, the failure arrow) SHALL show take 1 backwards, its object frame going from 339 to 89. At 378 the badge SHALL read `2` and the rewind mark leave, gone at 388.
+From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL reset at once (`idle`, `points` false, upright) and from 344 to 377 the object layer (the `?`, code lines, path P1, the failure arrow) SHALL show take 1 backwards, its object frame going from 339 to 89. At 378 badge `1` SHALL be removed, badge `2` pop in and the rewind mark leave, gone at 388. From 390 no take-1 object is drawn.
 
 #### Scenario: Object frame
 - **GIVEN** frames 343, 344, 360, 377, 378 and 389
@@ -273,67 +286,77 @@ From 340 the rewind mark SHALL pop beside the take badge. At 344 Visor SHALL res
 #### Scenario: Rewind ends on the request
 - **GIVEN** frame 377
 - **WHEN** the state is read
-- **THEN** the objects equal those of frame 89, Visor is idle without pointing, the badge reads `1` and the rewind mark is visible
+- **THEN** the objects equal those of frame 89, Visor is idle without pointing, the badge reads `1` and the rewind mark is drawn
 
 #### Scenario: The fright is not replayed
 - **GIVEN** every frame from 344 to 389
 - **WHEN** Visor and the emote are read
 - **THEN** Visor is `idle`, upright, with `points` false, and no emote is drawn
 
+#### Scenario: Take-1 objects gone in take 2
+- **GIVEN** every frame from 390 to 779
+- **WHEN** the state is read
+- **THEN** the failure arrow and path P1 are not drawn, and the code panel's lines are take 2's (0 until 616)
+
 ### Requirement: SDD same stage in both takes
-The state at frame 389, the last before take 2 acts, SHALL equal the state at frame 89, the last before take 1 acts, except the take badge's text: the same balloon and six `?`, the same empty code panel, Visor at the same place, scale, face and action, with every pop-in settled.
+The state at frame 389, the last before take 2 acts, SHALL equal the state at frame 89, the last before take 1 acts, except the take badge (its text and its pop-in from 378) and the rewind mark's leave: the same balloon and six `?`, the same empty code panel, Visor at the same place, scale, face and action, every other pop-in settled.
 
 #### Scenario: Fair comparison
 - **GIVEN** the state at 89 and at 389
-- **WHEN** they are compared field by field
-- **THEN** only the badge differs (`1` and `2`); at 389 the rewind mark is gone
+- **WHEN** they are compared field by field, leaving out the take badge
+- **THEN** they are equal, and at 389 the rewind mark is not drawn
 
 #### Scenario: Settled pop-ins
-- **GIVEN** each pop-in frame *a* of the timeline
-- **WHEN** the appearance is read at *a* − 1, *a* and *a* + 30
-- **THEN** it is absent at *a* − 1 (except the badge's second pop-in at 378, where frame 377 shows the badge reading `1`), starts at *a*, and is exactly opacity 1 and scale 1 from *a* + 30
+- **GIVEN** each pop-in frame *a* of design §2.6
+- **WHEN** the element is read at *a* − 1, *a*, *a* + 1 and *a* + 30
+- **THEN** it is not drawn at *a* − 1 (except badge `2`, where frame 377 draws badge `1`) and at *a*, is drawn at *a* + 1, and is exactly opacity 1 and scale 1 at *a* + 30
 
 ### Requirement: SDD take 2, the questions written down
-At 390 Visor SHALL hold the `proposal.md` sheet with one heading row. Each `?` SHALL travel its `ask` route and, on its arrival frame, be gone while the sheet gains that question row, without a tail check. At 488 Visor's face SHALL become `waiting`, with no emote.
+At 390 Visor SHALL hold the `proposal.md` page with one heading row. Each `?` SHALL travel its `ask` route and, on its arrival frame, be gone while the page gains that question row, without a tail check. At 480 Visor SHALL hand the page over: it leaves Visor's hand and travels, unchanged, to beside the balloon by 502. At 504 Visor's face SHALL become `waiting`, with no emote.
 
 #### Scenario: Sheet appears with its heading
 - **GIVEN** frames 389 and 390
 - **WHEN** Visor is read
-- **THEN** 389 holds nothing; 390 holds the sheet labelled `proposal.md` with exactly the heading row
+- **THEN** 389 holds nothing; 390 holds the page labelled `proposal.md` with exactly the heading row
 
 #### Scenario: Questions become rows
 - **GIVEN** frames 425, 426 and 476
-- **WHEN** the balloon and the sheet are read
+- **WHEN** the balloon and the page are read
 - **THEN** 425 has 3 `?` in the balloon (3, 4, 5), 3 in flight (0, 1, 2) and 1 row; 426 has 2 rows (heading and question 1) and 2 `?` in flight; 476 has an empty balloon, nothing in flight and 7 rows, every question row without a check
 
+#### Scenario: Seamless hand-over
+- **GIVEN** frames 479, 480, 491 and 502
+- **WHEN** the page is read
+- **THEN** 479 is Visor's held sheet and 480 the handed-over page, with equal page box, row marks, label pill and words; Visor holds nothing from 480; the page's top-left is (147.4, 186.9) at 491 and (100, 196) from 502
+
 #### Scenario: Visor waits
-- **GIVEN** frames 487 and 488
+- **GIVEN** frames 503 and 504
 - **WHEN** Visor and the emote are read
-- **THEN** 487 is `idle`; 488 is `waiting` and no emote is drawn
+- **THEN** 503 is `idle`; 504 is `waiting` and no emote is drawn
 
 ### Requirement: SDD take 2, answered and approved
-Six answer tokens filled `color.state.caller` SHALL travel from the balloon, one per question row; on its arrival frame each SHALL be gone while its row gains its tail check. At 576 the `GO` stamp SHALL pop onto the sheet. Visor SHALL not act during the answers.
+Six answer tokens filled `color.state.caller` SHALL leave from below the balloon's tail, never inside the balloon, one per question row; on its arrival on the row's `?` mark each SHALL be gone while its row gains its tail check. At 584 the `GO` stamp SHALL pop onto the handed-over page. Visor SHALL not act during the answers.
 
 #### Scenario: First answer
-- **GIVEN** frames 491, 492 and 514
+- **GIVEN** frames 511, 512 and 534
 - **WHEN** answer 0 and row 1 are read
-- **THEN** 491 has no answer token; 492 has it at the start of `answer-0`; 514 has no token and row 1 has its check
+- **THEN** 511 has no answer token; 512 has it at (70, 190), the start of `answer-0`, outside the balloon; 534 has no token and row 1 has its check
 
 #### Scenario: All answered, then GO
-- **GIVEN** frames 564, 575 and 576
-- **WHEN** the sheet and the stamp are read
-- **THEN** 564 has six checked rows and no stamp; 575 has no stamp; 576 has the `GO` stamp entering
+- **GIVEN** frames 574, 584 and 585
+- **WHEN** the page and the stamp are read
+- **THEN** 574 has six checked rows and no stamp; 584 has the stamp's pop starting (not yet drawn); 585 draws the `GO` stamp
 
 ### Requirement: SDD take 2, implemented from the sheet
-At 590 Visor's face SHALL become `idle` and it SHALL point at the code; path P2 fades out and path P3 fades in over 590 to 600; the code panel gains its eight lines at 612 to 654, six frames apart; at 660 Visor's face SHALL become `done` and the `worked` emote SHALL pop in beside its head and stay.
+At 600 Visor's face SHALL become `idle` and it SHALL point at the code; path P3 fades in over 600 to 610; the code panel gains its eight lines at 616 to 651, five frames apart; at 660 Visor's face SHALL become `done` and the `worked` emote SHALL pop in beside its head and stay.
 
 #### Scenario: Implementation frames
-- **GIVEN** frames 589, 590, 611, 612, 654 and 660
+- **GIVEN** frames 599, 600, 615, 616, 651 and 660
 - **WHEN** the state is read
-- **THEN** 589 is `waiting` without pointing and 0 lines; 590 is `idle` pointing; 611 has 0 lines; 612 has 1; 654 has 8; 660 is `done` with the `worked` emote entering
+- **THEN** 599 is `waiting` without pointing and 0 lines; 600 is `idle` pointing; 615 has 0 lines; 616 has 1; 651 has 8; 660 is `done` with the `worked` emote's pop starting
 
 ### Requirement: SDD final still
-Every frame from the outro (690) to the last (779) SHALL be identical: no breathing, blinking, pop-in or fade in progress. The scene SHALL hold at least `motion.readingHold` frames (3 s at 30 fps).
+Every frame from the outro (690) to the last (779) SHALL be identical: no breathing, blinking, pop-in, fade or trip in progress. The scene SHALL hold at least `motion.readingHold` frames (3 s at 30 fps).
 
 #### Scenario: Final hold identical
 - **GIVEN** the stage trees and the composition-pixel layer states of frames 690 to 779
@@ -346,21 +369,21 @@ Every frame from the outro (690) to the last (779) SHALL be identical: no breath
 - **THEN** 689 is still settling (scale not exactly 1) and 690 is exactly settled
 
 ### Requirement: SDD cast rules
-Visor SHALL be the scene's only character, drawn at scale 1.15 on the ground line y 440 (stage units), never recoloured, with opacity 1 from its settled pop-in; its expression SHALL change only at the five face frames and its action parameters (`points`, the held sheet) only at its acts or by a row's arrival or check. Emotes sit beside the head, never over the screen face.
+Visor SHALL be the scene's only character, drawn at scale 1.15 on the ground line y 440 (stage units), never recoloured, with opacity 1 from its settled pop-in; its expression SHALL change only at the five face frames and its action parameters (`points`, the held sheet) only inside its acts. Emotes sit beside the head, never over its posed screen face.
 
 #### Scenario: Expression changes only at face frames
 - **GIVEN** every pair of consecutive frames
 - **WHEN** Visor's expression differs between them
-- **THEN** the later frame is one of 270, 344, 488, 590, 660
+- **THEN** the later frame is one of 270, 344, 504, 600, 660
 
 #### Scenario: Actions only inside acts
 - **GIVEN** every pair of consecutive frames
 - **WHEN** Visor's `points` or held sheet differs between them
-- **THEN** the later frame is inside an act, or is a `?` arrival or an answer arrival frame
+- **THEN** the later frame is inside one of Visor's acts (90–90, 344–344, 390–480, 600–600)
 
 #### Scenario: Emote beside the head
 - **GIVEN** frames 300 and 700
-- **WHEN** the emote's box and Visor's screen face (431.7–528.3 × 292.8–352.6) are compared
+- **WHEN** the emote's box is compared with Visor's screen face box transformed by Visor's pose at that frame (tilt and squash about (480, 440))
 - **THEN** they do not intersect
 
 #### Scenario: One character, same skin
@@ -369,7 +392,7 @@ Visor SHALL be the scene's only character, drawn at scale 1.15 on the ground lin
 - **THEN** only `visor` appears, once, with scale 1.15, y 440, `surface` light, and no fill overriding its body
 
 ### Requirement: SDD built from package pieces
-The scene SHALL draw only through the package's pieces (`speechBubble`, `questionToken`, `codePanel`, `visor`, `stamp`, `countBadge`, `uiIcon`, `emote`), `pose`, and the components `Rings`, `MotionPath`, `Arrow` and `PositionedToken`. Its files SHALL contain no colour literal and SHALL create no SVG shape of their own.
+The scene SHALL draw only through the package's pieces (`speechBubble`, `questionToken`, `codePanel`, `visor`, `sheet`, `pill`, `stamp`, `countBadge`, `uiIcon`, `messageArrow`, `emote`), `pose`, and the components `Rings`, `MotionPath` and `PositionedToken`. Its files SHALL contain no colour literal and SHALL create no SVG shape of their own.
 
 #### Scenario: No shape of its own
 - **GIVEN** the files under `src/scenes/sdd-without-with-spec/`
@@ -381,24 +404,24 @@ The scene SHALL draw only through the package's pieces (`speechBubble`, `questio
 - **THEN** it reports nothing for the new scene's files
 
 ### Requirement: SDD layout and layers
-The scene SHALL use the stage layout of the change's design §6 in 960x540 stage units drawn at 1920x1080, with its layer order. No travelling `?` or answer SHALL overlap Visor's screen face; the held sheet's label SHALL clear the balloon; the stamp SHALL clear every row mark.
+The scene SHALL use the stage layout of the change's design §6 in 960x540 stage units drawn at 1920x1080, with its layer order. No travelling `?` or answer SHALL touch Visor's screen face or the page's label pill; the label SHALL clear the balloon; the stamp SHALL clear every row mark.
 
 #### Scenario: Layout equals the design
 - **GIVEN** the design §6 tables transcribed in the test
 - **WHEN** they are compared with the scene's layout data
 - **THEN** every position, size, scale and route is equal
 
-#### Scenario: Tokens clear the face
-- **GIVEN** each `guess`, `ask` and `answer` route sampled at 100 points by length, with each token's radius in stage units
-- **WHEN** each disc is compared with Visor's screen face
-- **THEN** none intersects it
+#### Scenario: Tokens clear the face and the label
+- **GIVEN** each `guess`, `ask` and `answer` route sampled at 100 points by length, each token as a disc of its radius (15 for a `?`, 17 for an answer)
+- **WHEN** each disc is compared with Visor's upright screen face and with the label pill where the page is at that time (held for `ask`, at rest for `answer`)
+- **THEN** none intersects either
 
 #### Scenario: Label and stamp clearances
-- **GIVEN** the derived label pill (194.8–367.3 × 157.1–198.5), the balloon (bottom 150) and the stamp (centre (281, 428), radius 28)
-- **WHEN** they are compared with the balloon and the six row marks (radius 13 × 1.15)
-- **THEN** the pill does not touch the balloon and the stamp touches no row mark
+- **GIVEN** the held and the resting label pills, the balloon (bottom 150, tail tip (70, 170)) and the stamp (centre (186.25, 446), radius 28)
+- **WHEN** they are compared with the balloon and the resting page's six row marks (radius 13 × 1.15)
+- **THEN** neither pill touches the balloon and the stamp touches no row mark
 
 #### Scenario: Stills reviewed (local)
-- **GIVEN** the eight stills of design §7
+- **GIVEN** the eight stills of design §7 and frame 450
 - **WHEN** the owner and the implementer open each PNG
 - **THEN** each shows what §7 lists, with no overlap, clipping or unreadable word
