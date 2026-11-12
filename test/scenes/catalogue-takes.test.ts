@@ -61,6 +61,12 @@ describe("Valid timeline, takes cases", () => {
     expect(joined({ outro: 691 })).toContain(`${ID}: outro at frame 691 is inside the reading hold (must be at most 690)`);
   });
 
+  test("Takes phase starting in the reading hold", () => {
+    expect(joined({ phases: phases((p) => (p.id === "t2-result" ? { ...p, from: 690, to: 700, events: [] } : p)) })).toContain(
+      `${ID}: start of phase t2-result at frame 690 is at or after the outro (frame 690)`,
+    );
+  });
+
   test("Phase beyond the composition", () => {
     expect(joined({ phases: phases((p) => (p.id === "t2-result" ? { ...p, to: 780 } : p)) })).toContain(`${ID}: phase 7 (t2-result [600, 780]) is outside the composition`);
   });

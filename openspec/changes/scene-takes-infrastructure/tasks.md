@@ -17,7 +17,7 @@ Test levels: **unit** (vitest, pure functions and source reads, no React renderi
 
 - [x] 3.1 `src/scenes/takes-kind.ts` (`TakesTimeline`, `checkTakes` with the order, cites, neutral-only, cast and hold rules; #41's review fixes included) and the `takes` branch of `checkTimeline`. Unit tests in a new `test/scenes/catalogue-takes.test.ts`, on the fixture:
   - "Valid takes", "Takes out of order", "Phase without an article line", "Localised takes scene";
-  - "Takes scene needs no slots or fires", "Takes outro inside the reading hold";
+  - "Takes scene needs no slots or fires", "Takes outro inside the reading hold", "Takes phase starting in the reading hold";
   - `takes` fixture cases for "Phase beyond the composition", "Overlapping phases", "Event outside its phase" and "Movement inside the reading hold".
 
   The state-machine and flow cases in `test/scenes/catalogue.test.ts` and `test/scenes/catalogue-flow.test.ts` stay unchanged, as do "Fire outside its window", "Outro inside the reading hold" and "Flow trip crosses the outro". Check: `npm test -- test/scenes`.
@@ -37,7 +37,7 @@ Test levels: **unit** (vitest, pure functions and source reads, no React renderi
 
 - [x] 5.1 TEST-4, one at a time in a scratch copy of the worktree: make each guard always pass, run its test, see it fail, and discard the copy. The guards are:
   - the neutral `pt` table, language and source rules;
-  - the takes order, cites and neutral-only rules;
+  - the takes order, cites and neutral-only rules, and the takes outro, phase-start and event-before-outro rules;
   - the act overlap, the emote on a face change (and the repeated expression), two emotes at once, and the emote before the next act;
   - the hold's cue-before-outro and pop-in-settle rules;
   - `motionPathAt`'s range checks.

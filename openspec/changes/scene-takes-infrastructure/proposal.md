@@ -56,5 +56,6 @@ None.
 
 - `README.md`, "How a scene is built": neutral registration, the `takes` kind and its checks, `MotionPath` and `motionPathAt`, and the flow diagram's "MP4 per format (and language, for a localised scene)".
 - `docs/adr/0004-scenes-illustrate-published-articles.md`: a dated amendment (2026-11-12, AB#144). Since ADR 0005's amendment of 2026-11-09, a neutral scene may show a few English words, and it keeps them in one `en` table with both pages as sources. This records a decision ADR 0005 already took, so it is no new ADR. The index row in `docs/adr/README.md` follows.
+- `docs/roadmap.md`: a row 13f for this change, after `sdd-scene-pieces` (13e).
 - `AGENTS.md` and the `openspec/config.yaml` context: the sentences that say a catalogue scene keeps its strings per language gain the neutral case.
 - After the merge, outside this repository: the brain vault's project notes (`architecture.md`, `changelog.md`). The motion skill's SCN-1 check text ("until AB#144 the catalogue still registers a composition per language") becomes true once a neutral scene is registered; it changes in the kit with that scene.

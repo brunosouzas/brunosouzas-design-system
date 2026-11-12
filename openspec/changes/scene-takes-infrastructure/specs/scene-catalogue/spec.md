@@ -88,6 +88,11 @@ Each scene SHALL have ordered, non-overlapping inclusive phases within its durat
 - **WHEN** its timeline is checked
 - **THEN** it fails naming the scene and outro frame 691 (at most 690)
 
+#### Scenario: Takes phase starting in the reading hold
+- **GIVEN** the fixture `takes-fixture` (outro 690) with its last phase `t2-result` moved to 690–700, with no events
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene, the start of phase `t2-result` and frame 690
+
 ### Requirement: State-machine and flow catalogue compatibility
 The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list them in registration order.
 
