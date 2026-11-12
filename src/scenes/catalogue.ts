@@ -6,6 +6,7 @@ import { tokens } from "../../tokens/generated/tokens";
 import { arrowDrawAt, pillAt, type Timeline } from "../brand/motion";
 import { checkFlow } from "./publish-subscribe/flow";
 import type { FlowTimeline } from "./publish-subscribe/timeline";
+import { checkTakes, type TakesTimeline } from "./takes-kind";
 
 export const FORMATS = {
   "16x9": { width: 1920, height: 1080 },
@@ -33,7 +34,16 @@ export type SceneContract<TTimeline extends CommonTimeline> = {
 /** Preserve legacy annotations and absent kind. */
 export type SceneData = SceneContract<Timeline> & { kind?: "state-machine" };
 export type FlowSceneData = SceneContract<FlowTimeline> & { kind: "flow" };
-export type CatalogueScene = SceneData | FlowSceneData;
+/**
+ * A two-take comparison (src/scenes/takes-kind.ts). It is always neutral: one
+ * composition per format for both pages, its few words in one English table
+ * (ADR 0005 as amended 2026-11-09), both pages' sources.
+ */
+export type TakesSceneData = Omit<SceneContract<TakesTimeline>, "text"> & { kind: "takes"; neutral: true; text: { readonly en: TextTable } };
+export type CatalogueScene = SceneData | FlowSceneData | TakesSceneData;
+
+/** A neutral scene: one video for the Portuguese and English pages (SCN-1). */
+export const isNeutral = (scene: CatalogueScene): boolean => (scene as { neutral?: unknown }).neutral === true;
 
 export type CompositionEntry = {
   id: string;
@@ -48,11 +58,15 @@ export type CompositionEntry = {
 
 export const compositionId = (sceneId: string, format: Format, lang: Lang): string => `${sceneId}-${format}-${lang}`;
 
-/** One composition per format and language, formats first (16x9-pt, 16x9-en, 4x5-pt, 4x5-en). */
+/**
+ * One composition per format and language, formats first (16x9-pt, 16x9-en,
+ * 4x5-pt, 4x5-en); a neutral scene has one per format, `<scene>-<format>`,
+ * whose `lang` is `en` (its words are English) and which the scene ignores.
+ */
 export const compositionsOf = (scene: CatalogueScene): CompositionEntry[] =>
   scene.formats.flatMap((format) =>
-    scene.languages.map((lang) => ({
-      id: compositionId(scene.id, format, lang),
+    (isNeutral(scene) ? ["en" as const] : scene.languages).map((lang) => ({
+      id: isNeutral(scene) ? `${scene.id}-${format}` : compositionId(scene.id, format, lang),
       folder: scene.id,
       format,
       lang,
@@ -67,10 +81,22 @@ export const compositionsOf = (scene: CatalogueScene): CompositionEntry[] =>
 
 const isList = (value: unknown): value is readonly string[] => Array.isArray(value);
 
-/** Same keys at every level in every language, no empty string or list, an https source per language. */
+/**
+ * Same keys at every level in every language, no empty string or list, an
+ * https source per language. A neutral scene instead declares `en` only, has
+ * one `en` table and no `pt` table, and an https source for both pages.
+ */
 export const checkText = (scene: CatalogueScene): string[] => {
   const problems: string[] = [];
-  const tables = scene.languages.map((lang) => ({ lang, table: scene.text[lang] }));
+  const neutral = isNeutral(scene);
+  const text = scene.text as Partial<Record<Lang, TextTable>>;
+  if (neutral) {
+    if (text.pt !== undefined) problems.push(`${scene.id}: a neutral scene has no pt text table`);
+    if (scene.languages.length !== 1 || scene.languages[0] !== "en") {
+      problems.push(`${scene.id}: a neutral scene declares en only (found ${JSON.stringify(scene.languages)})`);
+    }
+  }
+  const tables = (neutral ? ["en" as const] : scene.languages).map((lang) => ({ lang, table: text[lang] as TextTable }));
 
   for (const { lang, table } of tables) {
     if (table === undefined) problems.push(`${scene.id}: ${lang} has no text table`);
@@ -111,8 +137,9 @@ export const checkText = (scene: CatalogueScene): string[] => {
     for (const key of [...keys].sort()) compare(key, tables.map(({ lang, table }) => ({ lang, value: table[key] })));
   }
 
-  for (const lang of scene.languages) {
-    const source = scene.sources[lang];
+  // A neutral scene's one video serves both pages, so it needs both sources.
+  for (const lang of neutral ? (["pt", "en"] as const) : scene.languages) {
+    const source = (scene.sources as Partial<Record<Lang, string>>)[lang];
     if (typeof source !== "string" || !source.startsWith("https://")) {
       problems.push(`${scene.id}: ${lang} source article URL must start with https:// (found ${JSON.stringify(source)})`);
     }
@@ -157,6 +184,7 @@ export const checkTimeline = (scene: CatalogueScene, readingHold: number = token
     });
     return [...problems, ...checkFlow(id, scene.timeline)];
   }
+  if (scene.kind === "takes") return [...problems, ...checkTakes(scene, readingHold)];
   const legacy = scene.timeline;
   for (const [name, transition] of Object.entries(legacy.transitions)) {
     const fires = legacy.fires[name] ?? [];

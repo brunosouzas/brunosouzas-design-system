@@ -318,3 +318,46 @@ export const stageRingRadii = (width: number, height: number, values: StageRingV
   }
   return radii;
 };
+
+// ---------------------------------------------------------------- dashed motion path
+
+/** A frame range `[from, to]`, `from` before `to`. */
+const checkRange = (name: string, range: readonly [number, number]) => {
+  if (!Array.isArray(range) || range.length !== 2 || !range.every(Number.isFinite) || range[1] <= range[0]) {
+    throw new RangeError(`motionPathAt: ${name} must be two finite frames, the first before the second, found ${JSON.stringify(range)}`);
+  }
+};
+
+/**
+ * Opacity of a dashed motion path at `frame` (spec motion-components, "Dashed
+ * motion path"; change scene-takes-infrastructure): 0 before
+ * `fadeIn`, rising linearly to 1 over it, then falling linearly to 0 over the
+ * optional `fadeOut`, which must start at or after `fadeIn` ends. A scene feeds
+ * it any frame (a rewind feeds its object frame), so the component reads none.
+ *
+ * Throws a RangeError naming `frame`, `fadeIn` or `fadeOut` when one is not finite or not in order.
+ */
+export const motionPathAt = (frame: number, fadeIn: readonly [number, number], fadeOut?: readonly [number, number]): number => {
+  if (typeof frame !== "number" || !Number.isFinite(frame)) throw new RangeError(`motionPathAt: frame must be a finite number, found ${String(frame)}`);
+  checkRange("fadeIn", fadeIn);
+  if (fadeOut !== undefined) {
+    checkRange("fadeOut", fadeOut);
+    if (fadeOut[0] < fadeIn[1]) throw new RangeError(`motionPathAt: fadeOut must start at or after fadeIn ends (${fadeIn[1]}), found ${JSON.stringify(fadeOut)}`);
+  }
+  const rise = interpolate(frame, [fadeIn[0], fadeIn[1]], [0, 1], clamp);
+  return fadeOut === undefined ? rise : Math.min(rise, interpolate(frame, [fadeOut[0], fadeOut[1]], [1, 0], clamp));
+};
+
+/** What `MotionPath` draws: nothing at opacity 0, else the path in the `scene.path*` tokens' dash. */
+export const motionPathDrawing = (d: string, opacity: number) =>
+  opacity <= 0
+    ? null
+    : {
+        d,
+        opacity,
+        fill: "none",
+        stroke: tokens.scene.pathColor,
+        strokeWidth: tokens.scene.pathWidth,
+        strokeDasharray: `${tokens.scene.pathDash} ${tokens.scene.pathGap}`,
+        strokeLinecap: "round" as const,
+      };

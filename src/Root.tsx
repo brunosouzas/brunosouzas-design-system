@@ -1,5 +1,6 @@
 // Remotion Studio root: registers every scene of the catalogue as one
-// composition per format and language, in a folder named after the scene.
+// composition per format and language (one per format for a neutral scene), in
+// a folder named after the scene.
 // The ids, sizes and frame rate come from the scene data (src/scenes/catalogue.ts);
 // this file only maps each scene id to its React component.
 // Scene.tsx and scene.ts share a folder (design §9); the explicit extensions keep
