@@ -1,0 +1,7 @@
+# SHA-256 of circuit-breaker-states stills at 655525d (0.12.0), rendered on Bruno's MacBook Air (Apple M5), Remotion 4.0.538, 2026-11-12.
+# Frame 55 is the last frame before the first call (56), so the last frame with no HTTP code on screen; it must stay byte-identical.
+# Command: npx remotion still src/index.ts <id> out/stills/<id>/55.png --frame=55 --overwrite --log=error. A re-render (16x9-pt) gave the same hash.
+63363d90ef0b29c3efaf750b95683221978e1cf09fe2c00a5f3815d555a0b01f  circuit-breaker-states-16x9-en/55.png
+de6bc204deba82636317d71b1ffcb771b890dc0a76c9a32c8cf7f822520b2226  circuit-breaker-states-16x9-pt/55.png
+a9a2096815e8a568f23305b4d433a77fffc7704d239329bdd2b73e75c2e5a89e  circuit-breaker-states-4x5-en/55.png
+6def660a9037dbe6699722c00d6eab3445ba9c2f2403ad7fc07583d2c1addbea  circuit-breaker-states-4x5-pt/55.png

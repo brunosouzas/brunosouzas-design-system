@@ -1,0 +1,166 @@
+## MODIFIED Requirements
+
+### Requirement: Circuit-breaker state machine scene
+The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HALF_OPEN of the article "Circuit Breaker in MuleSoft" (`https://brunosouzas.com/blog/circuit-breaker-in-mulesoft`, Portuguese at `https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft`) through one loop, with the article's diagram labels, its three state sentences and the HTTP codes of its calls. The OPEN block carries the countdown. Its timing is listed frame by frame in the design.
+
+#### Scenario: Timing equals the approved pilot
+- **WHEN** the scene's timeline is compared with the pilot timeline table in the design
+- **THEN** intro end, start-marker fade, block pop-in frames, rings fade, the ranges and events of phases 1 to 5, every transition fire, every draw and pill frame, and the slot counts are equal to the pilot's; duration, outro and phase 6 are the healthy end's
+
+#### Scenario: Timing equals the healthy-end timeline
+- **WHEN** the scene's timeline is compared with the healthy-end timeline table in the design
+- **THEN** duration (1150), intro end, outro frame (1060), start-marker fade, block pop-in frames, rings fade, every phase range, every event, every transition fire, every draw and pill frame, and the slot counts are equal
+
+#### Scenario: Phase and transition order
+- **WHEN** the scene's timeline is read
+- **THEN** the phases run CLOSED, OPEN, HALF_OPEN, OPEN, HALF_OPEN, CLOSED, and the transitions fire in the order CLOSED to OPEN, OPEN to HALF_OPEN, HALF_OPEN to OPEN, OPEN to HALF_OPEN, HALF_OPEN to CLOSED
+
+#### Scenario: Failure crosses the threshold before OPEN
+- **WHEN** the first CLOSED phase's call results are read
+- **THEN** they contain both `ok` and `fail` results, the last results are `fail`, and the CLOSED to OPEN transition fires after the last of them
+
+#### Scenario: The failed test reopens, the successful test closes
+- **WHEN** the two HALF_OPEN phases are read
+- **THEN** the first ends with a `fail` result followed by the HALF_OPEN to OPEN transition, and the second holds only `ok` results followed by the HALF_OPEN to CLOSED transition
+
+#### Scenario: Caption follows the active state
+- **WHEN** a still is taken during each phase
+- **THEN** the caption shows the active state's name and its sentence from the article, in the composition's language
+
+#### Scenario: Caption outside phases
+- **WHEN** the frame is before the first phase, or between two phases, or in the outro
+- **THEN** there is no caption before the first phase; between phases and in the outro the caption of the latest phase that started stays
+
+### Requirement: State-machine and flow catalogue compatibility
+The catalogue SHALL register both state-machine and message-flow scenes through the same composition, text, source and phase-range contract, without requiring flow nodes to be active states or hold call slots. The circuit-breaker scene SHALL change only as its own requirements state; the pub-sub scene's data, compositions, frame behaviour, pinned timing and tests SHALL remain unchanged, except assertions listing every registered scene, which SHALL list both in registration order.
+
+#### Scenario: Both kinds in the catalogue
+- **GIVEN** the circuit-breaker and pub-sub scenes
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** both pass and eight unique compositions are returned, circuit-breaker first, pub-sub second; the pub-sub test suite and its pinned timeline pass without edits
+
+#### Scenario: Shared checks still reject a broken flow
+- **GIVEN** a pub-sub fixture with a duplicate composition id, a missing English text key or a non-HTTPS source
+- **WHEN** catalogue validation runs on each fixture
+- **THEN** each is rejected by the corresponding existing shared rule with the scene and offending entry named
+
+## ADDED Requirements
+
+### Requirement: Circuit-breaker existing elements before the healthy end
+Up to frame 819, every element `circuit-breaker-states` had in 0.12.0 (blocks, call squares, countdown, arrows, travelling tokens, transition pills, caption) SHALL keep its 0.12.0 frame logic; only the code tags are added. Frames 0 to 55, before the first call, SHALL be byte-identical to 0.12.0: their stills SHALL have the SHA-256 recorded in the change folder (`stills-0.12.0.sha256`, frame 55).
+
+#### Scenario: Frame logic equals 0.12.0 before frame 820
+- **GIVEN** the 0.12.0 timeline, pinned in the test as a literal copy
+- **WHEN** every frame from 0 to 819 is evaluated for each state and each transition
+- **THEN** block appearance, block contents, caption, arrow, pill pop-in and travelling-token positions equal those of the 0.12.0 timeline at the same frame
+
+#### Scenario: Earlier frames differ on a changed timeline
+- **GIVEN** a copy of the scene's timeline whose HALF_OPEN to CLOSED fire moves from 790 to 791
+- **WHEN** the same frame-by-frame comparison runs against it
+- **THEN** the comparison fails, and its first difference is at frame 772, where the HALF_OPEN to CLOSED arrow starts drawing (fire minus `arrowLead` 18); the failure names the frame and the transition
+
+#### Scenario: No code before the first call
+- **WHEN** the code tags of the three states are read at every frame from 0 to 55
+- **THEN** none is shown
+
+#### Scenario: Unchanged stills before the first call (local)
+- **GIVEN** `stills-0.12.0.sha256` (frame 55 of the four compositions, rendered at 655525d)
+- **WHEN** frame 55 is rendered at the change's head on the same machine and the SHA-256 are compared
+- **THEN** all four pairs are equal
+
+### Requirement: Circuit-breaker call codes
+Each state block SHALL carry a code tag showing the HTTP code of its latest call: `200` for `ok`, `502` for `fail`, `503` for `blocked`, the same in `pt` and `en`, kept in the text table under `codes`. The tag pops in on each call's frame and takes its block's opacity and scale; it is hidden while the block's latest phase has no call yet. The call squares and their glyphs do not change.
+
+#### Scenario: Codes through the loop
+- **WHEN** the code tag is read at frames 56, 90, 175, 262, 424, 458, 560, 680 and 834
+- **THEN** it is, in order: CLOSED `200`, CLOSED `502`, CLOSED `502`, OPEN `503`, HALF_OPEN `200`, HALF_OPEN `502`, OPEN `503`, HALF_OPEN `200`, CLOSED `200`
+
+#### Scenario: The tag restarts with a new phase
+- **WHEN** the OPEN tag is read at 544, 545, 559 and 560, and the CLOSED tag at 819, 820, 833 and 834
+- **THEN** OPEN shows `503` at 544, no tag at 545 and 559, and `503` at 560; CLOSED shows `502` at 819, no tag at 820 and 833, and `200` at 834
+
+#### Scenario: Codes equal in both languages
+- **WHEN** the text tables are read
+- **THEN** `codes` is `{ ok: "200", fail: "502", blocked: "503" }` in both `pt` and `en`
+
+#### Scenario: A missing code fails the catalogue
+- **GIVEN** a copy of the scene whose `en` text table lacks `codes.blocked`
+- **WHEN** the catalogue checks run
+- **THEN** they fail and name the scene, the language `en` and the key path `codes.blocked`
+
+### Requirement: Circuit-breaker code tag look and place
+A code tag SHALL be drawn as a pill (`radius.pill`, `outline.small` ink outline, `shadow.small`) with the call square's fill and glyph colour for its kind, its code in `font.mono` bold at the layout's pill size, centred on its block's top border at the per-format position in the design, clear of the state names, call squares, arrows, transition pills, travelling tokens, the countdown and the caption.
+
+#### Scenario: Tag colours follow the call kind
+- **WHEN** the tag's look is read for `ok`, `fail` and `blocked`
+- **THEN** its fill and text colour equal the call square's fill and glyph colour for the same kind: white with ink, `color.state.failure` with white, ink with white
+
+#### Scenario: Tags clear of other elements (local)
+- **WHEN** the stills at 175, 340, 458, 586, 740 and 1149 are reviewed in all four compositions
+- **THEN** every tag is fully visible and readable, inside the frame, and overlaps no state name, call square, arrow, transition pill, travelling token, countdown or caption
+
+### Requirement: Circuit-breaker healthy end
+After HALF_OPEN returns to CLOSED, the scene SHALL show the circuit healthy: the final CLOSED phase runs from frame 820 to 1140 and holds eight `ok` calls, one every 26 frames from 834 to 1016, each tagged `200`, and nothing else; no transition fires after 790. From the phase start to the outro (frame 1060) is 240 frames, 8.0 s, and the eight CLOSED slots end full of `ok` results.
+
+#### Scenario: Eight ok calls over eight seconds
+- **WHEN** the final CLOSED phase is read
+- **THEN** it is `[820, 1140]`, its events are `ok` at 834, 860, 886, 912, 938, 964, 990 and 1016, and the outro is 240 frames after its start
+
+#### Scenario: Each healthy call comes back 200
+- **WHEN** the CLOSED tag is read at each of those eight frames
+- **THEN** it shows `200` and its pop-in starts at that frame
+
+#### Scenario: Healthy end has no failure
+- **WHEN** every event and fire at or after frame 791 is listed
+- **THEN** every event is `ok`, there is no `fail` or `blocked` result, and no transition fires; the last fire of the scene is HALF_OPEN to CLOSED at 790
+
+#### Scenario: The window fills with ok
+- **WHEN** the CLOSED block's contents are read at frames 1015, 1016 and 1149
+- **THEN** at 1015 it holds seven `ok` and one `empty` slot, and at 1016 and 1149 eight `ok` slots
+
+### Requirement: Circuit-breaker end with only CLOSED lit
+From frame 850 (30 frames into the final CLOSED phase) to the last frame, CLOSED SHALL be in focus (opacity factor 1, scale `motion.focusScale`) while OPEN and HALF_OPEN stay on screen dimmed (opacity factor `motion.dimOpacity`, scale 1), with their code tags, the same focus and dimming the scene applies to inactive states during the run, with no change at the outro.
+
+#### Scenario: Only CLOSED lit through the last frame
+- **WHEN** the focus factors are read at frames 850, 1059, 1060, 1100 and 1149
+- **THEN** CLOSED is within 0.01 of opacity 1 and of `motion.focusScale`, and OPEN and HALF_OPEN are within 0.01 of `motion.dimOpacity` and of scale 1
+
+#### Scenario: No jump at the outro
+- **WHEN** the focus factors of each state at frames 1059 and 1060 are compared
+- **THEN** they are equal
+
+#### Scenario: The three states stay on screen
+- **WHEN** the block appearance of each state is read at frame 1149
+- **THEN** every block's opacity is above 0 and none is removed: CLOSED at 1, OPEN and HALF_OPEN at `motion.dimOpacity`, and each tag has its block's opacity
+
+### Requirement: Circuit-breaker final still
+Frames 1060 to 1149 (90 frames, 3 s) of every composition SHALL be identical: CLOSED lit with eight `ok` results and tag `200`; OPEN dimmed with two `blocked` results, two `empty` slots, an empty countdown and tag `503`; HALF_OPEN dimmed with three `ok` results and tag `200`; the four arrows and pills drawn; no travelling token; the CLOSED caption at full opacity.
+
+#### Scenario: Frame state holds
+- **WHEN** every frame from 1060 to 1149 is evaluated
+- **THEN** block appearance, block contents, code tags, caption, arrows, pills and token positions equal those at frame 1149 (numbers within 0.000001), and the last call's pop-ins at 1060 are within 0.00001 of 1
+
+#### Scenario: Identical final stills (local)
+- **WHEN** frames 1060 and 1149 of each composition are rendered and their SHA-256 compared
+- **THEN** the two are equal in all four compositions
+
+#### Scenario: Movement after the outro is refused
+- **GIVEN** a copy of the scene with an extra `ok` event at 1060 in the final CLOSED phase
+- **WHEN** the catalogue checks run on it
+- **THEN** they report the event at frame 1060 at or after the outro
+
+### Requirement: Circuit-breaker final caption
+From frame 830 to the last frame the caption SHALL be the CLOSED pill and the article's CLOSED sentence (EN and PT L42) in the composition's language: EN "Calls pass through normally; the circuit watches the outcomes.", PT "Chamadas passam normalmente; o circuito observa os resultados." The text table SHALL equal 0.12.0's plus the `codes` key, and nothing else.
+
+#### Scenario: Final caption per language
+- **WHEN** the caption is read at frames 830, 1060 and 1149 in `en` and in `pt`
+- **THEN** its state is CLOSED at opacity 1, and its sentence is the EN or the PT string above
+
+#### Scenario: Caption at the start of the final CLOSED phase
+- **WHEN** the caption is read at frames 820 and 830
+- **THEN** at 820 it is CLOSED at opacity 0, starting its fade, and at 830 CLOSED at opacity 1
+
+#### Scenario: Text table changes only by the codes
+- **GIVEN** the 0.12.0 text table, pinned in the test as a literal copy
+- **WHEN** the scene's text table without its `codes` key is compared with it
+- **THEN** both languages are deeply equal, and `codes` is the only key added
