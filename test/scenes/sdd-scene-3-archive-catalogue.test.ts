@@ -37,14 +37,14 @@ describe("SDD archive registration", () => {
     expect(scene.text).toBe(text);
   });
 
-  test("One composition, after this branch's earlier scenes", () => {
+  test("One composition, after the files scene", () => {
     const entries = scenes.flatMap(compositionsOf);
-    const before = scenes.slice(0, 3).flatMap(compositionsOf);
-    expect(scenes.slice(0, 3).map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay"]);
-    expect(entries.slice(0, 9)).toEqual(before);
-    expect(entries[8].id).toBe("sdd-request-relay-16x9");
-    expect(entries[9]).toEqual({ id: "sdd-scene-3-archive-16x9", folder: ID, format: "16x9", lang: "en", width: 1920, height: 1080, fps: 30, durationInFrames: 600 });
-    expect(entries[10].id).toBe("circuit-breaker-topology-16x9");
+    const before = scenes.slice(0, 4).flatMap(compositionsOf);
+    expect(scenes.slice(0, 4).map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay", "sdd-scene-2-files"]);
+    expect(entries.slice(0, 10)).toEqual(before);
+    expect(entries[9].id).toBe("sdd-scene-2-files-16x9");
+    expect(entries[10]).toEqual({ id: "sdd-scene-3-archive-16x9", folder: ID, format: "16x9", lang: "en", width: 1920, height: 1080, fps: 30, durationInFrames: 600 });
+    expect(entries[11].id).toBe("circuit-breaker-topology-16x9");
     expect(new Set(entries.map((e) => e.id)).size).toBe(entries.length);
   });
 
@@ -62,7 +62,7 @@ describe("Existing scenes unchanged by the archive scene", () => {
   test("Other scenes' code untouched", () => {
     // Their test files run in the same `npm test`; the `git diff` half of the scenario is a local check recorded
     // in the pull request (CI checks out one commit).
-    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay", ID, "circuit-breaker-topology"]);
+    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay", "sdd-scene-2-files", ID, "circuit-breaker-topology"]);
   });
 });
 
