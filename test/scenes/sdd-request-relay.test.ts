@@ -7,9 +7,10 @@
 // of src/scenes/sdd-request-relay/timeline.ts, so a retiming of the scene or of
 // the motion tokens fails here first.
 import { describe, expect, test } from "vitest";
+import { pointAlong } from "../../src/brand/motion";
 import { LEAVE_FRAMES } from "../../src/scenes/takes-kind";
 import { frameAt, objectFrame, type RelayState } from "../../src/scenes/sdd-request-relay/frame";
-import { CAST_SCALE, CAST_X, DESK, EMOTES, GROUND, HELD, aboveChaves, inScreen } from "../../src/scenes/sdd-request-relay/layout";
+import { CAST_SCALE, CAST_X, DESK, EMOTES, GROUND, HELD, ROUTES, aboveChaves, inScreen } from "../../src/scenes/sdd-request-relay/layout";
 import { STAGE_LAYERS, balaoParams, chavesParams, stageOf, visorParams } from "../../src/scenes/sdd-request-relay/stage";
 import { makeTimeline, timeline, type RelayTimeline } from "../../src/scenes/sdd-request-relay/timeline";
 import { textsOf } from "./topology-tree";
@@ -253,6 +254,7 @@ describe("SDD relay error and fright", () => {
     expect(STATES[310].failureArrow).toBe(1);
     expect(STATES[315].balao).toMatchObject({ expression: "idle", tilt: 0, squash: 1 });
     expect(STATES[316].balao).toMatchObject({ expression: "failed", tilt: -5 });
+    expect(STATES[316].balao!.squash).toBeLessThan(1);
     expect(STATES[330].emote!.kind).toBe("problem");
     expect(STATES[360].emote).toBeNull();
     expect(timeline.emotes[0].leaveAt! + LEAVE_FRAMES).toBeLessThanOrEqual(366);
@@ -317,6 +319,9 @@ describe("SDD relay carry and answer", () => {
     expect(STATES[712].sheet).toMatchObject({ place: "trip" });
     expect(STATES[712].sheet!.at.x).toBeCloseTo(DESK.x);
     const mid = STATES[723].sheet!.at;
+    const want = pointAlong(ROUTES.carry, 0.5)!;
+    expect(mid.x).toBeCloseTo(want.x);
+    expect(mid.y).toBeCloseTo(want.y);
     expect(mid.x).toBeLessThan(DESK.x);
     expect(mid.x).toBeGreaterThan(HELD.x);
     expect(STATES[733].chaves!.holdsSheet).toBe(false);

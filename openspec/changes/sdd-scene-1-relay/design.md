@@ -111,7 +111,7 @@ A take-1 change at frame *a* shows in reverse at the first rewind frame *f* with
 
 ### 2.8 Pop-ins and when an element is drawn
 
-As in the topology scene (its design §2.6): blocks pop with `blockPopIn` and badges with `pillPopIn` (`src/brand/motion.ts`); an element is drawn when its opacity is above 0 and its scale above 0.001, so an element popping at frame *a* first shows at *a* + 1; from *a* + `motion.fps` it is drawn exactly settled. A cast piece pops through `pose` (scale and opacity about its ground point); a piece without a `scale` parameter pops inside a group scaled about its anchor (§6.1). `leave(f, at)` (10 frames) multiplies the opacity of an element that leaves. Emotes pop with `emotePop` and leave with `leave`.
+As in the topology scene (its design §2.6): blocks pop with `blockPopIn` and badges with `pillPopIn` (`src/brand/motion.ts`); an element is drawn when its opacity is above 0 and its scale above 0.001, so an element popping at frame *a* first shows at *a* + 1; from *a* + `motion.fps` it is drawn exactly settled. A cast piece pops through `pose` (scale and opacity about its ground point); a piece without a `scale` parameter pops inside a group scaled about its anchor (§6.1). `leave(f, at)` (10 frames) multiplies the opacity of an element that leaves. Emotes pop with `emotePop` and leave with `leave`, with one exception: the `worked` emote never leaves (design §4, 950, "stays"), and the spec reads it as present from its own frame, not *a* + 1 (SCN-4 wants it settled well before the outro at 980 either way); `frame.ts` floors its scale at the piece's minimum instead of the true (zero) value `emotePop` gives at *a*, so the piece can still be drawn on that one frame.
 
 ### 2.9 The held sheet and its content
 
@@ -127,7 +127,7 @@ The scene's timeline type is `RelayTimeline = TakesTimeline & { … }` in the sc
 |---|---|
 | `acts`, `faces`, `emotes`, `trips`, `pops`, `fades`, `leaves`, `cues`, `rewind` (TakesTimeline) | §4; `faces` and `acts` include the reverse entries of §4.3 |
 | `actions` | the cast's action changes in real frames of take 1 and take 2: `{ actor, at, set }`, `set` a subset of `speaks`, `holdsStamp`, `facing`, `types`, `holdsSheet`, `points` (§4.2) |
-| `poses` | the fright: `{ actor: "balao", at: 316, tilt: -5, squash: -0.07 }` |
+| `fright` | Balão's fright pose: `{ actor: "balao", at: 316, tilt: -5, squash: -0.07 }` |
 
 Every change is also a `cues` entry or a trip end, so `checkHold` sees it. `makeTimeline(travel, fade)` builds it, so a change of `motion.travel` or `motion.fade` moves the arrivals and fades and fails the pinned beat-table test.
 
@@ -203,7 +203,7 @@ Every phase's `events` are the change frames of §4.2 that fall inside it. `rewi
 | 366 | Visor | face `failed` | L26, L122; choice q81 A |
 | 390 | rewind mark | pops (pill) | device |
 | 390–439 | stage | drawn from `o(f)`, take 1 backwards (§2.7, §4.3) | device |
-| 440 | badge | swap `1` → `2` (pill pop) | device |
+| 440 | badge | reads `2` instead of `1`; no fresh pop, the circle keeps the appear it already has from frame 20 | device |
 | 450 | rewind mark | leaves (gone 460) | device |
 | 456 … 610 | Balão, `?`, Chaves, screen, P1, P2 | as 56 … 210, + 400 | L20–L26, L32 |
 | 626 | Visor | act: `points` on | L32 |
@@ -233,7 +233,7 @@ Every phase's `events` are the change frames of §4.2 that fall inside it. `rewi
 
 **Faces:** Visor `done` 286, `failed` 366, `waiting` 702, `done` 950; Balão `failed` 316, `done` 836; plus the rewind's. **Emotes:** `problem` (Balão, 316, leaving 350); `worked` (Visor, 950, never leaving).
 
-**Pops:** `laptop` 4, `balao` 8, `chaves` 12, `visor` 16, `badge1` 20, `rewindMark` 390, `badge2` 440, `sheet` 626, `goMark` 836. **Fades:** `p1-t1` 56/118, `p2-t1` 142/204, `failureArrow` 300 (in only), `p1-t2` 456/518, `p2-t2` 542/604, `p4-carry` 712/734, `p4-return` 852/874 (in and out, F frames each). **Leaves:** `problem` 350, `rewindMark` 450.
+**Pops:** `laptop` 4, `balao` 8, `chaves` 12, `visor` 16, `badge1` 20, `rewindMark` 390, `badge2` 440 (data only, for the cue and phase tables; the badge keeps `badge1`'s appear and only its digit changes at 440, no fresh pop), `sheet` 626, `goMark` 836. **Fades:** `p1-t1` 56/118, `p2-t1` 142/204, `failureArrow` 300 (in only), `p1-t2` 456/518, `p2-t2` 542/604, `p4-carry` 712/734, `p4-return` 852/874 (in and out, F frames each). **Leaves:** `problem` 350, `rewindMark` 450.
 
 **Cues:** `requestLine` 142, 542; `codeLines1` 232 … 272; `sinks` 232 … 272 and their ends 242 … 282; `rows` 658 … 698; `checks` 760 … 800; `codeLines2` 902 … 942; `badgeSwap` 440; and every action frame of §4.2.
 

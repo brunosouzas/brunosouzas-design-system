@@ -9,7 +9,7 @@ import { describe, expect, test } from "vitest";
 import { checkCatalogue, checkTimeline, compositionsOf, type TakesSceneData } from "../../src/scenes/catalogue";
 import { findScene, scenes } from "../../src/scenes";
 import { sddRequestRelay as scene, text } from "../../src/scenes/sdd-request-relay/scene.ts";
-import { checkTakes } from "../../src/scenes/takes-kind";
+import { checkTakes, LEAVE_FRAMES } from "../../src/scenes/takes-kind";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 const ID = "sdd-request-relay";
@@ -72,8 +72,9 @@ describe("SDD relay cast timing", () => {
     expect(t.faces).toContainEqual({ actor: "balao", at: 316, expression: "failed" });
     expect(t.emotes).toContainEqual({ actor: "balao", kind: "problem", at: 316, leaveAt: 350 });
     expect(t.faces).toContainEqual({ actor: "visor", at: 366, expression: "failed" });
-    // The emote is gone (leave 350 + 10) before Visor's face changes.
-    expect(350 + 10).toBeLessThanOrEqual(366);
+    // The emote is gone (its leaveAt + LEAVE_FRAMES) before Visor's face changes.
+    const problem = t.emotes.find((e) => e.actor === "balao" && e.kind === "problem")!;
+    expect(problem.leaveAt! + LEAVE_FRAMES).toBeLessThanOrEqual(366);
   });
 });
 

@@ -8,8 +8,10 @@ import {
   BADGE, BODY_BOXES, CAST_SCALE, CAST_X, CODE_LINE_SHAPES, DESK, EMOTES, FAILURE_ARROW, GO_MARK, GROUND, GUIDES, HELD, KEYBOARD_LOCAL, LABEL, PAGE, QUESTION_BARS,
   REQUEST_LINE, REWIND_MARK, RINGS_CENTRE, ROUTES, SCREEN, STAGE, TEXT_SIZE, TOKEN_SCALE,
 } from "../../src/scenes/sdd-request-relay/layout";
+import { ABOVE_ORDER, BELOW_ORDER, CAST_ORDER, SHEET_ORDER } from "../../src/scenes/sdd-request-relay/stage";
 import type { Box } from "./text-measure";
 import { CAST_BOXES, STAMP_ACT, exemptAt, frameOf, itemsAt, moveElement, resizeText, textsAt, type Frame } from "./relay-tree";
+import { walk } from "./topology-tree";
 
 const FRAMES: Frame[] = Array.from({ length: 1080 }, (_, f) => frameOf(f));
 const MARGIN = 12;
@@ -31,7 +33,7 @@ describe("SDD relay layout", () => {
     expect(near(DESK.x, 579.5) && near(DESK.y, 36.3)).toBe(true);
     expect(near(HELD.x, 221.9) && near(HELD.y, 223.3)).toBe(true);
     expect(LABEL).toEqual({ width: 206, height: 44 });
-    expect(GO_MARK).toEqual({ r: 24, scale: 1.25, dx: 85.5, dy: 183.35 });
+    expect(GO_MARK).toEqual({ r: 24, scale: 1.25, dx: 58.9, dy: 183.35 });
     expect(TOKEN_SCALE).toBe(0.95);
     expect(FAILURE_ARROW).toEqual({ from: [588, 266], to: [124, 284], controls: [[500, 80], [160, 100]], kind: "failure" });
     expect(EMOTES.problem.scale).toBe(0.8);
@@ -138,5 +140,61 @@ describe("SDD relay text placement", () => {
     const moved = FRAMES.slice(600, 700).map((f) => ({ ...f, above: moveElement(f.above, "badge", 665 - 912, 40 - 52) }));
     const problems = placementProblems(moved);
     expect(problems[0]).toMatch(/^frame 656: (label crosses badge|badge crosses label)/);
+  });
+});
+
+// ---------------------------------------------------------------- layer order and the hand-over (design §6.2, §2.9)
+
+describe("SDD relay layer order", () => {
+  test("Layer order", () => {
+    // Within each layer's bodies group and its words group, the elements follow the layer's declared order
+    // (design §6.2, SCN-6): below (failure-arrow, keyboard, screen), cast (visor, chaves, balao -- Balão last, so
+    // its stamp is over the held sheet), sheet (sheet, label, go-mark), above (badge, rewind-mark, emote).
+    const order = (group: unknown) =>
+      [...new Set(walk(group as never).flatMap((w) => (w.node.attrs["data-element"] === undefined ? [] : [String(w.node.attrs["data-element"])])))];
+    const sortedBy = (names: string[], list: readonly string[]) =>
+      expect(names.map((n) => list.indexOf(n))).toEqual([...names.map((n) => list.indexOf(n))].sort((a, b) => a - b));
+    for (const frame of [305, 395, 1000]) {
+      const f = frameOf(frame);
+      for (const group of f.below.children) sortedBy(order(group), BELOW_ORDER);
+      for (const group of f.cast.children) sortedBy(order(group), CAST_ORDER);
+      for (const group of f.sheet.children) sortedBy(order(group), SHEET_ORDER);
+      for (const group of f.above.children) sortedBy(order(group), ABOVE_ORDER);
+    }
+    // Every element named in the constants actually appears at least once across the frames checked.
+    const seen = new Set<string>();
+    for (const frame of [305, 395, 1000]) {
+      const f = frameOf(frame);
+      for (const layer of [f.below, f.cast, f.sheet, f.above]) for (const n of order(layer)) seen.add(n);
+    }
+    for (const n of [...BELOW_ORDER, ...CAST_ORDER, ...SHEET_ORDER, ...ABOVE_ORDER]) expect(seen.has(n), n).toBe(true);
+  });
+});
+
+describe("SDD relay hand-over", () => {
+  /** Every paint attribute (fill, stroke and its width/join/dasharray) under a node, depth first. */
+  const paints = (node: unknown): string[] => {
+    const n = node as { attrs: Record<string, unknown>; children: unknown[] };
+    const own = ["fill", "stroke", "stroke-width", "stroke-linejoin", "stroke-dasharray"]
+      .map((k) => n.attrs[k]).filter((v) => v !== undefined).map(String);
+    return [...own, ...n.children.flatMap((c) => (typeof c === "string" ? [] : paints(c)))];
+  };
+  /** The held sheet's node, inside Chaves's own piece tree. */
+  const heldOf = (f: Frame) => {
+    for (const w of walk(f.cast as never)) if (w.element === "chaves" && w.node.tag === "g" && w.node.children.length > 0) return w.node;
+    throw new Error("no chaves node");
+  };
+  test("Seamless hand-over", () => {
+    // At 734 and 852 the free sheet (just before/after Chaves holds it) and the held sheet paint the same
+    // marks (design §2.9: "no jump"), so a drift in either drawing path is caught here, not just visually.
+    // Chaves's own tree also paints his body (not compared); every colour the free sheet's marks use is
+    // still present once he holds it, so none of its paint (ink stroke, grey bars, green checks) is dropped.
+    for (const [free, held] of [[733, 734], [852, 851]] as const) {
+      const freeSheet = frameOf(free).sheet;
+      const chavesTree = heldOf(frameOf(held));
+      const freePaints = new Set([...paints(freeSheet)].filter((p) => p.startsWith("#")));
+      const heldPaints = new Set([...paints(chavesTree)].filter((p) => p.startsWith("#")));
+      for (const p of freePaints) expect(heldPaints.has(p), p).toBe(true);
+    }
   });
 });

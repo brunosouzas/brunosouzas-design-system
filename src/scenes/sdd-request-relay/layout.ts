@@ -50,7 +50,7 @@ export const HELD: Point = { x: CAST_X.chaves + CAST_SCALE * (-118 - PAGE.width)
 export const LABEL = { width: 206, height: 44 } as const;
 export const labelCentre = (sheet: Point): Point => ({ x: sheet.x + PAGE_STAGE.width / 2, y: sheet.y });
 /** The `GO` mark: a `stamp` of radius 24 scaled 1.25, so its word is 33.75 units. */
-export const GO_MARK = { r: 24, scale: 1.25, dx: 85.5, dy: 183.35 } as const;
+export const GO_MARK = { r: 24, scale: 1.25, dx: 58.9, dy: 183.35 } as const;
 export const goCentre = (sheet: Point): Point => ({ x: sheet.x + GO_MARK.dx, y: sheet.y + GO_MARK.dy });
 /** Row k's (1–6) question mark on a sheet whose top-left is `sheet`. */
 export const rowMark = (sheet: Point, k: number): Point => ({ x: sheet.x + CAST_SCALE * 30, y: sheet.y + CAST_SCALE * (PAGE.top + 11 + PAGE.step * (k - 1)) });

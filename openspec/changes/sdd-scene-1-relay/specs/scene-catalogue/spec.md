@@ -47,9 +47,9 @@ The scene SHALL draw, left to right on one ground line (stage y 476) at one scal
 - **THEN** each drawn cast piece has `scale` 0.95 and ground y 476 (a pop-in scales it through `pose` about that point), Balão x 104 facing right, Chaves x 505, Visor x 852 facing left, and none has a fill or colour parameter
 
 #### Scenario: Emotes beside the head
-- **GIVEN** frames 330 and 1000
+- **GIVEN** frames 347 and 1000
 - **WHEN** the emote is read
-- **THEN** at 330 it is `problem` at (214.2, 286) at scale 0.8 and at 1000 `worked` at (800, 292) at scale 0.75, and no other emote is drawn at either frame
+- **THEN** at 347 it is `problem` at (214.2, 286) at scale 0.8 and at 1000 `worked` at (800, 292) at scale 0.75, and no other emote is drawn at either frame
 
 ### Requirement: SDD relay cast timing
 The `takes` kind SHALL accept `balao` and `chaves` as actors, with the same cast checks as the pillar cast. The scene's acts SHALL NOT overlap, every emote SHALL enter on its actor's expression change, and the `problem` emote SHALL be gone before Visor's face turns `failed`.
