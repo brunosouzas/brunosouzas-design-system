@@ -93,9 +93,21 @@ const differs = (t: FilesTimeline): string | null => {
   if (Object.keys(t.fades).length !== Object.keys(BEATS.fades).length) return "fade count";
   if (!eq(t.leaves, BEATS.leaves)) return "leaves";
   for (const [name, frames] of Object.entries(BEATS.cues)) if (!eq(t.cues[name], frames)) return `cue ${name}`;
+  if (!eq(Object.keys(t.cues).sort(), [...Object.keys(BEATS.cues), "actions"].sort())) return "cue keys";
   if (!eq(t.cues.actions, [...t.actions].map((a) => a.at))) return "cue actions";
   const rows = [...t.rows].map((r) => [r.file, r.row, r.at, r.to]).sort((a, b) => (a[2] as number) - (b[2] as number));
   if (!eq(rows, [...BEATS.rows].sort((a, b) => a[2] - b[2]))) return "rows";
+  // Each phase's events are exactly the change frames of §4.2 inside it.
+  const changes = [
+    ...Object.values(BEATS.pops), ...Object.values(BEATS.fades).flatMap(([i, o]) => [i, i + F, o, o + F]),
+    ...Object.values(BEATS.leaves).flatMap((at) => [at, at + 10]), ...BEATS.trips.flatMap(([, from]) => [from, from + T]),
+    ...Object.values(BEATS.cues).flat(), ...BEATS.actions.map((a) => a[1]), ...BEATS.faces.map((f) => f[1]), ...BEATS.emotes.map((e) => e[2]),
+    ...BEATS.acts.flatMap((a) => [a[1], a[2]]),
+  ];
+  for (const p of t.phases) {
+    const want = [...new Set(changes.filter((at) => at >= p.from && at <= p.to))].sort((a, b) => a - b);
+    if (!eq([...new Set(p.events.map((e) => e.at))].sort((a, b) => a - b), want)) return `events of ${p.id}`;
+  }
   return null;
 };
 
@@ -112,6 +124,9 @@ describe("SDD files beats and timing", () => {
   test("Files travel token changed", () => {
     expect(differs(makeTimeline(20))).toBe("trip file-proposal");
     expect(differs(makeTimeline(22, 12))).toBe("fade goGuide");
+    // The pin also reads each phase's events: a stray event fails it.
+    const stray = { ...timeline, phases: timeline.phases.map((p) => (p.id === "init" ? { ...p, events: [...p.events, { id: "stray", at: 41 }] } : p)) };
+    expect(differs(stray)).toBe("events of init");
   });
 
   test("Files seeking in any order", () => {
@@ -210,6 +225,9 @@ describe("SDD files init and propose", () => {
     expect(STATES[141].folder!.opacity).toBeLessThan(1);
     expect(STATES[150].folder).toBeNull();
     expect(words(70)).toContain("openspec/");
+    // A file's name pill in flight stays inside the stage less 12 (its top is centre.y − 117 × scale; design §4.3).
+    // The layout test checks the drawn boxes of every flying name too (design §6.3 item 4).
+    for (let f = 96; f < 136; f++) for (const x of STATES[f].files.filter((y) => y.inFlight)) expect(x.centre.y - 117 * x.scale, `${x.id} at ${f}`).toBeGreaterThanOrEqual(12);
   });
 
   test("No file before propose", () => {
@@ -292,6 +310,10 @@ describe("SDD files fix and review round 2", () => {
     expect(rows(584, "spec")).toEqual(Array(5).fill("checked"));
     expect(rows(584, "tasks")).toEqual(["plain", "plain", "checked", "plain"]);
     expect(rows(584, "design")).toEqual(["plain", "plain", "plain"]);
+    // No row is flagged twice in the scene: the second review finds rows the first did not (design §2.3).
+    const flags = timeline.rows.filter((r) => r.to === "flagged").map((r) => `${r.file} ${r.row}`);
+    expect(new Set(flags).size).toBe(flags.length);
+    expect(flags).toHaveLength(6);
   });
 
   test("One NO-GO at a time", () => {

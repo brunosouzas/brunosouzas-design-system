@@ -14,6 +14,7 @@
 import { tokens } from "../../../tokens/generated/tokens";
 import type { CastExpression } from "../../pieces/index.ts";
 import type { SequenceDevice, SequenceTimeline } from "../sequence-kind";
+import { LEAVE_FRAMES } from "../takes-kind";
 
 /** The four files of the change, left to right (L89–L96). */
 export const FILES = ["proposal", "design", "tasks", "spec"] as const;
@@ -127,7 +128,7 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
   const changes = [
     ...Object.entries(pops).map(([id, at]) => ev(`pop-${id}`, at)),
     ...Object.entries(fades).flatMap(([id, f]) => [ev(`${id}-in`, f.in[0]), ev(`${id}-in-end`, f.in[1]), ev(`${id}-out`, f.out[0]), ev(`${id}-out-end`, f.out[1])]),
-    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + 10)]),
+    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + LEAVE_FRAMES)]),
     ...trips.flatMap((t) => [ev(`${t.id}-depart`, t.from), ev(`${t.id}-arrive`, t.to)]),
     ...Object.entries(cues).flatMap(([id, frames]) => frames.map((at, i) => ev(`${id}-${i}`, at))),
     ...faces.map((face) => ev(`face-${face.actor}-${face.expression}`, face.at)),

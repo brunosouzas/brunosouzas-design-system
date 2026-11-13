@@ -11,7 +11,7 @@ import {
 } from "../../src/scenes/sdd-scene-2-files/layout";
 import { ABOVE_ORDER, BELOW_ORDER, CAST_ORDER, FILES_ORDER, FOLDER_ORDER, VERDICTS_ORDER } from "../../src/scenes/sdd-scene-2-files/stage";
 import type { Box } from "./text-measure";
-import { CAST_BOXES, FRAMES, exemptAt, frameOf, inFlightAt, itemsAt, moveElement, resizeText, textsAt, type Frame } from "./files-tree";
+import { CAST_BOXES, FRAMES, exemptAt, frameOf, inFlightAt, itemsAt, moveElement, resizeText, scaleElement, textsAt, type Frame } from "./files-tree";
 import { walk } from "./topology-tree";
 
 const MARGIN = 12;
@@ -103,7 +103,9 @@ describe("SDD files text size", () => {
       'label-tasks "tasks.md" at 32 (minimum 33), first drawn at frame 130',
       'label-spec "spec.md" at 32 (minimum 33), first drawn at frame 136',
     ]);
-    const stamp = FRAMES.map((f) => ({ ...f, verdicts: resizeText(resizeText(f.verdicts, "no-go-1", 27 * 1.2 / 1.25), "no-go-2", 27 * 1.2 / 1.25) }));
+    // The stamp's group scaled 1.2 instead of 1.25, about its centre (the scenario's fixture).
+    const k = 1.2 / NO_GO.scale;
+    const stamp = FRAMES.map((f) => ({ ...f, verdicts: scaleElement(scaleElement(f.verdicts, "no-go-1", k, VERDICT_CENTRE), "no-go-2", k, VERDICT_CENTRE) }));
     expect(sizeProblems(stamp)).toEqual([
       'no-go-1 "NO-GO" at 32.4 (minimum 33), first drawn at frame 394',
       'no-go-2 "NO-GO" at 32.4 (minimum 33), first drawn at frame 544',
@@ -138,7 +140,7 @@ const placementProblems = (frames: readonly Frame[]): string[] => {
         file.rows.forEach((row, k) => {
           if (row !== "flagged") return;
           const mark = rowMark(FILE_SLOTS[file.id], k + 1), reach = ROW_MARK_RADIUS + (tokens.outline.small / 2) * FILE_SCALE;
-          if (Math.hypot(mark.x - stamp.round!.cx, mark.y - stamp.round!.cy) < stamp.round!.r + reach) problems.push(`frame ${f.frame}: ${stamp.name} covers the ? of ${file.id} row ${k + 1}`);
+          if (Math.hypot(mark.x - stamp.round!.cx, mark.y - stamp.round!.cy) <= stamp.round!.r + reach) problems.push(`frame ${f.frame}: ${stamp.name} covers the ? of ${file.id} row ${k + 1}`);
         });
       }
     }
@@ -162,6 +164,9 @@ describe("SDD files text placement", () => {
     const moved = FRAMES.map((f) => ({ ...f, verdicts: moveElement(moveElement(f.verdicts, "no-go-1", 0, -74), "no-go-2", 0, -74) }));
     const problems = placementProblems(moved);
     expect(problems[0]).toMatch(/^frame 394: (label-\w+ crosses no-go-1|no-go-1 crosses label-\w+)/);
+    // The stamp-against-`?` circle check fails too when a stamp reaches a flagged row.
+    const near = FRAMES.map((f) => ({ ...f, verdicts: moveElement(f.verdicts, "no-go-1", 20, -20) }));
+    expect(placementProblems(near)).toContain("frame 394: no-go-1 covers the ? of tasks row 3");
   });
 });
 

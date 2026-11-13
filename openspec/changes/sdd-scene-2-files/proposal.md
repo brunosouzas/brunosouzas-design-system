@@ -49,10 +49,10 @@ none
 
 ## Implicit requirements
 
-- **Errors and invalid input:** the catalogue rejects a broken entry through the shared rules and the `sequence` checks ("Sequence scene kind", "Sequence cast and hold"; "SDD files registration", scenario "Broken entry rejected"). The stills and render commands keep their failure policy ("SDD files stills through existing commands", "SDD files master and web copy").
+- **Errors and invalid input:** the catalogue rejects a broken entry through the shared rules and the `sequence` checks ("Sequence scene kind", "Sequence cast and hold"; "SDD files registration", scenario "Files broken entry rejected"). The stills and render commands keep their failure policy ("SDD files stills through existing commands", "SDD files master and web copy").
 - **Limits:** every settled word at an effective size of at least 33 stage units (11.7 px in the site's 341 px column; the `?` is a symbol and exempt, so is a word in motion); every word inside the frame and clear of the cast ("SDD files text size", "SDD files text placement"). The final hold is at least `motion.readingHold` frames.
 - **No error scenario, and why:** "Existing scenes unchanged by the files scene" is proved by the other scenes' tests and stills, which are themselves the boundary (any change fails them); "SDD files built from package pieces" is a static check of the scene's files (a shape or a colour literal fails it, as "Files scene has no shape of its own" and the colour-literal test show).
-- **Repetition and idempotency:** every frame is a pure function of its frame number ("SDD files beats and timing", scenario "Seeking in any order"). Renders are reproducible.
+- **Repetition and idempotency:** every frame is a pure function of its frame number ("SDD files beats and timing", scenario "Files seeking in any order"). Renders are reproducible.
 - **Concurrency:** n/a. Frames render independently; the scene runs no concurrent process.
 - **Security:** n/a. No user input, no secret, no network beyond the existing font load at render time.
 - **Logs and observability:** n/a beyond the existing progress lines of the stills and render commands.

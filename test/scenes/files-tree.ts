@@ -4,8 +4,11 @@
 // §6.3, and which elements are popping, leaving, in flight or jolting at a
 // frame (item 6). Geometry is read from the piece trees stage.ts returns, with
 // their transforms applied (test/scenes/topology-tree.ts's walk, which reads
-// translate and scale; the only rotations are a stamp's own tilt and a jolt,
-// whose frames are exempt), so a test checks what the frame draws. Test-only.
+// translate and scale and ignores rotate), so a test checks what the frame
+// draws. Two rotations exist: a jolt, whose frames are exempt, and a stamp's
+// own −12° tilt, always present: its word is measured untilted, which is safe
+// because the word sits inside the stamp's disc, which is measured exactly
+// (a circle turned about its centre does not move). Test-only.
 import { tokens } from "../../tokens/generated/tokens";
 import { g, type SvgNode } from "../../src/pieces/node.ts";
 import { frameAt, type Appear, type FilesState } from "../../src/scenes/sdd-scene-2-files/frame";
@@ -88,3 +91,9 @@ export const resizeText = (node: SvgNode, element: string, size: number, inside 
   const attrs = here && node.tag === "text" ? { ...node.attrs, "font-size": size } : node.attrs;
   return { ...node, attrs, children: node.children.map((c) => (typeof c === "string" ? c : resizeText(c, element, size, here))) };
 };
+
+/** A layer with one element scaled by `k` about `about`: a fixture for the size test. */
+export const scaleElement = (node: SvgNode, element: string, k: number, about: { x: number; y: number }): SvgNode =>
+  node.attrs["data-element"] === element
+    ? g({ transform: `translate(${about.x} ${about.y}) scale(${k}) translate(${-about.x} ${-about.y})` }, node)
+    : { ...node, children: node.children.map((c) => (typeof c === "string" ? c : scaleElement(c, element, k, about))) };
