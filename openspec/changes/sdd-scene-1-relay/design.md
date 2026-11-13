@@ -378,7 +378,7 @@ The owner's G1 is given by his standing ok to the recommendations; he judges the
 |---|---|
 | `proposal.md` | L98, L116 |
 | `?` | L24, L106–L113 |
-| `GO` | device (q49 B), for L34 and L148 |
+| `GO` | device (q49 B), for L34 and L148; the word itself at L124 ("the verdict was GO or NO-GO") |
 | `1`, `2` | device (ADR 0004 amendment for AB#334) |
 
 ## Risks / trade-offs
