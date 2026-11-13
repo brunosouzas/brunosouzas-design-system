@@ -14,7 +14,7 @@
 //
 // How to run: `npm test -- test/scenes/sdd-scene-3-archive.test.ts`.
 import { tokens } from "../../../tokens/generated/tokens";
-import { emotePop, leave } from "../../brand/cast-motion";
+import { leave } from "../../brand/cast-motion";
 import { blockPopIn, motionPathAt, pointAlong, type Point } from "../../brand/motion";
 import type { CastExpression, EmoteKind } from "../../pieces/index.ts";
 import { LEAVE_FRAMES } from "../takes-kind";
@@ -48,8 +48,8 @@ const popAndLeave = (f: number, at: number, leaveAt: number): Appear | null => {
 export type BalaoState = { appear: Appear; expression: CastExpression; speaks: boolean; holdsStamp: boolean };
 export type ChavesState = { appear: Appear; expression: CastExpression };
 export type VisorState = { appear: Appear; expression: CastExpression; points: boolean };
-/** A folder at a frame: its centre and scale, whether it is in flight, and its jolt angle. */
-export type FolderState = { centre: Point; scale: number; inFlight: boolean; angle: number };
+/** A folder at a frame: its centre and scale, whether it is in flight, its jolt angle, and its pop-in appearance. */
+export type FolderState = { appear: Appear; centre: Point; scale: number; inFlight: boolean; angle: number };
 export type GoState = { centre: Point; scale: number; opacity: number; landed: boolean };
 export type EmoteState = { kind: EmoteKind; x: number; y: number; scale: number; opacity: number };
 export type BookState = { appear: Appear; angle: number };
@@ -105,7 +105,7 @@ export const joltAt = (t: ArchiveTimeline, id: "book" | "secondFolder", f: numbe
   return JOLT.amplitude * Math.sin((2 * Math.PI * k) / JOLT.period) * (1 - k / JOLT_FRAMES);
 };
 
-/** A folder before its trip (at its start slot), in flight, or parked (design §4.2). */
+/** A folder before its trip (at its start slot), in flight, or parked (design §2.5, §4.2): pops in like any element. */
 const folderAt = (
   t: ArchiveTimeline,
   popAt: number,
@@ -115,14 +115,15 @@ const folderAt = (
   angle: number,
   f: number,
 ): FolderState | null => {
-  if (f < popAt) return null;
+  const appear = blockPop(f, popAt);
+  if (appear === null) return null;
   const trip = tripById(t, tripId);
-  if (f < trip.from) return { centre: start.centre, scale: start.scale, inFlight: false, angle };
+  if (f < trip.from) return { appear, centre: start.centre, scale: start.scale, inFlight: false, angle };
   if (f < trip.to) {
     const progress = (f - trip.from) / (trip.to - trip.from);
-    return { centre: along(tripId, progress), scale: folderScaleAt(start.scale, parked.scale, progress), inFlight: true, angle: 0 };
+    return { appear, centre: along(tripId, progress), scale: folderScaleAt(start.scale, parked.scale, progress), inFlight: true, angle: 0 };
   }
-  return { centre: parked.centre, scale: parked.scale, inFlight: false, angle: 0 };
+  return { appear, centre: parked.centre, scale: parked.scale, inFlight: false, angle: 0 };
 };
 
 /** The `GO` stamp after Balão lets go: in flight, landed, then leaving (design §2.2, §2.6). */
@@ -137,14 +138,16 @@ const goAt = (t: ArchiveTimeline, f: number): GoState | null => {
   return opacity > 0 ? { centre: VERDICT_CENTRE, scale: GO.scaleTo, opacity, landed: true } : null;
 };
 
-/** The one emote on screen at `f`: `worked` stays (leaveAt null), present from its own `at` (design §2.5). */
+/**
+ * The one emote on screen at `f`: `worked` stays, present at its full scale
+ * from its own frame (design §2.5: "not a pop-in by this rule"; its entrance
+ * must still settle by the reading hold, which the outro at 500 clears by far).
+ */
 const emoteAt = (t: ArchiveTimeline, f: number): EmoteState | null => {
   for (const e of t.emotes) {
     if (f < e.at) continue;
     const base = EMOTES[e.kind as keyof typeof EMOTES];
-    const pop = f >= e.at + fps ? 1 : emotePop(f, e.at);
-    const scale = base.scale * Math.max(pop, MIN_SCALE / base.scale);
-    return { kind: e.kind, x: base.x, y: base.y, scale, opacity: 1 };
+    return { kind: e.kind, x: base.x, y: base.y, scale: base.scale, opacity: 1 };
   }
   return null;
 };

@@ -89,7 +89,8 @@ const folderOf = (f: FolderState): Drawn => {
   const top = folderTopLeft(f.centre, f.scale);
   const d = folder({ x: top.x, y: top.y, scale: f.scale });
   const rotate = folderTransform(f);
-  return rotate === "" ? d : wrapped(d, { transform: rotate });
+  const rotated = rotate === "" ? d : wrapped(d, { transform: rotate });
+  return shown(rotated, f.appear, f.centre);
 };
 const findingOf = (): Drawn =>
   diagramBox({ shape: "pill", x: FINDING_PILL.cx - FINDING_PILL.width / 2, y: FINDING_PILL.cy - FINDING_PILL.height / 2, width: FINDING_PILL.width, height: FINDING_PILL.height, text: [words.question], fill: "color.white", textSize: TEXT_SIZE.finding });

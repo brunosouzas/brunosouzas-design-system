@@ -144,7 +144,7 @@ describe("SDD archive cast", () => {
 
   test("Archive emote beside the head", () => {
     expect(STATES[403].emote).toBeNull();
-    expect(STATES[404].emote).toMatchObject({ kind: "worked", x: EMOTES.worked.x, y: EMOTES.worked.y, opacity: 1 });
+    expect(STATES[404].emote).toEqual({ kind: "worked", ...EMOTES.worked, opacity: 1 });
     expect(STATES[550].emote).toEqual({ kind: "worked", ...EMOTES.worked, opacity: 1 });
     expect(STATES.slice(0, 404).every((s) => s.emote === null)).toBe(true);
   });
@@ -161,6 +161,9 @@ describe("SDD archive cast", () => {
         if (JSON.stringify(a[actor]) !== JSON.stringify(b[actor])) {
           expect(timeline.acts.some((act) => act.actor === actor && f >= act.from && f <= act.to), `${actor} acts at ${f}`).toBe(true);
         }
+      }
+      for (const actor of ["balao", "chaves", "visor"] as const) {
+        if (STATES[f - 1][actor] === null || STATES[f][actor] === null) continue;
         const before = STATES[f - 1][actor]!.expression, now = STATES[f][actor]!.expression;
         if (before !== now) expect(timeline.faces.some((face) => face.actor === actor && face.at === f && face.expression === now), `${actor} face at ${f}`).toBe(true);
       }
@@ -178,6 +181,7 @@ const near = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.
 describe("SDD archive mechanics (first archive)", () => {
   test("Archive frames", () => {
     expect(STATES[11].firstFolder).toBeNull();
+    expect(STATES[12].firstFolder).toBeNull();
     expect(STATES[13].firstFolder).toMatchObject({ centre: { x: 480, y: 140 }, scale: 0.9, inFlight: false });
     expect(STATES[43].firstFolder).toMatchObject({ centre: { x: 480, y: 140 }, scale: 0.9, inFlight: false });
     expect(STATES[44].firstFolder!.inFlight).toBe(true);
@@ -200,6 +204,7 @@ describe("SDD archive second request and propose", () => {
     for (let f = 184; f <= 245; f++) expect(STATES[f].visor!.points, `frame ${f}`).toBe(true);
     expect(STATES[246].visor!.points).toBe(false);
     expect(STATES[189].secondFolder).toBeNull();
+    expect(STATES[190].secondFolder).toBeNull();
     expect(STATES[191].secondFolder).toMatchObject({ centre: { x: 380, y: 150 }, scale: 0.95 });
     expect(STATES[209].book!.angle).toBe(0);
     expect(STATES[215].book!.angle).not.toBe(0);

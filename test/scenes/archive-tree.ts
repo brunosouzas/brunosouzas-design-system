@@ -21,10 +21,12 @@ export const FRAMES: Frame[] = Array.from({ length: 600 }, (_, f) => frameOf(f))
 export const textsAt = (f: Frame): DrawnText[] => STAGE_LAYERS.flatMap((name) => textsOf(f[name]));
 
 export type Item = { name: string; box: Box; round?: { cx: number; cy: number; r: number } };
-/** The first shape (rect or circle) of an element in a layer, with half its stroke: its body box (and, for a circle, the circle). */
-export const bodyItem = (layer: SvgNode, element: string): Item | null => {
+/** The Nth shape (rect or circle) of an element in a layer, with half its stroke: its body box (and, for a circle, the circle). */
+export const bodyItemAt = (layer: SvgNode, element: string, index: number): Item | null => {
+  let seen = 0;
   for (const w of walk(layer)) {
     if (w.element !== element || (w.node.tag !== "rect" && w.node.tag !== "circle")) continue;
+    if (seen++ !== index) continue;
     const a = w.node.attrs, n = (k: string) => Number(a[k]);
     const s = Math.hypot(w.m[0], w.m[1]);
     const half = (Number(a["stroke-width"] ?? tokens.outline.block) / 2) * s;
@@ -38,6 +40,8 @@ export const bodyItem = (layer: SvgNode, element: string): Item | null => {
   }
   return null;
 };
+/** The first shape (rect or circle) of an element in a layer: its body box. */
+export const bodyItem = (layer: SvgNode, element: string): Item | null => bodyItemAt(layer, element, 0);
 
 const settled = (a: Appear | null | undefined) => a !== null && a !== undefined && a.opacity === 1 && a.scale === 1;
 /**
@@ -58,7 +62,9 @@ export const exemptAt = (f: Frame): Set<string> => {
 export const itemsAt = (f: Frame): { blocks: Item[]; words: (DrawnText & { name: string })[] } => {
   const blocks: Item[] = [];
   const add = (item: Item | null) => { if (item) blocks.push(item); };
-  add(bodyItem(f.book, "book"));
+  // The book's first rect is the back page (library.ts: offset +14/+10 from the front cover, slightly
+  // smaller); its second rect is the full front cover, the box design §6.1 means.
+  add(bodyItemAt(f.book, "book", 1));
   add(bodyItem(f.book, "field-pill"));
   add(bodyItem(f.folders, "finding-pill"));
   add(bodyItem(f.verdict, "go"));

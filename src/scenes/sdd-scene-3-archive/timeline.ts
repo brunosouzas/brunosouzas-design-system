@@ -15,6 +15,7 @@
 import { tokens } from "../../../tokens/generated/tokens";
 import type { CastExpression } from "../../pieces/index.ts";
 import type { SequenceDevice, SequenceTimeline } from "../sequence-kind";
+import { LEAVE_FRAMES } from "../takes-kind";
 import { JOLT_FRAMES } from "./layout";
 
 export type CastActor = "balao" | "chaves" | "visor";
@@ -104,7 +105,7 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
   const changes = [
     ...Object.entries(pops).map(([id, at]) => ev(`pop-${id}`, at)),
     ...Object.entries(fades).flatMap(([id, f]) => [ev(`${id}-in`, f.in[0]), ev(`${id}-in-end`, f.in[1]), ev(`${id}-out`, f.out[0]), ev(`${id}-out-end`, f.out[1])]),
-    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + 10)]),
+    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + LEAVE_FRAMES)]),
     ...trips.flatMap((t) => [ev(`${t.id}-depart`, t.from), ev(`${t.id}-arrive`, t.to)]),
     ...jolts.flatMap((j) => [ev(`jolt-${j.id}`, j.at), ev(`jolt-${j.id}-end`, j.at + JOLT_FRAMES)]),
     ...Object.entries(cues).flatMap(([id, frames]) => frames.map((at, i) => ev(`${id}-${i}`, at))),
