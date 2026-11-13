@@ -3,7 +3,7 @@
 ## ADDED Requirements
 
 ### Requirement: Sequence scene kind
-A scene of kind `sequence` SHALL be neutral and run its phases once, in order, with no take and no rewind. Every phase SHALL cite at least one line of its English source as a positive integer, and its outro SHALL be at most `duration` minus `motion.readingHold`, with no phase start and no event at or after it. The catalogue SHALL reject a scene that breaks one of these, naming the scene and the item.
+A scene of kind `sequence` SHALL be neutral and run its phases once, in order: no phase has a `take` and the timeline has no `rewind`. Every phase SHALL cite at least one line of its English source as a positive integer, and its outro SHALL be at most `duration` minus `motion.readingHold`, with no phase start and no event at or after it. The catalogue SHALL reject a scene that breaks one of these, naming the scene and the item.
 
 #### Scenario: Valid sequence
 - **GIVEN** the registered scene `sdd-scene-2-files`
@@ -19,6 +19,11 @@ A scene of kind `sequence` SHALL be neutral and run its phases once, in order, w
 - **GIVEN** a fixture of that scene that is not neutral
 - **WHEN** its timeline is checked
 - **THEN** it fails naming the scene and saying a `sequence` scene is neutral
+
+#### Scenario: Sequence with a take or a rewind rejected
+- **GIVEN** separate fixtures of that scene where phase `review-1` has `take: 1`, and where the timeline has a `rewind`
+- **WHEN** each timeline is checked
+- **THEN** the first fails naming the scene and phase `review-1` ("has a take"), the second naming the scene and saying a `sequence` scene has no rewind
 
 #### Scenario: Sequence outro inside the reading hold
 - **GIVEN** a fixture of that scene with its outro at 781
@@ -40,7 +45,7 @@ A `sequence` scene SHALL pass the `takes` kind's cast rules (acts of different a
 
 #### Scenario: Takes scenes unchanged
 - **GIVEN** the `takes-fixture`, `sdd-request-relay` and `circuit-breaker-topology`
-- **WHEN** the `takes` tests and the catalogue checks run unedited
+- **WHEN** the `takes` tests run, unedited except the registration assertions design §2.6 lists, and the catalogue checks run
 - **THEN** they pass, and `checkTakes` on each registered `takes` scene returns no problem
 
 ### Requirement: SDD files registration
@@ -114,9 +119,9 @@ The scene's timeline SHALL equal the change's design §4: the eleven phases with
 Chaves SHALL type while a command line appears on the screen and the `openspec/` folder pops above the stage; then Visor SHALL point while `proposal.md`, `design.md`, `tasks.md` and `spec.md` travel out of the folder to their slots, growing to full size, and the folder SHALL leave once the four have arrived.
 
 #### Scenario: Init and propose frames
-- **GIVEN** frames 39, 40, 46, 53, 84, 90, 96, 107, 118, 136, 140 and 150
+- **GIVEN** frames 39, 40, 46, 53, 84, 90, 96, 107, 118, 136, 140 and 150, and every frame of a file's flight
 - **WHEN** the state is evaluated
-- **THEN** at 39 no folder is drawn and Chaves does not type; Chaves types from 40 to 83; the command line is drawn from 46; the folder from 53; Visor points from 90; at 96 `proposal.md` is at the folder's centre (480, 139.1) at scale 0.4; at 107 it is halfway along its route at 0.7; from 118 it is at its slot at scale 1; from 136 all four are; the folder is leaving from 140 and gone at 150
+- **THEN** at 39 no folder is drawn and Chaves does not type; Chaves types from 40 to 83; the command line is drawn from 46; the folder from 53; Visor points from 90; at 96 `proposal.md` is at the folder's centre (480, 139.1) at scale 0.4; at 107 it is halfway along its route at 0.7; from 118 it is at its slot at scale 1; from 136 all four are; the folder is leaving from 140 and gone at 150; a file's name pill in flight stays inside x 12–948 and y 12–528
 
 #### Scenario: No file before propose
 - **GIVEN** every frame from 0 to 95
@@ -124,12 +129,12 @@ Chaves SHALL type while a command line appears on the screen and the `openspec/`
 - **THEN** no file and no file name is drawn
 
 ### Requirement: SDD files questions and answers
-After the files arrive, `proposal.md` SHALL gain six `?` rows, one at a time, and Visor SHALL stop pointing and wait; then Balão SHALL speak while each row gets its check.
+`proposal.md` SHALL arrive with no row and then gain six `?` rows, one at a time, and Visor SHALL stop pointing and wait; then Balão SHALL speak while each row gets its check.
 
 #### Scenario: Questions and answers frames
-- **GIVEN** frames 153, 154, 194, 202, 210, 218, 258 and 266
+- **GIVEN** frames 118, 153, 154, 194, 202, 210, 218, 258 and 266
 - **WHEN** the state is evaluated
-- **THEN** `proposal.md` has no row at 153, one `?` row from 154 and six from 194; at 202 Visor does not point and is `waiting`; Balão speaks from 210 to 265; row 1 is answered (a `?` and a check) from 218 and all six from 258
+- **THEN** `proposal.md` has no row from 118 to 153, one `?` row from 154 and six from 194; at 202 Visor does not point and is `waiting`; Balão speaks from 210 to 265; row 1 is answered (a `?` and a check) from 218 and all six from 258
 
 #### Scenario: No finding before the review
 - **GIVEN** every frame from 0 to 289
@@ -137,7 +142,7 @@ After the files arrive, `proposal.md` SHALL gain six `?` rows, one at a time, an
 - **THEN** no row of `design.md`, `tasks.md` or `spec.md` is flagged or checked, and no file jolts
 
 ### Requirement: SDD files review round 1
-With no actor on stage, the review SHALL flag `spec.md` rows 1, 2 and 3 and `tasks.md` row 3, one at a time, each with a `?` on the row and a 12-frame jolt of its file; then a `NO-GO` stamp in `color.state.failure` SHALL pop on the change at (516, 190).
+With no actor on stage, the review SHALL flag `spec.md` rows 1, 2 and 3 and `tasks.md` row 3, one at a time, each with a `?` on the row and a 12-frame jolt of its file; then a `NO-GO` stamp in `color.state.failure` SHALL pop on the change at (512, 194).
 
 #### Scenario: Review 1 frames
 - **GIVEN** frames 289, 290, 291, 302, 344, 356, 364, 365, 394 and 409
@@ -150,12 +155,12 @@ With no actor on stage, the review SHALL flag `spec.md` rows 1, 2 and 3 and `tas
 - **THEN** there is none
 
 ### Requirement: SDD files fix and review round 2
-The first `NO-GO` SHALL leave and the four flagged rows SHALL get their check; the review SHALL then flag `spec.md` row 2 again (its check goes) and `spec.md` row 4, each with a jolt; a second `NO-GO` SHALL pop at the same place, leave, and the two rows SHALL get their check.
+The first `NO-GO` SHALL leave and the four flagged rows SHALL get their check; the review SHALL then flag `spec.md` rows 4 and 5, rows the first review did not flag, each with a jolt; a second `NO-GO` SHALL pop at the same place, leave, and the two rows SHALL get their check.
 
 #### Scenario: Fix and review 2 frames
 - **GIVEN** frames 410, 420, 428, 446, 470, 494, 515, 560, 570 and 584
 - **WHEN** the state is evaluated
-- **THEN** `NO-GO` 1 is leaving at 410 and gone at 420; `spec.md` row 1 is checked from 428; the four rows are checked at 446; `spec.md` row 2 is flagged again from 470 and row 4 from 494; `NO-GO` 2 is drawn from 515, leaving from 560 and gone at 570; at 584 `spec.md` rows 1–4 and `tasks.md` row 3 are checked and `spec.md` row 5 is plain
+- **THEN** `NO-GO` 1 is leaving at 410 and gone at 420; `spec.md` row 1 is checked from 428; the four rows are checked at 446; `spec.md` row 4 is flagged from 470 and row 5 from 494; `NO-GO` 2 is drawn from 515, leaving from 560 and gone at 570; at 584 every row of `spec.md` and `tasks.md` row 3 are checked, and no row is flagged twice in the scene
 
 #### Scenario: One NO-GO at a time
 - **GIVEN** every frame from 0 to 869
@@ -163,12 +168,12 @@ The first `NO-GO` SHALL leave and the four flagged rows SHALL get their check; t
 - **THEN** at most one `NO-GO` is drawn, and none from 0 to 364, from 420 to 514 or from 570 to 869
 
 ### Requirement: SDD files approval
-After the second fix, Balão SHALL hold up its `GO` stamp; the stamp SHALL then leave its hand and travel to the change, growing from scale 0.95 to 1.6, land at (516, 190) and stay; Balão's face SHALL turn `done` as it lets go.
+After the second fix, Balão SHALL hold up its `GO` stamp; the stamp SHALL then leave its hand and travel to the change, growing about its centre from scale 0.95 to 1.6, land at (512, 194) and stay; Balão's face SHALL turn `done` as it lets go.
 
 #### Scenario: Approval frames
 - **GIVEN** frames 605, 606, 625, 626, 637 and 648
 - **WHEN** the state is evaluated
-- **THEN** at 605 Balão holds nothing; it holds the stamp with `GO` from 606 to 625; at 626 it holds nothing, its face is `done`, and the `GO` stamp is at (229.4, 409.5) at scale 0.95; at 637 it is halfway along its route; from 648 it is at (516, 190) at scale 1.6, drawn to 869
+- **THEN** at 605 Balão holds nothing; it holds the stamp with `GO` from 606 to 625; at 626 it holds nothing, its face is `done`, and the `GO` stamp is at (229.4, 409.5) at scale 0.95; at 637 it is halfway along its route; from 648 it is at (512, 194) at scale 1.6, drawn to 869
 
 #### Scenario: No GO before the owner
 - **GIVEN** every frame from 0 to 605
@@ -201,6 +206,11 @@ At every frame, every string the scene draws SHALL be a value of its `text.en` t
 - **WHEN** every drawn string is collected
 - **THEN** each one is `openspec/`, `proposal.md`, `design.md`, `tasks.md`, `spec.md`, `NO-GO`, `GO` or `?`, and all eight appear
 
+#### Scenario: Files words in the loaded face
+- **GIVEN** the stage layers of frames 85, 400 and 869
+- **WHEN** each passes through `withSansFamily`
+- **THEN** each layer that holds words held the `font.sans` stack before and holds none after
+
 #### Scenario: Files unlisted word rejected
 - **GIVEN** a fixture whose stage draws the literal `spec` in `spec.md`'s label at frame 700
 - **WHEN** the words test runs
@@ -220,15 +230,15 @@ Every word the scene draws SHALL have an effective font size, its `font-size` ti
 - **THEN** each fails naming the string, its size and the first frame it is drawn
 
 ### Requirement: SDD files text placement
-Every drawn word box (measured advance on the `fonts/` faces times effective size), the folder and file name pills and the stamps' discs SHALL lie inside the stage less 12 units, SHALL NOT intersect each other or a cast body box of design §6.2, and no stamp SHALL cover a flagged row's `?`. The moving and settling frames of design §6.3 are exempt.
+Every drawn word box (measured advance on the `fonts/` faces times effective size), the folder and file name pills and the stamps' discs SHALL lie inside the stage less 12 units, SHALL NOT intersect each other or a cast body box of design §6.2, and no stamp's circle SHALL meet a flagged row's `?` circle. The moving and settling frames of design §6.3 are exempt, except that a file's name in flight stays inside the stage.
 
 #### Scenario: Files placement at every checked frame
 - **GIVEN** every frame from 0 to 869 except the exempt frames
 - **WHEN** the boxes are computed
-- **THEN** each lies within x 12–948 and y 12–528, none intersects another or a cast body box, and no stamp disc intersects a flagged row's `?` disc
+- **THEN** each lies within x 12–948 and y 12–528, none intersects another or a cast body box, and no stamp's circle meets a flagged row's `?` circle (centre distance at most the sum of the radii with half their outlines)
 
 #### Scenario: Files collision rejected
-- **GIVEN** a fixture drawing the `NO-GO` stamps with their centre at (516, 120)
+- **GIVEN** a fixture drawing the `NO-GO` stamps with their centre at (512, 120)
 - **WHEN** the placement test runs
 - **THEN** it fails naming `no-go-1`, a file name pill and frame 394, the first frame the stamp is drawn and settled
 

@@ -32,7 +32,7 @@ Scene 1 showed why a request goes through a written list of questions and an own
 | S4 answer | Balão speaks; a check on each `?` row | Balão stops speaking |
 | S5 review 1 | `spec.md` rows 1–3 and `tasks.md` row 3 are flagged in turn (a `?` and a jolt of the file); `NO-GO` pops on the change | the stamp leaves |
 | S6 fix 1 | the four flagged rows get their check | the last check |
-| S7 review 2 | `spec.md` row 2 (its check goes) and row 4 are flagged; a second `NO-GO` | the stamp leaves |
+| S7 review 2 | `spec.md` rows 4 and 5 are flagged; a second `NO-GO` | the stamp leaves |
 | S8 fix 2 | the two rows get their check | the last check |
 | S9 approve | Balão holds up its `GO` stamp; the stamp travels to the change and lands; Balão `done` | the stamp has landed |
 | S10 apply | Visor points; six code lines appear; Visor `done`, `worked` emote | the final still is held |
@@ -55,9 +55,9 @@ The catalogue knows three kinds: the state machine (phases are states, transitio
 - `SequenceDevice = "findingMark" | "noGoStamp" | "goStamp"`: the reading devices a phase lists (MOT-1; §5).
 - `SequencePhase = { id, from, to, cites, devices?, events }`, as `TakesPhase` without `take`.
 - `SequenceTimeline = CueTimeline & { phases: readonly SequencePhase[] }`, where `CueTimeline` (exported by `takes-kind.ts`) is `TakesTimeline` without `phases` and `rewind`: `duration`, `outro`, `ringsFade`, `acts`, `faces`, `emotes`, `trips`, `pops`, `fades`, `leaves`, `cues`.
-- `checkSequence(scene, readingHold, settle)`: the scene is neutral ("a sequence scene is neutral"); the outro is at most `duration − readingHold`; no phase starts and no event falls at or after the outro; every phase cites at least one positive integer line; then `checkCast` and `checkHold` of `takes-kind.ts`. The messages are the `takes` kind's, with "sequence" for "takes" in the neutral one.
+- `checkSequence(scene, readingHold, settle)`: the scene is neutral ("a sequence scene is neutral"); the timeline has no `rewind` ("a sequence scene has no rewind") and no phase has a `take` ("phase <id> has a take; a sequence scene has none"), since a fixture built at runtime can carry either; the outro is at most `duration − readingHold`; no phase starts and no event falls at or after the outro; every phase cites at least one positive integer line; then `checkCast` and `checkHold` of `takes-kind.ts`. The messages are the `takes` kind's, with "sequence" for "takes" in the neutral one.
 
-`checkHold` adds "end of the rewind" only when the timeline has a `rewind`, so the `takes` scenes get exactly the problems they got before. `catalogue.ts` gains `SequenceSceneData` (as `TakesSceneData` with `kind: "sequence"` and the `SequenceTimeline`) in the `CatalogueScene` union, and `checkTimeline` calls `checkSequence` for that kind, after the common checks (phase ranges, order, events inside phases).
+`takes-kind.ts` exports `CueTimeline`, `checkCast(id: string, t: CueTimeline): string[]` and `checkHold(id: string, t: CueTimeline & { rewind?: TakesTimeline["rewind"] }, settle: number): string[]` (both were private and typed on `TakesTimeline`). `checkHold` adds "end of the rewind" only when the timeline has a `rewind`, so the `takes` scenes get exactly the problems they got before. `catalogue.ts` gains `SequenceSceneData` (as `TakesSceneData` with `kind: "sequence"` and the `SequenceTimeline`) in the `CatalogueScene` union, and `checkTimeline` calls `checkSequence` for that kind, after the common checks (phase ranges, order, events inside phases).
 
 ### 2.2 Words that read on a phone
 
@@ -82,22 +82,23 @@ The four findings of L128–L131 and the two of L133 must read without words. Th
 | `POST` had no contract | L129 | `spec.md` row 2 |
 | "only two fields" contradicted the error responses | L130 | `spec.md` row 3 |
 | the verification tasks did not cover the behaviour | L131 | `tasks.md` row 3 |
-| "any method other than `GET` gets `405` with a JSON body" included `HEAD` | L133 | `spec.md` row 2 again: the method rule the first fix wrote; its check goes |
-| `POST /api/orders/abc/delivery-status` under two rules (`400` and `405`) | L133 | `spec.md` row 4 |
+| "any method other than `GET` gets `405` with a JSON body" included `HEAD` | L133 | `spec.md` row 4 |
+| `POST /api/orders/abc/delivery-status` under two rules (`400` and `405`) | L133 | `spec.md` row 5 |
 
-The second round has two flagged rows to the first round's four, and one of them is a row the first fix had checked: "finer details" (L133) is what the viewer sees. The rows are bars; which rule a bar stands for is this design's mapping, not a claim on screen.
+The second round has two flagged rows to the first round's four: fewer, on rows the first round did not flag (L133, "finer details"). The article does not say which version wrote the rules the second review found, so no row is flagged twice. The rows are bars; which rule a bar stands for is this design's mapping, not a claim on screen. At the end every row of `spec.md` and `tasks.md` row 3 carry a check.
 
 ### 2.4 The verdicts
 
 - **`NO-GO` has no actor.** The review is Codex, "another agent, in a clean session" (L124), not a cast member, so nobody on stage acts: the stamp pops on the change (a block pop-in at its centre) and leaves when the next version starts. It is `stamp` with `fill: "color.state.failure"` (gate-0 q5): the review failed.
 - **`GO` is the owner's.** The article names two reviews, then the fourth version and the owner's approval of that commit (L135, L148); it states no third review. Balão is the owner of the request (ADR 0007, amended 2026-11-12; scene 1), so Balão holds up its stamp (`holdsStamp: { word: "GO" }`, the approval green), then the stamp leaves its hand and travels to the change, growing from the cast scale to 1.6, and stays.
-- **Where the stamps land:** on the change, across the gap between `design.md` and `tasks.md`, centre (516, 190): over the lower rows of both, clear of every flagged row (§6.3).
+- **Where the stamps land:** on the change, across the gap between `design.md` and `tasks.md`, centre (512, 194): over the lower rows of both. The `NO-GO` disc (radius 57.5 with the scale, 60 with its outline) clears the `?` of `tasks.md` row 3 (centre (565.5, 130.55), radius 12.35, 13.8 with its outline) by about 9.2 units, circle to circle (§6.3).
+- **Scale origin:** every stamp is drawn about (0, 0) and placed with `translate(centre) scale(s)`, so it scales about its own centre; the stamp piece tilts its face and word −12° about that centre.
 
 ### 2.5 Stage units, pop-ins and when an element is drawn
 
 As in scene 1 (its §2.3 and §2.8): the pieces are laid out in **960 × 540 stage units** in an SVG with `viewBox="0 0 960 540"` over the 1920 × 1080 composition; `Rings` and `MotionPath` are drawn in composition pixels (stage × 2), below the stage layers. Blocks pop with `blockPopIn`; an element popping at frame *a* is drawn from *a* + 1 (opacity above 0 and scale above 0.001) and exactly settled from *a* + `motion.fps`. A cast piece pops through `pose`. `leave(f, at)` (10 frames) multiplies the opacity of an element that leaves. The `worked` emote never leaves and is drawn from its own frame, its scale floored at the piece's minimum on that frame (scene 1's rule).
 
-A file in flight is drawn from its trip's first frame at its point on the route, scaled about its centre by `0.4 + 0.6 · p` (p the trip's progress, 0 to 1), with its label; from its arrival frame it is parked at its slot at scale 1. The `GO` stamp in flight is drawn the same way at scale `0.95 + 0.65 · p`, rotated as the stamp piece draws it (−12°).
+`proposal.md` has no row until its first row change (154): a file's drawn rows are those whose first change is at or before the frame for `proposal.md`, and all of its rows for the other three files (they arrive written). A file in flight is drawn from its trip's first frame at its point on the route, scaled about its centre by `0.4 + 0.6 · p` (p the trip's progress, 0 to 1), with its label; from its arrival frame it is parked at its slot at scale 1. The `GO` stamp in flight is drawn the same way at scale `0.95 + 0.65 · p`, rotated as the stamp piece draws it (−12°).
 
 ### 2.6 Registration order
 
@@ -111,7 +112,9 @@ Edits outside this scene's files:
 
 - `test/scenes/catalogue-flow.test.ts`: "Takes fixture beside the registered scenes" (the five ids), "Three scenes in the catalogue" (the earlier scenes' order), "Four scenes in the catalogue" (the four keep their order) and a new "Five scenes in the catalogue"; the two `available scenes:` lines of `test/scripts/cli.test.ts`. These are the MODIFIED requirement's scenarios.
 - `test/scenes/sdd-request-relay-catalogue.test.ts`: in "One composition, before the topology scene", `entries[9]` becomes `sdd-scene-2-files-16x9` and `entries[10]` `circuit-breaker-topology-16x9`; in "Other scenes' tests untouched", the list of scene ids gains `sdd-scene-2-files`.
-- `openspec/changes/sdd-scene-1-relay/specs/scene-catalogue/spec.md`, scenario "One composition, before the topology scene": "and right before `circuit-breaker-topology-16x9`" becomes "and before `circuit-breaker-topology-16x9`, with only `sdd-scene-2-files-16x9` between them". That change is merged but not archived (the owner archives it after G3); its scenario must stay true for its own archive.
+- `openspec/changes/sdd-scene-1-relay/specs/scene-catalogue/spec.md`, scenario "One composition, before the topology scene": "and right before `circuit-breaker-topology-16x9`" becomes "and before `circuit-breaker-topology-16x9`, with only `sdd-scene-2-files-16x9` between them".
+
+The rule for the unarchived change `sdd-scene-1-relay` (merged in #41; the owner archives it after his G3): its MODIFIED block of "State-machine and flow catalogue compatibility" ("Takes fixture beside the registered scenes", "Three scenes", "Four scenes") is not edited, because this change's MODIFIED block replaces that whole requirement when both are archived, scene 1 first (task 6.5). Its ADDED requirement "SDD relay registration" cannot be replaced by a MODIFIED block until it is in `openspec/specs/`, so its one scenario that this change makes false is edited in place, and that is the only edit to that change.
 
 ### 2.7 The timeline's data shape
 
@@ -123,7 +126,7 @@ The scene's timeline is `FilesTimeline = SequenceTimeline & { … }` in the scen
 | `actions` | the cast's action changes: `{ actor, at, set }`, `set` a subset of `speaks`, `holdsStamp`, `types`, `points` (§4.2) |
 | `rows` | each row change of a file: `{ file, row, at, to }`, `file` one of `proposal`, `design`, `tasks`, `spec`, `row` 1-based, `to` one of `question`, `answered`, `checked`, `flagged` (§4.2) |
 
-A row's state at frame *f* is its last change at or before *f*, `plain` before any. `flagged` draws as `question` (a `?` lead, no tail); `answered` as a `?` lead with the tail check; `checked` as no lead with the tail check. Every row change is also a `cues` entry, and every finding's change starts a jolt of its file. `makeTimeline(travel, fade)` builds the timeline, so a change of `motion.travel` or `motion.fade` moves the arrivals and fades and fails the pinned beat-table test.
+A row's state at frame *f* is its last change at or before *f*, `plain` before any (and not drawn at all, for `proposal.md`, before its first change; §2.5). `flagged` draws as `question` (a `?` lead, no tail); `answered` as a `?` lead with the tail check; `checked` as no lead with the tail check. Every row change is also a `cues` entry, and every finding's change starts a jolt of its file. Event ids follow scene 1's `timeline.ts`: `pop-<name>`, `<fade>-in`, `<fade>-in-end`, `<fade>-out`, `<fade>-out-end`, `leave-<name>`, `leave-<name>-end`, `<trip>-depart`, `<trip>-arrive`, `<cue>-<index>`, `face-<actor>-<expression>`, `emote-<kind>`, `act-<actor>`, `act-<actor>-end`; the cue key of the action frames is `actions`. `makeTimeline(travel, fade)` builds the timeline, so a change of `motion.travel` or `motion.fade` moves the arrivals and fades and fails the pinned beat-table test.
 
 ## 3. Pieces and components (MOT-6, CAST-1)
 
@@ -133,11 +136,11 @@ A row's state at frame *f* is its last change at or before *f*, `plain` before a
 | Chaves (developer) | `chaves` (`facing` right, `types`) |
 | Visor (AI agent) | `visor` (`facing` left, `points` always explicit) |
 | laptop | `codePanel` (screen) and `keyboard` (its base; Chaves's own keyboard replaces it while he types) |
-| `openspec/` | `folder` at scale 0.9; its name a `diagramBox` pill (`textSize` 33) on its front |
+| `openspec/` | `folder` at scale 0.9 (its back panel 171 × 178.2; drawn with the front flap and the papers, about 181.8 × 196, top near y 33); its name a `diagramBox` pill (`textSize` 33) on its front |
 | the four files | `sheet` at scale 0.95, each named by a `diagramBox` pill (`textSize` 33) on its top edge |
 | findings, answers, fixes | the `sheet`'s own row leads (`question`) and tail checks |
-| `NO-GO` | `stamp` (radius 46, `fill` `color.state.failure`, word `NO-GO`) in a group scaled 1.25 |
-| `GO` | Balão's held `stamp`, then the `stamp` piece (radius 24, word `GO`) in a group scaled 0.95 to 1.6 |
+| `NO-GO` | `stamp` (radius 46, `fill` `color.state.failure`, word `NO-GO`) in a group scaled 1.25 about its centre |
+| `GO` | Balão's held `stamp`, then the `stamp` piece (radius 24, word `GO`) in a group scaled 0.95 to 1.6 about its centre |
 | reaction | `emote` (`worked`) |
 | motion guide | `MotionPath` (the `GO` trip) |
 | stage rings | `Rings` |
@@ -155,7 +158,7 @@ Constants: `motion.fps` 30, `motion.travel` (T) 22, `motion.fade` (F) 10, `motio
 | 1 | `setup` | 0–39 | 20, 26 | — |
 | 2 | `init` | 40–89 | 44, 47, 50 | — |
 | 3 | `propose` | 90–149 | 86, 89, 98, 99, 100, 101 | — |
-| 4 | `list` | 150–209 | 103, 106, 108, 109, 110, 111, 112, 113 | — |
+| 4 | `list` | 150–209 | 103, 106, 108, 109, 110, 111, 112, 113, 116 | — |
 | 5 | `answer` | 210–279 | 118, 120 | — |
 | 6 | `review-1` | 280–409 | 124, 126, 128, 129, 130, 131 | findingMark, noGoStamp |
 | 7 | `fix-1` | 410–459 | 133, 146 | findingMark |
@@ -173,13 +176,13 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 | 0–20 | rings | fade in | — |
 | 2 | laptop (screen, empty; keyboard) | pops (block) | L26 |
 | 4 / 6 / 8 | Balão / Chaves (facing right) / Visor (`points` false) | pop (block, through `pose`) | L20, L26 |
-| 40 | Chaves | act: `types` on | L26, L44 |
+| 40 | Chaves | act: `types` on | L26, L44; reading choice (§5) |
 | 46 | screen | the command line (accent, tall) appears | L47, L86 |
 | 52 | folder `openspec/` | pops (block), with its name | L50, L53 |
 | 84 | Chaves | act: `types` off | L44 |
 | 90 | Visor | act: `points` on | L86 |
 | 96 / 102 / 108 / 114 | `proposal.md` / `design.md` / `tasks.md` / `spec.md` | departs the folder on route `file-<name>`; arrives T later (118 / 124 / 130 / 136) at its slot | L89–L96, L98–L101 |
-| 140 | folder | leaves (gone 150) | device (§5) |
+| 140 | folder | leaves (gone 150) | staging (§5) |
 | 154 + 8j, j = 0…5 | `proposal.md` row j + 1 | appears, a `?` row (`question`) | L103, L106–L113 |
 | 202 | Visor | act: `points` off; face `waiting` | L116 |
 | 210 | Balão | act: `speaks` on | L120 |
@@ -189,17 +192,17 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 | 308 | `spec.md` row 2 | `flagged`; jolt 308–319 | L129 |
 | 326 | `spec.md` row 3 | `flagged`; jolt 326–337 | L130 |
 | 344 | `tasks.md` row 3 | `flagged`; `tasks.md` jolts 344–355 | L131 |
-| 364 | `NO-GO` 1 | pops (block) at (516, 190) | L124, L126 |
+| 364 | `NO-GO` 1 | pops (block) at (512, 194) | L124, L126 |
 | 410 | `NO-GO` 1 | leaves (gone 420) | L133 ("the next version") |
 | 428 / 434 / 440 / 446 | `spec.md` rows 1, 2, 3; `tasks.md` row 3 | `checked` | L133 ("fixed all four") |
-| 470 | `spec.md` row 2 | `flagged` (its check goes); jolt 470–481 | L133 (`HEAD`) |
-| 494 | `spec.md` row 4 | `flagged`; jolt 494–505 | L133 (`400` or `405`) |
-| 514 | `NO-GO` 2 | pops (block) at (516, 190) | L133 ("also NO-GO") |
+| 470 | `spec.md` row 4 | `flagged`; jolt 470–481 | L133 (`HEAD`) |
+| 494 | `spec.md` row 5 | `flagged`; jolt 494–505 | L133 (`400` or `405`) |
+| 514 | `NO-GO` 2 | pops (block) at (512, 194) | L133 ("also NO-GO") |
 | 560 | `NO-GO` 2 | leaves (gone 570) | L135 |
-| 578 / 584 | `spec.md` rows 2, 4 | `checked` | L135 |
+| 578 / 584 | `spec.md` rows 4, 5 | `checked` | L135 |
 | 606 | Balão | act: `holdsStamp` `{ word: "GO" }` on | L148 |
 | 626 | Balão | act: `holdsStamp` off; face `done` | L148 |
-| 626 | `GO` | departs Balão's hand on route `go`, scale 0.95; arrives 648 at (516, 190), scale 1.6, and stays | L34, L124, L148 |
+| 626 | `GO` | departs Balão's hand on route `go`, scale 0.95; arrives 648 at (512, 194), scale 1.6, and stays | L34, L124, L148 |
 | 626–636, 648–658 | guide `go` | fades in, fades out | device |
 | 676 | Visor | act: `points` on | L152 |
 | 682 + 8j, j = 0…5 | screen | code line j + 1 appears | L154, L157–L162 |
@@ -216,7 +219,7 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 
 **Cues:** `commandLine` 46; `rows` 154 … 194; `answers` 218 … 258; `findings1` 290, 308, 326, 344; `fixes1` 428, 434, 440, 446; `findings2` 470, 494; `fixes2` 578, 584; `joltEnds` each finding + 12 (302, 320, 338, 356, 482, 506); `codeLines` 682 … 722; and every action frame.
 
-**Row changes** (`rows`, §2.7): `proposal` rows 1–6 `question` at 154 + 8(k − 1) and `answered` at 218 + 8(k − 1); `spec` row 1 `flagged` 290, `checked` 428; `spec` row 2 `flagged` 308, `checked` 434, `flagged` 470, `checked` 578; `spec` row 3 `flagged` 326, `checked` 440; `tasks` row 3 `flagged` 344, `checked` 446; `spec` row 4 `flagged` 494, `checked` 584. `design` rows 1–3, `tasks` rows 1, 2, 4 and `spec` row 5 stay `plain`.
+**Row changes** (`rows`, §2.7): `proposal` rows 1–6 `question` at 154 + 8(k − 1) and `answered` at 218 + 8(k − 1); `spec` row 1 `flagged` 290, `checked` 428; `spec` row 2 `flagged` 308, `checked` 434; `spec` row 3 `flagged` 326, `checked` 440; `tasks` row 3 `flagged` 344, `checked` 446; `spec` row 4 `flagged` 470, `checked` 578; `spec` row 5 `flagged` 494, `checked` 584. `design` rows 1–3 and `tasks` rows 1, 2 and 4 stay `plain`.
 
 ### 4.3 Routes (stage units)
 
@@ -224,17 +227,17 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 
 | Route | Path |
 |---|---|
-| `file-<name>` (the file's centre) | `M 480,139.1 C 480,40 C_k.x,40 C_k.x,141` |
-| `go` (the stamp's centre) | `M 229.4,409.5 C 300,300 420,190 516,190` |
+| `file-<name>` (the file's centre) | `M 480,139.1 C 480,110 C_k.x,110 C_k.x,141` |
+| `go` (the stamp's centre) | `M 229.4,409.5 C 300,300 420,194 512,194` |
 | guide `go` | the `go` route |
 
-An object travels its route in T frames, linear by length, and is drawn from the trip's start frame up to the frame before its arrival; at arrival it is parked at the route's end. The guide is drawn × 2 in composition pixels by `MotionPath`.
+The files' crest (control y 110) keeps a file in flight, with its name pill (`centre.y − 117 × scale` at the top), at least 12 units below the stage's top edge (§6.3 item 4); at a crest of 100 the pill grazes the margin. An object travels its route in T frames, linear by length, and is drawn from the trip's start frame up to the frame before its arrival; at arrival it is parked at the route's end. The guide is drawn × 2 in composition pixels by `MotionPath`.
 
 ## 5. Reading choices (MOT-1) and out-of-scope outcomes
 
 Approved at gate 0 (2026-11-13): concept A (q1); no relay (q2); two separate NO-GO rounds (q3); findings as gestures (q4); no new pieces, `NO-GO` on the `stamp` in the failure colour (q5).
 
-Made in this design, for G3 (§9): the `sequence` kind; who gives each verdict; the finding as a `?` and a jolt, the fix as a check (devices `findingMark`); the `NO-GO` stamp popping with no actor (`noGoStamp`); Balão's `GO` travelling to the change (`goStamp`, scene 1's q49 B device); no round number; the folder leaving; one typing act; the answer beat; the length (29 s); the stamp sizes; `waiting` after listing and `done` with `worked` after implementing (scene 1's faces).
+Made in this design, for G3 (§9): the `sequence` kind; who gives each verdict; Chaves typing the commands (the article names no one for `openspec init`, L44, or for sending the request with `/opsx:propose`, L86; the developer at the laptop is scene 1's reading of L26); the folder leaving once the files are out (staging, no claim); the finding as a `?` and a jolt, the fix as a check (devices `findingMark`); the `NO-GO` stamp popping with no actor (`noGoStamp`); Balão's `GO` travelling to the change (`goStamp`, scene 1's q49 B device); no round number; the folder leaving; one typing act; the answer beat; the length (29 s); the stamp sizes; `waiting` after listing and `done` with `worked` after implementing (scene 1's faces).
 
 Out of scope, because the article does not state them: a third review's verdict; the third version; who fixed the change; version numbers; the words of the findings; the proof; the archive.
 
@@ -249,13 +252,13 @@ Out of scope, because the article does not state them: a third review's verdict;
 | command line | `{ indent 0, w 96, color "white", tall }` | first line |
 | code lines | widths 46, 78, 66, 106, 58, 99; indents 0, 16, 0, 16, 0, 16; `color` "white" | after the command line (the `if` / result pairs of L157–L162) |
 | keyboard | `keyboard` width 150 in Chaves's units at (98, −74) | as scene 1 |
-| folder | `folder` x 394.5, y 50, scale 0.9 (171 × 178.2) | centre (480, 139.1); pop anchor its centre |
+| folder | `folder` x 394.5, y 50, scale 0.9 (back panel 171 × 178.2; drawn about 181.8 × 196, top near y 33) | centre (480, 139.1); pop anchor its centre |
 | folder name | `diagramBox` pill w 172, h 44, `textSize` 33, fill `color.white`, `["openspec/"]` | centred (480, 162.5), on the folder's front |
 | files | `sheet` 160 × 200, top 32, step 23, at scale 0.95 (152 × 190) | top-left (123, 46), (343, 46), (537, 46), (716, 46) |
 | file names | `diagramBox` pills h 44, `textSize` 33, fill `color.white`; w 206, 174, 154, 144 | centred on each top edge: (199, 46), (419, 46), (613, 46), (792, 46) |
 | rows | `proposal` bars 56, 44, 60, 50, 58, 40; `design` 96, 70, 84; `tasks` 80, 66, 56, 74; `spec` 58, 50, 60, 54, 46 | row k's centre y = 86.85 + 21.85(k − 1); its `?` at x = file left + 28.5 |
-| `NO-GO` | `stamp` r 46, `fill` `color.state.failure`, word `NO-GO`, × 1.25 | centre (516, 190) |
-| `GO` | `stamp` r 24, word `GO`; × 0.95 in flight, growing to × 1.6 | from (229.4, 409.5) (Balão's held stamp) to (516, 190) |
+| `NO-GO` | `stamp` r 46, `fill` `color.state.failure`, word `NO-GO`, × 1.25 about its centre | centre (512, 194) |
+| `GO` | `stamp` r 24, word `GO`; × 0.95 in flight, growing to × 1.6, about its centre | from (229.4, 409.5) (Balão's held stamp) to (512, 194) |
 | emote `worked` | `emote` scale 0.75 | (800, 292) |
 | rings | `Rings` | centre (960, 540) composition pixels |
 
@@ -269,10 +272,10 @@ Cast body boxes (scene 1's): Balão x 45.1–193.3, y 322.1–476; Chaves x 419.
 
 1. **Layout equals the design:** the values of §6.1 and §4.3.
 2. **Minimum size:** the folder name and the file names at 33, `NO-GO` at least 33 settled, the landed `GO` at least 33; a smaller `GO` only inside Balão's act 606–626 or in flight 626–647; the `?` not checked (a symbol); a file's name in flight not checked.
-3. **Boxes:** a word's box is its advance width × its effective size, placed by its anchor, from 0.8 × size above the baseline to 0.25 × size below it (`test/scenes/text-measure.ts`); a pill's box is its body; a stamp's box is its disc's square.
-4. **Inside the frame:** every box lies inside x 12–948 and y 12–528.
-5. **No overlaps:** no two of the folder name, the file names and the stamps intersect, none intersects a cast body box, and no stamp's disc intersects a flagged row's `?` disc.
-6. **When it runs:** every frame from 0 to 869 except an element before *a* + `motion.fps` from its pop-in at *a*, during its 10-frame leave, a file and its name in flight or jolting, the folder name from the first file's departure (96), and `GO` before it lands (648).
+3. **Boxes:** a word's box is its advance width × its effective size, placed by its anchor, from 0.8 × size above the baseline to 0.25 × size below it (`test/scenes/text-measure.ts`); a pill's box is its body with half its outline; a stamp's box is its disc's square (with half its outline) against the frame, the pills, the words and the cast, and its circle against a `?` disc (item 5).
+4. **Inside the frame:** every box lies inside x 12–948 and y 12–528, including a file's name in flight.
+5. **No overlaps:** no two of the folder name, the file names and the stamps intersect, none intersects a cast body box, and no stamp's circle intersects a flagged row's `?` circle (centre distance greater than the sum of the radii with half their outlines).
+6. **When it runs:** every frame from 0 to 869 except an element before *a* + `motion.fps` from its pop-in at *a*, during its 10-frame leave, a file and its name jolting (and in flight, except for item 4), the folder name from the first file's departure (96), and `GO` before it lands (648).
 
 If a value of §6.1 fails 2–5, the implementer changes it here and in the spec in the same commit and lists it for the owner.
 
@@ -286,7 +289,7 @@ If a value of §6.1 fails 2–5, the implementer changes it here and in the spec
 | 110 | the files flying out of the folder |
 | 294 | the first jolt, `spec.md` row 1 flagged |
 | 380 | review 1: four flagged rows and `NO-GO` |
-| 530 | review 2: two flagged rows and the second `NO-GO` |
+| 530 | review 2: `spec.md` rows 4 and 5 flagged and the second `NO-GO` |
 | 616 | Balão holding up `GO` |
 | 637 | `GO` in flight |
 | 700 | the code being written |
@@ -340,6 +343,7 @@ Every PNG is opened and checked for the cast (CAST-3, CAST-4, CAST-5), overlaps,
 - **Nobody on stage acts during the reviews (280–599).** That is the article: the reviewer is not a character. The jolts and the stamps carry the motion; the video is the check.
 - **A row's bar shifts right by 30 units when it is flagged** (the sheet's `?` lead moves the bar) and back when fixed. It underlines the change of state.
 - **The stamps cover the lower rows of `design.md` and `tasks.md`.** No flagged row is under them (§6.3 item 5).
+- **The words are mapped to the face Remotion loads** through `withSansFamily`, as in scene 1; `test/scenes/sdd-scene-2-files-words.test.ts` checks this scene's layers.
 
 ## Migration
 
@@ -351,13 +355,13 @@ The owner follows the recommendations and judges the scene on the video (G3); th
 
 1. **A new `sequence` kind** (§2.1). Recommended: accept.
 2. **`NO-GO` with no actor, `GO` from Balão** (§2.4). Recommended: keep.
-3. **A finding is a `?` and a jolt; a fix is a check** (§2.3). Recommended: keep.
+3. **A finding is a `?` and a jolt; a fix is a check** (§2.3); the second review flags rows the first did not. Recommended: keep.
 4. **No round number on screen.** Recommended: no badge.
 5. **Gate-0 frame 8 (the proof) folded into the final still.** Recommended: accept.
 6. **Registration right after `sdd-request-relay`** and the edits it needs in scene 1's test and unarchived spec (§2.6). Recommended: accept.
 7. **The folder leaves once the files are out.** Recommended: keep.
 8. **`NO-GO` in the failure red** (gate-0 q5). Recommended: keep.
-9. **One typing act and one command line for `init` and `propose`.** Recommended: keep.
+9. **Chaves types, in one act with one command line, for `init` and `propose`** (the article names no one; §5). Recommended: keep.
 10. **The answer beat** (L120). Recommended: keep.
 11. **Length 29 s** (870 frames, final still 100 frames). Recommended: accept.
 12. **Stamp sizes** (§2.2). Recommended: accept.

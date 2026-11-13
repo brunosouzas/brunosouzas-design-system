@@ -20,7 +20,7 @@ On **2026-11-13** the owner chose **concept A, "the files, not the relay"**, wit
   - **Init and propose:** Chaves types; the `openspec/` folder appears; Visor points and four named files come out of the folder.
   - **Questions and answers:** `proposal.md` lists six `?`; Balão answers and each gets its check.
   - **Review 1:** with no actor (the reviewer is another agent, off stage), four rows are flagged, three in `spec.md` and one in `tasks.md`, each a `?` on the row and a jolt of the file; a red `NO-GO` stamp lands on the change. The next version checks the four rows.
-  - **Review 2:** two finer rows of `spec.md` are flagged; a second `NO-GO`; the fourth version checks them.
+  - **Review 2:** two more rows of `spec.md`, ones the first review did not flag, are flagged; a second `NO-GO`; the fourth version checks them.
   - **Approval:** Balão holds up its `GO` stamp, which travels to the change and stays.
   - **Apply:** Visor points and six code lines (the DataWeave `if`/`else if` chain) appear; Visor `done`, `worked` emote; the final still holds.
 - **The catalogue registers five scenes.** The new scene goes right after `sdd-request-relay` and before `circuit-breaker-topology`, which stays last. The assertions that list every scene change, and so do two assertions of scene 1's catalogue test and one scenario sentence of the unarchived change `sdd-scene-1-relay` that name the scene after the relay (design §2.6; question 6). Every existing scene keeps its data, compositions and stills byte for byte.
@@ -61,13 +61,13 @@ The owner follows the recommendations and judges the scene on the video (G3). Ea
 
 1. **A new `sequence` kind** instead of the `takes` kind (design §2.1). Recommended: accept.
 2. **Who gives each verdict.** The `NO-GO` stamps land with no actor (the reviewer is Codex, another agent, not a cast member); `GO` is Balão's own stamp, the owner's explicit decision (L148), not a third review (the article names none). Recommended: keep.
-3. **A finding is a `?` on the flagged row plus a jolt of its file; a fix is that row's check** (design §2.3). Recommended: keep.
+3. **A finding is a `?` on the flagged row plus a jolt of its file; a fix is that row's check** (design §2.3). The second review flags rows the first did not, since the article does not say which version wrote the rules it found. Recommended: keep.
 4. **No round number on screen.** The rounds read apart by their findings (four, then two finer ones) and the fix between them. A `1`/`2` badge would be a new reading device (ADR 0004 allows take numbers only in `takes` scenes). Recommended: no badge.
 5. **Gate-0 frame 8 (the proof) folded into the final still.** Recommended: accept; the proof is out of scope.
-6. **Registration right after `sdd-request-relay`.** This edits two assertions of `test/scenes/sdd-request-relay-catalogue.test.ts` and the scenario "One composition, before the topology scene" of the unarchived change `sdd-scene-1-relay` (design §2.6). Recommended: accept.
+6. **Registration right after `sdd-request-relay`.** This edits two assertions of `test/scenes/sdd-request-relay-catalogue.test.ts` and one sentence of the scenario "One composition, before the topology scene" of the unarchived change `sdd-scene-1-relay`; that change's MODIFIED block is left as it is and replaced by this change's when both are archived, scene 1 first (design §2.6). Recommended: accept.
 7. **The folder leaves once the four files are out**, so the files have the top of the stage. Recommended: keep.
 8. **`NO-GO` in `color.state.failure`** (gate-0 q5), not the blocked orange. Recommended: keep.
-9. **One typing act for `init` and `propose`**, one command line on the screen. Recommended: keep.
+9. **Chaves types `init` and `propose`**, in one act with one command line on the screen. The article names no one for either (L44, L86); the developer at the laptop is scene 1's reading. Recommended: keep.
 10. **The answer beat** (Balão answers, six checks; L120), which the gate-0 sheet skips, so the review is not read as a review of unanswered questions. Recommended: keep.
 11. **Length 29 s** (870 frames), against ~26 s at gate 0 and 36 s for scene 1. Recommended: accept.
 12. **Stamp sizes:** `NO-GO` is a round stamp of radius 46 scaled 1.25 (its word at 33.75); `GO` is Balão's stamp (radius 24) landing at scale 1.6 (its word at 43.2). Recommended: accept.
