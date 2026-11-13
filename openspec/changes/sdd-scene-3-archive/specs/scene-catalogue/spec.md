@@ -157,7 +157,7 @@ With no cast member acting, the review SHALL flag the second folder once (a `?` 
 - **THEN** no `NO-GO` word or device is ever drawn, and at most one `?` pill is drawn at a time
 
 ### Requirement: SDD archive approval
-After the finding is fixed, Balão SHALL hold up its `GO` stamp; the stamp SHALL then leave its hand and travel to the second folder's slot, growing about its centre from scale 0.95 to 1.6, land there and stay; Balão's face SHALL turn `done` as it lets go.
+After the finding is fixed, Balão SHALL hold up its `GO` stamp; the stamp SHALL then leave its hand and travel to the second folder's slot, growing about its centre from scale 0.95 to 1.6, and land there and stay until the second archive (SDD archive mechanics (second archive), apply and ending, below); Balão's face SHALL turn `done` as it lets go.
 
 #### Scenario: Approval frames
 - **GIVEN** frames 343, 344, 359, 360, 371, 382, 419, 420
