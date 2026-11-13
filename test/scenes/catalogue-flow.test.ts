@@ -55,18 +55,30 @@ test("Takes fixture beside the registered scenes",()=>{
   expect(entries.slice(0,4).every(e=>e.folder==="circuit-breaker-states")).toBe(true);
   expect(entries.slice(4,8).every(e=>e.folder==="publish-subscribe")).toBe(true);
   expect(entries.at(-1)!.id).toBe("takes-fixture-16x9");
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","circuit-breaker-topology"]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","circuit-breaker-topology"]);
 });
 
 // Every registered scene (spec scene-catalogue, "State-machine and flow catalogue
 // compatibility", scenario "Three scenes in the catalogue"; change
-// circuit-breaker-topology-scene, task 2.4). The commands' `available scenes:`
-// line is checked in test/scripts/cli.test.ts.
+// circuit-breaker-topology-scene, task 2.4; generalised by change sdd-scene-1-relay,
+// task 2.4, §2.4: the three scenes registered before the topology scene keep their
+// relative order, and the topology scene stays last). The commands' `available
+// scenes:` line is checked in test/scripts/cli.test.ts.
 test("Three scenes in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","circuit-breaker-topology"]);
+  const earlier = scenes.filter(s=>s.id!=="circuit-breaker-topology").map(s=>s.id);
+  expect(earlier).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay"]);
+  expect(scenes.at(-1)!.id).toBe("circuit-breaker-topology");
+});
+
+// Added by change sdd-scene-1-relay, task 2.4: the full, exact catalogue of four
+// registered scenes, their composition counts and the topology scene still last.
+test("Four scenes in the catalogue",()=>{
+  expect(checkCatalogue(scenes)).toEqual([]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","circuit-breaker-topology"]);
   const entries=scenes.flatMap(compositionsOf);
-  expect(entries).toHaveLength(9); expect(new Set(entries.map(e=>e.id)).size).toBe(9);
-  expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"circuit-breaker-topology"]);
-  expect(entries[8].id).toBe("circuit-breaker-topology-16x9");
+  expect(entries).toHaveLength(10); expect(new Set(entries.map(e=>e.id)).size).toBe(10);
+  expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"sdd-request-relay","circuit-breaker-topology"]);
+  expect(entries[8].id).toBe("sdd-request-relay-16x9");
+  expect(entries[9].id).toBe("circuit-breaker-topology-16x9");
 });
