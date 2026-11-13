@@ -24,6 +24,10 @@ import {
 import { drawn as isDrawn, frameAt, type Appear, type TopologyState } from "./frame";
 import { text } from "./scene.ts";
 import { timeline, type Route, type StateName, type TagPlace, type TagText } from "./timeline";
+import { withSansFamily } from "../../brand/svg-fonts.ts";
+
+/** Re-exported so this scene's existing import path stays unedited (change sdd-scene-1-relay, task 1.1). */
+export { withSansFamily };
 
 const words = text.en;
 /** The ghost beside take 2's `backend calls`: take 1's last count, 60 (L29). */
@@ -162,20 +166,6 @@ export const componentsOf = (s: TopologyState): Components => ({
   },
   clock: s.clock === null || !isDrawn(s.clock.appear) ? null : { ...CLOCK, left: s.clock.left, appear: s.clock.appear, opacity: s.clock.opacity },
   tokens: s.tokens.map((t) => ({ ...t, radius: TOKEN_RADIUS })),
-});
-
-/**
- * The tree with every `font-family` that names the sans token stack replaced by
- * `family`. Why: the pieces name the face "Source Sans 3" (ADR 0008, the name
- * their embedded fonts use), but @remotion/google-fonts registers it as
- * "Source Sans Three", so in a video frame the SVG words would fall back to
- * Helvetica. Scene.tsx passes fonts.ts's `sans`, which starts with the loaded
- * family; the monospace face is registered under its own name and is left as is.
- */
-export const withSansFamily = (node: SvgNode, family: string): SvgNode => ({
-  ...node,
-  attrs: node.attrs["font-family"] === tokens.font.sans ? { ...node.attrs, "font-family": family } : node.attrs,
-  children: node.children.map((child) => (typeof child === "string" ? child : withSansFamily(child, family))),
 });
 
 /** The stage and the component props at `frame`. */

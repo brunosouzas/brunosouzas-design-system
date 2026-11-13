@@ -16,7 +16,7 @@
 import { tokens } from "../../tokens/generated/tokens";
 import type { CastExpression, EmoteKind } from "../pieces/index.ts";
 
-export type Actor = "mira" | "visor" | "drone" | "kiu" | "sinal";
+export type Actor = "mira" | "visor" | "drone" | "kiu" | "sinal" | "balao" | "chaves";
 export type Take = 1 | 2 | "rewind";
 /**
  * A reading device the article does not state, kept by the owner (MOT-1). The

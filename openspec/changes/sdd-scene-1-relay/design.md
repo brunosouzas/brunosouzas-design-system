@@ -262,14 +262,14 @@ No emote enters during the rewind.
 
 ### 4.4 Routes (stage units)
 
-`X_i = 437.5 + 27i` (the row above Chaves, y 300); `Y_i = 597.5 + 27i` (the row in the screen, y 340); `R_k = 76.15 + 21.85(k − 1)` (row k's mark on the desk sheet, x 608).
+`X_i = 437.5 + 27i` (the row above Chaves, y 300); `Y_i = 597.5 + 27i` (the row in the screen, y 340); `R_k = 77.15 + 21.85(k − 1)` (row k's mark on the desk sheet, x 608).
 
 | Route | Path |
 |---|---|
 | `ask-i` | `M 193.3,403.8 C 230,250 340,215 X_i,300` |
 | `hop-i` | `M X_i,300 C X_i+60,240 Y_i−40,270 Y_i,340` |
 | `list-i` | `M Y_i,340 C Y_i,290 608,R_{i+1}+50 608,R_{i+1}` |
-| `carry` (the sheet's top-left) | `M 579.5,35.3 C 474.5,10 314.5,90 221.9,223.3` |
+| `carry` (the sheet's top-left) | `M 579.5,36.3 C 474.5,10 314.5,90 221.9,223.3` |
 | `return` | `carry` reversed |
 | P1 (guide) | `M 193.3,403.8 C 230,250 340,215 505,300` |
 | P2 (guide) | `M 505,300 C 565,240 625,270 665,340` |
@@ -296,7 +296,7 @@ Out of scope, because the article only implies them: which code take 1 picked; t
 | request line | `{ indent 0, w 96, color "white", tall }` | first line |
 | code lines | widths 70, 100, 64, 90, 56, 30; indents 0, 16, 32, 32, 16, 0; `color` "white" | after the request line |
 | keyboard | `keyboard` width 150 in Chaves's units at (98, −74) | stage x 598.1, y 405.7, w 142.5 |
-| sheet | `sheet` 180 × 226, top 32, step 23, rows `{ lead: "question", bar, tail }` with bars 76, 58, 84, 66, 80, 52; at scale 0.95 (171 × 214.7) | desk top-left (579.5, 35.3); held top-left (221.9, 223.3) |
+| sheet | `sheet` 180 × 226, top 32, step 23, rows `{ lead: "question", bar, tail }` with bars 76, 58, 84, 66, 80, 52; at scale 0.95 (171 × 214.7) | desk top-left (579.5, 36.3); held top-left (221.9, 223.3) |
 | label | `diagramBox` pill w 206, h 44, `textSize` 33, fill `color.white`, `["proposal.md"]` | centred on the sheet's top edge: (sheet x + 85.5, sheet y) |
 | `GO` mark | `stamp` r 24, word `GO`, × 1.25 | (sheet x + 58.9, sheet y + 183.35); pop anchor its centre |
 | `?` | `questionToken` scale 0.95 | routes §4.4 |
@@ -407,3 +407,4 @@ The owner follows the recommendations and judges at the video (G3); this change 
 9. **Visor turns `waiting` after listing** and stops pointing; **Balão speaks while answering.** Recommended: keep.
 10. **No emote for Visor's `failed`** (one emote per reaction, the fright is Balão's, q79 A). Recommended: keep.
 11. **Length 36 s** (1080 frames, final still 100 frames). Recommended: accept.
+12. **Desk sheet moved from y 35.3 to y 36.3** (task 4.4, BUILD): the layout test's "Inside the frame" check (§6.3 item 4) found the label pill's outline 0.2 units inside the 12-unit stage margin at y 35.3. The desk anchor moved from 250 to 251 stage units, which only translates the desk sheet, its label, its `GO` mark and the `carry`/`return`/P4 routes by 1 unit; `HELD` and every cast position are unchanged. Recommended: accept (a layout-test catch, not a visual judgement call).
