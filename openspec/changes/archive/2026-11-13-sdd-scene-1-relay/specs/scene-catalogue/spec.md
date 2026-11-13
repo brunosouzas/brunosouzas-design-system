@@ -18,7 +18,7 @@ The catalogue SHALL register `sdd-request-relay` right after `publish-subscribe`
 #### Scenario: One composition, before the topology scene
 - **GIVEN** every registered scene
 - **WHEN** the compositions are enumerated without React or font loading
-- **THEN** `sdd-request-relay-16x9` (1920x1080, 30 fps, 1080 frames, folder `sdd-request-relay`) comes right after the eight compositions of `circuit-breaker-states` and `publish-subscribe`, unchanged and in order, and right before `circuit-breaker-topology-16x9`; every id is unique
+- **THEN** `sdd-request-relay-16x9` (1920x1080, 30 fps, 1080 frames, folder `sdd-request-relay`) comes right after the eight compositions of `circuit-breaker-states` and `publish-subscribe`, unchanged and in order, and before `circuit-breaker-topology-16x9`, with only `sdd-scene-2-files-16x9` between them; every id is unique
 
 #### Scenario: Broken entry rejected
 - **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 991

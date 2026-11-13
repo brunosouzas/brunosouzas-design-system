@@ -14,12 +14,14 @@ import { circuitBreakerStates } from "./scenes/circuit-breaker-states/scene.ts";
 
 import { PublishSubscribeScene } from "./scenes/publish-subscribe/Scene.tsx";
 import { SddRequestRelayScene } from "./scenes/sdd-request-relay/Scene.tsx";
+import { SddScene2FilesScene } from "./scenes/sdd-scene-2-files/Scene.tsx";
 import { CircuitBreakerTopologyScene } from "./scenes/circuit-breaker-topology/Scene.tsx";
 
 const components: Record<string, React.FC<SceneProps>> = {
   "publish-subscribe": PublishSubscribeScene,
   [circuitBreakerStates.id]: CircuitBreakerStatesScene,
   "sdd-request-relay": SddRequestRelayScene,
+  "sdd-scene-2-files": SddScene2FilesScene,
   "circuit-breaker-topology": CircuitBreakerTopologyScene,
 };
 

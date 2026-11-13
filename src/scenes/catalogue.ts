@@ -6,6 +6,7 @@ import { tokens } from "../../tokens/generated/tokens";
 import { arrowDrawAt, pillAt, type Timeline } from "../brand/motion";
 import { checkFlow } from "./publish-subscribe/flow";
 import type { FlowTimeline } from "./publish-subscribe/timeline";
+import { checkSequence, type SequenceTimeline } from "./sequence-kind";
 import { checkTakes, type TakesTimeline } from "./takes-kind";
 
 export const FORMATS = {
@@ -40,7 +41,12 @@ export type FlowSceneData = SceneContract<FlowTimeline> & { kind: "flow" };
  * (ADR 0005 as amended 2026-11-09), both pages' sources.
  */
 export type TakesSceneData = Omit<SceneContract<TakesTimeline>, "text"> & { kind: "takes"; neutral: true; text: { readonly en: TextTable } };
-export type CatalogueScene = SceneData | FlowSceneData | TakesSceneData;
+/**
+ * A scene that runs once, in order (src/scenes/sequence-kind.ts; change
+ * sdd-scene-2-files). Neutral like a `takes` scene.
+ */
+export type SequenceSceneData = Omit<SceneContract<SequenceTimeline>, "text"> & { kind: "sequence"; neutral: true; text: { readonly en: TextTable } };
+export type CatalogueScene = SceneData | FlowSceneData | TakesSceneData | SequenceSceneData;
 
 /** A neutral scene: one video for the Portuguese and English pages (SCN-1). */
 export const isNeutral = (scene: CatalogueScene): boolean => (scene as { neutral?: unknown }).neutral === true;
@@ -185,6 +191,7 @@ export const checkTimeline = (scene: CatalogueScene, readingHold: number = token
     return [...problems, ...checkFlow(id, scene.timeline)];
   }
   if (scene.kind === "takes") return [...problems, ...checkTakes(scene, readingHold)];
+  if (scene.kind === "sequence") return [...problems, ...checkSequence(scene, readingHold)];
   const legacy = scene.timeline;
   for (const [name, transition] of Object.entries(legacy.transitions)) {
     const fires = legacy.fires[name] ?? [];

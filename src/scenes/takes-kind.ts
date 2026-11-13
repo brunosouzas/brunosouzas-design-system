@@ -63,6 +63,13 @@ export type TakesTimeline = {
   cues: Readonly<Record<string, readonly number[]>>;
 };
 
+/**
+ * The cue fields a scene kind shares with `takes`: everything but the phases
+ * and the rewind. The `sequence` kind (sequence-kind.ts, change
+ * sdd-scene-2-files) runs `checkCast` and `checkHold` on its own timeline.
+ */
+export type CueTimeline = Omit<TakesTimeline, "phases" | "rewind">;
+
 /** Frames an emote or another element takes to leave; scenes pass it to `leave` (src/brand/cast-motion.ts), so the check and the frames agree. */
 export const LEAVE_FRAMES = 10;
 
@@ -95,7 +102,7 @@ const emoteEnd = (emote: TakesTimeline["emotes"][number], duration: number): num
   emote.leaveAt === null ? duration : emote.leaveAt + LEAVE_FRAMES;
 
 /** Acts, faces and emotes (CAST-3, CAST-4). */
-const checkCast = (id: string, t: TakesTimeline): string[] => {
+export const checkCast = (id: string, t: CueTimeline): string[] => {
   const problems: string[] = [];
   t.acts.forEach((a, i) => t.acts.slice(i + 1).forEach((b) => {
     if (a.actor !== b.actor && a.from <= b.to && b.from <= a.to) {
@@ -123,8 +130,8 @@ const checkCast = (id: string, t: TakesTimeline): string[] => {
   return problems;
 };
 
-/** Nothing moves from the outro on (SCN-4): cues before it, pop-ins settled by it. */
-const checkHold = (id: string, t: TakesTimeline, settle: number): string[] => {
+/** Nothing moves from the outro on (SCN-4): cues before it, pop-ins settled by it; the rewind's end too, when there is one. */
+export const checkHold = (id: string, t: CueTimeline & { rewind?: TakesTimeline["rewind"] }, settle: number): string[] => {
   const problems: string[] = [];
   const before = (what: string, frame: number) => {
     if (frame >= t.outro) problems.push(`${id}: ${what} at frame ${frame} is at or after the outro (frame ${t.outro})`);
@@ -140,7 +147,7 @@ const checkHold = (id: string, t: TakesTimeline, settle: number): string[] => {
   before("rings fade (ends)", t.ringsFade[1]);
   for (const [name, at] of Object.entries(t.leaves)) before(`leave of ${name} (ends)`, at + LEAVE_FRAMES);
   for (const [name, frames] of Object.entries(t.cues)) for (const frame of frames) before(`cue ${name}`, frame);
-  before("end of the rewind", t.rewind.to);
+  if (t.rewind !== undefined) before("end of the rewind", t.rewind.to);
   const latest = t.outro - settle;
   const settled = (what: string, frame: number) => {
     if (frame > latest) problems.push(`${id}: ${what} at frame ${frame} is too late to settle by the outro (at most ${latest})`);
