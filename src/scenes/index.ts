@@ -7,8 +7,9 @@ import { circuitBreakerStates } from "./circuit-breaker-states/scene";
 
 import { publishSubscribe } from "./publish-subscribe/scene.ts";
 import { sddRequestRelay } from "./sdd-request-relay/scene.ts";
+import { sddScene3Archive } from "./sdd-scene-3-archive/scene.ts";
 import { circuitBreakerTopology } from "./circuit-breaker-topology/scene.ts";
 
-export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe, sddRequestRelay, circuitBreakerTopology];
+export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe, sddRequestRelay, sddScene3Archive, circuitBreakerTopology];
 
 export const findScene = (id: string): CatalogueScene | undefined => scenes.find((scene) => scene.id === id);
