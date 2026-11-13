@@ -126,7 +126,7 @@ The scene `circuit-breaker-states` SHALL animate the states CLOSED, OPEN and HAL
 - **THEN** there is no caption before the first phase; between phases and in the outro the caption of the latest phase that started stays
 
 ### Requirement: State-machine and flow catalogue compatibility
-The catalogue SHALL register state-machine, message-flow and two-take scenes through the same composition, text, source and phase-range contract, without requiring flow nodes or takes to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list them in registration order.
+The catalogue SHALL register state-machine, message-flow, two-take and sequence scenes through the same composition, text, source and phase-range contract, without requiring flow nodes, takes or sequences to be active states or hold call slots. The circuit-breaker and publish-subscribe scenes' data, compositions, frame behaviour, pinned timing assertions and existing tests SHALL remain unchanged, except assertions that list every registered scene, which SHALL list them in registration order.
 
 #### Scenario: Both kinds in the catalogue
 - **GIVEN** the circuit-breaker and pub-sub scenes, registered with later scenes after them
@@ -134,14 +134,24 @@ The catalogue SHALL register state-machine, message-flow and two-take scenes thr
 - **THEN** both pass and their eight compositions are returned unchanged, circuit-breaker first, pub-sub second; the existing circuit-breaker test suite and pinned timeline pass without edits
 
 #### Scenario: Takes fixture beside the registered scenes
-- **GIVEN** the registered scenes followed by the fixture `takes-fixture`
+- **GIVEN** the registered scenes on this branch followed by the fixtures `takes-fixture` and a sequence fixture
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
-- **THEN** all pass and the registered scenes' compositions are returned unchanged and in order, `takes-fixture-16x9` last, every id unique; the catalogue itself registers exactly `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology`, in that order
+- **THEN** all pass and the registered scenes' compositions are returned unchanged and in order, the fixtures last, every id unique; the catalogue itself registers exactly `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay`, `sdd-scene-3-archive` and `circuit-breaker-topology`, in that order (on this branch; the owner reconciles with `sdd-scene-2-files` at merge time, proposal.md's open question 6)
 
 #### Scenario: Three scenes in the catalogue
-- **GIVEN** the circuit-breaker, pub-sub and `circuit-breaker-topology` scenes, registered in that order
+- **GIVEN** the circuit-breaker, pub-sub and `circuit-breaker-topology` scenes, registered with the SDD scenes between pub-sub and topology
 - **WHEN** catalogue checks and composition enumeration run without React or font loading
-- **THEN** all pass and nine unique compositions are returned in registration order, `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the three scenes in that order
+- **THEN** all pass and the three keep their relative order, their nine compositions are returned unchanged, and `circuit-breaker-topology-16x9` is the last composition
+
+#### Scenario: Four scenes in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub, `sdd-request-relay` and `circuit-breaker-topology` scenes, registered with `sdd-scene-3-archive` between the relay and topology scenes
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** all pass, the four keep their relative order, and `sdd-request-relay-16x9` is the ninth composition
+
+#### Scenario: Five scenes in the catalogue
+- **GIVEN** the circuit-breaker, pub-sub, `sdd-request-relay`, `sdd-scene-3-archive` and `circuit-breaker-topology` scenes, registered in that order
+- **WHEN** catalogue checks and composition enumeration run without React or font loading
+- **THEN** all pass and eleven unique compositions are returned in registration order, `sdd-scene-3-archive-16x9` tenth and `circuit-breaker-topology-16x9` last, and the commands' `available scenes:` line lists the five scenes in that order
 
 #### Scenario: Shared checks still reject a broken flow
 - **GIVEN** a pub-sub fixture with a duplicate composition id, a missing English text key or a non-HTTPS source
@@ -650,3 +660,476 @@ The scene SHALL use the stage layout of the change's design §6.1 in 960x540 sta
 - **GIVEN** the stills and boundary frames of design §7 and their phone sheet viewed at 341 CSS px
 - **WHEN** the owner and the implementer open each one
 - **THEN** each shows what §4.2 lists at that frame, with no overlap or clipping; every word is readable, and the failing Payment units, red against ink arrows and dashed cut lines are told apart at 341 px
+
+### Requirement: SDD relay registration
+The catalogue SHALL register `sdd-request-relay` right after `publish-subscribe` and before `circuit-breaker-topology`: kind `takes`, neutral, format `16x9` only, 1080 frames at 30 fps, outro 980, sources `https://brunosouzas.com/blog/spec-driven-development-in-practice` (`en`) and `https://brunosouzas.com/pt/blog/spec-driven-development-in-practice` (`pt`), and the `text.en` table of scenario "Word table". `src/Root.tsx` SHALL map its composition to the scene's component.
+
+#### Scenario: Registered entry
+- **GIVEN** the catalogue
+- **WHEN** `findScene("sdd-request-relay")` is read
+- **THEN** it returns the entry above with `neutral` true, `languages` `["en"]`, `text.en` only and both sources, and `src/Root.tsx` registers `sdd-request-relay-16x9` with the scene's component
+
+#### Scenario: Word table
+- **GIVEN** the registered entry
+- **WHEN** `text.en` is read
+- **THEN** it equals `file` "proposal.md", `approval` "GO", `question` "?", `takes` ["1", "2"]
+
+#### Scenario: One composition, before the topology scene
+- **GIVEN** every registered scene
+- **WHEN** the compositions are enumerated without React or font loading
+- **THEN** `sdd-request-relay-16x9` (1920x1080, 30 fps, 1080 frames, folder `sdd-request-relay`) comes right after the eight compositions of `circuit-breaker-states` and `publish-subscribe`, unchanged and in order, and right before `circuit-breaker-topology-16x9`; every id is unique
+
+#### Scenario: Broken entry rejected
+- **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 991
+- **WHEN** the catalogue is checked
+- **THEN** each fails naming `sdd-request-relay` and the problem (Portuguese table, `pt` source, outro inside the reading hold)
+
+### Requirement: Existing scenes unchanged by the relay scene
+Adding the relay scene SHALL leave every other registered scene unchanged: data, compositions, frame behaviour, tests and stills, except the assertions that list every registered scene (in `test/scenes/catalogue-flow.test.ts` and `test/scripts/cli.test.ts`). Moving `withSansFamily` SHALL NOT change any pixel of the circuit-breaker topology scene.
+
+#### Scenario: Other scenes' tests untouched
+- **GIVEN** the branch after this change and `main` before it
+- **WHEN** `npm test` runs
+- **THEN** the test files of `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology` pass with no edit, and `git diff` shows no change under `src/scenes/circuit-breaker-states/` or `src/scenes/publish-subscribe/`
+
+#### Scenario: Stills byte-identical (local)
+- **GIVEN** the stills of `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology`, rendered on `main` and on the branch
+- **WHEN** their SHA-256 are compared
+- **THEN** every pair is equal
+
+### Requirement: SDD relay cast
+The scene SHALL draw, left to right on one ground line (stage y 476) at one scale (0.95), Balão at x 104 facing right (its tail toward Chaves), Chaves at x 505, and Visor at x 852 facing left, from the cast pieces `balao`, `chaves` and `visor`, never recoloured. Expressions change only the face and the body pose; at most one emote SHALL be on screen, beside its character's head.
+
+#### Scenario: Cast in place at every frame
+- **GIVEN** frames 0 to 1079
+- **WHEN** the cast pieces' parameters are read
+- **THEN** each drawn cast piece has `scale` 0.95 and ground y 476 (a pop-in scales it through `pose` about that point), Balão x 104 facing right, Chaves x 505, Visor x 852 facing left, and none has a fill or colour parameter
+
+#### Scenario: Emotes beside the head
+- **GIVEN** frames 347 and 1000
+- **WHEN** the emote is read
+- **THEN** at 347 it is `problem` at (214.2, 286) at scale 0.8 and at 1000 `worked` at (800, 292) at scale 0.75, and no other emote is drawn at either frame
+
+### Requirement: SDD relay cast timing
+The `takes` kind SHALL accept `balao` and `chaves` as actors, with the same cast checks as the pillar cast. The scene's acts SHALL NOT overlap, every emote SHALL enter on its actor's expression change, and the `problem` emote SHALL be gone before Visor's face turns `failed`.
+
+#### Scenario: Takes checks pass
+- **GIVEN** the registered scene
+- **WHEN** `checkTimeline` and the `takes` checks run
+- **THEN** no problem is reported
+
+#### Scenario: Overlapping acts of the supporting cast
+- **GIVEN** a fixture of the scene's timeline with a `chaves` act 752–760 added during Balão's act 752–836
+- **WHEN** the `takes` checks run
+- **THEN** they fail naming the scene, the `balao` act and the `chaves` act
+
+#### Scenario: Fright before the agent's failure
+- **GIVEN** the scene's timeline
+- **WHEN** its faces and emotes are read
+- **THEN** Balão turns `failed` at 316 with the `problem` emote, the emote leaves at 350 (gone at 360), and Visor turns `failed` at 366
+
+### Requirement: SDD relay beats and timing
+The scene's timeline SHALL equal the change's design §4: the thirteen phases with their takes, frames and cited lines; every act, face, emote, trip, pop-in, fade, leave and cue; the rewind's object frames; the outro. Every trip SHALL end `motion.travel` frames after it starts, and every fade SHALL last `motion.fade` frames.
+
+#### Scenario: Timeline equals the beat table
+- **GIVEN** design §4 transcribed in the test, `motion.travel` 22 and `motion.fade` 10
+- **WHEN** it is compared with the scene's timeline
+- **THEN** every value is equal, including phases `setup` 0–49, `t1-request` 50–129, `t1-relay` 130–219, `t1-code` 220–299, `t1-error` 300–389, `rewind` 390–449, `t2-request` 450–529, `t2-relay` 530–619, `t2-list` 620–699, `t2-carry` 700–749, `t2-answer` 750–849, `t2-return` 850–889 and `t2-implement` 890–979
+
+#### Scenario: Travel token changed
+- **GIVEN** the timeline built with `motion.travel` 20
+- **WHEN** it is compared with the beat table
+- **THEN** the comparison fails naming the first trip whose arrival differs
+
+#### Scenario: Seeking in any order
+- **GIVEN** every frame from 0 to 1079
+- **WHEN** the state is evaluated forward, backward and in a shuffled order
+- **THEN** each frame gives the same state every time
+
+### Requirement: SDD relay take 1 relay
+In each take, Balão SHALL speak to Chaves while six `?` travel from its tail to a row above Chaves's head; Chaves SHALL then turn to the laptop and type, the request line SHALL appear on the screen, and the `?` SHALL travel into a row inside the screen. Take 2 SHALL repeat these frames 400 frames later.
+
+#### Scenario: Request and relay frames
+- **GIVEN** frames 55, 56, 82, 113, 135, 136, 142, 199 and 210
+- **WHEN** the state is evaluated
+- **THEN** at 55 Balão does not speak and no `?` is drawn; from 56 Balão speaks; at 82 `?` 5 has arrived above Chaves; at 113 all six wait above Chaves, who faces left; at 136 Chaves faces right and types; from 142 the screen shows the request line; at 199 all six wait in the screen; at 210 Chaves no longer types
+
+#### Scenario: Take 2 repeats the relay
+- **GIVEN** every frame f from 50 to 225
+- **WHEN** the stage of f and of f + 400 are compared without the badge and the rewind mark
+- **THEN** they are equal
+
+### Requirement: SDD relay take 1 code alone
+In take 1 Visor SHALL write the code alone: it points at the screen, six code lines appear, each `?` sinks into the code as its line appears, and Visor's face turns `done`. No `proposal.md` SHALL be drawn in take 1 or the rewind.
+
+#### Scenario: The questions sink into the code
+- **GIVEN** frames 225, 226, 232, 242, 272, 282 and 286
+- **WHEN** the state is evaluated
+- **THEN** Visor points from 226; the screen shows code line 1 from 232 and six code lines from 272; `?` 0 is drawn sinking at 232 and gone from 242; no `?` is drawn from 282; Visor's face is `done` from 286
+
+#### Scenario: No sheet before take 2
+- **GIVEN** every frame from 0 to 625
+- **WHEN** the stage is read
+- **THEN** no `proposal.md` and no `GO` is drawn
+
+### Requirement: SDD relay error and fright
+The first error SHALL come back from the code to Balão as a `failure` arrow; Balão SHALL then turn `failed` with the `problem` emote and a fright pose (tilt and squash); after the emote is gone Visor SHALL turn `failed`. These are reading devices approved at gate 0 (q79 A, q81 A).
+
+#### Scenario: Error frames
+- **GIVEN** frames 299, 305, 316, 330, 360 and 366
+- **WHEN** the state is evaluated
+- **THEN** no failure arrow is drawn at 299; it fades in from 300 to 310; Balão is `failed`, tilted -5 degrees and squashed from 316; the `problem` emote is drawn at 330 and gone at 360; Visor is `failed` from 366
+
+### Requirement: SDD relay rewind
+From 390 to 439 the whole stage except the badge and the rewind mark SHALL be drawn from an object frame playing take 1 backwards from 389 to 49, the cast included, with no emote; from 440 to 449 it SHALL hold object frame 49. The rewind mark SHALL pop at 390 and leave at 450; the badge SHALL read `1` until 439 and `2` from 440.
+
+#### Scenario: Object frames
+- **GIVEN** frames 389, 390, 414, 439 and 445
+- **WHEN** the object frame is read
+- **THEN** it is 389, 389, 222, 49 and 49
+
+#### Scenario: Same stage before each take
+- **GIVEN** frames 49, 449 and 450
+- **WHEN** their stages are compared without the badge and the rewind mark
+- **THEN** they are equal
+
+#### Scenario: Cast replayed backwards
+- **GIVEN** the scene's timeline
+- **WHEN** its acts and faces inside the rewind are read
+- **THEN** Visor turns `done` at 394, Balão `idle` at 401, Visor `idle` at 405; the acts are Visor 414, Chaves 416–427, Balão 430 and Balão 439; no emote enters between 390 and 449
+
+### Requirement: SDD relay open questions listed
+In take 2 Visor SHALL point and `proposal.md` SHALL appear above the screen with no rows; each `?` SHALL travel from the screen into the sheet and become its question row on arrival. No code line SHALL be drawn in take 2 before 902.
+
+#### Scenario: Rows from the questions
+- **GIVEN** frames 625, 626, 627, 636, 658, 698 and 702
+- **WHEN** the state is evaluated
+- **THEN** no sheet is drawn at 625 or 626; Visor points from 626, when the sheet's pop-in starts; from 627 the sheet is drawn above the screen with no rows; `?` 0 departs at 636 and row 1 is drawn from 658; six rows from 698; at 702 Visor no longer points and its face is `waiting`
+
+#### Scenario: No code before the approval
+- **GIVEN** every frame from 450 to 901
+- **WHEN** the screen is read
+- **THEN** it shows the request line only (from 542) and no code line
+
+### Requirement: SDD relay carry and answer
+Chaves SHALL turn to Balão and take the sheet into his hand; Balão SHALL then answer the six `?`, one check per row, and stamp `GO`, which stays on the sheet. Only Balão's answers and stamp SHALL change the sheet while Chaves holds it.
+
+#### Scenario: Carry frames
+- **GIVEN** frames 711, 712, 723 and 734
+- **WHEN** the state is evaluated
+- **THEN** at 711 the sheet is above the screen; at 712 Chaves faces left and the sheet starts its trip; at 723 it is halfway; from 734 Chaves holds it, with the `proposal.md` label at its top edge
+
+#### Scenario: Answer and stamp frames
+- **GIVEN** frames 751, 752, 760, 800, 806, 816, 835, 836 and 837
+- **WHEN** the state is evaluated
+- **THEN** Balão speaks from 752 to 805; row 1 is checked from 760 and all six from 800; Balão holds the stamp from 816 to 835; at 836 Balão no longer holds it, its face is `done` and the `GO` mark's pop-in starts; from 837 the mark is drawn on the sheet
+
+### Requirement: SDD relay implementation and final still
+Chaves SHALL bring the approved sheet back above the screen and face the laptop; Visor SHALL then implement: it points, six code lines appear, and its face turns `done` with the `worked` emote. From the outro on, nothing SHALL change.
+
+#### Scenario: Return and implementation frames
+- **GIVEN** frames 851, 852, 874, 896, 902, 942 and 950
+- **WHEN** the state is evaluated
+- **THEN** Chaves holds the sheet at 851; from 852 the sheet travels back and is above the screen from 874, with six checks and `GO`, when Chaves faces right; Visor points from 896; code line 1 from 902, six lines from 942; Visor `done` with the `worked` emote from 950
+
+#### Scenario: Final hold identical
+- **GIVEN** frames 980 to 1079
+- **WHEN** the stage and component state of each are compared
+- **THEN** they are deep-equal
+
+### Requirement: SDD relay words on screen
+At every frame, every string the scene draws SHALL be a value of its `text.en` table. Across the composition every value SHALL appear. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
+
+#### Scenario: Words over the whole composition
+- **GIVEN** the stage trees of frames 0 to 1079
+- **WHEN** every drawn string is collected
+- **THEN** each one is `proposal.md`, `GO`, `?`, `1` or `2`, and all five appear
+
+#### Scenario: Unlisted word rejected
+- **GIVEN** a fixture whose stage draws the literal `spec` in the sheet's label at frame 700
+- **WHEN** the words test runs
+- **THEN** it fails naming `spec` and frame 700
+
+### Requirement: SDD relay text size
+Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its pop-in has settled, of at least 33 stage units (11.7 px in the site's 341 px column), and the take numbers at least 36. The `?` mark is a symbol, exempt; so is the `GO` on Balão's held stamp during Balão's act.
+
+#### Scenario: Every settled word at its minimum
+- **GIVEN** every frame from 0 to 1079
+- **WHEN** each drawn string whose pop-in has settled is measured
+- **THEN** `proposal.md` and the `GO` mark are at least 33 and `1` and `2` at least 36; a `GO` below 33 is drawn only inside Balão's act 752–836
+
+#### Scenario: Too small rejected
+- **GIVEN** a fixture whose label is drawn at 32 and one whose badge is drawn at 35
+- **WHEN** the size test runs
+- **THEN** each fails naming the string, its size and the first frame it is drawn
+
+### Requirement: SDD relay text placement
+Every drawn word box (measured advance on the `fonts/` faces times effective size), the label pill, the `GO` mark and the badge SHALL lie inside the stage less 12 units and SHALL NOT intersect each other, the rewind mark or a cast body box of design §6.2. Moving and settling frames of design §6.3 are exempt.
+
+#### Scenario: Placement at every checked frame
+- **GIVEN** every frame from 0 to 1079 except the exempt frames
+- **WHEN** the boxes are computed
+- **THEN** each lies within x 12–948 and y 12–528, and none intersects another, the rewind mark or a cast body box
+
+#### Scenario: Collision rejected
+- **GIVEN** a fixture drawing the take badge at (665, 40)
+- **WHEN** the placement test runs
+- **THEN** it fails naming the badge, the label pill and frame 656, the first frame both are drawn and settled
+
+### Requirement: SDD relay built from package pieces
+The scene SHALL draw only through the pieces `balao`, `chaves`, `visor`, `emote`, `keyboard`, `codePanel`, `questionToken`, `sheet`, `diagramBox`, `stamp`, `messageArrow`, `countBadge` and `uiIcon`, `pose`, and the components `Rings` and `MotionPath`. Its files SHALL contain no colour literal and create no SVG shape of their own.
+
+#### Scenario: No shape of its own
+- **GIVEN** the files under `src/scenes/sdd-request-relay/`
+- **WHEN** a test reads them
+- **THEN** none calls `el(` with `path`, `rect`, `circle`, `ellipse`, `line`, `polygon` or `polyline`, and none contains a JSX element of those tags
+
+#### Scenario: No colour literal
+- **WHEN** the colour-literal test scans `src/scenes/` and `src/brand/`
+- **THEN** it reports nothing for the new files
+
+### Requirement: Sequence scene kind
+A `sequence` scene SHALL be neutral and run its phases once, no `take`, no `rewind`. Each phase SHALL cite a positive-integer line. The outro SHALL be at most `duration` minus `motion.readingHold`, with no phase or event at or after it.
+
+Ported verbatim from `sdd-scene-2-files` (PR #48, unmerged); design §2.1 explains why this branch needs its own copy.
+
+#### Scenario: Valid sequence
+- **GIVEN** the registered scene `sdd-scene-3-archive`
+- **WHEN** `checkTimeline` and `checkSequence` run on it
+- **THEN** neither reports a problem
+
+#### Scenario: Sequence phase without an article line
+- **GIVEN** separate fixtures of that scene where phase `request` cites `[]`, `[0]` or `[203.5]`
+- **WHEN** each timeline is checked
+- **THEN** each fails naming the scene and phase `request`
+
+#### Scenario: Localised sequence scene
+- **GIVEN** a fixture of that scene that is not neutral
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene and saying a `sequence` scene is neutral
+
+#### Scenario: Sequence with a take or a rewind rejected
+- **GIVEN** separate fixtures of that scene where phase `review` has `take: 1`, and where the timeline has a `rewind`
+- **WHEN** each timeline is checked
+- **THEN** the first fails naming the scene and phase `review` ("has a take"), the second naming the scene and saying a `sequence` scene has no rewind
+
+#### Scenario: Sequence outro inside the reading hold
+- **GIVEN** a fixture of that scene with its outro at 515
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene and saying the outro at frame 515 is inside the reading hold (at most 510)
+
+### Requirement: Sequence cast and hold
+A `sequence` scene SHALL pass the `takes` kind's cast rules (acts of different actors never overlap; an emote enters on its actor's expression change, alone, and is gone before any later act) and reading-hold rules (no act, face, trip, fade, leave or cue at or after the outro; pop-ins and emotes settled by it), with the same messages. A `takes` scene SHALL get exactly the problems it got before.
+
+#### Scenario: Overlapping acts in a sequence
+- **GIVEN** a fixture of `sdd-scene-3-archive` with a `chaves` act 350–355 added during Balão's act 344–360
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene, the `balao` act [344, 360] and the `chaves` act [350, 355]
+
+#### Scenario: Cue in the reading hold
+- **GIVEN** a fixture of that scene with an `ending` cue at 500
+- **WHEN** its timeline is checked
+- **THEN** it fails naming the scene, the cue and frame 500 (at or after the outro, frame 500)
+
+#### Scenario: Takes scenes unchanged
+- **GIVEN** the `takes-fixture`, `sdd-request-relay` and `circuit-breaker-topology`
+- **WHEN** the `takes` tests run, unedited except the registration assertions task 1.1 lists, and the catalogue checks run
+- **THEN** they pass, and `checkTakes` on each registered `takes` scene returns no problem
+
+### Requirement: SDD archive registration
+The catalogue SHALL register `sdd-scene-3-archive` right after `sdd-request-relay` and before `circuit-breaker-topology` (this branch's order; reconciled with `sdd-scene-2-files` at merge time): kind `sequence`, neutral, format `16x9` only, 600 frames at 30 fps, outro 500. `src/Root.tsx` SHALL map its composition to the scene's component.
+
+#### Scenario: Archive registered entry
+- **GIVEN** the catalogue
+- **WHEN** `findScene("sdd-scene-3-archive")` is read
+- **THEN** it returns the entry above with `neutral` true, `languages` `["en"]`, `text.en` only and both sources, and `src/Root.tsx` registers `sdd-scene-3-archive-16x9` with the scene's component
+
+#### Scenario: Archive word table
+- **GIVEN** the registered entry
+- **WHEN** `text.en` is read
+- **THEN** it equals `fieldCount` {`was` "exactly two fields", `now` "exactly three fields"}, `verdict` "GO", `question` "?"
+
+#### Scenario: One composition, after this branch's earlier scenes
+- **GIVEN** every registered scene on this branch
+- **WHEN** the compositions are enumerated without React or font loading
+- **THEN** `sdd-scene-3-archive-16x9` (1920x1080, 30 fps, 600 frames, folder `sdd-scene-3-archive`) comes right after `sdd-request-relay-16x9` and right before `circuit-breaker-topology-16x9`, the compositions before it are unchanged and in order, and every id is unique
+
+#### Scenario: Archive broken entry rejected
+- **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 511
+- **WHEN** the catalogue is checked
+- **THEN** each fails naming `sdd-scene-3-archive` and the problem (Portuguese table, `pt` source, outro inside the reading hold — the limit is `duration` 600 minus `motion.readingHold` 90 = 510)
+
+### Requirement: Existing scenes unchanged by the archive scene
+Adding the archive scene SHALL leave every other registered scene unchanged: data, compositions, frame behaviour, tests and stills, except the assertions that list every registered scene (`test/scenes/catalogue-flow.test.ts`, `test/scenes/sdd-request-relay-catalogue.test.ts`, `test/scripts/cli.test.ts`), which this change edits to the five-scene order above.
+
+#### Scenario: Other scenes' tests untouched
+- **GIVEN** the branch after this change and `origin/main` before it
+- **WHEN** `npm test` runs
+- **THEN** the test files of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology` pass with no edit beyond the registration assertions named above, and `git diff` shows no change under `src/scenes/circuit-breaker-states/`, `src/scenes/publish-subscribe/`, `src/scenes/sdd-request-relay/` or `src/scenes/circuit-breaker-topology/`
+
+#### Scenario: Stills byte-identical (local)
+- **GIVEN** the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology`, rendered on `origin/main` and on the branch
+- **WHEN** their SHA-256 are compared
+- **THEN** every pair is equal
+
+### Requirement: SDD archive cast
+The scene SHALL draw, left to right on one ground line (stage y 476) at one scale (0.95), Balão at x 104 facing right, Chaves at x 505 facing right and Visor at x 852 facing left, from the pieces `balao`, `chaves` and `visor`, never recoloured. Chaves SHALL carry no action parameter in this scene.
+
+#### Scenario: Archive cast in place at every frame
+- **GIVEN** frames 0 to 599
+- **WHEN** the cast pieces' parameters are read
+- **THEN** each drawn cast piece has `scale` 0.95 and ground y 476, Balão x 104 facing right, Chaves x 505 facing right with no action set, Visor x 852 facing left; `points` is set only inside Visor's act 184–246; and none has a fill or colour parameter; every change of a cast action falls inside a declared act of its actor and every face change on a `faces` entry (CAST-4)
+
+#### Scenario: Archive emote beside the head
+- **GIVEN** frames 403, 404 and 550
+- **WHEN** the emote is read
+- **THEN** none is drawn at 403; at 404 and 550 the only emote is `worked` at (800, 292), at scale 0.75
+
+### Requirement: SDD archive beats and timing
+The scene's timeline SHALL equal the change's design §4: the nine phases with their frames, cited lines and devices; every act, face, emote, trip, pop-in, fade, leave, jolt and cue; the outro. Every trip SHALL end `motion.travel` frames after it starts, and every fade SHALL last `motion.fade` frames.
+
+#### Scenario: Archive timeline equals the beat table
+- **GIVEN** design §4 transcribed in the test, `motion.travel` 22 and `motion.fade` 10
+- **WHEN** it is compared with the scene's timeline
+- **THEN** every value is equal, including phases `setup` 0-39, `archive-1` 40-119, `request` 120-179, `propose` 180-259, `review` 260-339, `approve` 340-399, `apply` 400-419, `archive-2` 420-469 and `ending` 470-499
+
+#### Scenario: Archive travel token changed
+- **GIVEN** the timeline built with `motion.travel` 20
+- **WHEN** it is compared with the beat table
+- **THEN** the comparison fails naming the first trip whose arrival differs
+
+#### Scenario: Archive seeking in any order
+- **GIVEN** every frame from 0 to 599
+- **WHEN** the state is evaluated forward, backward and in a shuffled order
+- **THEN** each frame gives the same state every time
+
+### Requirement: SDD archive mechanics (first archive)
+With no cast member acting, the first change's folder SHALL travel from its stage centre to a parked position and stay there; the `book` SHALL already be on stage and gain a field-count pill reading "exactly two fields" once the folder has parked.
+
+#### Scenario: Archive frames
+- **GIVEN** frames 11, 12, 13, 43, 44, 55, 66, 99, 100
+- **WHEN** the state is evaluated
+- **THEN** no folder is drawn at 11; the first folder pops at 12 and is first drawn at 13, at (480, 140) scale 0.9 from 13 to 43; it departs at 44, is partway along its route at 55, and is parked at (900, 70) scale 0.4 from 66; no field-count pill is drawn at 99; it is first drawn at 101 and reads "exactly two fields" from 100
+
+### Requirement: SDD archive second request and propose
+Balão SHALL speak with no text on screen; then Visor SHALL point while a second folder pops in a fresh slot, and the `book` SHALL jolt once (the breaking fact), independent of any finding on the second folder.
+
+#### Scenario: Request and propose frames
+- **GIVEN** frames 123, 124, 163, 164, 183, 184, 189, 190, 191, 209, 210, 221, 222, 245, 246
+- **WHEN** the state is evaluated
+- **THEN** Balão does not speak at 123 and speaks from 124 to 163, silent again from 164; Visor does not point at 183 and points from 184; no second folder is drawn at 189, it pops at 190 and is first drawn at 191; the book does not jolt at 209, jolts from 210 to 221 (angle not 0 at 215), and is not jolting at 222; Visor stops pointing at 246
+
+#### Scenario: No second folder before propose
+- **GIVEN** every frame from 0 to 189
+- **WHEN** the stage is read
+- **THEN** no second folder is drawn
+
+### Requirement: SDD archive single review round
+With no cast member acting, the review SHALL flag the second folder once (a `?` pill and a 12-frame jolt), then clear the `?` once fixed. No `NO-GO` stamp or device SHALL ever appear in this scene.
+
+#### Scenario: Break and finding frames
+- **GIVEN** frames 267, 268, 269, 279, 280, 303, 304, 313, 314
+- **WHEN** the state is evaluated
+- **THEN** no `?` pill is drawn at 267; it pops at 268 and is first drawn at 269, and the second folder jolts 268-279 (angle not 0 at 272, 0 at 280); the `?` pill is leaving from 304 and gone at 314
+
+#### Scenario: No finding before the review
+- **GIVEN** every frame from 0 to 267
+- **WHEN** the second folder and the `?` pill are read
+- **THEN** neither the folder jolts nor the `?` pill is drawn
+
+#### Scenario: At most one finding mark at a time
+- **GIVEN** every frame from 0 to 599
+- **WHEN** the `?` pill and any stamp are read
+- **THEN** no `NO-GO` word or device is ever drawn, and at most one `?` pill is drawn at a time
+
+### Requirement: SDD archive approval
+After the finding is fixed, Balão SHALL hold up its `GO` stamp; the stamp SHALL then leave its hand and travel to the second folder's slot, growing about its centre from scale 0.95 to 1.6, and land there and stay until the second archive (SDD archive mechanics (second archive), apply and ending, below); Balão's face SHALL turn `done` as it lets go.
+
+#### Scenario: Approval frames
+- **GIVEN** frames 343, 344, 359, 360, 371, 382, 419, 420
+- **WHEN** the state is evaluated
+- **THEN** at 343 Balão holds nothing; it holds the stamp with `GO` from 344 to 359; at 360 it holds nothing, its face is `done`, and the `GO` stamp is at (229.4, 409.5) at scale 0.95; at 371 it is partway along its route; from 382 to 419 it is at (380, 150) at scale 1.6; it is leaving from 420
+
+#### Scenario: No GO before the owner
+- **GIVEN** every frame from 0 to 343
+- **WHEN** the stage's words are read
+- **THEN** `GO` is not drawn
+
+### Requirement: SDD archive mechanics (second archive), apply and ending
+Visor's face SHALL first turn `done` with the `worked` emote (the implementation). With no cast member acting, the landed `GO` SHALL then fade away and the second folder SHALL travel to park beside the first; only once parked SHALL the field-count pill's text change (implementation, archive, new wording — L193-199, L236). Chaves's face SHALL then turn `done`; nothing else SHALL move after.
+
+#### Scenario: Second archive, apply and ending frames
+- **GIVEN** frames 403, 404, 419, 420, 429, 430, 451, 452, 473, 474
+- **WHEN** the state is evaluated
+- **THEN** Visor is not `done` with no emote at 403 and is `done` with the `worked` emote from 404; the `GO` stamp is at (380, 150) scale 1.6 at 419, leaving from 420 and gone at 430; the second folder is at (380, 150) scale 0.95 at 429, departs at 430, and is parked at (900, 170) scale 0.4 from 452; the pill reads "exactly two fields" at 451 and "exactly three fields" from 452; Chaves is not `done` at 473 and is `done` from 474
+
+#### Scenario: No field-count change before the second archive
+- **GIVEN** every frame from 0 to 451
+- **WHEN** the field-count pill is read
+- **THEN** it reads "exactly two fields" from 100 to 451 and is not drawn before 100
+
+#### Scenario: No cast act during archive or review
+- **GIVEN** frames 40-119 (`archive-1`), 260-339 (`review`) and 420-469 (`archive-2`)
+- **WHEN** the scene's `acts` are read
+- **THEN** none falls inside those ranges
+
+#### Scenario: Archive final hold identical
+- **GIVEN** frames 500 to 599
+- **WHEN** the stage and component state of each are compared
+- **THEN** they are deep-equal
+
+### Requirement: SDD archive words on screen
+At every frame, every string the scene draws SHALL be a value of its `text.en` table. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
+
+#### Scenario: Archive words over the whole composition
+- **GIVEN** the stage trees of frames 0 to 599
+- **WHEN** every drawn string is collected
+- **THEN** each one is "exactly two fields", "exactly three fields", "GO" or "?", and all four appear
+
+#### Scenario: Archive words in the loaded face
+- **GIVEN** the stage layers of frames 105, 455 and 599
+- **WHEN** each passes through `withSansFamily`
+- **THEN** each layer that holds words held the `font.sans` stack before and holds none after
+
+#### Scenario: Archive unlisted word rejected
+- **GIVEN** a fixture whose field-count pill reads the literal "exactly four fields" at frame 450
+- **WHEN** the words test runs
+- **THEN** it fails naming "exactly four fields" and frame 450
+
+### Requirement: SDD archive text size
+Every word the scene draws SHALL have an effective font size of at least 33 stage units (11.7 px in the site's 341 px column). Exempt: the `?` mark, `GO` in Balão's hand (344-359) or in flight (360-381).
+
+#### Scenario: Every settled archive word at its minimum
+- **GIVEN** every frame from 0 to 599
+- **WHEN** each drawn string whose pop-in has settled is measured
+- **THEN** the field-count pill is at least 33 and the landed `GO` is at least 33; a smaller `GO` is drawn only from 344 to 381
+
+#### Scenario: Archive word too small rejected
+- **GIVEN** a fixture whose field-count pill is drawn at 32
+- **WHEN** the size test runs
+- **THEN** it fails naming the string, its size and the first checked frame
+
+### Requirement: SDD archive text placement
+The field-count pill, the `?` pill, the `book`'s own box, the `GO` stamp's disc and every drawn word box but `?` SHALL lie inside the stage less 12 units and SHALL NOT intersect each other or a cast body box. The `?` pill's placement is checked at every frame it is drawn except while it is settling (269-297) or leaving (304-313); it IS checked from 298 to 303.
+
+#### Scenario: Archive placement at every checked frame
+- **GIVEN** every frame from 0 to 599 except exempt (moving/settling/leaving) frames
+- **WHEN** the boxes are computed
+- **THEN** each lies within x 12-948 and y 12-528, and none intersects another or a cast body box
+
+#### Scenario: Archive collision rejected
+- **GIVEN** a fixture moving the field-count pill to overlap the `?` pill's position at frame 300
+- **WHEN** the placement test runs
+- **THEN** it fails naming both elements and frame 300 (300 is outside the `?` pill's settle/leave exemption windows, so the fixture is falsifiable)
+
+### Requirement: SDD archive built from package pieces
+The scene SHALL draw only through the pieces `balao`, `chaves`, `visor`, `emote`, `folder`, `book`, `diagramBox` and `stamp`, `pose`, and the components `Rings` and `MotionPath`. Its files SHALL contain no colour literal and create no SVG shape of their own.
+
+#### Scenario: Archive scene has no shape of its own
+- **GIVEN** the files under `src/scenes/sdd-scene-3-archive/`
+- **WHEN** a test reads them
+- **THEN** none calls `el(` with `path`, `rect`, `circle`, `ellipse`, `line`, `polygon` or `polyline`, none contains a JSX element of those tags, and the pieces imported are those above
+
+#### Scenario: Archive scene has no colour literal
+- **WHEN** the colour-literal test scans `src/scenes/` and `src/brand/`
+- **THEN** it reports nothing for the new files
