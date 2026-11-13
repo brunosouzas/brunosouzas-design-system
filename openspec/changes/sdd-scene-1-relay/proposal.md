@@ -42,7 +42,7 @@ none
 - **Scenes 2 and 3 of the article** (the stages and files; what remains after delivery), which the roadmap plans as their own changes.
 - **A 4:5 cut** (SCN-3) and **any sound** (SCN-5).
 - **New pieces or tokens, or changes to existing pieces.** The scene uses Balão, Chaves, Visor, `keyboard`, `questionToken`, `sheet`, `stamp` and the others as 0.13.0 ships them.
-- **Outcomes the article only implies** (MOT-1): which status code the take-1 code picked; the debate between `400` and `404` (L122); the four commits of the change and the review rounds (L124–L148); the `curl` proof (L169). The scene shows one error coming back, one list, one approval and one implementation.
+- **Outcomes the article only implies** (MOT-1): which status code the take-1 code picked; the debate between `400` and `404` (L122); the four commits of the change and the review rounds, "the verdict was GO or NO-GO" at L124 through the fourth version's approval at L148 (checked against `brunosouzas-content` commit `728d6f4`, design §8); the `curl` proof (L169). The scene shows one error coming back, one list, one approval and one implementation.
 - **Changes to the `takes` checks themselves** beyond the two actor names, to neutral scenes or to `MotionPath`.
 
 ## Implicit requirements
