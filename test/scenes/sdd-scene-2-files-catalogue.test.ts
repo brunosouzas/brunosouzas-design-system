@@ -45,7 +45,8 @@ describe("SDD files registration", () => {
     expect(entries.slice(0, 9)).toEqual(before);
     expect(entries[8].id).toBe("sdd-request-relay-16x9");
     expect(entries[9]).toEqual({ id: "sdd-scene-2-files-16x9", folder: ID, format: "16x9", lang: "en", width: 1920, height: 1080, fps: 30, durationInFrames: 870 });
-    expect(entries[10].id).toBe("circuit-breaker-topology-16x9");
+    expect(entries[10].id).toBe("sdd-scene-3-archive-16x9");
+    expect(entries[11].id).toBe("circuit-breaker-topology-16x9");
     expect(new Set(entries.map((e) => e.id)).size).toBe(entries.length);
   });
 
@@ -63,7 +64,7 @@ describe("Existing scenes unchanged by the files scene", () => {
   test("Other scenes' code untouched", () => {
     // Their test files run in the same `npm test`; the `git diff` half of the scenario is a local check recorded
     // in the pull request (CI checks out one commit).
-    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay", ID, "circuit-breaker-topology"]);
+    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", "sdd-request-relay", ID, "sdd-scene-3-archive", "circuit-breaker-topology"]);
   });
 });
 

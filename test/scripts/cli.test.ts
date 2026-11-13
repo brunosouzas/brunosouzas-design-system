@@ -137,7 +137,7 @@ describe("Invalid invocation and failures", () => {
     const h = harness();
     expect(await runStills(["cast-motion-test", "--dry-run"], h.io)).toBe(1);
     expect(h.err[0]).toBe("error: unknown scene: cast-motion-test");
-    expect(h.err).toContainEqual("available scenes: circuit-breaker-states, publish-subscribe, sdd-request-relay, sdd-scene-2-files, circuit-breaker-topology");
+    expect(h.err).toContainEqual("available scenes: circuit-breaker-states, publish-subscribe, sdd-request-relay, sdd-scene-2-files, sdd-scene-3-archive, circuit-breaker-topology");
     expectNothingWritten(h);
   });
 
@@ -147,7 +147,7 @@ describe("Invalid invocation and failures", () => {
     expect(h.err).toEqual([
       "error: missing scene name",
       "usage: npm run stills -- <scene> [--dry-run]",
-      `available scenes: ${SCENE}, publish-subscribe, sdd-request-relay, sdd-scene-2-files, circuit-breaker-topology`,
+      `available scenes: ${SCENE}, publish-subscribe, sdd-request-relay, sdd-scene-2-files, sdd-scene-3-archive, circuit-breaker-topology`,
     ]);
     expectNothingWritten(h);
   });

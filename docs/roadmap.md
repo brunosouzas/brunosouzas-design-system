@@ -42,7 +42,7 @@ A video only where it shows a process unfolding; the other 19 pages keep their s
 
 | Article or wiki | Scenes | Card |
 |---|---|---|
-| Spec-driven development in practice | 3: without vs with a spec (`sdd-request-relay`, #41); the stages and what the AI does with each file (`sdd-scene-2-files`, a `sequence` scene: init, propose, two NO-GO reviews, the owner's GO, apply); what remains after delivery and how it is reused | AB#144 |
+| Spec-driven development in practice | 3: without vs with a spec (`sdd-request-relay`, #41); the stages and what the AI does with each file (`sdd-scene-2-files`, a `sequence` scene: init, propose, two NO-GO reviews, the owner's GO, apply); what remains after delivery and how it is reused (`sdd-scene-3-archive`, a `sequence` scene: archive, second request, propose, one review, GO, apply, second archive) | AB#144 |
 | EIP Idempotent Receiver | book + Mule | AB#145 |
 | EIP Dead Letter Channel | book + Mule | AB#146 |
 | EIP Correlation Identifier | book + Mule | AB#147 |

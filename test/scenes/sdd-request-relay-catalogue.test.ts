@@ -40,9 +40,10 @@ describe("SDD relay registration", () => {
     expect(scenes.slice(0, 2).map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe"]);
     expect(entries.slice(0, 8)).toEqual(first8);
     expect(entries[8]).toEqual({ id: "sdd-request-relay-16x9", folder: ID, format: "16x9", lang: "en", width: 1920, height: 1080, fps: 30, durationInFrames: 1080 });
-    // Since change sdd-scene-2-files (design §2.6) the files scene sits between this one and the topology scene.
+    // Since changes sdd-scene-2-files and sdd-scene-3-archive (design §2.6 of each) both scenes sit between this one and the topology scene.
     expect(entries[9].id).toBe("sdd-scene-2-files-16x9");
-    expect(entries[10].id).toBe("circuit-breaker-topology-16x9");
+    expect(entries[10].id).toBe("sdd-scene-3-archive-16x9");
+    expect(entries[11].id).toBe("circuit-breaker-topology-16x9");
     expect(new Set(entries.map((e) => e.id)).size).toBe(entries.length);
   });
 
@@ -84,6 +85,6 @@ describe("Existing scenes unchanged by the relay scene", () => {
   test("Other scenes' tests untouched", () => {
     // Their test files run unedited in the same `npm test`; the `git diff` half of the scenario is a local check
     // recorded in the pull request (CI checks out one commit).
-    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", ID, "sdd-scene-2-files", "circuit-breaker-topology"]);
+    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", ID, "sdd-scene-2-files", "sdd-scene-3-archive", "circuit-breaker-topology"]);
   });
 });
