@@ -6,6 +6,7 @@ import { scenes } from "../../src/scenes";
 import { publishSubscribe as scene } from "../../src/scenes/publish-subscribe/scene.ts";
 import type { FlowTimeline } from "../../src/scenes/publish-subscribe/timeline";
 import { takesFixture } from "../fixtures/takes-scene";
+import { sequenceFixture } from "../fixtures/sequence-scene";
 const broken = (edit: Partial<FlowTimeline>):FlowSceneData => ({...scene,timeline:{...scene.timeline,...edit}});
 const errors = (edit:Partial<FlowTimeline>) => checkTimeline(broken(edit)).join("\n");
 test("Both kinds in the catalogue",()=>{
@@ -40,21 +41,24 @@ test("Pub-sub compositions and text provenance",()=>{
   expect(compositionsOf(scene)).toEqual([ ["16x9","pt",1920,1080],["16x9","en",1920,1080],["4x5","pt",1080,1350],["4x5","en",1080,1350] ].map(([format,lang,width,height])=>({id:`publish-subscribe-${format}-${lang}`,folder:"publish-subscribe",format,lang,width,height,fps:30,durationInFrames:1000})));
 });
 
-// A neutral takes scene beside the registered ones (spec scene-catalogue,
-// "State-machine and flow catalogue compatibility"; change
-// scene-takes-infrastructure, task 3.4). The fixture is test-only, so the
-// catalogue itself keeps its two scenes.
+// A neutral takes scene and a neutral sequence scene beside the registered
+// ones (spec scene-catalogue, "State-machine and flow catalogue
+// compatibility", scenario "Takes fixture beside the registered scenes";
+// change scene-takes-infrastructure, task 3.4, extended by change
+// sdd-scene-3-archive to add the sequence fixture that scenario names). The
+// fixtures are test-only, so the catalogue itself keeps its registered scenes.
 test("Takes fixture beside the registered scenes",()=>{
   const before=scenes.flatMap(compositionsOf);
-  const all=[...scenes,takesFixture];
+  const all=[...scenes,takesFixture,sequenceFixture];
   expect(checkCatalogue(all)).toEqual([]);
   const entries=all.flatMap(compositionsOf);
-  // Lists every registered scene (change circuit-breaker-topology-scene): the registered compositions, then the fixture's.
-  expect(entries).toHaveLength(before.length+1); expect(new Set(entries.map(e=>e.id)).size).toBe(before.length+1);
+  // Lists every registered scene (change circuit-breaker-topology-scene): the registered compositions, then the fixtures'.
+  expect(entries).toHaveLength(before.length+2); expect(new Set(entries.map(e=>e.id)).size).toBe(before.length+2);
   expect(entries.slice(0,before.length)).toEqual(before);
   expect(entries.slice(0,4).every(e=>e.folder==="circuit-breaker-states")).toBe(true);
   expect(entries.slice(4,8).every(e=>e.folder==="publish-subscribe")).toBe(true);
-  expect(entries.at(-1)!.id).toBe("takes-fixture-16x9");
+  expect(entries.at(-2)!.id).toBe("takes-fixture-16x9");
+  expect(entries.at(-1)!.id).toBe("sequence-fixture-16x9");
   expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-3-archive","circuit-breaker-topology"]);
 });
 

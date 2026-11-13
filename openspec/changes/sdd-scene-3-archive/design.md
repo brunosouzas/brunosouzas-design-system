@@ -182,7 +182,7 @@ Out of scope: who runs the review; version numbers; the exact sentence fixed bey
 | field-count pill | `diagramBox` pill w 300, h 44, `textSize` 33, fill `color.white` | centred (665, 230) — above the book, clear of the `worked` emote (y 208-252 vs. the emote's ≈ y 266-318) |
 | first-change `folder` | `folder` scale 0.9 → parked 0.4 | from centre (480, 140) to (900, 70) |
 | second-change `folder` | `folder` scale 0.95 → parked 0.4 | initially centre (380, 150), parked (900, 170) |
-| `?` finding pill | `diagramBox` pill w 40, h 32, `textSize` 24 | centred (380, 32), clear of the frame margin (box y 14.5-49.5 with half the outline) and just above the second folder's top edge (≈ y 56 at scale 0.95, centre y 150) |
+| `?` finding pill | `diagramBox` pill w 40, h 18, `textSize` 24 | centred (380, 23), clear of the frame margin (box y 12.5-33.5 with half the outline) and clear of the second folder's two peeking papers (round-1 code review fix: the papers reach ≈ y 36-43 at this slot, well below the folder's own top-left anchor ≈ y 56 that the first draft measured against) |
 | `GO` | `stamp` r 24, word `GO`; × 0.95 in flight, growing to × 1.6; leaves (fades) once parked, before `archive-2` | from (229.4, 409.5) (Balão's held stamp) to (380, 150) |
 | emote `worked` | `emote` scale 0.75 | (800, 292) |
 | rings | `Rings` | centre (960, 540) composition pixels |

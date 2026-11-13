@@ -24,7 +24,7 @@ describe("SDD archive layout", () => {
     expect(CAST_X).toEqual({ balao: 104, chaves: 505, visor: 852 });
     expect(BOOK).toEqual({ x: 620, y: 300, width: 90, height: 160 });
     expect(FIELD_PILL).toEqual({ cx: 665, cy: 230, width: 300, height: 44 });
-    expect(FINDING_PILL).toEqual({ cx: 380, cy: 32, width: 40, height: 32 });
+    expect(FINDING_PILL).toEqual({ cx: 380, cy: 23, width: 40, height: 18 });
     expect(JOLT).toEqual({ amplitude: 5, period: 6 });
     expect(VERDICT_CENTRE).toEqual({ x: 380, y: 150 });
     expect(near(GO.from.x, 229.4) && near(GO.from.y, 409.5)).toBe(true);
@@ -44,6 +44,9 @@ describe("SDD archive layout", () => {
     expect(GUIDES).toEqual({ go: ROUTES.go });
     // The book is clear of Chaves's body box (design §2.4).
     expect(BOOK.x).toBeGreaterThan(BODY_BOXES.chaves.x1);
+    // Round-1 code review fix: the `?` pill's bottom edge must clear the second folder's peeking
+    // papers (measured at ≈ y 36 for the folder's start slot, centre (380, 150), scale 0.95).
+    expect(FINDING_PILL.cy + FINDING_PILL.height / 2).toBeLessThan(36);
   });
 });
 

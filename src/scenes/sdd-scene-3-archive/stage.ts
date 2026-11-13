@@ -17,7 +17,7 @@ import { balao, book, chaves, diagramBox, emote, folder, stamp, visor } from "..
 import { g, type Drawn, type SvgNode } from "../../pieces/node.ts";
 import { pose } from "../../pieces/pose.ts";
 import { frameAt, type Appear, type ArchiveState, type FolderState } from "./frame";
-import { BOOK, CAST_SCALE, CAST_X, FIELD_PILL, FINDING_PILL, GROUND, TEXT_SIZE, folderTopLeft } from "./layout";
+import { BOOK, BOOK_CENTRE, CAST_SCALE, CAST_X, FIELD_PILL, FINDING_PILL, GO, GROUND, TEXT_SIZE, folderTopLeft } from "./layout";
 import { text } from "./scene.ts";
 
 const words = text.en;
@@ -72,8 +72,7 @@ export const visorParams = (v: NonNullable<ArchiveState["visor"]>) => ({
 const bookOf = (b: NonNullable<ArchiveState["book"]>): Drawn => {
   const d = book({ x: BOOK.x, y: BOOK.y, width: BOOK.width, height: BOOK.height });
   if (b.angle === 0) return d;
-  const cx = BOOK.x + BOOK.width / 2, cy = BOOK.y + BOOK.height / 2;
-  return wrapped(d, { transform: `rotate(${b.angle} ${cx} ${cy})` });
+  return wrapped(d, { transform: `rotate(${b.angle} ${BOOK_CENTRE.x} ${BOOK_CENTRE.y})` });
 };
 const fieldPillOf = (p: NonNullable<ArchiveState["fieldPill"]>): Drawn =>
   diagramBox({
@@ -99,7 +98,7 @@ const findingOf = (): Drawn =>
 
 const stampAt = (d: Drawn, at: Point, scale: number, opacity = 1): Drawn =>
   wrapped(d, { transform: `translate(${at.x} ${at.y}) scale(${scale})`, ...(opacity === 1 ? {} : { opacity }) });
-const goOf = (s: NonNullable<ArchiveState["go"]>): Drawn => stampAt(stamp({ cx: 0, cy: 0, r: 24, word: words.verdict }), s.centre, s.scale, s.opacity);
+const goOf = (s: NonNullable<ArchiveState["go"]>): Drawn => stampAt(stamp({ cx: 0, cy: 0, r: GO.r, word: words.verdict }), s.centre, s.scale, s.opacity);
 
 // ---------------------------------------------------------------- layers
 
@@ -114,7 +113,7 @@ const named = (parts: [string, Drawn | null][]): Drawn[] => parts.flatMap(([name
 
 const bookLayerOf = (s: ArchiveState): SvgNode =>
   layer("book", named([
-    ["book", s.book ? shown(bookOf(s.book), s.book.appear, { x: BOOK.x + BOOK.width / 2, y: BOOK.y + BOOK.height / 2 }) : null],
+    ["book", s.book ? shown(bookOf(s.book), s.book.appear, BOOK_CENTRE) : null],
     ["field-pill", s.fieldPill ? shown(fieldPillOf(s.fieldPill), s.fieldPill.appear, { x: FIELD_PILL.cx, y: FIELD_PILL.cy }) : null],
   ]));
 
