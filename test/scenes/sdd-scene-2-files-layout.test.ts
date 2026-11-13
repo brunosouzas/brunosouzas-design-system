@@ -7,7 +7,7 @@ import { describe, expect, test } from "vitest";
 import { tokens } from "../../tokens/generated/tokens";
 import {
   BODY_BOXES, CAST_SCALE, CAST_X, CODE_LINE_SHAPES, COMMAND_LINE, EMOTES, FILE_ROUTE_CREST, FILE_SCALE, FILE_SLOTS, FOLDER, FOLDER_CENTRE, FOLDER_LABEL, GO, GROUND, GUIDES,
-  KEYBOARD_LOCAL, LABEL_HEIGHT, LABEL_WIDTHS, NO_GO, PAGE, RINGS_CENTRE, ROUTES, ROW_BARS, ROW_MARK_RADIUS, SCREEN, STAGE, TEXT_SIZE, VERDICT_CENTRE, rowMark, slotCentre,
+  JOLT, KEYBOARD_LOCAL, LABEL_HEIGHT, LABEL_WIDTHS, NO_GO, PAGE, RINGS_CENTRE, ROUTES, ROW_BARS, ROW_MARK_RADIUS, SCREEN, STAGE, TEXT_SIZE, VERDICT_CENTRE, rowMark, slotCentre,
 } from "../../src/scenes/sdd-scene-2-files/layout";
 import { ABOVE_ORDER, BELOW_ORDER, CAST_ORDER, FILES_ORDER, FOLDER_ORDER, VERDICTS_ORDER } from "../../src/scenes/sdd-scene-2-files/stage";
 import type { Box } from "./text-measure";
@@ -40,6 +40,9 @@ describe("SDD files layout", () => {
     for (let k = 1; k <= 6; k++) expect(rowMark(FILE_SLOTS.spec, k).y).toBeCloseTo(86.85 + 21.85 * (k - 1));
     expect(rowMark(FILE_SLOTS.spec, 1).x).toBeCloseTo(716 + 28.5);
     expect(NO_GO).toEqual({ r: 46, scale: 1.25, fill: "color.state.failure" });
+    // design §2.3: the jolt, 5° · sin(2π k / 6) · (1 − k / 12).
+    expect(JOLT).toEqual({ amplitude: 5, period: 6 });
+    expect(frameOf(291).state.files.find((x) => x.id === "spec")!.angle).toBeCloseTo(5 * Math.sin(Math.PI / 3) * (11 / 12));
     expect(VERDICT_CENTRE).toEqual({ x: 512, y: 194 });
     expect(near(GO.from.x, 229.4) && near(GO.from.y, 409.5)).toBe(true);
     expect([GO.r, GO.scaleFrom, GO.scaleTo]).toEqual([24, 0.95, 1.6]);

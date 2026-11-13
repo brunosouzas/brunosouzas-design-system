@@ -12,7 +12,7 @@ import { frameAt, type FilesState } from "../../src/scenes/sdd-scene-2-files/fra
 import { CAST_SCALE, CAST_X, EMOTES, FOLDER_CENTRE, GO, GROUND, ROUTES, VERDICT_CENTRE, slotCentre } from "../../src/scenes/sdd-scene-2-files/layout";
 import { STAGE_LAYERS, balaoParams, chavesParams, stageOf, visorParams } from "../../src/scenes/sdd-scene-2-files/stage";
 import { makeTimeline, timeline, type FileId, type FilesTimeline } from "../../src/scenes/sdd-scene-2-files/timeline";
-import { textsOf } from "./topology-tree";
+import { textsOf, walk } from "./topology-tree";
 
 const T = 22, F = 10;
 const r6 = [0, 1, 2, 3, 4, 5];
@@ -127,6 +127,11 @@ describe("SDD files beats and timing", () => {
     // The pin also reads each phase's events: a stray event fails it.
     const stray = { ...timeline, phases: timeline.phases.map((p) => (p.id === "init" ? { ...p, events: [...p.events, { id: "stray", at: 41 }] } : p)) };
     expect(differs(stray)).toBe("events of init");
+    // Event ids follow scene 1's convention (design §2.7): one phase pinned by (id, frame).
+    expect(timeline.phases.find((p) => p.id === "review-1")!.events.map((e) => [e.id, e.at])).toEqual([
+      ["findings1-0", 290], ["joltEnds-0", 302], ["findings1-1", 308], ["joltEnds-1", 320], ["findings1-2", 326], ["joltEnds-2", 338],
+      ["findings1-3", 344], ["joltEnds-3", 356], ["pop-noGo1", 364],
+    ]);
   });
 
   test("Files seeking in any order", () => {
@@ -157,6 +162,9 @@ describe("SDD files cast", () => {
     }
     expect(STATES[8].visor).toBeNull();
     expect(STATES[9].visor).not.toBeNull();
+    // A pop-in scales a cast piece through `pose` about its ground point (frame 5: Balão popping).
+    expect(STATES[5].balao!.appear.scale).toBeLessThan(1);
+    expect(JSON.stringify(stageOf(STATES[5]).cast)).toMatch(new RegExp(`translate\\(${CAST_X.balao} ${GROUND}\\) rotate\\(0\\) scale\\([0-9.]+ [0-9.]+\\) translate\\(-${CAST_X.balao} -${GROUND}\\)`));
   });
 
   test("Files emote beside the head", () => {
@@ -205,6 +213,9 @@ describe("SDD files init and propose", () => {
     expect(STATES[84].chaves!.types).toBe(false);
     expect(STATES[45].screen.commandLine).toBe(false);
     expect(STATES[46].screen.commandLine).toBe(true);
+    // What the screen draws: its panel, then one line from 46.
+    const screenRects = (f: number) => walk(stageOf(STATES[f]).below).filter((w) => w.element === "screen" && w.node.tag === "rect").length;
+    expect([screenRects(45), screenRects(46)]).toEqual([1, 2]);
     expect(STATES[52].folder).toBeNull();
     expect(STATES[53].folder).not.toBeNull();
     expect(STATES[89].visor!.points).toBe(false);
@@ -305,7 +316,9 @@ describe("SDD files fix and review round 2", () => {
     expect(flagged(494)).toEqual(["spec 4", "spec 5"]);
     expect(STATES[514].noGo).toBeNull();
     expect(STATES[515].noGo!.id).toBe("no-go-2");
+    expect(STATES[560].noGo).toEqual({ id: "no-go-2", appear: { opacity: 1, scale: 1 } });
     expect(STATES[561].noGo!.appear.opacity).toBeLessThan(1);
+    expect(rows(493, "spec")[4]).toBe("plain");
     expect(STATES[570].noGo).toBeNull();
     expect(rows(584, "spec")).toEqual(Array(5).fill("checked"));
     expect(rows(584, "tasks")).toEqual(["plain", "plain", "checked", "plain"]);
@@ -317,6 +330,9 @@ describe("SDD files fix and review round 2", () => {
   });
 
   test("One NO-GO at a time", () => {
+    // The two stamps' windows (pop to gone) are disjoint, so the state's one `noGo` slot hides nothing.
+    const window = (k: 1 | 2) => [timeline.pops[`noGo${k}`], timeline.leaves[`noGo${k}`] + 10];
+    expect(window(1)[1]).toBeLessThanOrEqual(window(2)[0]);
     const shown = (f: number) => STAGE_LAYERS.flatMap((name) => textsOf(stageOf(STATES[f])[name]).filter((t) => t.text === "NO-GO")).length;
     for (let f = 0; f < 870; f++) {
       expect(shown(f), `frame ${f}`).toBeLessThanOrEqual(1);
