@@ -99,10 +99,20 @@ describe("SDD relay text size", () => {
   });
 
   test("Too small rejected", () => {
-    const small = FRAMES.slice(656, 710).map((f) => ({ ...f, sheet: resizeText(f.sheet, "label", 32) }));
+    // Run over every frame, not a hand-picked slice: a slice's start frame would be
+    // reported as "first drawn" regardless of where the real exemption boundary is
+    // (it would report whatever frame the slice happens to start at), so this is
+    // the only way the reported frame actually proves anything about the scene.
+    const small = FRAMES.map((f) => ({ ...f, sheet: resizeText(f.sheet, "label", 32) }));
     expect(sizeProblems(small)).toEqual(['label "proposal.md" at 32 (minimum 33), first drawn at frame 656']);
-    const badge = FRAMES.slice(500, 510).map((f) => ({ ...f, above: resizeText(f.above, "badge", 35) }));
-    expect(sizeProblems(badge)).toEqual(['badge "2" at 35 (minimum 36), first drawn at frame 500']);
+    // The badge pops once (frame 20, settled at 50) and its digit swaps without a
+    // fresh pop (design §4, 440: "no fresh pop"), so it is never exempt again after
+    // 50 and the forced-too-small size is caught under both digits it ever shows.
+    const badge = FRAMES.map((f) => ({ ...f, above: resizeText(f.above, "badge", 35) }));
+    expect(sizeProblems(badge)).toEqual([
+      'badge "1" at 35 (minimum 36), first drawn at frame 50',
+      'badge "2" at 35 (minimum 36), first drawn at frame 440',
+    ]);
   });
 });
 
@@ -184,25 +194,43 @@ describe("SDD relay hand-over", () => {
     }
     return null;
   };
-  /** The page's top-left corner (its 180 x 226 rect) wherever it is drawn under `node`. */
-  const pageCorner = (node: SvgNode): { x: number; y: number } => {
-    for (const w of walk(node)) if (w.node.tag === "rect" && Number(w.node.attrs.width) === PAGE.width && Number(w.node.attrs.height) === PAGE.height) {
+  /**
+   * The held sheet's own nodes, re-rooted at the stage (brand-cast.ts's
+   * `holdSheet`, the group tagged `data-held="sheet"`), not Chaves's whole
+   * body: his limbs and head also hold 2-segment paths that the row-check
+   * heuristic below would otherwise misread as checks (a false positive
+   * `rowStates` found at frame 734, before any answer, from Chaves's own
+   * body, not the sheet).
+   */
+  const heldSheetOf = (node: SvgNode): ReturnType<typeof walk> => {
+    for (const w of walk(node)) if (w.node.attrs["data-held"] === "sheet") return walk(w.node, w.m);
+    throw new Error("no held sheet");
+  };
+  /** The page's top-left corner (its 180 x 226 rect) among already-walked nodes. */
+  const pageCorner = (nodes: ReturnType<typeof walk>): { x: number; y: number } => {
+    for (const w of nodes) if (w.node.tag === "rect" && Number(w.node.attrs.width) === PAGE.width && Number(w.node.attrs.height) === PAGE.height) {
       const p = shapePoint(w);
       if (p) return p;
     }
     throw new Error("no page rect");
   };
-  /** Each of the 6 rows, top to bottom, true if it has a check near it (a short, 2-segment path). */
-  const rowStates = (node: SvgNode): boolean[] => {
+  /**
+   * Each of the 6 rows, top to bottom, true if it has a check (`paper.ts`'s tail
+   * mark). A row's `?` disc and its tail check share one `cy` (paper.ts: the disc
+   * at `(x + 30, cy)`, the tick's first point at `(tx + 5, cy)`), so pairing by `y`
+   * identifies the row; pairing by distance from the disc is wrong, because the
+   * tail sits far to the row's right (`x + width - 40`), not near the disc.
+   */
+  const rowStates = (nodes: ReturnType<typeof walk>): boolean[] => {
     const marks: { x: number; y: number }[] = [], checks: { x: number; y: number }[] = [];
-    for (const w of walk(node)) {
+    for (const w of nodes) {
       if (w.node.tag === "circle" && Number(w.node.attrs.r) === 13) { const p = shapePoint(w); if (p) marks.push(p); }
       if (w.node.tag === "path" && typeof w.node.attrs.d === "string" && (String(w.node.attrs.d).match(/L/g) ?? []).length === 2) {
         const p = shapePoint(w);
         if (p) checks.push(p);
       }
     }
-    return marks.sort((a, b) => a.y - b.y).map((m) => checks.some((c) => Math.hypot(c.x - m.x, c.y - m.y) < 40));
+    return marks.sort((a, b) => a.y - b.y).map((m) => checks.some((c) => Math.abs(c.y - m.y) < 5));
   };
   test("Seamless hand-over", () => {
     // At 734 and 852 the free sheet (just before/after Chaves holds it, the last/first frame it is drawn
@@ -211,12 +239,20 @@ describe("SDD relay hand-over", () => {
     // before arrival, design §4.4), with the same rows and checks: content does not reset across the switch
     // of drawing path (the free `sheet` piece to Chaves's own `holdsSheet`).
     const GAP = 25; // stage units: generous against the known one-frame interpolation shortfall (~19 units)
-    for (const [free, held] of [[733, 734], [852, 851]] as const) {
-      const freeNode = frameOf(free).sheet, heldNode = frameOf(held).cast;
-      const freeCorner = pageCorner(freeNode), heldCorner = pageCorner(heldNode);
+    const cases = [
+      { free: 733, held: 734, checked: false }, // the carry: before any answer, every row unchecked
+      { free: 852, held: 851, checked: true }, // the return: after the stamp, every answered row checked
+    ];
+    for (const { free, held, checked } of cases) {
+      const freeNodes = walk(frameOf(free).sheet), heldNodes = heldSheetOf(frameOf(held).cast);
+      const freeCorner = pageCorner(freeNodes), heldCorner = pageCorner(heldNodes);
       expect(Math.hypot(freeCorner.x - HELD.x, freeCorner.y - HELD.y)).toBeLessThan(GAP);
       expect(Math.hypot(heldCorner.x - HELD.x, heldCorner.y - HELD.y)).toBeLessThan(1);
-      expect(rowStates(freeNode)).toEqual(rowStates(heldNode));
+      const freeRows = rowStates(freeNodes), heldRows = rowStates(heldNodes);
+      expect(freeRows).toEqual(heldRows);
+      // Non-vacuous: the shared result must actually be the expected all-false/all-true,
+      // not an accidental match (e.g. both sides wrongly reading six falses).
+      expect(freeRows).toEqual(Array(6).fill(checked));
     }
   });
 });
