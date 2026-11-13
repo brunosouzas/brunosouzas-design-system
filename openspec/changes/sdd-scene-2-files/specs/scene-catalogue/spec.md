@@ -79,8 +79,8 @@ Adding the files scene SHALL leave every other scene unchanged: data, compositio
 - **WHEN** `npm test` runs and `git diff` is read
 - **THEN** every test passes, and `git diff` shows no change under `src/scenes/circuit-breaker-states/`, `src/scenes/publish-subscribe/`, `src/scenes/sdd-request-relay/` or `src/scenes/circuit-breaker-topology/`
 
-#### Scenario: Takes stills byte-identical (local)
-- **GIVEN** the stills of `sdd-request-relay` and `circuit-breaker-topology`, rendered on `main` and on the branch
+#### Scenario: Other scenes' stills byte-identical (local)
+- **GIVEN** the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology`, rendered on `main` and on the branch
 - **WHEN** their SHA-256 are compared
 - **THEN** every pair is equal
 
@@ -90,7 +90,7 @@ The scene SHALL draw, left to right on one ground line (stage y 476) at one scal
 #### Scenario: Files cast in place at every frame
 - **GIVEN** frames 0 to 869
 - **WHEN** the cast pieces' parameters are read
-- **THEN** each drawn cast piece has `scale` 0.95 and ground y 476 (a pop-in scales it through `pose` about that point), Balão x 104 facing right, Chaves x 505 facing right, Visor x 852 facing left with `points` set, and none has a fill or colour parameter
+- **THEN** each drawn cast piece has `scale` 0.95 and ground y 476 (a pop-in scales it through `pose` about that point), Balão x 104 facing right, Chaves x 505 facing right, Visor x 852 facing left with `points` set, and none has a fill or colour parameter; every change of a cast action falls inside a declared act of its actor and every face change on a `faces` entry (CAST-4)
 
 #### Scenario: Files emote beside the head
 - **GIVEN** frames 735, 736 and 800
@@ -147,7 +147,7 @@ With no actor on stage, the review SHALL flag `spec.md` rows 1, 2 and 3 and `tas
 #### Scenario: Review 1 frames
 - **GIVEN** frames 289, 290, 291, 302, 344, 356, 364, 365, 394 and 409
 - **WHEN** the state is evaluated
-- **THEN** no row is flagged at 289; `spec.md` row 1 is flagged from 290; `spec.md` jolts at 291 (angle not 0) and not from 302; at 356 exactly `spec.md` rows 1–3 and `tasks.md` row 3 are flagged and no file jolts; no stamp is drawn at 364; `NO-GO` is drawn from 365, settled at scale 1.25 from 394 to 409
+- **THEN** no row is flagged at 289; `spec.md` row 1 is flagged from 290; `spec.md` jolts at 291 (angle not 0) and not at 302 (row 1's jolt is over); at 356 exactly `spec.md` rows 1–3 and `tasks.md` row 3 are flagged and no file jolts; no stamp is drawn at 364; `NO-GO` is drawn from 365, settled at scale 1.25 from 394 to 409
 
 #### Scenario: No actor in the reviews
 - **GIVEN** the scene's timeline
@@ -227,10 +227,10 @@ Every word the scene draws SHALL have an effective font size, its `font-size` ti
 #### Scenario: Files word too small rejected
 - **GIVEN** a fixture whose file names are drawn at 32 and one whose `NO-GO` group is scaled 1.2 (32.4)
 - **WHEN** the size test runs
-- **THEN** each fails naming the string, its size and the first frame it is drawn
+- **THEN** each fails naming the string, its size and the first frame it is checked (settled and not in flight)
 
 ### Requirement: SDD files text placement
-Every drawn word box (measured advance on the `fonts/` faces times effective size), the folder and file name pills and the stamps' discs SHALL lie inside the stage less 12 units, SHALL NOT intersect each other or a cast body box of design §6.2, and no stamp's circle SHALL meet a flagged row's `?` circle. The moving and settling frames of design §6.3 are exempt, except that a file's name in flight stays inside the stage.
+The folder and file name pills, the stamps' discs and every drawn word box but the `?` (advance on the `fonts/` faces times effective size) SHALL lie inside the stage less 12 units and SHALL NOT intersect each other, a word not counting against its own element, or a cast body box; no stamp's circle SHALL meet a flagged row's `?` circle. Moving and settling frames of design §6.3 are exempt, but a file's name in flight stays inside.
 
 #### Scenario: Files placement at every checked frame
 - **GIVEN** every frame from 0 to 869 except the exempt frames

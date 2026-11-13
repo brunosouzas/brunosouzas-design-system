@@ -145,8 +145,8 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
     ringsFade: [0, 20],
     phases: [
       phase("setup", 0, 39, [20, 26]),
-      phase("init", 40, 89, [44, 47, 50]),
-      phase("propose", 90, 149, [86, 89, 98, 99, 100, 101]),
+      phase("init", 40, 89, [20, 44, 47, 50, 53, 86]),
+      phase("propose", 90, 149, [86, 89, 90, 91, 92, 93, 94, 95, 96, 98, 99, 100, 101]),
       phase("list", 150, 209, [103, 106, 108, 109, 110, 111, 112, 113, 116]),
       phase("answer", 210, 279, [118, 120]),
       phase("review-1", 280, 409, [124, 126, 128, 129, 130, 131], ["findingMark", "noGoStamp"]),

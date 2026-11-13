@@ -156,8 +156,8 @@ Constants: `motion.fps` 30, `motion.travel` (T) 22, `motion.fade` (F) 10, `motio
 | # | Phase id | Frames | Cites (English lines) | Devices |
 |---|---|---|---|---|
 | 1 | `setup` | 0–39 | 20, 26 | — |
-| 2 | `init` | 40–89 | 44, 47, 50 | — |
-| 3 | `propose` | 90–149 | 86, 89, 98, 99, 100, 101 | — |
+| 2 | `init` | 40–89 | 20, 44, 47, 50, 53, 86 | — |
+| 3 | `propose` | 90–149 | 86, 89, 90, 91, 92, 93, 94, 95, 96, 98, 99, 100, 101 | — |
 | 4 | `list` | 150–209 | 103, 106, 108, 109, 110, 111, 112, 113, 116 | — |
 | 5 | `answer` | 210–279 | 118, 120 | — |
 | 6 | `review-1` | 280–409 | 124, 126, 128, 129, 130, 131 | findingMark, noGoStamp |
@@ -176,7 +176,7 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 | 0–20 | rings | fade in | — |
 | 2 | laptop (screen, empty; keyboard) | pops (block) | L26 |
 | 4 / 6 / 8 | Balão / Chaves (facing right) / Visor (`points` false) | pop (block, through `pose`) | L20, L26 |
-| 40 | Chaves | act: `types` on | L26, L44; reading choice (§5) |
+| 40 | Chaves | act: `types` on | L20, L44, L86; reading choice (§5) |
 | 46 | screen | the command line (accent, tall) appears | L47, L86 |
 | 52 | folder `openspec/` | pops (block), with its name | L50, L53 |
 | 84 | Chaves | act: `types` off | L44 |
@@ -206,14 +206,14 @@ Every phase's `events` are the change frames of §4.2 that fall inside it, sorte
 | 626–636, 648–658 | guide `go` | fades in, fades out | device |
 | 676 | Visor | act: `points` on | L152 |
 | 682 + 8j, j = 0…5 | screen | code line j + 1 appears | L154, L157–L162 |
-| 736 | Visor | face `done`, `worked` emote (stays) | L152, L167 |
+| 736 | Visor | face `done`, `worked` emote (stays) | L152 ("the spec already answered everything") |
 | 770–869 | everything | still | SCN-4 |
 
 **Acts** (inclusive ranges): Chaves 40–84; Visor 90–90, 202–202, 676–676; Balão 210–266, 606–626.
 
 **Faces:** Visor `waiting` 202, `done` 736; Balão `done` 626. **Emotes:** `worked` (Visor, 736, never leaving).
 
-**Pops:** `laptop` 2, `balao` 4, `chaves` 6, `visor` 8, `folder` 52, `noGo1` 364, `noGo2` 514. **Fades:** `go-guide` in 626–636, out 648–658. **Leaves:** `folder` 140, `noGo1` 410, `noGo2` 560.
+**Pops:** `laptop` 2, `balao` 4, `chaves` 6, `visor` 8, `folder` 52, `noGo1` 364, `noGo2` 514. **Fades:** `goGuide` in 626–636, out 648–658. **Leaves:** `folder` 140, `noGo1` 410, `noGo2` 560.
 
 **Trips:** `file-proposal` 96, `file-design` 102, `file-tasks` 108, `file-spec` 114, `go` 626; each ends T frames after it starts.
 
@@ -237,7 +237,7 @@ The files' crest (control y 110) keeps a file in flight, with its name pill (`ce
 
 Approved at gate 0 (2026-11-13): concept A (q1); no relay (q2); two separate NO-GO rounds (q3); findings as gestures (q4); no new pieces, `NO-GO` on the `stamp` in the failure colour (q5).
 
-Made in this design, for G3 (§9): the `sequence` kind; who gives each verdict; Chaves typing the commands (the article names no one for `openspec init`, L44, or for sending the request with `/opsx:propose`, L86; the developer at the laptop is scene 1's reading of L26); the folder leaving once the files are out (staging, no claim); the finding as a `?` and a jolt, the fix as a check (devices `findingMark`); the `NO-GO` stamp popping with no actor (`noGoStamp`); Balão's `GO` travelling to the change (`goStamp`, scene 1's q49 B device); no round number; the folder leaving; one typing act; the answer beat; the length (29 s); the stamp sizes; `waiting` after listing and `done` with `worked` after implementing (scene 1's faces).
+Made in this design, for G3 (§9): the `sequence` kind; who gives each verdict; Chaves typing the commands (the article names no one for `openspec init`, L44, or for sending the request with `/opsx:propose`, L86; the request was sent to the development team, L20, and the developer at the laptop is scene 1's reading of L26). Gate 0 put the cast only where the article ties a beat to a role, so this is a departure the owner judges at G3 (§9 question 9; the alternative is no actor: the command line appears on its own, as `NO-GO` does). The one command line on the screen stands for both commands: it appears at 46 with `init` (the folder follows at 52), and Chaves's typing after the folder is the `propose` command, whose result is the files at 96; the folder leaving once the files are out (staging, no claim); the finding as a `?` and a jolt, the fix as a check (devices `findingMark`); the `NO-GO` stamp popping with no actor (`noGoStamp`); Balão's `GO` travelling to the change (`goStamp`, scene 1's q49 B device); no round number; the folder leaving; one typing act; the answer beat; the length (29 s); the stamp sizes; `waiting` after listing and `done` with `worked` after implementing (scene 1's faces).
 
 Out of scope, because the article does not state them: a third review's verdict; the third version; who fixed the change; version numbers; the words of the findings; the proof; the archive.
 
@@ -272,7 +272,7 @@ Cast body boxes (scene 1's): Balão x 45.1–193.3, y 322.1–476; Chaves x 419.
 
 1. **Layout equals the design:** the values of §6.1 and §4.3.
 2. **Minimum size:** the folder name and the file names at 33, `NO-GO` at least 33 settled, the landed `GO` at least 33; a smaller `GO` only inside Balão's act 606–626 or in flight 626–647; the `?` not checked (a symbol); a file's name in flight not checked.
-3. **Boxes:** a word's box is its advance width × its effective size, placed by its anchor, from 0.8 × size above the baseline to 0.25 × size below it (`test/scenes/text-measure.ts`); a pill's box is its body with half its outline; a stamp's box is its disc's square (with half its outline) against the frame, the pills, the words and the cast, and its circle against a `?` disc (item 5).
+3. **Boxes:** a word's box is its advance width × its effective size, placed by its anchor, from 0.8 × size above the baseline to 0.25 × size below it (`test/scenes/text-measure.ts`); a pill's box is its body with half its outline; a stamp's box is its disc's square (with half its outline) against the frame, the pills, the words and the cast, and its circle against a `?` disc (item 5). The boxes are those of the pills, the stamps and the words other than `?`; a word belongs to its element (a file's name to its pill, a stamp's word to its stamp) and is not checked against it. The `?` marks are checked only as circles, against the stamps.
 4. **Inside the frame:** every box lies inside x 12–948 and y 12–528, including a file's name in flight.
 5. **No overlaps:** no two of the folder name, the file names and the stamps intersect, none intersects a cast body box, and no stamp's circle intersects a flagged row's `?` circle (centre distance greater than the sum of the radii with half their outlines).
 6. **When it runs:** every frame from 0 to 869 except an element before *a* + `motion.fps` from its pop-in at *a*, during its 10-frame leave, a file and its name jolting (and in flight, except for item 4), the folder name from the first file's departure (96), and `GO` before it lands (648).
@@ -342,7 +342,9 @@ Every PNG is opened and checked for the cast (CAST-3, CAST-4, CAST-5), overlaps,
 - **The `?` reads small on a phone** (8.8 px disc), as in scene 1; the jolt draws the eye to the file first. The phone sheet is the check.
 - **Nobody on stage acts during the reviews (280–599).** That is the article: the reviewer is not a character. The jolts and the stamps carry the motion; the video is the check.
 - **A row's bar shifts right by 30 units when it is flagged** (the sheet's `?` lead moves the bar) and back when fixed. It underlines the change of state.
-- **The stamps cover the lower rows of `design.md` and `tasks.md`.** No flagged row is under them (§6.3 item 5).
+- **The stamps cover the lower part of `design.md` and `tasks.md`.** They miss the three `design.md` rows, graze `tasks.md` row 4, and no flagged row is under them (§6.3 item 5).
+- **The folder leaving can read as "the files left the folder"**, while L89 keeps them in `openspec/changes/add-delivery-status/`. It is question 7; the owner judges it on the video.
+- **"State-machine and flow catalogue compatibility" is 496 characters** after this change's MODIFIED block (the limit is 500). Scene 3, or any later kind, splits it in two before adding to it.
 - **The words are mapped to the face Remotion loads** through `withSansFamily`, as in scene 1; `test/scenes/sdd-scene-2-files-words.test.ts` checks this scene's layers.
 
 ## Migration

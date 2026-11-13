@@ -13,7 +13,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [ ] 2.1 `src/scenes/sdd-scene-2-files/scene.ts`: the entry (kind `sequence`, neutral, `16x9`, both sources, the `text.en` table). Register it right after `sddRequestRelay` in `src/scenes/index.ts`.
 - [ ] 2.2 `src/scenes/sdd-scene-2-files/timeline.ts`: `makeTimeline(travel, fade)` returning the `FilesTimeline` of design §2.7 with the phases of §4.1 and the frame table of §4.2; `timeline = makeTimeline()`.
 - [ ] 2.3 Unit, `test/scenes/sdd-scene-2-files-catalogue.test.ts`: "Files registered entry", "Files word table", "One composition, after the relay scene", "Files broken entry rejected", "Other scenes' code untouched" (the scene list; the `git diff` half is local, task 6.1), "No actor in the reviews".
-- [ ] 2.4 Edit only the assertions design §2.6 lists: in `test/scenes/catalogue-flow.test.ts`, "Takes fixture beside the registered scenes", "Three scenes in the catalogue", "Four scenes in the catalogue" and a new "Five scenes in the catalogue"; the two `available scenes:` lines of `test/scripts/cli.test.ts`; in `test/scenes/sdd-request-relay-catalogue.test.ts`, the `entries[9]` assertion and the scene list; in `openspec/changes/sdd-scene-1-relay/specs/scene-catalogue/spec.md`, the one sentence of "One composition, before the topology scene" (the rule of design §2.6: scene 1's MODIFIED block is not edited). These prove the MODIFIED requirement's scenarios ("Both kinds in the catalogue" and "Shared checks still reject a broken flow" run unedited).
+- [ ] 2.4 Edit only the assertions design §2.6 lists: in `test/scenes/catalogue-flow.test.ts`, "Takes fixture beside the registered scenes", "Three scenes in the catalogue", "Four scenes in the catalogue" and a new "Five scenes in the catalogue"; the two `available scenes:` lines of `test/scripts/cli.test.ts`; in `test/scenes/sdd-request-relay-catalogue.test.ts`, the `entries[9]` assertion and the scene list; in `openspec/changes/sdd-scene-1-relay/specs/scene-catalogue/spec.md`, the one sentence of "One composition, before the topology scene" (the rule of design §2.6: scene 1's MODIFIED block is not edited). These prove the MODIFIED requirement's scenarios ("Both kinds in the catalogue" and "Shared checks still reject a broken flow" run unedited in `test/scenes/catalogue-flow.test.ts`).
 - [ ] 2.5 Unit, `test/scenes/sdd-scene-2-files.test.ts`: "Files timeline equals the beat table" (an independent transcription of design §4 in the test) and "Files travel token changed".
 
 ## 3. Frame logic (scene-catalogue)
@@ -21,14 +21,13 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [ ] 3.1 `src/scenes/sdd-scene-2-files/frame.ts`: `frameAt(f)`, the whole stage state as data, pure, no React (design §2.3–§2.5, §2.7).
 - [ ] 3.2 Unit, `test/scenes/sdd-scene-2-files.test.ts`, one `describe` per requirement:
   - **Beats and timing:** "Files seeking in any order".
-  - **Cast:** "Files cast in place at every frame", "Files emote beside the head".
+  - **Cast:** "Files cast in place at every frame" (with its CAST-4 half, the test "Every cast change inside an act or a face entry"), "Files emote beside the head".
   - **Init and propose:** "Init and propose frames", "No file before propose".
   - **Questions and answers:** "Questions and answers frames", "No finding before the review".
   - **Review round 1:** "Review 1 frames".
   - **Fix and review round 2:** "Fix and review 2 frames", "One NO-GO at a time".
   - **Approval:** "Approval frames", "No GO before the owner".
   - **Apply and final still:** "Apply frames", "No code before the approval", "Files final hold identical".
-  - Plus a consistency test: every frame where a cast action parameter changes lies inside a declared act of that actor, and every frame where a face changes has its `faces` entry (CAST-4 against the drawn state).
 
 ## 4. Stage, layout and composition (scene-catalogue)
 
@@ -49,7 +48,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 ## 6. Checks, docs and review
 
 - [ ] 6.1 `npm run typecheck && npm run tokens:check && npm run build && npm test` and `openspec validate --all --strict`: all pass. With `git diff origin/main --stat -- src/scenes/circuit-breaker-states src/scenes/publish-subscribe src/scenes/sdd-request-relay src/scenes/circuit-breaker-topology` empty, this proves "Other scenes' code untouched".
-- [ ] 6.2 Local: "Takes stills byte-identical (local)". Render the stills of `sdd-request-relay` and `circuit-breaker-topology` on `origin/main` and on the branch, and compare their SHA-256.
+- [ ] 6.2 Local: "Other scenes' stills byte-identical (local)". Render the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology` on `origin/main` and on the branch, and compare their SHA-256.
 - [ ] 6.3 Docs (proposal "Documentation"): `README.md` (the scene row, its files, the `sequence` kind) and `docs/roadmap.md` (the SDD row).
 - [ ] 6.4 Code review: two independent clean-context reviewers per round, one after the other, at most two rounds; fix every right high and medium.
 - [ ] 6.5 After the owner's look at the video (G3): `openspec archive sdd-scene-2-files -y` (after `sdd-scene-1-relay` is archived, since both modify "State-machine and flow catalogue compatibility"), then `openspec validate --all --strict`. This task waits for G3.

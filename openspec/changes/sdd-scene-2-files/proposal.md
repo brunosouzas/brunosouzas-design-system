@@ -11,6 +11,7 @@ On **2026-11-13** the owner chose **concept A, "the files, not the relay"**, wit
 - **q3:** both NO-GO rounds stay separate beats (NO-GO, NO-GO, then GO).
 - **q4:** findings are gestures, never text pills; the storyboard's pills were annotation only (ADR 0005).
 - **q5:** no new pieces: `folder` and `stamp` (any word) are enough.
+- **Concept A's own rule:** the cast appears only where the article ties a beat to a role; the review is another agent (Codex), not a cast member.
 
 ## What Changes
 
@@ -50,6 +51,7 @@ none
 
 - **Errors and invalid input:** the catalogue rejects a broken entry through the shared rules and the `sequence` checks ("Sequence scene kind", "Sequence cast and hold"; "SDD files registration", scenario "Broken entry rejected"). The stills and render commands keep their failure policy ("SDD files stills through existing commands", "SDD files master and web copy").
 - **Limits:** every settled word at an effective size of at least 33 stage units (11.7 px in the site's 341 px column; the `?` is a symbol and exempt, so is a word in motion); every word inside the frame and clear of the cast ("SDD files text size", "SDD files text placement"). The final hold is at least `motion.readingHold` frames.
+- **No error scenario, and why:** "Existing scenes unchanged by the files scene" is proved by the other scenes' tests and stills, which are themselves the boundary (any change fails them); "SDD files built from package pieces" is a static check of the scene's files (a shape or a colour literal fails it, as "Files scene has no shape of its own" and the colour-literal test show).
 - **Repetition and idempotency:** every frame is a pure function of its frame number ("SDD files beats and timing", scenario "Seeking in any order"). Renders are reproducible.
 - **Concurrency:** n/a. Frames render independently; the scene runs no concurrent process.
 - **Security:** n/a. No user input, no secret, no network beyond the existing font load at render time.
@@ -67,7 +69,7 @@ The owner follows the recommendations and judges the scene on the video (G3). Ea
 6. **Registration right after `sdd-request-relay`.** This edits two assertions of `test/scenes/sdd-request-relay-catalogue.test.ts` and one sentence of the scenario "One composition, before the topology scene" of the unarchived change `sdd-scene-1-relay`; that change's MODIFIED block is left as it is and replaced by this change's when both are archived, scene 1 first (design §2.6). Recommended: accept.
 7. **The folder leaves once the four files are out**, so the files have the top of the stage. Recommended: keep.
 8. **`NO-GO` in `color.state.failure`** (gate-0 q5), not the blocked orange. Recommended: keep.
-9. **Chaves types `init` and `propose`**, in one act with one command line on the screen. The article names no one for either (L44, L86); the developer at the laptop is scene 1's reading. Recommended: keep.
+9. **Chaves types `init` and `propose`**, in one act with one command line on the screen. This departs from concept A's rule (cast only where the article ties the beat to a role): the article names no one for either command (L44, L86); the tie is indirect (the request goes to the development team, L20, and from it to Claude, L86; the developer at the laptop is scene 1's reading). The alternative is no actor: the command line and the folder appear on their own, as `NO-GO` does. Recommended: keep Chaves, since scene 1 established him at that laptop; the alternative is a one-line change of the timeline.
 10. **The answer beat** (Balão answers, six checks; L120), which the gate-0 sheet skips, so the review is not read as a review of unanswered questions. Recommended: keep.
 11. **Length 29 s** (870 frames), against ~26 s at gate 0 and 36 s for scene 1. Recommended: accept.
 12. **Stamp sizes:** `NO-GO` is a round stamp of radius 46 scaled 1.25 (its word at 33.75); `GO` is Balão's stamp (radius 24) landing at scale 1.6 (its word at 43.2). Recommended: accept.
