@@ -103,6 +103,8 @@ npm run stills -- publish-subscribe --dry-run     # print 24 commands, no effect
 npm run render -- publish-subscribe --dry-run     # print eight commands; real video waits for owner stills approval
 npm run stills -- circuit-breaker-topology        # 14 PNGs: the 13 phase ends and the last frame
 npm run render -- circuit-breaker-topology        # one master and one web copy (64 s), after the owner approves the stills
+npm run stills -- sdd-request-relay               # 14 PNGs: the 13 phase ends and the last frame
+npm run render -- sdd-request-relay               # one master and one web copy (36 s), after the owner approves the stills
 npm run build                                     # compile the package into dist/ (the package test needs it)
 npm run cover -- cover.json --out card.svg        # build a blog cover (or a banner, diagram or icon) from its spec
 npm run pieces:sheet -- --out out/pieces.svg      # every piece once, labelled, for review
@@ -125,6 +127,7 @@ The catalogue contains:
 | `circuit-breaker-states` | [EN](https://brunosouzas.com/blog/circuit-breaker-in-mulesoft), [PT](https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft) | approved pilot, unchanged |
 | `publish-subscribe` | [EN](https://brunosouzas.com/wiki/publish-subscribe-in-mulesoft/), [PT](https://brunosouzas.com/pt/wiki/publish-subscribe-in-mulesoft/) and their Anypoint MQ diagrams | owner media gate pending |
 | `circuit-breaker-topology` | [EN](https://brunosouzas.com/blog/circuit-breaker-in-mulesoft), [PT](https://brunosouzas.com/pt/blog/circuit-breaker-in-mulesoft) (one neutral video for both) | owner media gate pending ([stills and video sheets](docs/spikes/2026-11-12-circuit-breaker-topology/README.md)) |
+| `sdd-request-relay` | [EN](https://brunosouzas.com/blog/spec-driven-development-in-practice), [PT](https://brunosouzas.com/pt/blog/spec-driven-development-in-practice) (one neutral video for both) | owner media gate pending ([stills and video sheets](docs/spikes/2026-11-12-sdd-request-relay/)) |
 
 Studio lists the compositions of each scene in catalogue order: one per format and language for a localised scene, one per format for a neutral one. Pub-sub runs for 1000 frames at 30 fps, with the final 90 frames static. It depicts the article's AUTO acknowledgment case with a propagated invoice error, not every acknowledgment mode. Publish confirms exchange acceptance, not queue delivery. No redelivery is animated. After owner stills approval, `npm run render -- publish-subscribe` produces the four masters and four web copies; do not run it before that gate.
 
@@ -149,7 +152,16 @@ A scene lives in `src/scenes/<scene>/` with:
 - `stage.ts`: the two stage SVG layers built from the pieces, and the component props (window squares, failure-rate bar, clock, tokens);
 - `Scene.tsx`: only draws them, in the layer order rings, drop path, arrows and blocks, window, tokens, labels.
 
-Its words are at least 33 stage units (36 for state names, the take number and the counters), 11.7 px in the site's 341 px column on a 360 px phone; `test/scenes/circuit-breaker-topology-layout.test.ts` measures them with harfbuzzjs on `fonts/` and checks their placement at every frame. The pieces name Source Sans 3 "Source Sans 3" while `@remotion/google-fonts` registers it as "Source Sans Three", so `Scene.tsx` maps the stage trees' sans stack to the loaded family (`withSansFamily`); without it the SVG words fall back to Helvetica.
+Its words are at least 33 stage units (36 for state names, the take number and the counters), 11.7 px in the site's 341 px column on a 360 px phone; `test/scenes/circuit-breaker-topology-layout.test.ts` measures them with harfbuzzjs on `fonts/` and checks their placement at every frame. The pieces name Source Sans 3 "Source Sans 3" while `@remotion/google-fonts` registers it as "Source Sans Three", so `Scene.tsx` maps the stage trees' sans stack to the loaded family through `withSansFamily` (`src/brand/svg-fonts.ts`, shared with the request-relay scene below; `stage.ts` re-exports it so its own import path is unedited); without it the SVG words fall back to Helvetica.
+
+**The SDD request-relay scene** (`sdd-request-relay`, AB#144, a `takes` scene) shows one request played twice on one stage, with Balão (the logistics team, requester and approver) and Chaves (the developer) as the supporting cast beside Visor (the AI agent) at their shared laptop. Take 1: Balão asks, Chaves relays it to Visor, Visor writes the code alone with the six open questions sunk into it, and the first error comes back to Balão, who never saw those decisions. A rewind (badge `1` → `2`). Take 2: the same relay, then Visor lists the six questions in `proposal.md` instead of choosing; Chaves carries the sheet to Balão; Balão answers each question, stamps `GO`; Chaves carries it back, and only then does Visor implement. 1080 frames (36 s), one 16:9 composition, no caption or sound. Its files:
+
+- `scene.ts`: the entry and the `text.en` word table (`proposal.md`, `GO`, `?`, the take numbers);
+- `timeline.ts`: `makeTimeline(travel, fade)`, the beat table of the change's design §4 (acts, faces, emotes, trips, pops, fades, leaves, cues, the rewind's reverse entries), derived from `motion.travel` and `motion.fade` so a token change fails the pinned beat-table test;
+- `frame.ts`: `frameAt(f)` and the rewind's object frame `objectFrame(f)`, the whole stage as plain data; from the outro (980) every frame reads as frame 980, so the final hold (to 1079) is byte-identical;
+- `layout.ts`: positions and routes in 960 × 540 stage units, drawn × 2;
+- `stage.ts`: the five stage SVG layers built from the pieces (below, cast, sheet, tokens, above), words passed through `withSansFamily`;
+- `Scene.tsx`: only draws them, with the `Rings` and the `MotionPath` guides (P1, P2, P4).
 
 `SceneContract<TTimeline>` supplies common metadata and phase ranges (`from`, `to`, events with `at`), duration and outro. `SceneData` remains the legacy state-machine alias with `Timeline`: states, slots, call results and transition fires retain their window checks. `CatalogueScene` also accepts `FlowSceneData` with `kind: "flow"`; it needs no active states or slots. It accepts `TakesSceneData` with `kind: "takes"` too (above). The flow validator rejects unknown endpoints, invalid frames/ranges, trips crossing the outro, and impossible copy ownership/handoffs. There is no plug-in or graph-interpreter API.
 
