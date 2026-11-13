@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.14.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.13.0...v0.14.0) (2026-11-13)
+
+
+### Features
+
+* SDD archive scene, scene 3 of 3 (AB[#144](https://github.com/brunosouzas/brunosouzas-design-system/issues/144)) ([066410f](https://github.com/brunosouzas/brunosouzas-design-system/commit/066410f1206c577cbd79f1bf6f05f24e04512638))
+* SDD relay scene 1, one request played twice (AB[#144](https://github.com/brunosouzas/brunosouzas-design-system/issues/144)) ([208b654](https://github.com/brunosouzas/brunosouzas-design-system/commit/208b654c120647d01297a4c9a02d45b702893ea9))
+* SDD scene 2, the files, from init to apply (AB[#144](https://github.com/brunosouzas/brunosouzas-design-system/issues/144)) ([8aca070](https://github.com/brunosouzas/brunosouzas-design-system/commit/8aca07061b52fcd4d1420ad2ea4a85b59de7cc7c))
+* sequence scene kind for scenes that run once (AB[#144](https://github.com/brunosouzas/brunosouzas-design-system/issues/144)) ([8aca070](https://github.com/brunosouzas/brunosouzas-design-system/commit/8aca07061b52fcd4d1420ad2ea4a85b59de7cc7c))
+
 ## [0.13.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.12.0...v0.13.0) (2026-11-12)
 
 
