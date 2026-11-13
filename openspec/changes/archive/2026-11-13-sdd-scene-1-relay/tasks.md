@@ -49,7 +49,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [x] 5.3 Local: the stills sheet and the phone sheet (341 CSS px) into `docs/spikes/2026-11-12-sdd-request-relay/`.
 - [x] 5.4 Local: `npm run render -- sdd-request-relay`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet; frames 980 and 1079 rendered with `npx remotion still` and compared byte for byte. This proves "SDD relay video verified from output (local)" (SCN-4, SCN-5).
 
-- [ ] 5.5 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive.
+- [x] 5.5 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive. Done: Bruno watched the rendered web MP4 (2026-11-13) and approved, no changes requested.
 
 ## 6. Checks, docs and review
 
@@ -57,4 +57,4 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [x] 6.2 Docs (proposal "Documentation"): `README.md` (the scene row, its files, `svg-fonts.ts`) and `docs/roadmap.md` (the SDD row).
 - [x] 6.3 Code review: two independent clean-context reviewers per round, at most two rounds; fix every right high and medium.
 - [x] 6.4 Local: "Stills byte-identical (local)". Render the stills of `circuit-breaker-states`, `publish-subscribe` and `circuit-breaker-topology` on `origin/main` and on the branch, and compare their SHA-256.
-- [ ] 6.5 After the owner's look at the video (G3): `openspec archive sdd-scene-1-relay -y`, then `openspec validate --all --strict`. This task waits for G3, because the owner judges the scene on the video.
+- [x] 6.5 After the owner's look at the video (G3): `openspec archive sdd-scene-1-relay -y`, then `openspec validate --all --strict`. This task waits for G3, because the owner judges the scene on the video. Done (PR #50).
