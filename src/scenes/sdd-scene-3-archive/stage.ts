@@ -82,8 +82,8 @@ const fieldPillOf = (p: NonNullable<ArchiveState["fieldPill"]>): Drawn =>
 
 // ---------------------------------------------------------------- the folders and the finding
 
-/** A folder's placement: about its centre, turned by its jolt. */
-const folderTransform = (f: FolderState): string => `${f.angle === 0 ? "" : `rotate(${f.angle} ${f.centre.x} ${f.centre.y})`}`;
+/** A folder's placement: about its centre, turned by its jolt (0 when it is not jolting). */
+const folderTransform = (f: FolderState): string => (f.angle === 0 ? "" : `rotate(${f.angle} ${f.centre.x} ${f.centre.y})`);
 const folderOf = (f: FolderState): Drawn => {
   const top = folderTopLeft(f.centre, f.scale);
   const d = folder({ x: top.x, y: top.y, scale: f.scale });

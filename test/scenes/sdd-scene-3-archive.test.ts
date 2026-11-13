@@ -189,6 +189,7 @@ describe("SDD archive mechanics (first archive)", () => {
     expect(near(STATES[55].firstFolder!.centre, half55)).toBe(true);
     expect(STATES[66].firstFolder).toMatchObject({ centre: { x: 900, y: 70 }, scale: 0.4, inFlight: false });
     expect(STATES[99].fieldPill).toBeNull();
+    expect(STATES[100].fieldPill).toBeNull();
     expect(STATES[101].fieldPill).toMatchObject({ text: "was" });
   });
 });
@@ -221,6 +222,7 @@ describe("SDD archive second request and propose", () => {
 describe("SDD archive single review round", () => {
   test("Break and finding frames", () => {
     expect(STATES[267].finding).toBeNull();
+    expect(STATES[268].finding).toBeNull();
     expect(STATES[269].finding).not.toBeNull();
     expect(STATES[268].secondFolder!.angle).toBe(0);
     expect(STATES[272].secondFolder!.angle).not.toBe(0);

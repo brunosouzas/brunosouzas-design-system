@@ -38,7 +38,7 @@ This branch is cut from `origin/main` at `208b654` (scene 1 only; PR #48 has not
 
 **Round-2 correction:** OpenSpec 1.14.1 refuses to add a requirement whose header already exists (`ADDED failed … already exists`), so the two changes' ADDED blocks do **not** merge as a harmless duplicate the way the proposal first claimed. Whichever of the two PRs archives second must, as an explicit manual step before its own `openspec archive` (added to task 6.6 of both changes' owners' checklists): drop the duplicate "Sequence scene kind"/"Sequence cast and hold" ADDED blocks from its own delta (the code they describe is already in `openspec/specs/` from the first archive), and rebuild its MODIFIED "State-machine and flow catalogue compatibility" block against the spec as it stands after the first archive, not against this design's own six-scenario copy. This is real manual work at merge/archive time, not a no-op; it is called out here so the owner budgets for it rather than discovering it as an archive failure.
 
-The code files (`sequence-kind.ts`, the `takes-kind.ts`/`catalogue.ts` edits) are ported **byte-identical** to `sdd-scene-2-files`' own commit (verified with `diff` in task 1.1). The registration files (`src/scenes/index.ts`, `src/Root.tsx`, `README.md`, `docs/roadmap.md`, and the three tests that pin the registry list: `test/scenes/catalogue-flow.test.ts`, `test/scenes/sdd-request-relay-catalogue.test.ts`, `test/scripts/cli.test.ts`) are **not** expected to merge cleanly against PR #48 — both branches add a fifth scene at the same point, so this is an ordinary merge conflict the owner resolves by hand when merging the two PRs in order (scene 2 first, by number), not a silent risk.
+The code files (`sequence-kind.ts`, the `takes-kind.ts`/`catalogue.ts` edits) are ported **byte-identical** to `sdd-scene-2-files`' own commit (verified with `diff` in task 1.1). The registration files (`src/scenes/index.ts`, `src/Root.tsx`, `README.md`, `docs/roadmap.md`, and the three tests that pin the registry list: `test/scenes/catalogue-flow.test.ts`, `test/scenes/sdd-request-relay-catalogue.test.ts`, `test/scripts/cli.test.ts`) are **not** expected to merge cleanly against PR #48 — both branches add a fifth scene at the same point, so this is an ordinary merge conflict the owner resolves by hand when merging the two PRs in order (scene 2 first, by number), not a silent risk. (Round-2 code review addition: this branch also adds `test/fixtures/sequence-scene.ts`, a test-only `sequence` fixture that `catalogue-flow.test.ts`'s "Takes fixture beside the registered scenes" scenario needs; scene 2's branch has no such file, so it is a clean add, not a conflict.)
 
 | Option | Why not, or why |
 |---|---|
@@ -182,7 +182,7 @@ Out of scope: who runs the review; version numbers; the exact sentence fixed bey
 | field-count pill | `diagramBox` pill w 300, h 44, `textSize` 33, fill `color.white` | centred (665, 230) — above the book, clear of the `worked` emote (y 208-252 vs. the emote's ≈ y 266-318) |
 | first-change `folder` | `folder` scale 0.9 → parked 0.4 | from centre (480, 140) to (900, 70) |
 | second-change `folder` | `folder` scale 0.95 → parked 0.4 | initially centre (380, 150), parked (900, 170) |
-| `?` finding pill | `diagramBox` pill w 40, h 18, `textSize` 24 | centred (380, 23), clear of the frame margin (box y 12.5-33.5 with half the outline) and clear of the second folder's two peeking papers (round-1 code review fix: the papers reach ≈ y 36-43 at this slot, well below the folder's own top-left anchor ≈ y 56 that the first draft measured against) |
+| `?` finding pill | `diagramBox` pill w 40, h 32, `textSize` 24 | centred (505, 50) — beside the second folder's front (x ≤ ≈ 470), clear of the frame margin (box x 483.5-526.5, y 32.5-67.5 with half the outline) and clear of the folder's two peeking papers (round-2 code review fix: shrinking the pill to clear the papers vertically, round-1's attempt, left the `?` glyph overflowing a height-18 pill; moving sideways instead keeps the pill at its full size) |
 | `GO` | `stamp` r 24, word `GO`; × 0.95 in flight, growing to × 1.6; leaves (fades) once parked, before `archive-2` | from (229.4, 409.5) (Balão's held stamp) to (380, 150) |
 | emote `worked` | `emote` scale 0.75 | (800, 292) |
 | rings | `Rings` | centre (960, 540) composition pixels |
@@ -216,7 +216,7 @@ Cast body boxes (scenes 1-2's): Balão x 45.1-193.3, y 322.1-476; Chaves x 419.5
 | 215 | the book jolting (the breaking fact) |
 | 272 | the second folder's single finding, flagged |
 | 370 | `GO` in flight |
-| 410 | the second folder (with `GO`) travelling to park |
+| 440 | the second folder travelling to park (round-2 code review fix: at 410 `GO` is still landed and the trip has not departed yet) |
 | 455 | the field-count pill reading "exactly three fields" |
 | 480 | Chaves beside the book, settled |
 

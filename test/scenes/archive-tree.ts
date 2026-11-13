@@ -42,6 +42,12 @@ export const bodyItemAt = (layer: SvgNode, element: string, index: number): Item
 };
 /** The first shape (rect or circle) of an element in a layer: its body box. */
 export const bodyItem = (layer: SvgNode, element: string): Item | null => bodyItemAt(layer, element, 0);
+const union = (a: Box, b: Box): Box => ({ x0: Math.min(a.x0, b.x0), y0: Math.min(a.y0, b.y0), x1: Math.max(a.x1, b.x1), y1: Math.max(a.y1, b.y1) });
+/** The book's own box (round-2 code review fix): the union of its back page (rect 0) and front cover (rect 1), library.ts's full outline. */
+export const bookItem = (layer: SvgNode): Item | null => {
+  const back = bodyItemAt(layer, "book", 0), front = bodyItemAt(layer, "book", 1);
+  return front === null ? back : back === null ? front : { name: "book", box: union(back.box, front.box) };
+};
 
 const settled = (a: Appear | null | undefined) => a !== null && a !== undefined && a.opacity === 1 && a.scale === 1;
 /**
@@ -62,9 +68,8 @@ export const exemptAt = (f: Frame): Set<string> => {
 export const itemsAt = (f: Frame): { blocks: Item[]; words: (DrawnText & { name: string })[] } => {
   const blocks: Item[] = [];
   const add = (item: Item | null) => { if (item) blocks.push(item); };
-  // The book's first rect is the back page (library.ts: offset +14/+10 from the front cover, slightly
-  // smaller); its second rect is the full front cover, the box design §6.1 means.
-  add(bodyItemAt(f.book, "book", 1));
+  // The book's own box is the union of its back page (rect 0) and front cover (rect 1); round-2 fix.
+  add(bookItem(f.book));
   add(bodyItem(f.book, "field-pill"));
   add(bodyItem(f.folders, "finding-pill"));
   add(bodyItem(f.verdict, "go"));

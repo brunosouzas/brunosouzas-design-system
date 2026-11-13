@@ -37,8 +37,8 @@ export const folderScaleAt = (from: number, to: number, p: number): number => fr
 /** A piece's drawing anchor (top-left) for a centred placement at `scale` (the `folder` piece's own 190x198 glyph at scale 1). */
 export const folderTopLeft = (centre: Point, scale: number): Point => ({ x: centre.x - 95 * scale, y: centre.y - 99 * scale });
 
-/** The single finding's `?` pill, above the second folder, clear of its papers' peak (round-1 fix, design §6.1: the original ≈y56 ignored the folder's two peeking papers, measured to reach ≈y36). */
-export const FINDING_PILL = { cx: 380, cy: 23, width: 40, height: 18 } as const;
+/** The single finding's `?` pill, beside the second folder, clear of its two peeking papers (round-2 fix, design §6.1: shrinking the pill to clear the papers vertically left the `?` glyph overflowing it; moved beside the folder instead, at its full size). */
+export const FINDING_PILL = { cx: 505, cy: 50, width: 40, height: 32 } as const;
 
 /** The jolt of the book or a flagged folder, in degrees, `k` frames after it starts (design §2.3). */
 export const JOLT = { amplitude: 5, period: 6 } as const;

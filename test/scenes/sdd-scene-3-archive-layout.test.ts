@@ -24,7 +24,7 @@ describe("SDD archive layout", () => {
     expect(CAST_X).toEqual({ balao: 104, chaves: 505, visor: 852 });
     expect(BOOK).toEqual({ x: 620, y: 300, width: 90, height: 160 });
     expect(FIELD_PILL).toEqual({ cx: 665, cy: 230, width: 300, height: 44 });
-    expect(FINDING_PILL).toEqual({ cx: 380, cy: 23, width: 40, height: 18 });
+    expect(FINDING_PILL).toEqual({ cx: 505, cy: 50, width: 40, height: 32 });
     expect(JOLT).toEqual({ amplitude: 5, period: 6 });
     expect(VERDICT_CENTRE).toEqual({ x: 380, y: 150 });
     expect(near(GO.from.x, 229.4) && near(GO.from.y, 409.5)).toBe(true);
@@ -44,9 +44,9 @@ describe("SDD archive layout", () => {
     expect(GUIDES).toEqual({ go: ROUTES.go });
     // The book is clear of Chaves's body box (design §2.4).
     expect(BOOK.x).toBeGreaterThan(BODY_BOXES.chaves.x1);
-    // Round-1 code review fix: the `?` pill's bottom edge must clear the second folder's peeking
-    // papers (measured at ≈ y 36 for the folder's start slot, centre (380, 150), scale 0.95).
-    expect(FINDING_PILL.cy + FINDING_PILL.height / 2).toBeLessThan(36);
+    // Round-2 code review fix: the `?` pill sits beside the second folder's front (x ≤ ≈ 470), clear
+    // of its two peeking papers (measured reaching ≈ y 36-43 at the folder's start slot).
+    expect(FINDING_PILL.cx - FINDING_PILL.width / 2).toBeGreaterThan(470);
   });
 });
 
@@ -57,16 +57,14 @@ const sizeProblems = (frames: readonly Frame[]): string[] => {
   const problems = new Map<string, string>();
   for (const f of frames) {
     const exempt = exemptAt(f);
-    for (const { words } of [itemsAt(f)]) {
-      for (const t of words) {
-        if (t.text === "?") continue;
-        // A smaller `GO` only while Balão holds it (344-359) or in flight (360-381, design §2.2).
-        if (t.text === "GO" && f.frame >= 344 && f.frame <= 381) continue;
-        if (exempt.has(t.element)) continue;
-        if (t.size < TEXT_SIZE.word - 1e-9) {
-          const key = `${t.element} "${t.text}"`;
-          if (!problems.has(key)) problems.set(key, `${key} at ${Math.round(t.size * 100) / 100} (minimum ${TEXT_SIZE.word}), first drawn at frame ${f.frame}`);
-        }
+    for (const t of itemsAt(f).words) {
+      if (t.text === "?") continue;
+      // A smaller `GO` only while Balão holds it (344-359) or in flight (360-381, design §2.2).
+      if (t.text === "GO" && f.frame >= 344 && f.frame <= 381) continue;
+      if (exempt.has(t.element)) continue;
+      if (t.size < TEXT_SIZE.word - 1e-9) {
+        const key = `${t.element} "${t.text}"`;
+        if (!problems.has(key)) problems.set(key, `${key} at ${Math.round(t.size * 100) / 100} (minimum ${TEXT_SIZE.word}), first drawn at frame ${f.frame}`);
       }
     }
   }
@@ -96,12 +94,13 @@ const placementProblems = (frames: readonly Frame[]): string[] => {
   const problems: string[] = [];
   for (const f of frames) {
     const exempt = exemptAt(f);
-    const { blocks } = itemsAt(f);
+    const { blocks, words } = itemsAt(f);
     const checked = blocks.filter((b) => !exempt.has(b.name));
-    for (const item of checked) {
-      const b = item.box;
-      if (b.x0 < MARGIN || b.y0 < MARGIN || b.x1 > STAGE.width - MARGIN || b.y1 > STAGE.height - MARGIN) problems.push(`frame ${f.frame}: ${item.name} leaves the stage less ${MARGIN} (${fmt(b)})`);
-    }
+    const insideMargin = (name: string, b: Box) => {
+      if (b.x0 < MARGIN || b.y0 < MARGIN || b.x1 > STAGE.width - MARGIN || b.y1 > STAGE.height - MARGIN) problems.push(`frame ${f.frame}: ${name} leaves the stage less ${MARGIN} (${fmt(b)})`);
+    };
+    for (const item of checked) insideMargin(item.name, item.box);
+    for (const w of words.filter((w) => !exempt.has(w.element))) insideMargin(w.name, w.box);
     for (const [i, a] of checked.entries()) {
       for (const b of checked.slice(i + 1)) if (overlaps(a.box, b.box)) problems.push(`frame ${f.frame}: ${a.name} crosses ${b.name}`);
       for (const c of CAST_BOXES) if (overlaps(a.box, c.box)) problems.push(`frame ${f.frame}: ${a.name} crosses ${c.name}`);
@@ -119,7 +118,7 @@ describe("SDD archive text placement", () => {
   });
 
   test("Archive collision rejected", () => {
-    const moved = FRAMES.map((f) => ({ ...f, book: moveElement(f.book, "field-pill", -300, -200) }));
+    const moved = FRAMES.map((f) => ({ ...f, book: moveElement(f.book, "field-pill", -160, -180) }));
     const problems = placementProblems(moved);
     // At frame 300 the `?` pill is not exempt (298-303, outside its settle 269-297 and leave 304-313 windows).
     expect(problems).toContain("frame 300: field-pill crosses finding-pill");
