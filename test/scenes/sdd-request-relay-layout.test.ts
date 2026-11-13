@@ -12,6 +12,7 @@ import { ABOVE_ORDER, BELOW_ORDER, CAST_ORDER, SHEET_ORDER } from "../../src/sce
 import type { Box } from "./text-measure";
 import { CAST_BOXES, STAMP_ACT, exemptAt, frameOf, itemsAt, moveElement, resizeText, textsAt, type Frame } from "./relay-tree";
 import { walk } from "./topology-tree";
+import type { SvgNode } from "../../src/pieces/node.ts";
 
 const FRAMES: Frame[] = Array.from({ length: 1080 }, (_, f) => frameOf(f));
 const MARGIN = 12;
@@ -98,8 +99,8 @@ describe("SDD relay text size", () => {
   });
 
   test("Too small rejected", () => {
-    const small = FRAMES.slice(690, 710).map((f) => ({ ...f, sheet: resizeText(f.sheet, "label", 32) }));
-    expect(sizeProblems(small)).toEqual(['label "proposal.md" at 32 (minimum 33), first drawn at frame 690']);
+    const small = FRAMES.slice(656, 710).map((f) => ({ ...f, sheet: resizeText(f.sheet, "label", 32) }));
+    expect(sizeProblems(small)).toEqual(['label "proposal.md" at 32 (minimum 33), first drawn at frame 656']);
     const badge = FRAMES.slice(500, 510).map((f) => ({ ...f, above: resizeText(f.above, "badge", 35) }));
     expect(sizeProblems(badge)).toEqual(['badge "2" at 35 (minimum 36), first drawn at frame 500']);
   });
@@ -172,29 +173,50 @@ describe("SDD relay layer order", () => {
 });
 
 describe("SDD relay hand-over", () => {
-  /** Every paint attribute (fill, stroke and its width/join/dasharray) under a node, depth first. */
-  const paints = (node: unknown): string[] => {
-    const n = node as { attrs: Record<string, unknown>; children: unknown[] };
-    const own = ["fill", "stroke", "stroke-width", "stroke-linejoin", "stroke-dasharray"]
-      .map((k) => n.attrs[k]).filter((v) => v !== undefined).map(String);
-    return [...own, ...n.children.flatMap((c) => (typeof c === "string" ? [] : paints(c)))];
+  /** The absolute stage point of a shape (its `x`/`y`, `cx`/`cy`, or a path's first `M`). */
+  const shapePoint = (w: ReturnType<typeof walk>[number]): { x: number; y: number } | null => {
+    const a = w.node.attrs, apply = (x: number, y: number) => ({ x: w.m[0] * x + w.m[2] * y + w.m[4], y: w.m[1] * x + w.m[3] * y + w.m[5] });
+    if (w.node.tag === "rect") return apply(Number(a.x), Number(a.y));
+    if (w.node.tag === "circle") return apply(Number(a.cx), Number(a.cy));
+    if (w.node.tag === "path" && typeof a.d === "string") {
+      const m = /M\s*([\d.-]+)[ ,]+([\d.-]+)/.exec(a.d);
+      if (m) return apply(Number(m[1]), Number(m[2]));
+    }
+    return null;
   };
-  /** The held sheet's node, inside Chaves's own piece tree. */
-  const heldOf = (f: Frame) => {
-    for (const w of walk(f.cast as never)) if (w.element === "chaves" && w.node.tag === "g" && w.node.children.length > 0) return w.node;
-    throw new Error("no chaves node");
+  /** The page's top-left corner (its 180 x 226 rect) wherever it is drawn under `node`. */
+  const pageCorner = (node: SvgNode): { x: number; y: number } => {
+    for (const w of walk(node)) if (w.node.tag === "rect" && Number(w.node.attrs.width) === PAGE.width && Number(w.node.attrs.height) === PAGE.height) {
+      const p = shapePoint(w);
+      if (p) return p;
+    }
+    throw new Error("no page rect");
+  };
+  /** Each of the 6 rows, top to bottom, true if it has a check near it (a short, 2-segment path). */
+  const rowStates = (node: SvgNode): boolean[] => {
+    const marks: { x: number; y: number }[] = [], checks: { x: number; y: number }[] = [];
+    for (const w of walk(node)) {
+      if (w.node.tag === "circle" && Number(w.node.attrs.r) === 13) { const p = shapePoint(w); if (p) marks.push(p); }
+      if (w.node.tag === "path" && typeof w.node.attrs.d === "string" && (String(w.node.attrs.d).match(/L/g) ?? []).length === 2) {
+        const p = shapePoint(w);
+        if (p) checks.push(p);
+      }
+    }
+    return marks.sort((a, b) => a.y - b.y).map((m) => checks.some((c) => Math.hypot(c.x - m.x, c.y - m.y) < 40));
   };
   test("Seamless hand-over", () => {
-    // At 734 and 852 the free sheet (just before/after Chaves holds it) and the held sheet paint the same
-    // marks (design §2.9: "no jump"), so a drift in either drawing path is caught here, not just visually.
-    // Chaves's own tree also paints his body (not compared); every colour the free sheet's marks use is
-    // still present once he holds it, so none of its paint (ink stroke, grey bars, green checks) is dropped.
+    // At 734 and 852 the free sheet (just before/after Chaves holds it, the last/first frame it is drawn
+    // that way) and the held sheet are at the same place, within the one-frame gap every trip leaves before
+    // its destination (design §2.9: "no jump"; the carry/return trips end at T frames, drawn up to the frame
+    // before arrival, design §4.4), with the same rows and checks: content does not reset across the switch
+    // of drawing path (the free `sheet` piece to Chaves's own `holdsSheet`).
+    const GAP = 25; // stage units: generous against the known one-frame interpolation shortfall (~19 units)
     for (const [free, held] of [[733, 734], [852, 851]] as const) {
-      const freeSheet = frameOf(free).sheet;
-      const chavesTree = heldOf(frameOf(held));
-      const freePaints = new Set([...paints(freeSheet)].filter((p) => p.startsWith("#")));
-      const heldPaints = new Set([...paints(chavesTree)].filter((p) => p.startsWith("#")));
-      for (const p of freePaints) expect(heldPaints.has(p), p).toBe(true);
+      const freeNode = frameOf(free).sheet, heldNode = frameOf(held).cast;
+      const freeCorner = pageCorner(freeNode), heldCorner = pageCorner(heldNode);
+      expect(Math.hypot(freeCorner.x - HELD.x, freeCorner.y - HELD.y)).toBeLessThan(GAP);
+      expect(Math.hypot(heldCorner.x - HELD.x, heldCorner.y - HELD.y)).toBeLessThan(1);
+      expect(rowStates(freeNode)).toEqual(rowStates(heldNode));
     }
   });
 });

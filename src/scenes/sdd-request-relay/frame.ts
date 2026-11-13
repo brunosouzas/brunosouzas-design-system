@@ -78,14 +78,21 @@ const count = (frames: readonly number[], at: number) => frames.filter((frame) =
 /** The cast's action parameters at frame `x` of a take: the defaults, then every action of that take up to `x`. */
 const castAt = (t: RelayTimeline, take: 1 | 2, x: number) => {
   const start = take2Start(t);
-  const pose: Record<CastActor, Required<Pick<CastSet, never>> & CastSet> = {
+  const pose: {
+    balao: Required<Pick<CastSet, "speaks" | "holdsStamp">>;
+    chaves: Required<Pick<CastSet, "facing" | "types" | "holdsSheet">>;
+    visor: Required<Pick<CastSet, "points">>;
+  } = {
     balao: { speaks: false, holdsStamp: false },
     chaves: { facing: "left", types: false, holdsSheet: false },
     visor: { points: false },
   };
   for (const a of [...t.actions].sort((p, q) => p.at - q.at)) {
     const inTake = take === 1 ? a.at < t.rewind.from : a.at >= start;
-    if (inTake && a.at <= x) pose[a.actor] = { ...pose[a.actor], ...a.set };
+    if (!inTake || a.at > x) continue;
+    if (a.actor === "balao") pose.balao = { ...pose.balao, ...a.set };
+    else if (a.actor === "chaves") pose.chaves = { ...pose.chaves, ...a.set };
+    else pose.visor = { ...pose.visor, ...a.set };
   }
   return pose;
 };
@@ -217,14 +224,14 @@ export const frameAt = (rawFrame: number, t: RelayTimeline = defaultTimeline): R
       ? { requestLine: x >= t.cues.requestLine[0], codeLines: count(t.cues.codeLines1, x) }
       : { requestLine: x >= t.cues.requestLine[1], codeLines: count(t.cues.codeLines2, x) },
     balao: balaoAppear === null ? null : {
-      appear: balaoAppear, expression: balaoFace, speaks: cast.balao.speaks!, holdsStamp: cast.balao.holdsStamp!,
+      appear: balaoAppear, expression: balaoFace, speaks: cast.balao.speaks, holdsStamp: cast.balao.holdsStamp,
       tilt: frightened ? t.fright.tilt : 0,
       squash: frightened ? squashAfter(x, t.fright.at, t.fright.squash) : 1,
     },
     chaves: chavesAppear === null ? null : {
-      appear: chavesAppear, expression: faceAt(t, take, "chaves", x), facing: cast.chaves.facing!, types: cast.chaves.types!, holdsSheet: cast.chaves.holdsSheet!,
+      appear: chavesAppear, expression: faceAt(t, take, "chaves", x), facing: cast.chaves.facing, types: cast.chaves.types, holdsSheet: cast.chaves.holdsSheet,
     },
-    visor: visorAppear === null ? null : { appear: visorAppear, expression: faceAt(t, take, "visor", x), points: cast.visor.points! },
+    visor: visorAppear === null ? null : { appear: visorAppear, expression: faceAt(t, take, "visor", x), points: cast.visor.points },
     tokens: tokensAt(t, take, x),
     sheet: take === 2 ? sheetAt(t, frame) : null,
     failureArrow: take === 1 ? fadeIn(x, fade("failureArrow").in) : 0,
