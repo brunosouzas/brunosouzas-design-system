@@ -43,7 +43,7 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [x] 5.2 Local: `npm run stills -- sdd-scene-2-files` (12 PNGs) and `npx remotion still` at the frames of design §7. Open every PNG: CAST-3, CAST-4, CAST-5, overlaps, clipping, contrast (MOT-5).
 - [x] 5.3 Local: the stills sheet and the phone sheet (341 CSS px) into `docs/spikes/2026-11-13-sdd-scene-2-files/`, captured with headless Chrome through `<img>` (ADR 0008).
 - [x] 5.4 Local: `npm run render -- sdd-scene-2-files`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet; frames 770 and 869 rendered with `npx remotion still` and compared byte for byte. This proves "SDD files video verified from output (local)" (SCN-4, SCN-5).
-- [ ] 5.5 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive.
+- [x] 5.5 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive.
 
 ## 6. Checks, docs and review
 
@@ -51,4 +51,4 @@ Each task names the scenarios it proves and the test that proves them. "Unit" me
 - [x] 6.2 Local: "Other scenes' stills byte-identical (local)". Render the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology` on `origin/main` and on the branch, and compare their SHA-256.
 - [x] 6.3 Docs (proposal "Documentation"): `README.md` (the scene row, its files, the `sequence` kind) and `docs/roadmap.md` (the SDD row).
 - [x] 6.4 Code review: two independent clean-context reviewers per round, one after the other, at most two rounds; fix every right high and medium.
-- [ ] 6.5 After the owner's look at the video (G3): `openspec archive sdd-scene-2-files -y` (after `sdd-scene-1-relay` is archived, since both modify "State-machine and flow catalogue compatibility"), then `openspec validate --all --strict`. This task waits for G3.
+- [x] 6.5 After the owner's look at the video (G3): `openspec archive sdd-scene-2-files -y` (after `sdd-scene-1-relay` is archived, since both modify "State-machine and flow catalogue compatibility"), then `openspec validate --all --strict`. This task waits for G3.
