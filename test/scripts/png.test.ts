@@ -7,23 +7,25 @@ import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "n
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
-import { browserArgs, findBrowser, MAC_BROWSERS, NO_BROWSER, parsePngArgs, PNG_USAGE, pngPage, pngProblem, pngSize, runPng, svgSize } from "../../scripts/png";
+import { BAND_RGB, browserArgs, captureWindow, decodePng, encodePng, findBrowser, MAC_BROWSERS, NO_BROWSER, parsePngArgs, PNG_USAGE, pngPage, pngProblem, pngSize, runPng, svgSize } from "../../scripts/png";
 
 const folders: string[] = [];
 afterEach(() => {
   for (const folder of folders.splice(0)) rmSync(folder, { recursive: true, force: true });
 });
 
-/** A PNG header of the given size (signature, IHDR length, type, width, height). */
-const pngOf = (width: number, height: number): Buffer => {
-  const bytes = Buffer.alloc(33);
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(bytes, 0);
-  bytes.writeUInt32BE(13, 8);
-  bytes.write("IHDR", 12, "latin1");
-  bytes.writeUInt32BE(width, 16);
-  bytes.writeUInt32BE(height, 20);
-  return bytes;
-};
+/** An RGB PNG of the given size whose top `drawn` rows are the band's colour and the rest white, as a
+ * browser that drew the window only down to that row would write it (all rows by default). */
+const pngOf = (width: number, height: number, drawn = height): Buffer =>
+  encodePng({
+    width,
+    height,
+    colourType: 2,
+    channels: 3,
+    rows: Array.from({ length: height }, (_, y) => Buffer.from(Array.from({ length: width }, () => (y < drawn ? [...BAND_RGB] : [255, 255, 255])).flat())),
+  });
+/** The browser's --window-size. */
+const windowOf = (list: string[]) => list.find((a) => a.startsWith("--window-size="))!.slice("--window-size=".length).split(",").map(Number) as [number, number];
 const svgOfSize = (width: number, height: number) => `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"></svg>\n`;
 
 const workspace = () => {
@@ -32,8 +34,8 @@ const workspace = () => {
   const out: string[] = [];
   const err: string[] = [];
   const calls: string[][] = [];
-  /** A stand-in browser that writes a PNG of `shot` to its --screenshot path. */
-  const run = (args: string[], shot?: { width: number; height: number }, env: Record<string, string | undefined> = { BRUNOSOUZAS_CHROME: "/fake/chrome" }) => {
+  /** A stand-in browser that writes a PNG of `shot` (or of its window, drawn whole) to its --screenshot path. */
+  const run = (args: string[], shot?: { width: number; height: number; drawn?: number } | "window", env: Record<string, string | undefined> = { BRUNOSOUZAS_CHROME: "/fake/chrome" }) => {
     out.length = 0;
     err.length = 0;
     return runPng(
@@ -44,7 +46,9 @@ const workspace = () => {
         isFile: (path) => path === "/fake/chrome" || path.startsWith(root),
         exec: async (_file, list) => {
           calls.push(list);
-          if (shot) writeFileSync(list.find((a) => a.startsWith("--screenshot="))!.slice("--screenshot=".length), pngOf(shot.width, shot.height));
+          const [width, height] = windowOf(list);
+          const png = shot === "window" ? pngOf(width, height) : shot && pngOf(shot.width, shot.height, shot.drawn);
+          if (png) writeFileSync(list.find((a) => a.startsWith("--screenshot="))!.slice("--screenshot=".length), png);
         },
       },
     );
@@ -88,6 +92,7 @@ describe("PNG render", () => {
     const page = pngPage({ width: 1584, height: 396 }, { width: 792, ground: "#1B1D24", zones: true });
     expect([page.width, page.height]).toEqual([840, 246]);
     expect(page.image).toEqual({ x: 24, y: 24, width: 792, height: 198 });
+    expect(captureWindow(page)).toEqual({ width: 840, height: 400 });
     expect(page.html).toContain('<body style="margin:0;background:#1B1D24">');
     expect(page.html).toMatch(/<img src="image.svg" width="792" height="198" style="[^"]*left:24px;top:24px/);
     expect(page.html).toMatch(/<svg [^>]*viewBox="0 0 1584 396" width="792" height="198" style="position:absolute;left:24px;top:24px"/);
@@ -111,7 +116,7 @@ describe("PNG render", () => {
     writeFileSync(join(ws.root, "banner.svg"), svgOfSize(1584, 396));
     writeFileSync(join(ws.root, "banner.png"), "old");
     expect(await ws.run(["banner.svg", "--out", "banner.png"], { width: 1584, height: 309 })).toBe(1);
-    expect(ws.err).toEqual(["cannot render banner.png: the browser wrote 1584x309, expected 1584x396"]);
+    expect(ws.err).toEqual(["cannot render banner.png: the browser wrote 1584x309, expected 1584x404"]);
     expect(readFileSync(join(ws.root, "banner.png"), "utf8")).toBe("old");
     expect(readdirSync(ws.root).sort()).toEqual(["banner.png", "banner.svg"]);
   });
@@ -119,12 +124,27 @@ describe("PNG render", () => {
   test("PNG written through a rename, temporary folder removed", async () => {
     const ws = workspace();
     writeFileSync(join(ws.root, "banner.svg"), svgOfSize(1584, 396));
-    expect(await ws.run(["banner.svg", "--out", "banner.png", "--width", "792", "--ground", "#f6f3ec", "--zones"], { width: 840, height: 246 })).toBe(0);
+    expect(await ws.run(["banner.svg", "--out", "banner.png", "--width", "792", "--ground", "#f6f3ec", "--zones"], "window")).toBe(0);
     expect(ws.out).toEqual(["wrote banner.png (840x246)"]);
     expect(pngSize(readFileSync(join(ws.root, "banner.png")))).toEqual({ width: 840, height: 246 });
     expect(readdirSync(ws.root).sort()).toEqual(["banner.png", "banner.svg"]);
     const folder = ws.calls[0].find((a) => a.startsWith("--user-data-dir="))!.slice("--user-data-dir=".length, -"/profile".length);
     expect(() => readdirSync(folder)).toThrow();
+  });
+
+  // SW-180: the size alone passed a 512x112 capture with only its top rows drawn.
+  test("Short, wide page: a capture drawn in part fails, a whole one is cut to the page", async () => {
+    const ws = workspace();
+    writeFileSync(join(ws.root, "wide.svg"), svgOfSize(512, 112));
+    writeFileSync(join(ws.root, "wide.png"), "old");
+    expect(await ws.run(["wide.svg", "--out", "wide.png"], { width: 512, height: 400, drawn: 25 })).toBe(1);
+    expect(windowOf(ws.calls[0])).toEqual([512, 400]);
+    expect(ws.err).toEqual(["cannot render wide.png: the browser drew the page only in part (row 112 of 400 is not drawn)"]);
+    expect(readFileSync(join(ws.root, "wide.png"), "utf8")).toBe("old");
+    expect(await ws.run(["wide.svg", "--out", "wide.png"], "window")).toBe(0);
+    expect(ws.out).toEqual(["wrote wide.png (512x112)"]);
+    const written = decodePng(readFileSync(join(ws.root, "wide.png")));
+    expect(typeof written === "string" ? written : [written.width, written.height, written.rows.length]).toEqual([512, 112, 112]);
   });
 
   test("Browser failure", async () => {
