@@ -4,7 +4,7 @@
 // repository script, not compiled into the package and not a bin, that shows a
 // written SVG through one `<img>` in headless Chrome and saves the screenshot.
 // Chrome is the renderer ADR 0008 names for written images: it honours the
-// embedded faces. No npm dependency; the PNG header is read with node:fs.
+// embedded faces. No npm dependency: the PNG is read and written with node:zlib.
 //
 // `--width` shows the image smaller (the height follows, rounded), `--ground`
 // puts it on a page of that colour with a 24 px margin, and `--zones` (a
@@ -12,12 +12,14 @@
 // in the page, never in the image.
 //
 // What can go wrong: a bad argument prints the problem with the usage; no
-// browser, a browser that fails, times out (60 s) or writes the wrong size
-// prints `cannot render <file.png>: <reason>`. Each exits 1 and leaves the
+// browser, a browser that fails, times out (60 s), writes the wrong size or
+// draws the page only in part (the check band below the page does not reach
+// the window's last row) prints `cannot render <file.png>: <reason>`. Each exits 1 and leaves the
 // target as it was; the temporary folder is removed in every case.
 import { execFile as nodeExecFile } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
+import { crc32, deflateSync, inflateSync } from "node:zlib";
 import { basename, delimiter, dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { tokens } from "../tokens/generated/tokens.ts";
@@ -102,24 +104,44 @@ const zonesOverlay = (x: number, y: number, width: number, height: number): stri
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LINKEDIN_BANNER_WIDTH} ${LINKEDIN_BANNER_HEIGHT}" width="${width}" height="${height}" style="position:absolute;left:${x}px;top:${y}px">${[...circles, ...names].join("")}</svg>`;
 };
 
-/** The page that shows `image.svg` at its size (or `width`), on a `ground` with a margin, with the zones if asked. */
+/** The page that shows `image.svg` at its size (or `width`), on a `ground` with a margin, with the zones if asked;
+ * below it, in the browser's window only, the check band (see `captureWindow`). */
 export const pngPage = (size: { width: number; height: number }, options: { width?: number; ground?: string; zones?: boolean } = {}): Page => {
   const width = options.width ?? size.width;
   const height = options.width === undefined ? size.height : Math.round((size.height * options.width) / size.width);
   const margin = options.ground === undefined ? 0 : GROUND_MARGIN;
   const image = { x: margin, y: margin, width, height };
+  const page = { width: width + 2 * margin, height: height + 2 * margin };
+  const window = captureWindow(page);
   const body = `margin:0${options.ground === undefined ? "" : `;background:${options.ground}`}`;
   const img = `<img src="image.svg" width="${width}" height="${height}" style="display:block;position:absolute;left:${margin}px;top:${margin}px">`;
+  const band = `<div style="position:absolute;left:0;top:${page.height}px;width:${page.width}px;height:${window.height - page.height}px;background:${BAND_CSS}"></div>`;
   const html = [
     "<!doctype html>",
     `<html><head><meta charset="utf-8"><title>png</title></head><body style="${body}">`,
     img,
     ...(options.zones ? [zonesOverlay(margin, margin, width, height)] : []),
+    band,
     "</body></html>",
     "",
   ].join("\n");
-  return { html, width: width + 2 * margin, height: height + 2 * margin, image };
+  return { html, ...page, image };
 };
+
+/** Headless Chrome draws a short window only in part (a 512x112 window came out with its top 25 rows drawn
+ * and the rest blank, at the right size), so the browser's window is at least this tall. */
+export const MIN_WINDOW_HEIGHT = 400;
+/** The check band's least height, below the page. */
+export const BAND_HEIGHT = 8;
+/** The band's colour: the capture is whole only when the band reaches the window's last row. */
+export const BAND_RGB = [0xff, 0x00, 0xff] as const;
+const BAND_CSS = "#FF00FF";
+
+/** The browser's window for a page: the page, then the band down to at least MIN_WINDOW_HEIGHT. */
+export const captureWindow = (page: { width: number; height: number }): { width: number; height: number } => ({
+  width: page.width,
+  height: Math.max(page.height + BAND_HEIGHT, MIN_WINDOW_HEIGHT),
+});
 
 /** The problem of `--zones` on another size, or undefined. */
 export const zonesProblem = (size: { width: number; height: number }): string | undefined =>
@@ -160,12 +182,96 @@ export const pngSize = (bytes: Buffer): { width: number; height: number } | unde
   return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
 };
 
-/** The problem of the browser's output against the page's size, or undefined. */
+/** The problem of the browser's output against the window's size, or undefined. */
 export const pngProblem = (bytes: Buffer, expected: { width: number; height: number }): string | undefined => {
   const size = pngSize(bytes);
   if (size === undefined) return "the browser did not write a PNG";
   if (size.width !== expected.width || size.height !== expected.height) return `the browser wrote ${size.width}x${size.height}, expected ${expected.width}x${expected.height}`;
   return undefined;
+};
+
+type Pixels = { width: number; height: number; colourType: 2 | 6; channels: 3 | 4; rows: Buffer[] };
+
+const chunks = function* (bytes: Buffer): Generator<{ type: string; data: Buffer }> {
+  for (let at = 8; at + 12 <= bytes.length; ) {
+    const length = bytes.readUInt32BE(at);
+    yield { type: bytes.toString("latin1", at + 4, at + 8), data: bytes.subarray(at + 8, at + 8 + length) };
+    at += 12 + length;
+  }
+};
+
+/** The rows of an 8-bit RGB or RGBA, non-interlaced PNG (what Chrome writes), or the problem. */
+export const decodePng = (bytes: Buffer): Pixels | string => {
+  const size = pngSize(bytes);
+  if (size === undefined) return "the browser did not write a PNG";
+  const [depth, colourType, , , interlace] = bytes.subarray(24, 29);
+  if (depth !== 8 || (colourType !== 2 && colourType !== 6) || interlace !== 0) return `the browser wrote a PNG this script cannot read (depth ${depth}, colour type ${colourType}, interlace ${interlace})`;
+  const channels = colourType === 2 ? 3 : 4;
+  let raw: Buffer;
+  try {
+    raw = inflateSync(Buffer.concat([...chunks(bytes)].filter((c) => c.type === "IDAT").map((c) => c.data)));
+  } catch {
+    return "the browser wrote a PNG whose image data cannot be read";
+  }
+  const stride = size.width * channels;
+  if (raw.length !== size.height * (stride + 1)) return "the browser wrote a PNG whose image data has the wrong length";
+  const rows: Buffer[] = [];
+  let previous = Buffer.alloc(stride);
+  for (let y = 0; y < size.height; y++) {
+    const filter = raw[y * (stride + 1)];
+    const row = Buffer.from(raw.subarray(y * (stride + 1) + 1, (y + 1) * (stride + 1)));
+    for (let x = 0; x < stride; x++) {
+      const left = x >= channels ? row[x - channels] : 0;
+      const up = previous[x];
+      const upLeft = x >= channels ? previous[x - channels] : 0;
+      let add: number;
+      if (filter === 0) add = 0;
+      else if (filter === 1) add = left;
+      else if (filter === 2) add = up;
+      else if (filter === 3) add = (left + up) >> 1;
+      else if (filter === 4) {
+        const p = left + up - upLeft;
+        const [pa, pb, pc] = [Math.abs(p - left), Math.abs(p - up), Math.abs(p - upLeft)];
+        add = pa <= pb && pa <= pc ? left : pb <= pc ? up : upLeft;
+      } else return `the browser wrote a PNG with an unknown row filter ${filter}`;
+      row[x] = (row[x] + add) & 0xff;
+    }
+    rows.push(row);
+    previous = row;
+  }
+  return { width: size.width, height: size.height, colourType, channels, rows };
+};
+
+const chunk = (type: string, data: Buffer): Buffer => {
+  const head = Buffer.alloc(8);
+  head.writeUInt32BE(data.length, 0);
+  head.write(type, 4, "latin1");
+  const crc = Buffer.alloc(4);
+  crc.writeUInt32BE(crc32(Buffer.concat([head.subarray(4), data])), 0);
+  return Buffer.concat([head, data, crc]);
+};
+
+/** An 8-bit PNG of the given rows (filter 0 on every row). */
+export const encodePng = (pixels: Pixels): Buffer => {
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(pixels.width, 0);
+  ihdr.writeUInt32BE(pixels.height, 4);
+  ihdr.set([8, pixels.colourType, 0, 0, 0], 8);
+  const raw = Buffer.concat(pixels.rows.flatMap((row) => [Buffer.from([0]), row]));
+  return Buffer.concat([SIGNATURE, chunk("IHDR", ihdr), chunk("IDAT", deflateSync(raw)), chunk("IEND", Buffer.alloc(0))]);
+};
+
+/** The page cut out of the browser's capture, once the band below it is drawn to the window's last row;
+ * otherwise the problem (a capture drawn only in part, which its size alone does not show). */
+export const pageOfCapture = (bytes: Buffer, page: { width: number; height: number }): { ok: true; png: Buffer } | { ok: false; problem: string } => {
+  const pixels = decodePng(bytes);
+  if (typeof pixels === "string") return { ok: false, problem: pixels };
+  const isBand = (row: Buffer, x: number) => BAND_RGB.every((value, i) => row[x * pixels.channels + i] === value);
+  for (let y = page.height; y < pixels.height; y++) {
+    const row = pixels.rows[y];
+    if (!isBand(row, 0) || !isBand(row, pixels.width - 1)) return { ok: false, problem: `the browser drew the page only in part (row ${y} of ${pixels.height} is not drawn)` };
+  }
+  return { ok: true, png: encodePng({ ...pixels, height: page.height, rows: pixels.rows.slice(0, page.height) }) };
 };
 
 type Exec = (file: string, args: string[], options: { timeout: number }) => Promise<void>;
@@ -214,7 +320,7 @@ export const runPng = async (args: string[], io: PngIo, deps: PngDeps = {}): Pro
     writeFileSync(join(folder, "image.svg"), text);
     writeFileSync(join(folder, "page.html"), page.html);
     try {
-      await (deps.exec ?? execBrowser)(browser, browserArgs(folder, page), { timeout: BROWSER_TIMEOUT_MS });
+      await (deps.exec ?? execBrowser)(browser, browserArgs(folder, captureWindow(page)), { timeout: BROWSER_TIMEOUT_MS });
     } catch (error) {
       const killed = typeof error === "object" && error !== null && "killed" in error && (error as { killed?: boolean }).killed;
       return cannot(killed ? `the browser did not finish in ${BROWSER_TIMEOUT_MS / 1000} s` : `the browser failed: ${error instanceof Error ? error.message.split("\n")[0] : String(error)}`);
@@ -222,9 +328,11 @@ export const runPng = async (args: string[], io: PngIo, deps: PngDeps = {}): Pro
     const shot = join(folder, "image.png");
     if (!existsSync(shot)) return cannot("the browser wrote no screenshot");
     const bytes = readFileSync(shot);
-    const problem = pngProblem(bytes, page);
+    const problem = pngProblem(bytes, captureWindow(page));
     if (problem !== undefined) return cannot(problem);
-    writeFileSync(partial, bytes);
+    const cut = pageOfCapture(bytes, page);
+    if (!cut.ok) return cannot(cut.problem);
+    writeFileSync(partial, cut.png);
     renameSync(partial, target);
   } finally {
     rmSync(partial, { force: true });
