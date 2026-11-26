@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.1](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.14.0...v0.14.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* npm run png fails a capture drawn only in part (SW-180) ([#51](https://github.com/brunosouzas/brunosouzas-design-system/issues/51)) ([d587731](https://github.com/brunosouzas/brunosouzas-design-system/commit/d5877315812793d40c0c82e56219f1411b72bbbf))
+
 ## [0.14.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.13.0...v0.14.0) (2026-11-13)
 
 
