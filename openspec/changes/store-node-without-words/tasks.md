@@ -12,7 +12,7 @@ Scenarios carried unchanged into the MODIFIED "Diagram shapes" keep their tests 
 ## 2. Store without words (`illustration-pieces`)
 
 - [ ] 2.1 Tests first in `test/pieces/body-diagram.test.ts` (unit), new `describe("Store without words")`: "Empty store", "Empty store on the dark surface" and "Words asked of an empty store". Check: the three fail on the code of 0.14.1 (`text` is required).
-- [ ] 2.2 In `src/pieces/diagram.ts`: `storeNode`'s schema takes `text` as `lines(3)` not required, `StoreNodeParams` makes `text` optional, the drawing skips the words without `text`, and the relations reject `subtitle` then `textSize` without `text` (design §2). `test/pieces/required-only.ts` and the copy in `test/pieces/icons.test.ts` drop `text` from `storeNode`, so they stay the smallest valid call. Check: the three tests of 2.1, "Cylinder", the "Missing and unknown parameters" test of `test/pieces/catalogue.test.ts` (unit) and "Frozen store node calls" pass.
+- [ ] 2.2 In `src/pieces/diagram.ts`: `storeNode`'s schema takes `text` as `lines(3)` not required, `StoreNodeParams` makes `text` optional, the drawing skips the words without `text`, and the relations reject `subtitle` then `textSize` without `text` (design §2). `test/pieces/required-only.ts` and the copy in `test/pieces/icons.test.ts` drop `text` from `storeNode`, so they stay the smallest valid call; `test/pieces/palette.test.ts`, which builds its calls from `REQUIRED_ONLY`, gains one `storeNode` call with `text: ["a"]` on each surface, so the store's word colours stay checked. Check: the three tests of 2.1, "Cylinder", the "Missing and unknown parameters" test of `test/pieces/catalogue.test.ts` (unit), the palette test (unit) and "Frozen store node calls" pass.
 
 ## 3. Documentation and checks
 

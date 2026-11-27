@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Store without words
-`storeNode`'s `text` SHALL be optional. Without it, the piece draws the body the same call draws with `text` (the cylinder face and its lid, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each, before the room and `ry` limits, which apply as with words; `text: []` is rejected naming `text`.
+`storeNode`'s `text` SHALL be optional. Without it (absent or `undefined`), the piece draws the body the same call draws with `text` (the cylinder face and its lid, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each, before the room and `ry` limits, which apply as with words; `text: []` is rejected naming `text`.
 
 #### Scenario: Empty store
 - **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60, fill: "color.state.healthy" })` is called
@@ -12,8 +12,8 @@
 - **THEN** its body is deep-equal to the body of the same call with `text: ["IDs"]`, its face is filled `#1D1C1A` and stroked `#ADA79D`, and its text list is empty
 
 #### Scenario: Words asked of an empty store
-- **WHEN** `storeNode` with `x: 0`, `y: 0`, `width: 100`, `height: 60` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `height: 10`, and, with no words, `height: 10` and `ry: 20`
-- **THEN** each throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `height` and `ry`; the `subtitle` and `textSize` messages are `storeNode: <name>: needs text: it styles words that are not drawn`
+- **WHEN** `storeNode` with `x: 0`, `y: 0`, `width: 100`, `height: 60` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `height: 10`, `subtitle: "a"` with `text: undefined`, and, with no words, `height: 10` alone and `ry: 20` alone
+- **THEN** each of the eight calls throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `subtitle`, `height` and `ry`; the `subtitle` and `textSize` messages are `storeNode: <name>: needs text: it styles words that are not drawn`
 
 ### Requirement: Store node calls of 0.14.1 unchanged
 Every `storeNode` call valid in 0.14.1 SHALL draw the same tree and the same `toSvg` bytes as in 0.14.1.
