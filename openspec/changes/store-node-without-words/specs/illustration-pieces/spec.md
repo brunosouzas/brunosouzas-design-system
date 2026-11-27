@@ -1,27 +1,32 @@
 ## ADDED Requirements
 
 ### Requirement: Store without words
-`storeNode`'s `text` SHALL be optional. Without it, the piece draws the body the same call draws with `text` (the cylinder face and its lid, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each; `text: []` is rejected naming `text`. Room for the outline and the `ry` limit apply as with words.
+`storeNode`'s `text` SHALL be optional. Without it, the piece draws the body the same call draws with `text` (the cylinder face and its lid, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each, before the room and `ry` limits, which apply as with words; `text: []` is rejected naming `text`.
 
 #### Scenario: Empty store
-- **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60 })` is called
-- **THEN** its body is the face path `M0,8 A50,8 0 0 1 100,8 V52 A50,8 0 0 1 0,52 Z` and the lid `M0,8 A50,8 0 0 0 100,8`, deep-equal to the body of the same call with `text: ["IDs"]`, and its text list is empty
+- **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60, fill: "color.state.healthy" })` is called
+- **THEN** its body is the face path `M0,8 A50,8 0 0 1 100,8 V52 A50,8 0 0 1 0,52 Z` filled `#3DDC84` and the lid `M0,8 A50,8 0 0 0 100,8`, deep-equal to the body of the same call with `text: ["IDs"]`, and its text list is empty
 
 #### Scenario: Empty store on the dark surface
 - **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60, surface: "dark", inkScale: 2 })` is called
 - **THEN** its body is deep-equal to the body of the same call with `text: ["IDs"]`, its face is filled `#1D1C1A` and stroked `#ADA79D`, and its text list is empty
 
 #### Scenario: Words asked of an empty store
-- **WHEN** `storeNode` with `x: 0`, `y: 0`, `width: 100`, `height: 60` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, and, with no words, `height: 10` and `ry: 20`
-- **THEN** each throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `height` and `ry`
+- **WHEN** `storeNode` with `x: 0`, `y: 0`, `width: 100`, `height: 60` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `height: 10`, and, with no words, `height: 10` and `ry: 20`
+- **THEN** each throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `height` and `ry`; the `subtitle` and `textSize` messages are `storeNode: <name>: needs text: it styles words that are not drawn`
 
 ### Requirement: Store node calls of 0.14.1 unchanged
 Every `storeNode` call valid in 0.14.1 SHALL draw the same tree and the same `toSvg` bytes as in 0.14.1.
 
 #### Scenario: Frozen store node calls
-- **GIVEN** `test/fixtures/store-node-0.14.1.json`, written by `scripts/freeze-store-node.ts` from `d334273` (0.14.1) before any code: 8 calls with one and three lines, a subtitle, a fill, a code run at `textSize` 36, `ry` 15, the dark surface and `inkScale` 2
+- **GIVEN** `test/fixtures/store-node-0.14.1.json`, written by `scripts/freeze-store-node.ts` from `d334273` (0.14.1) before any code, with the drawing code of `d334273`: 8 calls at `x: 0`, `y: 0`; at `width: 100`, `height: 60`, `text: ["IDs"]` alone, with `subtitle: "in memory"`, with `fill: "color.state.healthy"`, with `ry: 15` and with `surface: "dark"`; `width: 160`, `height: 120`, `text: ["a", "b", "c"]`; ``width: 200, height: 122, text: ["`orderId`"], textSize: 36``; and `width: 120`, `height: 80`, `text: ["IDs"]`, `inkScale: 2`
 - **WHEN** each call is made again
 - **THEN** its tree is deep-equal to the pinned tree and its body then text nodes through `toSvg`, joined with no separator, equal the pinned string
+
+#### Scenario: A changed store node is caught
+- **GIVEN** the same fixture
+- **WHEN** each call is made with the default `ry` drawn as 9 instead of 8 (the call's own `ry` kept)
+- **THEN** exactly the 7 calls without `ry` differ from their pinned tree, and the call with `ry: 15` does not
 
 ## MODIFIED Requirements
 

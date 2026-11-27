@@ -6,8 +6,8 @@ Scenarios carried unchanged into the MODIFIED "Diagram shapes" keep their tests 
 
 ## 1. Frozen 0.14.1 calls
 
-- [ ] 1.1 Before any code: `scripts/freeze-store-node.ts` (new, in the shape of `scripts/freeze-stamp.ts`) run on `origin/main` (`d334273`) writes `test/fixtures/store-node-0.14.1.json` with the 8 calls of the spec scenario "Frozen store node calls", committed alone. Check: the commit holds only the script and the fixture, and the fixture has 8 entries.
-- [ ] 1.2 Test "Frozen store node calls" in `test/pieces/frozen.test.ts` (unit), new `describe("Store node calls of 0.14.1 unchanged")`: every call deep-equals its tree and its `svg` (`changedCalls` is empty), plus an altered-drawing check that `changedCalls` catches a change, as "A changed stamp is caught" does. Check: passes before and after 2.2.
+- [ ] 1.1 Before any code: `scripts/freeze-store-node.ts` (new, in the shape of `scripts/freeze-stamp.ts`) run on this branch while `src/` and `tokens/` equal `d334273` (its header says so, as `scripts/freeze-stamp.ts` does) writes `test/fixtures/store-node-0.14.1.json` with the 8 calls of the spec scenario "Frozen store node calls", committed alone. Check: the commit holds only the script and the fixture, the fixture has 8 entries, and `git diff d334273 <that commit> -- src tokens` is empty.
+- [ ] 1.2 Test "Frozen store node calls" in `test/pieces/frozen.test.ts` (unit), new `describe("Store node calls of 0.14.1 unchanged")`: every call deep-equals its tree and its `svg` (`changedCalls` is empty), and "A changed store node is caught": drawn with `{ ry: 9, ...params }`, `changedCalls` lists exactly the 7 calls without `ry`. Check: both pass before and after 2.2.
 
 ## 2. Store without words (`illustration-pieces`)
 
