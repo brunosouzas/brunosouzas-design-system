@@ -5,7 +5,7 @@
 The Idempotent Receiver book scene (SW-160, pull request #53) passed gate 1 on 2026-11-27, and the owner took every recommendation of its design §7. Two of those answers need pieces the package does not have:
 
 - **Point 5, the channel.** The wiki page's diagram draws the message channel as a queue, with no pattern's name. The scene should draw a `queueNode` with no words. `queueNode` requires `text` (one to three lines), as `storeNode` did before SW-248. A scene draws only through the pieces (motion MOT-6), so it cannot drop the words by hand.
-- **Point 8, the icons' shadows.** `eipIcon` still draws the hard offset shadows of the published notation (src/pieces/eip-icons.ts): 46 ink copies of a face, moved right and down by 1.5 to 2.5 units. ADR 0009 removed those shadows from every other piece ("no piece passes a literal offset of its own"). The book scene would be the first published video to show them, at scales 2.8 and 3.4. The owner chose to fix the piece first, as SW-248 came before the scene.
+- **Point 8, the icons' shadows.** `eipIcon` still draws the hard offset shadows of the published notation (src/pieces/eip-icons.ts): 46 ink copies of a face, moved right and down by 1.5 to 2.5 units. ADR 0009 removed those shadows from every other piece ("no piece passes a literal offset of its own"). The requirement "No hard offset shadow" already counts `eipIcon` and `nameTag` among the flat cover pieces, but its test looks only for a translated copy just before its twin, so it missed these shadows. The book scene would be the first published video to show them, at scales 2.8 and 3.4. The owner chose to fix the piece first, as SW-248 came before the scene.
 
 ## What Changes
 
@@ -24,6 +24,7 @@ The Idempotent Receiver book scene (SW-160, pull request #53) passed gate 1 on 2
 
 - `illustration-pieces`:
   - "Diagram shapes" names `queueNode`'s optional `text`;
+  - "No hard offset shadow" points to the new rule for `eipIcon` and `nameTag`, and its scenario "Every cover piece is flat" applies that rule;
   - new requirements "EIP icons without offset shadows", "Queue without words" and "Queue node calls of 0.14.1 unchanged".
 
 ## Out of scope
@@ -33,7 +34,7 @@ The Idempotent Receiver book scene (SW-160, pull request #53) passed gate 1 on 2
 - **Other diagram shapes:** `diagramBox`, `decisionNode` and `exchangeNode` keep a required `text`; no scene asks for them empty.
 - **The images already published on brunosouzas.com** (the wiki's EIP icons and diagrams). They change only when their specs are rebuilt on the new version, in the site's or the content repository's own change.
 - **Any other redraw of the EIP icons:** their strokes, colours and layout stay as published. Removing the shadows is the only change.
-- **An ADR change:** this applies ADR 0009 to the one piece it had not reached.
+- **An ADR change:** this applies ADR 0009 to the one piece its check had missed.
 
 ## Implicit requirements
 

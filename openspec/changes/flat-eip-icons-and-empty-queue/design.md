@@ -7,11 +7,15 @@ A node is an offset shadow when one of two things holds:
 - it is a node or group with a `transform` of `translate(…)`, the published notation's way of copying a whole drawing;
 - or it is filled `color.ink`, has no stroke, and repeats the shape of a later node of the same icon moved right and down by the same amount, more than 0 and at most 3. The shape is the same rect size, the same circle radius, or the same polygon points.
 
-`test/pieces/eip-icons.test.ts` holds this rule as a function. On the 0.14.1 data it finds exactly these 46 top-level nodes (icon, then the node indexes):
+Offsets and coordinates are compared after rounding to 2 decimals (`r2`). Exact float equality finds only 42 nodes: subtracting decimal strings such as 22.60 − 21.00 leaves offsets like 1.6000000000000014.
+
+The rule lives in one test helper, `test/pieces/eip-shadows.ts`. `test/pieces/eip-icons.test.ts` uses it, and so does "Every cover piece is flat" in `test/pieces/node.test.ts`. That test's own check, `isShadowOf`, looks only for a translated copy just before its twin, so it missed these shadows: the splitter's is a plain rect at (8.5, 6.5).
+
+On the 0.14.1 data it finds exactly these 46 top-level nodes (icon, then the node indexes):
 
 `aggregator` 0; `canonical-data-model` 0, 4, 12; `channel-adapter` 0, 2, 6; `claim-check` 0; `competing-consumers` 0, 2; `content-based-router` 0; `content-enricher` 0; `content-filter` 0; `correlation-identifier` 0, 2, 8, 9; `dead-letter-channel` 0, 3; `event-driven-consumer` 0, 2; `guaranteed-delivery` 0, 3; `idempotent-receiver` 0, 2, 6; `invalid-message-channel` 0, 3; `message-expiration` 0; `message-filter` 0, 2; `message-translator` 0; `point-to-point-channel` 0; `polling-consumer` 0, 2; `process-manager` 0; `publish-subscribe-channel` 0; `request-reply` 0, 2, 5, 8; `return-address` 0; `scatter-gather` 0; `splitter` 0; `transactional-client` 0, 4.
 
-The ink nodes the rule leaves alone are drawing, not shadow: arrowheads, diamonds, dots, the dark outline layer under a channel arrow, and the `!` dot. The before and after sheet of the 26 icons in `docs/spikes/2026-11-27-flat-eip-icons/` is the visual check.
+The ink nodes the rule leaves alone are drawing, not shadow: arrowheads, diamonds, dots, the dark outline layer under a channel arrow, and the `!` dot. The before and after sheet of the 26 icons (task 3.2) is the visual check.
 
 **Decision: delete the nodes from the data** (`eip-icons.ts` is edited by hand since its import). The rejected alternative was to keep the data and filter the shadows when `eipIcon` draws. That leaves 46 dead nodes in the source, and the next reader has to know the rule to read an icon.
 

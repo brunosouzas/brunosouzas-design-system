@@ -1,20 +1,20 @@
 ## ADDED Requirements
 
 ### Requirement: EIP icons without offset shadows
-No EIP icon SHALL draw an offset shadow (ADR 0009). An offset shadow is a node or group moved by a `transform`, or an ink-filled node without a stroke that repeats the shape of a later node of the same icon moved right and down by the same amount, at most 3. Every other node of each 0.14.1 icon stays, in its order and unchanged, with the icon's name, title and description.
+No EIP icon SHALL draw an offset shadow (ADR 0009). An offset shadow is a node or group with a `translate(…)` transform, or an ink-filled node without a stroke that repeats the shape of a later node of the same icon moved right and down by the same amount, more than 0 and at most 3, compared at 2 decimals. Every other node of each 0.14.1 icon stays, in its order and unchanged, with the icon's name, title and description.
 
 #### Scenario: No offset shadow
-- **WHEN** the shadow rule of design §1 is applied to each of the 26 icons
+- **WHEN** the shadow rule of `flat-eip-icons-and-empty-queue` design §1 is applied to each of the 26 icons
 - **THEN** it finds no node
 
 #### Scenario: Every face kept
 - **GIVEN** `test/fixtures/eip-icons-0.14.1.json`, written by `scripts/freeze-eip-book-pieces.ts` from `d26f254` before any code
 - **WHEN** each icon is compared with its frozen entry
-- **THEN** its name, title and description equal the frozen ones, and its nodes deep-equal the frozen nodes without the 46 nodes listed in design §1
+- **THEN** its name, title and description equal the frozen ones, and its nodes deep-equal the frozen nodes without the 46 nodes listed in `flat-eip-icons-and-empty-queue` design §1
 
 #### Scenario: A shadow is caught
-- **WHEN** the shadow rule is applied to the frozen 0.14.1 icons, and then to `splitter` with a copy of its face rect, filled `#121212`, without a stroke and moved by (2.5, 2.5), put before the face
-- **THEN** it finds exactly the 46 nodes of design §1 in the first, and that one node in the second
+- **WHEN** the shadow rule is applied to the frozen 0.14.1 icons, and then to the frozen `splitter` without its node 0 and with a copy of its face rect, filled `#121212`, without a stroke and moved by (2.5, 2.5), put before the face
+- **THEN** it finds exactly the 46 nodes of `flat-eip-icons-and-empty-queue` design §1 in the first, and only that copy in the second
 
 ### Requirement: Queue without words
 `queueNode`'s `text` SHALL be optional. Without it (absent or `undefined`), the piece draws the body the same call draws with `text` (the box and its rails, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each, before the width and room limits, which apply as with words; `text: []` is rejected naming `text`.
@@ -86,3 +86,18 @@ Every `queueNode` call valid in 0.14.1 SHALL draw the same tree and the same `to
 - **WHEN** `queueNode` gets `height: 12` with `width: 31`, and then with `width: 32`
 - **THEN** the first throws a `RangeError` naming `width`; the second draws its rails at 10 and 22
 
+
+### Requirement: No hard offset shadow
+No piece SHALL draw a hard offset shadow (ADR 0009): each of the 26 cover pieces draws each shape once, with no ink copy behind it, whatever offset it used before 0.7.0; for `eipIcon` and the icon in `nameTag`, "EIP icons without offset shadows" says what a copy is. `shadowed(shape, offset)`, still exported, returns the shape alone when `offset` is 0 (its default, `shadow.block`, is 0), and otherwise an ink copy translated by the offset before the shape's own transform, then the shape.
+
+#### Scenario: Sheet without a shadow
+- **WHEN** `sheet` draws its page at `x` 300, `y` 112
+- **THEN** the first body node is the page `rect` at (300, 112) with `fill` `#FFFFFF` and no `transform`, and no body node is filled `#121212` with a `translate` transform
+
+#### Scenario: Every cover piece is flat
+- **WHEN** each of the 26 cover pieces is drawn with its required parameters, and `nameTag` with `icon: "splitter"`
+- **THEN** no body node is an ink-filled copy, translated, of the node after it, and the shadow rule of "EIP icons without offset shadows" finds no node in the icon group of `eipIcon` or of `nameTag`
+
+#### Scenario: Shadow of a turned shape
+- **WHEN** a shape with `transform="rotate(30)"` is passed to `shadowed` with offset 8, and then with offset 0
+- **THEN** the first result is the ink copy with transform `translate(8 8) rotate(30)` then the shape; the second is the shape alone
