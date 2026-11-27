@@ -59,7 +59,7 @@ test("Takes fixture beside the registered scenes",()=>{
   expect(entries.slice(4,8).every(e=>e.folder==="publish-subscribe")).toBe(true);
   expect(entries.at(-2)!.id).toBe("takes-fixture-16x9");
   expect(entries.at(-1)!.id).toBe("sequence-fixture-16x9");
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","circuit-breaker-topology"]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","idempotent-receiver-book","circuit-breaker-topology"]);
 });
 
 // Every registered scene (spec scene-catalogue, "State-machine and flow catalogue
@@ -73,7 +73,7 @@ test("Takes fixture beside the registered scenes",()=>{
 test("Three scenes in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
   const earlier = scenes.filter(s=>s.id!=="circuit-breaker-topology").map(s=>s.id);
-  expect(earlier).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive"]);
+  expect(earlier).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","idempotent-receiver-book"]);
   expect(scenes.at(-1)!.id).toBe("circuit-breaker-topology");
 });
 
@@ -82,7 +82,7 @@ test("Three scenes in the catalogue",()=>{
 // order with both files and archive scenes between the relay and topology scenes.
 test("Four scenes in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  const four = scenes.filter(s=>s.id!=="sdd-scene-2-files"&&s.id!=="sdd-scene-3-archive").map(s=>s.id);
+  const four = scenes.filter(s=>s.id!=="sdd-scene-2-files"&&s.id!=="sdd-scene-3-archive"&&s.id!=="idempotent-receiver-book").map(s=>s.id);
   expect(four).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","circuit-breaker-topology"]);
   const entries=scenes.flatMap(compositionsOf);
   expect(entries[8].id).toBe("sdd-request-relay-16x9");
@@ -93,9 +93,9 @@ test("Four scenes in the catalogue",()=>{
 // topology scene still last.
 test("Five scenes in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  const five = scenes.filter(s=>s.id!=="sdd-scene-3-archive").map(s=>s.id);
+  const five = scenes.filter(s=>s.id!=="sdd-scene-3-archive"&&s.id!=="idempotent-receiver-book").map(s=>s.id);
   expect(five).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","circuit-breaker-topology"]);
-  const entries=scenes.filter(s=>s.id!=="sdd-scene-3-archive").flatMap(compositionsOf);
+  const entries=scenes.filter(s=>s.id!=="sdd-scene-3-archive"&&s.id!=="idempotent-receiver-book").flatMap(compositionsOf);
   expect(entries).toHaveLength(11); expect(new Set(entries.map(e=>e.id)).size).toBe(11);
   expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"sdd-request-relay","sdd-scene-2-files","circuit-breaker-topology"]);
   expect(entries[9].id).toBe("sdd-scene-2-files-16x9");
@@ -106,11 +106,25 @@ test("Five scenes in the catalogue",()=>{
 // six registered scenes, their composition counts and the topology scene still last.
 test("Six scenes in the catalogue",()=>{
   expect(checkCatalogue(scenes)).toEqual([]);
-  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","circuit-breaker-topology"]);
-  const entries=scenes.flatMap(compositionsOf);
+  // Since change idempotent-receiver-book-scene (SW-160): the six with the book scene excluded.
+  const six=scenes.filter(s=>s.id!=="idempotent-receiver-book");
+  expect(six.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","circuit-breaker-topology"]);
+  const entries=six.flatMap(compositionsOf);
   expect(entries).toHaveLength(12); expect(new Set(entries.map(e=>e.id)).size).toBe(12);
   expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","circuit-breaker-topology"]);
   expect(entries[9].id).toBe("sdd-scene-2-files-16x9");
   expect(entries[10].id).toBe("sdd-scene-3-archive-16x9");
   expect(entries[11].id).toBe("circuit-breaker-topology-16x9");
+});
+
+// Added by change idempotent-receiver-book-scene (SW-160), task 2.4: the full, exact catalogue of seven
+// registered scenes, the book scene before the topology scene, which stays last.
+test("Seven scenes in the catalogue",()=>{
+  expect(checkCatalogue(scenes)).toEqual([]);
+  expect(scenes.map(s=>s.id)).toEqual(["circuit-breaker-states","publish-subscribe","sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","idempotent-receiver-book","circuit-breaker-topology"]);
+  const entries=scenes.flatMap(compositionsOf);
+  expect(entries).toHaveLength(13); expect(new Set(entries.map(e=>e.id)).size).toBe(13);
+  expect(entries.map(e=>e.folder)).toEqual([...Array(4).fill("circuit-breaker-states"),...Array(4).fill("publish-subscribe"),"sdd-request-relay","sdd-scene-2-files","sdd-scene-3-archive","idempotent-receiver-book","circuit-breaker-topology"]);
+  expect(entries[11].id).toBe("idempotent-receiver-book-16x9");
+  expect(entries[12].id).toBe("circuit-breaker-topology-16x9");
 });

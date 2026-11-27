@@ -10,7 +10,8 @@ import { sddRequestRelay } from "./sdd-request-relay/scene.ts";
 import { sddScene2Files } from "./sdd-scene-2-files/scene.ts";
 import { sddScene3Archive } from "./sdd-scene-3-archive/scene.ts";
 import { circuitBreakerTopology } from "./circuit-breaker-topology/scene.ts";
+import { idempotentReceiverBook } from "./idempotent-receiver-book/scene.ts";
 
-export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe, sddRequestRelay, sddScene2Files, sddScene3Archive, circuitBreakerTopology];
+export const scenes: readonly CatalogueScene[] = [circuitBreakerStates, publishSubscribe, sddRequestRelay, sddScene2Files, sddScene3Archive, idempotentReceiverBook, circuitBreakerTopology];
 
 export const findScene = (id: string): CatalogueScene | undefined => scenes.find((scene) => scene.id === id);
