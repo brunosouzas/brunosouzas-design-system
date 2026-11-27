@@ -32,7 +32,7 @@ export const AT = {
   door: { x: 488, y: LANE },
   processed: { x: 852, y: LANE },
   ghost: { x: 852, y: 320 },
-  ignored: { x: 852, y: 428 },
+  ignored: { x: 300, y: 428 },
 } as const satisfies Record<string, Point>;
 /** The check on the processed message. */
 export const CHECK = { cx: 902, cy: 178, r: 22 } as const;
@@ -59,7 +59,7 @@ export const ROUTES: Readonly<Record<string, string>> = {
   send: `M ${p(AT.sender)} L ${p(AT.channel)}`,
   deliver: `M ${p(AT.channel)} L ${p(AT.door)}`,
   process: `M ${p(AT.door)} C 600,110 760,140 ${p(AT.processed)}`,
-  ignore: `M ${p(AT.door)} C 560,320 780,300 ${p(AT.ignored)}`,
+  ignore: `M ${p(AT.door)} C 470,330 380,428 ${p(AT.ignored)}`,
 };
 
 /** The dashed guides (stage units), drawn × STAGE_SCALE by `MotionPath`: the lane, then the two ways out. */

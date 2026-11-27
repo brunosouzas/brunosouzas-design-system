@@ -15,7 +15,7 @@ Every beat animates line 28 of the English page (the Portuguese page has the sam
 | The duplicate is found and ignored | the store comes into focus as the lookup finds 42; the second delivery turns orange and is set aside | L28 "ignores any message that arrives with a known ID"; L32 "if yes, it ignores the duplicate" |
 | Same effect, once or several times | take 1's result fades in beside take 2's: one processed message in both | L28 "produces the same effect whether it is received once or several times" |
 
-**The channel's icon (a choice, for the owner's ok).** The page and its diagram say "Message channel" (L32, label `channel`, drawn there as a `queueNode`). The package has no generic Message Channel icon; the scene draws the closest one, `point-to-point-channel`, the pipe of the EIP notation (design §7, point 5).
+**The channel's icon (a choice, for the owner's ok).** The page and its diagram say "Message channel" (L32, label `channel`, drawn there as a `queueNode`). The package has no generic Message Channel icon; the scene draws `point-to-point-channel`, the icon of the Point-to-Point Channel pattern, a channel type the page does not name (design §7, point 5).
 
 ## 2. Decisions
 
@@ -28,7 +28,7 @@ The card asks that this first EIP video yield the reusable book scene type, so t
 | Everything in the scene's folder; extract with the second book scene | the second scene would copy the lane, the token and the store |
 | A new scene kind `eip-book` with its own checks | a book scene is a `takes` or a `sequence` scene; it needs no new rule, only shared drawing |
 | A generic book stage and frame builder now (tokens, rests, routes and outcomes as data) | it would be designed from one example; what the next pattern needs (a dead-letter channel, a correlation pair) is not known yet |
-| **A React-free module beside the kinds, with only what every book scene draws (chosen)** | the lane (`LANE` 212), the text sizes (`BOOK_TEXT` 33 and 36), the message token (`messageToken`, a pill 56 high with its ID at 36), an EIP icon with its message arrow on the lane (`iconOnLane`, from `ICON_ARROW_Y` per icon), and the store empty or holding an ID (`emptyStore`, `storedId`) |
+| **A React-free module beside the kinds, with only what every book scene draws (chosen)** | the lane (`LANE` 212), the text sizes (`BOOK_TEXT` 33 and 36), the message token (`messageToken`, a pill 56 high with its ID at 36), an EIP icon with its message arrow on the lane (`iconOnLane`, from `ICON_ARROW_Y` per icon: the y of the arrow's line in the icon drawing, not of its shadow), and the store empty or holding an ID (`emptyStore`, `storedId`) |
 
 What the chosen module does not cover, said plainly: the next book scene still writes its own `scene.ts`, `timeline.ts`, `layout.ts`, `frame.ts`, `stage.ts` and `Scene.tsx` (here about 400 lines of code, most of it frame and stage logic), reusing the module's drawing and this scene's files as a model. Whether that meets the card's "almost only data", or a generic builder should be extracted now or with the second book scene, is the owner's call (design §7, point 4).
 
@@ -54,7 +54,7 @@ After `sdd-scene-3-archive` and before `circuit-breaker-topology`, which stays l
 
 `TakesDevice` gains three names, so the phases list every device the scene uses:
 
-- `lookupMark`: the `?` shown at a lookup that finds nothing (marked choice 1 of the gate-0 README, approved with concept B). It stands for the diagram's decision (label `decision`), without words.
+- `lookupMark`: the `?` shown while a lookup finds nothing, that is the diagram's decision (label `decision`) answered "no". The gate-0 README's marked choice 1 says "the question mark at each lookup", while its sheet B-book drew no `?` at the match; the scene follows the sheet, and the owner chooses at G1 (§7, point 7).
 - `ghost`: take 1's processed token, faded (`motion.dimOpacity`), beside take 2's at the end (marked choice 3, approved). As the topology scene's ghost, it compares the two takes' effect.
 - `matchFocus`: the store and its `42` come into focus (`motion.focusScale`) while the lookup finds 42 (§2.8). It shows the lookup line 28 and the diagram state ("arrives with a known ID", "if yes"), no new fact; it is new since gate 0, for the owner's ok at G1.
 
@@ -72,9 +72,9 @@ The sheet drew two copies side by side between the channel and the receiver. In 
 
 At this change's spec stage the owner set the rule for these videos: a short video that explains is best, but length must not cost understanding ("não vamos nos apegar a isso pq senão podemos cometer o erro básico que é a pressa que se torna inimiga da perfeição"). The first stills ran 26 s; this design spends more time where it helps the reading:
 
-- a 22-frame rest at the receiver's door before each lookup (98–119 and 438–459, where take 2 also shows the copy waiting in the channel) and before the match (602–619);
+- a rest at the receiver's door before each lookup: 22 frames (98–119 and 438–459, where take 2 also shows the copy waiting in the channel), and 18 frames before the match (602–619);
 - take 1's result held for 80 frames after its check settles (240–319);
-- the match: the store in focus (§2.5) from 625, held to 665, settling back by 695, before the duplicate turns orange at 680;
+- the match: the store in focus (§2.5) from 625, held from 655 to 665, then falling back; the duplicate turns orange at 680, while the focus still settles, and the store is at rest again from 695;
 - a 32-frame rest after the ignore before take 1's result fades in (708–739).
 
 The scene is 30 s (900 frames). The length is a result of these beats, not a target.
@@ -157,11 +157,11 @@ How things move: the stage nodes (`sender`, `channel`, `receiver`, `store`) and 
 |---|---|
 | Lane | y 212 |
 | Sender | pill x 16, y 180, 150 × 64, `color.state.caller`, `Sender` at 33 |
-| Channel | `point-to-point-channel` at x 196, scale 2.8, its arrow (y 19.5 in the icon) on the lane |
-| Receiver | `idempotent-receiver` at x 520, scale 3.4, its arrow (y 24) on the lane |
+| Channel | `point-to-point-channel` at x 196, scale 2.8, its arrow line (y 20 in the icon) on the lane |
+| Receiver | `idempotent-receiver` at x 520, scale 3.4, its arrow line (y 23) on the lane |
 | Store | x 560, y 366, 160 × 128; `42` at 36 when stored; focus about its centre |
 | Lookup | `messageArrow` (640, 274) → (640, 362), both heads; dashed width 2.5 at rest, solid width 4 while looking up |
-| Token rests (`AT`) | sender (212, 212), channel (286, 212), door (488, 212), processed (852, 212), ghost (852, 320), ignored (852, 428) |
+| Token rests (`AT`) | sender (212, 212), channel (286, 212), door (488, 212), processed (852, 212), ghost (852, 320), ignored (300, 428): the duplicate is set aside away from the store and the lookup |
 | Token | pill 56 high, at least 84 wide (19 per character + 44), `42` at 36 |
 | Check | `checkBadge` (902, 178), r 22 |
 | `?` | `questionToken` (700, 318), scale 2 |
@@ -171,7 +171,7 @@ How things move: the stage nodes (`sender`, `channel`, `receiver`, `store`) and 
 | Route `send` | `M 212,212 L 286,212` |
 | Route `deliver` | `M 286,212 L 488,212` |
 | Route `process` | `M 488,212 C 600,110 760,140 852,212` |
-| Route `ignore` | `M 488,212 C 560,320 780,300 852,428` (between the receiver and the store) |
+| Route `ignore` | `M 488,212 C 470,330 380,428 300,428` (down and back from the door, clear of the lookup and the store) |
 | Guides | P1 `M 166,212 L 520,212`; P2 = `process`; P3 = `ignore`; drawn × 2 by `MotionPath` |
 
 ### 6.2 Layers (SCN-6), bottom to top
@@ -185,11 +185,11 @@ How things move: the stage nodes (`sender`, `channel`, `receiver`, `store`) and 
 
 ## 7. Open points for G1
 
-1. **The match.** Applied by the owner's rule (§2.8): the store and its `42` come into focus while the lookup finds 42 (`matchFocus`, §2.5). Recommended: keep.
-2. **Length.** Answered by the owner on 2026-11-27: understanding before length (§2.8); 30 s.
-3. **The copy in the channel** (§2.6) rather than two tokens leaving together. Recommended: accept.
-4. **How much of the book scene type is shared** (§2.1). Today the next book scene reuses the drawing module and copies this scene's frame and stage logic (about 400 lines). Options: (a) accept, and extract a generic builder with the second book scene, when two patterns show what is common (recommended); (b) extract a generic book stage and frame builder in this change, before the scene ships.
-5. **The channel's icon** (§1): `point-to-point-channel` for the page's "Message channel". Options: (a) keep the EIP pipe (recommended: the book's notation for a channel); (b) a `queueNode` with no words; (c) a `queueNode` labelled `Message channel` at 33.
-6. **The receiver icon's own `1`.** The `idempotent-receiver` EIP icon carries a circled `1` (its "once" mark); in take 2 it sits on the same screen as the take badge `2`. Options: (a) keep the published icon (recommended: the badge is apart, top right); (b) ask the design system for a variant without the mark.
-
-Outside this change, for a design-system card if the owner wants one: `eipIcon` still draws its offset shadow copies, which ADR 0009 removed from every other piece.
+1. **The match.** The store and its `42` come into focus while the lookup finds 42 (`matchFocus`, §2.5), new since gate 0. Options: (a) keep the focus; (b) only the solid lookup arrow, no focus. Recommended: (a), the found ID is the beat line 28 turns on.
+2. **Length.** Answered by the owner on 2026-11-27: understanding before length (§2.8); the scene is 30 s.
+3. **The copy in the channel** (§2.6) rather than two tokens leaving together. Options: (a) the copy appears in the channel once the first delivery leaves; (b) two tokens leave the channel side by side, as the sheet drew them. Recommended: (a).
+4. **How much of the book scene type is shared** (§2.1). Today the next book scene reuses the drawing module and copies this scene's frame and stage logic (about 400 lines). Options: (a) extract a generic builder with the second book scene, when two patterns show what is common; (b) extract a generic book stage and frame builder in this change, before the scene ships. Recommended: (a).
+5. **The channel's icon** (§1): the page says "Message channel"; the package has no icon for it. Options: (a) keep `point-to-point-channel`, the icon of the Point-to-Point Channel pattern, a channel type the page does not name; (b) a `queueNode` with no words, as the diagram draws the channel's shape; (c) a `queueNode` labelled `Message channel` at 33, the diagram's label. Recommended: (b), the diagram's own shape without naming another pattern.
+6. **The receiver icon's own `1`.** The `idempotent-receiver` EIP icon carries a circled `1` (its "once" mark); in take 2 it shares the screen with the take badge `2`. Options: (a) keep the published icon (the badge is apart, top right); (b) ask the design system for a variant without the mark. Recommended: (a).
+7. **The `?` at the match.** Options: (a) the `?` only while a lookup finds nothing, as the sheet drew it (the scene today); (b) the `?` at every lookup, the match included, as the README's text said. Recommended: (a), so the match shows the found ID, not a question.
+8. **The EIP icons' offset shadows.** `eipIcon` draws the published notation's hard offset shadows (src/pieces/eip-icons.ts), which ADR 0009 removed from every other piece ("no piece passes a literal offset of its own"); this would be the first published video to show them, at scales 2.8 and 3.4. Options: (a) ship as is and open a design-system card to redraw the 26 icons; (b) a design-system change to `eipIcon` first, as SW-248 came before this scene; (c) an ADR 0009 amendment that exempts the published EIP notation. Recommended: (b), so the series' first video and every later one show the icons in the v2 grammar.

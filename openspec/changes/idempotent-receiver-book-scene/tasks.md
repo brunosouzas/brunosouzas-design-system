@@ -28,7 +28,7 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 - [x] 4.2 Local: `npm run stills -- idempotent-receiver-book` (14 PNGs) and `npx remotion still` at frames 140, 350, 428, 450, 470, 610, 650, 698 and 760 (the moments between phase ends). Open every PNG: overlaps, clipping, contrast, the tokens on their routes (MOT-5).
 - [x] 4.3 Local: the stills sheet into `docs/spikes/2026-11-27-idempotent-receiver-book/` for gate 1.
 - [ ] 4.4 Gate 1: the owner reads the spec and the stills' sheet; his answers (design §7) change the spec and the code in this branch, and a comment names the approved commit.
-- [ ] 4.5 Local, after gate 1: `npm run render -- idempotent-receiver-book`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet; frames 680 and 779 rendered with `npx remotion still` and compared byte for byte. This proves "Idempotent Receiver book video verified from output (local)" (SCN-4, SCN-5).
+- [ ] 4.5 Local, after gate 1: `npm run render -- idempotent-receiver-book`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet; frames 800 and 899 rendered with `npx remotion still` and compared byte for byte. This proves "Idempotent Receiver book video verified from output (local)" (SCN-4, SCN-5).
 - [ ] 4.6 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive.
 
 ## 5. Checks, docs and review

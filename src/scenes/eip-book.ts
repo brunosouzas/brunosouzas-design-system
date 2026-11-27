@@ -18,11 +18,12 @@ export const BOOK_TEXT = { word: 33, strong: 36 } as const;
 export const LANE = 212;
 
 /**
- * The y of each used icon's message arrow inside its 64 × 40 drawing
- * (src/pieces/eip-icons.ts), so `iconOnLane` puts that arrow on the lane.
- * A pattern's scene adds its icons here.
+ * The y of each used icon's message arrow inside its 64 × 40 drawing: the y of
+ * the arrow's line (its `M x,y H …` path in src/pieces/eip-icons.ts), not of
+ * its offset shadow, so `iconOnLane` puts that line on the lane. A pattern's
+ * scene adds its icons here, read the same way.
  */
-export const ICON_ARROW_Y = { "point-to-point-channel": 19.5, "idempotent-receiver": 24 } as const;
+export const ICON_ARROW_Y = { "point-to-point-channel": 20, "idempotent-receiver": 23 } as const;
 export type LaneIcon = keyof typeof ICON_ARROW_Y;
 /** The icon's drawing width at scale 1 (EIP_ICON_WIDTH). */
 export const ICON_WIDTH = 64;

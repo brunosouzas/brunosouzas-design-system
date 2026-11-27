@@ -23,13 +23,13 @@ describe("Idempotent Receiver book layout", () => {
     expect(LANE).toBe(212);
     expect(BOOK_TEXT).toEqual({ word: 33, strong: 36 });
     expect(TOKEN).toEqual({ height: 56, minWidth: 84, perCharacter: 19, padding: 44 });
-    expect(ICON_ARROW_Y).toEqual({ "point-to-point-channel": 19.5, "idempotent-receiver": 24 });
+    expect(ICON_ARROW_Y).toEqual({ "point-to-point-channel": 20, "idempotent-receiver": 23 });
     expect(SENDER).toEqual({ x: 16, y: 180, width: 150, height: 64 });
     expect(CHANNEL).toEqual({ x: 196, scale: 2.8 });
     expect(RECEIVER).toEqual({ x: 520, scale: 3.4 });
     expect(STORE).toEqual({ x: 560, y: 366, width: 160, height: 128 });
     expect(LOOKUP).toEqual({ from: [640, 274], to: [640, 362], rest: 2.5, active: 4 });
-    expect(AT).toEqual({ sender: { x: 212, y: 212 }, channel: { x: 286, y: 212 }, door: { x: 488, y: 212 }, processed: { x: 852, y: 212 }, ghost: { x: 852, y: 320 }, ignored: { x: 852, y: 428 } });
+    expect(AT).toEqual({ sender: { x: 212, y: 212 }, channel: { x: 286, y: 212 }, door: { x: 488, y: 212 }, processed: { x: 852, y: 212 }, ghost: { x: 852, y: 320 }, ignored: { x: 300, y: 428 } });
     expect(CHECK).toEqual({ cx: 902, cy: 178, r: 22 });
     expect(QUESTION).toEqual({ cx: 700, cy: 318, scale: 2 });
     expect(BADGE).toEqual({ cx: 912, cy: 52 });
@@ -39,7 +39,7 @@ describe("Idempotent Receiver book layout", () => {
       send: "M 212,212 L 286,212",
       deliver: "M 286,212 L 488,212",
       process: "M 488,212 C 600,110 760,140 852,212",
-      ignore: "M 488,212 C 560,320 780,300 852,428",
+      ignore: "M 488,212 C 470,330 380,428 300,428",
     });
     expect(GUIDES).toEqual({ p1: "M 166,212 L 520,212", p2: ROUTES.process, p3: ROUTES.ignore });
   });
@@ -114,7 +114,7 @@ describe("Idempotent Receiver book text placement", () => {
   });
 
   test("Collision rejected", () => {
-    const moved = FRAMES.map((f) => ({ ...f, tokens: moveElement(f.tokens, "ghost", 0, 428 - 320) }));
+    const moved = FRAMES.map((f) => ({ ...f, tokens: moveElement(f.tokens, "ghost", 300 - 852, 428 - 320) }));
     expect(placementProblems(moved)[0]).toBe('frame 750: ghost "42" crosses copy "42"');
   });
 });

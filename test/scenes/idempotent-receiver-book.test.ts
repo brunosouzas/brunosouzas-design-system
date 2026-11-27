@@ -120,7 +120,7 @@ describe("Idempotent Receiver book take 1", () => {
     expect(STATES[120].lookup).toBe(true);
     expect(STATES[124].question).toBeNull();
     expect(STATES[154].question).toEqual({ opacity: 1, scale: 1 });
-    expect(STATES[169].lookup).toBe(true);
+    for (const f of FRAMES.slice(120, 170)) expect(STATES[f].lookup, `frame ${f}`).toBe(true);
     expect(STATES[170].question).toBeNull();
     expect(STATES[170].lookup).toBe(false);
     expect(STATES[179].stored).toBeNull();

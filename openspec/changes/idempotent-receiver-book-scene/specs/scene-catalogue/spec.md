@@ -179,7 +179,7 @@ Every settled word box (measured advance on the `fonts/` faces times effective s
 - **THEN** each checked box lies within x 12–948 and y 12–528 and none crosses another element's, and at frame 800 the checked words other than the `?` are the badge's `2`, the copy's, the ghost's, the message's and the stored `42`, and `Sender`
 
 #### Scenario: Collision rejected
-- **GIVEN** a fixture drawing the ghost token 108 units lower, on the ignored token
+- **GIVEN** a fixture drawing the ghost token moved onto the ignored token (by −552, +108)
 - **WHEN** the placement test runs
 - **THEN** its first problem is at frame 750, the ghost's `42` crossing the copy's `42`
 
