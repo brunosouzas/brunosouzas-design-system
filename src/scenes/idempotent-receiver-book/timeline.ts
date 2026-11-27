@@ -7,8 +7,10 @@
 // `motion.fade`, so a change of either token moves the arrivals and fade ends
 // and fails the pinned beat-table test instead of silently retiming the scene;
 // the scene uses `timeline`. Take 2 repeats take 1's send, delivery, lookup and
-// processing 280 frames later (design §2.3), then adds the second delivery.
-// The scene has no cast, so its acts, faces and emotes are empty.
+// processing 340 frames later (design §2.3), then adds the second delivery,
+// the match and the ignore. The scene has no cast, so its acts, faces and
+// emotes are empty. Reading pauses follow the owner's rule of 2026-11-27:
+// understanding before length (design §2.8).
 //
 // Retiming is a visual change: it goes back into design §4 and the pinned
 // test in the same commit (MOT-5).
@@ -16,9 +18,10 @@ import { tokens } from "../../../tokens/generated/tokens";
 import type { TakesDevice, TakesTimeline } from "../takes-kind";
 
 /** Take 2's repeated frames are take 1's plus this (design §2.3). */
-export const TAKE2_OFFSET = 280;
+export const TAKE2_OFFSET = 340;
 
-export type BookTimeline = TakesTimeline;
+/** The match's focus on the store and its ID: rises from `on`, falls from `off` (design §2.8). */
+export type BookTimeline = TakesTimeline & { focus: { on: number; off: number } };
 
 const ev = (id: string, at: number) => ({ id, at });
 
@@ -35,43 +38,45 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
   const span = (from: number): [number, number] => [from, from + F];
   /** A trip on its route: the id without its take, or `route` when two trips share one (the second delivery). */
   const trip = (id: string, from: number, route: string = id.replace(/-t[12]$/, "")) => ({ id, route, from, to: from + T });
-  const rewind = { from: 260, to: 309, objects: [259, 39] as const };
+  const rewind = { from: 320, to: 369, objects: [319, 39] as const };
 
-  // ---------------------------------------------------------------- take 1 (frames 40–259): one delivery
+  // ---------------------------------------------------------------- take 1 (frames 40–319): one delivery
   const send1 = trip("send-t1", 46);
   const deliver1 = trip("deliver-t1", send1.to + 8);
-  const process1 = trip("process-t1", 166);
+  const process1 = trip("process-t1", 186);
 
-  // ---------------------------------------------------------------- take 2 (frames 320–679): two deliveries
+  // ---------------------------------------------------------------- take 2 (frames 380–799): two deliveries
   const send2 = trip("send-t2", send1.from + D);
   const deliver2 = trip("deliver-t2", deliver1.from + D);
   const process2 = trip("process-t2", process1.from + D);
-  const second = trip("deliver2-t2", 500, "deliver");
-  const ignore = trip("ignore-t2", 596);
+  const second = trip("deliver2-t2", 580, "deliver");
+  const ignore = trip("ignore-t2", 686);
 
   const trips = [send1, deliver1, process1, send2, deliver2, process2, second, ignore];
   const pops = {
     // The stage pops in and settles (pop + motion.fps) by frame 39, so the rewind lands on the stage take 2 starts from.
     sender: 1, channel: 3, receiver: 5, store: 7, badge1: 9,
-    "message-t1": 40, "question-t1": 104, "stored-t1": 160, "check-t1": process1.to,
-    rewindMark: 260,
-    "message-t2": 40 + D, copy: deliver2.from + 11, "question-t2": 104 + D, "stored-t2": 160 + D, "check-t2": process2.to,
+    "message-t1": 40, "question-t1": 124, "stored-t1": 180, "check-t1": process1.to,
+    rewindMark: 320,
+    "message-t2": 40 + D, copy: deliver2.from + 11, "question-t2": 124 + D, "stored-t2": 180 + D, "check-t2": process2.to,
   };
   const fades = {
     "p1-t1": { in: span(40), out: span(deliver1.to) },
-    "p2-t1": { in: span(160), out: span(process1.to) },
+    "p2-t1": { in: span(180), out: span(process1.to) },
     "p1-t2": { in: span(40 + D), out: span(second.to) },
-    "p2-t2": { in: span(160 + D), out: span(process2.to) },
-    "p3-t2": { in: span(590), out: span(ignore.to) },
-    ghost: { in: span(640) },
+    "p2-t2": { in: span(180 + D), out: span(process2.to) },
+    "p3-t2": { in: span(680), out: span(ignore.to) },
+    ghost: { in: span(740) },
   };
-  const leaves = { "question-t1": 140, "question-t2": 140 + D, rewindMark: 320 };
+  const leaves = { "question-t1": 160, "question-t2": 160 + D, rewindMark: 380 };
+  const focus = { on: 625, off: 665 };
   const cues = {
-    lookupOn: [100, 100 + D, 540],
-    lookupOff: [150, 150 + D, 580],
-    processed: [160, 160 + D],
-    ignored: [590],
-    badgeSwap: [310],
+    lookupOn: [120, 120 + D, 620],
+    lookupOff: [170, 170 + D, 670],
+    processed: [180, 180 + D],
+    ignored: [680],
+    badgeSwap: [370],
+    focus: [focus.on, focus.off],
   };
 
   // Every change frame, assigned to the phase it falls in (design §4.1).
@@ -88,23 +93,23 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
   });
 
   return {
-    duration: 780,
-    outro: 680,
+    duration: 900,
+    outro: 800,
     ringsFade: [0, 20],
     phases: [
       phase("setup", 1, 0, 39, [28, 32], ["takeNumbers"]),
-      phase("t1-send", 1, 40, 99, [28, 32]),
-      phase("t1-lookup", 1, 100, 159, [28, 32], ["lookupMark"]),
-      phase("t1-process", 1, 160, 219, [28, 32]),
-      phase("t1-hold", 1, 220, 259, [28]),
-      phase("rewind", "rewind", 260, 319, [28], ["rewind", "takeNumbers"]),
-      phase("t2-send", 2, 320, 379, [28, 32]),
-      phase("t2-lookup", 2, 380, 439, [28, 32], ["lookupMark"]),
-      phase("t2-process", 2, 440, 499, [28, 32]),
-      phase("t2-deliver", 2, 500, 539, [28, 32]),
-      phase("t2-match", 2, 540, 589, [28, 32]),
-      phase("t2-ignore", 2, 590, 639, [28, 32]),
-      phase("t2-compare", 2, 640, 679, [28], ["ghost"]),
+      phase("t1-send", 1, 40, 119, [28, 32]),
+      phase("t1-lookup", 1, 120, 179, [28, 32], ["lookupMark"]),
+      phase("t1-process", 1, 180, 239, [28, 32]),
+      phase("t1-hold", 1, 240, 319, [28]),
+      phase("rewind", "rewind", 320, 379, [28], ["rewind", "takeNumbers"]),
+      phase("t2-send", 2, 380, 459, [28, 32]),
+      phase("t2-lookup", 2, 460, 519, [28, 32], ["lookupMark"]),
+      phase("t2-process", 2, 520, 579, [28, 32]),
+      phase("t2-deliver", 2, 580, 619, [28, 32]),
+      phase("t2-match", 2, 620, 679, [28, 32], ["matchFocus"]),
+      phase("t2-ignore", 2, 680, 739, [28, 32]),
+      phase("t2-compare", 2, 740, 799, [28], ["ghost"]),
     ],
     rewind,
     acts: [],
@@ -115,6 +120,7 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
     fades,
     leaves,
     cues,
+    focus,
   };
 };
 

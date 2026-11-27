@@ -14,7 +14,7 @@ import { frameOf, textsAt, type Frame } from "./book-tree";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 const SCENE_DIR = join(repoRoot, "src/scenes/idempotent-receiver-book");
-const FRAMES: Frame[] = Array.from({ length: 780 }, (_, f) => frameOf(f));
+const FRAMES: Frame[] = Array.from({ length: 900 }, (_, f) => frameOf(f));
 
 const flatten = (value: unknown): string[] => (typeof value === "string" ? [value] : Array.isArray(value) ? value.flatMap(flatten) : Object.values(value as object).flatMap(flatten));
 const ALLOWED = new Set(flatten(text.en));

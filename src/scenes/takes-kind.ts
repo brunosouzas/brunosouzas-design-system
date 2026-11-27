@@ -22,10 +22,11 @@ export type Take = 1 | 2 | "rewind";
  * A reading device the article does not state, kept by the owner (MOT-1). The
  * list is the one PR #41 wrote for the first takes scene; scenes built on it
  * (#41, #44) use it as is, so it is kept verbatim (design §4). The Idempotent
- * Receiver book scene (SW-160, gate 0 of 2026-11-27) adds the `?` drawn at a
- * lookup and the faded result of take 1 beside take 2's (`lookupMark`, `ghost`).
+ * Receiver book scene (SW-160, 2026-11-27) adds the `?` drawn at a lookup and
+ * the faded result of take 1 beside take 2's, approved at gate 0, and the
+ * stored ID's focus when a lookup finds it (`lookupMark`, `ghost`, `matchFocus`).
  */
-export type TakesDevice = "fright" | "rewind" | "takeNumbers" | "goStamp" | "lookupMark" | "ghost";
+export type TakesDevice = "fright" | "rewind" | "takeNumbers" | "goStamp" | "lookupMark" | "ghost" | "matchFocus";
 
 export type TakesPhase = {
   id: string;

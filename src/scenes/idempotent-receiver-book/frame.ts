@@ -15,6 +15,7 @@
 // `motion.fps`.
 //
 // How to run: `npm test -- test/scenes/idempotent-receiver-book.test.ts`.
+import { spring } from "remotion";
 import { tokens } from "../../../tokens/generated/tokens";
 import { leave } from "../../brand/cast-motion";
 import { blockPopIn, fadeIn, motionPathAt, pillPopIn, pointAlong, type Point } from "../../brand/motion";
@@ -46,6 +47,18 @@ const popAndLeave = (f: number, at: number, leaveAt: number): Appear | null => {
   return opacity > 0 ? { opacity, scale: appear.scale } : null;
 };
 
+/**
+ * The store's focus at the match (design §2.8), 0 to 1: it rises with the
+ * focus spring from `on`, falls with it from `off`, and is exactly 1 or 0 once
+ * the spring has had `motion.fps` frames, so the final hold cannot move.
+ */
+const focusAt = (x: number, { on, off }: BookTimeline["focus"]): number => {
+  const rise = (from: number) => (x >= from + fps ? 1 : spring({ frame: x - from, fps, config: tokens.motion.focus }));
+  if (x < on) return 0;
+  if (x < off) return rise(on);
+  return 1 - rise(off);
+};
+
 /** A message token's outcome colour: white in flight, green once processed, orange once ignored (ADR 0006 `color.state.*`). */
 export type TokenFill = "white" | "healthy" | "blocked";
 export type TokenState = { id: "message" | "copy"; point: Point; fill: TokenFill; appear: Appear };
@@ -60,6 +73,8 @@ export type BookState = {
   store: Appear | null;
   /** The ID 42 in the store. */
   stored: Appear | null;
+  /** The store's focus scale at the match, store and stored ID together (1 at rest, up to `motion.focusScale`). */
+  storeFocus: number;
   /** Is the receiver looking up its store? */
   lookup: boolean;
   question: Appear | null;
@@ -166,6 +181,7 @@ export const frameAt = (rawFrame: number, t: BookTimeline = defaultTimeline): Bo
     receiver: blockPop(x, t.pops.receiver),
     store: blockPop(x, t.pops.store),
     stored: pillPop(x, t.pops[`stored-${s}`]),
+    storeFocus: take === 2 ? 1 + (tokens.motion.focusScale - 1) * focusAt(x, t.focus) : 1,
     lookup,
     question: popAndLeave(x, t.pops[`question-${s}`], t.leaves[`question-${s}`]),
     check: blockPop(x, t.pops[`check-${s}`]),

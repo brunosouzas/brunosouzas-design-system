@@ -25,7 +25,7 @@ const harness = (failure: (c: Command) => boolean = () => false) => {
   return { root, io, ran, out, err };
 };
 const ID = "idempotent-receiver-book-16x9";
-const FRAMES = [39, 99, 159, 219, 259, 319, 379, 439, 499, 539, 589, 639, 679, 779];
+const FRAMES = [39, 119, 179, 239, 319, 379, 459, 519, 579, 619, 679, 739, 799, 899];
 
 test("Idempotent Receiver book key-frame stills", async () => {
   const h = harness();
@@ -49,11 +49,11 @@ test("Idempotent Receiver book stills dry run", async () => {
 });
 
 test("Idempotent Receiver book still failure", async () => {
-  const h = harness((c) => c.kind === "still" && c.frame === 499);
+  const h = harness((c) => c.kind === "still" && c.frame === 579);
   expect(await runStills([scene.id], h.io)).toBe(1);
-  expect(h.err).toEqual([`error: still failed: ${ID} frame 499 (exit code 1)`]);
-  expect(h.ran.map((c) => c.frame)).toEqual([39, 99, 159, 219, 259, 319, 379, 439, 499]);
-  for (const f of [39, 99, 159, 219, 259, 319, 379, 439]) expect(existsSync(join(h.root, `out/stills/${ID}/${f}.png`))).toBe(true);
+  expect(h.err).toEqual([`error: still failed: ${ID} frame 579 (exit code 1)`]);
+  expect(h.ran.map((c) => c.frame)).toEqual([39, 119, 179, 239, 319, 379, 459, 519, 579]);
+  for (const f of [39, 119, 179, 239, 319, 379, 459, 519]) expect(existsSync(join(h.root, `out/stills/${ID}/${f}.png`))).toBe(true);
 });
 
 test("Idempotent Receiver book render dry run", async () => {

@@ -8,13 +8,13 @@ At gate 0, on **2026-11-27**, the owner chose **concept B, "one stage, two takes
 
 ## What Changes
 
-- **A new catalogue scene, `idempotent-receiver-book`.** A two-take scene (kind `takes`), neutral, one 16:9 composition `idempotent-receiver-book-16x9`: 780 frames (26 s) at 30 fps, outro 680, a final still of 100 frames. Its words are `Sender`, `42`, the `?` mark and the take numbers. No cast.
+- **A new catalogue scene, `idempotent-receiver-book`.** A two-take scene (kind `takes`), neutral, one 16:9 composition `idempotent-receiver-book-16x9`: 900 frames (30 s) at 30 fps, outro 800, a final still of 100 frames. Its length follows the owner's rule of 2026-11-27, understanding before length (design §2.8). Its words are `Sender`, `42`, the `?` mark and the take numbers. No cast.
   - **One stage, left to right, on one lane:** the Sender (a pill in the caller's colour), the point-to-point channel and the Idempotent Receiver (EIP icons), the processed IDs (an empty store) under the receiver, the outcomes on the right.
   - **Take 1:** the Sender sends order 42 into the channel; the channel delivers it once; the receiver looks up its store (`?`: not there), processes the message (green, checked) and stores 42.
   - **The rewind:** a rewind mark; take 1 plays backwards; badge `1` becomes `2`.
-  - **Take 2:** the same order, sent once; a second copy appears in the channel; the first delivery is processed and stored as in take 1; the second reaches the receiver, the lookup finds 42, and the duplicate is set aside (orange). Take 1's result fades in beside take 2's: one processed message in both, and the final still holds.
-- **The EIP book scene type,** `src/scenes/eip-book.ts`: the lane, the text sizes, the message token, an icon placed on the lane, and the store empty or holding an ID, so the next book scene supplies only its icons, routes and timeline (design §2.1). It draws through the package's pieces.
-- **The `takes` kind's reading devices** gain `lookupMark` and `ghost` (design §2.5), so the phases name the devices the owner approved.
+  - **Take 2:** the same order, sent once; a second copy appears in the channel; the first delivery is processed and stored as in take 1; the second reaches the receiver, the lookup finds 42 (the store comes into focus), and the duplicate is set aside (orange). Take 1's result fades in beside take 2's: one processed message in both, and the final still holds.
+- **The EIP book scene type,** `src/scenes/eip-book.ts`: the lane, the text sizes, the message token, an icon placed on the lane, and the store empty or holding an ID, which every book scene draws (design §2.1). The next book scene still writes its own timeline, layout, frame and stage logic, using this scene as its model; whether a generic builder should come now or with the second book scene is an open point for the owner (design §7, point 4). It draws through the package's pieces.
+- **The `takes` kind's reading devices** gain `lookupMark`, `ghost` and `matchFocus` (design §2.5): the first two approved at gate 0, the third new for G1.
 - **The catalogue registers seven scenes.** The new scene is registered after `sdd-scene-3-archive` and before `circuit-breaker-topology`, which stays last; the assertions that list every scene are updated. Every existing scene keeps its data, compositions and stills.
 
 ## Capabilities
@@ -25,7 +25,7 @@ none
 
 ### Modified Capabilities
 
-- `scene-catalogue`: the book scene's registration, reading devices, beats and timing (take 1, rewind, take 2's two deliveries, the duplicate ignored, the final still), words, text size, layout and placement, and pieces (ADDED); "State-machine and flow catalogue compatibility" is MODIFIED so its scenarios count seven scenes.
+- `scene-catalogue`: the book scene's registration, reading devices, beats and timing (take 1, rewind, take 2's two deliveries, the duplicate ignored, the final still), words, text size, layout and placement, and pieces (ADDED); "State-machine and flow catalogue compatibility" is MODIFIED so its scenarios count seven scenes; the `available scenes:` clause moves from "Five scenes" and "Six scenes" to the new "Seven scenes", since the line now lists seven.
 - `scene-rendering`: stills and the master and web copies for the book scene (ADDED).
 
 ## Out of scope
@@ -45,6 +45,7 @@ none
 - **Concurrency:** n/a. Frames render independently; the scene runs no concurrent process.
 - **Security:** n/a. No user input, no secret, no network beyond the existing font load at render time.
 - **Logs and observability:** n/a beyond the existing progress lines of the stills and render commands.
+- **Structural requirements without a separate error scenario:** "Idempotent Receiver book reading devices", "Idempotent Receiver book layout", "Idempotent Receiver book built from package pieces" and "Existing scenes unchanged by the book scene" are checked by exact equality against the expected values (device list, layout values, file list and patterns, the other scenes' tests, diff and stills); any deviation fails that equality, so a separate negative fixture would only repeat it.
 
 ## Documentation
 

@@ -76,8 +76,8 @@ const nodesOf = (s: BookState): SvgNode =>
     )],
     ["channel", s.channel && shown(iconOnLane("point-to-point-channel", CHANNEL.x, CHANNEL.scale), s.channel, ANCHORS.channel)],
     ["receiver", s.receiver && shown(iconOnLane("idempotent-receiver", RECEIVER.x, RECEIVER.scale), s.receiver, ANCHORS.receiver)],
-    ["store", s.store && shown(emptyStore(STORE), s.store, ANCHORS.store)],
-    ["stored", s.stored && shown(storedId(STORE, words.id), s.stored, ANCHORS.store)],
+    ["store", s.store && shown(emptyStore(STORE), { ...s.store, scale: s.store.scale * s.storeFocus }, ANCHORS.store)],
+    ["stored", s.stored && shown(storedId(STORE, words.id), { ...s.stored, scale: s.stored.scale * s.storeFocus }, ANCHORS.store)],
   ]));
 
 const tokensOf = (s: BookState): SvgNode =>

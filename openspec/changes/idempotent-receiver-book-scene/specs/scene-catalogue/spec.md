@@ -3,7 +3,7 @@
 ## ADDED Requirements
 
 ### Requirement: Idempotent Receiver book registration
-The catalogue SHALL register `idempotent-receiver-book` after `sdd-scene-3-archive` and before `circuit-breaker-topology`: kind `takes`, neutral, format `16x9` only, 780 frames at 30 fps, outro 680, sources `https://brunosouzas.com/wiki/idempotent-receiver-in-mulesoft/` (`en`) and `https://brunosouzas.com/pt/wiki/idempotent-receiver-in-mulesoft/` (`pt`), and the `text.en` table of scenario "Word table". `src/Root.tsx` SHALL map its composition to the scene's component.
+The catalogue SHALL register `idempotent-receiver-book` after `sdd-scene-3-archive` and before `circuit-breaker-topology`: kind `takes`, neutral, format `16x9` only, 900 frames at 30 fps, outro 800, sources `https://brunosouzas.com/wiki/idempotent-receiver-in-mulesoft/` (`en`) and `https://brunosouzas.com/pt/wiki/idempotent-receiver-in-mulesoft/` (`pt`), and the `text.en` table of scenario "Word table". `src/Root.tsx` SHALL map its composition to the scene's component.
 
 #### Scenario: Registered entry
 - **GIVEN** the catalogue
@@ -18,10 +18,10 @@ The catalogue SHALL register `idempotent-receiver-book` after `sdd-scene-3-archi
 #### Scenario: One composition, before the topology scene
 - **GIVEN** every registered scene
 - **WHEN** the compositions are enumerated without React or font loading
-- **THEN** the first eleven are those of the five earlier scenes, unchanged and in order; the twelfth is `idempotent-receiver-book-16x9` (1920x1080, 30 fps, 780 frames, folder `idempotent-receiver-book`); the thirteenth and last is `circuit-breaker-topology-16x9`; every id is unique
+- **THEN** the first eleven are those of the five earlier scenes, unchanged and in order; the twelfth is `idempotent-receiver-book-16x9` (1920x1080, 30 fps, 900 frames, folder `idempotent-receiver-book`); the thirteenth and last is `circuit-breaker-topology-16x9`; every id is unique
 
 #### Scenario: Broken entry rejected
-- **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 691
+- **GIVEN** separate fixtures of the entry with a `text.pt` table, with `sources.pt` starting `http://`, or with its outro at 811
 - **WHEN** the catalogue is checked
 - **THEN** each fails naming `idempotent-receiver-book` and the problem (Portuguese table, `pt` source, outro inside the reading hold)
 
@@ -31,12 +31,12 @@ The catalogue SHALL register `idempotent-receiver-book` after `sdd-scene-3-archi
 - **THEN** no problem is reported
 
 ### Requirement: Idempotent Receiver book reading devices
-The `takes` kind's reading devices SHALL include `lookupMark` and `ghost`. The scene SHALL name `takeNumbers` in `setup`, `lookupMark` in `t1-lookup` and `t2-lookup`, `rewind` and `takeNumbers` in `rewind`, and `ghost` in `t2-compare`, and no other device. It SHALL have no cast, and every phase SHALL cite lines 28 or 32 of the English page only.
+The `takes` kind's reading devices SHALL include `lookupMark`, `ghost` and `matchFocus`. The scene SHALL name `takeNumbers` in `setup`, `lookupMark` in `t1-lookup` and `t2-lookup`, `rewind` and `takeNumbers` in `rewind`, `matchFocus` in `t2-match` and `ghost` in `t2-compare`, and no other device. It SHALL have no cast, and every phase SHALL cite lines 28 or 32 of the English page only.
 
 #### Scenario: Devices where the owner approved them
 - **GIVEN** the scene's phases
 - **WHEN** their devices are listed in phase order
-- **THEN** they are `setup:takeNumbers`, `t1-lookup:lookupMark`, `rewind:rewind`, `rewind:takeNumbers`, `t2-lookup:lookupMark` and `t2-compare:ghost`
+- **THEN** they are `setup:takeNumbers`, `t1-lookup:lookupMark`, `rewind:rewind`, `rewind:takeNumbers`, `t2-lookup:lookupMark`, `t2-match:matchFocus` and `t2-compare:ghost`
 
 #### Scenario: No cast
 - **GIVEN** the scene's timeline
@@ -49,12 +49,12 @@ The `takes` kind's reading devices SHALL include `lookupMark` and `ghost`. The s
 - **THEN** every line is 28 or 32
 
 ### Requirement: Idempotent Receiver book beats and timing
-The scene's timeline SHALL equal the change's design §4: the thirteen phases with their takes, frames, cited lines and devices; every trip, pop-in, fade, leave and cue; the rewind's object frames; the outro. Every trip SHALL end `motion.travel` frames after it starts, and every fade SHALL last `motion.fade` frames. Take 2 SHALL repeat take 1's frames 40 to 219 at an offset of 280.
+The timeline SHALL equal design §4: the thirteen phases with their takes, frames, lines and devices; every trip, pop-in, fade, leave, cue and the focus; the rewind; the outro. Every trip SHALL end `motion.travel` frames after it starts and every fade but the rings' SHALL last `motion.fade` frames. Take 2 SHALL repeat take 1's frames 40 to 239 at an offset of 340, except take 2's copy and guide P1's later fade-out.
 
 #### Scenario: Timeline equals the beat table
 - **GIVEN** design §4 transcribed in the test, `motion.travel` 22 and `motion.fade` 10
 - **WHEN** it is compared with the scene's timeline
-- **THEN** every value is equal, including phases `setup` 0–39, `t1-send` 40–99, `t1-lookup` 100–159, `t1-process` 160–219, `t1-hold` 220–259, `rewind` 260–319, `t2-send` 320–379, `t2-lookup` 380–439, `t2-process` 440–499, `t2-deliver` 500–539, `t2-match` 540–589, `t2-ignore` 590–639 and `t2-compare` 640–679
+- **THEN** every value is equal, including phases `setup` 0–39, `t1-send` 40–119, `t1-lookup` 120–179, `t1-process` 180–239, `t1-hold` 240–319, `rewind` 320–379, `t2-send` 380–459, `t2-lookup` 460–519, `t2-process` 520–579, `t2-deliver` 580–619, `t2-match` 620–679, `t2-ignore` 680–739 and `t2-compare` 740–799
 
 #### Scenario: Travel token changed
 - **GIVEN** the timeline built with `motion.travel` 20
@@ -62,75 +62,80 @@ The scene's timeline SHALL equal the change's design §4: the thirteen phases wi
 - **THEN** the comparison fails naming trip `send-t1`, whose arrival is 66 instead of 68
 
 #### Scenario: Seeking in any order
-- **GIVEN** every frame from 0 to 779
+- **GIVEN** every frame from 0 to 899
 - **WHEN** the state is evaluated forward, backward and in a shuffled order
 - **THEN** each frame gives the same state every time
 
-#### Scenario: Take 2 repeats take 1 by 280 frames
-- **GIVEN** every frame f from 40 to 219
-- **WHEN** the states of f and f + 280 are compared without the take, the object frame, the badge, the rewind mark, take 2's copy and guide P1
+#### Scenario: Take 2 repeats take 1 by 340 frames
+- **GIVEN** every frame f from 40 to 239
+- **WHEN** the states of f and f + 340 are compared without the take, the object frame, the badge, the rewind mark, take 2's copy and guide P1
 - **THEN** they are equal
 
 ### Requirement: Idempotent Receiver book take 1
 In take 1 the token `42` SHALL leave the Sender, enter the channel and reach the receiver once; the lookup SHALL turn solid with a `?` that leaves before it ends; the token SHALL then turn green and move to the processed side, `42` SHALL appear in the store, and a check SHALL pop on the processed token. No second copy SHALL be drawn before take 2.
 
 #### Scenario: One delivery, looked up, processed and stored
-- **GIVEN** frames 40, 45, 70, 99, 100, 104, 134, 149, 150, 159, 160, 161, 177, 188 and 218, and every frame from 0 to 259
+- **GIVEN** frames 40, 45, 70, 99, 119, 120, 124, 154, 169, 170, 179, 180, 181, 197, 208, 209 and 238, and every frame from 0 to 319
 - **WHEN** the state is evaluated
-- **THEN** no token at 40; the token is at the Sender's side at 45, in the channel at 70 and at the door at 99; the lookup is solid from 100 to 149; the `?` is not drawn at 104, settled at 134 and gone at 150; at 159 the token is white and the store empty; from 160 the token is green and from 161 `42` is drawn in the store; at 177 the token is halfway along route `process`; at 188 it is at the processed side, with the check drawn from 189 and settled at 218; no copy is drawn before 260
+- **THEN** no token at 40; the token is at the Sender's side at 45, in the channel at 70 and at the door at 99; the lookup is dashed at 119 and solid from 120 to 169; the `?` is not drawn at 124, settled at 154 and gone at 170; at 179 the token is white and the store empty; from 180 the token is green and from 181 `42` is drawn in the store; at 197 the token is halfway along route `process`; at 208 it is at the processed side, with the check drawn from 209 and settled at 238; no copy is drawn before 320
 
 ### Requirement: Idempotent Receiver book rewind
-From 260 to 309 the stage except the badge and the rewind mark SHALL be drawn from an object frame playing take 1 backwards from 259 to 39; from 310 to 319 it SHALL hold object frame 39, the stage take 2 starts from. The rewind mark SHALL pop at 260 and leave at 320; the badge SHALL read `1` until 309 and `2` from 310 without a new pop-in.
+From 320 to 369 the stage except the badge and the rewind mark SHALL be drawn from an object frame playing take 1 backwards from 319 to 39; from 370 to 379 it SHALL hold object frame 39, the stage take 2 starts from. The rewind mark SHALL pop at 320 and leave at 380; the badge SHALL read `1` until 369 and `2` from 370 without a new pop-in.
 
 #### Scenario: Object frames
-- **GIVEN** frames 259, 260, 285, 309 and 315
+- **GIVEN** frames 319, 320, 345, 369 and 375
 - **WHEN** the object frame is read
-- **THEN** it is 259, 259, 147, 39 and 39
+- **THEN** it is 319, 319, 176, 39 and 39
 
 #### Scenario: Same stage before each take
-- **GIVEN** frames 39, 319 and 320
+- **GIVEN** frames 39, 379 and 380
 - **WHEN** their stages are compared without the `above` layer (the badge and the rewind mark)
 - **THEN** they are equal
 
 #### Scenario: Badge and mark
-- **GIVEN** frames 259, 261, 309, 310 and 330
+- **GIVEN** frames 319, 321, 369, 370 and 390
 - **WHEN** the badge and the rewind mark are read
-- **THEN** the badge reads `1` at 309 and `2` at 310; the mark is not drawn at 259, is drawn at 261 and is gone at 330
+- **THEN** the badge reads `1` at 369 and `2` at 370; the mark is not drawn at 319, is drawn at 321 and is gone at 390
 
 ### Requirement: Idempotent Receiver book take 2 deliveries
 In take 2 the token SHALL be sent once, as in take 1; once the first delivery has left the channel, a copy SHALL pop in the channel and wait there while the first delivery is looked up and processed; the copy SHALL then reach the receiver.
 
 #### Scenario: Sent once, delivered twice
-- **GIVEN** frames 367, 368, 368 to 499, and 522
+- **GIVEN** frames 427, 428, 428 to 579, and 602
 - **WHEN** the state is evaluated
-- **THEN** no copy is drawn at 367; at 368 the copy is drawn in the channel and the first delivery is more than 84 units to its right; the copy stays in the channel through 499; at 522 it is at the door
+- **THEN** no copy is drawn at 427; at 428 the copy is drawn in the channel and the first delivery is more than 84 units to its right; the copy stays in the channel through 579; at 602 it is at the door
 
 ### Requirement: Idempotent Receiver book duplicate ignored
-When the copy reaches the receiver, the lookup SHALL turn solid with no `?`, while the store holds `42`; the copy SHALL then turn orange and move to the ignored side. From the second processing on, exactly one green token and one check SHALL be drawn.
+When the copy reaches the receiver, the lookup SHALL turn solid with no `?` while the store holds `42`, and the store SHALL come into focus; the copy SHALL then turn orange and move to the ignored side. From frame 549, exactly one message token SHALL be green and the check SHALL be drawn; take 1's faded result (the ghost) is not a message token.
 
 #### Scenario: Found and set aside
-- **GIVEN** frames 539, 540, 580, 589, 590 and 618, and every frame from 469 to 779
+- **GIVEN** frames 619, 620, 670, 679, 680 and 708, and every frame from 549 to 899
 - **WHEN** the state is evaluated
-- **THEN** the lookup is dashed at 539, solid from 540 and dashed again at 580; the stored `42` is settled at 540; no `?` is drawn from 500 to 679; the copy is white at 589, orange from 590 and at the ignored side at 618; from 469 to 779 exactly one token is green and the check is drawn
+- **THEN** the lookup is dashed at 619, solid from 620 and dashed again at 670; the stored `42` is settled at 620; no `?` is drawn from 580 to 799; the copy is white at 679, orange from 680 and at the ignored side at 708; from 549 to 899 exactly one message token is green and the check is drawn
+
+#### Scenario: The store in focus at the match
+- **GIVEN** every frame from 0 to 899
+- **WHEN** the store's focus scale is read
+- **THEN** it is 1 before 625, above 1 at 630, exactly `motion.focusScale` (1.06) from 655 to 665, and 1 again from 695
 
 ### Requirement: Idempotent Receiver book final still
-From 640 take 1's processed token SHALL fade in at the ghost place, beside take 2's tokens, at `motion.dimOpacity`. From the outro (680) on, nothing SHALL change.
+From 740 take 1's processed token SHALL fade in at the ghost place, beside take 2's tokens, at `motion.dimOpacity`. From the outro (800) on, nothing SHALL change.
 
 #### Scenario: Take 1's result faded beside take 2's
-- **GIVEN** frames 639, 645 and 650
+- **GIVEN** frames 739, 745 and 750
 - **WHEN** the ghost's opacity factor is read
 - **THEN** it is 0, 0.5 and 1
 
 #### Scenario: Final hold identical
-- **GIVEN** frames 680 to 779
-- **WHEN** the state and the stage of each are compared with frame 680
+- **GIVEN** frames 800 to 899
+- **WHEN** the state and the stage of each are compared with frame 800
 - **THEN** they are deep-equal
 
 ### Requirement: Idempotent Receiver book words on screen
 At every frame, every string the scene draws SHALL be a value of its `text.en` table, and across the composition every value SHALL appear. A string counts as drawn when its element has opacity above 0 and scale above 0.001. The scene SHALL have no caption.
 
 #### Scenario: Words over the whole composition
-- **GIVEN** the stage trees of frames 0 to 779
+- **GIVEN** the stage trees of frames 0 to 899
 - **WHEN** every drawn string is collected
 - **THEN** each one is `Sender`, `42`, `?`, `1` or `2`, and all five appear
 
@@ -143,14 +148,14 @@ At every frame, every string the scene draws SHALL be a value of its `text.en` t
 Every word the scene draws SHALL have an effective font size, its `font-size` times every scale applied once its element has settled, of at least 33 stage units for `Sender` and at least 36 for `42`, `1` and `2`. The `?` is a symbol, exempt.
 
 #### Scenario: Every settled word at its minimum
-- **GIVEN** every frame from 0 to 779
+- **GIVEN** every frame from 0 to 899
 - **WHEN** each drawn string whose element has settled is measured
-- **THEN** none is below its minimum, and at frame 680 `Sender` is 33 and the token's `42`, the stored `42` and the badge's `2` are 36
+- **THEN** none is below its minimum, and at frame 800 `Sender` is 33 and the token's `42`, the stored `42` and the badge's `2` are 36
 
 #### Scenario: Too small rejected
 - **GIVEN** a fixture whose Sender word is drawn at 32 and one whose badge is drawn at 35
 - **WHEN** the size test runs
-- **THEN** the first fails naming `Sender`, 32 and frame 31, and the second naming `1` at frame 39 and `2` at frame 310
+- **THEN** the first fails naming `Sender`, 32 and frame 31, and the second naming `1` at frame 39 and `2` at frame 370
 
 ### Requirement: Idempotent Receiver book layout
 The scene's positions, sizes and routes SHALL equal design §6.1, and its elements SHALL be drawn in the layer order of design §6.2.
@@ -161,22 +166,22 @@ The scene's positions, sizes and routes SHALL equal design §6.1, and its elemen
 - **THEN** they equal design §6.1: lane 212, text sizes 33 and 36, the token, the icons' arrow heights, the Sender, channel, receiver, store, lookup, token rests, check, `?`, badge, rewind mark, rings centre, the four routes and the three guides
 
 #### Scenario: Layer order
-- **GIVEN** frames 120, 290, 610 and 680
+- **GIVEN** frames 140, 350, 700 and 800
 - **WHEN** the elements of each layer are read
 - **THEN** they follow `below` (lookup), `nodes` (sender, channel, receiver, store, stored), `tokens` (ghost, message, copy, check, question), `above` (badge, rewind-mark), and every named element appears in at least one of those frames
 
 ### Requirement: Idempotent Receiver book text placement
-Every settled word box (measured advance on the `fonts/` faces times effective size), the badge and the rewind mark SHALL lie inside the stage less 12 units, and no two of different elements SHALL cross. Elements popping, fading or leaving, and tokens not at one of their rests, are exempt at that frame (design §6.3).
+Every settled word box (measured advance on the `fonts/` faces times effective size), the `?` included, the badge and the rewind mark SHALL lie inside the stage less 12 units, and no two of different elements SHALL cross. Elements popping, fading or leaving, and tokens not at one of their rests, are exempt at that frame (design §6.3).
 
 #### Scenario: Placement at every checked frame
-- **GIVEN** every frame from 0 to 779
+- **GIVEN** every frame from 0 to 899
 - **WHEN** the boxes are computed
-- **THEN** each checked box lies within x 12–948 and y 12–528 and none crosses another element's, and at frame 680 the checked words are the badge's `2`, the copy's, the ghost's, the message's and the stored `42`, and `Sender`
+- **THEN** each checked box lies within x 12–948 and y 12–528 and none crosses another element's, and at frame 800 the checked words other than the `?` are the badge's `2`, the copy's, the ghost's, the message's and the stored `42`, and `Sender`
 
 #### Scenario: Collision rejected
 - **GIVEN** a fixture drawing the ghost token 108 units lower, on the ignored token
 - **WHEN** the placement test runs
-- **THEN** its first problem is at frame 650, the ghost's `42` crossing the copy's `42`
+- **THEN** its first problem is at frame 750, the ghost's `42` crossing the copy's `42`
 
 ### Requirement: Idempotent Receiver book built from package pieces
 The scene SHALL draw only through the pieces `eipIcon`, `diagramBox`, `storeNode`, `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon`, through the book scene type `src/scenes/eip-book.ts`, and the components `Rings` and `MotionPath`. Its files and the book scene type SHALL contain no colour literal and create no SVG shape of their own.
@@ -194,12 +199,12 @@ The scene SHALL draw only through the pieces `eipIcon`, `diagramBox`, `storeNode
 Adding the book scene SHALL leave every other registered scene unchanged: data, compositions, frame behaviour, tests and stills, except the assertions that list every registered scene (in `test/scenes/catalogue-flow.test.ts`, the catalogue tests of the three SDD scenes and `test/scripts/cli.test.ts`).
 
 #### Scenario: Other scenes untouched
-- **GIVEN** the branch after this change and `main` before it
-- **WHEN** `npm test` runs and `git diff origin/main --stat -- src/scenes` is read
+- **GIVEN** the branch after this change
+- **WHEN** `npm test` runs and `git diff origin/main...HEAD --stat -- src/scenes` is read
 - **THEN** every test passes and the diff lists only `src/scenes/idempotent-receiver-book/`, `src/scenes/eip-book.ts`, `src/scenes/index.ts` and `src/scenes/takes-kind.ts`
 
 #### Scenario: Stills byte-identical (local)
-- **GIVEN** the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay` and `circuit-breaker-topology`, rendered on `main` and on the branch
+- **GIVEN** the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay`, `sdd-scene-2-files`, `sdd-scene-3-archive` and `circuit-breaker-topology`, rendered on `main` and on the branch
 - **WHEN** their SHA-256 are compared
 - **THEN** every pair is equal
 

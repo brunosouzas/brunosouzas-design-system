@@ -12,7 +12,7 @@ import type { Box } from "./text-measure";
 import { blocksAt, exemptAt, frameOf, moveElement, resizeText, textsAt, type Frame } from "./book-tree";
 import { walk } from "./topology-tree";
 
-const FRAMES: Frame[] = Array.from({ length: 780 }, (_, f) => frameOf(f));
+const FRAMES: Frame[] = Array.from({ length: 900 }, (_, f) => frameOf(f));
 const MARGIN = 12;
 const overlaps = (a: Box, b: Box) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
 
@@ -68,17 +68,17 @@ describe("Idempotent Receiver book text size", () => {
   test("Every settled word at its minimum", () => {
     expect(sizeProblems(FRAMES)).toEqual([]);
     const at = (frame: number, word: string, element: string) => textsAt(FRAMES[frame]).find((t) => t.text === word && t.element === element)!.size;
-    expect(at(680, "Sender", "sender")).toBe(33);
-    expect(at(680, "42", "message")).toBe(36);
-    expect(at(680, "42", "stored")).toBe(36);
-    expect(at(680, "2", "badge")).toBe(36);
+    expect(at(800, "Sender", "sender")).toBe(33);
+    expect(at(800, "42", "message")).toBe(36);
+    expect(at(800, "42", "stored")).toBe(36);
+    expect(at(800, "2", "badge")).toBe(36);
   });
 
   test("Too small rejected", () => {
     const small = FRAMES.map((f) => ({ ...f, nodes: resizeText(f.nodes, "sender", 32) }));
     expect(sizeProblems(small)).toEqual(['sender "Sender" at 32 (minimum 33), first drawn at frame 31']);
     const badge = FRAMES.map((f) => ({ ...f, above: resizeText(f.above, "badge", 35) }));
-    expect(sizeProblems(badge)).toEqual(['badge "1" at 35 (minimum 36), first drawn at frame 39', 'badge "2" at 35 (minimum 36), first drawn at frame 310']);
+    expect(sizeProblems(badge)).toEqual(['badge "1" at 35 (minimum 36), first drawn at frame 39', 'badge "2" at 35 (minimum 36), first drawn at frame 370']);
   });
 });
 
@@ -92,7 +92,7 @@ const placementProblems = (frames: readonly Frame[]): string[] => {
     const exempt = exemptAt(f);
     const checked = [
       ...blocksAt(f).filter((b) => !exempt.has(b.name)).map((b) => ({ ...b, element: b.name })),
-      ...textsAt(f).filter((t) => t.text !== "?" && !exempt.has(t.element)).map((t) => ({ name: `${t.element} "${t.text}"`, box: t.box, element: t.element })),
+      ...textsAt(f).filter((t) => !exempt.has(t.element)).map((t) => ({ name: `${t.element} "${t.text}"`, box: t.box, element: t.element })),
     ];
     for (const item of checked) {
       const b = item.box;
@@ -109,13 +109,13 @@ describe("Idempotent Receiver book text placement", () => {
   test("Placement at every checked frame", () => {
     expect(placementProblems(FRAMES)).toEqual([]);
     // The check sees what it is meant to at the final still: the sender's word, four 42s (processed, faded, ignored, stored) and the badge.
-    const words = textsAt(FRAMES[680]).filter((t) => t.text !== "?").map((t) => `${t.element}:${t.text}`).sort();
+    const words = textsAt(FRAMES[800]).filter((t) => t.text !== "?").map((t) => `${t.element}:${t.text}`).sort();
     expect(words).toEqual(["badge:2", "copy:42", "ghost:42", "message:42", "sender:Sender", "stored:42"]);
   });
 
   test("Collision rejected", () => {
     const moved = FRAMES.map((f) => ({ ...f, tokens: moveElement(f.tokens, "ghost", 0, 428 - 320) }));
-    expect(placementProblems(moved)[0]).toBe('frame 650: ghost "42" crosses copy "42"');
+    expect(placementProblems(moved)[0]).toBe('frame 750: ghost "42" crosses copy "42"');
   });
 });
 
@@ -128,7 +128,7 @@ describe("Idempotent Receiver book layer order", () => {
     const sortedBy = (names: string[], list: readonly string[]) =>
       expect(names.map((n) => list.indexOf(n))).toEqual([...names.map((n) => list.indexOf(n))].sort((a, b) => a - b));
     const seen = new Set<string>();
-    for (const frame of [120, 290, 610, 680]) {
+    for (const frame of [140, 350, 700, 800]) {
       const f = frameOf(frame);
       for (const [layer, list] of [[f.below, BELOW_ORDER], [f.nodes, NODES_ORDER], [f.tokens, TOKENS_ORDER], [f.above, ABOVE_ORDER]] as const) {
         for (const group of layer.children) if (typeof group !== "string") sortedBy(order(group), list);
