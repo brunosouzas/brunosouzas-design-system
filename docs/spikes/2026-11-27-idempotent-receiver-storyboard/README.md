@@ -4,6 +4,19 @@ Gate 0 of card SW-160 (EIP videos: Idempotent Receiver, book + Mule): three conc
 
 Source of every beat: `writing/integration-patterns-in-mulesoft/idempotent-receiver-in-mulesoft.{en,pt}.md` in `brunosouzas-content` at commit `0162e3a` (the Portuguese page has the same line numbers; the caption lines of the card are 109 and 122). Each frame on the sheets carries its beat and its line.
 
+## Owner's pick (2026-11-27)
+
+The owner chose **concept B for both scene types**, with every recommendation (answers to the questions of pull request #53):
+
+- **q1 B:** one stage, two takes, for the book scene and for the Mule scene.
+- **q2:** Balão is the client in the Mule scene (ADR 0007, the requester acting).
+- **q3:** Balão's reactions: `done` and `worked` on 200, `failed` and `problem` on 500, no reaction on 409.
+- **q4:** a small design-system change first, so `storeNode` can be drawn empty (its `text` optional).
+- **q5:** the published diagram's component names on screen at 33 units, no new Mule glyphs.
+- **q6:** this branch takes the book scene's spec next, with this folder as its gate 0 evidence; the Mule scene gets its own change.
+
+The marked choices below (the lookup's question mark, take 1 of the book scene, the ghost) were approved with concept B.
+
 | Sheet | Concept | Scene type |
 |---|---|---|
 | [`B-book.png`](B-book.png) | **B, one stage, two takes (recommended)** | book |
