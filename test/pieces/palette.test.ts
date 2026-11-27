@@ -131,6 +131,8 @@ const STATE_CALLS: Partial<Record<P.PieceName, { label: string; params: Record<s
   // A question row with a tail check (its tail rect is the second mark, 1/1), then a checked row without one.
   sheet: [{ label: "sheet:tail", params: { rows: [{ lead: "question", bar: 40, tail: "check" }, { lead: "checked", bar: 40 }] } }],
   serverStack: [{ label: "serverStack:failing", params: { units: 3, failing: 1 } }],
+  // A store with words: its required-only call draws none since text became optional (change store-node-without-words, task 2.2).
+  storeNode: [{ label: "storeNode:words", params: { text: ["a"] } }],
   // Visor holding a sheet with a question row and a tail check, facing right and left (change sdd-scene-pieces, task 5.4).
   visor: [
     { label: "visor:sheet", params: { holdsSheet: HELD_WITH_CHECK } },

@@ -15,7 +15,7 @@ import { PIECES } from "../../src/pieces/library";
 const BODY_DIAGRAM: Record<keyof typeof DIAGRAM_PIECES, object> = {
   diagramBox: { x: 0, y: 0, width: 120, text: ["a"] },
   decisionNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
-  storeNode: { x: 0, y: 0, width: 120, height: 60, text: ["a"] },
+  storeNode: { x: 0, y: 0, width: 120, height: 60 },
   queueNode: { x: 0, y: 0, width: 120, text: ["a"] },
   exchangeNode: { x: 0, y: 0, width: 120, text: ["a"] },
   taggedContainer: { x: 0, y: 0, width: 200, height: 100, tag: "a" },

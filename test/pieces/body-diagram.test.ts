@@ -67,6 +67,38 @@ describe("Diagram shapes", () => {
   });
 });
 
+// Change store-node-without-words (SW-248), task 2.1: spec illustration-pieces, "Store without words".
+describe("Store without words", () => {
+  const box = { x: 0, y: 0, width: 100, height: 60 };
+
+  test("Empty store", () => {
+    const { body, text } = storeNode({ ...box, fill: "color.state.healthy" });
+    expect(body.map((n) => n.attrs.d)).toEqual(["M0,8 A50,8 0 0 1 100,8 V52 A50,8 0 0 1 0,52 Z", "M0,8 A50,8 0 0 0 100,8"]);
+    expect(body[0].attrs.fill).toBe("#3DDC84");
+    expect(body).toEqual(storeNode({ ...box, fill: "color.state.healthy", text: ["IDs"] }).body);
+    expect(text).toEqual([]);
+  });
+
+  test("Empty store on the dark surface", () => {
+    const { body, text } = storeNode({ ...box, surface: "dark", inkScale: 2 });
+    expect(body).toEqual(storeNode({ ...box, surface: "dark", inkScale: 2, text: ["IDs"] }).body);
+    expect(body[0].attrs).toMatchObject({ fill: "#1D1C1A", stroke: "#ADA79D" });
+    expect(text).toEqual([]);
+  });
+
+  test("Words asked of an empty store", () => {
+    const words = "needs text: it styles words that are not drawn";
+    expect(() => storeNode({ ...box, text: [] })).toThrow(/^storeNode: text:/);
+    expect(() => storeNode({ ...box, subtitle: "a" })).toThrow(new RangeError(`storeNode: subtitle: ${words}`));
+    expect(() => storeNode({ ...box, textSize: 20 })).toThrow(new RangeError(`storeNode: textSize: ${words}`));
+    expect(() => storeNode({ ...box, subtitle: "a", textSize: 20 })).toThrow(/^storeNode: subtitle:/);
+    expect(() => storeNode({ ...box, subtitle: "a", height: 10 })).toThrow(/^storeNode: subtitle:/);
+    expect(() => storeNode({ ...box, subtitle: "a", text: undefined })).toThrow(/^storeNode: subtitle:/);
+    expect(() => storeNode({ ...box, height: 10 })).toThrow(/^storeNode: height:/);
+    expect(() => storeNode({ ...box, ry: 20 })).toThrow(/^storeNode: ry:/);
+  });
+});
+
 describe("Sticker of the body diagram pieces", () => {
   test("Dark diagram box", () => {
     const { body, text } = diagramBox({ x: 0, y: 0, width: 120, text: ["Sender"], shape: "pill", surface: "dark" });
