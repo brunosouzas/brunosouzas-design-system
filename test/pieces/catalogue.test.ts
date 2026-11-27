@@ -287,9 +287,11 @@ describe("Words come from the caller", () => {
   });
 
   test("No piece invents a word", () => {
-    for (const name of P.PIECE_NAMES) {
+    // storeNode draws no words from its required-only call since text became optional, so it is checked again with words (SW-248).
+    const calls: [P.PieceName, Record<string, unknown>][] = [...P.PIECE_NAMES.map((name): [P.PieceName, Record<string, unknown>] => [name, REQUIRED_ONLY[name]]), ["storeNode", { ...REQUIRED_ONLY.storeNode, text: ["a"] }]];
+    for (const [name, params] of calls) {
       const words: string[] = [];
-      walk(call(name, REQUIRED_ONLY[name]).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
+      walk(call(name, params).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
       // The caller's words, in strings, string arrays and objects (change body-diagram-pieces); backticks are not drawn.
       const given: string[] = [];
       const collect = (value: unknown): void => {
@@ -297,7 +299,7 @@ describe("Words come from the caller", () => {
         else if (Array.isArray(value)) value.forEach(collect);
         else if (typeof value === "object" && value !== null) Object.values(value).forEach(collect);
       };
-      collect(REQUIRED_ONLY[name]);
+      collect(params);
       for (const word of words) expect(word === "?" || given.includes(word), `${name}: ${word}`).toBe(true);
     }
   });

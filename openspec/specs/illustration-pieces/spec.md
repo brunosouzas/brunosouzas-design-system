@@ -567,7 +567,7 @@ Every `uiIcon` call valid in 0.3.0 SHALL stay valid and draw the tree and `toSvg
 - **THEN** each string equals its string in the 0.6.1 fixture, since `color.white` keeps `#FFFFFF`
 
 ### Requirement: Diagram shapes
-`diagramBox`, `decisionNode`, `storeNode`, `queueNode` and `exchangeNode` SHALL take the parameters and draw the geometry of `body-diagram-pieces` design §3, from the top-left `x`, `y`: a box or pill, a diamond, a cylinder with its lid, a box with two rails, and a hexagon with points 0.26 × height in.
+`diagramBox`, `decisionNode`, `storeNode`, `queueNode` and `exchangeNode` SHALL take the parameters and draw the geometry of `body-diagram-pieces` design §3, from the top-left `x`, `y`: a box or pill, a diamond, a cylinder with its lid, a box with two rails, and a hexagon with points 0.26 × height in. `storeNode`'s `text` is optional ("Store without words").
 
 #### Scenario: Default diagram box
 - **WHEN** `diagramBox({ x: 0, y: 0, width: 120, text: ["Orders API"] })` is called
@@ -1796,3 +1796,31 @@ Adding the supporting cast SHALL change no existing output: every existing file 
 - **GIVEN** `test/fixtures/stamp-0.12.0.json`, written from `655525d` before the move: `stamp` round and `rect`, at the default `r` and at 24, with the default and a set `rotate` (0) and `fill` (`illustration.accent`), word `GO` (8 calls)
 - **WHEN** each call is made with `stamp` from its new module
 - **THEN** its tree is deep-equal to the pinned tree and its `toSvg` bytes are equal
+
+### Requirement: Store without words
+`storeNode`'s `text` SHALL be optional. Without it (absent or `undefined`), the piece draws the body the same call draws with `text` (the cylinder face and its lid, on the same surface, fill and ink scale) and no text node. Without `text`, `subtitle` and then `textSize` are rejected naming each, before the room and `ry` limits, which apply as with words; `text: []` is rejected naming `text`.
+
+#### Scenario: Empty store
+- **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60, fill: "color.state.healthy" })` is called
+- **THEN** its body is the face path `M0,8 A50,8 0 0 1 100,8 V52 A50,8 0 0 1 0,52 Z` filled `#3DDC84` and the lid `M0,8 A50,8 0 0 0 100,8`, deep-equal to the body of the same call with `text: ["IDs"]`, and its text list is empty
+
+#### Scenario: Empty store on the dark surface
+- **WHEN** `storeNode({ x: 0, y: 0, width: 100, height: 60, surface: "dark", inkScale: 2 })` is called
+- **THEN** its body is deep-equal to the body of the same call with `text: ["IDs"]`, its face is filled `#1D1C1A` and stroked `#ADA79D`, and its text list is empty
+
+#### Scenario: Words asked of an empty store
+- **WHEN** `storeNode` with `x: 0`, `y: 0`, `width: 100`, `height: 60` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `height: 10`, `subtitle: "a"` with `text: undefined`, and, with no words, `height: 10` alone and `ry: 20` alone
+- **THEN** each of the eight calls throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `subtitle`, `height` and `ry`; the `subtitle` and `textSize` messages are `storeNode: <name>: needs text: it styles words that are not drawn`
+
+### Requirement: Store node calls of 0.14.1 unchanged
+Every `storeNode` call valid in 0.14.1 SHALL draw the same tree and the same `toSvg` bytes as in 0.14.1.
+
+#### Scenario: Frozen store node calls
+- **GIVEN** `test/fixtures/store-node-0.14.1.json`, written by `scripts/freeze-store-node.ts` from `d334273` (0.14.1) before any code, with the drawing code of `d334273`: 8 calls at `x: 0`, `y: 0`; at `width: 100`, `height: 60`, `text: ["IDs"]` alone, with `subtitle: "in memory"`, with `fill: "color.state.healthy"`, with `ry: 15` and with `surface: "dark"`; `width: 160`, `height: 120`, `text: ["a", "b", "c"]`; ``width: 200, height: 122, text: ["`orderId`"], textSize: 36``; and `width: 120`, `height: 80`, `text: ["IDs"]`, `inkScale: 2`
+- **WHEN** each call is made again
+- **THEN** its tree is deep-equal to the pinned tree and its body then text nodes through `toSvg`, joined with no separator, equal the pinned string
+
+#### Scenario: A changed store node is caught
+- **GIVEN** the same fixture
+- **WHEN** each call is made with the default `ry` drawn as 9 instead of 8 (the call's own `ry` kept)
+- **THEN** exactly the 7 calls without `ry` differ from their pinned tree, and the call with `ry: 15` does not
