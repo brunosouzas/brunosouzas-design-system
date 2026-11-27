@@ -1,7 +1,7 @@
 // Unit tests of the body diagram pieces (spec illustration-pieces, change
 // body-diagram-pieces, task 3.1). Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
-import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer } from "../../src/pieces/diagram";
+import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer, type StoreNodeParams } from "../../src/pieces/diagram";
 import { coverTree } from "../../src/pieces/cover";
 import { pill } from "../../src/pieces/library";
 import { toSvg } from "../../src/pieces/render";
@@ -87,15 +87,28 @@ describe("Store without words", () => {
   });
 
   test("Words asked of an empty store", () => {
-    const words = "needs text: it styles words that are not drawn";
-    expect(() => storeNode({ ...box, text: [] })).toThrow(/^storeNode: text:/);
-    expect(() => storeNode({ ...box, subtitle: "a" })).toThrow(new RangeError(`storeNode: subtitle: ${words}`));
-    expect(() => storeNode({ ...box, textSize: 20 })).toThrow(new RangeError(`storeNode: textSize: ${words}`));
-    expect(() => storeNode({ ...box, subtitle: "a", textSize: 20 })).toThrow(/^storeNode: subtitle:/);
-    expect(() => storeNode({ ...box, subtitle: "a", height: 10 })).toThrow(/^storeNode: subtitle:/);
-    expect(() => storeNode({ ...box, subtitle: "a", text: undefined })).toThrow(/^storeNode: subtitle:/);
-    expect(() => storeNode({ ...box, height: 10 })).toThrow(/^storeNode: height:/);
-    expect(() => storeNode({ ...box, ry: 20 })).toThrow(/^storeNode: ry:/);
+    /** The error a call throws: a RangeError, its message returned for the caller to match. */
+    const thrown = (params: Partial<StoreNodeParams>): string => {
+      try {
+        storeNode({ ...box, ...params });
+      } catch (error) {
+        expect(error).toBeInstanceOf(RangeError);
+        return (error as RangeError).message;
+      }
+      throw new Error(`no error for ${JSON.stringify(params)}`);
+    };
+    const noWords = (name: string) => `storeNode: ${name}: needs text: it styles words that are not drawn`;
+    expect(thrown({ text: [] })).toMatch(/^storeNode: text:/);
+    expect(thrown({ subtitle: "a" })).toBe(noWords("subtitle"));
+    expect(thrown({ textSize: 20 })).toBe(noWords("textSize"));
+    expect(thrown({ subtitle: "a", textSize: 20 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", height: 10 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", text: undefined })).toBe(noWords("subtitle"));
+    expect(thrown({ height: 10 })).toMatch(/^storeNode: height:/);
+    expect(thrown({ ry: 20 })).toMatch(/^storeNode: ry:/);
+    // The requirement's order beyond the scenario's eight calls: both words checks come before room and ry (code review, SW-248).
+    expect(thrown({ textSize: 20, height: 10 })).toBe(noWords("textSize"));
+    expect(thrown({ subtitle: "a", ry: 20 })).toBe(noWords("subtitle"));
   });
 });
 
