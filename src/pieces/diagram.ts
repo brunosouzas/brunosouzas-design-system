@@ -103,24 +103,32 @@ export const decisionNode = definePiece<ShapeParams & { height: number }>(
   (params) => limits(roomOn(params.width, params.height, params)),
 );
 
-export type StoreNodeParams = ShapeParams & { height: number; ry?: number };
-/** A store: a cylinder in its bounds, with the front of its lid. */
+export type StoreNodeParams = Omit<ShapeParams, "text"> & { text?: string[]; height: number; ry?: number };
+/** Without `text` a store draws no words, so the parameters that style them have nothing to style (change store-node-without-words). */
+const NO_WORDS = "needs text: it styles words that are not drawn";
+/** A store: a cylinder in its bounds, with the front of its lid; empty without `text`. */
 export const storeNode = definePiece<StoreNodeParams>(
   "storeNode",
-  { ...shapeSchema(true), ry: size() },
+  { ...shapeSchema(true), text: { ...lines(3), required: false }, ry: size() },
   (params) => {
-    const { x, y, width: w, height: h, text, subtitle, fill, ry = 8 } = params;
+    const { x, y, width: w, height: h, text = [], subtitle, fill, ry = 8 } = params;
     const c = coloursOf(fill, params);
     const { outline } = inkOf(params);
     const rx = r2(w / 2);
     const body: Shape = (dx, dy, attrs) =>
       el("path", { d: `M${r2(x + dx)},${r2(y + ry + dy)} A${rx},${ry} 0 0 1 ${r2(x + w + dx)},${r2(y + ry + dy)} V${r2(y + h - ry + dy)} A${rx},${ry} 0 0 1 ${r2(x + dx)},${r2(y + h - ry + dy)} Z`, ...attrs });
     const lid = el("path", { d: `M${r2(x)},${r2(y + ry)} A${rx},${ry} 0 0 0 ${r2(x + w)},${r2(y + ry)}`, fill: "none", stroke: inkOf(params).line, "stroke-width": r2(0.75 * outline) });
-    return drawn([...sticker(body, c.face, params), lid], centred(x + w / 2, y + (h + ry) / 2, text, subtitle, c, params.textSize));
+    return drawn([...sticker(body, c.face, params), lid], text.length === 0 ? [] : centred(x + w / 2, y + (h + ry) / 2, text, subtitle, c, params.textSize));
   },
   (params) => {
     const ry = params.ry ?? 8;
-    return limits(roomOn(params.width, params.height, params), ry > params.height / 4 && { path: "ry", message: `must be at most a quarter of the height (${r2(params.height / 4)}), found ${r2(ry)}` });
+    const empty = params.text === undefined;
+    return limits(
+      empty && params.subtitle !== undefined && { path: "subtitle", message: NO_WORDS },
+      empty && params.textSize !== undefined && { path: "textSize", message: NO_WORDS },
+      roomOn(params.width, params.height, params),
+      ry > params.height / 4 && { path: "ry", message: `must be at most a quarter of the height (${r2(params.height / 4)}), found ${r2(ry)}` },
+    );
   },
 );
 

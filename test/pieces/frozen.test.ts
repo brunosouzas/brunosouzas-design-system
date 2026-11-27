@@ -1,8 +1,8 @@
 // Calls valid in an earlier release still draw the trees (and SVG bytes) pinned
 // in the frozen fixtures (spec illustration-pieces, "Existing calls unchanged",
 // "UI icon calls of 0.3.0 unchanged", "Message arrow calls of 0.3.1 unchanged",
-// "Piece calls of 0.5.0 unchanged"). Each fixture was first written by its
-// freeze script on the release it names (scripts/freeze-pieces.ts on 897f2ff,
+// "Piece calls of 0.5.0 unchanged", "Store node calls of 0.14.1 unchanged").
+// Each fixture was first written by its freeze script on the release it names (scripts/freeze-pieces.ts on 897f2ff,
 // scripts/freeze-ui-icons.ts on 2bfe4a5, scripts/freeze-message-arrow.ts on the
 // 0.3.1 tree, scripts/freeze-pieces-0.5.0.ts on f91ba2e), and re-run once for
 // 0.7.0 (change identity-v2-type-pieces-cleanup, task 5.6) from the drawing the
@@ -18,6 +18,7 @@ import { PIECES, type PieceName } from "../../src/pieces/library";
 import { g, type SvgNode } from "../../src/pieces/node";
 import { toSvg } from "../../src/pieces/render";
 import { stamp, type StampParams } from "../../src/pieces/stamp";
+import { storeNode, type StoreNodeParams } from "../../src/pieces/diagram";
 
 type Frozen = { piece: PieceName; params: Record<string, unknown>; tree: unknown };
 type FrozenSvg = Frozen & { svg: string };
@@ -177,5 +178,27 @@ describe("Stamp calls of 0.12.0 unchanged", () => {
     const defaultRotate = frozenStamp.filter(({ params }) => params.rotate === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
     expect(defaultRotate).toHaveLength(4);
     expect(changedCalls(frozenStamp, altered)).toEqual(defaultRotate);
+  });
+});
+
+// Change store-node-without-words (SW-248), task 1.2: spec illustration-pieces, "Store node calls of 0.14.1
+// unchanged". The fixture was written by scripts/freeze-store-node.ts while src/ and tokens/ equalled 0.14.1
+// (d334273), before `text` became optional; its `svg` is the body then the text nodes through toSvg (`svgOf`).
+const frozenStore = load<FrozenSvg[]>("store-node-0.14.1");
+const drawStore: Draw = (_piece, params) => storeNode(params as StoreNodeParams);
+
+describe("Store node calls of 0.14.1 unchanged", () => {
+  test("Frozen store node calls", () => {
+    expect(frozenStore).toHaveLength(8);
+    expect(frozenStore.every(({ piece }) => piece === "storeNode")).toBe(true);
+    expect(changedCalls(frozenStore, drawStore)).toEqual([]);
+  });
+
+  test("A changed store node is caught", () => {
+    // The default ry drawn as 9 instead of 8: every call that sets no ry differs, the one with ry 15 does not.
+    const altered: Draw = (_piece, params) => storeNode({ ry: 9, ...params } as StoreNodeParams);
+    const defaultRy = frozenStore.filter(({ params }) => params.ry === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
+    expect(defaultRy).toHaveLength(7);
+    expect(changedCalls(frozenStore, altered)).toEqual(defaultRy);
   });
 });

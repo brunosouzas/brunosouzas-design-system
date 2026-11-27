@@ -1,7 +1,7 @@
 // Unit tests of the body diagram pieces (spec illustration-pieces, change
 // body-diagram-pieces, task 3.1). Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
-import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer } from "../../src/pieces/diagram";
+import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer, type StoreNodeParams } from "../../src/pieces/diagram";
 import { coverTree } from "../../src/pieces/cover";
 import { pill } from "../../src/pieces/library";
 import { toSvg } from "../../src/pieces/render";
@@ -64,6 +64,51 @@ describe("Diagram shapes", () => {
   test("Queue as narrow as its rails allow", () => {
     expect(() => queueNode({ x: 0, y: 0, width: 31, height: 12, text: ["a"] })).toThrow(/^queueNode: width:/);
     expect(queueNode({ x: 0, y: 0, width: 32, height: 12, text: ["a"] }).body.at(-1)!.attrs.d).toBe("M10,0 V12 M22,0 V12");
+  });
+});
+
+// Change store-node-without-words (SW-248), task 2.1: spec illustration-pieces, "Store without words".
+describe("Store without words", () => {
+  const box = { x: 0, y: 0, width: 100, height: 60 };
+
+  test("Empty store", () => {
+    const { body, text } = storeNode({ ...box, fill: "color.state.healthy" });
+    expect(body.map((n) => n.attrs.d)).toEqual(["M0,8 A50,8 0 0 1 100,8 V52 A50,8 0 0 1 0,52 Z", "M0,8 A50,8 0 0 0 100,8"]);
+    expect(body[0].attrs.fill).toBe("#3DDC84");
+    expect(body).toEqual(storeNode({ ...box, fill: "color.state.healthy", text: ["IDs"] }).body);
+    expect(text).toEqual([]);
+  });
+
+  test("Empty store on the dark surface", () => {
+    const { body, text } = storeNode({ ...box, surface: "dark", inkScale: 2 });
+    expect(body).toEqual(storeNode({ ...box, surface: "dark", inkScale: 2, text: ["IDs"] }).body);
+    expect(body[0].attrs).toMatchObject({ fill: "#1D1C1A", stroke: "#ADA79D" });
+    expect(text).toEqual([]);
+  });
+
+  test("Words asked of an empty store", () => {
+    /** The error a call throws: a RangeError, its message returned for the caller to match. */
+    const thrown = (params: Partial<StoreNodeParams>): string => {
+      try {
+        storeNode({ ...box, ...params });
+      } catch (error) {
+        expect(error).toBeInstanceOf(RangeError);
+        return (error as RangeError).message;
+      }
+      throw new Error(`no error for ${JSON.stringify(params)}`);
+    };
+    const noWords = (name: string) => `storeNode: ${name}: needs text: it styles words that are not drawn`;
+    expect(thrown({ text: [] })).toMatch(/^storeNode: text:/);
+    expect(thrown({ subtitle: "a" })).toBe(noWords("subtitle"));
+    expect(thrown({ textSize: 20 })).toBe(noWords("textSize"));
+    expect(thrown({ subtitle: "a", textSize: 20 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", height: 10 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", text: undefined })).toBe(noWords("subtitle"));
+    expect(thrown({ height: 10 })).toMatch(/^storeNode: height:/);
+    expect(thrown({ ry: 20 })).toMatch(/^storeNode: ry:/);
+    // The requirement's order beyond the scenario's eight calls: both words checks come before room and ry (code review, SW-248).
+    expect(thrown({ textSize: 20, height: 10 })).toBe(noWords("textSize"));
+    expect(thrown({ subtitle: "a", ry: 20 })).toBe(noWords("subtitle"));
   });
 });
 
