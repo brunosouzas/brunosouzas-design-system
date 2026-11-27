@@ -185,6 +185,8 @@ How things move: the stage nodes (`sender`, `channel`, `receiver`, `store`) and 
 
 ## 7. Open points for G1
 
+**Answered by the owner on 2026-11-27** (gate 1 on commit `42544d9`): every recommendation, (a) for points 1, 3, 4, 6 and 7, (b) for points 5 and 8. Points 1, 3, 6 and 7 are what the scene already does, and point 4 leaves the shared builder to the second book scene. Points 5 and 8 need pieces the package does not have yet: `queueNode` cannot be drawn without words (its `text` is required, as `storeNode`'s was before SW-248) and `eipIcon` still draws the offset shadows. Both come first in a design-system change of their own, as SW-248 did; this branch then takes them from `main` (task 4.4a).
+
 1. **The match.** The store and its `42` come into focus while the lookup finds 42 (`matchFocus`, §2.5), new since gate 0. Options: (a) keep the focus; (b) only the solid lookup arrow, no focus. Recommended: (a), the found ID is the beat line 28 turns on.
 2. **Length.** Answered by the owner on 2026-11-27: understanding before length (§2.8); the scene is 30 s.
 3. **The copy in the channel** (§2.6) rather than two tokens leaving together. Options: (a) the copy appears in the channel once the first delivery leaves; (b) two tokens leave the channel side by side, as the sheet drew them. Recommended: (a).
