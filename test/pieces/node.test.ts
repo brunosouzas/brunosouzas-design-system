@@ -5,6 +5,7 @@ import { tokens } from "../../tokens/generated/tokens";
 import { lineBadge, pill, PIECES, PIECE_NAMES, sheet } from "../../src/pieces/library";
 import { SVG_TAGS, el, shadowed, type SvgNode } from "../../src/pieces/node";
 import { REQUIRED_ONLY } from "./required-only";
+import { shadowIndexes } from "./eip-shadows";
 
 describe("SVG node tree", () => {
   test("Shapes and words apart", () => {
@@ -74,6 +75,15 @@ describe("No hard offset shadow", () => {
         const children = (group.children as readonly (SvgNode | string)[]).filter((child): child is SvgNode => typeof child !== "string");
         children.slice(0, -1).forEach((node, i) => expect(isShadowOf(node, children[i + 1]), `${name}: ${JSON.stringify(node.attrs)}`).toBe(false));
       }
+    }
+    // Change flat-eip-icons-and-empty-queue, task 2.1: the icon's own copies, which isShadowOf does not see
+    // (the shadow rule of "EIP icons without offset shadows"), in eipIcon and in nameTag's icon (splitter).
+    expect(REQUIRED_ONLY.nameTag.icon).toBe("splitter");
+    for (const name of ["eipIcon", "nameTag"] as const) {
+      const drawn = (PIECES[name] as (params: object) => { body: readonly SvgNode[] })(REQUIRED_ONLY[name]);
+      const icons = nodesOf(drawn.body).filter((node) => node.tag === "g" && node.attrs.stroke === "none" && /^translate\(.*\) scale\(/.test(String(node.attrs.transform)));
+      expect(icons, name).toHaveLength(1);
+      expect(shadowIndexes(icons[0].children.filter((child): child is SvgNode => typeof child !== "string")), name).toEqual([]);
     }
   });
 

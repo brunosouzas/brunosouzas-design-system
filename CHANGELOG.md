@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.15.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.14.1...v0.15.0) (2026-11-28)
+
+
+### Features
+
+* EIP icons without offset shadows, queueNode without words (SW-249) ([#56](https://github.com/brunosouzas/brunosouzas-design-system/issues/56)) ([5d19585](https://github.com/brunosouzas/brunosouzas-design-system/commit/5d19585c6282386cbced630757c7c68bb602da90))
+* storeNode without words, an empty store (SW-248) ([#54](https://github.com/brunosouzas/brunosouzas-design-system/issues/54)) ([d26f254](https://github.com/brunosouzas/brunosouzas-design-system/commit/d26f254e70262a59d91e68f442643999c546bdd6))
+
 ## [0.14.1](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.14.0...v0.14.1) (2026-11-26)
 
 

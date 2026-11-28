@@ -104,7 +104,7 @@ export const decisionNode = definePiece<ShapeParams & { height: number }>(
 );
 
 export type StoreNodeParams = Omit<ShapeParams, "text"> & { text?: string[]; height: number; ry?: number };
-/** Without `text` a store draws no words, so the parameters that style them have nothing to style (change store-node-without-words). */
+/** Without `text` a store or a queue draws no words, so the parameters that style them have nothing to style (changes store-node-without-words, flat-eip-icons-and-empty-queue). */
 const NO_WORDS = "needs text: it styles words that are not drawn";
 /** A store: a cylinder in its bounds, with the front of its lid; empty without `text`. */
 export const storeNode = definePiece<StoreNodeParams>(
@@ -133,21 +133,25 @@ export const storeNode = definePiece<StoreNodeParams>(
 );
 
 const RAIL = 10;
-/** A queue: a box with a rail 10 in from each side. */
-export const queueNode = definePiece<ShapeParams>(
+export type QueueNodeParams = Omit<ShapeParams, "text"> & { text?: string[] };
+/** A queue: a box with a rail 10 in from each side; empty without `text`. */
+export const queueNode = definePiece<QueueNodeParams>(
   "queueNode",
-  shapeSchema(false),
+  { ...shapeSchema(false), text: { ...lines(3), required: false } },
   (params) => {
-    const { x, y, width: w, height: h = M.nodeHeight, text, subtitle, fill } = params;
+    const { x, y, width: w, height: h = M.nodeHeight, text = [], subtitle, fill } = params;
     const c = coloursOf(fill, params);
     const { outline } = inkOf(params);
     const rails = el("path", { d: `M${r2(x + RAIL)},${r2(y)} V${r2(y + h)} M${r2(x + w - RAIL)},${r2(y)} V${r2(y + h)}`, fill: "none", stroke: inkOf(params).line, "stroke-width": r2(0.75 * outline) });
-    return drawn([...sticker(rect(x, y, w, h, tokens.radius.small), c.face, params), rails], centred(x + w / 2, y + h / 2, text, subtitle, c, params.textSize));
+    return drawn([...sticker(rect(x, y, w, h, tokens.radius.small), c.face, params), rails], text.length === 0 ? [] : centred(x + w / 2, y + h / 2, text, subtitle, c, params.textSize));
   },
   (params) => {
     const height = params.height ?? M.nodeHeight;
     const least = Math.max(height, 2 * RAIL + 4 * inkOf(params).outline);
+    const empty = params.text === undefined;
     return limits(
+      empty && params.subtitle !== undefined && { path: "subtitle", message: NO_WORDS },
+      empty && params.textSize !== undefined && { path: "textSize", message: NO_WORDS },
       roomFor("height", height, params),
       params.width < least && { path: "width", message: `must be at least the height and leave room for the rails (${r2(least)}), found ${r2(params.width)}` },
     );
