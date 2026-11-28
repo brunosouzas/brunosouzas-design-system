@@ -19,7 +19,7 @@ import { PIECES, type PieceName } from "../../src/pieces/library";
 import { g, type SvgNode } from "../../src/pieces/node";
 import { toSvg } from "../../src/pieces/render";
 import { stamp, type StampParams } from "../../src/pieces/stamp";
-import { queueNode, storeNode, type StoreNodeParams } from "../../src/pieces/diagram";
+import { queueNode, storeNode, type QueueNodeParams, type StoreNodeParams } from "../../src/pieces/diagram";
 
 type Frozen = { piece: PieceName; params: Record<string, unknown>; tree: unknown };
 type FrozenSvg = Frozen & { svg: string };
@@ -209,7 +209,7 @@ describe("Store node calls of 0.14.1 unchanged", () => {
 // where queueNode draws as in 0.14.1, before `text` became optional; its `svg` is the body then the text nodes
 // through toSvg (`svgOf`).
 const frozenQueue = load<FrozenSvg[]>("queue-node-0.14.1");
-const drawQueue: Draw = (_piece, params) => queueNode(params as Parameters<typeof queueNode>[0]);
+const drawQueue: Draw = (_piece, params) => queueNode(params as QueueNodeParams);
 
 describe("Queue node calls of 0.14.1 unchanged", () => {
   test("Frozen queue node calls", () => {
@@ -220,7 +220,7 @@ describe("Queue node calls of 0.14.1 unchanged", () => {
 
   test("A changed queue node is caught", () => {
     // The default height drawn as 47 instead of 46: every call that sets no height differs, the others do not.
-    const altered: Draw = (_piece, params) => queueNode({ height: 47, ...params } as Parameters<typeof queueNode>[0]);
+    const altered: Draw = (_piece, params) => queueNode({ height: 47, ...params } as QueueNodeParams);
     const defaultHeight = frozenQueue.filter(({ params }) => params.height === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
     expect(defaultHeight).toHaveLength(4);
     expect(changedCalls(frozenQueue, altered)).toEqual(defaultHeight);

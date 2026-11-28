@@ -287,8 +287,13 @@ describe("Words come from the caller", () => {
   });
 
   test("No piece invents a word", () => {
-    // storeNode draws no words from its required-only call since text became optional, so it is checked again with words (SW-248).
-    const calls: [P.PieceName, Record<string, unknown>][] = [...P.PIECE_NAMES.map((name): [P.PieceName, Record<string, unknown>] => [name, REQUIRED_ONLY[name]]), ["storeNode", { ...REQUIRED_ONLY.storeNode, text: ["a"] }]];
+    // storeNode and queueNode draw no words from their required-only calls since text became optional, so each is
+    // checked again with words (SW-248, SW-249).
+    const calls: [P.PieceName, Record<string, unknown>][] = [
+      ...P.PIECE_NAMES.map((name): [P.PieceName, Record<string, unknown>] => [name, REQUIRED_ONLY[name]]),
+      ["storeNode", { ...REQUIRED_ONLY.storeNode, text: ["a"] }],
+      ["queueNode", { ...REQUIRED_ONLY.queueNode, text: ["a"] }],
+    ];
     for (const [name, params] of calls) {
       const words: string[] = [];
       walk(call(name, params).text, (node) => words.push(...node.children.filter((c): c is string => typeof c === "string")));
