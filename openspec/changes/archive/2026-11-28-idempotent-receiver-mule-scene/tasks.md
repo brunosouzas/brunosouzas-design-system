@@ -28,7 +28,7 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 - [x] 4.3 Local: the stills sheet into `docs/spikes/2026-11-28-idempotent-receiver-mule/` for gate 1.
 - [x] 4.4 Gate 1: the owner reads the spec and the stills' sheet; the answers (design §7) change the spec and the code in this branch, and a comment names the approved commit. Done 2026-11-28 on `9c4b5e3`: every recommendation (design §7).
 - [x] 4.5 Local, after gate 1: `npm run render -- idempotent-receiver-mule`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet, each frame extracted at `(f − 0.1)/30`; frames 1250 and 1349 rendered with `npx remotion still` and compared byte for byte. This proves "Idempotent Receiver Mule video verified from output (local)" (SCN-4, SCN-5). Done 2026-11-28: 19 s, master 28.6 MB, web 917 KB, 1920 × 1080, 30 fps, 45.0 s, no audio stream; frames 1250 and 1349 byte-identical (spike README).
-- [ ] 4.6 The owner's look at the video (G3): the web MP4, its sheets and the Studio. The owner's answers change the spec and the code in this branch before the archive.
+- [x] 4.6 The owner's look at the video (G3): the web MP4, its sheets and the Studio. The owner's answers change the spec and the code in this branch before the archive. Done 2026-11-28 on `fe0bc50`: approved, no change.
 
 ## 5. Checks, docs and review
 
@@ -36,4 +36,4 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 - [x] 5.2 Local: "Stills byte-identical (local)": the stills of the seven other scenes on `origin/main` and on the branch, compared by SHA-256. Done 2026-11-28: 116 stills identical against `2df19be`.
 - [x] 5.3 Docs (proposal "Documentation"): `README.md` (the scene row, its commands and files, the Mule scene type) and `docs/roadmap.md` (the Idempotent Receiver row).
 - [x] 5.4 Code review by a clean-context reviewer, at most two rounds; fix every right high and medium. Done 2026-11-28: round 1 on `820ea1f`, NO-GO with 3 medium and 2 low, no high and no behaviour defect; all fixed in `a635729` and the next commit; each of the reviewer's ten mutations now fails a test. No high, so no second round.
-- [ ] 5.5 After G3: `openspec archive idempotent-receiver-mule-scene -y`, then `openspec validate --all --strict`.
+- [x] 5.5 After G3: `openspec archive idempotent-receiver-mule-scene -y`, then `openspec validate --all --strict`. Done 2026-11-28.

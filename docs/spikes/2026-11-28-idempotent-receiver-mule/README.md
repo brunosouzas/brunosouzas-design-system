@@ -12,4 +12,6 @@ Timing on an Apple M5: the 18 stills took 30 s with the bundle cached. The owner
 
 **Render (task 4.5), Apple M5, 2026-11-28, on `9c4b5e3`'s scene code (unchanged since):** `npm run render -- idempotent-receiver-mule` took 19 s for the composition; master 28.6 MB, web copy 917 KB; both 1920 × 1080, 30 fps, 45.0 s (1350 frames), one video stream and no audio stream (SCN-5). Frames 1250 and 1349 rendered as PNGs with `npx remotion still` are byte-identical (SHA-256 `1dd952c9…ef1c4`, SCN-4). The stills of the seven other scenes (116 PNGs) are byte-identical on this branch and on `origin/main` (`2df19be`). The rendered videos are build outputs and are not committed.
 
+The owner approved the video (G3) on `fe0bc50` on 2026-11-28, with no change.
+
 Review it frame by frame with `npm run studio` (folder `idempotent-receiver-mule`).
