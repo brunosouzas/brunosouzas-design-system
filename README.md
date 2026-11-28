@@ -226,7 +226,7 @@ const badge = lineBadge({ x: 250, y: 40, text: "SH", fill: "#7B3FE4", surface: "
 
 ### Body diagrams
 
-Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagramBox` (a box or pill with a fill and centred lines), `decisionNode` (diamond), `storeNode` (cylinder; its words are optional, so a store can be drawn empty), `queueNode` (box with two rails), `exchangeNode` (hexagon), `taggedContainer` (a frame with its name on a tab), `lifeline` (dashed, or sparse dots once nothing calls it), `phaseBand` (a pill across a sequence in its state's colour), `altFrame` (alt/else frame with a tag and condition per part) and `edgeLabel` (words next to an arrow, optionally on a backdrop). They take `surface` and, the stickers, `inkScale`, like the map pieces, and paint what the caller lays out.
+Ten pieces draw what the blog's body diagrams need beyond the map pieces: `diagramBox` (a box or pill with a fill and centred lines), `decisionNode` (diamond), `storeNode` (cylinder), `queueNode` (box with two rails), `exchangeNode` (hexagon), `taggedContainer` (a frame with its name on a tab), `lifeline` (dashed, or sparse dots once nothing calls it), `phaseBand` (a pill across a sequence in its state's colour), `altFrame` (alt/else frame with a tag and condition per part) and `edgeLabel` (words next to an arrow, optionally on a backdrop). They take `surface` and, the stickers, `inkScale`, like the map pieces, and paint what the caller lays out. The words of `storeNode` and `queueNode` are optional, so a store or a queue can be drawn empty: the same body with no text, and `subtitle` or `textSize` without `text` is an error.
 
 - The shapes take one to three centred lines (`text`), an optional `subtitle` and `textSize`. Without `fill` the face is the surface's panel; with a fill, every word is ink.
 - Backticks mark code: `` "adopts a `correlationId`" `` draws `correlationId` in the monospace stack, as a `tspan`. An odd number of backticks is drawn as is. The cover `pill` follows the same rule (`` "`main`" ``).
@@ -418,7 +418,7 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 
 ### EIP icons
 
-`src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description.
+`src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description. Like every other piece, they draw no hard offset shadow (ADR 0009): the 46 ink copies the published notation drew under its faces were removed in change `flat-eip-icons-and-empty-queue`, so `eipIcon`, `nameTag` and any cover or scene that draws an icon look flat from the next release. A test (`test/pieces/eip-shadows.ts`) finds any such copy again.
 
 ## Upgrading to 0.13.0
 

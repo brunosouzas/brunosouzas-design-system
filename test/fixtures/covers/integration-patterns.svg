@@ -32,12 +32,6 @@
     <rect x="104" y="102" width="20" height="200" rx="8" fill="#121212"/>
     <path d="M228,118 V296 M232,122 V300" stroke-width="2"/>
     <g transform="translate(132 140) scale(0.66)" stroke="none">
-      <g transform="translate(1.8 1.8)">
-        <path d="M4,20 H20 M20,7 V33 M20,7 H50 M20,20 H50 M20,33 H50" fill="none" stroke="#121212" stroke-width="6.2" stroke-linecap="butt" stroke-linejoin="round"/>
-        <polygon points="59.00,7.00 51.00,11.96 51.00,2.04" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
-        <polygon points="59.00,20.00 51.00,24.96 51.00,15.04" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
-        <polygon points="59.00,33.00 51.00,37.96 51.00,28.04" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
-      </g>
       <g>
         <path d="M4,20 H20 M20,7 V33 M20,7 H50 M20,20 H50 M20,33 H50" fill="none" stroke="#121212" stroke-width="6.2" stroke-linecap="butt" stroke-linejoin="round"/>
         <polygon points="59.00,7.00 51.00,11.96 51.00,2.04" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
@@ -52,7 +46,6 @@
       </g>
     </g>
     <g transform="translate(178 140) scale(0.66)" stroke="none">
-      <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
       <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
       <polyline points="6,20 17,20" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       <polygon points="17.00,17.40 19.60,20.00 17.00,22.60 14.40,20.00" fill="#121212"/>
@@ -65,7 +58,6 @@
       <polyline points="39,28.5 58,28.5" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
     </g>
     <g transform="translate(132 190) scale(0.66)" stroke="none">
-      <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
       <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
       <rect x="16" y="15.5" width="8" height="8" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
       <polyline points="26.5,19.5 35.5,19.5" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -75,14 +67,11 @@
       <rect x="42" y="25" width="6" height="6" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
     </g>
     <g transform="translate(178 190) scale(0.66)" stroke="none">
-      <path d="M9,4.5 H53 A2.9250000000000003,6.5 0 0 1 53,17.5 H9 A2.9250000000000003,6.5 0 0 1 9,4.5 Z" fill="#121212" transform="translate(2 2)"/>
       <path d="M9,4.5 H53 A2.9250000000000003,6.5 0 0 1 53,17.5 H9 A2.9250000000000003,6.5 0 0 1 9,4.5 Z" fill="#D7D1C5" stroke="#121212" stroke-width="1.75" stroke-linejoin="round"/>
       <ellipse cx="53" cy="11" rx="2.9250000000000003" ry="6.5" fill="#FFFFFF" stroke="#121212" stroke-width="1.75"/>
-      <polygon points="40.73,32.67 36.67,36.73 30.93,36.73 26.87,32.67 26.87,26.93 30.93,22.87 36.67,22.87 40.73,26.93" fill="#121212"/>
       <polygon points="38.93,30.87 34.87,34.93 29.13,34.93 25.07,30.87 25.07,25.13 29.13,21.07 34.87,21.07 38.93,25.13" fill="#FF6B6B" stroke="#121212" stroke-width="1.75" stroke-linejoin="round"/>
     </g>
     <g transform="translate(132 240) scale(0.66)" stroke="none">
-      <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
       <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
       <rect x="11" y="8" width="17" height="22" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
       <rect x="36" y="8" width="17" height="22" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
@@ -90,12 +79,7 @@
       <polyline points="13.5,27.5 50.5,10.5" fill="none" stroke="#121212" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
     </g>
     <g transform="translate(178 240) scale(0.66)" stroke="none">
-      <rect x="18.5" y="11.5" width="42" height="27" rx="3" fill="#121212"/>
       <rect x="16" y="9" width="42" height="27" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
-      <g transform="translate(1.8 1.8)">
-        <path d="M3,23 H27" fill="none" stroke="#121212" stroke-width="6.6" stroke-linecap="butt" stroke-linejoin="round"/>
-        <polygon points="36.00,23.00 27.00,28.58 27.00,17.42" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
-      </g>
       <g>
         <path d="M3,23 H27" fill="none" stroke="#121212" stroke-width="6.6" stroke-linecap="butt" stroke-linejoin="round"/>
         <polygon points="36.00,23.00 27.00,28.58 27.00,17.42" fill="#121212" stroke="#121212" stroke-width="3" stroke-linejoin="round"/>
@@ -105,7 +89,6 @@
         <polygon points="36.00,23.00 27.00,28.58 27.00,17.42" fill="#D7D1C5"/>
       </g>
       <rect x="38.5" y="17" width="12" height="12" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
-      <circle cx="17.8" cy="11.3" r="7.6" fill="#121212"/>
       <circle cx="16" cy="9.5" r="7.6" fill="#D7D1C5" stroke="#121212" stroke-width="1.75"/>
       <polyline points="13.6,7.6 16.4,5.4 16.4,13.8" fill="none" stroke="#121212" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
       <polyline points="13.8,13.8 19,13.8" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -128,7 +111,6 @@
       <path d="M307,246 L325,232 H385 L403,246 V318 Q403,324 397,324 H313 Q307,324 307,318 Z" fill="#FFFFFF"/>
       <circle cx="355" cy="246" r="5" fill="#FFFFFF" stroke-width="3"/>
       <g transform="translate(317 259) scale(1.18)" stroke="none">
-        <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
         <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
         <polyline points="6,19 14,19" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
         <polyline points="50,19 58,19" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
@@ -147,7 +129,6 @@
       <path d="M437,246 L455,232 H515 L533,246 V318 Q533,324 527,324 H443 Q437,324 437,318 Z" fill="#FFFFFF"/>
       <circle cx="485" cy="246" r="5" fill="#FFFFFF" stroke-width="3"/>
       <g transform="translate(447 259) scale(1.18)" stroke="none">
-        <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
         <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
         <polyline points="6,20 17,20" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
         <polygon points="17.00,17.40 19.60,20.00 17.00,22.60 14.40,20.00" fill="#121212"/>
@@ -165,7 +146,6 @@
       <path d="M567,246 L585,232 H645 L663,246 V318 Q663,324 657,324 H573 Q567,324 567,318 Z" fill="#FFFFFF"/>
       <circle cx="615" cy="246" r="5" fill="#FFFFFF" stroke-width="3"/>
       <g transform="translate(577 259) scale(1.18)" stroke="none">
-        <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
         <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
         <rect x="16" y="15.5" width="8" height="8" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
         <polyline points="26.5,19.5 35.5,19.5" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
