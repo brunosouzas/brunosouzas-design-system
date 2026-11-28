@@ -97,7 +97,7 @@ In take 1 the request SHALL leave Balão and reach the validator; the lookup SHA
 #### Scenario: The store in focus at each match
 - **GIVEN** every frame from 0 to 1349
 - **WHEN** the store's focus scale is read
-- **THEN** it is 1 before 425, from 495 to 609, from 670 to 1054 and from 1125; exactly 1.06 from 455 to 465 and from 1085 to 1095; and at 460 the store and the stored ID are drawn scaled 1.06 about (533, 435), at 400 without a transform
+- **THEN** it is 1 before 425, from 495 to 609, from 670 to 1054 and from 1125; exactly 1.06 from 455 to 465 and from 1085 to 1095; and at 460 the store and the stored ID are drawn scaled 1.06 about (533, 435), at 400 without a transform; from 420 to 499 and from 1050 to 1129 the store is drawn at its focus scale, on the spring's rise and fall too
 
 ### Requirement: Idempotent Receiver Mule rewind
 From 610 to 669 the stage, Balão included, except the badge, the rewind mark and the emote SHALL be drawn from an object frame playing take 1 backwards from 609 to 39, the stage take 2 starts from. The rewind mark SHALL pop at 610 and leave at 670; the badge SHALL read `1` until 659 and `2` from 660 without a new pop-in.
@@ -106,6 +106,11 @@ From 610 to 669 the stage, Balão included, except the badge, the rewind mark an
 - **GIVEN** frames 609, 610, 640 and 669
 - **WHEN** the object frame is read
 - **THEN** it is 609, 609, 319 and 39
+
+#### Scenario: The rewind draws take 1 backwards
+- **GIVEN** every frame f from 610 to 669
+- **WHEN** its stage is compared with the stage of its object frame
+- **THEN** the `below`, `nodes` and `tokens` layers, Balão as drawn and the guides are equal; no emote is drawn; Balão is drawn with the reverse cast's face and speech: `done` from 639 to 645 and speaking at 635–637 and 667–668; the `200` is drawn at 640 and the `?` at 658 (object frame 145)
 
 #### Scenario: Same stage before each take
 - **GIVEN** frames 39 and 669
