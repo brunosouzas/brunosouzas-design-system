@@ -35,7 +35,7 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 ## 5. Checks, docs and review
 
 - [x] 5.1 `npm run typecheck && npm run tokens:check && npm run build && npm test` and `openspec validate --all --strict`: all pass. With `git diff origin/main...HEAD --stat -- src/scenes` this proves "Other scenes untouched".
-- [x] 5.2 Local: "Stills byte-identical (local)": the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay`, `sdd-scene-2-files`, `sdd-scene-3-archive` and `circuit-breaker-topology` on `origin/main` (`d26f254`) and on the branch, compared by SHA-256. Done 2026-11-27: 102 stills, every pair equal.
+- [x] 5.2 Local: "Stills byte-identical (local)": the stills of `circuit-breaker-states`, `publish-subscribe`, `sdd-request-relay`, `sdd-scene-2-files`, `sdd-scene-3-archive` and `circuit-breaker-topology` on `origin/main` (`d26f254`) and on the branch, compared by SHA-256. Done 2026-11-27: 102 stills, every pair equal. Again on 2026-11-28 against `origin/main` at `4caa26c` (0.15.0), after the code review: 102 stills, every pair equal.
 - [x] 5.3 Docs (proposal "Documentation"): `README.md` (the scene row, its files, the book scene type) and `docs/roadmap.md` (the Idempotent Receiver row).
-- [ ] 5.4 Code review by a clean-context reviewer, at most two rounds; fix every right high and medium.
+- [x] 5.4 Code review by a clean-context reviewer, at most two rounds; fix every right high and medium. Done 2026-11-28: round 1 on `c474687`, NO-GO with 3 medium and 5 low, all fixed in `6dd5cce`; no high, so no second round.
 - [ ] 5.5 After G3: `openspec archive idempotent-receiver-book-scene -y`, then `openspec validate --all --strict`.
