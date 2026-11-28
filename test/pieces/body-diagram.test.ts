@@ -1,7 +1,7 @@
 // Unit tests of the body diagram pieces (spec illustration-pieces, change
 // body-diagram-pieces, task 3.1). Each test title is the spec scenario it proves.
 import { describe, expect, test } from "vitest";
-import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer, type StoreNodeParams } from "../../src/pieces/diagram";
+import { altFrame, decisionNode, diagramBox, edgeLabel, exchangeNode, lifeline, phaseBand, queueNode, stateStart, storeNode, taggedContainer, type QueueNodeParams, type StoreNodeParams } from "../../src/pieces/diagram";
 import { coverTree } from "../../src/pieces/cover";
 import { pill } from "../../src/pieces/library";
 import { toSvg } from "../../src/pieces/render";
@@ -109,6 +109,50 @@ describe("Store without words", () => {
     // The requirement's order beyond the scenario's eight calls: both words checks come before room and ry (code review, SW-248).
     expect(thrown({ textSize: 20, height: 10 })).toBe(noWords("textSize"));
     expect(thrown({ subtitle: "a", ry: 20 })).toBe(noWords("subtitle"));
+  });
+});
+
+// Change flat-eip-icons-and-empty-queue (SW-249), task 2.2: spec illustration-pieces, "Queue without words".
+describe("Queue without words", () => {
+  const box = { x: 0, y: 0, width: 100 };
+
+  test("Empty queue", () => {
+    const { body, text } = queueNode(box);
+    expect(body.map((n) => [n.tag, n.attrs.width, n.attrs.height, n.attrs.rx, n.attrs.fill, n.attrs.d])).toEqual([
+      ["rect", 100, 46, 6, "#FFFFFF", undefined],
+      ["path", undefined, undefined, undefined, "none", "M10,0 V46 M90,0 V46"],
+    ]);
+    expect(body).toEqual(queueNode({ ...box, text: ["orders"] }).body);
+    expect(text).toEqual([]);
+  });
+
+  test("Empty queue on the dark surface", () => {
+    const { body, text } = queueNode({ ...box, surface: "dark", inkScale: 2 });
+    expect(body).toEqual(queueNode({ ...box, surface: "dark", inkScale: 2, text: ["orders"] }).body);
+    expect(body[0].attrs).toMatchObject({ fill: "#1D1C1A", stroke: "#ADA79D" });
+    expect(text).toEqual([]);
+  });
+
+  test("Words asked of an empty queue", () => {
+    /** The error a call throws: a RangeError, its message returned for the caller to match. */
+    const thrown = (params: Partial<QueueNodeParams>): string => {
+      try {
+        queueNode({ ...box, ...params });
+      } catch (error) {
+        expect(error).toBeInstanceOf(RangeError);
+        return (error as RangeError).message;
+      }
+      throw new Error(`no error for ${JSON.stringify(params)}`);
+    };
+    const noWords = (name: string) => `queueNode: ${name}: needs text: it styles words that are not drawn`;
+    expect(thrown({ text: [] })).toMatch(/^queueNode: text:/);
+    expect(thrown({ subtitle: "a" })).toBe(noWords("subtitle"));
+    expect(thrown({ textSize: 20 })).toBe(noWords("textSize"));
+    expect(thrown({ subtitle: "a", textSize: 20 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", width: 40 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", text: undefined })).toBe(noWords("subtitle"));
+    expect(thrown({ width: 40 })).toMatch(/^queueNode: width:/);
+    expect(thrown({ height: 10 })).toMatch(/^queueNode: height:/);
   });
 });
 

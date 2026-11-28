@@ -1,7 +1,8 @@
 // Calls valid in an earlier release still draw the trees (and SVG bytes) pinned
 // in the frozen fixtures (spec illustration-pieces, "Existing calls unchanged",
 // "UI icon calls of 0.3.0 unchanged", "Message arrow calls of 0.3.1 unchanged",
-// "Piece calls of 0.5.0 unchanged", "Store node calls of 0.14.1 unchanged").
+// "Piece calls of 0.5.0 unchanged", "Store node calls of 0.14.1 unchanged", "Queue node calls of 0.14.1
+// unchanged").
 // Each fixture was first written by its freeze script on the release it names (scripts/freeze-pieces.ts on 897f2ff,
 // scripts/freeze-ui-icons.ts on 2bfe4a5, scripts/freeze-message-arrow.ts on the
 // 0.3.1 tree, scripts/freeze-pieces-0.5.0.ts on f91ba2e), and re-run once for
@@ -18,7 +19,7 @@ import { PIECES, type PieceName } from "../../src/pieces/library";
 import { g, type SvgNode } from "../../src/pieces/node";
 import { toSvg } from "../../src/pieces/render";
 import { stamp, type StampParams } from "../../src/pieces/stamp";
-import { storeNode, type StoreNodeParams } from "../../src/pieces/diagram";
+import { queueNode, storeNode, type StoreNodeParams } from "../../src/pieces/diagram";
 
 type Frozen = { piece: PieceName; params: Record<string, unknown>; tree: unknown };
 type FrozenSvg = Frozen & { svg: string };
@@ -200,5 +201,28 @@ describe("Store node calls of 0.14.1 unchanged", () => {
     const defaultRy = frozenStore.filter(({ params }) => params.ry === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
     expect(defaultRy).toHaveLength(7);
     expect(changedCalls(frozenStore, altered)).toEqual(defaultRy);
+  });
+});
+
+// Change flat-eip-icons-and-empty-queue (SW-249), task 1.2: spec illustration-pieces, "Queue node calls of 0.14.1
+// unchanged". The fixture was written by scripts/freeze-eip-book-pieces.ts while src/ and tokens/ equalled d26f254,
+// where queueNode draws as in 0.14.1, before `text` became optional; its `svg` is the body then the text nodes
+// through toSvg (`svgOf`).
+const frozenQueue = load<FrozenSvg[]>("queue-node-0.14.1");
+const drawQueue: Draw = (_piece, params) => queueNode(params as Parameters<typeof queueNode>[0]);
+
+describe("Queue node calls of 0.14.1 unchanged", () => {
+  test("Frozen queue node calls", () => {
+    expect(frozenQueue).toHaveLength(8);
+    expect(frozenQueue.every(({ piece }) => piece === "queueNode")).toBe(true);
+    expect(changedCalls(frozenQueue, drawQueue)).toEqual([]);
+  });
+
+  test("A changed queue node is caught", () => {
+    // The default height drawn as 47 instead of 46: every call that sets no height differs, the others do not.
+    const altered: Draw = (_piece, params) => queueNode({ height: 47, ...params } as Parameters<typeof queueNode>[0]);
+    const defaultHeight = frozenQueue.filter(({ params }) => params.height === undefined).map(({ piece, params }) => `${piece} ${JSON.stringify(params)}`);
+    expect(defaultHeight).toHaveLength(4);
+    expect(changedCalls(frozenQueue, altered)).toEqual(defaultHeight);
   });
 });
