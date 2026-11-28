@@ -168,6 +168,8 @@ How things move: the components, the store (with the lookup arrow), the statemen
 
 ## 7. Open points for G1
 
+**Answered by the owner on 2026-11-28** (gate 1 on commit `9c4b5e3`): every recommendation, (a) for points 1 to 4, and the three choices taken alone (Balão's face back to idle as the answer leaves, tokens resting above the boxes, the provider request not drawn). Each is what the scene already does, so neither the spec nor the code changes.
+
 Decided already, so not asked again: the `?` at each take's first lookup only (gate 0, approved with concept B; the book scene's G1, point 7), and a generic Mule builder only with the second Mule scene (the owner's rule for a scene type, the book scene's G1, point 4; §2.1).
 
 1. **Length.** The scene is 45 s, the book scene 30 s: each take has two requests (§2.6). Options: (a) keep 45 s; (b) shorten the rests and holds to about 40 s. Recommended: (a), by the owner's rule.
