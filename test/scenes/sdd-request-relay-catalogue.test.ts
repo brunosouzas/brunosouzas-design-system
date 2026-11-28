@@ -45,7 +45,9 @@ describe("SDD relay registration", () => {
     expect(entries[10].id).toBe("sdd-scene-3-archive-16x9");
     // Since change idempotent-receiver-book-scene (SW-160) the book scene sits before the topology scene.
     expect(entries[11].id).toBe("idempotent-receiver-book-16x9");
-    expect(entries[12].id).toBe("circuit-breaker-topology-16x9");
+    // Since change idempotent-receiver-mule-scene (SW-160) the Mule scene sits after the book scene.
+    expect(entries[12].id).toBe("idempotent-receiver-mule-16x9");
+    expect(entries[13].id).toBe("circuit-breaker-topology-16x9");
     expect(new Set(entries.map((e) => e.id)).size).toBe(entries.length);
   });
 
@@ -87,6 +89,6 @@ describe("Existing scenes unchanged by the relay scene", () => {
   test("Other scenes' tests untouched", () => {
     // Their test files run unedited in the same `npm test`; the `git diff` half of the scenario is a local check
     // recorded in the pull request (CI checks out one commit).
-    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", ID, "sdd-scene-2-files", "sdd-scene-3-archive", "idempotent-receiver-book", "circuit-breaker-topology"]);
+    expect(scenes.map((s) => s.id)).toEqual(["circuit-breaker-states", "publish-subscribe", ID, "sdd-scene-2-files", "sdd-scene-3-archive", "idempotent-receiver-book", "idempotent-receiver-mule", "circuit-breaker-topology"]);
   });
 });

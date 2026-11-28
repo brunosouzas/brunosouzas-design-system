@@ -39,8 +39,10 @@ describe("Idempotent Receiver book registration", () => {
     const before = scenes.slice(0, 5).flatMap(compositionsOf);
     expect(entries.slice(0, 11)).toEqual(before);
     expect(entries[11]).toEqual({ id: "idempotent-receiver-book-16x9", folder: ID, format: "16x9", lang: "en", width: 1920, height: 1080, fps: 30, durationInFrames: 900 });
+    // Since change idempotent-receiver-mule-scene (SW-160) the Mule scene sits between this one and the topology scene.
+    expect(entries[12].id).toBe("idempotent-receiver-mule-16x9");
     expect(entries.at(-1)!.id).toBe("circuit-breaker-topology-16x9");
-    expect(entries).toHaveLength(13);
+    expect(entries).toHaveLength(14);
     expect(new Set(entries.map((e) => e.id)).size).toBe(entries.length);
   });
 

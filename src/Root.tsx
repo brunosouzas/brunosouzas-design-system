@@ -18,6 +18,7 @@ import { SddScene2FilesScene } from "./scenes/sdd-scene-2-files/Scene.tsx";
 import { SddScene3ArchiveScene } from "./scenes/sdd-scene-3-archive/Scene.tsx";
 import { CircuitBreakerTopologyScene } from "./scenes/circuit-breaker-topology/Scene.tsx";
 import { IdempotentReceiverBookScene } from "./scenes/idempotent-receiver-book/Scene.tsx";
+import { IdempotentReceiverMuleScene } from "./scenes/idempotent-receiver-mule/Scene.tsx";
 
 const components: Record<string, React.FC<SceneProps>> = {
   "publish-subscribe": PublishSubscribeScene,
@@ -27,6 +28,7 @@ const components: Record<string, React.FC<SceneProps>> = {
   "sdd-scene-3-archive": SddScene3ArchiveScene,
   "circuit-breaker-topology": CircuitBreakerTopologyScene,
   "idempotent-receiver-book": IdempotentReceiverBookScene,
+  "idempotent-receiver-mule": IdempotentReceiverMuleScene,
 };
 
 const componentOf = (sceneId: string): React.FC<SceneProps> => {
