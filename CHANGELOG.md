@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.16.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.15.0...v0.16.0) (2026-11-28)
+
+
+### Features
+
+* Idempotent Receiver book scene, one stage two takes (SW-160) ([#53](https://github.com/brunosouzas/brunosouzas-design-system/issues/53)) ([2df19be](https://github.com/brunosouzas/brunosouzas-design-system/commit/2df19be0e7d6c7b86fd7de4f7a45b06f99f29f52))
+* Idempotent Receiver Mule scene, the stored-ID trap in two takes (SW-160) ([#59](https://github.com/brunosouzas/brunosouzas-design-system/issues/59)) ([f6e9cec](https://github.com/brunosouzas/brunosouzas-design-system/commit/f6e9cecfbf1a0fabdb60c04db2667712619992a2))
+
 ## [0.15.0](https://github.com/brunosouzas/brunosouzas-design-system/compare/v0.14.1...v0.15.0) (2026-11-28)
 
 
