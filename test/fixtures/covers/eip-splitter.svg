@@ -2,7 +2,6 @@
   <title id="eip-splitter-title">Splitter</title>
   <desc id="eip-splitter-desc">Icon of the Splitter pattern: a component turning one message into three. Redrawn from the Enterprise Integration Patterns icon by Gregor Hohpe and Bobby Woolf, enterpriseintegrationpatterns.com, CC BY 4.0.</desc>
   <g transform="translate(0 0) scale(1)" stroke="none">
-    <rect x="8.5" y="6.5" width="52" height="30" rx="3" fill="#121212"/>
     <rect x="6" y="4" width="52" height="30" rx="3" fill="#3DDC84" stroke="#121212" stroke-width="2"/>
     <rect x="16" y="15.5" width="8" height="8" fill="#FFFFFF" stroke="#121212" stroke-width="1.5" stroke-linejoin="round"/>
     <polyline points="26.5,19.5 35.5,19.5" fill="none" stroke="#121212" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>

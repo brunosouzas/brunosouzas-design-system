@@ -133,6 +133,8 @@ const STATE_CALLS: Partial<Record<P.PieceName, { label: string; params: Record<s
   serverStack: [{ label: "serverStack:failing", params: { units: 3, failing: 1 } }],
   // A store with words: its required-only call draws none since text became optional (change store-node-without-words, task 2.2).
   storeNode: [{ label: "storeNode:words", params: { text: ["a"] } }],
+  // A queue with words, for the same reason (change flat-eip-icons-and-empty-queue, task 2.4).
+  queueNode: [{ label: "queueNode:words", params: { text: ["a"] } }],
   // Visor holding a sheet with a question row and a tail check, facing right and left (change sdd-scene-pieces, task 5.4).
   visor: [
     { label: "visor:sheet", params: { holdsSheet: HELD_WITH_CHECK } },
