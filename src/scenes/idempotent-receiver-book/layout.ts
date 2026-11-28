@@ -9,7 +9,7 @@
 // the pinned layout test (test/scenes/idempotent-receiver-book-layout.test.ts)
 // in the same commit.
 import type { Point } from "../../brand/motion";
-import { LANE, type StoreBox } from "../eip-book";
+import { LANE, type ChannelBox, type StoreBox } from "../eip-book";
 
 export const STAGE = { width: 960, height: 540 } as const;
 /** Composition pixels per stage unit (1920 × 1080 over 960 × 540). */
@@ -17,8 +17,9 @@ export const STAGE_SCALE = 2;
 
 /** The sender: a pill in the caller's colour, its word at 33. */
 export const SENDER = { x: 16, y: LANE - 32, width: 150, height: 64 } as const;
-/** The two EIP icons on the lane: the point-to-point channel and the Idempotent Receiver. */
-export const CHANNEL = { x: 196, scale: 2.8 } as const;
+/** The message channel, a queue without words centred on the lane and on its token rest (AT.channel). */
+export const CHANNEL: ChannelBox = { x: 196, width: 180, height: 96 };
+/** The Idempotent Receiver's EIP icon on the lane. */
 export const RECEIVER = { x: 520, scale: 3.4 } as const;
 /** The processed IDs, under the receiver. */
 export const STORE: StoreBox = { x: 560, y: 366, width: 160, height: 128 };
@@ -44,7 +45,7 @@ export const REWIND_MARK = { x: 826, y: 28, size: 48 } as const;
 /** Pop-in anchors of the pieces without a `scale` parameter. */
 export const ANCHORS = {
   sender: { x: SENDER.x + SENDER.width / 2, y: LANE },
-  channel: { x: CHANNEL.x + (64 * CHANNEL.scale) / 2, y: LANE },
+  channel: { x: CHANNEL.x + CHANNEL.width / 2, y: LANE },
   receiver: { x: RECEIVER.x + (64 * RECEIVER.scale) / 2, y: LANE },
   store: { x: STORE.x + STORE.width / 2, y: STORE.y + STORE.height / 2 },
   badge: { x: BADGE.cx, y: BADGE.cy },

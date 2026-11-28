@@ -9,7 +9,7 @@ At gate 0, on **2026-11-27**, the owner chose **concept B, "one stage, two takes
 ## What Changes
 
 - **A new catalogue scene, `idempotent-receiver-book`.** A two-take scene (kind `takes`), neutral, one 16:9 composition `idempotent-receiver-book-16x9`: 900 frames (30 s) at 30 fps, outro 800, a final still of 100 frames. Its length follows the owner's rule of 2026-11-27, understanding before length (design §2.8). Its words are `Sender`, `42`, the `?` mark and the take numbers. No cast.
-  - **One stage, left to right, on one lane:** the Sender (a pill in the caller's colour), the point-to-point channel and the Idempotent Receiver (EIP icons), the processed IDs (an empty store) under the receiver, the outcomes on the right.
+  - **One stage, left to right, on one lane:** the Sender (a pill in the caller's colour), the message channel (a queue without words, as the diagram draws it) and the Idempotent Receiver (its EIP icon), the processed IDs (an empty store) under the receiver, the outcomes on the right.
   - **Take 1:** the Sender sends order 42 into the channel; the channel delivers it once; the receiver looks up its store (`?`: not there), processes the message (green, checked) and stores 42.
   - **The rewind:** a rewind mark; take 1 plays backwards; badge `1` becomes `2`.
   - **Take 2:** the same order, sent once; a second copy appears in the channel; the first delivery is processed and stored as in take 1; the second reaches the receiver, the lookup finds 42 (the store comes into focus), and the duplicate is set aside (orange). Take 1's result fades in beside take 2's: one processed message in both, and the final still holds.
@@ -33,7 +33,7 @@ none
 - **The Mule scene** (the trap of L109 and L122): its own change, after this one (gate 0, question 6).
 - **Embedding the video on the wiki pages.** That is the site's change in `brunosouzas.com` (web copy, poster, text description; WEB-1, WEB-2). The pages keep their book diagram (MOT-2).
 - **A 4:5 cut** (SCN-3) and **any sound** (SCN-5).
-- **New pieces or tokens.** The scene uses `eipIcon`, `diagramBox`, `storeNode` (empty since SW-248), `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon` as the package ships them.
+- **New pieces or tokens.** The scene uses `queueNode` (empty since SW-249), `eipIcon` (flat since SW-249), `diagramBox`, `storeNode` (empty since SW-248), `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon` as the package ships them.
 - **What the page says beyond the book's example** (MOT-1): the book's second path (an idempotent message, L28), Mule, the key, the time to live, the store's persistence and the trap (L36–L141). The scene shows one sender, one order, two deliveries and one processing.
 - **Changes to the `takes` checks** beyond the two device names.
 

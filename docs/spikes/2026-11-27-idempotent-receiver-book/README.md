@@ -8,4 +8,6 @@ Evidence for gate 1 of change `idempotent-receiver-book-scene` (the spec plus th
 
 Timing on an Apple M5: the 14 stills took 71 s on the first run (a cold bundle) and 23 to 24 s once the bundle was cached. The first stills (26 s of video) were retimed to 30 s by the owner's rule of 2026-11-27, understanding before length (design §2.8 of the change). The video's render time is measured at the render, after gate 1.
 
+**Redrawn after gate 1, on 2026-11-28 (task 4.4a).** The owner's answers to points 5 and 8 of design §7 came through package 0.15.0 (SW-249): the channel is now a `queueNode` without words (x 196, width 180, height 96, centred on the lane and on the token's rest in the channel), and every EIP icon is flat, without the notation's offset shadows. `stills-sheet.png` was rendered again from the same frames, the same way; the timeline is unchanged. The 14 stills took 25 s with the bundle cached.
+
 Review it frame by frame with `npm run studio` (folder `idempotent-receiver-book`).

@@ -17,7 +17,7 @@ import { tokens } from "../../../tokens/generated/tokens";
 import type { Point } from "../../brand/motion";
 import { checkBadge, countBadge, diagramBox, messageArrow, questionToken, uiIcon } from "../../pieces/library.ts";
 import { g, type Drawn, type SvgNode } from "../../pieces/node.ts";
-import { BOOK_TEXT, emptyStore, iconOnLane, messageToken, storedId } from "../eip-book";
+import { BOOK_TEXT, channelOnLane, emptyStore, iconOnLane, messageToken, storedId } from "../eip-book";
 import { frameAt, type Appear, type BookState, type TokenFill } from "./frame";
 import { ANCHORS, AT, BADGE, CHANNEL, CHECK, LOOKUP, QUESTION, RECEIVER, REWIND_MARK, SENDER, STORE } from "./layout";
 import { text } from "./scene.ts";
@@ -74,7 +74,7 @@ const nodesOf = (s: BookState): SvgNode =>
       diagramBox({ x: SENDER.x, y: SENDER.y, width: SENDER.width, height: SENDER.height, shape: "pill", fill: "color.state.caller", text: [words.sender], textSize: BOOK_TEXT.word }),
       s.sender, ANCHORS.sender,
     )],
-    ["channel", s.channel && shown(iconOnLane("point-to-point-channel", CHANNEL.x, CHANNEL.scale), s.channel, ANCHORS.channel)],
+    ["channel", s.channel && shown(channelOnLane(CHANNEL), s.channel, ANCHORS.channel)],
     ["receiver", s.receiver && shown(iconOnLane("idempotent-receiver", RECEIVER.x, RECEIVER.scale), s.receiver, ANCHORS.receiver)],
     ["store", s.store && shown(emptyStore(STORE), { ...s.store, scale: s.store.scale * s.storeFocus }, ANCHORS.store)],
     ["stored", s.stored && shown(storedId(STORE, words.id), { ...s.stored, scale: s.stored.scale * s.storeFocus }, ANCHORS.store)],

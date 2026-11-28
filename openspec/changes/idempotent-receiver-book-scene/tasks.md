@@ -5,7 +5,7 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 ## 1. The branch and the shared code (scene-catalogue)
 
 - [x] 1.1 Merge `origin/main` into `feature/sw-160-idempotent-receiver-storyboard` with a merge commit (no rebase, no force push), so the branch has `storeNode` without words (SW-248, `d26f254`). Check: `git merge-base --is-ancestor d26f254 HEAD` succeeds.
-- [x] 1.2 `src/scenes/eip-book.ts`, the book scene type of design §2.1 (`LANE`, `BOOK_TEXT`, `ICON_ARROW_Y`, `iconOnLane`, `TOKEN`, `messageToken`, `emptyStore`, `storedId`). Proven through the scene's tests below ("Layout equals the design", "No shape of its own").
+- [x] 1.2 `src/scenes/eip-book.ts`, the book scene type of design §2.1 (`LANE`, `BOOK_TEXT`, `ICON_ARROW_Y`, `iconOnLane`, `channelOnLane` (since 4.4a), `TOKEN`, `messageToken`, `emptyStore`, `storedId`). Proven through the scene's tests below ("Layout equals the design", "No shape of its own").
 - [x] 1.3 Add `lookupMark`, `ghost` and `matchFocus` to `TakesDevice` in `src/scenes/takes-kind.ts` (design §2.5). Unit, `test/scenes/idempotent-receiver-book-catalogue.test.ts`: "Devices where the owner approved them" (a type error before 1.3).
 
 ## 2. Scene data and timeline (scene-catalogue)
@@ -28,7 +28,7 @@ Card SW-160, from the gate-0 pick of 2026-11-27 (concept B for both scene types)
 - [x] 4.2 Local: `npm run stills -- idempotent-receiver-book` (14 PNGs) and `npx remotion still` at frames 140, 350, 428, 450, 470, 610, 650, 698 and 760 (the moments between phase ends). Open every PNG: overlaps, clipping, contrast, the tokens on their routes (MOT-5).
 - [x] 4.3 Local: the stills sheet into `docs/spikes/2026-11-27-idempotent-receiver-book/` for gate 1.
 - [x] 4.4 Gate 1: the owner reads the spec and the stills' sheet; his answers (design §7) change the spec and the code in this branch, and a comment names the approved commit. Done 2026-11-27 on `42544d9`: every recommendation (design §7).
-- [ ] 4.4a After the design-system change that adds `queueNode` without words and `eipIcon` without offset shadows merges: merge `origin/main` into this branch with a merge commit; the channel becomes a `queueNode` without words (point 5); the spec, the layout, the stills and the sheet follow, and the owner sees the new stills before the render.
+- [ ] 4.4a After the design-system change that adds `queueNode` without words and `eipIcon` without offset shadows merges: merge `origin/main` into this branch with a merge commit; the channel becomes a `queueNode` without words (point 5); the spec, the layout, the stills and the sheet follow, and the owner sees the new stills before the render. Merged 2026-11-28 (`5b29668`, 0.15.0); the channel, spec, design, layout test, stills and sheet changed in the next commit; waiting for the owner's look at the sheet.
 - [ ] 4.5 Local, after gate 1: `npm run render -- idempotent-receiver-book`; read the web copy with `npx remotion ffmpeg -hide_banner -i …`; the web-MP4 sheet and its 341 px sheet; frames 800 and 899 rendered with `npx remotion still` and compared byte for byte. This proves "Idempotent Receiver book video verified from output (local)" (SCN-4, SCN-5).
 - [ ] 4.6 The owner's look at the video (G3): the web MP4, its sheets and the Studio. His answers change the spec and the code in this branch before the archive.
 

@@ -15,7 +15,7 @@ Every beat animates line 28 of the English page (the Portuguese page has the sam
 | The duplicate is found and ignored | the store comes into focus as the lookup finds 42; the second delivery turns orange and is set aside | L28 "ignores any message that arrives with a known ID"; L32 "if yes, it ignores the duplicate" |
 | Same effect, once or several times | take 1's result fades in beside take 2's: one processed message in both | L28 "produces the same effect whether it is received once or several times" |
 
-**The channel's icon (a choice, for the owner's ok).** The page and its diagram say "Message channel" (L32, label `channel`, drawn there as a `queueNode`). The package has no generic Message Channel icon; the scene draws `point-to-point-channel`, the icon of the Point-to-Point Channel pattern, a channel type the page does not name (design §7, point 5).
+**The channel's shape (the owner's answer at gate 1, design §7, point 5).** The page and its diagram say "Message channel" (L32, label `channel`, drawn there as a `queueNode`). The package has no generic Message Channel icon, and `point-to-point-channel` would name a channel type the page does not, so the scene draws the diagram's own shape: a `queueNode` without words (since 0.15.0, SW-249), centred on the lane.
 
 ## 2. Decisions
 
@@ -28,7 +28,7 @@ The card asks that this first EIP video yield the reusable book scene type, so t
 | Everything in the scene's folder; extract with the second book scene | the second scene would copy the lane, the token and the store |
 | A new scene kind `eip-book` with its own checks | a book scene is a `takes` or a `sequence` scene; it needs no new rule, only shared drawing |
 | A generic book stage and frame builder now (tokens, rests, routes and outcomes as data) | it would be designed from one example; what the next pattern needs (a dead-letter channel, a correlation pair) is not known yet |
-| **A React-free module beside the kinds, with only what every book scene draws (chosen)** | the lane (`LANE` 212), the text sizes (`BOOK_TEXT` 33 and 36), the message token (`messageToken`, a pill 56 high with its ID at 36), an EIP icon with its message arrow on the lane (`iconOnLane`, from `ICON_ARROW_Y` per icon: the y of the arrow's line in the icon drawing, not of its shadow), and the store empty or holding an ID (`emptyStore`, `storedId`) |
+| **A React-free module beside the kinds, with only what every book scene draws (chosen)** | the lane (`LANE` 212), the text sizes (`BOOK_TEXT` 33 and 36), the message token (`messageToken`, a pill 56 high with its ID at 36), a message channel on the lane (`channelOnLane`, a `queueNode` without words centred on the lane), an EIP icon with its message arrow on the lane (`iconOnLane`, from `ICON_ARROW_Y` per icon: the y of the arrow's line in the icon drawing), and the store empty or holding an ID (`emptyStore`, `storedId`) |
 
 What the chosen module does not cover, said plainly: the next book scene still writes its own `scene.ts`, `timeline.ts`, `layout.ts`, `frame.ts`, `stage.ts` and `Scene.tsx` (here about 400 lines of code, most of it frame and stage logic), reusing the module's drawing and this scene's files as a model. Whether that meets the card's "almost only data", or a generic builder should be extracted now or with the second book scene, is the owner's call (design §7, point 4).
 
@@ -81,7 +81,7 @@ The scene is 30 s (900 frames). The length is a result of these beats, not a tar
 
 ## 3. Pieces
 
-`eipIcon` (`point-to-point-channel`, `idempotent-receiver`), `diagramBox` (the Sender pill, the tokens), `storeNode` (empty, and its words alone for the stored ID), `messageArrow` (the lookup, both heads), `checkBadge`, `questionToken`, `countBadge` (the take badge), `uiIcon` (`reset`, the rewind mark), and the components `Rings` and `MotionPath`. No colour literal; the fills are `color.state.caller` (the Sender), `color.white`, `color.state.healthy` (processed, ADR 0006) and `color.state.blocked` (ignored, as the book diagram's "Ignore the duplicate" box).
+`queueNode` (the channel, without words), `eipIcon` (`idempotent-receiver`), `diagramBox` (the Sender pill, the tokens), `storeNode` (empty, and its words alone for the stored ID), `messageArrow` (the lookup, both heads), `checkBadge`, `questionToken`, `countBadge` (the take badge), `uiIcon` (`reset`, the rewind mark), and the components `Rings` and `MotionPath`. No colour literal; the fills are `color.state.caller` (the Sender), `color.white`, `color.state.healthy` (processed, ADR 0006) and `color.state.blocked` (ignored, as the book diagram's "Ignore the duplicate" box).
 
 ## 4. Beat table (30 fps, `motion.travel` 22, `motion.fade` 10)
 
@@ -157,7 +157,7 @@ How things move: the stage nodes (`sender`, `channel`, `receiver`, `store`) and 
 |---|---|
 | Lane | y 212 |
 | Sender | pill x 16, y 180, 150 × 64, `color.state.caller`, `Sender` at 33 |
-| Channel | `point-to-point-channel` at x 196, scale 2.8, its arrow line (y 20 in the icon) on the lane |
+| Channel | a `queueNode` without words, x 196, width 180, height 96, centred on the lane (y 164 to 260) and on its token rest (x 286) |
 | Receiver | `idempotent-receiver` at x 520, scale 3.4, its arrow line (y 23) on the lane |
 | Store | x 560, y 366, 160 × 128; `42` at 36 when stored; focus about its centre |
 | Lookup | `messageArrow` (640, 274) → (640, 362), both heads; dashed width 2.5 at rest, solid width 4 while looking up |

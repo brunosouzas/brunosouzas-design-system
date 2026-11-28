@@ -163,7 +163,7 @@ The scene's positions, sizes and routes SHALL equal design §6.1, and its elemen
 #### Scenario: Layout equals the design
 - **GIVEN** the scene's layout and the book scene type's constants
 - **WHEN** they are read
-- **THEN** they equal design §6.1: lane 212, text sizes 33 and 36, the token, the icons' arrow heights, the Sender, channel, receiver, store, lookup, token rests, check, `?`, badge, rewind mark, rings centre, the four routes and the three guides
+- **THEN** they equal design §6.1: lane 212, text sizes 33 and 36, the token, the receiver icon's arrow height, the Sender, channel, receiver, store, lookup, token rests, check, `?`, badge, rewind mark, rings centre, the four routes and the three guides
 
 #### Scenario: Layer order
 - **GIVEN** frames 140, 350, 700 and 800
@@ -184,7 +184,7 @@ Every settled word box (measured advance on the `fonts/` faces times effective s
 - **THEN** its first problem is at frame 750, the ghost's `42` crossing the copy's `42`
 
 ### Requirement: Idempotent Receiver book built from package pieces
-The scene SHALL draw only through the pieces `eipIcon`, `diagramBox`, `storeNode`, `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon`, through the book scene type `src/scenes/eip-book.ts`, and the components `Rings` and `MotionPath`. Its files and the book scene type SHALL contain no colour literal and create no SVG shape of their own.
+The scene SHALL draw only through the pieces `queueNode`, `eipIcon`, `diagramBox`, `storeNode`, `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon`, through the book scene type `src/scenes/eip-book.ts`, and the components `Rings` and `MotionPath`. Its files and the book scene type SHALL contain no colour literal and create no SVG shape of their own.
 
 #### Scenario: No shape of its own
 - **GIVEN** the files under `src/scenes/idempotent-receiver-book/` and `src/scenes/eip-book.ts`

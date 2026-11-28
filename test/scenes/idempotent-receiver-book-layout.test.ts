@@ -23,9 +23,11 @@ describe("Idempotent Receiver book layout", () => {
     expect(LANE).toBe(212);
     expect(BOOK_TEXT).toEqual({ word: 33, strong: 36 });
     expect(TOKEN).toEqual({ height: 56, minWidth: 84, perCharacter: 19, padding: 44 });
-    expect(ICON_ARROW_Y).toEqual({ "point-to-point-channel": 20, "idempotent-receiver": 23 });
+    expect(ICON_ARROW_Y).toEqual({ "idempotent-receiver": 23 });
     expect(SENDER).toEqual({ x: 16, y: 180, width: 150, height: 64 });
-    expect(CHANNEL).toEqual({ x: 196, scale: 2.8 });
+    expect(CHANNEL).toEqual({ x: 196, width: 180, height: 96 });
+    // Centred on the channel's token rest (design §6.1).
+    expect(CHANNEL.x + CHANNEL.width / 2).toBe(AT.channel.x);
     expect(RECEIVER).toEqual({ x: 520, scale: 3.4 });
     expect(STORE).toEqual({ x: 560, y: 366, width: 160, height: 128 });
     expect(LOOKUP).toEqual({ from: [640, 274], to: [640, 362], rest: 2.5, active: 4 });
