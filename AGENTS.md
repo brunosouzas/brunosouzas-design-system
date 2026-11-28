@@ -23,7 +23,7 @@ Layout: `tokens/source.json` (the only place token values are written) generates
 - Pull request titles are Conventional Commits (`feat:`, `fix:`, `feat!:` …; the `Title` check): the squash merge makes the title the commit release-please reads. `feat`, `fix`, `perf` and `revert` release (or a `Release-As:` footer); `docs`, `ci`, `chore`, `test`, `refactor`, `build`, `style` do not.
 - The package ships `dist/`, `tokens/generated/` and `fonts/` (with `OFL.txt`).
 - The package's one runtime dependency is `harfbuzzjs`, pinned exactly: it subsets the `fonts/` faces embedded in every written SVG (ADR 0008). Another runtime dependency needs an ADR.
-- Board area: `site` (Azure Boards, project `brunosouzas`).
+- Tracker: Linear brunosouzas, team SW, label `site`.
 - OpenSpec: yes, see `openspec/`. The order of the planned changes is in `docs/roadmap.md`.
 - Project-wide decisions are ADRs in `docs/adr/` (index in `docs/adr/README.md`). Read them before a design; a change that contradicts one needs a new ADR that supersedes it.
 - Every on-screen string of a scene or piece comes from an approved source: a published article of the blog (or its diagram labels), or a post or page the owner approved for publication (ADR 0004, amended 2026-10-30); a catalogue scene in `src/scenes/` still comes from a published article and keeps its strings in its per-language text table, or, for a neutral scene, its few English words in one `en` table (ADR 0004, amended 2026-11-12). New scenes are language-neutral by default and every gesture names its source line (ADR 0005). A scene or piece never adds a claim its source does not make. Reason: the animation illustrates an approved text; it must not say more than the text.
