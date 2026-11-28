@@ -29,11 +29,11 @@ none
 
 ## Out of scope
 
-- **What the page says beyond the trap of L109 and L122** (MOT-1), as the card and gate 0 left out: removing the ID (L128), a charge after the 409, exactly-once, the Anypoint MQ path as if it were a run (L124 says it is not tested), the provider failure after a successful charge (L122, second sentence), the default `correlationId` key and the "before" endpoint (L36, L92–L105), the time to live and clusters (L133–L137).
+- **What the page says beyond the trap of L109 and L122** (MOT-1), as the card and gate 0 left out: removing the ID (L128), a charge after the 409, exactly-once, the Anypoint MQ path as if it were a run (L124 says it is not tested), the payment request to the provider after the charge (L42, L44; the gate-0 sheet drew three components) and its failure after a successful charge (L122, second sentence), the default `correlationId` key and the "before" endpoint (L36, L92–L105), the time to live and clusters (L133–L137).
 - **Embedding the video on the wiki page.** That is the site's change in `brunosouzas.com` (WEB-1, WEB-2).
 - **A 4:5 cut** (SCN-3) and **any sound** (SCN-5).
 - **New pieces or tokens.** The scene uses `diagramBox`, `storeNode`, `sheet`, `countBadge`, `messageArrow`, `questionToken`, `balao`, `emote` and `uiIcon` as the package ships them (0.15.0).
-- **A generic Mule stage and frame builder** (design §2.1, §7 point 6).
+- **A generic Mule stage and frame builder** (design §2.1; the owner's rule, with the second Mule scene).
 - **Changes to the `takes` checks.** The scene uses the devices the book scene added (`lookupMark`, `ghost`, `matchFocus`).
 
 ## Implicit requirements

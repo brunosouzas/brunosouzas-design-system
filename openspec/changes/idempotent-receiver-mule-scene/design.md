@@ -40,15 +40,17 @@ As the book scene (its design §2.3) and `sdd-request-relay` (its design §2.7):
 
 The sheet drew a token riding above a component (`onBox`). In motion, a request token `orderId` pops above Balão's head (where answers land), travels above the listener, then above the validator, and, if it is let through, above the charge; tokens are drawn above blocks (SCN-6), so they rest above the boxes, clear of their words. At the charge, take 1's request leaves as the statement gains its row and count (the charge recorded, L44); take 2's turns red (`color.state.failure`, the failure) and then leaves. At a match, the retry turns orange (`color.state.blocked`, the duplicate, as the diagram's `409: duplicate`) and then leaves. Each answer is its own token, `200`, `500` or `409` in its state colour, that pops where the request ended and travels back over the stage to Balão. The four dashed guides show each route while a token travels it.
 
+**The provider request is not drawn.** The diagram (L42) and L44 put a fourth step after the charge, the payment request to the provider; the gate-0 sheet drew three components, and the trap the scene shows (L109, L122) fails at the charge, before it. So the `200` leaves the Simulated charge, and the provider's own failure (L122, second sentence) stays out of scope.
+
 ### 2.5 Reading devices and the cast
 
 The scene uses the book scene's devices, approved at its gates, and the `takes` kind's: `takeNumbers` (setup, rewind), `rewind`, `lookupMark` (the `?` at each take's first lookup, when the store does not have the ID), `matchFocus` (the store and its `orderId` come into focus at each retry's match) and `ghost` (take 1's count `1` faded beside take 2's `0`, `motion.dimOpacity`).
 
-Balão is the only actor (ADR 0007: the requester acting; gate 0 q2). Its acts are the two speaking spans of each take (40–68 and 340–368, and 630 later). Its faces: `done` with the `worked` emote when `200` arrives (264), `failed` with the `problem` emote when `500` arrives (894), each emote leaving 36 frames later (CAST-3, gone before Balão speaks again), and back to `idle` when it asks again (330, 960; decided here). No face or emote when `409` arrives (gate 0 q3: the article's quiet error, L122).
+Balão is the only actor (ADR 0007: the requester acting; gate 0 q2). Its acts are the two speaking spans of each take (40–68 and 340–368, and 630 later). Its faces: `done` with the `worked` emote when `200` arrives (264), `failed` with the `problem` emote when `500` arrives (894), each emote leaving 36 frames later (CAST-3, gone before Balão speaks again), and back to `idle` as its answer leaves (330, 960), before it asks again (340, 970; decided here). No face or emote when `409` arrives (gate 0 q3: the article's quiet error, L122).
 
 ### 2.6 Understanding before length (the owner, 2026-11-27)
 
-The owner's rule of the book scene (its design §2.8) holds: the length is a result of the beats. Each take has two requests, so the scene runs 45 s (1350 frames): a 22-frame rest at the validator before each lookup, 80 frames between the 409's arrival and the rewind (528–609), and a 22-frame rest after take 2's 409 before take 1's count fades in (1158–1179).
+The owner's rule of the book scene (its design §2.8) holds: the length is a result of the beats. Each take has two requests, so the scene runs 45 s (1350 frames): a 22-frame rest at the validator before each lookup, 82 frames from the 409's arrival to the rewind (528–609; the rewind starts at 610), and a 22-frame rest after take 2's 409 before take 1's count fades in (1158–1179).
 
 ### 2.7 Sources
 
@@ -166,9 +168,9 @@ How things move: the components, the store (with the lookup arrow), the statemen
 
 ## 7. Open points for G1
 
+Decided already, so not asked again: the `?` at each take's first lookup only (gate 0, approved with concept B; the book scene's G1, point 7), and a generic Mule builder only with the second Mule scene (the owner's rule for a scene type, the book scene's G1, point 4; §2.1).
+
 1. **Length.** The scene is 45 s, the book scene 30 s: each take has two requests (§2.6). Options: (a) keep 45 s; (b) shorten the rests and holds to about 40 s. Recommended: (a), by the owner's rule.
-2. **The `?` at the first lookup of each take** (`lookupMark`), as in the book scene. Options: (a) keep it, so the two videos of the page read alike; (b) no `?` here, only the stored `orderId`. Recommended: (a).
-3. **How the failure shows** (§2.4). The request turns red at the charge, and `500` travels back on a grey dashed guide, like every route. Options: (a) as now; (b) the `500`'s route drawn red, as the gate-0 sheet drew a red failure arrow (`messageArrow` kind `failure`). Recommended: (a): the red `500` and the red request carry the failure, and the guides stay one notation; (b) would add an arrow the other routes do not have.
-4. **No focus at the 500.** The `orderId` stays in the store from the 500 on; the store comes into focus only at the retry's match, which shows that it stayed. Options: (a) as now; (b) also bring the store into focus when the 500 arrives. Recommended: (a), one focus per lookup as in the book scene.
-5. **The emote's place** (§6.1): beside Balão's head, as the gate-0 sheet drew it; the emote touches Balão's left hand. Options: (a) keep the sheet's place; (b) move it up and left, clear of the hand. Recommended: (a), approved at gate 0; (b) if the stills read cluttered.
-6. **How much of the Mule scene type is shared** (§2.1). Options: (a) extract a generic builder with the second Mule scene, as decided for the book scene type; (b) extract one now. Recommended: (a).
+2. **How the failure shows** (§2.4). The request turns red at the charge, and `500` travels back on a grey dashed guide, like every route. Options: (a) as now; (b) the `500`'s route drawn red, as the gate-0 sheet drew a red failure arrow (`messageArrow` kind `failure`). Recommended: (a): the red `500` and the red request carry the failure, and the guides stay one notation; (b) would add an arrow the other routes do not have.
+3. **No focus at the 500.** The `orderId` stays in the store from the 500 on; the store comes into focus only at the retry's match, which shows that it stayed. Options: (a) as now; (b) also bring the store into focus when the 500 arrives. Recommended: (a), one focus per lookup as in the book scene.
+4. **The emote's place** (§6.1): beside Balão's head, as the gate-0 sheet drew it; the emote touches Balão's left hand. Options: (a) keep the sheet's place; (b) move it up and left, clear of the hand. Recommended: (a), approved at gate 0; (b) if the stills read cluttered.

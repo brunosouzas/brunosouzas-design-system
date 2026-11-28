@@ -9,9 +9,12 @@
 // code review, round 1).
 import { describe, expect, test } from "vitest";
 import { pointAlong } from "../../src/brand/motion";
+import { emote } from "../../src/pieces/library";
+import type { CastExpression, EmoteKind } from "../../src/pieces/index";
 import type { SvgNode } from "../../src/pieces/node";
+import { client } from "../../src/scenes/eip-mule";
 import { frameAt, objectFrame, type MuleState, type TokenId } from "../../src/scenes/idempotent-receiver-mule/frame";
-import { AT, ROUTES } from "../../src/scenes/idempotent-receiver-mule/layout";
+import { AT, CLIENT, EMOTE, ROUTES } from "../../src/scenes/idempotent-receiver-mule/layout";
 import { STAGE_LAYERS, stageOf } from "../../src/scenes/idempotent-receiver-mule/stage";
 import { makeTimeline, timeline, type MuleTimeline } from "../../src/scenes/idempotent-receiver-mule/timeline";
 import { tokens } from "../../tokens/generated/tokens";
@@ -40,6 +43,16 @@ const lookupLine = (f: number) => {
 const REST = { dashed: true, width: 2.5 };
 const ACTIVE = { dashed: false, width: 4 };
 const token = (s: MuleState, id: TokenId) => s.tokens.find((m) => m.id === id);
+/** Balão as drawn at `f` equals the client drawn with this face and speech (spec review round 1: assert the stage, not only the state). */
+const balaoDrawn = (f: number, expression: CastExpression, speaks: boolean) =>
+  expect(drawnAt(f, "cast", "balao")[0].children, `frame ${f}`).toEqual(client(CLIENT, { expression, speaks }).body);
+/** The emote as drawn at `f` is `kind`, at its place and pop scale. */
+const emoteDrawn = (f: number, kind: EmoteKind) => {
+  const scale = STATES[f].emote!.scale;
+  expect(firstShape(drawnAt(f, "cast", "emote")[0]), `frame ${f}`).toEqual(firstShape({ tag: "g", attrs: {}, children: emote({ kind, x: EMOTE.x, y: EMOTE.y, scale: EMOTE.scale * scale }).body }));
+};
+/** The number of shapes the statement draws: one more set (a bar and a check) per charge row. */
+const statementShapes = (f: number) => JSON.stringify(drawnAt(f, "nodes", "statement")).match(/"tag":"(rect|path|polyline|circle)"/g)!.length;
 const fillOf = (f: number, id: TokenId) => firstShape(drawnAt(f, "tokens", id)[0]).attrs.fill;
 
 // ---------------------------------------------------------------- design §4, transcribed
@@ -210,6 +223,8 @@ describe("Idempotent Receiver Mule take 1", () => {
     expect(token(STATES[99], "request")!.point).toEqual(AT.validator);
     expect(STATES[41].balao!.speaks).toBe(true);
     expect(STATES[68].balao!.speaks).toBe(false);
+    balaoDrawn(41, "idle", true);
+    balaoDrawn(68, "idle", false);
     expect([119, 120, 169, 170].map(lookupLine)).toEqual([REST, ACTIVE, ACTIVE, REST]);
     expect(STATES[124].question).toBeNull();
     expect(STATES[154].question).toEqual({ opacity: 1, scale: 1 });
@@ -222,8 +237,7 @@ describe("Idempotent Receiver Mule take 1", () => {
     expect(STATES[216].charges).toBe(1);
     expect(wordsOf(217, "nodes", "count")).toEqual(["1"]);
     // As drawn: the statement gains its row (a bar and a check) at 216.
-    const shapes = (f: number) => JSON.stringify(drawnAt(f, "nodes", "statement")).match(/"tag":"(rect|path|polyline|circle)"/g)!.length;
-    expect(shapes(216)).toBeGreaterThan(shapes(215));
+    expect(statementShapes(216)).toBeGreaterThan(statementShapes(215));
     expect(token(STATES[236], "request")).toBeUndefined();
     expect(token(STATES[236], "answer")).toBeUndefined();
     expect(wordsOf(237, "tokens", "answer")).toEqual(["200"]);
@@ -231,7 +245,10 @@ describe("Idempotent Receiver Mule take 1", () => {
     expect(token(STATES[264], "answer")!.point).toEqual(AT.client);
     expect(STATES[263].balao!.expression).toBe("idle");
     expect(STATES[264].balao!.expression).toBe("done");
+    balaoDrawn(263, "idle", false);
+    balaoDrawn(264, "done", false);
     expect(STATES[265].emote!.kind).toBe("worked");
+    emoteDrawn(265, "worked");
     expect(STATES[310].emote).toBeNull();
   });
 
@@ -253,6 +270,8 @@ describe("Idempotent Receiver Mule take 1", () => {
     for (const f of FRAMES.slice(500, 610)) {
       expect(STATES[f].balao!.expression, `frame ${f}`).toBe("idle");
       expect(STATES[f].emote, `frame ${f}`).toBeNull();
+      balaoDrawn(f, "idle", false);
+      expect(drawnAt(f, "cast", "emote"), `frame ${f}`).toEqual([]);
     }
     for (const f of FRAMES.slice(216, 610)) expect(STATES[f].charges, `frame ${f}`).toBe(1);
   });
@@ -298,12 +317,17 @@ describe("Idempotent Receiver Mule take 2", () => {
     expect(fillOf(867, "answer")).toBe(tokens.color.state.failure);
     expect(token(STATES[894], "answer")!.point).toEqual(AT.client);
     expect(STATES[894].balao!.expression).toBe("failed");
+    balaoDrawn(894, "failed", false);
     expect(STATES[895].emote!.kind).toBe("problem");
+    emoteDrawn(895, "problem");
     expect(STATES[940].emote).toBeNull();
     // The orderId stays stored from 811 to the end, and the statement keeps no charge.
     for (const f of FRAMES.slice(811, 1350)) {
       expect(STATES[f].stored, `frame ${f}`).not.toBeNull();
       expect(STATES[f].charges, `frame ${f}`).toBe(0);
+      // As drawn: the orderId in the store, and the statement with no row (as at 215, before take 1's charge).
+      expect(wordsOf(f, "nodes", "stored"), `frame ${f}`).toEqual(["orderId"]);
+      expect(statementShapes(f), `frame ${f}`).toBe(statementShapes(215));
     }
   });
 
@@ -317,6 +341,8 @@ describe("Idempotent Receiver Mule take 2", () => {
     for (const f of FRAMES.slice(1130, 1350)) {
       expect(STATES[f].balao!.expression, `frame ${f}`).toBe("idle");
       expect(STATES[f].emote, `frame ${f}`).toBeNull();
+      balaoDrawn(f, "idle", false);
+      expect(drawnAt(f, "cast", "emote"), `frame ${f}`).toEqual([]);
     }
   });
 });
