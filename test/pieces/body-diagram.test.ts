@@ -150,6 +150,7 @@ describe("Queue without words", () => {
     expect(thrown({ textSize: 20 })).toBe(noWords("textSize"));
     expect(thrown({ subtitle: "a", textSize: 20 })).toBe(noWords("subtitle"));
     expect(thrown({ subtitle: "a", width: 40 })).toBe(noWords("subtitle"));
+    expect(thrown({ subtitle: "a", height: 10 })).toBe(noWords("subtitle"));
     expect(thrown({ subtitle: "a", text: undefined })).toBe(noWords("subtitle"));
     expect(thrown({ width: 40 })).toMatch(/^queueNode: width:/);
     expect(thrown({ height: 10 })).toMatch(/^queueNode: height:/);

@@ -418,7 +418,7 @@ const github = toSvg(el("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "
 
 ### EIP icons
 
-`src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description. Like every other piece, they draw no hard offset shadow (ADR 0009): the 46 ink copies the published notation drew under its faces were removed in change `flat-eip-icons-and-empty-queue`, so `eipIcon`, `nameTag` and any cover or scene that draws an icon look flat from the next release. A test (`test/pieces/eip-shadows.ts`) finds any such copy again.
+`src/pieces/eip-icons.ts` holds the 26 Enterprise Integration Patterns icons as data. They are redrawn from the icons by Gregor Hohpe and Bobby Woolf ([enterpriseintegrationpatterns.com](https://www.enterpriseintegrationpatterns.com/)), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); each icon keeps that credit in its description. Like every other piece, they draw no hard offset shadow (ADR 0009): the 46 ink copies the published notation drew under its faces were removed in change `flat-eip-icons-and-empty-queue`, so `eipIcon`, `nameTag` and any cover or scene that draws an icon look flat from the next release. The tests in `test/pieces/eip-icons.test.ts` and "Every cover piece is flat" in `test/pieces/node.test.ts` apply the rule in `test/pieces/eip-shadows.ts` and find any such copy again.
 
 ## Upgrading to 0.13.0
 

@@ -28,8 +28,8 @@ No EIP icon SHALL draw an offset shadow (ADR 0009). An offset shadow is a node o
 - **THEN** its body is deep-equal to the body of the same call with `text: ["orders"]`, its face is filled `#1D1C1A` and stroked `#ADA79D`, and its text list is empty
 
 #### Scenario: Words asked of an empty queue
-- **WHEN** `queueNode` with `x: 0`, `y: 0`, `width: 100` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `width: 40`, `subtitle: "a"` with `text: undefined`, and, with no words, `width: 40` alone and `height: 10` alone
-- **THEN** each of the eight calls throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `subtitle`, `width` and `height`; the `subtitle` and `textSize` messages are `queueNode: <name>: needs text: it styles words that are not drawn`
+- **WHEN** `queueNode` with `x: 0`, `y: 0`, `width: 100` gets `text: []`, `subtitle: "a"`, `textSize: 20`, `subtitle: "a"` with `textSize: 20`, `subtitle: "a"` with `width: 40`, `subtitle: "a"` with `height: 10`, `subtitle: "a"` with `text: undefined`, and, with no words, `width: 40` alone and `height: 10` alone
+- **THEN** each of the nine calls throws a `RangeError`, naming in turn `text`, `subtitle`, `textSize`, `subtitle`, `subtitle`, `subtitle`, `subtitle`, `width` and `height`; the `subtitle` and `textSize` messages are `queueNode: <name>: needs text: it styles words that are not drawn`
 
 ### Requirement: Queue node calls of 0.14.1 unchanged
 Every `queueNode` call valid in 0.14.1 SHALL draw the same tree and the same `toSvg` bytes as in 0.14.1.

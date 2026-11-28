@@ -83,5 +83,15 @@ describe("EIP icons without offset shadows", () => {
     const copy: SvgNode = { tag: "rect", attrs: { ...faceAttrs, x: String(Number(face.attrs.x) + 2.5), y: String(Number(face.attrs.y) + 2.5), fill: "#121212" }, children: [] };
     expect(shadowIndexes([face, ...rest])).toEqual([]);
     expect(shadowIndexes([copy, face, ...rest])).toEqual([0]);
+    // What the rule leaves alone (code review round 1): moved by unequal amounts or more than 3, stroked, not ink, after
+    // its twin, or a circle of another radius.
+    const moved = (dx: number, dy: number, attrs: Record<string, string> = {}): SvgNode => ({ ...copy, attrs: { ...copy.attrs, x: String(Number(face.attrs.x) + dx), y: String(Number(face.attrs.y) + dy), ...attrs } });
+    for (const other of [moved(2, 3), moved(3.5, 3.5), moved(2.5, 2.5, { stroke: "#121212" }), moved(2.5, 2.5, { fill: "#FFFFFF" })]) {
+      expect(shadowIndexes([other, face, ...rest]), JSON.stringify(other.attrs)).toEqual([]);
+    }
+    expect(shadowIndexes([face, copy, ...rest])).toEqual([]);
+    const dot = (cx: number, r: number): SvgNode => ({ tag: "circle", attrs: { cx: String(cx), cy: String(cx), r: String(r), fill: "#121212" }, children: [] });
+    expect(shadowIndexes([dot(12, 4), dot(10, 4)])).toEqual([0]);
+    expect(shadowIndexes([dot(12, 4), dot(10, 5)])).toEqual([]);
   });
 });

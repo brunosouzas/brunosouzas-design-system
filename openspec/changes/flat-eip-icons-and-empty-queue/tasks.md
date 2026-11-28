@@ -55,5 +55,5 @@ Scenarios carried unchanged into the MODIFIED "Diagram shapes" keep their tests 
   - in `test/fixtures/covers/README.md`, the two regenerated goldens;
   - no version change.
   - Check: `npm run typecheck && npm run tokens:check && npm run build && npm test` exits 0, `openspec validate --all --strict` passes, and `git diff origin/main -- package.json` is empty.
-- [ ] 3.4 Code review by a clean-context reviewer, at most two rounds; fix every right high and medium.
+- [x] 3.4 Code review by a clean-context reviewer, at most two rounds; fix every right high and medium. Done 2026-11-28: round 1 on `351d759`, GO with 1 medium and 2 low, all fixed; no high, so no second round.
 - [ ] 3.5 `openspec archive flat-eip-icons-and-empty-queue -y`, then `openspec validate --all --strict`.
