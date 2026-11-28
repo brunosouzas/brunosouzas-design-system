@@ -46,7 +46,7 @@ Scenarios carried unchanged into the MODIFIED "Diagram shapes" keep their tests 
 
 - [x] 3.1 Regenerate the goldens `test/fixtures/covers/integration-patterns.svg` and `eip-splitter.svg` with `npm run cover -- <spec> --out <golden>`, and change no other golden.
   - Check: `git diff --stat -- test/fixtures/covers` lists those two SVGs and the README only. "Golden output" and "Golden drifts" of `test/scripts/cover.test.ts` (unit) pass.
-- [ ] 3.2 Local, after 3.1 (sheets rebuilt 2026-11-28; the owner's approval pending): rebuild from this branch the sheets the owner saw at gate 1, and commit them as small PNGs with a README in `docs/spikes/2026-11-27-flat-eip-icons/`. The owner approves the drawing from them before 3.4. The sheets are:
+- [x] 3.2 Local, after 3.1 (sheets rebuilt 2026-11-28 on `9b843ba`; the owner approved them the same day): rebuild from this branch the sheets the owner saw at gate 1, and commit them as small PNGs with a README in `docs/spikes/2026-11-27-flat-eip-icons/`. The owner approves the drawing from them before 3.4. The sheets are:
   - the 26 icons, 0.14.1 and new, side by side at scale 3;
   - the two goldens next to their 0.14.1 goldens, rendered in headless Chrome through an `<img>`. This is in addition to cover-cli's "Visual parity (local)", which compares with the 0.6.1 goldens;
   - and the empty queue on both surfaces.
