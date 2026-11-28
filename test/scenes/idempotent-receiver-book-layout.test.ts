@@ -7,7 +7,7 @@
 import { describe, expect, test } from "vitest";
 import { BOOK_TEXT, ICON_ARROW_Y, LANE, TOKEN } from "../../src/scenes/eip-book";
 import { AT, BADGE, CHANNEL, CHECK, GUIDES, LOOKUP, QUESTION, RECEIVER, REWIND_MARK, RINGS_CENTRE, ROUTES, SENDER, STAGE, STORE } from "../../src/scenes/idempotent-receiver-book/layout";
-import { ABOVE_ORDER, BELOW_ORDER, NODES_ORDER, TOKENS_ORDER } from "../../src/scenes/idempotent-receiver-book/stage";
+import { ABOVE_ORDER, BELOW_ORDER, NODES_ORDER, STAGE_LAYERS, TOKENS_ORDER } from "../../src/scenes/idempotent-receiver-book/stage";
 import type { Box } from "./text-measure";
 import { blocksAt, exemptAt, frameOf, moveElement, resizeText, textsAt, type Frame } from "./book-tree";
 import { walk } from "./topology-tree";
@@ -127,8 +127,13 @@ describe("Idempotent Receiver book layer order", () => {
   test("Layer order", () => {
     const order = (group: unknown) =>
       [...new Set(walk(group as never).flatMap((w) => (w.node.attrs["data-element"] === undefined ? [] : [String(w.node.attrs["data-element"])])))];
-    const sortedBy = (names: string[], list: readonly string[]) =>
+    const sortedBy = (names: string[], list: readonly string[]) => {
+      // Every element drawn in a layer belongs to that layer (code review round 1), then in the layer's order.
+      for (const n of names) expect(list, n).toContain(n);
       expect(names.map((n) => list.indexOf(n))).toEqual([...names.map((n) => list.indexOf(n))].sort((a, b) => a - b));
+    };
+    // Scene.tsx draws the layers in this order, bottom to top.
+    expect(STAGE_LAYERS).toEqual(["below", "nodes", "tokens", "above"]);
     const seen = new Set<string>();
     for (const frame of [140, 350, 700, 800]) {
       const f = frameOf(frame);

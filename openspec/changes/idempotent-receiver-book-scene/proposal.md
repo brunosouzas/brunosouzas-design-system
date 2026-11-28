@@ -13,7 +13,7 @@ At gate 0, on **2026-11-27**, the owner chose **concept B, "one stage, two takes
   - **Take 1:** the Sender sends order 42 into the channel; the channel delivers it once; the receiver looks up its store (`?`: not there), processes the message (green, checked) and stores 42.
   - **The rewind:** a rewind mark; take 1 plays backwards; badge `1` becomes `2`.
   - **Take 2:** the same order, sent once; a second copy appears in the channel; the first delivery is processed and stored as in take 1; the second reaches the receiver, the lookup finds 42 (the store comes into focus), and the duplicate is set aside (orange). Take 1's result fades in beside take 2's: one processed message in both, and the final still holds.
-- **The EIP book scene type,** `src/scenes/eip-book.ts`: the lane, the text sizes, the message token, an icon placed on the lane, and the store empty or holding an ID, which every book scene draws (design §2.1). The next book scene still writes its own timeline, layout, frame and stage logic, using this scene as its model; whether a generic builder should come now or with the second book scene is an open point for the owner (design §7, point 4). It draws through the package's pieces.
+- **The EIP book scene type,** `src/scenes/eip-book.ts`: the lane, the text sizes, the message token, a message channel and an icon placed on the lane, and the store empty or holding an ID, which every book scene draws (design §2.1). The next book scene still writes its own timeline, layout, frame and stage logic, using this scene as its model; the owner chose at G1 to extract a generic builder with the second book scene, when two patterns show what is common (design §7, point 4). It draws through the package's pieces.
 - **The `takes` kind's reading devices** gain `lookupMark`, `ghost` and `matchFocus` (design §2.5): the first two approved at gate 0, the third new for G1.
 - **The catalogue registers seven scenes.** The new scene is registered after `sdd-scene-3-archive` and before `circuit-breaker-topology`, which stays last; the assertions that list every scene are updated. Every existing scene keeps its data, compositions and stills.
 
@@ -35,7 +35,7 @@ none
 - **A 4:5 cut** (SCN-3) and **any sound** (SCN-5).
 - **New pieces or tokens.** The scene uses `queueNode` (empty since SW-249), `eipIcon` (flat since SW-249), `diagramBox`, `storeNode` (empty since SW-248), `messageArrow`, `checkBadge`, `questionToken`, `countBadge` and `uiIcon` as the package ships them.
 - **What the page says beyond the book's example** (MOT-1): the book's second path (an idempotent message, L28), Mule, the key, the time to live, the store's persistence and the trap (L36–L141). The scene shows one sender, one order, two deliveries and one processing.
-- **Changes to the `takes` checks** beyond the two device names.
+- **Changes to the `takes` checks** beyond the three device names.
 
 ## Implicit requirements
 
@@ -52,5 +52,5 @@ none
 - `README.md`: the scene in the catalogue table and its files; the book scene type.
 - `docs/roadmap.md`: the Idempotent Receiver row under "Videos per article".
 - `docs/spikes/2026-11-27-idempotent-receiver-book/`: the stills sheet (gate 1), then the phone sheet and the web-MP4 sheets.
-- No ADR change: ADR 0004's amendments of 2026-11-12 leave a neutral scene's words and devices to the scene and allow the take numbers in every `takes` scene; the two new devices are the ones the owner approved at gate 0, recorded in design §2.5.
+- No ADR change: ADR 0004's amendments of 2026-11-12 leave a neutral scene's words and devices to the scene and allow the take numbers in every `takes` scene; of the three new devices, `lookupMark` and `ghost` are the ones the owner approved at gate 0 and `matchFocus` the one the owner kept at G1, recorded in design §2.5 and §7.
 - Brain vault after the merge (S7): `10-personal/projects/brunosouzas-design-system/` `architecture.md`, `roadmap.md` and `changelog.md`.

@@ -54,9 +54,9 @@ After `sdd-scene-3-archive` and before `circuit-breaker-topology`, which stays l
 
 `TakesDevice` gains three names, so the phases list every device the scene uses:
 
-- `lookupMark`: the `?` shown while a lookup finds nothing, that is the diagram's decision (label `decision`) answered "no". The gate-0 README's marked choice 1 says "the question mark at each lookup", while its sheet B-book drew no `?` at the match; the scene follows the sheet, and the owner chooses at G1 (§7, point 7).
+- `lookupMark`: the `?` shown while a lookup finds nothing, that is the diagram's decision (label `decision`) answered "no". The gate-0 README's marked choice 1 says "the question mark at each lookup", while its sheet B-book drew no `?` at the match; the scene follows the sheet, as the owner chose at G1 (§7, point 7).
 - `ghost`: take 1's processed token, faded (`motion.dimOpacity`), beside take 2's at the end (marked choice 3, approved). As the topology scene's ghost, it compares the two takes' effect.
-- `matchFocus`: the store and its `42` come into focus (`motion.focusScale`) while the lookup finds 42 (§2.8). It shows the lookup line 28 and the diagram state ("arrives with a known ID", "if yes"), no new fact; it is new since gate 0, for the owner's ok at G1.
+- `matchFocus`: the store and its `42` come into focus (`motion.focusScale`) while the lookup finds 42 (§2.8). It shows the lookup line 28 and the diagram state ("arrives with a known ID", "if yes"), no new fact; it is new since gate 0, and the owner kept it at G1 (§7, point 1).
 
 The rewind and the take numbers are the `takes` kind's devices (ADR 0004, amendment of 2026-11-12). Take 1's single delivery is the first half of the definition at L28 (marked choice 2, approved).
 

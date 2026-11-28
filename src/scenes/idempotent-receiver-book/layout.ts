@@ -9,6 +9,7 @@
 // the pinned layout test (test/scenes/idempotent-receiver-book-layout.test.ts)
 // in the same commit.
 import type { Point } from "../../brand/motion";
+import { EIP_ICON_WIDTH } from "../../pieces/eip-icons.ts";
 import { LANE, type ChannelBox, type StoreBox } from "../eip-book";
 
 export const STAGE = { width: 960, height: 540 } as const;
@@ -46,7 +47,7 @@ export const REWIND_MARK = { x: 826, y: 28, size: 48 } as const;
 export const ANCHORS = {
   sender: { x: SENDER.x + SENDER.width / 2, y: LANE },
   channel: { x: CHANNEL.x + CHANNEL.width / 2, y: LANE },
-  receiver: { x: RECEIVER.x + (64 * RECEIVER.scale) / 2, y: LANE },
+  receiver: { x: RECEIVER.x + (EIP_ICON_WIDTH * RECEIVER.scale) / 2, y: LANE },
   store: { x: STORE.x + STORE.width / 2, y: STORE.y + STORE.height / 2 },
   badge: { x: BADGE.cx, y: BADGE.cy },
   rewindMark: { x: REWIND_MARK.x + REWIND_MARK.size / 2, y: REWIND_MARK.y + REWIND_MARK.size / 2 },

@@ -26,9 +26,6 @@ export const LANE = 212;
  */
 export const ICON_ARROW_Y = { "idempotent-receiver": 23 } as const;
 export type LaneIcon = keyof typeof ICON_ARROW_Y;
-/** The icon's drawing width at scale 1 (EIP_ICON_WIDTH). */
-export const ICON_WIDTH = 64;
-export const ICON_HEIGHT = 40;
 
 /** An EIP icon at `x`, scaled, with its message arrow on the lane. */
 export const iconOnLane = (name: LaneIcon, x: number, scale: number): Drawn => eipIcon({ name, x, y: LANE - ICON_ARROW_Y[name] * scale, scale });

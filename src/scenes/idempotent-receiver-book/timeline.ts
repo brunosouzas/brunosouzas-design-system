@@ -15,7 +15,7 @@
 // Retiming is a visual change: it goes back into design §4 and the pinned
 // test in the same commit (MOT-5).
 import { tokens } from "../../../tokens/generated/tokens";
-import type { TakesDevice, TakesTimeline } from "../takes-kind";
+import { LEAVE_FRAMES, type TakesDevice, type TakesTimeline } from "../takes-kind";
 
 /** Take 2's repeated frames are take 1's plus this (design §2.3). */
 export const TAKE2_OFFSET = 340;
@@ -83,7 +83,7 @@ export const makeTimeline = (travel: number = tokens.motion.travel, fade: number
   const changes = [
     ...Object.entries(pops).map(([id, at]) => ev(`pop-${id}`, at)),
     ...Object.entries(fades).flatMap(([id, f]) => [ev(`${id}-in`, f.in[0]), ev(`${id}-in-end`, f.in[1]), ...("out" in f && f.out ? [ev(`${id}-out`, f.out[0]), ev(`${id}-out-end`, f.out[1])] : [])]),
-    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + 10)]),
+    ...Object.entries(leaves).flatMap(([id, at]) => [ev(`leave-${id}`, at), ev(`leave-${id}-end`, at + LEAVE_FRAMES)]),
     ...trips.flatMap((t) => [ev(`${t.id}-depart`, t.from), ev(`${t.id}-arrive`, t.to)]),
     ...Object.entries(cues).flatMap(([id, frames]) => frames.map((at, i) => ev(`${id}-${i}`, at))),
   ];

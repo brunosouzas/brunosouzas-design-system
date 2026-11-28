@@ -11,10 +11,27 @@ import { AT, ROUTES } from "../../src/scenes/idempotent-receiver-book/layout";
 import { STAGE_LAYERS, stageOf } from "../../src/scenes/idempotent-receiver-book/stage";
 import { makeTimeline, timeline, type BookTimeline } from "../../src/scenes/idempotent-receiver-book/timeline";
 import { pointAlong } from "../../src/brand/motion";
+import type { SvgNode } from "../../src/pieces/node";
+import { tokens } from "../../tokens/generated/tokens";
 
 const T = 22, F = 10, D = 340;
 const FRAMES = Array.from({ length: 900 }, (_, f) => f);
 const STATES: BookState[] = FRAMES.map((f) => frameAt(f));
+
+/** The groups of one named element in a stage layer at frame `f`: what stage.ts draws, not only the state (code review round 1). */
+const drawnAt = (f: number, layer: "below" | "nodes" | "tokens" | "above", name: string): SvgNode[] => {
+  const find = (n: SvgNode | string): SvgNode[] => (typeof n === "string" ? [] : [...(n.attrs["data-element"] === name ? [n] : []), ...n.children.flatMap(find)]);
+  return find(stageOf(STATES[f])[layer]);
+};
+/** The first shape under a group, through any pop-in or fade wrappers. */
+const firstShape = (n: SvgNode): SvgNode => (n.tag === "g" ? firstShape(n.children.find((c): c is SvgNode => typeof c !== "string")!) : n);
+/** The lookup line as drawn: dashed or not, and its width. */
+const lookupLine = (f: number) => {
+  const line = firstShape(drawnAt(f, "below", "lookup")[0]);
+  return { dashed: line.attrs["stroke-dasharray"] !== undefined, width: line.attrs["stroke-width"] };
+};
+const REST = { dashed: true, width: 2.5 };
+const ACTIVE = { dashed: false, width: 4 };
 
 // ---------------------------------------------------------------- design §4, transcribed
 
@@ -62,6 +79,25 @@ const BEATS = {
   focus: { on: 625, off: 665 },
 } as const;
 
+/**
+ * Each phase's events as design §4.1 defines them, from the transcription above: every change frame of the table
+ * (a pop, the start and end of a fade, a leave and its end 10 frames later, a trip's departure and arrival, a cue)
+ * that falls in the phase, ordered by frame then name.
+ */
+const EXPECTED_EVENTS: { id: string; at: number }[][] = (() => {
+  const changes = [
+    ...Object.entries(BEATS.pops).map(([id, at]) => ({ id: `pop-${id}`, at })),
+    ...Object.entries(BEATS.fades).flatMap(([id, f]) => [
+      { id: `${id}-in`, at: f.in[0] }, { id: `${id}-in-end`, at: f.in[1] },
+      ...("out" in f ? [{ id: `${id}-out`, at: f.out[0] }, { id: `${id}-out-end`, at: f.out[1] }] : []),
+    ]),
+    ...Object.entries(BEATS.leaves).flatMap(([id, at]) => [{ id: `leave-${id}`, at }, { id: `leave-${id}-end`, at: at + 10 }]),
+    ...BEATS.trips.flatMap(([id, , from]) => [{ id: `${id}-depart`, at: from }, { id: `${id}-arrive`, at: from + T }]),
+    ...Object.entries(BEATS.cues).flatMap(([id, frames]) => frames.map((at, i) => ({ id: `${id}-${i}`, at }))),
+  ];
+  return BEATS.phases.map(([, , from, to]) => changes.filter((e) => e.at >= from && e.at <= to).sort((a, b) => a.at - b.at || a.id.localeCompare(b.id)));
+})();
+
 /** The first difference between the beat table and a timeline, as a path, or null. */
 const firstDifference = (t: BookTimeline): string | null => {
   const check = (path: string, a: unknown, b: unknown) => (JSON.stringify(a) === JSON.stringify(b) ? null : `${path}: expected ${JSON.stringify(b)}, found ${JSON.stringify(a)}`);
@@ -72,6 +108,11 @@ const firstDifference = (t: BookTimeline): string | null => {
   }
   for (const [i, [id, route, from]] of BEATS.trips.entries()) {
     const d = check(`trip ${id}`, t.trips[i], { id, route, from, to: from + T });
+    if (d) return d;
+  }
+  // The events last: a changed table shows first where it changed, then what its phases saw.
+  for (const [i, [id]] of BEATS.phases.entries()) {
+    const d = check(`phase ${id} events`, t.phases[i]?.events, EXPECTED_EVENTS[i]);
     if (d) return d;
   }
   return check("duration", t.duration, BEATS.duration) ?? check("outro", t.outro, BEATS.outro) ?? check("ringsFade", t.ringsFade, BEATS.ringsFade)
@@ -85,6 +126,9 @@ describe("Idempotent Receiver book beats and timing", () => {
     expect(firstDifference(timeline)).toBeNull();
     expect(timeline.trips.length).toBe(BEATS.trips.length);
     expect(timeline.phases.length).toBe(BEATS.phases.length);
+    // Every change frame lands in exactly one phase: none is lost between phases.
+    expect(EXPECTED_EVENTS.flat().length).toBe(timeline.phases.flatMap((p) => p.events).length);
+    expect(timeline.phases.find((p) => p.id === "t1-send")!.events.map((e) => e.at)).toEqual([40, 40, 46, 50, 68, 76, 98, 98, 108]);
     expect(makeTimeline(T, F)).toEqual(timeline);
   });
 
@@ -123,6 +167,7 @@ describe("Idempotent Receiver book take 1", () => {
     for (const f of FRAMES.slice(120, 170)) expect(STATES[f].lookup, `frame ${f}`).toBe(true);
     expect(STATES[170].question).toBeNull();
     expect(STATES[170].lookup).toBe(false);
+    expect([119, 120, 169, 170].map(lookupLine)).toEqual([REST, ACTIVE, ACTIVE, REST]);
     expect(STATES[179].stored).toBeNull();
     expect(msg(STATES[179])!.fill).toBe("white");
     expect(msg(STATES[180])!.fill).toBe("healthy");
@@ -179,6 +224,12 @@ describe("Idempotent Receiver book duplicate ignored", () => {
     expect(STATES[670].lookup).toBe(false);
     expect(copy(STATES[679]).fill).toBe("white");
     expect(copy(STATES[680]).fill).toBe("blocked");
+    // As drawn: the lookup solid during the match, the copy white, then orange (ADR 0009: blocked), the processed one green.
+    expect([619, 620, 669, 670].map(lookupLine)).toEqual([REST, ACTIVE, ACTIVE, REST]);
+    const fillOf = (f: number, name: string) => firstShape(drawnAt(f, "tokens", name)[0]).attrs.fill;
+    expect(fillOf(679, "copy")).toBe(tokens.color.white);
+    expect(fillOf(680, "copy")).toBe(tokens.color.state.blocked);
+    expect(fillOf(680, "message")).toBe(tokens.color.state.healthy);
     expect(copy(STATES[708]).point).toEqual(AT.ignored);
     // From the second check on, one message token is green and the check is drawn; the ghost is not a message token.
     for (const f of FRAMES.slice(549, 900)) {
@@ -192,6 +243,11 @@ describe("Idempotent Receiver book duplicate ignored", () => {
     expect(STATES[630].storeFocus).toBeGreaterThan(1);
     for (const f of FRAMES.slice(655, 666)) expect(STATES[f].storeFocus, `frame ${f}`).toBe(1.06);
     for (const f of FRAMES.slice(695, 900)) expect(STATES[f].storeFocus, `frame ${f}`).toBe(1);
+    // As drawn: the store and the stored ID scaled by the focus about the store's centre, and not before it.
+    for (const name of ["store", "stored"]) {
+      expect(drawnAt(660, "nodes", name)[0].children[0], name).toMatchObject({ tag: "g", attrs: { transform: "translate(640 430) scale(1.06) translate(-640 -430)" } });
+      expect((drawnAt(600, "nodes", name)[0].children[0] as SvgNode).attrs.transform, name).toBeUndefined();
+    }
   });
 });
 
@@ -200,6 +256,12 @@ describe("Idempotent Receiver book final still", () => {
     expect(STATES[739].ghost).toBe(0);
     expect(STATES[745].ghost).toBeCloseTo(0.5);
     expect(STATES[750].ghost).toBe(1);
+    // As drawn: take 1's green token, dimmed to motion.dimOpacity, half of it midway.
+    expect(drawnAt(739, "tokens", "ghost")).toEqual([]);
+    const ghost = (f: number) => drawnAt(f, "tokens", "ghost")[0].children[0] as SvgNode;
+    expect(ghost(745).attrs.opacity).toBeCloseTo(tokens.motion.dimOpacity / 2);
+    expect(ghost(750).attrs.opacity).toBe(tokens.motion.dimOpacity);
+    expect(firstShape(ghost(750)).attrs.fill).toBe(tokens.color.state.healthy);
   });
 
   test("Final hold identical", () => {
